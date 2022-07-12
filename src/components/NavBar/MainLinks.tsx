@@ -1,6 +1,6 @@
-import {Group, Text, ThemeIcon, UnstyledButton} from "@mantine/core";
-import React, {useState} from "react";
-import {Home, QuestionMark, StepInto, Tools,} from "tabler-icons-react";
+import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
+import React, { useState } from "react";
+import { Home, QuestionMark, StepInto, Tools } from "tabler-icons-react";
 
 interface MainLinkProps {
     icon: React.ReactNode;
@@ -8,7 +8,7 @@ interface MainLinkProps {
     label: string;
 }
 
-function MainLink({icon, color, label}: MainLinkProps) {
+function MainLink({ icon, color, label }: MainLinkProps) {
     return (
         <UnstyledButton
             sx={(theme) => ({
@@ -35,15 +35,15 @@ function MainLink({icon, color, label}: MainLinkProps) {
 }
 
 const aboutData = {
-    icon: <QuestionMark size={16}/>,
+    icon: <QuestionMark size={16} />,
     color: "orange",
     label: "About",
 };
-const toolsData = {icon: <Tools size={16}/>, color: "violet", label: "Tools"};
-const walkthroughsData = {icon: <StepInto size={16}/>, color: "blue", label: "Walkthroughs"};
+const toolsData = { icon: <Tools size={16} />, color: "violet", label: "Tools" };
+const walkthroughsData = { icon: <StepInto size={16} />, color: "blue", label: "Walkthroughs" };
 
 export function MainLinks() {
     const [data, setData] = useState<MainLinkProps[]>([aboutData, toolsData, walkthroughsData]);
-    const links = data.map((link) => <MainLink {...link} key={link.label}/>);
+    const links = data.map((link) => <MainLink {...link} key={link.label} />);
     return <div>{links}</div>;
 }
