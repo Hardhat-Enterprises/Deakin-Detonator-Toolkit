@@ -1,14 +1,16 @@
 import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
 import React, { useState } from "react";
-import { Home, QuestionMark, StepInto, Tools } from "tabler-icons-react";
+import { QuestionMark, StepInto, Tools } from "tabler-icons-react";
+import { Link } from "react-router-dom";
 
 interface MainLinkProps {
     icon: React.ReactNode;
     color: string;
     label: string;
+    route: string;
 }
 
-function MainLink({ icon, color, label }: MainLinkProps) {
+function MainLink({ icon, color, label, route }: MainLinkProps) {
     return (
         <UnstyledButton
             sx={(theme) => ({
@@ -23,13 +25,14 @@ function MainLink({ icon, color, label }: MainLinkProps) {
                 },
             })}
         >
-            <Group>
-                <ThemeIcon color={color} variant="light">
-                    {icon}
-                </ThemeIcon>
-
-                <Text size="sm">{label}</Text>
-            </Group>
+            <Link to={route} style={{ textDecoration: "none", color: "inherit" }}>
+                <Group>
+                    <ThemeIcon color={color} variant="light">
+                        {icon}
+                    </ThemeIcon>
+                    <Text size="sm">{label}</Text>
+                </Group>
+            </Link>
         </UnstyledButton>
     );
 }
@@ -38,9 +41,10 @@ const aboutData = {
     icon: <QuestionMark size={16} />,
     color: "orange",
     label: "About",
+    route: "/about",
 };
-const toolsData = { icon: <Tools size={16} />, color: "violet", label: "Tools" };
-const walkthroughsData = { icon: <StepInto size={16} />, color: "blue", label: "Walkthroughs" };
+const toolsData = { icon: <Tools size={16} />, color: "violet", label: "Tools", route: "/tools" };
+const walkthroughsData = { icon: <StepInto size={16} />, color: "blue", label: "Walkthroughs", route: "/walkthroughs" };
 
 export function MainLinks() {
     const [data, setData] = useState<MainLinkProps[]>([aboutData, toolsData, walkthroughsData]);

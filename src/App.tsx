@@ -1,9 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import {
     AppShell,
     Burger,
-    Button,
     Center,
     ColorScheme,
     ColorSchemeProvider,
@@ -14,9 +13,9 @@ import {
     useMantineTheme,
 } from "@mantine/core";
 import Navigation from "./components/NavBar/Navigation";
-import AboutPage from "./components/AboutPage/AboutPage";
-import { Plus } from "tabler-icons-react";
-import { Command } from "@tauri-apps/api/shell";
+import { Route, Routes } from "react-router-dom";
+import AboutPage from "./pages/About";
+import ToolsPage from "./pages/Tools";
 
 export default function App() {
     const theme = useMantineTheme();
@@ -30,12 +29,6 @@ export default function App() {
 
     const toggleOpened = () => {
         setOpened(!opened);
-    };
-
-    const runCommand = async () => {
-        const command = new Command("cat", ["/home/jordyn/DDT-PoC/package.json"]);
-        const handle = await command.execute();
-        console.log(handle.stdout);
     };
 
     return (
@@ -66,10 +59,11 @@ export default function App() {
                             </Header>
                         }
                     >
-                        <AboutPage />
-                        <Button leftIcon={<Plus />} onClick={runCommand}>
-                            Run command
-                        </Button>
+                        <Routes>
+                            <Route path="/" element={<AboutPage />} />
+                            <Route path="/about" element={<AboutPage />} />
+                            <Route path="/tools" element={<ToolsPage />} />
+                        </Routes>
                     </AppShell>
                 </MantineProvider>
             </ColorSchemeProvider>
