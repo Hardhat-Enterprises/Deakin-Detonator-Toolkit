@@ -1,8 +1,9 @@
-import {useState} from 'react'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 import {
     AppShell,
     Burger,
+    Button,
     Center,
     ColorScheme,
     ColorSchemeProvider,
@@ -10,10 +11,12 @@ import {
     MantineProvider,
     MediaQuery,
     Text,
-    useMantineTheme
+    useMantineTheme,
 } from "@mantine/core";
 import Navigation from "./components/NavBar/Navigation";
 import AboutPage from "./components/AboutPage/AboutPage";
+import { Plus } from "tabler-icons-react";
+import { Command } from "@tauri-apps/api/shell";
 
 export default function App() {
     const theme = useMantineTheme();
@@ -29,19 +32,25 @@ export default function App() {
         setOpened(!opened);
     };
 
+    const runCommand = async () => {
+        const command = new Command("cat", ["/home/jordyn/DDT-PoC/package.json"]);
+        const handle = await command.execute();
+        console.log(handle.stdout);
+    };
+
     return (
         <div className="App">
             <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-                <MantineProvider theme={{colorScheme}} withGlobalStyles withNormalizeCSS>
+                <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
                     <AppShell
                         navbarOffsetBreakpoint="sm"
                         asideOffsetBreakpoint="sm"
                         fixed
-                        navbar={<Navigation hidden={!opened} onNavBarClickCallback={toggleOpened}/>}
+                        navbar={<Navigation hidden={!opened} onNavBarClickCallback={toggleOpened} />}
                         header={
                             <Header height={70} p="md">
                                 <Center inline>
-                                    <MediaQuery largerThan="sm" styles={{display: "none"}}>
+                                    <MediaQuery largerThan="sm" styles={{ display: "none" }}>
                                         <Burger
                                             opened={opened}
                                             onClick={toggleOpened}
@@ -57,12 +66,13 @@ export default function App() {
                             </Header>
                         }
                     >
-                        <>
-<AboutPage></AboutPage>
-                        </>
+                        <AboutPage />
+                        <Button leftIcon={<Plus />} onClick={runCommand}>
+                            Run command
+                        </Button>
                     </AppShell>
                 </MantineProvider>
             </ColorSchemeProvider>
         </div>
-    )
+    );
 }
