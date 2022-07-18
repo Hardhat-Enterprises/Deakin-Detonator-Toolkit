@@ -18,8 +18,8 @@
         "sidecar": true,
         "scope": [
           {
-            "name": "cat",
-            "cmd": "cat",
+            "name": "nmap",
+            "cmd": "nmap",
             "args": true
           }
         ]

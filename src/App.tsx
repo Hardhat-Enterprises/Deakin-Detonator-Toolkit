@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import "./App.css";
 import {
     AppShell,
     Burger,
@@ -12,8 +10,11 @@ import {
     Text,
     useMantineTheme,
 } from "@mantine/core";
+import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
 import Navigation from "./components/NavBar/Navigation";
-import { Route, Routes } from "react-router-dom";
+import NmapTool from "./components/NmapTool/NmapTool";
 import AboutPage from "./pages/About";
 import ToolsPage from "./pages/Tools";
 
@@ -63,6 +64,7 @@ export default function App() {
                             <Route path="/" element={<AboutPage />} />
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/tools" element={<ToolsPage />} />
+                            <Route path="/tools/nmap" element={<NmapTool />} />
                         </Routes>
                     </AppShell>
                 </MantineProvider>
