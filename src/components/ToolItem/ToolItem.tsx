@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import { IconRocket, IconScan } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 import ToolItemPopover from "./ToolItemPopover";
@@ -20,12 +21,9 @@ const ToolItem = ({ title, description, route }: ToolItemProps) => {
             <td>{title}</td>
             <td>{description}</td>
             <td>
-                <ToolItemPopover
-                    icon={<IconRocket />}
-                    color={"green"}
-                    actionCallback={handleNavigate}
-                    hoverText={"Go"}
-                />
+                <Button leftIcon={<IconRocket />} onClick={handleNavigate}>
+                    Go
+                </Button>
             </td>
         </>
     );

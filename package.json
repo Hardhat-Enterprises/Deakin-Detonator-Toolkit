@@ -15,6 +15,7 @@
         "@mantine/core": "^4.2.12",
         "@mantine/form": "^4.2.12",
         "@mantine/hooks": "^4.2.12",
+        "@mantine/prism": "^4.2.12",
         "@tabler/icons": "^1.76.0",
         "@tauri-apps/api": "^1.0.2",
         "react": "^18.2.0",
