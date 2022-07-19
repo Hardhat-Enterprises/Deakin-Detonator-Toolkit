@@ -7,8 +7,6 @@ This repo houses a proof of concept UI for the DDT application built with Modern
 
 # Setup
 
-## Pre-requisites
-
 1. Follow the guide [here](https://tauri.app/v1/guides/getting-started/prerequisites) for installing the pre-requisites for Tauri.
 
 2. Install nodejs and yarn.
