@@ -1,15 +1,6 @@
-import { Button, Center, Group, Stack, Text, Title } from "@mantine/core";
-import { Plus } from "tabler-icons-react";
-import React from "react";
-import { Command } from "@tauri-apps/api/shell";
+import { Center, Group, Stack, Text, Title } from "@mantine/core";
 
 const AboutPage = () => {
-    const runCommand = async () => {
-        const command = new Command("cat", ["/home/jordyn/DDT-PoC/package.json"]);
-        const handle = await command.execute();
-        console.log(handle.stdout);
-    };
-
     return (
         <Group direction={"column"} position={"center"}>
             <Title>About the toolkit</Title>
@@ -29,9 +20,6 @@ const AboutPage = () => {
                     </Text>
                 </Stack>
             </Center>
-            <Button leftIcon={<Plus />} onClick={runCommand}>
-                Run command
-            </Button>
         </Group>
     );
 };
