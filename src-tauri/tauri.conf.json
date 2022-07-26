@@ -21,6 +21,11 @@
             "name": "nmap",
             "cmd": "nmap",
             "args": true
+          },
+          {
+            "name": "snmp-check",
+            "cmd": "snmp-check",
+            "args": true
           }
         ]
       }

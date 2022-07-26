@@ -15,6 +15,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navigation from "./components/NavBar/Navigation";
 import NmapTool from "./components/NmapTool/NmapTool";
+import SnmpCheck from "./components/SmnpCheck/SmnpCheck";
 import AboutPage from "./pages/About";
 import ToolsPage from "./pages/Tools";
 
@@ -65,6 +66,7 @@ export default function App() {
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/tools" element={<ToolsPage />} />
                             <Route path="/tools/nmap" element={<NmapTool />} />
+                            <Route path="/tools/snmp-check" element={<SnmpCheck />} />
                         </Routes>
                     </AppShell>
                 </MantineProvider>
