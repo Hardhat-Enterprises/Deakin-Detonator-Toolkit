@@ -1,8 +1,8 @@
 import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { Prism } from "@mantine/prism";
-import { Command } from "@tauri-apps/api/shell";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { CommandHelper } from "../../utils/CommandHelper";
+import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 
 interface FormValuesType {
     ip: string;
@@ -64,40 +64,15 @@ const NmapTool = () => {
 
         args.push(values.ip);
 
-        const command = new Command("nmap", args);
-        const handle = await command.execute();
-
-        const stdout = handle.stdout;
-        const stderr = handle.stderr;
-
-        if (stdout && !stderr) {
-            const output = `$ nmap ${args.join(" ")}\n\n${stdout}`;
-            setOutput(output);
-        } else if (stderr && !stdout) {
-            const output = `$ nmap ${args.join(" ")}\n\n${stderr}`;
-            setOutput(output);
-        }
+        const output = await CommandHelper.runCommand("nmap", args);
+        setOutput(output);
 
         setLoading(false);
     };
 
-    const getConsoleOutputElement = () => {
-        const clearOutput = () => {
-            setOutput("");
-        };
-
-        if (output) {
-            return (
-                <>
-                    <Title>Output</Title>
-                    <Prism language={"bash"}>{output}</Prism>
-                    <Button color={"red"} onClick={clearOutput}>
-                        Clear output
-                    </Button>
-                </>
-            );
-        }
-    };
+    const clearOutput = useCallback(() => {
+        setOutput("");
+    }, [setOutput]);
 
     // Determine if the current scan options are for the top ports.
     const isTopPortScan = form.values.scanOption === "Top ports";
@@ -127,7 +102,7 @@ const NmapTool = () => {
                     {...form.getInputProps("scanOption")}
                 />
                 <Button type={"submit"}>Scan</Button>
-                {getConsoleOutputElement()}
+                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
     );

@@ -1,4 +1,4 @@
-import { Group, Table, Title } from "@mantine/core";
+import { Group, Stack, Table, Title } from "@mantine/core";
 import ToolItem from "../components/ToolItem/ToolItem";
 
 const TOOLS = [
@@ -7,15 +7,20 @@ const TOOLS = [
         description: "Network map scanning tool",
         route: "/tools/nmap",
     },
+    {
+        title: "snmp-check",
+        description: "SNMP enumeration tool",
+        route: "/tools/snmp-check",
+    },
 ];
 
 const ToolsPage = () => {
     const rows = TOOLS.map((tool) => {
-        return <ToolItem title={tool.title} description={tool.description} route={tool.route}></ToolItem>;
+        return <ToolItem title={tool.title} description={tool.description} route={tool.route} key={tool.title} />;
     });
 
     return (
-        <Group direction={"column"} position={"center"}>
+        <Stack align={"center"}>
             <Title>Tools</Title>
             <Table horizontalSpacing="xl" verticalSpacing="md" fontSize="md">
                 <thead>
@@ -27,7 +32,7 @@ const ToolsPage = () => {
                 </thead>
                 <tbody>{rows}</tbody>
             </Table>
-        </Group>
+        </Stack>
     );
 };
 

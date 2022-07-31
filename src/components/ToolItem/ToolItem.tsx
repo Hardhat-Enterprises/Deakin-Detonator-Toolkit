@@ -16,7 +16,7 @@ const ToolItem = ({ title, description, route }: ToolItemProps) => {
     };
 
     return (
-        <>
+        <tr>
             <td>{title}</td>
             <td>{description}</td>
             <td>
@@ -24,7 +24,7 @@ const ToolItem = ({ title, description, route }: ToolItemProps) => {
                     Go
                 </Button>
             </td>
-        </>
+        </tr>
     );
 };
 
