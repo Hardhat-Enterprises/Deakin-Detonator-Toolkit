@@ -9,19 +9,19 @@ This repo houses a proof of concept UI for the DDT application built with Modern
 
 Steps 1-4 install the pre-requisites for Tauri. If more information is needed for steps 1-4, follow the Tauri pre-requisites installation guide [here](https://tauri.app/v1/guides/getting-started/prerequisites).
 
-Step 1: 
+1. Update package list.
 
     ```bash
     $ sudo apt update
     ```
 
-Step 2:
+2. Upgrade all packages.
 
     ```bash
     $ sudo apt upgrade --fix-missing -y
     ```
 
-Step 3:
+3. Install tauri pre-requisites.
 
     ```bash
     $ sudo apt install libwebkit2gtk-4.0-dev \
@@ -34,55 +34,50 @@ Step 3:
     	librsvg2-dev
     ```
 
-Step 4:
+4. Install rust.
 
     ```bash
     $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
     ```
 
-Steps 5-8 installs nodejs and yarn.
-
-Step 5: 
+5. Install volta (to manage node installations).
 
     ```bash
     $ curl https://get.volta.sh | bash
     ```
 
-Step 6: Close your current terminal and open a new one
-    
-Step 7: 
+6. Close your current terminal and open a new one.
+7. Install node.
 
     ```bash
     $ volta install node
     ```
-    
-Step 8: 
+
+8. Install yarn.
 
     ```bash
     $ volta install yarn
     ```
 
-Step 9 - Clone the repo: 
+9. Clone the repo.
 
     ```bash
     $ git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
     ```
 
-Steps 10-11 installs the dependencies.
-
-Step 10: 
+10. Change current directory to the toolkit.
 
     ```bash
     $ cd Deakin-Detonator-Toolkit
     ```
-    
-Step 11: 
+
+11. Install all project dependencies.
 
     ```bash
     $ yarn install
     ```
 
-Step 12 - Run the application in dev mode, this will hot-reload upon changes made to the code: 
+12. Run the application in dev mode, this will hot-reload upon changes made to the code:
 
     ```bash
     $ yarn run tauri dev
