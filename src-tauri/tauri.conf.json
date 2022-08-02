@@ -7,7 +7,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "capstone",
+    "productName": "ddt",
     "version": "0.1.0"
   },
   "tauri": {
@@ -26,6 +26,11 @@
             "name": "snmp-check",
             "cmd": "snmp-check",
             "args": true
+          },
+          {
+            "name": "python3",
+            "cmd": "python3",
+            "args": true
           }
         ]
       }
@@ -35,7 +40,11 @@
       "category": "DeveloperTool",
       "copyright": "",
       "deb": {
-        "depends": []
+        "depends": [],
+         "files": { 
+          "/usr/share/ddt": "../exploits/",
+          "/usr/share/doc/ddt/README.md": "../README.md"
+        }
       },
       "externalBin": [],
       "icon": [
