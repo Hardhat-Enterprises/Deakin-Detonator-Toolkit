@@ -14,6 +14,7 @@ import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { CVE202141773 } from "./components/CVE-2021-41773/CVE-2021-41773";
+import { DirbTool } from "./components/DirbTool/DirbTool";
 import Navigation from "./components/NavBar/Navigation";
 import NmapTool from "./components/NmapTool/NmapTool";
 import SnmpCheck from "./components/SmnpCheck/SmnpCheck";
@@ -69,6 +70,7 @@ export default function App() {
                             <Route path="/tools" element={<ToolsPage />} />
                             <Route path="/tools/nmap" element={<NmapTool />} />
                             <Route path="/tools/snmp-check" element={<SnmpCheck />} />
+                            <Route path="/tools/dirb" element={<DirbTool />} />
                             <Route path="/attack-vectors" element={<AttackVectors />} />
                             <Route path="/attack-vectors/cve-2021-41773" element={<CVE202141773 />} />
                         </Routes>

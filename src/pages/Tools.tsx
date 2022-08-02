@@ -12,6 +12,11 @@ const TOOLS = [
         description: "SNMP enumeration tool",
         route: "/tools/snmp-check",
     },
+    {
+        title: "Dirb",
+        description: "dirb",
+        route: "/tools/dirb",
+    },
 ];
 
 const ToolsPage = () => {
