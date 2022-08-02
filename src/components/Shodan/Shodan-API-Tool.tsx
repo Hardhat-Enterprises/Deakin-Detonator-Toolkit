@@ -35,13 +35,13 @@ export function ShodanAPITool() {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit({ ...values }))}>
+        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
             <Stack>
                 <Title>Shodan API Tool</Title>
                 <TextInput label={"Valid API Key"} required {...form.getInputProps("shodanKey")} />
                 <TextInput label={"Host IP"} required {...form.getInputProps("hostIP")} />
-                <Button type={"submit"}>Exploit</Button>
+                <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
