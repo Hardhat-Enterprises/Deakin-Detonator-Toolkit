@@ -27,8 +27,6 @@ const scanOptions = [
 const NmapTool = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
-    const [selectedScanOption, setSelectedScanOption] = useState("");
-    const [selectedSpeedOption, setSelectedSpeedOption] = useState("");
 
     let form = useForm({
         initialValues: {
@@ -66,12 +64,8 @@ const NmapTool = () => {
 
         args.push(values.ip);
 
-        try {
-            const output = await CommandHelper.runCommand("nmap", args);
-            setOutput(output);
-        } catch (e: any) {
-            setOutput(e);
-        }
+        const output = await CommandHelper.runCommand("nmap", args);
+        setOutput(output);
 
         setLoading(false);
     };
@@ -81,14 +75,10 @@ const NmapTool = () => {
     }, [setOutput]);
 
     // Determine if the current scan options are for the top ports.
-    const isTopPortScan = selectedScanOption === "Top ports";
+    const isTopPortScan = form.values.scanOption === "Top ports";
 
     return (
-        <form
-            onSubmit={form.onSubmit((values) =>
-                onSubmit({ ...values, scanOption: selectedScanOption, speed: selectedSpeedOption })
-            )}
-        >
+        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
             <Stack>
                 <Title>Network port scanner (NMAP)</Title>
@@ -96,22 +86,20 @@ const NmapTool = () => {
                 {!isTopPortScan && <TextInput label={"Port"} {...form.getInputProps("port")} />}
                 {isTopPortScan && <NumberInput label={"Number of top ports"} {...form.getInputProps("numTopPorts")} />}
                 <NativeSelect
-                    value={selectedSpeedOption}
-                    onChange={(e) => setSelectedSpeedOption(e.target.value)}
                     title={"Scan speed"}
                     data={speeds}
                     required
                     placeholder={"Pick a scan speed"}
                     description={"Speed of the scan, refer: https://nmap.org/book/performance-timing-templates.html"}
+                    {...form.getInputProps("speed")}
                 />
                 <NativeSelect
-                    value={selectedScanOption}
-                    onChange={(e) => setSelectedScanOption(e.target.value)}
                     title={"Scan option"}
                     data={scanOptions}
                     required
                     placeholder={"Pick a scan option"}
                     description={"Type of scan to perform"}
+                    {...form.getInputProps("scanOption")}
                 />
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
