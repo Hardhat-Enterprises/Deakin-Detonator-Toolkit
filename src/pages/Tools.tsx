@@ -12,11 +12,6 @@ const TOOLS = [
         description: "SNMP enumeration tool",
         route: "/tools/snmp-check",
     },
-    {
-        title: "Shodan API",
-        description: "Shodan API tool w keys",
-        route: "/tools/shodan-api-tool",
-    },
 ];
 
 const ToolsPage = () => {
