@@ -1,0 +1,33 @@
+name: Bug Report
+title: "[Bug]: "
+description: File a Bug Report.
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: input
+    id: contact
+    attributes:
+      label: Name of Bug
+      description: Bug name?
+      placeholder: Application Crash 1
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What Happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: A bug happened!
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: What did you do to make this happen?
+      placeholder: Can you make it occur again?
+    validations:
+      required: true
