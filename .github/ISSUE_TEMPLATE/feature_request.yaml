@@ -1,0 +1,43 @@
+name: Feature Request
+description: Suggest a new Feature for the project!
+title: "[Feature Request]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this Feature Request!
+  - type: input
+    id: name
+    attributes:
+      label: Name of Feature
+      description: Feature name?
+      placeholder: ex. New Tool
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: What is the priority of this feature?
+      multiple: true
+      options:
+        - High
+        - Medium
+        - Low
+  - type: input
+    id: categories 
+    attributes:
+      label: Categories
+      description: Applicable categories for development/implementation?
+      placeholder: (UI, UX, QA, Integration, etc.)
+    validations:
+      required: true
+  - type: textarea
+    id: detailed_description
+    attributes:
+      label: Description of Feature
+      description: A clear and concise description of what you want to happen. Attach any relevant supproting screenshots or documents here.
+      placeholder: A clear and concise description of what you want to happen.
+    validations:
+      required: true
