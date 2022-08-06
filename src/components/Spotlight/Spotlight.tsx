@@ -2,6 +2,7 @@ import { Input, Group } from "@mantine/core";
 import { SpotlightProvider, openSpotlight } from "@mantine/spotlight";
 import type { SpotlightAction } from "@mantine/spotlight";
 import { IconHome, IconSearch, IconTools } from "@tabler/icons";
+import { useNavigate } from "react-router-dom";
 
 function SpotlightControl() {
     return (
@@ -16,22 +17,24 @@ function SpotlightControl() {
     );
 }
 
-const actions: SpotlightAction[] = [
-    {
-        title: "Home",
-        description: "Get to home page",
-        onTrigger: () => console.log("Home"),
-        icon: <IconHome size={18} />,
-    },
-    {
-        title: "Tools",
-        description: "Get to tools page",
-        onTrigger: () => console.log("Tools"),
-        icon: <IconTools size={18} />,
-    },
-];
-
 function Search() {
+    let navigate = useNavigate();
+
+    const actions: SpotlightAction[] = [
+        {
+            title: "Home",
+            description: "Get to home page",
+            onTrigger: () => navigate("/"),
+            icon: <IconHome size={18} />,
+        },
+        {
+            title: "Tools",
+            description: "Get to tools page",
+            onTrigger: () => navigate("/tools"),
+            icon: <IconTools size={18} />,
+        },
+    ];
+
     return (
         <SpotlightProvider
             actions={actions}
