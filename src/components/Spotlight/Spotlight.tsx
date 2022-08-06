@@ -1,4 +1,4 @@
-import { Input, Group } from "@mantine/core";
+import { Input } from "@mantine/core";
 import { SpotlightProvider, openSpotlight } from "@mantine/spotlight";
 import type { SpotlightAction } from "@mantine/spotlight";
 import { IconHome, IconSearch, IconStepInto, IconTools, IconWaveSawTool } from "@tabler/icons";
