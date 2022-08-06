@@ -7,6 +7,12 @@ const VECTORS = [
         description: "Apache 2.4.49 and 2.4.50 RCE",
         route: "/attack-vectors/cve-2021-41773",
     },
+    {
+        title: "CVE-2020-1472 | Zero_Log_On",
+        description: "Zero Logon vlunerability",
+        route: "/attack-vectors/cve-2021-41773",
+    }
+    
 ];
 
 export function AttackVectors() {
