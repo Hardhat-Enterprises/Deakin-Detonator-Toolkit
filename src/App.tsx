@@ -13,14 +13,8 @@ import {
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { CVE202141773 } from "./components/CVE-2021-41773/CVE-2021-41773";
-import { DirbTool } from "./components/DirbTool/DirbTool";
 import Navigation from "./components/NavBar/Navigation";
-import NmapTool from "./components/NmapTool/NmapTool";
-import SnmpCheck from "./components/SmnpCheck/SmnpCheck";
-import AboutPage from "./pages/About";
-import { AttackVectors } from "./pages/AttackVectors";
-import ToolsPage from "./pages/Tools";
+import { ROUTES } from "./components/RouteWrapper";
 
 export default function App() {
     const theme = useMantineTheme();
@@ -65,14 +59,9 @@ export default function App() {
                         }
                     >
                         <Routes>
-                            <Route path="/" element={<AboutPage />} />
-                            <Route path="/about" element={<AboutPage />} />
-                            <Route path="/tools" element={<ToolsPage />} />
-                            <Route path="/tools/nmap" element={<NmapTool />} />
-                            <Route path="/tools/snmp-check" element={<SnmpCheck />} />
-                            <Route path="/tools/dirb" element={<DirbTool />} />
-                            <Route path="/attack-vectors" element={<AttackVectors />} />
-                            <Route path="/attack-vectors/cve-2021-41773" element={<CVE202141773 />} />
+                            {ROUTES.map((route) => (
+                                <Route {...route}></Route>
+                            ))}
                         </Routes>
                     </AppShell>
                 </MantineProvider>
