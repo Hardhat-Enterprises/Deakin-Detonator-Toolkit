@@ -40,7 +40,7 @@ export const ROUTES: RouteProperties[] = [
     },
     {
         name: "SnmpCheck",
-        path: "/tools/snmpcheck",
+        path: "/tools/snmp-check",
         element: <SnmpCheck />,
     },
     {
