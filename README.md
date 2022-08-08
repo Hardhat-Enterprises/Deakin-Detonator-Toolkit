@@ -42,6 +42,12 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
     $ ./install_dependencies.sh
     ```
 
+4. Run the application (dev mode).
+
+    ```bash
+    $ yarn run tauri dev
+    ```
+
 # 📷 Screenshot
 
 ![screenshot](https://i.imgur.com/Nu67H6n.png)
