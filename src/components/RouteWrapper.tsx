@@ -2,6 +2,7 @@ import AboutPage from "../pages/About";
 import { AttackVectors } from "../pages/AttackVectors";
 import ToolsPage from "../pages/Tools";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
+import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import { DirbTool } from "./DirbTool/DirbTool";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
@@ -68,6 +69,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2021-41773",
         element: <CVE202141773 />,
         description: "Apache 2.4.49 and 2.4.50 RCE",
+    },
+    {
+        name: "CVE-2021-44228",
+        path: "/attack-vectors/cve-2021-44228",
+        element: <CVE202144228 />,
+        description: "Vulnerability in the Apache Log4j 2 Java library allowing RCE",
     },
 ];
 
