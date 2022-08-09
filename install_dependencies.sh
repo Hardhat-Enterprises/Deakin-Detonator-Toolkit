@@ -23,7 +23,8 @@ sudo apt install -y mitmproxy \
         libjavascriptcoregtk-4.0-18 \
         libjavascriptcoregtk-4.0-dev \
         libwebkit2gtk-4.1 \
-        libwebkit2gtk-4.1-dev
+        libwebkit2gtk-4.1-dev \
+		openjdk-11-jdk
 
 echo "System deps installed."
 echo "Installing rust..."
