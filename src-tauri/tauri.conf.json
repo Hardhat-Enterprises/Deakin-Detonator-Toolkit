@@ -31,6 +31,11 @@
             "name": "python3",
             "cmd": "python3",
             "args": true
+          },
+          {
+            "name": "dirb",
+            "cmd": "dirb",
+            "args": true
           }
         ]
       }
