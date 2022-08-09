@@ -3,6 +3,7 @@ import { AttackVectors } from "../pages/AttackVectors";
 import ToolsPage from "../pages/Tools";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import { DirbTool } from "./DirbTool/DirbTool";
+import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
 import SnmpCheck from "./SmnpCheck/SmnpCheck";
@@ -62,6 +63,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Dirb",
         element: <DirbTool />,
         description: "Dirb tool",
+    },
+    {
+        name: "JohnTheRipper",
+        path: "/tools/JohnTheRipper",
+        element: <JohnTheRipper />,
+        description: "Utility for cracking passcodes",
     },
     {
         name: "CVE-2021-41773",
