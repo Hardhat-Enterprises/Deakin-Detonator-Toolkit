@@ -45,9 +45,9 @@
       "category": "DeveloperTool",
       "copyright": "",
       "deb": {
-        "depends": [],
+        "depends": ["openjdk-11-jdk"],
          "files": { 
-          "/usr/share/ddt": "../exploits/",
+          "/usr/share/ddt": "exploits/",
           "/usr/share/doc/ddt/README.md": "../README.md"
         }
       },
@@ -59,8 +59,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
-      "longDescription": "",
+      "identifier": "com.deakin.ddt",
+      "longDescription": "Deakin Detonator Toolkit",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
