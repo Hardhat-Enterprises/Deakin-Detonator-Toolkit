@@ -3,6 +3,7 @@ import { AttackVectors } from "../pages/AttackVectors";
 import ToolsPage from "../pages/Tools";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import { DirbTool } from "./DirbTool/DirbTool";
+import FindOffset from "./FindOffset/FindOffset";
 import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
@@ -75,6 +76,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2021-41773",
         element: <CVE202141773 />,
         description: "Apache 2.4.49 and 2.4.50 RCE",
+    },
+    {
+        name: "Find offset",
+        path: "/attack-vectors/find-offset",
+        element: <FindOffset />,
+        description: "Find the offset to the instruction pointer in a buffer overflow vulnerable binary.",
     },
 ];
 
