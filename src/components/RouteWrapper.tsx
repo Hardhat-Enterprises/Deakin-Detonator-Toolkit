@@ -3,6 +3,7 @@ import { AttackVectors } from "../pages/AttackVectors";
 import ToolsPage from "../pages/Tools";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import { DirbTool } from "./DirbTool/DirbTool";
+import FindOffset from "./FindOffset/FindOffset";
 import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
