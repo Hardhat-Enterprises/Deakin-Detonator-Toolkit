@@ -77,6 +77,12 @@ export const ROUTES: RouteProperties[] = [
         element: <CVE202141773 />,
         description: "Apache 2.4.49 and 2.4.50 RCE",
     },
+    {
+        name: "Find offset",
+        path: "/attack-vectors/find-offset",
+        element: <FindOffset />,
+        description: "Find the offset to the instruction pointer in a buffer overflow vulnerable binary.",
+    },
 ];
 
 export function getTools() {
