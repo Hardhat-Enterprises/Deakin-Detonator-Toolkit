@@ -11,9 +11,8 @@ import {
     useMantineTheme,
 } from "@mantine/core";
 import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { CVE202141773 } from "./components/CVE-2021-41773/CVE-2021-41773";
 import Navigation from "./components/NavBar/Navigation";
 
 export default function App() {
@@ -57,7 +56,9 @@ export default function App() {
                                 </Center>
                             </Header>
                         }
-                    ></AppShell>
+                    >
+                        <Routes></Routes>
+                    </AppShell>
                 </MantineProvider>
             </ColorSchemeProvider>
         </div>
