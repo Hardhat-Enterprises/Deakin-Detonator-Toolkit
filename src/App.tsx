@@ -14,13 +14,6 @@ import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navigation from "./components/NavBar/Navigation";
-import NmapTool from "./components/NmapTool/NmapTool";
-import SnmpCheck from "./components/SmnpCheck/SmnpCheck";
-import AboutPage from "./pages/About";
-import ToolsPage from "./pages/Tools";
-import AttackVectorsPage from "./pages/Attack Vectors";
-import WalkthroughsPage from "./pages/Walkthroughs";
-import ReferencesPage from "./pages/References";
 
 export default function App() {
     const theme = useMantineTheme();
@@ -64,16 +57,7 @@ export default function App() {
                             </Header>
                         }
                     >
-                        <Routes>
-                            <Route path="/" element={<AboutPage />} />
-                            <Route path="/about" element={<AboutPage />} />
-                            <Route path="/attackvectors" element={<AttackVectorsPage />} />
-                            <Route path="/tools" element={<ToolsPage />} />
-                            <Route path="/tools/nmap" element={<NmapTool />} />
-                            <Route path="/tools/snmp-check" element={<SnmpCheck />} />
-                            <Route path="/walkthroughs" element={<WalkthroughsPage />} />
-                            <Route path="/references" element={<ReferencesPage />} />
-                        </Routes>
+                        <Routes></Routes>
                     </AppShell>
                 </MantineProvider>
             </ColorSchemeProvider>

@@ -31,6 +31,26 @@
             "name": "python3",
             "cmd": "python3",
             "args": true
+          },
+          {
+            "name": "dirb",
+            "cmd": "dirb",
+            "args": true
+          },
+          {
+            "name": "john",
+            "cmd": "john",
+            "args": true
+          },
+          {
+            "name": "zip2john",
+            "cmd": "zip2john",
+            "args": true
+          },
+          {
+            "name": "rar2john",
+            "cmd": "rar2john",
+            "args": true
           }
         ]
       }
