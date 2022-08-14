@@ -13,6 +13,7 @@
   "tauri": {
     "allowlist": {
       "shell": {
+        "all": true,
         "open": true,
         "execute": true,
         "sidecar": true,
@@ -51,8 +52,27 @@
             "name": "rar2john",
             "cmd": "rar2john",
             "args": true
+          },
+          {
+            "name": "bash -c",
+            "cmd": "bash -c",
+            "args": true
           }
         ]
+      },
+      "fs": {
+        "all": true,
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "copyFile": true,
+        "createDir": true,
+        "removeDir": true,
+        "removeFile": true,
+        "renameFile": true
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {

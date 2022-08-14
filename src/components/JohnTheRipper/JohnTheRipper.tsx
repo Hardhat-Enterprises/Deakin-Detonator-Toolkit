@@ -40,8 +40,10 @@ const JohnTheRipper = () => {
         setLoading(true);
 
         if (values.hash.length == 0) {
-            const args = [`${values.filePath} > /tmp/hash.txt`];
-            const command = values.fileType + "2john";
+            const args = [` "${values.fileType}2john ${values.filePath} > /tmp/hashoutput.txt"`];
+            //const command = values.fileType + "2john";
+            const command = "bash -c";
+            console.log(command + args);
             try {
                 const output = await CommandHelper.runCommand(command, args);
                 setOutput(output);
@@ -59,7 +61,7 @@ const JohnTheRipper = () => {
 
             setLoading(false);
         } else {
-            const args = [` --format=${values.fileType} ${values.hash}`];
+            const args = [`--format=${values.fileType} ${values.hash}`];
             try {
                 const output = await CommandHelper.runCommand("john", args);
                 setOutput(output);
