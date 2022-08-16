@@ -13,16 +13,6 @@ interface FormValuesType {
 
 const fileTypes = ["zip", "rar"];
 
-const scanOptions = [
-    "All",
-    "Operating System",
-    "Firewall Status",
-    "Services",
-    "Stealth",
-    "Device Discovery",
-    "Top ports",
-];
-
 const JohnTheRipper = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
@@ -39,6 +29,7 @@ const JohnTheRipper = () => {
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
+        //if hash is not specified
         if (values.hash.length === 0) {
             const args = [`${values.filePath}`];
 
@@ -62,6 +53,7 @@ const JohnTheRipper = () => {
             }
 
             setLoading(false);
+            //if hash is specified
         } else {
             const args = [`--format=${values.fileType}`, `${values.hash}`];
             try {

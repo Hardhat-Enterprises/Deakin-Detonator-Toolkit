@@ -38,9 +38,6 @@ source "$HOME/.cargo/env"
 
 echo "-----------------------------"
 echo "Rust installation complete..."
-echo "-----------------------------"
-
-echo "-------------------------------"
 echo "Installing NodeSource NodeJS..."
 echo "-------------------------------"
 #Install NodeSource NodeJS
