@@ -39,6 +39,11 @@
             "args": true
           },
           {
+            "name": "bash",
+            "cmd": "bash",
+            "args": true
+          },
+          {
             "name": "john",
             "cmd": "john",
             "args": true
@@ -52,24 +57,12 @@
             "name": "rar2john",
             "cmd": "rar2john",
             "args": true
-          },
-          {
-            "name": "bash -c",
-            "cmd": "bash -c",
-            "args": true
           }
         ]
       },
       "fs": {
         "all": true,
-        "readFile": true,
-        "writeFile": true,
-        "readDir": true,
-        "copyFile": true,
-        "createDir": true,
-        "removeDir": true,
-        "removeFile": true,
-        "renameFile": true
+        "scope": ["$TEMP/**"]
       },
       "path": {
         "all": true
