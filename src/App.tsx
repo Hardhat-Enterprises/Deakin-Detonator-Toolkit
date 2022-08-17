@@ -15,6 +15,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { CVE202141773 } from "./components/CVE-2021-41773/CVE-2021-41773";
 import Navigation from "./components/NavBar/Navigation";
+import { ROUTES } from "./components/RouteWrapper";
 
 export default function App() {
     const theme = useMantineTheme();
@@ -57,7 +58,13 @@ export default function App() {
                                 </Center>
                             </Header>
                         }
-                    ></AppShell>
+                    >
+                        <Routes>
+                            {ROUTES.map((route) => (
+                                <Route {...route}></Route>
+                            ))}
+                        </Routes>
+                    </AppShell>
                 </MantineProvider>
             </ColorSchemeProvider>
         </div>

@@ -1,11 +1,11 @@
-import { Group, Title } from "@mantine/core";
+import { Group, Title, Stack, Text } from "@mantine/core";
 import React from "react";
 
 const WalkthroughsPage = () => {
     return (
-        <Group direction={"column"} position={"center"}>
-            <Title>Walkthroughs</Title>
-        </Group>
+        <Stack align={"center"}>
+        <Title>Walkthroughs</Title>
+    </Stack>
     );
 };
 
