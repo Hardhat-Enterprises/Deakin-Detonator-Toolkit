@@ -4,10 +4,9 @@ import React from "react";
 const WalkthroughsPage = () => {
     return (
         <Stack align={"center"}>
-        <Title>Walkthroughs</Title>
-    </Stack>
+            <Title>Walkthroughs</Title>
+        </Stack>
     );
 };
 
 export default WalkthroughsPage;
-

@@ -1,60 +1,81 @@
 import { Button, Group, Popover, Stack, Text, Title } from "@mantine/core";
 import { IconExternalLink } from "@tabler/icons";
 import { useState } from "react";
-import { ActionIcon } from '@mantine/core';
+import { ActionIcon } from "@mantine/core";
 
 const ReferencesPage = () => {
     const [opened, setOpened] = useState(false);
 
     return (
         <>
-	    <Group position={"center"}>
+            <Group position={"center"}>
                 <div>
-                    <p><Title>References</Title></p>
+                    <p>
+                        <Title>References</Title>
+                    </p>
                 </div>
-        </Group>
-            
-        
-        <Group position={"center"} align={"left"}>            
-            <Stack>
+            </Group>
+
+            <Group position={"center"} align={"left"}>
+                <Stack>
                     <Title order={4}>GUI Development:</Title>
-                <Group>
-                    <ActionIcon size="lg" color="green" variant="filled" component="a" target="_blank" rel="noopener noreferrer" href="https://www.reactjs.org"><IconExternalLink size={18}/></ActionIcon>
-                    <Popover width={418} position="bottom" withArrow shadow="md">
-                        <Popover.Target>
-                            <Button style={{ width: 418 }} onClick={() => setOpened((o) => !o)}>ReactJS</Button>
-                        </Popover.Target>
-                        <Popover.Dropdown>
-                            <Text size="sm">
-                            <p>Deakin Detonator Toolkit is built using ReactJS</p>
-                            <p>URL: https://www.reactjs.org</p>
-                            </Text>
-                        </Popover.Dropdown>
-                    </Popover>
-                </Group>
-        
-                <Title order={4}>Tools:</Title>
-                <Group>
-                    <ActionIcon size="lg" color="green" variant="filled" component="a" target="_blank" rel="noopener noreferrer" href="https://www.nmap.org"><IconExternalLink size={18}/></ActionIcon>
-                    <Popover width={418} position="bottom" withArrow shadow="md">
-                        <Popover.Target>
-                            <Button style={{ width: 418 }} onClick={() => setOpened((o) => !o)}>Nmap</Button>
-                        </Popover.Target>
-                        <Popover.Dropdown>
-                            <Text size="sm">
-                            <p>Nmap a network scaning tool</p>
-                            <p>URL: https://www.nmap.org</p>
-                            </Text>
-                        </Popover.Dropdown>
-                    </Popover>
-                </Group>
+                    <Group>
+                        <ActionIcon
+                            size="lg"
+                            color="green"
+                            variant="filled"
+                            component="a"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://www.reactjs.org"
+                        >
+                            <IconExternalLink size={18} />
+                        </ActionIcon>
+                        <Popover width={418} position="bottom" withArrow shadow="md">
+                            <Popover.Target>
+                                <Button style={{ width: 418 }} onClick={() => setOpened((o) => !o)}>
+                                    ReactJS
+                                </Button>
+                            </Popover.Target>
+                            <Popover.Dropdown>
+                                <Text size="sm">
+                                    <p>Deakin Detonator Toolkit is built using ReactJS</p>
+                                    <p>URL: https://www.reactjs.org</p>
+                                </Text>
+                            </Popover.Dropdown>
+                        </Popover>
+                    </Group>
 
-                
+                    <Title order={4}>Tools:</Title>
+                    <Group>
+                        <ActionIcon
+                            size="lg"
+                            color="green"
+                            variant="filled"
+                            component="a"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://www.nmap.org"
+                        >
+                            <IconExternalLink size={18} />
+                        </ActionIcon>
+                        <Popover width={418} position="bottom" withArrow shadow="md">
+                            <Popover.Target>
+                                <Button style={{ width: 418 }} onClick={() => setOpened((o) => !o)}>
+                                    Nmap
+                                </Button>
+                            </Popover.Target>
+                            <Popover.Dropdown>
+                                <Text size="sm">
+                                    <p>Nmap a network scaning tool</p>
+                                    <p>URL: https://www.nmap.org</p>
+                                </Text>
+                            </Popover.Dropdown>
+                        </Popover>
+                    </Group>
 
+                    {/* Below is code mirgrated from old phyton/thinker app. Please uncomment and update these as attack vectors are implimented into DDT */}
 
-                {/* Below is code mirgrated from old phyton/thinker app. Please uncomment and update these as attack vectors are implimented into DDT */}
-
-                
                     {/* <Title order={4}>Attack Vector One:</Title>
                 <Group>
                     <ActionIcon size="lg" color="green" variant="filled" component="a" target="_blank" rel="noopener noreferrer" href="https://github.com/DanMcInerney/pymetasploit3"><IconExternalLink size={18}/></ActionIcon>
@@ -364,10 +385,9 @@ const ReferencesPage = () => {
                         </Popover.Dropdown>
                     </Popover>
                 </Group> */}
-                
-            </Stack>
-        </Group>
-     </>
+                </Stack>
+            </Group>
+        </>
     );
 };
 
