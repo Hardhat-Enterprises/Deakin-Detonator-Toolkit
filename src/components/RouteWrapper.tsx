@@ -1,6 +1,8 @@
 import AboutPage from "../pages/About";
 import { AttackVectors } from "../pages/AttackVectors";
+import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
+import WalkthroughsPage from "../pages/Walkthroughs";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import { DirbTool } from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
@@ -38,6 +40,18 @@ export const ROUTES: RouteProperties[] = [
         name: "Attack Vectors",
         path: "/attack-vectors",
         element: <AttackVectors />,
+        description: "Attack Vectors page",
+    },
+    {
+        name: "Walk-throughts",
+        path: "/walk-throughts",
+        element: <WalkthroughsPage />,
+        description: "Walk-throughts page",
+    },
+    {
+        name: "References",
+        path: "/references",
+        element: <ReferencesPage />,
         description: "Attack Vectors page",
     },
     {
