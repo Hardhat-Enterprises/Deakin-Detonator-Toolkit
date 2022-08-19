@@ -39,7 +39,7 @@ const ReferencesPage = () => {
                             </Popover.Target>
                             <Popover.Dropdown>
                                 <Text size="sm">
-                                    <p>Deakin Detonator Toolkit is built using ReactJS</p>
+                                    <p>Deakin Detonator Toolkit is built using ReactJS.</p>
                                     <p>URL: https://www.reactjs.org</p>
                                 </Text>
                             </Popover.Dropdown>
@@ -67,8 +67,35 @@ const ReferencesPage = () => {
                             </Popover.Target>
                             <Popover.Dropdown>
                                 <Text size="sm">
-                                    <p>Nmap a network scaning tool</p>
+                                    <p>Nmap a network scaning tool.</p>
                                     <p>URL: https://www.nmap.org</p>
+                                </Text>
+                            </Popover.Dropdown>
+                        </Popover>
+                    </Group>
+
+                    <Group>
+                        <ActionIcon
+                            size="lg"
+                            color="green"
+                            variant="filled"
+                            component="a"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://www.openwall.com/john/"
+                        >
+                            <IconExternalLink size={18} />
+                        </ActionIcon>
+                        <Popover width={418} position="bottom" withArrow shadow="md">
+                            <Popover.Target>
+                                <Button style={{ width: 418 }} onClick={() => setOpened((o) => !o)}>
+                                    JohnTheRipper
+                                </Button>
+                            </Popover.Target>
+                            <Popover.Dropdown>
+                                <Text size="sm">
+                                    <p>JohnTheRipper is a free and open source password cracker.</p>
+                                    <p>URL: https://www.openwall.com/john/</p>
                                 </Text>
                             </Popover.Dropdown>
                         </Popover>
