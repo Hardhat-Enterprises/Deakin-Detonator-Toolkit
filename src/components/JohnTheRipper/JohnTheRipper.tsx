@@ -38,17 +38,14 @@ const JohnTheRipper = () => {
                 await writeTextFile("hash.txt", result, { dir: BaseDirectory.Temp });
                 setOutput(result);
             } catch (e: any) {
-                console.log(e);
                 setOutput(e);
             }
 
             try {
                 const args = [`--format=${values.fileType}`, "/tmp/hash.txt"];
                 const result = await CommandHelper.runCommand("john", args);
-                console.log(result);
                 setOutput(output + "\n" + result);
             } catch (e: any) {
-                console.log(e);
                 setOutput(e);
             }
 
@@ -58,10 +55,8 @@ const JohnTheRipper = () => {
             const args = [`--format=${values.fileType}`, `${values.hash}`];
             try {
                 const result = await CommandHelper.runCommand("john", args);
-                console.log(result);
                 setOutput(output + "\n" + result);
             } catch (e: any) {
-                console.log(e);
                 setOutput(e);
             }
 
