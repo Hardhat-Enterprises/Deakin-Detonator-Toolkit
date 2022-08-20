@@ -9,6 +9,7 @@ import FindOffset from "./FindOffset/FindOffset";
 import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
+import SMBEnumeration from "./SMBEnumeration/SMBEnumeration";
 import SnmpCheck from "./SmnpCheck/SmnpCheck";
 
 export interface RouteProperties {
@@ -60,6 +61,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/nmap",
         element: <NmapTool />,
         description: "Network scanning tool",
+    },
+    {
+        name: "SMB Enumeration",
+        path: "/tools/SMBEnumeration",
+        element: <SMBEnumeration />,
+        description: "SMB Enumeration tool",
     },
     {
         name: "SnmpCheck",
