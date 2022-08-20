@@ -14,41 +14,42 @@ interface FormValuesType {
 const speeds = ["T0", "T1", "T2", "T3", "T4", "T5"];
 
 const scripts = [
-"smb2-capabilities.nse",
-"smb2-security-mode.nse",
-"smb2-time.nse",
-"smb2-vuln-uptime.nse",
-"smb-brute.nse",
-"smb-double-pulsar-backdoor.nse",
-"smb-enum-domains.nse",
-"smb-enum-groups.nse",
-"smb-enum-processes.nse",
-"smb-enum-services.nse",
-"smb-enum-sessions.nse",
-"smb-enum-shares.nse",
-"smb-enum-users.nse",
-"smb-flood.nse",
-"smb-ls.nse",
-"smb-mbenum.nse",
-"smb-os-discovery.nse",
-"smb-print-text.nse",
-"smb-protocols.nse",
-"smb-psexec.nse",
-"smb-security-mode.nse",
-"smb-server-stats.nse",
-"smb-system-info.nse",
-"smb-vuln-conficker.nse",
-"smb-vuln-cve2009-3103.nse",
-"smb-vuln-cve-2017-7494.nse",
-"smb-vuln-ms06-025.nse",
-"smb-vuln-ms07-029.nse",
-"smb-vuln-ms08-067.nse",
-"smb-vuln-ms10-054.nse",
-"smb-vuln-ms10-061.nse",
-"smb-vuln-ms17-010.nse",
-"smb-vuln-regsvc-dos.nse",
-"smb-vuln-webexec.nse",
-"smb-webexec-exploit.nse"]
+    "smb2-capabilities.nse",
+    "smb2-security-mode.nse",
+    "smb2-time.nse",
+    "smb2-vuln-uptime.nse",
+    "smb-brute.nse",
+    "smb-double-pulsar-backdoor.nse",
+    "smb-enum-domains.nse",
+    "smb-enum-groups.nse",
+    "smb-enum-processes.nse",
+    "smb-enum-services.nse",
+    "smb-enum-sessions.nse",
+    "smb-enum-shares.nse",
+    "smb-enum-users.nse",
+    "smb-flood.nse",
+    "smb-ls.nse",
+    "smb-mbenum.nse",
+    "smb-os-discovery.nse",
+    "smb-print-text.nse",
+    "smb-protocols.nse",
+    "smb-psexec.nse",
+    "smb-security-mode.nse",
+    "smb-server-stats.nse",
+    "smb-system-info.nse",
+    "smb-vuln-conficker.nse",
+    "smb-vuln-cve2009-3103.nse",
+    "smb-vuln-cve-2017-7494.nse",
+    "smb-vuln-ms06-025.nse",
+    "smb-vuln-ms07-029.nse",
+    "smb-vuln-ms08-067.nse",
+    "smb-vuln-ms10-054.nse",
+    "smb-vuln-ms10-061.nse",
+    "smb-vuln-ms17-010.nse",
+    "smb-vuln-regsvc-dos.nse",
+    "smb-vuln-webexec.nse",
+    "smb-webexec-exploit.nse",
+];
 
 const SMBEnumeration = () => {
     const [loading, setLoading] = useState(false);
@@ -61,19 +62,18 @@ const SMBEnumeration = () => {
             ip: "",
             port: "",
             speed: "T3",
-            script: "smb-enum-users"
+            script: "smb-enum-users",
         },
     });
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-        
+
         const args = [`-${values.speed}`, `--script=${values.scripts}`];
 
         if (values.port) {
             args.push(`-p ${values.port}`);
         }
-
 
         args.push(values.ip);
 
@@ -91,8 +91,6 @@ const SMBEnumeration = () => {
         setOutput("");
     }, [setOutput]);
 
-
-
     return (
         <form
             onSubmit={form.onSubmit((values) =>
@@ -103,7 +101,7 @@ const SMBEnumeration = () => {
             <Stack>
                 <Title>SMB Enumeration</Title>
                 <TextInput label={"Target IP or Hostname"} required {...form.getInputProps("ip")} />
-                <TextInput label={"Port"} required {...form.getInputProps("port")} placeholder={"Example: 445"}/>
+                <TextInput label={"Port"} required {...form.getInputProps("port")} placeholder={"Example: 445"} />
 
                 <NativeSelect
                     label={"Scan Speed"}
@@ -125,7 +123,7 @@ const SMBEnumeration = () => {
                     placeholder={"Select an SMB Enumeration Script to run against the target"}
                     description={"NSE Scripts, refer: https://nmap.org/nsedoc/scripts/"}
                 />
-                
+
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
