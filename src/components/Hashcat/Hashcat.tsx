@@ -24,17 +24,13 @@ interface FormValuesType {
     hashValue: string;
     hashFilePath: string;
     passwordFilePath: string;
+    additionalCommand: string;
+    minPwdLen: number;
+    maxPwdLen: number;
 }
 
 const inputType = ["Hash Value", "File"];
-const attackMode = ["Straight/Combination", "Brute-force", "Hybride Wordlist + Mask"];
-const maskCharsets = [
-    "Lowercase letters",
-    "Uppercase letters",
-    "Numbers",
-    "Special charactors",
-    "All charactors on keyboard",
-];
+const attackMode = ["Straight", "Brute-force", "Hybride Wordlist + Mask"];
 
 const Hashcat = () => {
     const [loading, setLoading] = useState(false);
@@ -44,19 +40,53 @@ const Hashcat = () => {
 
     let form = useForm({
         initialValues: {
-            attackMode: "Straight/Combination",
+            attackMode: "Straight",
             inputType: "Hash Value",
-            maskCharsets: "Uppercase letters",
+            maskCharsets: "",
             hashAlgorithmCode: 0,
             hashValue: "",
             hashFilePath: "",
             passwordFilePath: "",
+            additionalCommand: "",
+            minPwdLen: 1,
+            maxPwdLen: 1,
         },
     });
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-        const args = [`-a 0 -m ${values.hashAlgorithmCode} ${values.hashValue} ${values.passwordFilePath}`];
+        const args = [`-m${values.hashAlgorithmCode}`];
+        if (selectedModeOption === "Straight") {
+            args.push(`-a0`);
+        } else if (selectedModeOption === "Brute-force") {
+            args.push(`-a3`);
+        } else if (selectedModeOption === "Hybride Wordlist + Mask") {
+            args.push(`-a6`);
+        }
+        if (selectedInputOption === "Hash Value") {
+            args.push(`${values.hashValue}`);
+        } else if (selectedInputOption === "File") {
+            args.push(`${values.hashFilePath}`);
+        }
+        if (selectedModeOption === "Straight") {
+            args.push(`${values.passwordFilePath}`);
+        } else if (selectedModeOption === "Brute-force") {
+            args.push(`--increment`);
+            // args.push(`--increment-min ${values.minPwdLen}`, `--increment-max ${values.maxPwdLen}`) *not working
+            if (values.maskCharsets) {
+                args.push(`${values.maskCharsets}`);
+            }
+        } else if (selectedModeOption === "Hybride Wordlist + Mask") {
+            args.push(`${values.passwordFilePath}`);
+            args.push(`--increment`);
+            // args.push(`--increment-min ${values.minPwdLen}`, `--increment-max ${values.maxPwdLen}`) *not working
+            if (values.maskCharsets) {
+                args.push(`${values.maskCharsets}`);
+            }
+        }
+        if (values.additionalCommand) {
+            args.push(`${values.additionalCommand}`);
+        }
 
         try {
             const output = await CommandHelper.runCommand("hashcat", args);
@@ -72,8 +102,7 @@ const Hashcat = () => {
         setOutput("");
     }, [setOutput]);
 
-    const isPasswordFile =
-        selectedModeOption === "Straight/Combination" || selectedModeOption === "Hybride Wordlist + Mask";
+    const isPasswordFile = selectedModeOption === "Straight" || selectedModeOption === "Hybride Wordlist + Mask";
     const isCharset = selectedModeOption === "Brute-force" || selectedModeOption === "Hybride Wordlist + Mask";
     const isFile = selectedInputOption == "File";
 
@@ -134,7 +163,7 @@ const Hashcat = () => {
                 {isCharset && (
                     <Grid>
                         <Grid.Col span={6}>
-                            <TextInput
+                            <NumberInput
                                 label={"Minimum password length"}
                                 placeholder={"Start from 1"}
                                 required
@@ -142,9 +171,9 @@ const Hashcat = () => {
                             />
                         </Grid.Col>
                         <Grid.Col span={6}>
-                            <TextInput
+                            <NumberInput
                                 label={"Maximum password length"}
-                                placeholder={"Recommend not bigger than 9"}
+                                placeholder={"Recommend not bigger than 8"}
                                 required
                                 {...form.getInputProps("maxPwdLen")}
                             />
@@ -152,15 +181,15 @@ const Hashcat = () => {
                     </Grid>
                 )}
                 {isCharset && (
-                    <MultiSelect
-                        title={"Charsets"}
-                        data={maskCharsets}
-                        required
-                        label={"Pick charsets (multiselect), refer: https://hashcat.net/wiki/doku.php?id=hashcat"}
-                        {...form.getInputProps("selectedCharsets")}
+                    <TextInput
+                        label={"Mask Charsets, refer: https://hashcat.net/wiki/doku.php?id=hashcat"}
+                        {...form.getInputProps("maskCharsets")}
                     />
                 )}
-
+                <TextInput
+                    label={"Additional command, refer: https://hashcat.net/wiki/doku.php?id=hashcat"}
+                    {...form.getInputProps("additionalCommand")}
+                />
                 <Button type={"submit"}>Crack</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
