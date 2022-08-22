@@ -36,6 +36,11 @@
             "name": "dirb",
             "cmd": "dirb",
             "args": true
+          },
+          {
+            "name": "hashcat",
+            "cmd": "hashcat",
+            "args": true
           }
         ]
       }

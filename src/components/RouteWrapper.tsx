@@ -6,6 +6,7 @@ import WalkthroughsPage from "../pages/Walkthroughs";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import { DirbTool } from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
+import Hashcat from "./Hashcat/Hashcat";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
 import SnmpCheck from "./SmnpCheck/SmnpCheck";
@@ -89,6 +90,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/find-offset",
         element: <FindOffset />,
         description: "Find the offset to the instruction pointer in a buffer overflow vulnerable binary.",
+    },
+    {
+        name: "Hashcat",
+        path: "/tools/hashcat",
+        element: <Hashcat />,
+        description: "Hashcat hash restoring tool",
     },
 ];
 
