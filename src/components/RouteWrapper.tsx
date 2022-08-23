@@ -1,11 +1,16 @@
 import AboutPage from "../pages/About";
 import { AttackVectors } from "../pages/AttackVectors";
+import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
+import WalkthroughsPage from "../pages/Walkthroughs";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import { DirbTool } from "./DirbTool/DirbTool";
+import FindOffset from "./FindOffset/FindOffset";
+import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
+import SMBEnumeration from "./SMBEnumeration/SMBEnumeration";
 import SnmpCheck from "./SmnpCheck/SmnpCheck";
 
 export interface RouteProperties {
@@ -41,10 +46,28 @@ export const ROUTES: RouteProperties[] = [
         description: "Attack Vectors page",
     },
     {
+        name: "Walk-throughts",
+        path: "/walk-throughts",
+        element: <WalkthroughsPage />,
+        description: "Walk-throughts page",
+    },
+    {
+        name: "References",
+        path: "/references",
+        element: <ReferencesPage />,
+        description: "Attack Vectors page",
+    },
+    {
         name: "Nmap",
         path: "/tools/nmap",
         element: <NmapTool />,
         description: "Network scanning tool",
+    },
+    {
+        name: "SMB Enumeration",
+        path: "/tools/SMBEnumeration",
+        element: <SMBEnumeration />,
+        description: "SMB Enumeration tool",
     },
     {
         name: "SnmpCheck",
@@ -65,6 +88,12 @@ export const ROUTES: RouteProperties[] = [
         description: "Dirb tool",
     },
     {
+        name: "JohnTheRipper",
+        path: "/tools/JohnTheRipper",
+        element: <JohnTheRipper />,
+        description: "Utility for cracking passwords",
+    },
+    {
         name: "CVE-2021-41773",
         path: "/attack-vectors/cve-2021-41773",
         element: <CVE202141773 />,
@@ -75,6 +104,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2021-44228",
         element: <CVE202144228 />,
         description: "Vulnerability in the Apache Log4j 2 Java library allowing RCE",
+    },
+    {
+        name: "Find offset",
+        path: "/attack-vectors/find-offset",
+        element: <FindOffset />,
+        description: "Find the offset to the instruction pointer in a buffer overflow vulnerable binary.",
     },
 ];
 
