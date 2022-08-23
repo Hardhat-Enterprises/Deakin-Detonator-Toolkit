@@ -7,9 +7,12 @@ import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import { DirbTool } from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
+import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
+import SMBEnumeration from "./SMBEnumeration/SMBEnumeration";
 import SnmpCheck from "./SmnpCheck/SmnpCheck";
+import Hydra from "./Hydra/Hydra";
 
 export interface RouteProperties {
     name: string;
@@ -62,6 +65,12 @@ export const ROUTES: RouteProperties[] = [
         description: "Network scanning tool",
     },
     {
+        name: "SMB Enumeration",
+        path: "/tools/SMBEnumeration",
+        element: <SMBEnumeration />,
+        description: "SMB Enumeration tool",
+    },
+    {
         name: "SnmpCheck",
         path: "/tools/snmpcheck",
         element: <SnmpCheck />,
@@ -80,6 +89,12 @@ export const ROUTES: RouteProperties[] = [
         description: "Dirb tool",
     },
     {
+        name: "JohnTheRipper",
+        path: "/tools/JohnTheRipper",
+        element: <JohnTheRipper />,
+        description: "Utility for cracking passwords",
+    },
+    {
         name: "CVE-2021-41773",
         path: "/attack-vectors/cve-2021-41773",
         element: <CVE202141773 />,
@@ -96,6 +111,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/hashcat",
         element: <Hashcat />,
         description: "Hashcat hash restoring tool",
+    },
+    {
+        name: "Hydra",
+        path: "/tools/Hydra",
+        element: <Hydra />,
+        description: "Login Cracker",
     },
 ];
 
