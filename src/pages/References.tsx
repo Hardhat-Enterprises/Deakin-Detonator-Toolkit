@@ -100,6 +100,33 @@ const ReferencesPage = () => {
                             </Popover.Dropdown>
                         </Popover>
                     </Group>
+                    
+                    <Group>
+                        <ActionIcon
+                            size="lg"
+                            color="green"
+                            variant="filled"
+                            component="a"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://hashcat.net/hashcat/"
+                        >
+                            <IconExternalLink size={18} />
+                        </ActionIcon>
+                        <Popover width={418} position="bottom" withArrow shadow="md">
+                            <Popover.Target>
+                                <Button style={{ width: 418 }} onClick={() => setOpened((o) => !o)}>
+                                    Hashcat
+                                </Button>
+                            </Popover.Target>
+                            <Popover.Dropdown>
+                                <Text size="sm">
+                                    <p>Hashcat hash restoring tool</p>
+                                    <p>URL: https://hashcat.net/hashcat</p>
+                                </Text>
+                            </Popover.Dropdown>
+                        </Popover>
+                    </Group>
 
                     {/* Below is code mirgrated from old phyton/thinker app. Please uncomment and update these as attack vectors are implimented into DDT */}
 
