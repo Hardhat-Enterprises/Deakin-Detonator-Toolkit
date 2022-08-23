@@ -56,6 +56,11 @@
             "name": "rar2john",
             "cmd": "rar2john",
             "args": true
+          },
+          {
+            "name": "hydra",
+            "cmd": "hydra",
+            "args": true
           }
         ]
       },
