@@ -41,8 +41,40 @@
             "name": "hashcat",
             "cmd": "hashcat",
             "args": true
+          },
+          {
+            "name": "bash",
+            "cmd": "bash",
+            "args": true
+          },
+          {
+            "name": "john",
+            "cmd": "john",
+            "args": true
+          },
+          {
+            "name": "zip2john",
+            "cmd": "zip2john",
+            "args": true
+          },
+          {
+            "name": "rar2john",
+            "cmd": "rar2john",
+            "args": true
+          },
+          {
+            "name": "hydra",
+            "cmd": "hydra",
+            "args": true
           }
         ]
+      },
+      "fs": {
+        "all": true,
+        "scope": ["$TEMP/**"]
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
