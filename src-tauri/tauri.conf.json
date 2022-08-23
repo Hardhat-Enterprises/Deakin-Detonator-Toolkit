@@ -79,7 +79,7 @@
       "deb": {
         "depends": [],
          "files": { 
-          "/usr/share/ddt": "../exploits/",
+          "/usr/share/ddt": "exploits/",
           "/usr/share/doc/ddt/README.md": "../README.md"
         }
       },
@@ -91,7 +91,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "au.edu.deakin.ddt",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
