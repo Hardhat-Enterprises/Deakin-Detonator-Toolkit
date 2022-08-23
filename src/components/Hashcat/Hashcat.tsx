@@ -122,7 +122,7 @@ const Hashcat = () => {
                     data={attackMode}
                     required
                     placeholder={"Pick a attack mode"}
-                    label={"Attack mode, refer: https://hashcat.net/wiki/doku.php?id=hashcat"}
+                    label={"Attack mode, refer: https://hashcat.net/hashcat"}
                 />
                 <Grid>
                     <Grid.Col span={3}>
@@ -137,7 +137,7 @@ const Hashcat = () => {
                     </Grid.Col>
                     <Grid.Col span={9}>
                         <NumberInput
-                            label={"Hash Algorithm, refer: https://hashcat.net/wiki/doku.php?id=hashcat"}
+                            label={"Hash Algorithm, refer: https://hashcat.net/hashcat"}
                             placeholder={"Enter the Hash Algorithm code"}
                             required
                             {...form.getInputProps("hashAlgorithmCode")}
@@ -190,13 +190,13 @@ const Hashcat = () => {
                 )}
                 {isCharset && (
                     <TextInput
-                        label={"Mask Charsets, refer: https://hashcat.net/wiki/doku.php?id=hashcat"}
+                        label={"Mask Charsets, refer: https://hashcat.net/hashcat"}
                         placeholder={"eg: ?d?d?d?d"}
                         {...form.getInputProps("maskCharsets")}
                     />
                 )}
                 <TextInput
-                    label={"Additional command, refer: https://hashcat.net/wiki/doku.php?id=hashcat"}
+                    label={"Additional command, refer: https://hashcat.net/hashcat"}
                     placeholder={"eg: --force"}
                     {...form.getInputProps("additionalCommand")}
                 />
