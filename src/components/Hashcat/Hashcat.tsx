@@ -1,20 +1,9 @@
-import {
-    Button,
-    LoadingOverlay,
-    NativeSelect,
-    NumberInput,
-    Stack,
-    TextInput,
-    Title,
-    MultiSelect,
-    Grid,
-    Alert,
-} from "@mantine/core";
+import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Title, Grid, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { IconAlertCircle } from "@tabler/icons";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { Command } from "@tauri-apps/api/shell";
 
 interface FormValuesType {
     attackMode: string;
@@ -40,8 +29,8 @@ const Hashcat = () => {
 
     let form = useForm({
         initialValues: {
-            attackMode: "Straight",
-            inputType: "Hash Value",
+            attackMode: "",
+            inputType: "",
             maskCharsets: "",
             hashAlgorithmCode: 0,
             hashValue: "",
@@ -72,14 +61,25 @@ const Hashcat = () => {
             args.push(`${values.passwordFilePath}`);
         } else if (selectedModeOption === "Brute-force") {
             args.push(`--increment`);
-            // args.push(`--increment-min ${values.minPwdLen}`, `--increment-max ${values.maxPwdLen}`) *not working
+            args.push(
+                `--increment`,
+                `--increment-min`,
+                `${values.minPwdLen}`,
+                `--increment-max`,
+                `${values.maxPwdLen}`
+            );
             if (values.maskCharsets) {
                 args.push(`${values.maskCharsets}`);
             }
         } else if (selectedModeOption === "Hybride Wordlist + Mask") {
             args.push(`${values.passwordFilePath}`);
-            args.push(`--increment`);
-            // args.push(`--increment-min ${values.minPwdLen}`, `--increment-max ${values.maxPwdLen}`) *not working
+            args.push(
+                `--increment`,
+                `--increment-min`,
+                `${values.minPwdLen}`,
+                `--increment-max`,
+                `${values.maxPwdLen}`
+            );
             if (values.maskCharsets) {
                 args.push(`${values.maskCharsets}`);
             }
@@ -132,6 +132,7 @@ const Hashcat = () => {
                             label={"Input Hash Type"}
                             data={inputType}
                             required
+                            placeholder={"Input type"}
                         />
                     </Grid.Col>
                     <Grid.Col span={9}>
@@ -143,11 +144,18 @@ const Hashcat = () => {
                         />
                     </Grid.Col>
                 </Grid>
-                {!isFile && <TextInput label={"Input hash value"} required {...form.getInputProps("hashValue")} />}
+                {!isFile && (
+                    <TextInput
+                        label={"Input hash value"}
+                        placeholder={"eg:ae71a4222ef1893879b442f14c40c370"}
+                        required
+                        {...form.getInputProps("hashValue")}
+                    />
+                )}
                 {isFile && (
                     <TextInput
                         label={"Input hash file path"}
-                        placeholder={" Hash file(s) path"}
+                        placeholder={" eg: /root/hash.txt"}
                         required
                         {...form.getInputProps("hashFilePath")}
                     />
@@ -155,7 +163,7 @@ const Hashcat = () => {
                 {isPasswordFile && (
                     <TextInput
                         label={"Input password file"}
-                        placeholder={"The password file path"}
+                        placeholder={"eg: /root/pwd.txt"}
                         required
                         {...form.getInputProps("passwordFilePath")}
                     />
@@ -183,13 +191,22 @@ const Hashcat = () => {
                 {isCharset && (
                     <TextInput
                         label={"Mask Charsets, refer: https://hashcat.net/wiki/doku.php?id=hashcat"}
+                        placeholder={"eg: ?d?d?d?d"}
                         {...form.getInputProps("maskCharsets")}
                     />
                 )}
                 <TextInput
                     label={"Additional command, refer: https://hashcat.net/wiki/doku.php?id=hashcat"}
+                    placeholder={"eg: --force"}
                     {...form.getInputProps("additionalCommand")}
                 />
+                <Alert
+                    icon={<IconAlertCircle size={16} />}
+                    radius="md"
+                    children={
+                        "Please try with additional command '--force', otherwise you have to download OpenCL for hashcat. "
+                    }
+                ></Alert>
                 <Button type={"submit"}>Crack</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
