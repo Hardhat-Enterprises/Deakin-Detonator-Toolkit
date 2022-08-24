@@ -5,13 +5,13 @@ import ToolsPage from "../pages/Tools";
 import WalkthroughsPage from "../pages/Walkthroughs";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import { DirbTool } from "./DirbTool/DirbTool";
+import Enum4linux from "./Enum4linux/Enum4linux";
 import FindOffset from "./FindOffset/FindOffset";
 import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
 import SMBEnumeration from "./SMBEnumeration/SMBEnumeration";
 import SnmpCheck from "./SmnpCheck/SmnpCheck";
-import Hydra from "./Hydra/Hydra";
 
 export interface RouteProperties {
     name: string;
@@ -70,6 +70,12 @@ export const ROUTES: RouteProperties[] = [
         description: "SMB Enumeration tool",
     },
     {
+        name: "Enum4linux",
+        path: "/tools/Enum4linux",
+        element: <Enum4linux/>,
+        description: "Enum4linux tool",
+    },
+    {
         name: "SnmpCheck",
         path: "/tools/snmpcheck",
         element: <SnmpCheck />,
@@ -104,12 +110,6 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/find-offset",
         element: <FindOffset />,
         description: "Find the offset to the instruction pointer in a buffer overflow vulnerable binary.",
-    },
-    {
-        name: "Hydra",
-        path: "/tools/Hydra",
-        element: <Hydra />,
-        description: "Login Cracker",
     },
 ];
 
