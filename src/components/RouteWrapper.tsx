@@ -12,6 +12,7 @@ import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
 import SMBEnumeration from "./SMBEnumeration/SMBEnumeration";
 import SnmpCheck from "./SmnpCheck/SmnpCheck";
 import Hydra from "./Hydra/Hydra";
+import SearchSploit from "./SearchSploit/SearchSploit";
 
 export interface RouteProperties {
     name: string;
@@ -110,6 +111,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Hydra",
         element: <Hydra />,
         description: "Login Cracker",
+    },
+    {
+        name: "SearchSploit",
+        path: "/tools/SearchSploit",
+        element: <SearchSploit />,
+        description: "SearchSploit Utility. Allow you to search through exploits, shellcodes and papers.",
     },
 ];
 
