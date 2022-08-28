@@ -66,6 +66,11 @@
             "name": "hydra",
             "cmd": "hydra",
             "args": true
+          },
+          {
+            "name": "searchsploit",
+            "cmd": "searchsploit",
+            "args": true
           }
         ]
       },
