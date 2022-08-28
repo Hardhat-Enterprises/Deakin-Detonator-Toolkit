@@ -34,7 +34,7 @@ sudo apt install -y mitmproxy \
         libsoup2.4-dev \
         libjavascriptcoregtk-4.0-18 \
         libjavascriptcoregtk-4.0-dev \
-        libwebkit2gtk-4.1 \
+        libwebkit2gtk-4.1-0 \
         libwebkit2gtk-4.1-dev \
 		cargo \
 		nodejs
