@@ -38,6 +38,11 @@
             "args": true
           },
           {
+            "name": "hashcat",
+            "cmd": "hashcat",
+            "args": true
+          },
+          {
             "name": "bash",
             "cmd": "bash",
             "args": true
