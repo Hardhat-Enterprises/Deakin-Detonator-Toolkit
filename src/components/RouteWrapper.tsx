@@ -7,11 +7,14 @@ import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import { DirbTool } from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
+import Hashcat from "./Hashcat/Hashcat";
 import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
 import SMBEnumeration from "./SMBEnumeration/SMBEnumeration";
 import SnmpCheck from "./SmnpCheck/SmnpCheck";
+import Hydra from "./Hydra/Hydra";
+import SearchSploit from "./SearchSploit/SearchSploit";
 
 export interface RouteProperties {
     name: string;
@@ -110,6 +113,24 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/find-offset",
         element: <FindOffset />,
         description: "Find the offset to the instruction pointer in a buffer overflow vulnerable binary.",
+    },
+    {
+        name: "Hashcat",
+        path: "/tools/hashcat",
+        element: <Hashcat />,
+        description: "Hashcat hash restoring tool",
+    },
+    {
+        name: "Hydra",
+        path: "/tools/Hydra",
+        element: <Hydra />,
+        description: "Login Cracker",
+    },
+    {
+        name: "SearchSploit",
+        path: "/tools/SearchSploit",
+        element: <SearchSploit />,
+        description: "SearchSploit Utility. Allow you to search through exploits, shellcodes and papers.",
     },
 ];
 

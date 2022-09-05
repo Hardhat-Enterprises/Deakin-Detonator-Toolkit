@@ -38,6 +38,11 @@
             "args": true
           },
           {
+            "name": "hashcat",
+            "cmd": "hashcat",
+            "args": true
+          },
+          {
             "name": "bash",
             "cmd": "bash",
             "args": true
@@ -55,6 +60,16 @@
           {
             "name": "rar2john",
             "cmd": "rar2john",
+            "args": true
+          },
+          {
+            "name": "hydra",
+            "cmd": "hydra",
+            "args": true
+          },
+          {
+            "name": "searchsploit",
+            "cmd": "searchsploit",
             "args": true
           }
         ]

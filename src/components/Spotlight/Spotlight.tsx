@@ -38,7 +38,9 @@ function Search() {
             actions={actions}
             searchIcon={<IconSearch size={18} />}
             filter={(query, actions) =>
-                actions.filter((action) => action.title.toLowerCase().includes(query.toLowerCase()))
+                actions.filter((action) =>
+                    (action.title.toLowerCase() + action.description?.toLocaleLowerCase()).includes(query.toLowerCase())
+                )
             }
             searchPlaceholder="Search..."
             shortcut="mod + shift + 1"
