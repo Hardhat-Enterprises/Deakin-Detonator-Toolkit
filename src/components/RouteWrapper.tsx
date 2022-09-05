@@ -12,6 +12,7 @@ import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
 import SMBEnumeration from "./SMBEnumeration/SMBEnumeration";
 import SnmpCheck from "./SmnpCheck/SmnpCheck";
 import Hydra from "./Hydra/Hydra";
+import { ZeroLogon } from "./ZeroLogon/Zerologon";
 
 export interface RouteProperties {
     name: string;
@@ -98,6 +99,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2021-41773",
         element: <CVE202141773 />,
         description: "Apache 2.4.49 and 2.4.50 RCE",
+    },
+    {
+        name: "ZeroLogon",
+        path: "/attack-vectors/ZeroLogon",
+        element: <ZeroLogon />,
+        description: "Zero Logon will let the penetester to perform an authentication attempts on windows server",
     },
     {
         name: "Find offset",
