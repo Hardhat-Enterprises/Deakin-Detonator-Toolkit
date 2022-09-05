@@ -38,6 +38,11 @@
             "args": true
           },
           {
+            "name": "hashcat",
+            "cmd": "hashcat",
+            "args": true
+          },
+          {
             "name": "bash",
             "cmd": "bash",
             "args": true
@@ -61,6 +66,11 @@
             "name": "hydra",
             "cmd": "hydra",
             "args": true
+          },
+          {
+            "name": "searchsploit",
+            "cmd": "searchsploit",
+            "args": true
           }
         ]
       },
@@ -77,7 +87,7 @@
       "category": "DeveloperTool",
       "copyright": "",
       "deb": {
-        "depends": [],
+        "depends": ["openjdk-11-jdk"],
          "files": { 
           "/usr/share/ddt": "exploits/",
           "/usr/share/doc/ddt/README.md": "../README.md"
@@ -91,8 +101,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "au.edu.deakin.ddt",
-      "longDescription": "",
+      "identifier": "com.deakin.ddt",
+      "longDescription": "Deakin Detonator Toolkit",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",

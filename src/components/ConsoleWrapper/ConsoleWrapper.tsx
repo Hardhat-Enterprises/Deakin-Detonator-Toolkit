@@ -3,18 +3,21 @@ import { Prism } from "@mantine/prism";
 
 interface ConsoleWrapperProps {
     output: string;
-    clearOutputCallback: () => void;
+    clearOutputCallback?: () => void;
+    hideClearButton?: boolean;
 }
 
-const ConsoleWrapper = ({ output, clearOutputCallback }: ConsoleWrapperProps) => {
+const ConsoleWrapper = ({ output, clearOutputCallback, hideClearButton }: ConsoleWrapperProps) => {
     if (output) {
         return (
             <>
                 <Title>Output</Title>
                 <Prism language={"bash"}>{output}</Prism>
-                <Button color={"red"} onClick={clearOutputCallback}>
-                    Clear output
-                </Button>
+                {!hideClearButton && (
+                    <Button color={"red"} onClick={clearOutputCallback}>
+                        Clear output
+                    </Button>
+                )}
             </>
         );
     } else {
