@@ -60,8 +60,8 @@ const attackVectorsData = {
 const walkthroughsData = {
     icon: <IconStepInto size={16} />,
     color: "blue",
-    label: "Walk-throughs",
-    route: "/walk-throughts",
+    label: "Walkthroughs",
+    route: "/walkthroughs",
 };
 
 const referencesData = {
