@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Title } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -14,7 +14,6 @@ interface FormValues {
 export function ZeroLogon() {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
-    const [selectedVersion, setSelectedVersion] = useState("2.4.49");
 
     let form = useForm({
         initialValues: {
