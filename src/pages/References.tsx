@@ -136,17 +136,19 @@ const ReferencesPage = () => {
                             rel="noopener noreferrer"
                             href="https://github.com/SecureAuthCorp/impacket"
                         >
-                        <IconExternalLink size={18} />
+                            <IconExternalLink size={18} />
                         </ActionIcon>
                         <Popover width={418} position="bottom" withArrow shadow="md">
                             <Popover.Target>
                                 <Button style={{ width: 418 }} onClick={() => setOpened((o) => !o)}>
-                                Impacket
+                                    Impacket
                                 </Button>
                             </Popover.Target>
                             <Popover.Dropdown>
                                 <Text size="sm">
-                                    <p>Impacket is a collection of Python classes for working with network protocols. </p>
+                                    <p>
+                                        Impacket is a collection of Python classes for working with network protocols.{" "}
+                                    </p>
                                     <p>URL: https://github.com/SecureAuthCorp/impacket</p>
                                 </Text>
                             </Popover.Dropdown>
