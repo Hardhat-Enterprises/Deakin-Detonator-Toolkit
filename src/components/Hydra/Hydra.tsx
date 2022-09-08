@@ -1,64 +1,75 @@
-import {
-    Button,
-    LoadingOverlay,
-    NativeSelect,
-    NumberInput,
-    Stack,
-    TextInput,
-    Title,
-    HoverCard,
-    Text,
-    Group,
-} from "@mantine/core";
+import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Title, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 
 interface FormValuesType {
-    user: string;
-    threads: string;
-    server: string;
+    loginInputType: string;
+    loginArgs: string;
     passwordInputType: string;
-    serviceInputType: string;
     passwordArgs: string;
+    threads: string;
+    service: string;
+    serviceArgs: string;
+    nsr: string;
 }
 
-const passwordInputTypes = ["-p", "-P", "-x", "-e"];
-const loginInputTypes = ["-l", "-L"];
+const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic"];
+const loginInputTypes = ["Single Login", "File"];
+const serviceType = ["SMTP", "SSH", "NFS"];
 
 const Hydra = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [selectedPasswordInput, setSelectedPasswordInput] = useState("");
-    const [setselectedLoginInput, setsetselectedLoginInput] = useState("");
+    const [selectedLoginInput, setSelectedLoginInput] = useState("");
+    const [selectedService, setSelectedService] = useState("");
 
     let form = useForm({
         initialValues: {
+            loginInputType: "",
+            loginArgs: "",
             passwordInputType: "",
-            serviceInputType: "",
-            user: "",
-            threads: "6",
-            server: "",
             passwordArgs: "",
+            threads: "6",
+            service: "",
+            serviceArgs: "",
+            nsr: "nsr",
         },
     });
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
-        try {
-            const args = [
-                "-l",
-                `${values.user}`,
-                `${values.passwordInputType}`,
-                `${values.passwordArgs}`,
-                "-t",
-                `${values.threads}`,
-                `${values.server}`,
-            ];
-            const output = await CommandHelper.runCommand("hydra", args);
+        const args = [];
+        if (selectedLoginInput === "Single Login") {
+            args.push(`-l`, `${values.loginArgs}`);
+        } else if (selectedLoginInput === "File") {
+            args.push(`-L`, `${values.loginArgs}`);
+        }
+        if (selectedPasswordInput === "Single Password") {
+            args.push(`-p`, `${values.passwordArgs}`);
+        } else if (selectedPasswordInput === "File") {
+            args.push(`-P`, `${values.passwordArgs}`);
+        } else if (selectedPasswordInput === "Character Set") {
+            args.push(`-x`, `${values.passwordArgs}`);
+        } else if (selectedPasswordInput === "Basic") {
+            args.push(`-e`, `${values.nsr}`);
+        }
+        if (values.threads) {
+            args.push(`-t ${values.threads}`);
+        }
+        if (selectedService === "SMTP") {
+            args.push(`smtp://${values.serviceArgs}`);
+        } else if (selectedService === "SSH") {
+            args.push(`ssh://${values.serviceArgs}`);
+        } else if (selectedService === "NFS") {
+            args.push(`nfs://${values.serviceArgs}`);
+        }
 
+        try {
+            const output = await CommandHelper.runCommand("hydra", args);
             setOutput(output);
         } catch (e: any) {
             setOutput(e);
@@ -71,59 +82,127 @@ const Hydra = () => {
         setOutput("");
     }, [setOutput]);
 
+    const isLoginSingle = selectedLoginInput === "Single Login";
+    const isLoginFile = selectedLoginInput === "File";
+    const isPasswordSingle = selectedPasswordInput === "Single Password";
+    const isPasswordFile = selectedPasswordInput === "File";
+    const isPasswordSet = selectedPasswordInput === "Character Set";
+    const isPasswordBasic = selectedPasswordInput === "Basic";
+    const isService = selectedService;
+
     return (
         <form
             onSubmit={form.onSubmit((values) =>
                 onSubmit({
                     ...values,
                     passwordInputType: selectedPasswordInput,
-                    serviceInputType: setselectedLoginInput,
+                    loginInputType: selectedLoginInput,
+                    service: selectedService,
                 })
             )}
         >
             <LoadingOverlay visible={loading} />
             <Stack>
                 <Title>Hydra</Title>
-                <NativeSelect
-                    value={setselectedLoginInput}
-                    onChange={(e) => setsetselectedLoginInput(e.target.value)}
-                    label={"Login settings"}
-                    description={"-l [login]; -L [/path/to/logins.txt]"}
-                    data={loginInputTypes}
-                    placeholder={"Select logins"}
-                />
-                <TextInput {...form.getInputProps("user")} />
-                <NativeSelect
-                    value={selectedPasswordInput}
-                    onChange={(e) => setSelectedPasswordInput(e.target.value)}
-                    label={"Password settings"}
-                    description={"-p [password]; -P [/path/to/dictionary.txt]; -x [min:max:charset]; -e [nsr]"}
-                    data={passwordInputTypes}
-                    placeholder={"Select a tool to crack with"}
-                />
-                <TextInput {...form.getInputProps("passwordArgs")} />
-                <NumberInput
-                    label={"Number of threads"}
-                    {...form.getInputProps("threads")}
-                    defaultValue={6}
-                    placeholder={"Choose how many"}
-                    required
-                />
-                <TextInput label={"Services"} {...form.getInputProps("server")} />
-                <Group position="left">
-                    <HoverCard width={280} shadow="md">
-                        <HoverCard.Target>
-                            <Button>Hover to see tips on Services</Button>
-                        </HoverCard.Target>
-                        <HoverCard.Dropdown>
-                            <Text size="sm">
-                                Form: service://serverip:port/opt Services: [ssh://], [smtp://], [nfs://] Examples:
-                                [ssh://192.168.1.1/22] Check for open ports with nmap!
-                            </Text>
-                        </HoverCard.Dropdown>
-                    </HoverCard>
-                </Group>
-                <Button type={"submit"}>Crack It</Button>
+                <Grid>
+                    <Grid.Col span={3}>
+                        <NativeSelect
+                            value={selectedLoginInput}
+                            onChange={(e) => setSelectedLoginInput(e.target.value)}
+                            label={"Login settings"}
+                            data={loginInputTypes}
+                            required
+                            placeholder={"Select logins"}
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={9}>
+                        {isLoginSingle && (
+                            <TextInput
+                                {...form.getInputProps("loginArgs")}
+                                label={"Specify username"}
+                                placeholder={"eg: kali"}
+                                required
+                            />
+                        )}
+                        {isLoginFile && (
+                            <TextInput
+                                {...form.getInputProps("loginArgs")}
+                                label={"File path"}
+                                placeholder={"eg: /home/kali/Desktop/logins.txt"}
+                                required
+                            />
+                        )}
+                    </Grid.Col>
+                </Grid>
+                <Grid>
+                    <Grid.Col span={3}>
+                        <NativeSelect
+                            value={selectedPasswordInput}
+                            onChange={(e) => setSelectedPasswordInput(e.target.value)}
+                            label={"Password settings"}
+                            data={passwordInputTypes}
+                            required
+                            placeholder={"Select a tool to crack with"}
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={9}>
+                        {isPasswordSingle && (
+                            <TextInput
+                                {...form.getInputProps("passwordArgs")}
+                                label={"Password"}
+                                placeholder={"eg: root"}
+                                required
+                            />
+                        )}
+                        {isPasswordFile && (
+                            <TextInput
+                                {...form.getInputProps("passwordArgs")}
+                                label={"File path"}
+                                placeholder={"eg: /home/kali/Desktop/pwd.txt"}
+                                required
+                            />
+                        )}
+                        {isPasswordSet && (
+                            <TextInput
+                                {...form.getInputProps("passwordArgs")}
+                                label={"Character Set"}
+                                placeholder={"eg: 1:5:Aa1"}
+                                required
+                            />
+                        )}
+                        {isPasswordBasic && (
+                            <TextInput label={"Null, username, reverse username"} disabled placeholder={"nsr"} />
+                        )}
+                    </Grid.Col>
+                </Grid>
+                <Grid>
+                    <Grid.Col span={1}>
+                        <NumberInput label={"Threads"} {...form.getInputProps("threads")} defaultValue={6} required />
+                    </Grid.Col>
+                    <Grid.Col span={2}>
+                        <NativeSelect
+                            value={selectedService}
+                            onChange={(e) => setSelectedService(e.target.value)}
+                            label={"Service Type"}
+                            data={serviceType}
+                            required
+                            placeholder={"Select a service"}
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={9}>
+                        {isService && (
+                            <TextInput
+                                {...form.getInputProps("serviceArgs")}
+                                label={"IP address and Port number"}
+                                placeholder={"eg: 192.168.1.1:22"}
+                                required
+                            />
+                        )}
+                    </Grid.Col>
+                </Grid>
+                <Button type={"submit"} color="cyan">
+                    Crack
+                </Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

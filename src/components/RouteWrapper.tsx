@@ -2,6 +2,7 @@ import AboutPage from "../pages/About";
 import { AttackVectors } from "../pages/AttackVectors";
 import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
+import WalkthroughsPage from "../pages/Walkthroughs";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import { DirbTool } from "./DirbTool/DirbTool";
@@ -14,7 +15,7 @@ import SMBEnumeration from "./SMBEnumeration/SMBEnumeration";
 import SnmpCheck from "./SmnpCheck/SmnpCheck";
 import Hydra from "./Hydra/Hydra";
 import SearchSploit from "./SearchSploit/SearchSploit";
-import { WalkthroughsPage } from "../pages/Walkthroughs";
+import Urlsnarf from "./Urlsnarf/Urlsnarf";
 
 export interface RouteProperties {
     name: string;
@@ -49,10 +50,10 @@ export const ROUTES: RouteProperties[] = [
         description: "Attack Vectors page",
     },
     {
-        name: "Walkthroughs",
-        path: "/walkthroughs",
+        name: "Walk-throughts",
+        path: "/walk-throughts",
         element: <WalkthroughsPage />,
-        description: "Walkthroughs page",
+        description: "Walk-throughts page",
     },
     {
         name: "References",
@@ -127,6 +128,12 @@ export const ROUTES: RouteProperties[] = [
         description: "Login Cracker",
     },
     {
+        name: "Urlsnarf",
+        path: "/tools/Urlsnarf",
+        element: <Urlsnarf />,
+        description: "HTTP SNIFFA",
+    },
+    {
         name: "SearchSploit",
         path: "/tools/SearchSploit",
         element: <SearchSploit />,
@@ -140,8 +147,4 @@ export function getTools() {
 
 export function getAttackVectors() {
     return ROUTES.filter((route) => route.path.startsWith("/attack-vectors/"));
-}
-
-export function getWalkthroughs() {
-    return ROUTES.filter((route) => route.path.startsWith("/walkthroughs/"));
 }

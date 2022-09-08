@@ -71,6 +71,11 @@
             "name": "searchsploit",
             "cmd": "searchsploit",
             "args": true
+          },
+          {
+            "name": "urlsnarf",
+            "cmd": "urlsnarf",
+            "args": true
           }
         ]
       },
