@@ -1,4 +1,4 @@
-import { Center, Group, Stack, Text, Title } from "@mantine/core";
+import { Stack, Text, Title } from "@mantine/core";
 
 const AboutPage = () => {
     return (
