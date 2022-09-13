@@ -20,6 +20,16 @@ const ReferencesPage = () => {
                         description={"Deakin Detonator Toolkit is built using ReactJS"}
                         url={"https://www.reactjs.org"}
                     />
+                    <Reference
+                        name={"Mantine"}
+                        description={"Mantine is a React UI component library"}
+                        url={"https://mantine.dev"}
+                    />
+                    <Reference
+                        name={"TypeScript"}
+                        description={"TypeScript is a typed superset of JavaScript"}
+                        url={"https://www.typescriptlang.org"}
+                    />
                     <Title order={4}>Tools:</Title>
                     <Reference
                         name={"Nmap"}
@@ -40,6 +50,30 @@ const ReferencesPage = () => {
                         name={"Impacket"}
                         description={"Impacket is a collection of Python classes for working with network protocols."}
                         url={"https://github.com/SecureAuthCorp/impacket"}
+                    />
+                    <Reference
+                        name={"Snmp-check"}
+                        description={"Snmp-check is a tool for enumerating on SNMP services."}
+                        url={"https://www.kali.org/tools/snmpcheck/"}
+                    />
+                    <Reference
+                        name={"Shodan"}
+                        description={"Shodan is a repository of information about internet connected devices."}
+                        url={"https://www.shodan.io/"}
+                    />
+                    <Reference
+                        name={"Exploitdb"}
+                        description={
+                            "Exploitdb is used for the searchsploit tool. Contains information about exploits and vulnerabilities."
+                        }
+                        url={"https://github.com/offensive-security/exploitdb"}
+                    />
+                    <Reference
+                        name={"Dirb"}
+                        description={
+                            "Dirb is a tool that can scan a website, enumerating directories and files that may be present."
+                        }
+                        url={"https://www.kali.org/tools/dirb/"}
                     />
                 </Stack>
             </Group>
