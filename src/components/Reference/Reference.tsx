@@ -1,7 +1,6 @@
 import { Group, ActionIcon, Popover, Button, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconExternalLink } from "@tabler/icons";
-import { useState } from "react";
 
 interface ReferenceProps {
     name: string;
