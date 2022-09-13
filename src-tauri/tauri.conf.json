@@ -102,7 +102,7 @@
       "category": "DeveloperTool",
       "copyright": "",
       "deb": {
-        "depends": ["openjdk-11-jdk", "python3-impacket"],
+        "depends": ["openjdk-11-jdk", "python3-impacket", "dsniff"],
          "files": { 
           "/usr/share/ddt": "exploits/",
           "/usr/share/doc/ddt/README.md": "../README.md"

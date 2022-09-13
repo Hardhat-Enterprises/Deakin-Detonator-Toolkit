@@ -39,7 +39,8 @@ sudo apt install -y mitmproxy \
         libwebkit2gtk-4.1-dev \
 		openjdk-11-jdk
 		cargo \
-		nodejs
+		nodejs \
+		dsniff
 
 echo "-----------------------------"
 echo "Installing yarn..."
