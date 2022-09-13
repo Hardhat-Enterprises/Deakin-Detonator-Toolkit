@@ -81,6 +81,16 @@
             "name": "impacket-secretsdump",
             "cmd": "impacket-wmiexec",
             "args": true
+          },
+          {
+            "name": "arpspoof",
+            "cmd": "arpspoof",
+            "args": true
+          },
+          {
+            "name": "kill",
+            "cmd": "kill",
+            "args": true
           }
         ]
       },
