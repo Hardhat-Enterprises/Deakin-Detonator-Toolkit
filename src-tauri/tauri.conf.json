@@ -76,6 +76,16 @@
             "name": "urlsnarf",
             "cmd": "urlsnarf",
             "args": true
+          },
+          {
+            "name": "impacket-wmiexec",
+            "cmd": "impacket-wmiexec",
+            "args": true
+          },
+          {
+            "name": "impacket-secretsdump",
+            "cmd": "impacket-secretsdump",
+            "args": true
           }
         ]
       },
@@ -92,7 +102,7 @@
       "category": "DeveloperTool",
       "copyright": "",
       "deb": {
-        "depends": ["openjdk-11-jdk"],
+        "depends": ["openjdk-11-jdk", "python3-impacket"],
          "files": { 
           "/usr/share/ddt": "exploits/",
           "/usr/share/doc/ddt/README.md": "../README.md"
@@ -133,10 +143,12 @@
     "windows": [
       {
         "fullscreen": false,
+        "width": 800,
         "height": 600,
+        "maximized": true,
         "resizable": true,
-        "title": "Deakin Detonator Toolkit",
-        "width": 800
+        "title": "Deakin Detonator Toolkit"
+        
       }
     ]
   }

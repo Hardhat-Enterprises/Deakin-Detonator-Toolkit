@@ -30,11 +30,16 @@ const ReferencesPage = () => {
                         name={"Hashcat"}
                         description={"Hashcat has cracking tools"}
                         url={"https://hashcat.net/hashcat"}
-                    />{" "}
+                    />
                     <Reference
                         name={"JohnTheRipper"}
                         description={"JohnTheRipper is a free and open source password cracking tool."}
                         url={"https://www.openwall.com/john"}
+                    />
+                    <Reference
+                        name={"Impacket"}
+                        description={"Impacket is a collection of Python classes for working with network protocols."}
+                        url={"https://github.com/SecureAuthCorp/impacket"}
                     />
                 </Stack>
             </Group>
