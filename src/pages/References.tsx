@@ -41,6 +41,20 @@ const ReferencesPage = () => {
                         description={"Impacket is a collection of Python classes for working with network protocols."}
                         url={"https://github.com/SecureAuthCorp/impacket"}
                     />
+                    <Reference
+                        name={"Hydra"}
+                        description={
+                            "Hydra is a parallelized login cracker which supports numerous protocols to attack."
+                        }
+                        url={"https://www.kali.org/tools/hydra/"}
+                    />
+                    <Reference
+                        name={"Urlsnarf"}
+                        description={
+                            "Urlsnarf is a tool within dsniff package, which contains tools for listening and creating network traffic"
+                        }
+                        url={"https://www.kali.org/tools/dsniff/"}
+                    />
                 </Stack>
             </Group>
         </>
