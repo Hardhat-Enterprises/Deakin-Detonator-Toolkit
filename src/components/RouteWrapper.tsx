@@ -13,6 +13,7 @@ import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
 import SMBEnumeration from "./SMBEnumeration/SMBEnumeration";
 import SnmpCheck from "./SmnpCheck/SmnpCheck";
 import Hydra from "./Hydra/Hydra";
+import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
@@ -132,6 +133,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Hydra",
         element: <Hydra />,
         description: "Login Cracker",
+    },
+    {
+        name: "Urlsnarf",
+        path: "/tools/Urlsnarf",
+        element: <Urlsnarf />,
+        description: "HTTP Sniffer",
     },
     {
         name: "SearchSploit",

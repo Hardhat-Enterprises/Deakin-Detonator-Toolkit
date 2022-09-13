@@ -52,6 +52,20 @@ const ReferencesPage = () => {
                         url={"https://github.com/SecureAuthCorp/impacket"}
                     />
                     <Reference
+                        name={"Hydra"}
+                        description={
+                            "Hydra is a parallelised login cracker which supports numerous protocols to attack."
+                        }
+                        url={"https://www.kali.org/tools/hydra/"}
+                    />
+                    <Reference
+                        name={"Urlsnarf"}
+                        description={
+                            "Urlsnarf is a tool within dsniff package, which contains tools for listening and creating network traffic"
+                        }
+                        url={"https://www.kali.org/tools/dsniff/"}
+                    />
+                    <Reference
                         name={"Snmp-check"}
                         description={"Snmp-check is a tool for enumerating on SNMP services."}
                         url={"https://www.kali.org/tools/snmpcheck/"}
