@@ -71,6 +71,16 @@
             "name": "searchsploit",
             "cmd": "searchsploit",
             "args": true
+          },
+          {
+            "name": "impacket-wmiexec",
+            "cmd": "impacket-wmiexec",
+            "args": true
+          },
+          {
+            "name": "impacket-secretsdump",
+            "cmd": "impacket-wmiexec",
+            "args": true
           }
         ]
       },
@@ -87,7 +97,7 @@
       "category": "DeveloperTool",
       "copyright": "",
       "deb": {
-        "depends": ["openjdk-11-jdk"],
+        "depends": ["openjdk-11-jdk", "python3-impacket"],
          "files": { 
           "/usr/share/ddt": "exploits/",
           "/usr/share/doc/ddt/README.md": "../README.md"
