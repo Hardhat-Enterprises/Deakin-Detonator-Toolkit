@@ -105,7 +105,7 @@ const Hydra = () => {
             <Stack>
                 <Title>Hydra</Title>
                 <Grid>
-                    <Grid.Col span={6}>
+                    <Grid.Col span={12}>
                         <NativeSelect
                             value={selectedLoginInput}
                             onChange={(e) => setSelectedLoginInput(e.target.value)}
@@ -115,7 +115,7 @@ const Hydra = () => {
                             placeholder={"Select logins"}
                         />
                     </Grid.Col>
-                    <Grid.Col span={6}>
+                    <Grid.Col span={12}>
                         {isLoginSingle && (
                             <TextInput
                                 {...form.getInputProps("loginArgs")}
@@ -135,7 +135,7 @@ const Hydra = () => {
                     </Grid.Col>
                 </Grid>
                 <Grid>
-                    <Grid.Col span={6}>
+                    <Grid.Col span={12}>
                         <NativeSelect
                             value={selectedPasswordInput}
                             onChange={(e) => setSelectedPasswordInput(e.target.value)}
@@ -145,7 +145,7 @@ const Hydra = () => {
                             placeholder={"Select a tool to crack with"}
                         />
                     </Grid.Col>
-                    <Grid.Col span={6}>
+                    <Grid.Col span={12}>
                         {isPasswordSingle && (
                             <TextInput
                                 {...form.getInputProps("passwordArgs")}
@@ -176,10 +176,10 @@ const Hydra = () => {
                     </Grid.Col>
                 </Grid>
                 <Grid>
-                    <Grid.Col span={3}>
+                    <Grid.Col span={6}>
                         <NumberInput label={"Threads"} {...form.getInputProps("threads")} defaultValue={6} required />
                     </Grid.Col>
-                    <Grid.Col span={3}>
+                    <Grid.Col span={6}>
                         <NativeSelect
                             value={selectedService}
                             onChange={(e) => setSelectedService(e.target.value)}
@@ -189,7 +189,7 @@ const Hydra = () => {
                             placeholder={"Select a service"}
                         />
                     </Grid.Col>
-                    <Grid.Col span={6}>
+                    <Grid.Col span={12}>
                         {isService && (
                             <TextInput
                                 {...form.getInputProps("serviceArgs")}
