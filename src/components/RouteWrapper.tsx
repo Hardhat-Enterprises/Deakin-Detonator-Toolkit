@@ -17,8 +17,8 @@ import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
 import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
-import ARPSpoof from "./ArpSpoof/ArpSpoof";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
+import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
 
 export interface RouteProperties {
     name: string;
@@ -153,6 +153,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/ARPSpoofing",
         element: <ARPSpoofing />,
         description: "ARP spoof tool to poison the MAC address between two targets.",
+    },
+    {
+        name: "WalkthroughSamplePage",
+        path: "/walkthroughs/walkthroughsample",
+        element: <WalkthroughSamplePage />,
+        description: "The walkthrough sample page.",
     },
 ];
 
