@@ -17,6 +17,11 @@ import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
+<<<<<<< HEAD
+=======
+import VulscanTool from "./VulscanTool/VulscanTool";
+import { CVE20170144 } from "./CVE-2017-0144/CVE-2017-0144";
+>>>>>>> 47c60a5 (CVE-2017-0144 attack vector/exploit added)
 
 export interface RouteProperties {
     name: string;
@@ -115,6 +120,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2021-44228",
         element: <CVE202144228 />,
         description: "Vulnerability in the Apache Log4j 2 Java library allowing RCE",
+    },
+    {
+        name: "CVE-2017-0144",
+        path: "/attack-vectors/cve-2017-0144",
+        element: <CVE20170144 />,
+        description: "Windows SMB (SMBv1) Remote Code Execution Vulnerability",
     },
     {
         name: "Find offset",
