@@ -89,6 +89,12 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/dirb/"}
                     />
+                    <Title order={4}>Attack Vectors:</Title>
+                    <Reference
+                        name={"CVE-2017-0144 - Eternal Blue"}
+                        description={"Windows SMB Remote Code Execution Vulnerability"}
+                        url={"https://cve.mitre.org/cgi-bin/cvename.cgi?name=cve-2017-0144"}
+                    />
                 </Stack>
             </Group>
         </>
