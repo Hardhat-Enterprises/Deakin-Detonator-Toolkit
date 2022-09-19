@@ -89,6 +89,14 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/dirb/"}
                     />
+                    <Title order={4}>Attack Vectors:</Title>
+                    <Reference
+                        name={"CVE-2022-22965 - Spring4Shell"}
+                        description={
+                            "A Spring MVC or Spring WebFlux application running on JDK 9+ may be vulnerable to remote code execution (RCE) via data binding"
+                        }
+                        url={"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-22965"}
+                    />
                 </Stack>
             </Group>
         </>

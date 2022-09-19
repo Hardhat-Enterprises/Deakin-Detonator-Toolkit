@@ -17,9 +17,13 @@ import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
+<<<<<<< HEAD
 import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
+=======
+import { CVE202222965 } from "./CVE-2022-22965/CVE-2022-22965";
+>>>>>>> 4ee34c6 (Urlsnarf + Hydra improvements (#57))
 
 export interface RouteProperties {
     name: string;
@@ -118,6 +122,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2021-44228",
         element: <CVE202144228 />,
         description: "Vulnerability in the Apache Log4j 2 Java library allowing RCE",
+    },
+    {
+        name: "CVE-2022-22965",
+        path: "/attack-vectors/cve-2022-22965",
+        element: <CVE202222965 />,
+        description:
+            "A Spring MVC or Spring WebFlux application running on JDK 9+ may be vulnerable to remote code execution (RCE) via data binding",
     },
     {
         name: "Find offset",

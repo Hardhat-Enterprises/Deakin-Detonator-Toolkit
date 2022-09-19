@@ -85,6 +85,7 @@
           {
             "name": "impacket-secretsdump",
             "cmd": "impacket-secretsdump",
+<<<<<<< HEAD
             "args": true
           },
           {
@@ -95,6 +96,8 @@
           {
             "name": "kill",
             "cmd": "kill",
+=======
+>>>>>>> 4ee34c6 (Urlsnarf + Hydra improvements (#57))
             "args": true
           }
         ]
