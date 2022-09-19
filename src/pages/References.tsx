@@ -89,6 +89,11 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/dirb/"}
                     />
+                    <Reference
+                        name={"Vulscan"}
+                        description={"Vulscan is a module which enhances nmap to a vulnerability scanner."}
+                        url={"https://github.com/scipag/vulscan"}
+                    />
                 </Stack>
             </Group>
         </>

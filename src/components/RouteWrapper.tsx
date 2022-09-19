@@ -17,6 +17,7 @@ import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
+import VulscanTool from "./VulscanTool/VulscanTool";
 
 export interface RouteProperties {
     name: string;
@@ -67,6 +68,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/nmap",
         element: <NmapTool />,
         description: "Network scanning tool",
+    },
+    {
+        name: "Vulscan",
+        path: "/tools/vulscan",
+        element: <VulscanTool />,
+        description: "Vulnerability scanning tool",
     },
     {
         name: "SMB Enumeration",
