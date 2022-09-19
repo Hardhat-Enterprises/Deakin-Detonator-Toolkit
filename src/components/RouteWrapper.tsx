@@ -17,13 +17,12 @@ import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
-<<<<<<< HEAD
+
 import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
-=======
+
 import { CVE202222965 } from "./CVE-2022-22965/CVE-2022-22965";
->>>>>>> 4ee34c6 (Urlsnarf + Hydra improvements (#57))
 
 export interface RouteProperties {
     name: string;
