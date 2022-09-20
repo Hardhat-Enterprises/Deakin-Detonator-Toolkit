@@ -18,6 +18,9 @@ import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
 import { CVE20170144 } from "./CVE-2017-0144/CVE-2017-0144";
+import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
+import ARPSpoofing from "./ArpSpoof/ArpSpoof";
+import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
 
 export interface RouteProperties {
     name: string;
@@ -152,6 +155,24 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/SearchSploit",
         element: <SearchSploit />,
         description: "SearchSploit Utility. Allow you to search through exploits, shellcodes and papers.",
+    },
+    {
+        name: "SMG-Ghost Scanner",
+        path: "/tools/SMGGhostScanner",
+        element: <SMGGhostScanner />,
+        description: "Scan whether the target is vulnerable to CVE2020-0796.",
+    },
+    {
+        name: "ARP Spoofing",
+        path: "/tools/ARPSpoofing",
+        element: <ARPSpoofing />,
+        description: "ARP spoof tool to poison the MAC address between two targets.",
+    },
+    {
+        name: "WalkthroughSamplePage",
+        path: "/walkthroughs/walkthroughsample",
+        element: <WalkthroughSamplePage />,
+        description: "The walkthrough sample page.",
     },
 ];
 

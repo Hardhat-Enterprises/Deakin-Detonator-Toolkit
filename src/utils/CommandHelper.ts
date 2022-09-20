@@ -1,4 +1,4 @@
-import { Command } from "@tauri-apps/api/shell";
+import { Child, Command } from "@tauri-apps/api/shell";
 
 export const CommandHelper = {
     /**
@@ -17,5 +17,10 @@ export const CommandHelper = {
         const output = `$ ${commandString} ${args.join(" ")}\n\n${stdout}\n${stderr}`;
 
         return output;
+    },
+    async getCommandHandle(commandString: string, args: string[]): Promise<Child> {
+        const command = new Command(commandString, args);
+        const handle = await command.spawn();
+        return handle;
     },
 };
