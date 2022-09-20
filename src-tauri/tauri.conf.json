@@ -86,6 +86,11 @@
             "name": "impacket-secretsdump",
             "cmd": "impacket-secretsdump",
             "args": true
+          },
+          {
+            "name": "sudo",
+            "cmd": "sudo",
+            "args": true
           }
         ]
       },
