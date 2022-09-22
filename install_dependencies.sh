@@ -53,6 +53,14 @@ echo "Yarn install complete"
 echo "Installing project dependencies..."
 echo "----------------------------------"
 
+# Install NMAP Vulscan module 
+
+sudo git clone https://github.com/scipag/vulscan scipag_vulscan
+sudo ln -s `pwd`/scipag_vulscan /usr/share/nmap/scripts/vulscan
+echo "-----------------------------"
+echo "Adding NMAP Vulscan module"
+echo "-----------------------------"
+
 # Install all yarn deps.
 yarn install
 
