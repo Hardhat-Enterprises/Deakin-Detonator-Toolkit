@@ -20,6 +20,7 @@ import { WalkthroughsPage } from "../pages/Walkthroughs";
 import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
+import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 
 export interface RouteProperties {
     name: string;
@@ -166,6 +167,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/walkthroughsample",
         element: <WalkthroughSamplePage />,
         description: "The walkthrough sample page.",
+    },
+    {
+        name: "CVE-2022-24112",
+        path: "/attack-vectors/cve-2022-24112",
+        element: <CVE202224112 />,
+        description: "Apache APISIX Remote Code Execution Vulnerability",
     },
 ];
 
