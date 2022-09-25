@@ -37,7 +37,7 @@ const AboutPage = () => {
                         <p>
                             <Text align={"center"}>
                                 The Tools page of the Deakin Detonator Toolkit provides you with a list of different
-                                tools and controls for Cyber Security analyses. These tools can support network
+                                tools and controls for cyber security analysis. These tools can support network
                                 scanning, password cracking and much more. To explore this section of the Deakin
                                 Detonator Toolkit further, press on the "Tools" category displayed on the left-hand
                                 navigation bar.
