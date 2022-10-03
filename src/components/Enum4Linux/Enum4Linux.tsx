@@ -54,9 +54,19 @@ const Enum4Linux = () => {
             <LoadingOverlay visible={loading} />
             <Stack>
                 <Title>Enum4Linux</Title>
-                <TextInput label={"IP Address of Target"} required {...form.getInputProps("ipAddress")} />
-                <TextInput label={"Option"} required {...form.getInputProps("argumentMain")} />
-                <TextInput label={"Parameters"} {...form.getInputProps("paramMain")} />
+                <TextInput
+                    label={"IP Address of Target"}
+                    placeholder={"Example: 192.168.1.200"}
+                    required
+                    {...form.getInputProps("ipAddress")}
+                />
+                <TextInput
+                    label={"Option"}
+                    placeholder={"Example: U"}
+                    required
+                    {...form.getInputProps("argumentMain")}
+                />
+                <TextInput label={"Parameters"} placeholder={"Example: o"} {...form.getInputProps("paramMain")} />
                 <TextInput label={"Additional Options"} {...form.getInputProps("argumentAlt")} />
                 <TextInput label={"Additional Options Parameters"} {...form.getInputProps("paramAlt")} />
                 <Button type={"submit"}>Scan</Button>
