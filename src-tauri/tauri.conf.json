@@ -96,6 +96,11 @@
             "name": "kill",
             "cmd": "kill",
             "args": true
+          },
+          {
+            "name": "enum4linux",
+            "cmd": "enum4linux",
+            "args": true
           }
         ]
       },

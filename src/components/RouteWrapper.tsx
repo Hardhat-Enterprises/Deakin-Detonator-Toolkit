@@ -20,6 +20,7 @@ import { WalkthroughsPage } from "../pages/Walkthroughs";
 import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
+import Enum4Linux from "./Enum4Linux/Enum4Linux";
 
 export interface RouteProperties {
     name: string;
@@ -160,6 +161,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/ARPSpoofing",
         element: <ARPSpoofing />,
         description: "ARP spoof tool to poison the MAC address between two targets.",
+    },
+    {
+        name: "Enum4Linux",
+        path: "/tools/enum4linux",
+        element: <Enum4Linux />,
+        description: "Windows and Samba information enumeration tool",
     },
     {
         name: "WalkthroughSamplePage",
