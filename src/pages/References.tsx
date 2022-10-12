@@ -94,6 +94,12 @@ const ReferencesPage = () => {
                         description={"Enux4Linux is a tool for enumerating information from Windows and Samba systems."}
                         url={"https://www.kali.org/tools/enum4linux/"}
                     />
+                    <Title order={4}>Attack Vectors:</Title>
+                    <Reference
+                        name={"CVE-2022-24112"}
+                        description={"Apache APISIX - Remote Code Execution."}
+                        url={"https://apisix.apache.org/"}
+                    />
                 </Stack>
             </Group>
         </>
