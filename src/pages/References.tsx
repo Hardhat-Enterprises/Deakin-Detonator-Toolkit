@@ -89,6 +89,11 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/dirb/"}
                     />
+                    <Reference
+                        name={"Enum4Linux"}
+                        description={"Enux4Linux is a tool for enumerating information from Windows and Samba systems."}
+                        url={"https://www.kali.org/tools/enum4linux/"}
+                    />
                 </Stack>
             </Group>
         </>

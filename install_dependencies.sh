@@ -40,7 +40,8 @@ sudo apt install -y mitmproxy \
 		openjdk-11-jdk
 		cargo \
 		nodejs \
-		dsniff
+		dsniff \
+		enum4linux
 
 echo "-----------------------------"
 echo "Installing yarn..."
