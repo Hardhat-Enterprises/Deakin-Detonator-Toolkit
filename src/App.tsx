@@ -10,6 +10,7 @@ import {
     Text,
     useMantineTheme,
 } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
@@ -64,6 +65,7 @@ export default function App() {
                             ))}
                         </Routes>
                     </AppShell>
+                    <Notifications />
                 </MantineProvider>
             </ColorSchemeProvider>
         </div>
