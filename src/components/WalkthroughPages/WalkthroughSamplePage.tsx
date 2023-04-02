@@ -1,7 +1,7 @@
 import { VideoPlayer } from "../../pages/Walkthroughs";
 
 const WalkthroughSamplePage = () => {
-    return VideoPlayer("https://www.youtube.com/embed/lMSJUkPPWEY", "Walkthrough Example Page");
+    return VideoPlayer("[URL]", "[NAME]");
 };
 
 export default WalkthroughSamplePage;
