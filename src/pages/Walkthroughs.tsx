@@ -5,7 +5,7 @@ import { IconVideoPlus } from "@tabler/icons";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../utils/CommandHelper";
-import { notifications } from "@mantine/notifications";
+import { showNotification } from "@mantine/notifications";
 
 export function WalkthroughsPage() {
     interface FormValues {
@@ -80,7 +80,7 @@ export function WalkthroughsPage() {
                     <Button
                         type={"submit"}
                         onClick={() =>
-                            notifications.show({
+                            showNotification({
                                 title: "Done!",
                                 message: "Remember to rgister it in the RouteWrapper!",
                                 autoClose: false,
