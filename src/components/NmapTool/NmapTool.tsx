@@ -1,8 +1,13 @@
-import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Title } from "@mantine/core";
+import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Title, HoverCard, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { IconQuestionMark } from "@tabler/icons";
+
+const title = "Network port scanner (NMAP)";
+const description_userguide =   "nmap — Network exploration tool and security / port scanner. " +
+                                "User guide : https://nmap.org/book/man.html";
 
 interface FormValuesType {
     ip: string;
@@ -91,8 +96,8 @@ const NmapTool = () => {
         >
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>Network port scanner (NMAP)</Title>
-                <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
+                {UserGuide(title, description_userguide)}          
+                <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />                        
                 {!isTopPortScan && <TextInput label={"Port"} {...form.getInputProps("port")} />}
                 {isTopPortScan && <NumberInput label={"Number of top ports"} {...form.getInputProps("numTopPorts")} />}
                 <NativeSelect
@@ -121,3 +126,35 @@ const NmapTool = () => {
 };
 
 export default NmapTool;
+
+export function UserGuide(title: string, description: string) {
+    return (
+        <Title>{title}
+            <HoverCard width={900} shadow="md" position="bottom" closeDelay={1000}>
+                <HoverCard.Target>
+                    <IconQuestionMark size={24} color="red"/>
+                </HoverCard.Target>
+                <HoverCard.Dropdown>
+                    <Text size="md">
+                        {description}
+                    </Text>
+                </HoverCard.Dropdown>
+            </HoverCard>                    
+        </Title>        
+    );
+}
+
+export function UserGuide2(description: string) {
+    return (
+        <HoverCard width={900} shadow="md" position="bottom" closeDelay={300}>
+            <HoverCard.Target>
+                <IconQuestionMark size={32} color="red"/>
+            </HoverCard.Target>
+            <HoverCard.Dropdown>
+                <Text size="md">
+                    {description}
+                </Text>
+            </HoverCard.Dropdown>
+        </HoverCard>                         
+    );
+}
