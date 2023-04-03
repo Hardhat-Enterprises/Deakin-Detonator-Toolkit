@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { IconQuestionMark } from "@tabler/icons";
+import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "Network port scanner (NMAP)";
 const description_userguide =   "nmap — Network exploration tool and security / port scanner. " +
@@ -126,35 +126,3 @@ const NmapTool = () => {
 };
 
 export default NmapTool;
-
-export function UserGuide(title: string, description: string) {
-    return (
-        <Title>{title}
-            <HoverCard width={900} shadow="md" position="bottom" closeDelay={1000}>
-                <HoverCard.Target>
-                    <IconQuestionMark size={24} color="red"/>
-                </HoverCard.Target>
-                <HoverCard.Dropdown>
-                    <Text size="md">
-                        {description}
-                    </Text>
-                </HoverCard.Dropdown>
-            </HoverCard>                    
-        </Title>        
-    );
-}
-
-export function UserGuide2(description: string) {
-    return (
-        <HoverCard width={900} shadow="md" position="bottom" closeDelay={300}>
-            <HoverCard.Target>
-                <IconQuestionMark size={32} color="red"/>
-            </HoverCard.Target>
-            <HoverCard.Dropdown>
-                <Text size="md">
-                    {description}
-                </Text>
-            </HoverCard.Dropdown>
-        </HoverCard>                         
-    );
-}
