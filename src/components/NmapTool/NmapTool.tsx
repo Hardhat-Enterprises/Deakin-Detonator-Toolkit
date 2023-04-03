@@ -1,8 +1,13 @@
-import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Title } from "@mantine/core";
+import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { UserGuide } from "../UserGuide/UserGuide";
+
+const title = "Network port scanner (NMAP)";
+const description_userguide =
+    "nmap — Network exploration tool and security / port scanner. " + "User guide : https://nmap.org/book/man.html";
 
 interface FormValuesType {
     ip: string;
@@ -91,7 +96,7 @@ const NmapTool = () => {
         >
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>Network port scanner (NMAP)</Title>
+                {UserGuide(title, description_userguide)}
                 <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
                 {!isTopPortScan && <TextInput label={"Port"} {...form.getInputProps("port")} />}
                 {isTopPortScan && <NumberInput label={"Number of top ports"} {...form.getInputProps("numTopPorts")} />}
