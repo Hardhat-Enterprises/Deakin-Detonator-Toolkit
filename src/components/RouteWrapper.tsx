@@ -22,6 +22,7 @@ import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
+import DnsenumTool from "./DNSenumTool/DNSenumTool";
 
 export interface RouteProperties {
     name: string;
@@ -138,6 +139,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Hydra",
         element: <Hydra />,
         description: "Login Cracker",
+    },
+    {
+        name: "DNSenum",
+        path: "/tools/dnsenum",
+        element: <DnsenumTool />,
+        description: "DNS enumeration tool",
     },
     {
         name: "Urlsnarf",
