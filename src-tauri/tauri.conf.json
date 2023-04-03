@@ -101,6 +101,11 @@
             "name": "enum4linux",
             "cmd": "enum4linux",
             "args": true
+          },
+          {
+            "name": "dnsenum",
+            "cmd": "dnsenum",
+            "args": true
           }
         ]
       },

@@ -29,8 +29,6 @@ const DnsenumTool = () => {
             "--threads",
             `${values.threads}`,
             `${values.domain}`,
-            "-o",
-            "dnsenum.txt",
         ];
 
         if (values.subdomains) {
