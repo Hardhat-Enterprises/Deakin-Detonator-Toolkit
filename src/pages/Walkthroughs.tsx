@@ -6,6 +6,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../utils/CommandHelper";
 import { showNotification } from "@mantine/notifications";
+import { UserGuide } from "../components/UserGuide/UserGuide";
 
 export function WalkthroughsPage() {
     interface FormValues {
@@ -30,7 +31,10 @@ export function WalkthroughsPage() {
     };
     return (
         <Stack align={"center"}>
-            <Title>Walkthroughs</Title>
+            {UserGuide(
+                "Walkthrough Videos",
+                "How to add a Walkthrough Video \nStep 1: Use the add button to create a video page \nStep 2: Register it in the RouteWrapper"
+            )}
             <Table horizontalSpacing="xl" verticalSpacing="md" fontSize="md">
                 <thead>
                     <tr>
