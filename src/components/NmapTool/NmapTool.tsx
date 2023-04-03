@@ -6,8 +6,8 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "Network port scanner (NMAP)";
-const description_userguide =   "nmap — Network exploration tool and security / port scanner. " +
-                                "User guide : https://nmap.org/book/man.html";
+const description_userguide =
+    "nmap — Network exploration tool and security / port scanner. " + "User guide : https://nmap.org/book/man.html";
 
 interface FormValuesType {
     ip: string;
@@ -96,8 +96,8 @@ const NmapTool = () => {
         >
             <LoadingOverlay visible={loading} />
             <Stack>
-                {UserGuide(title, description_userguide)}          
-                <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />                        
+                {UserGuide(title, description_userguide)}
+                <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
                 {!isTopPortScan && <TextInput label={"Port"} {...form.getInputProps("port")} />}
                 {isTopPortScan && <NumberInput label={"Number of top ports"} {...form.getInputProps("numTopPorts")} />}
                 <NativeSelect

@@ -3,18 +3,17 @@ import { IconQuestionMark } from "@tabler/icons";
 
 export function UserGuide(title: string, description: string) {
     return (
-        <Title>{title}
+        <Title>
+            {title}
             <HoverCard width={900} shadow="md" position="bottom" closeDelay={1000}>
                 <HoverCard.Target>
-                    <IconQuestionMark size={24} color="red"/>
+                    <IconQuestionMark size={24} color="red" />
                 </HoverCard.Target>
                 <HoverCard.Dropdown>
-                    <Text size="md">
-                        {description}
-                    </Text>
+                    <Text size="md">{description}</Text>
                 </HoverCard.Dropdown>
-            </HoverCard>                    
-        </Title>        
+            </HoverCard>
+        </Title>
     );
 }
 
@@ -22,13 +21,11 @@ export function UserGuide2(description: string) {
     return (
         <HoverCard width={900} shadow="md" position="bottom" closeDelay={300}>
             <HoverCard.Target>
-                <IconQuestionMark size={32} color="red"/>
+                <IconQuestionMark size={32} color="red" />
             </HoverCard.Target>
             <HoverCard.Dropdown>
-                <Text size="md">
-                    {description}
-                </Text>
+                <Text size="md">{description}</Text>
             </HoverCard.Dropdown>
-        </HoverCard>                         
+        </HoverCard>
     );
 }
