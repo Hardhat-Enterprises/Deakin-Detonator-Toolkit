@@ -10,7 +10,9 @@ export function UserGuide(title: string, description: string) {
                     <IconQuestionMark size={24} color="red" />
                 </HoverCard.Target>
                 <HoverCard.Dropdown>
-                    <Text size="md">{description}</Text>
+                    <pre>
+                        <Text size="md">{description}</Text>
+                    </pre>
                 </HoverCard.Dropdown>
             </HoverCard>
         </Title>
@@ -24,7 +26,9 @@ export function UserGuide2(description: string) {
                 <IconQuestionMark size={32} color="red" />
             </HoverCard.Target>
             <HoverCard.Dropdown>
-                <Text size="md">{description}</Text>
+                <pre>
+                    <Text size="md">{description}</Text>
+                </pre>
             </HoverCard.Dropdown>
         </HoverCard>
     );
