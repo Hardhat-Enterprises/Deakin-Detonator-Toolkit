@@ -24,12 +24,7 @@ const DnsenumTool = () => {
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-        const args = [
-            "--enum",
-            "--threads",
-            `${values.threads}`,
-            `${values.domain}`,
-        ];
+        const args = ["--enum", "--threads", `${values.threads}`, `${values.domain}`];
 
         if (values.subdomains) {
             args.push(`-S ${values.subdomains}`);
