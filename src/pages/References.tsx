@@ -94,6 +94,13 @@ const ReferencesPage = () => {
                         description={"Enux4Linux is a tool for enumerating information from Windows and Samba systems."}
                         url={"https://www.kali.org/tools/enum4linux/"}
                     />
+                    <Reference
+                        name={"Dnsenum"}
+                        description={
+                            "Dnsenum is a multithreaded perl script to enumerate DNS information of a domain and to discover non-contiguous ip blocks."
+                        }
+                        url={"https://www.kali.org/tools/dnsenum/"}
+                    />
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2022-24112"}

@@ -114,67 +114,177 @@
           }
         ]
       },
-      "fs": {
-        "all": true,
-        "scope": ["$TEMP/**"]
-      },
-      "path": {
-        "all": true
-      }
+      =======
+    "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+    "build": {
+        "beforeBuildCommand": "npm run build",
+        "beforeDevCommand": "npm run dev",
+        "devPath": "http://localhost:5173",
+        "distDir": "../dist"
     },
-    "bundle": {
-      "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
-      "deb": {
-        "depends": ["openjdk-11-jdk", "python3-impacket", "dsniff"],
-         "files": { 
-          "/usr/share/ddt": "exploits/",
-          "/usr/share/doc/ddt/README.md": "../README.md"
-        }
-      },
-      "externalBin": [],
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "com.deakin.ddt",
-      "longDescription": "Deakin Detonator Toolkit",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
-      },
-      "resources": [],
-      "shortDescription": "",
-      "targets": "all",
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
-      }
+    "package": {
+        "productName": "ddt",
+        "version": "0.1.0"
     },
-    "security": {
-      "csp": null
-    },
-    "updater": {
-      "active": false
-    },
-    "windows": [
-      {
-        "fullscreen": false,
-        "width": 800,
-        "height": 600,
-        "maximized": true,
-        "resizable": true,
-        "title": "Deakin Detonator Toolkit"
-        
-      }
-    ]
-  }
+    "tauri": {
+        "allowlist": {
+            "shell": {
+                "open": true,
+                "execute": true,
+                "sidecar": true,
+                "scope": [
+                    {
+                        "name": "nmap",
+                        "cmd": "nmap",
+                        "args": true
+                    },
+                    {
+                        "name": "snmp-check",
+                        "cmd": "snmp-check",
+                        "args": true
+                    },
+                    {
+                        "name": "python3",
+                        "cmd": "python3",
+                        "args": true
+                    },
+                    {
+                        "name": "dirb",
+                        "cmd": "dirb",
+                        "args": true
+                    },
+                    {
+                        "name": "hashcat",
+                        "cmd": "hashcat",
+                        "args": true
+                    },
+                    {
+                        "name": "bash",
+                        "cmd": "bash",
+                        "args": true
+                    },
+                    {
+                        "name": "john",
+                        "cmd": "john",
+                        "args": true
+                    },
+                    {
+                        "name": "zip2john",
+                        "cmd": "zip2john",
+                        "args": true
+                    },
+                    {
+                        "name": "rar2john",
+                        "cmd": "rar2john",
+                        "args": true
+                    },
+                    {
+                        "name": "hydra",
+                        "cmd": "hydra",
+                        "args": true
+                    },
+                    {
+                        "name": "searchsploit",
+                        "cmd": "searchsploit",
+                        "args": true
+                    },
+                    {
+                        "name": "urlsnarf",
+                        "cmd": "urlsnarf",
+                        "args": true
+                    },
+                    {
+                        "name": "impacket-wmiexec",
+                        "cmd": "impacket-wmiexec",
+                        "args": true
+                    },
+                    {
+                        "name": "impacket-secretsdump",
+                        "cmd": "impacket-secretsdump",
+                        "args": true
+                    },
+                    {
+                        "name": "arpspoof",
+                        "cmd": "arpspoof",
+                        "args": true
+                    },
+                    {
+                        "name": "kill",
+                        "cmd": "kill",
+                        "args": true
+                    },
+                    {
+                        "name": "enum4linux",
+                        "cmd": "enum4linux",
+                        "args": true
+                    },
+                    {
+                        "name": "dnsenum",
+                        "cmd": "dnsenum",
+                        "args": true
+                    }
+                ]
+            },
+            "fs": {
+                "all": true,
+                "scope": ["$TEMP/**"]
+            },
+            "path": {
+                "all": true
+            }
+        },
+        "bundle": {
+            "active": true,
+            "category": "DeveloperTool",
+            "copyright": "",
+            "deb": {
+                "depends": ["openjdk-11-jdk", "python3-impacket", "dsniff"],
+                "files": {
+                    "/usr/share/ddt": "exploits/",
+                    "/usr/share/doc/ddt/README.md": "../README.md"
+                }
+            },
+            "externalBin": [],
+            "icon": [
+                "icons/32x32.png",
+                "icons/128x128.png",
+                "icons/128x128@2x.png",
+                "icons/icon.icns",
+                "icons/icon.ico"
+            ],
+            "identifier": "com.deakin.ddt",
+            "longDescription": "Deakin Detonator Toolkit",
+            "macOS": {
+                "entitlements": null,
+                "exceptionDomain": "",
+                "frameworks": [],
+                "providerShortName": null,
+                "signingIdentity": null
+            },
+            "resources": [],
+            "shortDescription": "",
+            "targets": "all",
+            "windows": {
+                "certificateThumbprint": null,
+                "digestAlgorithm": "sha256",
+                "timestampUrl": ""
+            }
+        },
+        "security": {
+            "csp": null
+        },
+        "updater": {
+            "active": false
+        },
+        "windows": [
+            {
+                "fullscreen": false,
+                "width": 800,
+                "height": 600,
+                "maximized": true,
+                "resizable": true,
+                "title": "Deakin Detonator Toolkit"
+            }
+        ]
+    }
 }

@@ -19,11 +19,13 @@ import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
 import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
-import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import Foremost from "./Foremost/Foremost";
 import Cewl from "./Cewl/Cewl";
+
+import DnsenumTool from "./DNSenumTool/DNSenumTool";
+
 
 export interface RouteProperties {
     name: string;
@@ -142,6 +144,12 @@ export const ROUTES: RouteProperties[] = [
         description: "Login Cracker",
     },
     {
+        name: "DNSenum",
+        path: "/tools/dnsenum",
+        element: <DnsenumTool />,
+        description: "DNS enumeration tool",
+    },
+    {
         name: "Urlsnarf",
         path: "/tools/Urlsnarf",
         element: <Urlsnarf />,
@@ -170,12 +178,6 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/enum4linux",
         element: <Enum4Linux />,
         description: "Windows and Samba information enumeration tool",
-    },
-    {
-        name: "WalkthroughSamplePage",
-        path: "/walkthroughs/walkthroughsample",
-        element: <WalkthroughSamplePage />,
-        description: "The walkthrough sample page.",
     },
     {
         name: "CVE-2022-24112",
