@@ -23,6 +23,7 @@ import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import Foremost from "./Foremost/Foremost";
+import Cewl from "./Cewl/Cewl";
 
 export interface RouteProperties {
     name: string;
@@ -187,6 +188,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/foremost",
         element: <Foremost />,
         description: "File recovery tool",
+    },
+    {
+        name: "Cewl",
+        path: "/tools/Cewl",
+        element: <Cewl />,
+        description: "Custom word list generator",
     },
 ];
 

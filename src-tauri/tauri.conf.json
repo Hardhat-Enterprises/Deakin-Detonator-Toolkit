@@ -97,9 +97,19 @@
             "cmd": "kill",
             "args": true
           },
+    	  {
+            "name": "cewl",
+            "cmd": "cewl",
+            "args": true
+          },
           {
             "name": "enum4linux",
             "cmd": "enum4linux",
+            "args": true
+          },
+	  {
+            "name": "foremost",
+            "cmd": "foremost",
             "args": true
           }
         ]

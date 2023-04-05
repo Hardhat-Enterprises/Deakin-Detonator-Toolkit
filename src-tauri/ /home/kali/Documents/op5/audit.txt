@@ -1,0 +1,20 @@
+Foremost version 1.5.7 by Jesse Kornblum, Kris Kendall, and Nick Mikus
+Audit File
+
+Foremost started at Tue Apr  4 20:19:50 2023
+Invocation: foremost -i /home/kali/Documents/Terryusb2.E01 -o /home/kali/Documents/op5 -a 
+Output directory: /home/kali/Documents/Deakin-Detonator-Toolkit/src-tauri/ /home/kali/Documents/op5
+Configuration file: /etc/foremost.conf
+------------------------------------------------------------------
+File: stdin
+Start: Tue Apr  4 20:19:50 2023
+Length: Unknown
+ 
+Num	 Name (bs=512)	       Size	 File Offset	 Comment 
+
+
+0 FILES EXTRACTED
+	
+------------------------------------------------------------------
+
+Foremost finished at Tue Apr  4 20:19:51 2023
