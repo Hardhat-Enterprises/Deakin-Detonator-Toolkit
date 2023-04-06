@@ -22,6 +22,8 @@ import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
+import Cewl from "./Cewl/Cewl";
+
 
 export interface RouteProperties {
     name: string;
@@ -181,6 +183,13 @@ export const ROUTES: RouteProperties[] = [
         element: <CVE202224112 />,
         description: "Apache APISIX Remote Code Execution Vulnerability",
     },
+    {
+        name: "Cewl",
+        path: "/tools/Cewl",
+        element: <Cewl />,
+        description: "Custom word list generator",
+    },
+
 ];
 
 export function getTools() {

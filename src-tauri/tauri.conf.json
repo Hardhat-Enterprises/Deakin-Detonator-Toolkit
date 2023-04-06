@@ -106,7 +106,13 @@
                         "name": "dnsenum",
                         "cmd": "dnsenum",
                         "args": true
+                    },
+                    {
+                        "name": "cewl",
+                        "cmd": "cewl",
+                        "args": true
                     }
+
                 ]
             },
             "fs": {
