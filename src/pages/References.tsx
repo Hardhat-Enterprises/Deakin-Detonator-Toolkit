@@ -101,11 +101,9 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/dnsenum/"}
                     />
-                                        <Reference
+                    <Reference
                         name={"DNSMap"}
-                        description={
-                            "DNSMap can scan for subdomains using brute-forcing techniques."
-                        }
+                        description={"DNSMap can scan for subdomains using brute-forcing techniques."}
                         url={"https://www.kali.org/tools/dnsmap/"}
                     />
                     <Title order={4}>Attack Vectors:</Title>
