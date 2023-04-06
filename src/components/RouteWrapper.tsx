@@ -22,6 +22,7 @@ import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
+import Parsero  from "./parsero/parsero";
 
 export interface RouteProperties {
     name: string;
@@ -181,6 +182,13 @@ export const ROUTES: RouteProperties[] = [
         element: <CVE202224112 />,
         description: "Apache APISIX Remote Code Execution Vulnerability",
     },
+    {
+        name: "parsero",
+        path: "/tools/parsero",
+        element: <Parsero />,
+        description: "Looks at the Disallow entries of web servers",
+        
+    }
 ];
 
 export function getTools() {

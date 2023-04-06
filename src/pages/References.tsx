@@ -101,6 +101,13 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/dnsenum/"}
                     />
+                     <Reference
+                        name={"parsero"}
+                        description={
+                            "Parsero is a Python script that reads Robots.txt of the web server and looks at the Disallow entries."
+                        }
+                        url={"https://www.kali.org/tools/parsero/"}
+                    />
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2022-24112"}
