@@ -22,6 +22,7 @@ import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
+import DNSMap from "./DNSMap/DNSMap";
 
 export interface RouteProperties {
     name: string;
@@ -180,6 +181,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2022-24112",
         element: <CVE202224112 />,
         description: "Apache APISIX Remote Code Execution Vulnerability",
+    },
+    {
+        name: "DNSMap",
+        path: "/tools/dnsmap",
+        element: <DNSMap />,
+        description: "DNS Mapping Tool",
     },
 ];
 
