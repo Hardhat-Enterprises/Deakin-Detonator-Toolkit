@@ -23,7 +23,7 @@ import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import Cewl from "./Cewl/Cewl";
-
+import DNSMap from "./DNSMap/DNSMap";
 
 export interface RouteProperties {
     name: string;
@@ -189,7 +189,12 @@ export const ROUTES: RouteProperties[] = [
         element: <Cewl />,
         description: "Custom word list generator",
     },
-
+    {
+        name: "DNSMap",
+        path: "/tools/dnsmap",
+        element: <DNSMap />,
+        description: "DNS Mapping Tool",
+    }
 ];
 
 export function getTools() {
