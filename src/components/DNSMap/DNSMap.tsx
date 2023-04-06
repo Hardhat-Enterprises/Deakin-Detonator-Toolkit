@@ -5,8 +5,8 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 
 interface FormValuesType {
-    domain: string
-    delay: number
+    domain: string;
+    delay: number;
 }
 
 const DNSMap = () => {
@@ -38,14 +38,17 @@ const DNSMap = () => {
         setOutput("");
     }, [setOutput]);
 
-
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
             <LoadingOverlay visible={loading} />
             <Stack>
                 <Title>DNS Mapping for Subdomains (DNSMap)</Title>
                 <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
-                <TextInput label={"Random delay between requests (default 10)(milliseconds)"} type="number" {...form.getInputProps("threads")} />
+                <TextInput
+                    label={"Random delay between requests (default 10)(milliseconds)"}
+                    type="number"
+                    {...form.getInputProps("threads")}
+                />
                 <Button type={"submit"}>Start Mapping</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
@@ -53,4 +56,4 @@ const DNSMap = () => {
     );
 };
 
-export default DNSMap
+export default DNSMap;
