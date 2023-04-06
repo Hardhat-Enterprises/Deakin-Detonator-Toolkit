@@ -111,6 +111,11 @@
                         "name": "cewl",
                         "cmd": "cewl",
                         "args": true
+                    },
+                    {
+                        "name": "dnsmap",
+                        "cmd": "dnsmap",
+                        "args": true
                     }
 
                 ]
