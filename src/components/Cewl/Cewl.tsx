@@ -1,3 +1,5 @@
+
+
 import { Button, LoadingOverlay, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
@@ -5,77 +7,73 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 
 interface FormValuesType {
-    depth: string;
-    minLength: string;
-    url: string;
+				depth: string;
+				minLength: string;
+				url: string;
 
 }
+	
 
-const Cewl = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
+const url = ['all', 'jpeg'];
+const url = ["True", "False"];
+	const Cewl = () => {
+		const [loading, setLoading] = useState(false);
+		const [output, setOutput] = useState("");
+		const [selectedUrl, setSelectedUrl] = useState("");
 
 
-    let form = useForm({
-        initialValues: {
-            depth: 2,
-            minLenght: 5,
-            url: "",
-        },
-    });
 
-    const onSubmit = async (values: FormValues) => {
-        setLoading(true);
+		let form = useForm({
+			initialValues: {
+				
+			depth: "",
+			minLength: "",
+			url: "",
 
-        const args = [`-d ${values.depth}`];
-        args.push(`-m ${values.minLength}`);
-	args.push(values.url);
 
-        try {
-            const output = await CommandHelper.runCommand("cewl", args);
-            setOutput(output);
-        } catch (e: any) {
-            setOutput(e);
-        }
+			},
+		});
 
-        setLoading(false);
-    };
+		const onSubmit = async (values: FormValues) => {
+			setLoading(true);
 
-    const clearOutput = useCallback(() => {
-        setOutput("");
-    }, [setOutput]);
+			const args = [];
+			args.push(`-d ${values.depth}`);
+			if (values.minLength) {
+				args.push(`-m ${values.minLength}`);
+		}
+			if (values.url == "True") {
+				args.push(`-`);
+			}			args.push(values.url);
 
-    return (
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            <LoadingOverlay visible={loading} />
-            <Stack>
-                <Title>cewl</Title>
-                <TextInput
-                    label={"Max depth"}
-                    placeholder={"Example: 2"}
-                    required
-                    {...form.getInputProps("depth")}
-                />
-                <TextInput
-                    label={"minimum word length"}
-                    placeholder={"Example: 5"}
-                    required
-                    {...form.getInputProps("minLength")}
-                />
-	        <TextInput
-                    label={"Target URL"}
-                    required
-                    {...form.getInputProps("url")}
-                />
-                <Button type={"submit"}>Scan</Button>
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
-    );
+
+			const output = await CommandHelper.runCommand("cewl", args);
+			setOutput(output);
+
+			setLoading(false);
+		};
+
+		const clearOutput = useCallback(() => {
+			setOutput("");
+		}, [setOutput]);
+		return (
+		<form onSubmit={form.onSubmit((values) => onSubmit(...values, {name}: selected{name_title}))}>
+			<LoadingOverlay visible={loading} />
+			<Stack>
+				<Title>cewl</Title>
+				                <NativeSelect
+					value=selectedUrl
+					onChange={(e) => setSelectedUrl(e.target.value)}
+					title={"Target URL"}
+					data={url}
+					required
+					placeholder={"Pick any option"}
+				/>
+				<Button type={"submit"}>Scan</Button>
+				<ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+			</Stack>
+		</form>
+	);
 };
 
 export default Cewl;
-
-
-
-

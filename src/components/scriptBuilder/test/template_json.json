@@ -1,0 +1,34 @@
+
+{
+	"arg1": {
+		"name":"depth",
+		"req_flag":true,
+		"require_val": true,
+		"flag_val":"d",
+		"have_preset":false,
+		"preset_vals":"",
+		"label": "Max depth",
+		"is_required":true
+
+	},
+	"arg2": {
+		"name":"minLength",
+		"req_flag":true,
+		"require_val": true,
+		"flag_val":"m",
+		"have_preset":false,
+		"preset_vals":"",
+		"label": "Minimum Length",
+		"is_required":false
+	},
+	"arg3": {
+		"name":"url",
+		"req_flag":false,
+		"require_val": true,
+		"flag_val":"",
+		"have_preset":false,
+		"preset_vals":"",
+		"label": "Target URL",
+		"is_required":true
+	}
+}
