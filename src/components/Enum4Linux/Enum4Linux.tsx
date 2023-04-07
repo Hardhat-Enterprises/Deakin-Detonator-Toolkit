@@ -3,6 +3,18 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { UserGuide } from "../UserGuide/UserGuide";
+
+const title = "Enum4Linux";
+const description_userguide =
+    "Enum4linux is a tool used for the enumeration of information from Windows and Samba operating systems. " +
+    "\nIt is particularly useful for identifying the remote OS of a system and providing a list of the users " +
+    "and group \nmemberships found within the system. \n\nOptions for the tool can be found at: " +
+    "https://www.kali.org/tools/enum4linux/ \n\nUsing the tool: \nStep 1: Enter a Target IP address. " +
+    "\n               Eg: 192.168.1.1 \n\nStep 2: Enter an Option for the Enumeration. \n               Eg: " +
+    "U (get userlist) \n\nStep 3: Enter any Parameters. \n               Eg: example.txt \n\nStep 4: Enter " +
+    "any Additional Options/Parameters. \n\nStep 5: Click Scan to commence Enum4Linux's operation. \n\nStep 6: " +
+    "View the Output block below to view the results of the tools execution.";
 
 interface FormValues {
     ipAddress: string;
@@ -50,10 +62,10 @@ const Enum4Linux = () => {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+        <form onSubmit={form.onSubmit((values: FormValues) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>Enum4Linux</Title>
+            {UserGuide(title, description_userguide)}
                 <TextInput
                     label={"IP Address of Target"}
                     placeholder={"Example: 192.168.1.200"}
