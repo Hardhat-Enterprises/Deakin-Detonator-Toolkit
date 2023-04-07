@@ -17,6 +17,12 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { IconAlertCircle } from "@tabler/icons";
 interface FormValues {
     ip: string;
+    port: string;
+    protocol: string;
+    Ml: string;
+    select_file: string;
+    import_file: string;
+    export_path: string;
 }
 
 const Gyoithon = () => {
@@ -35,22 +41,63 @@ const Gyoithon = () => {
             protocol: "",
             Ml: "",
             select_file: "",
-            output_path: "",
+            import_file: "",
+            export_path: "",
         },
     });
 
     const Install = async () => {
         setLoading(true);
-        const args = [`/usr/share/ddt/SMGGhostScanner.py`];
-        const output = await CommandHelper.runCommand("python3", args);
+        const args = [`install`, `-r`, `/usr/share/ddt/GyoiThon/requirements.txt`];
+        const output = await CommandHelper.runCommand("pip3", args);
         setOutput(output);
         setLoading(false);
         setValue("configure");
     };
 
+    const ShowTarget = async () => {
+        setLoading(true);
+        const args = [`/usr/share/ddt/GyoiThon/host.txt`];
+        const output = await CommandHelper.runCommand("cat", args);
+        setOutput(output);
+        setLoading(false);
+    };
+
+    const ClearTarget = async () => {
+        setLoading(true);
+        const args = [`/usr/share/ddt/GyoiThon/configure.py`, `-clear`, `/usr/share/ddt/GyoiThon/host.txt`];
+        const output = await CommandHelper.runCommand("python3", args);
+        setOutput(output);
+        setLoading(false);
+    };
+
+    const NextRun = async () => {
+        setValue("run");
+    };
+
     const Configure = async (values: FormValues) => {
         setLoading(true);
-        const args = [`/usr/share/ddt/SMGGhostScanner.py`, values.ip];
+        const args = [
+            `/usr/share/ddt/GyoiThon/configure.py`,
+            `-add`,
+            `/usr/share/ddt/GyoiThon/host.txt`,
+            values.protocol,
+            values.ip,
+            values.port,
+        ];
+        const output = await CommandHelper.runCommand("python3", args);
+        setOutput(output);
+        setLoading(false);
+    };
+
+    const Import = async (values: FormValues) => {
+        setLoading(true);
+        const args = [
+            `/usr/share/ddt/GyoiThon/configure.py`,
+            `-import`,
+            `/usr/share/ddt/GyoiThon/host.txt`,
+            values.import_file,
+        ];
         const output = await CommandHelper.runCommand("python3", args);
         setOutput(output);
         setLoading(false);
@@ -59,18 +106,42 @@ const Gyoithon = () => {
 
     const Run = async (values: FormValues) => {
         setLoading(true);
-        const args = [`/usr/share/ddt/SMGGhostScanner.py`, values.ip];
+        const args = [`/usr/share/ddt/GyoiThon/gyoithon.py`, `-m`];
         const output = await CommandHelper.runCommand("python3", args);
-        setOutput(output);
+        setOutput(output + "Report generated successfully!");
         setLoading(false);
         setValue("export");
     };
 
+    const ShowReport = async () => {
+        setLoading(true);
+        const args = [`/usr/share/ddt/GyoiThon/report`];
+        const output = await CommandHelper.runCommand("ls", args);
+        setOutput(output);
+        setLoading(false);
+    };
+
+    const ClearReport = async () => {
+        setLoading(true);
+        const args = [`/usr/share/ddt/GyoiThon/report`, `-type`, `f`, `-delete`];
+        const output = await CommandHelper.runCommand("find", args);
+        setOutput(output + "Reports deleted!");
+        setLoading(false);
+    };
+
+    const Preview = async (values: FormValues) => {
+        setLoading(true);
+        const args = [`/usr/share/ddt/GyoiThon/report/` + values.select_file];
+        const output = await CommandHelper.runCommand("cat", args);
+        setOutput(output);
+        setLoading(false);
+    };
+
     const Export = async (values: FormValues) => {
         setLoading(true);
-        const args = [`/usr/share/ddt/SMGGhostScanner.py`, values.ip];
-        const output = await CommandHelper.runCommand("python3", args);
-        setOutput(output);
+        const args = [`/usr/share/ddt/GyoiThon/report/` + values.select_file, values.export_path];
+        const output = await CommandHelper.runCommand("cp", args);
+        setOutput(output + "Report exported successfully!");
         setLoading(false);
     };
 
@@ -100,15 +171,22 @@ const Gyoithon = () => {
                             </Group>
                         </Accordion.Panel>
                     </Accordion.Item>
-                    <form onSubmit={form.onSubmit((values) => Configure(values))}>
-                        <Accordion.Item value="configure">
-                            <Accordion.Control>Step 2: Configure Targets</Accordion.Control>
-                            <Accordion.Panel>
-                                <Text align={"center"}>Add different ports in the same IP address once</Text>
-                                <Group grow style={{ marginTop: 10 }}>
-                                    <Button variant="outline">Show Current Targets</Button>
-                                    <Button variant="outline">Clear Targets</Button>
-                                </Group>
+                    <Accordion.Item value="configure">
+                        <Accordion.Control>Step 2: Configure Targets</Accordion.Control>
+                        <Accordion.Panel>
+                            <Text align={"center"}>Add different ports in the same IP address once</Text>
+                            <Group grow style={{ marginTop: 10 }}>
+                                <Button onClick={ShowTarget} variant="outline">
+                                    Show Current Targets
+                                </Button>
+                                <Button onClick={ClearTarget} variant="outline">
+                                    Clear Targets
+                                </Button>
+                                <Button onClick={NextRun} variant="outline">
+                                    Next Step
+                                </Button>
+                            </Group>
+                            <form onSubmit={form.onSubmit((values) => Configure(values))}>
                                 <Group grow style={{ marginTop: 10 }}>
                                     <TextInput label={"Target IP address"} required {...form.getInputProps("ip")} />
                                     <TextInput label={"Target Port"} required {...form.getInputProps("port")} />
@@ -125,9 +203,17 @@ const Gyoithon = () => {
                                         ADD
                                     </Button>
                                 </Group>
-                            </Accordion.Panel>
-                        </Accordion.Item>
-                    </form>
+                            </form>
+                            <form onSubmit={form.onSubmit((values) => Import(values))}>
+                                <Group grow>
+                                    <TextInput label={"Import File"} required {...form.getInputProps("import_file")} />
+                                    <Button style={{ marginTop: 20 }} type={"submit"}>
+                                        IMPORT THIS FILE
+                                    </Button>
+                                </Group>
+                            </form>
+                        </Accordion.Panel>
+                    </Accordion.Item>
                     <form onSubmit={form.onSubmit((values) => Run(values))}>
                         <Accordion.Item value="run">
                             <Accordion.Control>Step 3: Run The Tool</Accordion.Control>
@@ -149,14 +235,30 @@ const Gyoithon = () => {
                             </Accordion.Panel>
                         </Accordion.Item>
                     </form>
-                    <form onSubmit={form.onSubmit((values) => Export(values))}>
-                        <Accordion.Item value="export">
-                            <Accordion.Control>Step 4: View Reports</Accordion.Control>
-                            <Accordion.Panel>
-                                <Group grow>
-                                    <Button variant="outline">Show All Reports</Button>
-                                    <Button variant="outline">Clear All Reports</Button>
+                    <Accordion.Item value="export">
+                        <Accordion.Control>Step 4: View Reports</Accordion.Control>
+                        <Accordion.Panel>
+                            <Group grow>
+                                <Button onClick={ShowReport} variant="outline">
+                                    Show All Reports
+                                </Button>
+                                <Button onClick={ClearReport} variant="outline">
+                                    Clear All Reports
+                                </Button>
+                            </Group>
+                            <form onSubmit={form.onSubmit((values) => Preview(values))}>
+                                <Group grow style={{ marginTop: 10 }}>
+                                    <TextInput
+                                        label={"Target Report"}
+                                        required
+                                        {...form.getInputProps("select_file")}
+                                    />
+                                    <Button style={{ marginTop: 20 }} type={"submit"}>
+                                        PREVIEW
+                                    </Button>
                                 </Group>
+                            </form>
+                            <form onSubmit={form.onSubmit((values) => Export(values))}>
                                 <Group grow style={{ marginTop: 10 }}>
                                     <TextInput
                                         label={"Target Report"}
@@ -168,9 +270,9 @@ const Gyoithon = () => {
                                         EXPORT
                                     </Button>
                                 </Group>
-                            </Accordion.Panel>
-                        </Accordion.Item>
-                    </form>
+                            </form>
+                        </Accordion.Panel>
+                    </Accordion.Item>
                 </Accordion>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>

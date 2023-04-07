@@ -26,3 +26,4 @@ dist-ssr
 # Bonus files
 Exploit.class
 Exploit.java
+src-tauri/exploits/GyoiThon/host.txt
