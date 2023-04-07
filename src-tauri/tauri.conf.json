@@ -111,6 +111,31 @@
                         "name": "dnsmap",
                         "cmd": "dnsmap",
                         "args": true
+                    },
+                    {
+                        "name": "pip3",
+                        "cmd": "pip3",
+                        "args": true
+                    },
+                    {
+                        "name": "ls",
+                        "cmd": "ls",
+                        "args": true
+                    },
+                    {
+                        "name": "cat",
+                        "cmd": "cat",
+                        "args": true
+                    },
+                    {
+                        "name": "find",
+                        "cmd": "find",
+                        "args": true
+                    },
+                    {
+                        "name": "cp",
+                        "cmd": "cp",
+                        "args": true
                     }
                 ]
             },
