@@ -1,5 +1,6 @@
 import { Title, HoverCard, Text } from "@mantine/core";
 import { IconQuestionMark } from "@tabler/icons";
+import styles from "./UserGuide.module.css";
 
 export function UserGuide(title: string, description: string) {
     return (
@@ -10,9 +11,9 @@ export function UserGuide(title: string, description: string) {
                     <IconQuestionMark size={24} color="red" />
                 </HoverCard.Target>
                 <HoverCard.Dropdown>
-                    <pre>
-                        <Text size="md">{description}</Text>
-                    </pre>
+                    <Text className={styles.text} size="md">
+                        <pre style={{ whiteSpace: "pre-wrap" }}>{description}</pre>
+                    </Text>
                 </HoverCard.Dropdown>
             </HoverCard>
         </Title>
@@ -26,9 +27,9 @@ export function UserGuide2(description: string) {
                 <IconQuestionMark size={32} color="red" />
             </HoverCard.Target>
             <HoverCard.Dropdown>
-                <pre>
-                    <Text size="md">{description}</Text>
-                </pre>
+                <Text className={styles.text} size="md">
+                    <pre style={{ whiteSpace: "pre-wrap" }}>{description}</pre>
+                </Text>
             </HoverCard.Dropdown>
         </HoverCard>
     );

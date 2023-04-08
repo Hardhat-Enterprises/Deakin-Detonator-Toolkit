@@ -22,8 +22,8 @@ import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
-import Cewl from "./Cewl/Cewl";
 import DNSMap from "./DNSMap/DNSMap";
+import Gyoithon from "./Gyoithon/Gyoithon";
 
 export interface RouteProperties {
     name: string;
@@ -184,17 +184,17 @@ export const ROUTES: RouteProperties[] = [
         description: "Apache APISIX Remote Code Execution Vulnerability",
     },
     {
-        name: "Cewl",
-        path: "/tools/Cewl",
-        element: <Cewl />,
-        description: "Custom word list generator",
-    },
-    {
         name: "DNSMap",
         path: "/tools/dnsmap",
         element: <DNSMap />,
         description: "DNS Mapping Tool",
     }
+    {
+        name: "AI-based pen-testing tool (Gyoithon)",
+        path: "/tools/gyoithon",
+        element: <Gyoithon />,
+        description: "A HTTP/HTTPS port detector based on Naive Bayes and Deep Nueral Network",
+    },
 ];
 
 export function getTools() {
