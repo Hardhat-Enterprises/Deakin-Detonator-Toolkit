@@ -27,11 +27,9 @@ export function UserGuide2(description: string) {
                 <IconQuestionMark size={32} color="red" />
             </HoverCard.Target>
             <HoverCard.Dropdown>
-                <pre>
-                    <Text className={styles.text} size="md">
-                        {description}
-                    </Text>
-                </pre>
+                <Text className={styles.text} size="md">
+                    <pre style={{ whiteSpace: "pre-wrap" }}>{description}</pre>
+                </Text>
             </HoverCard.Dropdown>
         </HoverCard>
     );
