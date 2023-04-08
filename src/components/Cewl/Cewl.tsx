@@ -22,7 +22,7 @@ const Cewl = () => {
         },
     });
 
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
         const args = [`-d ${values.depth}`];
