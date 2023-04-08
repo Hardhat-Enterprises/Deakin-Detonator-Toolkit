@@ -8,13 +8,11 @@ interface FormValuesType {
     depth: string;
     minLength: string;
     url: string;
-
 }
 
 const Cewl = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
-
 
     let form = useForm({
         initialValues: {
@@ -29,7 +27,7 @@ const Cewl = () => {
 
         const args = [`-d ${values.depth}`];
         args.push(`-m ${values.minLength}`);
-	args.push(values.url);
+        args.push(values.url);
 
         try {
             const output = await CommandHelper.runCommand("cewl", args);
@@ -50,23 +48,14 @@ const Cewl = () => {
             <LoadingOverlay visible={loading} />
             <Stack>
                 <Title>cewl</Title>
-                <TextInput
-                    label={"Max depth"}
-                    placeholder={"Example: 2"}
-                    required
-                    {...form.getInputProps("depth")}
-                />
+                <TextInput label={"Max depth"} placeholder={"Example: 2"} required {...form.getInputProps("depth")} />
                 <TextInput
                     label={"minimum word length"}
                     placeholder={"Example: 5"}
                     required
                     {...form.getInputProps("minLength")}
                 />
-	        <TextInput
-                    label={"Target URL"}
-                    required
-                    {...form.getInputProps("url")}
-                />
+                <TextInput label={"Target URL"} required {...form.getInputProps("url")} />
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
@@ -75,7 +64,3 @@ const Cewl = () => {
 };
 
 export default Cewl;
-
-
-
-

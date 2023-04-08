@@ -26,7 +26,6 @@ import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import Cewl from "./Cewl/Cewl";
 
-
 export interface RouteProperties {
     name: string;
     path: string;
@@ -202,7 +201,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Cewl",
         element: <Cewl />,
         description: "Custom word list generator",
-    }
+    },
 ];
 
 export function getTools() {
