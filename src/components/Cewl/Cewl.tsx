@@ -49,7 +49,12 @@ const Cewl = () => {
             <Stack>
                 <Title>cewl</Title>
                 <TextInput label={"Max depth"} placeholder={"Example: 2"} required {...form.getInputProps("depth")} />
-                <TextInput label={"minimum word length"} placeholder={"Example: 5"} required {...form.getInputProps("minLength")} />
+                <TextInput
+                    label={"minimum word length"}
+                    placeholder={"Example: 5"}
+                    required
+                    {...form.getInputProps("minLength")}
+                />
                 <TextInput label={"Target URL"} required {...form.getInputProps("url")} />
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
