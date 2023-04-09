@@ -16,8 +16,8 @@ const Cewl = () => {
 
     let form = useForm({
         initialValues: {
-            depth: 2,
-            minLenght: 5,
+            depth: "",
+            minLenght: "",
             url: "",
         },
     });
