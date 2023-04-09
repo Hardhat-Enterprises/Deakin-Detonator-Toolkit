@@ -106,6 +106,11 @@ const ReferencesPage = () => {
                         description={"DNSMap can scan for subdomains using brute-forcing techniques."}
                         url={"https://www.kali.org/tools/dnsmap/"}
                     />
+                    <Reference
+                        name={"Cewl"}
+                        description={"CeWL (Custom Word List generator) is a ruby app which spiders a given URL."}
+                        url={"https://www.kali.org/tools/cewl/"}
+                    />
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2022-24112"}

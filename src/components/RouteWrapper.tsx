@@ -24,6 +24,7 @@ import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
+import Cewl from "./Cewl/Cewl";
 
 export interface RouteProperties {
     name: string;
@@ -194,6 +195,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/gyoithon",
         element: <Gyoithon />,
         description: "A HTTP/HTTPS port detector based on Naive Bayes and Deep Nueral Network",
+    },
+    {
+        name: "Cewl",
+        path: "/tools/Cewl",
+        element: <Cewl />,
+        description: "Custom word list generator",
     },
 ];
 
