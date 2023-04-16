@@ -25,6 +25,7 @@ import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import Cewl from "./Cewl/Cewl";
+import NetcatTool from "./Netcat/Netcat";
 
 export interface RouteProperties {
     name: string;
@@ -201,6 +202,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Cewl",
         element: <Cewl />,
         description: "Custom word list generator",
+    },
+    {
+        name: "Netcat",
+        path: "/tools/Netcat",
+        element: <NetcatTool />,
+        description: "Netcat",
     },
 ];
 

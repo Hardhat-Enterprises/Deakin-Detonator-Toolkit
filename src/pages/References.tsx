@@ -111,6 +111,13 @@ const ReferencesPage = () => {
                         description={"CeWL (Custom Word List generator) is a ruby app which spiders a given URL."}
                         url={"https://www.kali.org/tools/cewl/"}
                     />
+                    <Reference
+                        name={"Netcat"}
+                        description={
+                            "Netcat is a UNIX tool that reads and writes data across network connections using TCP and UDP protocols."
+                        }
+                        url={"https://www.kali.org/tools/netcat/"}
+                    />
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2022-24112"}
