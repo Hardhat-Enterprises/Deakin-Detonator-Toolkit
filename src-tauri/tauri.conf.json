@@ -141,6 +141,16 @@
                         "name": "cewl",
                         "cmd": "cewl",
                         "args": true
+                    },
+                    { 
+                        "name": "nc", 
+                        "cmd": "nc",
+                        "args": true
+                    },
+                    {
+                        "name": "bash", 
+                        "cmd": "bash",
+                        "args": true
                     }
                 ]
             },
