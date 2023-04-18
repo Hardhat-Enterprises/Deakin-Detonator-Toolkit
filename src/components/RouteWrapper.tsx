@@ -26,6 +26,7 @@ import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import Cewl from "./Cewl/Cewl";
 import NetcatTool from "./Netcat/Netcat";
+import Sherlock from "./Sherlock/Sherlock";
 
 export interface RouteProperties {
     name: string;
@@ -208,6 +209,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Netcat",
         element: <NetcatTool />,
         description: "Netcat",
+    },
+    {
+        name: "Sherlock",
+        path: "/tools/Sherlock",
+        element: <Sherlock />,
+        description: "Tool to find username across social network",
     },
 ];
 
