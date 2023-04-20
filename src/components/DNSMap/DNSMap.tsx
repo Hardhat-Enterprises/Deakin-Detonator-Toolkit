@@ -1,13 +1,23 @@
-import { Button, LoadingOverlay, Stack, TextInput, Title } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { UserGuide } from "../UserGuide/UserGuide";
 
 interface FormValuesType {
     domain: string;
     delay: number;
 }
+
+const title = "DNS Mapping for Subdomains (DNSMap)";
+const description_userguide =
+    "dnsmap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
+    "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall servicios and smtp. " +
+    "So itwill be possible search for smtp.example.com inside example.com automatically. \n\n" +
+    "Step 1: Enter a valid domain to be mapped.\n" +
+    "Step 2: Enter a delay between requests. Default is 10 (milliseconds). Can be left blank.\n" +
+    "Step 3: Results will be shown below";
 
 const DNSMap = () => {
     const [loading, setLoading] = useState(false);
@@ -42,7 +52,7 @@ const DNSMap = () => {
         <form onSubmit={form.onSubmit(onSubmit)}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>DNS Mapping for Subdomains (DNSMap)</Title>
+                {UserGuide(title, description_userguide)}
                 <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
                 <TextInput
                     label={"Random delay between requests (default 10)(milliseconds)"}
