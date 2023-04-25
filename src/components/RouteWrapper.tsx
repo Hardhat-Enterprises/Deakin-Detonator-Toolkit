@@ -23,7 +23,6 @@ import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import BEDTool from "./BedTool/BEDTool";
-import Metagoofil from "./Metagoofil/Metagoofil";
 
 export interface RouteProperties {
     name: string;
@@ -187,12 +186,6 @@ export const ROUTES: RouteProperties[] = [
         name: "BEDTool",
         path: "/tools/BEDTool",
         element: <BEDTool />,
-        description: "BED is a program which is designed to check daemons for potential buffer overflows, format strings et. al.",
-    },
-    {
-        name: "Metagoofil",
-        path: "/tools/Metagoofil",
-        element: <Metagoofil />,
         description: "BED is a program which is designed to check daemons for potential buffer overflows, format strings et. al.",
     }
 ];

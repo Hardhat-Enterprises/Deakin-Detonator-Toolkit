@@ -106,11 +106,6 @@
             "name": "bed",
             "cmd": "bed",
             "args": true
-          },
-          {
-            "name": "metagoofil",
-            "cmd": "metagoofil",
-            "args": true
           }
 
         ]
