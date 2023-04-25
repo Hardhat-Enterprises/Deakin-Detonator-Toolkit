@@ -101,7 +101,18 @@
             "name": "enum4linux",
             "cmd": "enum4linux",
             "args": true
+          },
+          {
+            "name": "bed",
+            "cmd": "bed",
+            "args": true
+          },
+          {
+            "name": "metagoofil",
+            "cmd": "metagoofil",
+            "args": true
           }
+
         ]
       },
       "fs": {
