@@ -161,7 +161,7 @@
                         "name": "bed",
                         "cmd": "bed",
                         "args": true
-                      }
+                    },
                 ]
             },
             "fs": {
