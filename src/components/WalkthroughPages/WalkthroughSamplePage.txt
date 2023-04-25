@@ -1,0 +1,7 @@
+import { VideoPlayer } from "../../pages/Walkthroughs";
+
+const '[EXPORT]' = () => {
+    return VideoPlayer('[URL]', '[NAME]');
+};
+
+export default '[EXPORT]';

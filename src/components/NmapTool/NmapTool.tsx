@@ -1,8 +1,25 @@
-import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Title } from "@mantine/core";
+import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { UserGuide } from "../UserGuide/UserGuide";
+
+const title = "Network port scanner (NMAP)";
+const description_userguide =
+    "Nmap is a network scanning tool that allows a user to discover everything connected to " +
+    "a network and receive a wide variety of information about what is connected. The tool utilises several " +
+    "scanning techniques that include but are not limited toUDP, TCP connect(), TCP SYN (half-open)and FTP. " +
+    "Nmap offers several advanced features including an Operating System (OS) detection and Firewall status " +
+    "check and provides a number of scan types.\n\nNmap Reference Guide: https://nmap.org/book/man.html\n\n" +
+    "How to use Nmap:\n\n" +
+    "Step 1: Enter an IP or Hostname.\n" +
+    "       E.g. 127.0.0.1\n\n" +
+    "Step 2: Enter a Port number.\n       E.g. 5173\n\nStep 3: Pick a scan speed - Note; " +
+    "Higher sppeds require a faster host network.\nT0 - Paranoid / T1 - Sneaky / T2 - Polite / T3 - Normal / " +
+    " T4 - Aggressive /\nT5 - Insane\n       Eg: T2\n\nStep 4: Select the type of scan to perform.\n        " +
+    "Eg: Operating System\n\nStep 5: Click Scan to commence the Nmap operation.\n\n" +
+    "Step 6: View the Output block below to view the results of the Scan.";
 
 interface FormValuesType {
     ip: string;
@@ -91,7 +108,7 @@ const NmapTool = () => {
         >
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>Network port scanner (NMAP)</Title>
+                {UserGuide(title, description_userguide)}
                 <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
                 {!isTopPortScan && <TextInput label={"Port"} {...form.getInputProps("port")} />}
                 {isTopPortScan && <NumberInput label={"Number of top ports"} {...form.getInputProps("numTopPorts")} />}

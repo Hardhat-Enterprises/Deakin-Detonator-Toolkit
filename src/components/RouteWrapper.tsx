@@ -19,10 +19,15 @@ import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
 import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
-import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import BEDTool from "./BedTool/BEDTool";
+import DnsenumTool from "./DNSenumTool/DNSenumTool";
+import DNSMap from "./DNSMap/DNSMap";
+import Gyoithon from "./Gyoithon/Gyoithon";
+import Cewl from "./Cewl/Cewl";
+import NetcatTool from "./Netcat/Netcat";
+import Sherlock from "./Sherlock/Sherlock";
 
 export interface RouteProperties {
     name: string;
@@ -141,6 +146,12 @@ export const ROUTES: RouteProperties[] = [
         description: "Login Cracker",
     },
     {
+        name: "DNSenum",
+        path: "/tools/dnsenum",
+        element: <DnsenumTool />,
+        description: "DNS enumeration tool",
+    },
+    {
         name: "Urlsnarf",
         path: "/tools/Urlsnarf",
         element: <Urlsnarf />,
@@ -171,12 +182,6 @@ export const ROUTES: RouteProperties[] = [
         description: "Windows and Samba information enumeration tool",
     },
     {
-        name: "WalkthroughSamplePage",
-        path: "/walkthroughs/walkthroughsample",
-        element: <WalkthroughSamplePage />,
-        description: "The walkthrough sample page.",
-    },
-    {
         name: "CVE-2022-24112",
         path: "/attack-vectors/cve-2022-24112",
         element: <CVE202224112 />,
@@ -187,7 +192,37 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/BEDTool",
         element: <BEDTool />,
         description: "BED is a program which is designed to check daemons for potential buffer overflows, format strings et. al.",
-    }
+    },
+    {
+        name: "DNSMap",
+        path: "/tools/dnsmap",
+        element: <DNSMap />,
+        description: "DNS Mapping Tool",
+    },
+    {
+        name: "AI-based pen-testing tool (Gyoithon)",
+        path: "/tools/gyoithon",
+        element: <Gyoithon />,
+        description: "A HTTP/HTTPS port detector based on Naive Bayes and Deep Nueral Network",
+    },
+    {
+        name: "Cewl",
+        path: "/tools/Cewl",
+        element: <Cewl />,
+        description: "Custom word list generator",
+    },
+    {
+        name: "Netcat",
+        path: "/tools/Netcat",
+        element: <NetcatTool />,
+        description: "Netcat",
+    },
+    {
+        name: "Sherlock",
+        path: "/tools/Sherlock",
+        element: <Sherlock />,
+        description: "Tool to find username across social network",
+    },
 ];
 
 export function getTools() {
