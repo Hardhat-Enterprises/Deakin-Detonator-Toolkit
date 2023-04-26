@@ -36,7 +36,7 @@ const SMGGhostScanner = () => {
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>SNMP Enumeration tool</Title>
+                <Title>SMGGhost Scanner</Title>
                 <Alert
                     icon={<IconAlertCircle size={16} />}
                     radius="md"
