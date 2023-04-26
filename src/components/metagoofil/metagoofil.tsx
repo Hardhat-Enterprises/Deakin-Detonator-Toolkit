@@ -27,7 +27,7 @@ export function Metagoofil() {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = ['-d', values.webname, '-l', values.searchmax, '-n', values.filelimit, '-t', values.filetype];
+        const args = ["-d", values.webname, "-l", values.searchmax, "-n", values.filelimit, "-t", values.filetype];
         const output = await CommandHelper.runCommand("metagoofil", args);
 
         setOutput(output);
@@ -44,13 +44,21 @@ export function Metagoofil() {
             <Stack>
                 <Title>Metagoofil</Title>
                 <TextInput label={"Enter the website for search"} required {...form.getInputProps("webname")} />
-                <TextInput label={"Enter number of results (default 100)"} required {...form.getInputProps("searchmax")} />
-                <TextInput label={"Enter the value for Download file limit)"} required {...form.getInputProps("filelimit")} />
+                <TextInput
+                    label={"Enter number of results (default 100)"}
+                    required
+                    {...form.getInputProps("searchmax")}
+                />
+                <TextInput
+                    label={"Enter the value for Download file limit)"}
+                    required
+                    {...form.getInputProps("filelimit")}
+                />
                 <TextInput label={"Enter your file type"} required {...form.getInputProps("filetype")} />
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
     );
-};
-export default Metagoofil
+}
+export default Metagoofil;

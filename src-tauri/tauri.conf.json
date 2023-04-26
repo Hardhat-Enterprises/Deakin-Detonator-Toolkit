@@ -107,7 +107,7 @@
                         "cmd": "metagoofil",
                         "args": true
                     },
-                    
+
                     {
                         "name": "dnsenum",
                         "cmd": "dnsenum",

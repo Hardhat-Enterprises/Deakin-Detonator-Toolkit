@@ -180,7 +180,8 @@ export const ROUTES: RouteProperties[] = [
         name: "Metagoofil",
         path: "/tools/metagoofil",
         element: <Metagoofil />,
-        description: "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company.",
+        description:
+            "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company.",
     },
     {
         name: "CVE-2022-24112",
