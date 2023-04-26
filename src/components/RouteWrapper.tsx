@@ -22,6 +22,7 @@ import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
+import Metagoofil from "./metagoofil/metagoofil";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import Cewl from "./Cewl/Cewl";
@@ -180,6 +181,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/enum4linux",
         element: <Enum4Linux />,
         description: "Windows and Samba information enumeration tool",
+    },
+    {
+        name: "Metagoofil",
+        path: "/tools/metagoofil",
+        element: <Metagoofil />,
+        description:
+            "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company.",
     },
     {
         name: "CVE-2022-24112",

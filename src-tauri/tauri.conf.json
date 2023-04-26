@@ -103,6 +103,12 @@
                         "args": true
                     },
                     {
+                        "name": "metagoofil",
+                        "cmd": "metagoofil",
+                        "args": true
+                    },
+
+                    {
                         "name": "dnsenum",
                         "cmd": "dnsenum",
                         "args": true
