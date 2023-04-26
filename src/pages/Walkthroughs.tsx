@@ -25,7 +25,7 @@ export function WalkthroughsPage() {
         },
     });
     const onSubmit = async (values: FormValues) => {
-        const args = [`exploits/AddVideo.py`, values.URL, values.NAME];
+        const args = [`../components/WalkthroughPages/AddVideo.py`, values.URL, values.NAME];
         const result = await CommandHelper.runCommand("python3", args);
         console.log(result);
     };
