@@ -106,6 +106,23 @@ const ReferencesPage = () => {
                         description={"DNSMap can scan for subdomains using brute-forcing techniques."}
                         url={"https://www.kali.org/tools/dnsmap/"}
                     />
+                    <Reference
+                        name={"Cewl"}
+                        description={"CeWL (Custom Word List generator) is a ruby app which spiders a given URL."}
+                        url={"https://www.kali.org/tools/cewl/"}
+                    />
+                    <Reference
+                        name={"Netcat"}
+                        description={
+                            "Netcat is a UNIX tool that reads and writes data across network connections using TCP and UDP protocols."
+                        }
+                        url={"https://www.kali.org/tools/netcat/"}
+                    />
+                    <Reference
+                        name={"Sherlock"}
+                        description={"Sherlock is used to search for usernames across social networks."}
+                        url={"https://www.kali.org/tools/sherlock/"}
+                    />
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2022-24112"}
