@@ -1,9 +1,15 @@
-import { Button, LoadingOverlay, NativeSelect, Stack, TextInput, Title } from "@mantine/core";
+import { Button, LoadingOverlay, NativeSelect, Stack, TextInput} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
+
+import{ UserGuide} from"../UserGuide/UserGuide";
+const title="John the Ripper tool"
+const descritpion_userguide= "John the Ripper is a popular and powerful open-source password cracking tool used to test the strength of passwords. It can be used by system administrators and security professionals to audit the passwords on their systems. John the Ripper is available for multiple platforms, including Unix, Windows, macOS, and DOS. It uses various techniques to crack passwords, such as dictionary attacks, brute-force attacks, and hybrid attacks. The tool is highly customizable and has a command-line interface, making it suitable for advanced users. John the Ripper is widely regarded as one of the most effective and efficient password cracking tools available."+"\n\nHow to use John the Ripper:\n\nStep 1: Specify the filepath to the password file that you wish to crack. \nE.g /home/user/passwords.txt\n\nStep 2: Specify the hash that is utilized in the password file. This field is mandatory, as you must specify the hash in order for John the Ripper to crack the password. A wide range of hashes are supported by the tool. \nE.g md5\n\nStep 3: This specifies the format of the password file. A variety of file extensions are supported, including Unix password files, Windows SAM files, and more. This is necessary so as to enable John the Ripper to correctly read the file. \nE.g rar\n\nStep 4: Click crack to commence the tool's execution.\n\nStep 5: View the output block below to view the results of the tool's execution.";
+
+
 
 interface FormValuesType {
     filePath: string;
@@ -72,7 +78,7 @@ const JohnTheRipper = () => {
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, fileType: selectedFileTypeOption }))}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>John The Ripper</Title>
+                {UserGuide(title, descritpion_userguide)}}
                 <TextInput label={"Filepath"} required {...form.getInputProps("filePath")} />
                 <TextInput label={"Hash (if known)"} {...form.getInputProps("hash")} />
                 <NativeSelect
