@@ -144,35 +144,9 @@
                         "args": true
                     },
                     {
-<<<<<<< HEAD
-                    "name": "Dnsrecon",
+                    "name": "dnsrecon",
                     "cmd": "dnsrecon",
                     "args": true
-=======
-                        "name": "cewl",
-                        "cmd": "cewl",
-                        "args": true
-                    },
-                    {
-                        "name": "nc",
-                        "cmd": "nc",
-                        "args": true
-                    },
-                    {
-                        "name": "bash",
-                        "cmd": "bash",
-                        "args": true
-                    },
-                    {
-                        "name": "sherlock",
-                        "cmd": "sherlock",
-                        "args": true
-                    },
-                    {
-                        "name": "bed",
-                        "cmd": "bed",
-                        "args": true
->>>>>>> d7be6bf043a588627db1c967aa74f7ee94cea37c
                     }
                 ]
             },

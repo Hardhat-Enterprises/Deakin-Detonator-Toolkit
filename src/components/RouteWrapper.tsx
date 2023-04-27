@@ -25,15 +25,7 @@ import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import Metagoofil from "./metagoofil/metagoofil";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
-<<<<<<< HEAD
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
-=======
-import Cewl from "./Cewl/Cewl";
-import NetcatTool from "./Netcat/Netcat";
-import Sherlock from "./Sherlock/Sherlock";
-import BEDTool from "./BedTool/BEDTool";
-
->>>>>>> d7be6bf043a588627db1c967aa74f7ee94cea37c
 export interface RouteProperties {
     name: string;
     path: string;
@@ -212,39 +204,12 @@ export const ROUTES: RouteProperties[] = [
         description: "A HTTP/HTTPS port detector based on Naive Bayes and Deep Nueral Network",
     },
     {
-<<<<<<< HEAD
         name: "Dnsrecon",
         path: "/tools/Dnsrecon",
         element: <Dnsrecon />,
         description: "Dnsrecon is a python script that is used to find different hosts",
     },
 
-=======
-        name: "Cewl",
-        path: "/tools/Cewl",
-        element: <Cewl />,
-        description: "Custom word list generator",
-    },
-    {
-        name: "Netcat",
-        path: "/tools/Netcat",
-        element: <NetcatTool />,
-        description: "Netcat",
-    },
-    {
-        name: "Sherlock",
-        path: "/tools/Sherlock",
-        element: <Sherlock />,
-        description: "Tool to find username across social network",
-    },
-    {
-        name: "bed",
-        path: "/tools/bed",
-        element: <BEDTool />,
-        description:
-            "BED is a program which is designed to check daemons for potential buffer overflows, format strings",
-    },
->>>>>>> d7be6bf043a588627db1c967aa74f7ee94cea37c
 ];
 
 export function getTools() {
