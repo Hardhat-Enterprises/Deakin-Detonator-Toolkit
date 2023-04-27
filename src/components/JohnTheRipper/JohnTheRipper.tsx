@@ -78,7 +78,7 @@ const JohnTheRipper = () => {
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, fileType: selectedFileTypeOption }))}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                {UserGuide(title, descritpion_userguide)}}
+                {UserGuide(title, descritpion_userguide)}
                 <TextInput label={"Filepath"} required {...form.getInputProps("filePath")} />
                 <TextInput label={"Hash (if known)"} {...form.getInputProps("hash")} />
                 <NativeSelect
