@@ -168,6 +168,11 @@
                         "cmd": "bed",
                         "args": true
                     }
+                    {
+                        "name": "dnsrecon",
+                        "cmd": "dnsrecon",
+                        "args": true
+                    }
                 ]
             },
             "fs": {

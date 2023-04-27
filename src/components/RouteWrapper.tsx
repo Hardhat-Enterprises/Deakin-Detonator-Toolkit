@@ -29,7 +29,7 @@ import Cewl from "./Cewl/Cewl";
 import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
-
+import Dnsrecon from "./Dnsrecon/Dnsrecon";
 export interface RouteProperties {
     name: string;
     path: string;
@@ -231,6 +231,12 @@ export const ROUTES: RouteProperties[] = [
         element: <BEDTool />,
         description:
             "BED is a program which is designed to check daemons for potential buffer overflows, format strings",
+    },
+    {
+        name: "Dnsrecon",
+        path: "/tools/Dnsrecon",
+        element: <Dnsrecon />,
+        description: "Dnsrecon is a python script that is used to find different hosts",
     },
 ];
 
