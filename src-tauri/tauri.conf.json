@@ -144,9 +144,9 @@
                         "args": true
                     },
                     {
-                    "name": "dnsrecon",
-                    "cmd": "dnsrecon",
-                    "args": true
+                        "name": "dnsrecon",
+                        "cmd": "dnsrecon",
+                        "args": true
                     }
                 ]
             },

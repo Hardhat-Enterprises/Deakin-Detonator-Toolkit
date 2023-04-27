@@ -209,7 +209,6 @@ export const ROUTES: RouteProperties[] = [
         element: <Dnsrecon />,
         description: "Dnsrecon is a python script that is used to find different hosts",
     },
-
 ];
 
 export function getTools() {

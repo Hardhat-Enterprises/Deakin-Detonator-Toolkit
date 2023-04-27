@@ -31,7 +31,7 @@ export function Dnsrecon() {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = ['-d', values.url];
+        const args = ["-d", values.url];
         const output = await CommandHelper.runCommand("dnsrecon", args);
 
         setOutput(output);
@@ -46,12 +46,12 @@ export function Dnsrecon() {
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                {UserGuide(title,description_userguide)}
+                {UserGuide(title, description_userguide)}
                 <TextInput label={"URL"} required {...form.getInputProps("url")} />
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
     );
-};
-export default Dnsrecon
+}
+export default Dnsrecon;
