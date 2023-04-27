@@ -24,7 +24,7 @@ import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
-
+import Dnsrecon from "./Dnsrecon/Dnsrecon";
 export interface RouteProperties {
     name: string;
     path: string;
@@ -195,6 +195,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Gyoithon />,
         description: "A HTTP/HTTPS port detector based on Naive Bayes and Deep Nueral Network",
     },
+    {
+        name: "Dnsrecon",
+        path: "/tools/Dnsrecon",
+        element: <Dnsrecon />,
+        description: "Dnsrecon is a python script that is used to find different hosts",
+    },
+
 ];
 
 export function getTools() {

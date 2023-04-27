@@ -136,6 +136,11 @@
                         "name": "cp",
                         "cmd": "cp",
                         "args": true
+                    },
+                    {
+                    "name": "Dnsrecon",
+                    "cmd": "dnsrecon",
+                    "args": true
                     }
                 ]
             },
