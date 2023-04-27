@@ -25,6 +25,10 @@ import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import Metagoofil from "./metagoofil/metagoofil";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
+import Cewl from "./Cewl/Cewl";
+import NetcatTool from "./Netcat/Netcat";
+import Sherlock from "./Sherlock/Sherlock";
+import BEDTool from "./BedTool/BEDTool";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
 export interface RouteProperties {
     name: string;
@@ -202,6 +206,31 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/gyoithon",
         element: <Gyoithon />,
         description: "A HTTP/HTTPS port detector based on Naive Bayes and Deep Nueral Network",
+    },
+    {
+        name: "Cewl",
+        path: "/tools/Cewl",
+        element: <Cewl />,
+        description: "Custom word list generator",
+    },
+    {
+        name: "Netcat",
+        path: "/tools/Netcat",
+        element: <NetcatTool />,
+        description: "Netcat",
+    },
+    {
+        name: "Sherlock",
+        path: "/tools/Sherlock",
+        element: <Sherlock />,
+        description: "Tool to find username across social network",
+    },
+    {
+        name: "bed",
+        path: "/tools/bed",
+        element: <BEDTool />,
+        description:
+            "BED is a program which is designed to check daemons for potential buffer overflows, format strings",
     },
     {
         name: "Dnsrecon",
