@@ -30,6 +30,7 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
     $ git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
     ```
 
+
 2. Change current directory to the toolkit.
 
     ```bash
