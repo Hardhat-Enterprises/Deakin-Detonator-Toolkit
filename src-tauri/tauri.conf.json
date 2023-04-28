@@ -167,7 +167,7 @@
                         "name": "bed",
                         "cmd": "bed",
                         "args": true
-                    }
+                    },
                     {
                         "name": "dnsrecon",
                         "cmd": "dnsrecon",
