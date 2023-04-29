@@ -22,11 +22,14 @@ import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
+import Metagoofil from "./metagoofil/metagoofil";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import Cewl from "./Cewl/Cewl";
 import NetcatTool from "./Netcat/Netcat";
-
+import Sherlock from "./Sherlock/Sherlock";
+import BEDTool from "./BedTool/BEDTool";
+import Dnsrecon from "./Dnsrecon/Dnsrecon";
 export interface RouteProperties {
     name: string;
     path: string;
@@ -180,6 +183,13 @@ export const ROUTES: RouteProperties[] = [
         description: "Windows and Samba information enumeration tool",
     },
     {
+        name: "Metagoofil",
+        path: "/tools/metagoofil",
+        element: <Metagoofil />,
+        description:
+            "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company.",
+    },
+    {
         name: "CVE-2022-24112",
         path: "/attack-vectors/cve-2022-24112",
         element: <CVE202224112 />,
@@ -208,6 +218,25 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Netcat",
         element: <NetcatTool />,
         description: "Netcat",
+    },
+    {
+        name: "Sherlock",
+        path: "/tools/Sherlock",
+        element: <Sherlock />,
+        description: "Tool to find username across social network",
+    },
+    {
+        name: "bed",
+        path: "/tools/bed",
+        element: <BEDTool />,
+        description:
+            "BED is a program which is designed to check daemons for potential buffer overflows, format strings",
+    },
+    {
+        name: "Dnsrecon",
+        path: "/tools/Dnsrecon",
+        element: <Dnsrecon />,
+        description: "Dnsrecon is a python script that is used to find different hosts",
     },
 ];
 

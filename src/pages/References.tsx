@@ -118,6 +118,11 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/netcat/"}
                     />
+                    <Reference
+                        name={"Sherlock"}
+                        description={"Sherlock is used to search for usernames across social networks."}
+                        url={"https://www.kali.org/tools/sherlock/"}
+                    />
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2022-24112"}

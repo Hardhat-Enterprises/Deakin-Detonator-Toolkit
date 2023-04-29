@@ -103,6 +103,12 @@
                         "args": true
                     },
                     {
+                        "name": "metagoofil",
+                        "cmd": "metagoofil",
+                        "args": true
+                    },
+
+                    {
                         "name": "dnsenum",
                         "cmd": "dnsenum",
                         "args": true
@@ -142,14 +148,29 @@
                         "cmd": "cewl",
                         "args": true
                     },
-                    { 
-                        "name": "nc", 
+                    {
+                        "name": "nc",
                         "cmd": "nc",
                         "args": true
                     },
                     {
-                        "name": "bash", 
+                        "name": "bash",
                         "cmd": "bash",
+                        "args": true
+                    },
+                    {
+                        "name": "sherlock",
+                        "cmd": "sherlock",
+                        "args": true
+                    },
+                    {
+                        "name": "bed",
+                        "cmd": "bed",
+                        "args": true
+                    },
+                    {
+                        "name": "dnsrecon",
+                        "cmd": "dnsrecon",
                         "args": true
                     }
                 ]
