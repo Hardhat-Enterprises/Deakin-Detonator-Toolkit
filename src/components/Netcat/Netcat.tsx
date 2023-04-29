@@ -39,7 +39,6 @@ const netcatOptions = [
 
 //Tool name must be capital or jsx will cry out errors :P
 const NetcatTool = () => {
-    const [loading, setLoading] = useState(false);
     var [output, setOutput] = useState("");
     const [selectedScanOption, setSelectedNetcatOption] = useState("");
 
@@ -54,8 +53,6 @@ const NetcatTool = () => {
     });
 
     const onSubmit = async (values: FormValuesType) => {
-        setLoading(false);
-
         //Starts off with the IP address after netcat
         //Ex: nc <ip address>
         let args = [``];
@@ -133,8 +130,6 @@ const NetcatTool = () => {
 
                 break;
         }
-
-        setLoading(false);
     };
 
     const clearOutput = useCallback(() => {
@@ -144,7 +139,6 @@ const NetcatTool = () => {
     //<ConsoleWrapper output={output} clearOutputCallback={clearOutput} /> prints the terminal on the tool
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
-            <LoadingOverlay visible={loading} />
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
