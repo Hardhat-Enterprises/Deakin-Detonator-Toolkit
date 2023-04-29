@@ -10,9 +10,10 @@ const description_userguide =
     "ffuf is a web directory and resource discovery tool. It takes a wordlist " +
     "and uses a brute force fuzzing technique against a target URL to attempt to discover valid files " +
     "and directories. This can reveal vulnerabilities in web applications as well generally data-mine " +
-    "and map out the target. Ffuf can even be used to brute force credentials used in web authentication.\n\n" + 
+    "and map out the target. Ffuf can even be used to brute force credentials used in web authentication.\n\n" +
     "For further information on ffuf: https://github.com/ffuf/ffufS\n\n" +
-    "Wordlist directory: /src-tauri/exploits/ffuf_wordlists/\n\n" +"Basic ffuf brute force discovery:\n\n" +
+    "Wordlist directory: /src-tauri/exploits/ffuf_wordlists/\n\n" +
+    "Basic ffuf brute force discovery:\n\n" +
     "Step 1: Enter a URL, and use FUZZ to indicate where words from wordlist will be fuzzed\n" +
     "       E.g. http://www.example.com/FUZZ\n\n" +
     "Step 2: Optionally enter a wordlist other than the default\n" +
@@ -35,9 +36,9 @@ interface FormValuesType {
 const FfufTool = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
-    const [checkedStopWhen, setCheckedStopWhen] = useState(false)
-    const [checkedVerboseOutput, setCheckedVerboseOutput] = useState(false)
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false)    
+    const [checkedStopWhen, setCheckedStopWhen] = useState(false);
+    const [checkedVerboseOutput, setCheckedVerboseOutput] = useState(false);
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -47,19 +48,18 @@ const FfufTool = () => {
             filtersize: "",
             extensions: "",
             filterwords: "",
-            filterlines: ""
+            filterlines: "",
         },
     });
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-        
+
         const args = [`-u`, `${values.url}`];
 
-        if (values.wordlist){
-            args.push(`-w`, `./exploits/ffuf_wordlists/${values.wordlist}`)
-        }
-        else args.push(`-w`, `./exploits/ffuf_wordlists/default_SECLIST_wordlist.txt`)
+        if (values.wordlist) {
+            args.push(`-w`, `./exploits/ffuf_wordlists/${values.wordlist}`);
+        } else args.push(`-w`, `./exploits/ffuf_wordlists/default_SECLIST_wordlist.txt`);
 
         if (values.extensions) {
             args.push(`-e`, `${values.extensions}`);
@@ -81,12 +81,12 @@ const FfufTool = () => {
             args.push(`-fl`, `${values.filterlines}`);
         }
 
-        if (checkedStopWhen){
-            args.push(`-sf`)
+        if (checkedStopWhen) {
+            args.push(`-sf`);
         }
 
-        if (checkedVerboseOutput){
-            args.push(`-v`)
+        if (checkedVerboseOutput) {
+            args.push(`-v`);
         }
 
         try {
@@ -102,51 +102,71 @@ const FfufTool = () => {
     const clearOutput = useCallback(() => {
         setOutput("");
     }, [setOutput]);
-    
+
     return (
-        <form
-            onSubmit={form.onSubmit((values) =>
-                onSubmit({ ...values})
-            )}
-        >
+        <form onSubmit={form.onSubmit((values) => onSubmit({ ...values }))}>
             <LoadingOverlay visible={loading} />
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <Switch
                     size="md"
                     label="Advanced Mode"
-                    checked={checkedAdvanced} onChange={(e) => 
-                    setCheckedAdvanced(e.currentTarget.checked)}
+                    checked={checkedAdvanced}
+                    onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                 />
-                <TextInput label={"Target URL"} placeholder={"https://www.example.com/FUZZ"} required {...form.getInputProps("url")} />
-                <TextInput label={"Wordlist: default is directory-list-2.3-medium.txt by SecLists"} placeholder={"wordlist.txt"} {...form.getInputProps("wordlist")} />                
+                <TextInput
+                    label={"Target URL"}
+                    placeholder={"https://www.example.com/FUZZ"}
+                    required
+                    {...form.getInputProps("url")}
+                />
+                <TextInput
+                    label={"Wordlist: default is directory-list-2.3-medium.txt by SecLists"}
+                    placeholder={"wordlist.txt"}
+                    {...form.getInputProps("wordlist")}
+                />
                 <TextInput label={"Extensions"} placeholder={".html,.txt,.php"} {...form.getInputProps("extensions")} />
-                {checkedAdvanced && 
+                {checkedAdvanced && (
                     <>
                         <TextInput label={"Optional Output File"} {...form.getInputProps("output")} />
 
-                        <TextInput label={"Filter HTTP response size. Comma separated list of sizes and ranges"} {...form.getInputProps("filtersize")} />
-                
-                        <TextInput label={"Filter by amount of words in response. Comma separated list of word counts and ranges"} {...form.getInputProps("filterwords")} />
-                    
-                        <TextInput label={"Filter by amount of lines in response. Comma separated list of line counts and ranges"} {...form.getInputProps("filterlines")} />
-                    </> 
-                }   
+                        <TextInput
+                            label={"Filter HTTP response size. Comma separated list of sizes and ranges"}
+                            {...form.getInputProps("filtersize")}
+                        />
+
+                        <TextInput
+                            label={
+                                "Filter by amount of words in response. Comma separated list of word counts and ranges"
+                            }
+                            {...form.getInputProps("filterwords")}
+                        />
+
+                        <TextInput
+                            label={
+                                "Filter by amount of lines in response. Comma separated list of line counts and ranges"
+                            }
+                            {...form.getInputProps("filterlines")}
+                        />
+                    </>
+                )}
                 <Group grow>
                     <Switch
                         size="md"
                         label="Stop when > 95% of responses return 403 Forbidden"
-                        checked={checkedStopWhen} onChange={(e) => 
-                        setCheckedStopWhen(e.currentTarget.checked)}
+                        checked={checkedStopWhen}
+                        onChange={(e) => setCheckedStopWhen(e.currentTarget.checked)}
                     />
                     <Switch
                         size="md"
                         label="Verbose Output"
-                        checked={checkedVerboseOutput} onChange={(e) => 
-                        setCheckedVerboseOutput(e.currentTarget.checked)}
-                    />                      
+                        checked={checkedVerboseOutput}
+                        onChange={(e) => setCheckedVerboseOutput(e.currentTarget.checked)}
+                    />
                 </Group>
-                <Button type={"submit"} style={{fontSize: "24px" ,paddingTop: "8px"}}>Scan</Button>
+                <Button type={"submit"} style={{ fontSize: "24px", paddingTop: "8px" }}>
+                    Scan
+                </Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

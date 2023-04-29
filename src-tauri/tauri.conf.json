@@ -174,7 +174,7 @@
                         "args": true
                     },
                     {
-                        "name": "ffuf", 
+                        "name": "ffuf",
                         "cmd": "ffuf",
                         "args": true
                     }
