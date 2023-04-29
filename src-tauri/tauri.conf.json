@@ -172,6 +172,11 @@
                         "name": "dnsrecon",
                         "cmd": "dnsrecon",
                         "args": true
+                    },
+                    {
+                        "name": "ffuf", 
+                        "cmd": "ffuf",
+                        "args": true
                     }
                 ]
             },
