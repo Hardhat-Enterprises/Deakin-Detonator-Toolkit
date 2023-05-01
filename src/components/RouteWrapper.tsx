@@ -31,6 +31,7 @@ import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
 import FfufTool from "./Ffuf/FfufTool";
+import Redeemer from "./WalkthroughPages/Redeemer";
 export interface RouteProperties {
     name: string;
     path: string;
@@ -244,6 +245,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Ffuf",
         element: <FfufTool />,
         description: "FFuf is a brute force web fuzzer for directory and resource discovery",
+    },
+    {
+        name: "Redeemer",
+        path: "/walkthroughs/Redeemer",
+        element: <Redeemer />,
+        description: "A walkthrough on the Redeemer HackTheBox challenge showcasing nmap tool",
     },
 ];
 
