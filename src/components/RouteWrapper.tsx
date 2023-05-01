@@ -30,6 +30,7 @@ import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
+import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 export interface RouteProperties {
     name: string;
@@ -238,6 +239,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Dnsrecon",
         element: <Dnsrecon />,
         description: "Dnsrecon is a python script that is used to find different hosts",
+    },
+    {
+        name: "Ffuf",
+        path: "/tools/Ffuf",
+        element: <FfufTool />,
+        description: "FFuf is a brute force web fuzzer for directory and resource discovery",
     },
     {
         name: "Redeemer",
