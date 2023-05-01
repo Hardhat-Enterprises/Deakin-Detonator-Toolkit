@@ -27,6 +27,7 @@ import Gyoithon from "./Gyoithon/Gyoithon";
 import Cewl from "./Cewl/Cewl";
 import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
+import CrunchGUI from "./crunch/crunch";
 
 export interface RouteProperties {
     name: string;
@@ -216,6 +217,12 @@ export const ROUTES: RouteProperties[] = [
         element: <Sherlock />,
         description: "Tool to find username across social network",
     },
+    {
+        name: "Crunch",
+        path: "/tools/CrunchGUI",
+        element: <CrunchGUI />,
+        description: "Tool for creating custom wordlists as per the user requirements",
+    }
 ];
 
 export function getTools() {

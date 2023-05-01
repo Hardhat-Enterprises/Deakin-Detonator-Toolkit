@@ -156,6 +156,11 @@
                         "name": "sherlock",
                         "cmd": "sherlock",
                         "args": true
+                    },
+                    {
+                        "name": "crunch",
+                        "cmd": "crunch",
+                        "args": true
                     }
                 ]
             },
