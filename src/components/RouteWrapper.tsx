@@ -32,6 +32,7 @@ import BEDTool from "./BedTool/BEDTool";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
+import Fawn from "./WalkthroughPages/Fawn";
 export interface RouteProperties {
     name: string;
     path: string;
@@ -252,6 +253,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Redeemer />,
         description: "A walkthrough on the Redeemer HackTheBox challenge showcasing nmap tool",
     },
+    {
+        name: "Fawn",
+        path: "/walkthroughs/Fawn",
+        element: <Fawn />,
+        description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
+    },
+
 ];
 
 export function getTools() {
