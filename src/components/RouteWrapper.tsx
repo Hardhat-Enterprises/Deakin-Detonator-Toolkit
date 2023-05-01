@@ -259,7 +259,6 @@ export const ROUTES: RouteProperties[] = [
         element: <Fawn />,
         description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
     },
-
 ];
 
 export function getTools() {
