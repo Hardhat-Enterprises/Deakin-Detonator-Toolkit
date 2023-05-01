@@ -181,6 +181,7 @@
                     {
                         "name": "crunch",
                         "cmd": "crunch",
+                        "args": true
                     }
                 ]
             },
