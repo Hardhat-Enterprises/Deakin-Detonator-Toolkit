@@ -229,7 +229,10 @@
             "csp": null
         },
         "updater": {
-            "active": false
+            "active": true,
+            "dialog": true,
+            "endpoints": ["https://lencx.github.io/OhMyBox/install.json"],
+            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDcyNEQ4Njk4MjNDNkJGRTQKUldUa3Y4WWptSVpOY2dTZkY4dThjSlY0eXJpUS8zUUZhNnV0eTZ4TlpkeEd3cVRNMStyNm00d0oK"
         },
         "windows": [
             {

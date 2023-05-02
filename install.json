@@ -1,0 +1,11 @@
+{
+    "version": "v0.1.1",
+    "notes": "Test version",
+    "pub_date": "2022-05-2 ADET19:25:57Z",
+    "platforms": {
+        "linux-x86_64": {
+            "signature": "Content of app.AppImage.tar.gz.sig",
+            "url": "https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/releases/download/untagged-da51b4f7b1f8690bb716/ddt_0.1.0_amd64.AppImage"
+        }
+    }
+}
