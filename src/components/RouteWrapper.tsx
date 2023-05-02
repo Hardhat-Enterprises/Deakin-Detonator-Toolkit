@@ -24,6 +24,7 @@ import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
+import NbtscanTool from "./NbtscanTool/NbtscanTool";
 
 export interface RouteProperties {
     name: string;
@@ -146,6 +147,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/dnsenum",
         element: <DnsenumTool />,
         description: "DNS enumeration tool",
+    },
+    {
+        name: "Nbtscan",
+        path: "/tools/nbtscan",
+        element: <NbtscanTool />,
+        description: "Tool used for scanning NetBIOS information on a network",
     },
     {
         name: "Urlsnarf",

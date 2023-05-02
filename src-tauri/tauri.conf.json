@@ -108,6 +108,11 @@
                         "args": true
                     },
                     {
+                        "name": "nbtscan",
+                        "cmd": "nbtscan",
+                        "args": true
+                    },
+                    {
                         "name": "dnsmap",
                         "cmd": "dnsmap",
                         "args": true
