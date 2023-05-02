@@ -167,10 +167,15 @@
                         "name": "bed",
                         "cmd": "bed",
                         "args": true
-                    }
+                    },
                     {
                         "name": "dnsrecon",
                         "cmd": "dnsrecon",
+                        "args": true
+                    },
+                    {
+                        "name": "crackmapexec",
+                        "cmd": "crackmapexec",
                         "args": true
                     }
                 ]
