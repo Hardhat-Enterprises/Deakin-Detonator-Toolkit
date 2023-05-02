@@ -31,6 +31,9 @@ import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
 import Crackmapexec from "./Crackmapexec/Crackmapexec";
+import FfufTool from "./Ffuf/FfufTool";
+import Redeemer from "./WalkthroughPages/Redeemer";
+import Fawn from "./WalkthroughPages/Fawn";
 export interface RouteProperties {
     name: string;
     path: string;
@@ -244,6 +247,24 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Crackmapexec",
         element: <Crackmapexec />,
         description: "Crackmapexec is a swiss army knife use for pentesting Active Directory or Windows  environments.",
+    },
+    {
+        name: "Ffuf",
+        path: "/tools/Ffuf",
+        element: <FfufTool />,
+        description: "FFuf is a brute force web fuzzer for directory and resource discovery",
+    },
+    {
+        name: "Redeemer",
+        path: "/walkthroughs/Redeemer",
+        element: <Redeemer />,
+        description: "A walkthrough on the Redeemer HackTheBox challenge showcasing nmap tool",
+    },
+    {
+        name: "Fawn",
+        path: "/walkthroughs/Fawn",
+        element: <Fawn />,
+        description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
     },
 ];
 

@@ -177,6 +177,11 @@
                         "name": "crackmapexec",
                         "cmd": "crackmapexec",
                         "args": true
+                    },
+                    {
+                        "name": "ffuf",
+                        "cmd": "ffuf",
+                        "args": true
                     }
                 ]
             },
