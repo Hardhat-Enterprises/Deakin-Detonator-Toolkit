@@ -32,7 +32,8 @@ const Gyoithon = () => {
     const [selectedProtocolOption, setSelectedProtocolOption] = useState("");
     const protocolType = ["HTTPS", "HTTP"];
     const [selectedMLOption, setSelectedMLOption] = useState("");
-    const MLType = ["Naive Bayes", "Deep Neural Network"];
+    const Ml = ["Naive Bayes", "Deep Neural Network"];
+    const isDNN = selectedMLOption == "Deep Neural Network";
 
     let form = useForm({
         initialValues: {
@@ -102,6 +103,14 @@ const Gyoithon = () => {
         setOutput(output);
         setLoading(false);
         setValue("run");
+    };
+
+    const GridSearch = async () => {
+        setLoading(true);
+        const args = [`/usr/share/ddt/GyoiThon/modules/Deep_Neural_Network.py`, `-grid`];
+        const output = await CommandHelper.runCommand("python3", args);
+        setOutput(output);
+        setLoading(false);
     };
 
     const Run = async (values: FormValues) => {
@@ -214,20 +223,27 @@ const Gyoithon = () => {
                             </form>
                         </Accordion.Panel>
                     </Accordion.Item>
-                    <form onSubmit={form.onSubmit((values) => Run(values))}>
+                    <form onSubmit={form.onSubmit((values) => Run({ ...values, Ml: selectedMLOption }))}>
                         <Accordion.Item value="run">
                             <Accordion.Control>Step 3: Run The Tool</Accordion.Control>
                             <Accordion.Panel>
+                                <Text align={"center"}>
+                                    * Each target will takes about 5 min * Grid Search only works on DNN now
+                                </Text>
                                 <Group grow>
                                     <NativeSelect
                                         value={selectedMLOption}
                                         onChange={(e) => setSelectedMLOption(e.target.value)}
                                         label={"ML model Type"}
-                                        data={MLType}
+                                        data={Ml}
                                         required
                                         placeholder={"Naive Bayes/ Deep Neural Network"}
-                                        {...form.getInputProps("ML")}
                                     />
+                                    {isDNN && (
+                                        <Button onClick={GridSearch} style={{ marginTop: 20 }}>
+                                            Grid Search
+                                        </Button>
+                                    )}
                                     <Button style={{ marginTop: 20 }} type={"submit"}>
                                         RUN
                                     </Button>

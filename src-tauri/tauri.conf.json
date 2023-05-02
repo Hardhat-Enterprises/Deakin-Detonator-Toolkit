@@ -103,6 +103,12 @@
                         "args": true
                     },
                     {
+                        "name": "metagoofil",
+                        "cmd": "metagoofil",
+                        "args": true
+                    },
+
+                    {
                         "name": "dnsenum",
                         "cmd": "dnsenum",
                         "args": true
@@ -140,6 +146,41 @@
                     {
                         "name": "cp",
                         "cmd": "cp",
+                        "args": true
+                    },
+                    {
+                        "name": "cewl",
+                        "cmd": "cewl",
+                        "args": true
+                    },
+                    {
+                        "name": "nc",
+                        "cmd": "nc",
+                        "args": true
+                    },
+                    {
+                        "name": "bash",
+                        "cmd": "bash",
+                        "args": true
+                    },
+                    {
+                        "name": "sherlock",
+                        "cmd": "sherlock",
+                        "args": true
+                    },
+                    {
+                        "name": "bed",
+                        "cmd": "bed",
+                        "args": true
+                    },
+                    {
+                        "name": "dnsrecon",
+                        "cmd": "dnsrecon",
+                        "args": true
+                    },
+                    {
+                        "name": "ffuf",
+                        "cmd": "ffuf",
                         "args": true
                     }
                 ]
