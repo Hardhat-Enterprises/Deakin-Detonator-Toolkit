@@ -66,6 +66,7 @@ for (const { id, name } of updater.assets) {
 await octokit.rest.repos.uploadReleaseAsset({
     ...options,
     release_id: updater.id,
+    name: UPDATE_FILE_NAME,
     version: UPDATE_FILE_NAME,
     data: JSON.stringify(updateData),
 });
