@@ -15,6 +15,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navigation from "./components/NavBar/Navigation";
 import { ROUTES } from "./components/RouteWrapper";
+import { NotificationsProvider } from "@mantine/notifications";
 
 export default function App() {
     const theme = useMantineTheme();
@@ -64,6 +65,7 @@ export default function App() {
                             ))}
                         </Routes>
                     </AppShell>
+                    <NotificationsProvider />
                 </MantineProvider>
             </ColorSchemeProvider>
         </div>

@@ -19,9 +19,22 @@ import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
 import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
-import WalkthroughSamplePage from "./WalkthroughPages/WalkthroughSamplePage";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
+import DnsenumTool from "./DNSenumTool/DNSenumTool";
+import Metagoofil from "./metagoofil/metagoofil";
+import DNSMap from "./DNSMap/DNSMap";
+import Gyoithon from "./Gyoithon/Gyoithon";
+import NbtscanTool from "./NbtscanTool/NbtscanTool";
+import Cewl from "./Cewl/Cewl";
+import NetcatTool from "./Netcat/Netcat";
+import Sherlock from "./Sherlock/Sherlock";
+import BEDTool from "./BedTool/BEDTool";
+import Dnsrecon from "./Dnsrecon/Dnsrecon";
+import Crackmapexec from "./Crackmapexec/Crackmapexec";
+import FfufTool from "./Ffuf/FfufTool";
+import Redeemer from "./WalkthroughPages/Redeemer";
+import Fawn from "./WalkthroughPages/Fawn";
 
 export interface RouteProperties {
     name: string;
@@ -140,6 +153,18 @@ export const ROUTES: RouteProperties[] = [
         description: "Login Cracker",
     },
     {
+        name: "DNSenum",
+        path: "/tools/dnsenum",
+        element: <DnsenumTool />,
+        description: "DNS enumeration tool",
+    },
+    {
+        name: "Nbtscan",
+        path: "/tools/nbtscan",
+        element: <NbtscanTool />,
+        description: "Tool used for scanning NetBIOS information on a network",
+    },
+    {
         name: "Urlsnarf",
         path: "/tools/Urlsnarf",
         element: <Urlsnarf />,
@@ -170,16 +195,84 @@ export const ROUTES: RouteProperties[] = [
         description: "Windows and Samba information enumeration tool",
     },
     {
-        name: "WalkthroughSamplePage",
-        path: "/walkthroughs/walkthroughsample",
-        element: <WalkthroughSamplePage />,
-        description: "The walkthrough sample page.",
+        name: "Metagoofil",
+        path: "/tools/metagoofil",
+        element: <Metagoofil />,
+        description:
+            "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company.",
     },
     {
         name: "CVE-2022-24112",
         path: "/attack-vectors/cve-2022-24112",
         element: <CVE202224112 />,
         description: "Apache APISIX Remote Code Execution Vulnerability",
+    },
+    {
+        name: "DNSMap",
+        path: "/tools/dnsmap",
+        element: <DNSMap />,
+        description: "DNS Mapping Tool",
+    },
+    {
+        name: "AI-based pen-testing tool (Gyoithon)",
+        path: "/tools/gyoithon",
+        element: <Gyoithon />,
+        description: "A HTTP/HTTPS port detector based on Naive Bayes and Deep Nueral Network",
+    },
+    {
+        name: "Cewl",
+        path: "/tools/Cewl",
+        element: <Cewl />,
+        description: "Custom word list generator",
+    },
+    {
+        name: "Netcat",
+        path: "/tools/Netcat",
+        element: <NetcatTool />,
+        description: "Netcat",
+    },
+    {
+        name: "Sherlock",
+        path: "/tools/Sherlock",
+        element: <Sherlock />,
+        description: "Tool to find username across social network",
+    },
+    {
+        name: "bed",
+        path: "/tools/bed",
+        element: <BEDTool />,
+        description:
+            "BED is a program which is designed to check daemons for potential buffer overflows, format strings",
+    },
+    {
+        name: "Dnsrecon",
+        path: "/tools/Dnsrecon",
+        element: <Dnsrecon />,
+        description: "Dnsrecon is a python script that is used to find different hosts",
+    },
+    {
+        name: "Crackmapexec",
+        path: "/tools/Crackmapexec",
+        element: <Crackmapexec />,
+        description: "Crackmapexec is a swiss army knife use for pentesting Active Directory or Windows  environments.",
+    },
+    {
+        name: "Ffuf",
+        path: "/tools/Ffuf",
+        element: <FfufTool />,
+        description: "FFuf is a brute force web fuzzer for directory and resource discovery",
+    },
+    {
+        name: "Redeemer",
+        path: "/walkthroughs/Redeemer",
+        element: <Redeemer />,
+        description: "A walkthrough on the Redeemer HackTheBox challenge showcasing nmap tool",
+    },
+    {
+        name: "Fawn",
+        path: "/walkthroughs/Fawn",
+        element: <Fawn />,
+        description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
     },
 ];
 
