@@ -3,6 +3,18 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { UserGuide } from "../UserGuide/UserGuide";
+
+const title = "Urlsnarf";
+const description_userguide =
+    "Urlsnarf is a network traffic sniffing tool that works to output all URL's that are requested from HTTP\n" +
+    "traffic in the from of CLF (Common Log Format) that is very commonly used within web servers. The tool\n" +
+    "in the DDT provides two listener settings being through an interface or packet capture file.\n\nInformation " +
+    "on the tool can be found at: https://linux.die.net/man/8/urlsnarf\n\nUsing the tool:\nStep 1: Select the " +
+    "Listener settings.\n               Eg: Interface\n\nStep 2: Input the Interface.\n               Eg: eth0\n\n" +
+    "Step 3: Enter any Exclusion details within the sniff.\n               Eg: POST (every packet besides POST will " +
+    "be shown)\n\nStep 4: Click Sniff to commence Urlsnarf's operation.\n\nStep 5: View the Output block below to " +
+    "view the results of the tools execution.";
 
 interface FormValuesType {
     listenerInputType: string;
@@ -64,7 +76,7 @@ const Urlsnarf = () => {
         >
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>Urlsnarf</Title>
+                {UserGuide(title, description_userguide)}
                 <NativeSelect
                     value={selectedListenerInput}
                     onChange={(e) => setSelectedListenerInput(e.target.value)}
