@@ -14,12 +14,10 @@ const getSignature = async (url) => {
 };
 
 const updateData = {
-    name: "",
     version: "",
     pub_date: new Date().toISOString(),
     platforms: {
         linux: { signature: "", url: "" },
-        darwin: { signature: "", url: "" },
         "linux-x86_64": { signature: "", url: "" },
     },
 };
@@ -28,18 +26,10 @@ const octokit = getOctokit(process.env.GITHUB_TOKEN);
 const options = { owner: context.repo.owner, repo: context.repo.repo };
 
 const { data: release } = await octokit.rest.repos.getLatestRelease(options);
-updateData.name = release.tag_name;
 updateData.version = release.tag_name;
 // eslint-disable-next-line camelcase
 for (const { name, browser_download_url } of release.assets) {
-    if (name.endsWith(".app.tar.gz")) {
-        // eslint-disable-next-line camelcase
-        updateData.platforms.darwin.url = browser_download_url;
-    } else if (name.endsWith(".app.tar.gz.sig")) {
-        // eslint-disable-next-line no-await-in-loop
-        const signature = await getSignature(browser_download_url);
-        updateData.platforms.darwin.signature = signature;
-    } else if (name.endsWith(".AppImage.tar.gz")) {
+    if (name.endsWith(".AppImage.tar.gz")) {
         // eslint-disable-next-line camelcase
         updateData.platforms.linux.url = browser_download_url;
         // eslint-disable-next-line camelcase
@@ -70,6 +60,5 @@ await octokit.rest.repos.uploadReleaseAsset({
     ...options,
     release_id: updater.id,
     name: UPDATE_FILE_NAME,
-    version: UPDATE_FILE_NAME,
     data: JSON.stringify(updateData),
 });
