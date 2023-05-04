@@ -29,6 +29,7 @@ const options = { owner: context.repo.owner, repo: context.repo.repo };
 
 const { data: release } = await octokit.rest.repos.getLatestRelease(options);
 updateData.name = release.tag_name;
+updateData.version = release.version;
 // eslint-disable-next-line camelcase
 for (const { name, browser_download_url } of release.assets) {
     if (name.endsWith(".app.tar.gz")) {
@@ -54,6 +55,7 @@ for (const { name, browser_download_url } of release.assets) {
 const { data: updater } = await octokit.rest.repos.getReleaseByTag({
     ...options,
     tag: UPDATE_TAG_NAME,
+    version: UPDATE_TAG_VERSION,
 });
 
 for (const { id, name } of updater.assets) {
@@ -68,6 +70,6 @@ await octokit.rest.repos.uploadReleaseAsset({
     ...options,
     release_id: updater.id,
     name: UPDATE_FILE_NAME,
-    version: UPDATE_FILE_NAME,
+    version: UPDATE_FILE_VERSION,
     data: JSON.stringify(updateData),
 });
