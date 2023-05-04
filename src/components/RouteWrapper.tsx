@@ -26,6 +26,7 @@ import Metagoofil from "./metagoofil/metagoofil";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import Arjuntool from "./arjuntool/Arjuntool";
+import NbtscanTool from "./NbtscanTool/NbtscanTool";
 import Cewl from "./Cewl/Cewl";
 import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
@@ -157,6 +158,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/dnsenum",
         element: <DnsenumTool />,
         description: "DNS enumeration tool",
+    },
+    {
+        name: "Nbtscan",
+        path: "/tools/nbtscan",
+        element: <NbtscanTool />,
+        description: "Tool used for scanning NetBIOS information on a network",
     },
     {
         name: "Urlsnarf",
