@@ -33,7 +33,7 @@ export function Arjuntool() {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = ['-u', values.url,'-oJ', values.oJ];
+        const args = ["-u", values.url, "-oJ", values.oJ];
         const output = await CommandHelper.runCommand("arjun", args);
 
         setOutput(output);
@@ -50,13 +50,16 @@ export function Arjuntool() {
             <Stack>
                 <title>Arjuntool</title>
                 <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                <TextInput label={"Please enter the parameters as -oT/-oJ/-oB/-d/-t"} required {...form.getInputProps("oJ")} />
+                <TextInput
+                    label={"Please enter the parameters as -oT/-oJ/-oB/-d/-t"}
+                    required
+                    {...form.getInputProps("oJ")}
+                />
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
     );
+}
 
-};
-
-export default Arjuntool
+export default Arjuntool;
