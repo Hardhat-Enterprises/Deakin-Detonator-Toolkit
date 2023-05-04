@@ -13,6 +13,12 @@
         "test": "vitest",
         "coverage": "vitest run --coverage"
     },
+    "link-staged": {
+        "*{tsx,css}": [
+            "prettier --write",
+            "git add"
+        ]
+    },
     "dependencies": {
         "@emotion/react": "^11.10.4",
         "@mantine/core": "^5.3.0",
