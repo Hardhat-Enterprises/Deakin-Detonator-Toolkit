@@ -24,6 +24,7 @@ import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
+import Arjuntool from "./arjuntool/Arjuntool";
 
 export interface RouteProperties {
     name: string;
@@ -188,6 +189,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/dnsmap",
         element: <DNSMap />,
         description: "DNS Mapping Tool",
+    },
+    {
+        name: "Arjuntool",
+        path: "/tools/Arjuntool",
+        element: <Arjuntool />,
+        description: "Arjun Tool",
     },
     {
         name: "AI-based pen-testing tool (Gyoithon)",
