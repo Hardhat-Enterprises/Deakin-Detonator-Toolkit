@@ -11,7 +11,8 @@
         "style:fix": "prettier --write .",
         "prepare": "husky install",
         "test": "vitest",
-        "coverage": "vitest run --coverage"
+        "coverage": "vitest run --coverage",
+        "update": "node cd_scripts/update.mjs"
     },
     "link-staged": {
         "*{tsx,css}": [
@@ -20,6 +21,7 @@
         ]
     },
     "dependencies": {
+        "@actions/github": "^5.1.1",
         "@emotion/react": "^11.10.4",
         "@mantine/core": "^5.3.0",
         "@mantine/form": "^5.3.0",
@@ -29,6 +31,7 @@
         "@mantine/spotlight": "^5.3.0",
         "@tabler/icons": "^1.95.1",
         "@tauri-apps/api": "^1.0.2",
+        "node-fetch": "^3.3.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-router-dom": "6.3.0"
