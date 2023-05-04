@@ -55,7 +55,6 @@ for (const { name, browser_download_url } of release.assets) {
 const { data: updater } = await octokit.rest.repos.getReleaseByTag({
     ...options,
     tag: UPDATE_TAG_NAME,
-    version: UPDATE_TAG_VERSION,
 });
 
 for (const { id, name } of updater.assets) {
