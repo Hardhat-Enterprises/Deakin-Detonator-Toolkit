@@ -30,6 +30,7 @@ import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
+import Crackmapexec from "./Crackmapexec/Crackmapexec";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
@@ -240,6 +241,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Dnsrecon",
         element: <Dnsrecon />,
         description: "Dnsrecon is a python script that is used to find different hosts",
+    },
+    {
+        name: "Crackmapexec",
+        path: "/tools/Crackmapexec",
+        element: <Crackmapexec />,
+        description: "Crackmapexec is a swiss army knife use for pentesting Active Directory or Windows  environments.",
     },
     {
         name: "Ffuf",
