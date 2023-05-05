@@ -4,6 +4,7 @@ This repo houses the new version of the Deakin Detonator Toolkit application bui
 
 -   UI built with [Mantine](https://mantine.dev), [ReactJS](https://reactjs.org/) and [TypeScript](https://www.typescriptlang.org/).
 -   Shipped as desktop client via [Tauri](https://tauri.app/).
+-   GUI exhibition will be available here: http://34.129.77.178:8080 (Deakin Intranet Only)
 
 `src/` contains the source code for the UI.
 `src-tauri` contains the source code and configuration for the Tauri application.
@@ -50,4 +51,14 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 📷 Screenshot
 
-![screenshot](https://i.imgur.com/Nu67H6n.png)
+<img src="https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/blob/main/static/ddt_homepage.png" width="1000px">
+
+# 📷 Release
+
+1. Change the version number in scr-tauri/tauri.conf.json larger than current version
+
+2. Merge the main branch into release branch, it will trigger the CD pipeline to update the repo release info
+
+3. The update information will appear when user open the app
+
+<img src="https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/blob/main/static/Updater.png" width="1000px">
