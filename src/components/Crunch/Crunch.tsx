@@ -7,10 +7,7 @@ import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "Crunch Password Generator";
 const description_userguide =
-    "Crunch is a wordlist generator where you can specify a standard character set or a custom one based on the needs of your project.";
-("Crunch can create a wordlist based on criteria you specify.");
-("The wordlist can be used for various purposes such as dictionary attacks or password cracking.");
-("You can find more information about the tool, including usage instructions and examples, in its official documentation: https://tools.kali.org/password-attacks/crunch");
+    "1. Crunch is a wordlist generator where you can specify a standard character set or a custom one based on the needs of your project. Crunch can create a wordlist based on criteria you specify. \n2. The wordlist can be used for various purposes such as dictionary attacks or password cracking. \n3. You can find more information about the tool, including usage instructions and examples, in its official documentation: https://tools.kali.org/password-attacks/crunch";
 
 //list of input values collected by the form
 interface FormValuesType {

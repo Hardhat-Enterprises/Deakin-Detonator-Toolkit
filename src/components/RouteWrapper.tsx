@@ -279,7 +279,7 @@ export const ROUTES: RouteProperties[] = [
         name: "Crunch",
         path: "/tools/Crunch",
         element: <Crunch />,
-        description: "placeholder",
+        description: "Crunch is a wordlist generator where you can specify a standard character set or a custom one.",
     },
 ];
 
