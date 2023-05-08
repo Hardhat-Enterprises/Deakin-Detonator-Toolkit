@@ -35,6 +35,7 @@ import Crackmapexec from "./Crackmapexec/Crackmapexec";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
+import Crunch from "./Crunch/Crunch";
 
 export interface RouteProperties {
     name: string;
@@ -273,6 +274,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Fawn",
         element: <Fawn />,
         description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
+    },
+    {
+        name: "Crunch",
+        path: "/tools/Crunch",
+        element: <Crunch />,
+        description: "placeholder",
     },
 ];
 
