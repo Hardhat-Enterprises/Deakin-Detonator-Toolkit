@@ -7,8 +7,8 @@
         "distDir": "../dist"
     },
     "package": {
-        "productName": "ddt",
-        "version": "0.1.0"
+        "productName": "Deakin-Detonator-Toolkit",
+        "version": "0.1.1"
     },
     "tauri": {
         "allowlist": {
@@ -114,6 +114,11 @@
                         "args": true
                     },
                     {
+                        "name": "nbtscan",
+                        "cmd": "nbtscan",
+                        "args": true
+                    },
+                    {
                         "name": "dnsmap",
                         "cmd": "dnsmap",
                         "args": true
@@ -174,14 +179,23 @@
                         "args": true
                     },
                     {
+                        "name": "crackmapexec",
+                        "cmd": "crackmapexec",
+                        "args": true
+                    },
+                    {
                         "name": "ffuf",
                         "cmd": "ffuf",
                         "args": true
                     },
                     {
                         "name": "traceroute",
-                        "cmd": "sudo traceroute",
+                        "cmd": "sudo traceroute"
                         "args": true
+                    },
+                    {
+                        "name": "crunch",
+                        "cmd": "crunch"
                     }
                 ]
             },
@@ -234,7 +248,12 @@
             "csp": null
         },
         "updater": {
-            "active": false
+            "active": true,
+            "dialog": true,
+            "endpoints": [
+                "https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/releases/download/updater/update.json"
+            ],
+            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDcyNEQ4Njk4MjNDNkJGRTQKUldUa3Y4WWptSVpOY2dTZkY4dThjSlY0eXJpUS8zUUZhNnV0eTZ4TlpkeEd3cVRNMStyNm00d0oK"
         },
         "windows": [
             {
