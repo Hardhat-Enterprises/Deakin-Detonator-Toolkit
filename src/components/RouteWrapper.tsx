@@ -33,6 +33,7 @@ import Dnsrecon from "./Dnsrecon/Dnsrecon";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
+import Traceroute from "./Traceroute/Traceroute";
 export interface RouteProperties {
     name: string;
     path: string;
@@ -258,6 +259,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Fawn",
         element: <Fawn />,
         description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
+    },
+    {
+        name: "Traceroute",
+        path: "/tools/Traceroute",
+        element: <Traceroute />,
+        description: "Traceroute Testing",
     },
 ];
 

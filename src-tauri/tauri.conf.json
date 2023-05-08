@@ -177,6 +177,11 @@
                         "name": "ffuf",
                         "cmd": "ffuf",
                         "args": true
+                    },
+                    {
+                        "name": "traceroute",
+                        "cmd": "sudo traceroute",
+                        "args": true
                     }
                 ]
             },
