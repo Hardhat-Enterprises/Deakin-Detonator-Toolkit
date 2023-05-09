@@ -189,6 +189,11 @@
                         "args": true
                     },
                     {
+                        "name": "traceroute",
+                        "cmd": "sudo traceroute",
+                        "args": true
+                     },
+                    {
                         "name": "crunch",
                         "cmd": "crunch",
                         "args": true

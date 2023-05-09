@@ -35,6 +35,7 @@ import Crackmapexec from "./Crackmapexec/Crackmapexec";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
+import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
 
 export interface RouteProperties {
@@ -274,6 +275,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Fawn",
         element: <Fawn />,
         description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
+    },
+    {
+        name: "Traceroute",
+        path: "/tools/Traceroute",
+        element: <Traceroute />,
+        description:
+            "The traceroute utility displays the route used by IP packets on their way to a specified network (or Internet) host.",
     },
     {
         name: "Crunch",
