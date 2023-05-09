@@ -25,15 +25,19 @@ import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import Metagoofil from "./metagoofil/metagoofil";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
+import NbtscanTool from "./NbtscanTool/NbtscanTool";
 import Cewl from "./Cewl/Cewl";
 import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
+import Crackmapexec from "./Crackmapexec/Crackmapexec";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
 import Traceroute from "./Traceroute/Traceroute";
+import Crunch from "./Crunch/Crunch";
+
 export interface RouteProperties {
     name: string;
     path: string;
@@ -157,6 +161,12 @@ export const ROUTES: RouteProperties[] = [
         description: "DNS enumeration tool",
     },
     {
+        name: "Nbtscan",
+        path: "/tools/nbtscan",
+        element: <NbtscanTool />,
+        description: "Tool used for scanning NetBIOS information on a network",
+    },
+    {
         name: "Urlsnarf",
         path: "/tools/Urlsnarf",
         element: <Urlsnarf />,
@@ -243,6 +253,12 @@ export const ROUTES: RouteProperties[] = [
         description: "Dnsrecon is a python script that is used to find different hosts",
     },
     {
+        name: "Crackmapexec",
+        path: "/tools/Crackmapexec",
+        element: <Crackmapexec />,
+        description: "Crackmapexec is a swiss army knife use for pentesting Active Directory or Windows  environments.",
+    },
+    {
         name: "Ffuf",
         path: "/tools/Ffuf",
         element: <FfufTool />,
@@ -265,6 +281,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Traceroute",
         element: <Traceroute />,
         description: "Traceroute Testing",
+    },
+    {
+        name: "Crunch",
+        path: "/tools/Crunch",
+        element: <Crunch />,
+        description: "Crunch is a wordlist generator where you can specify a standard character set or a custom one.",
     },
 ];
 
