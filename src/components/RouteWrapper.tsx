@@ -280,7 +280,8 @@ export const ROUTES: RouteProperties[] = [
         name: "Traceroute",
         path: "/tools/Traceroute",
         element: <Traceroute />,
-        description: "The traceroute utility displays the route used by IP packets on their way to a specified network (or Internet) host.",
+        description:
+            "The traceroute utility displays the route used by IP packets on their way to a specified network (or Internet) host.",
     },
     {
         name: "Crunch",
