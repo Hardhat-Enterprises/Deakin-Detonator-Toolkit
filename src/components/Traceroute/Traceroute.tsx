@@ -6,11 +6,12 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "Traceroute Tool";
-const description_userguide = "How to use Traceroute tool:\n" 
-+ "You will need to upgrade your terminal to a root terminal by typing your password to the terminal you used to open DDT\n"
-+ "If you chose one of these three scans: ICMP, TCP, UDP you will only need to provide a hostname\n"
-+ "If you chose custom scan you can type your customized traceroute option"
-+ "For example: -I -p 12345";
+const description_userguide =
+    "How to use Traceroute tool:\n" +
+    "You will need to upgrade your terminal to a root terminal by typing your password to the terminal you used to open DDT\n" +
+    "If you chose one of these three scans: ICMP, TCP, UDP you will only need to provide a hostname\n" +
+    "If you chose custom scan you can type your customized traceroute option" +
+    "For example: -I -p 12345";
 
 //Variables
 interface FormValuesType {
