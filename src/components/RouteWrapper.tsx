@@ -37,6 +37,7 @@ import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
 import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
+import Meow from "./WalkthroughPages/Meow";
 
 export interface RouteProperties {
     name: string;
@@ -288,6 +289,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Crunch",
         element: <Crunch />,
         description: "Crunch is a wordlist generator where you can specify a standard character set or a custom one.",
+    },
+    {
+        name: "Meow",
+        path: "/walkthroughs/Meow",
+        element: <Meow />,
+        description: "A walkthrough on the Redeemer HackTheBox challenge showcasing nmap tool",
     },
 ];
 
