@@ -5,7 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 
-const title = " SnmpCheck ";
+const title = " SmnpCheck ";
 const description_userguide =
     "The SNMP Check tool enables you to perform SNMP (Simple Network Management Protocol) checks on a specific IP address or hostname and port. SNMP is a widely used protocol for managing and monitoring network devices." +
     "\n\nTo perform a scan, follow these steps: \n Enter the IP address or hostname of the target device in the 'IP or Hostname' field. \n Optionally, specify a custom port number in the 'Port' field (default port: 161). \n Click the 'Scan' button to initiate the SNMP check." +
