@@ -5,7 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 
-const Title = " SnmpCheck ";
+const title = " SnmpCheck ";
 const description_userguide =
     "This tool allows you to perform SNMP checks on a specified IP or hostname and port. Enter the IP or hostname and port number, then click the 'Scan' button to initiate the scan.";
 
@@ -43,7 +43,7 @@ const SnmpCheck = () => {
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                {UserGuide(Title, description_userguide)}
+                {UserGuide(title, description_userguide)}
                 <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
                 <NumberInput label={"Port"} {...form.getInputProps("port")} />
                 <Button type={"submit"}>Scan</Button>
