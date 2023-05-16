@@ -1,8 +1,13 @@
-import { Button, LoadingOverlay, NumberInput, Stack, TextInput, Title } from "@mantine/core";
+import { Button, LoadingOverlay, NumberInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { UserGuide } from "../UserGuide/UserGuide";
+
+const Title = " SnmpCheck ";
+const description_userguide =
+    "This tool allows you to perform SNMP checks on a specified IP or hostname and port. Enter the IP or hostname and port number, then click the 'Scan' button to initiate the scan.";
 
 interface FormValues {
     ip: string;
@@ -38,7 +43,7 @@ const SnmpCheck = () => {
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>SNMP Enumeration tool</Title>
+                {UserGuide(Title, description_userguide)}
                 <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
                 <NumberInput label={"Port"} {...form.getInputProps("port")} />
                 <Button type={"submit"}>Scan</Button>
