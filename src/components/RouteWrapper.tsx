@@ -38,6 +38,7 @@ import Fawn from "./WalkthroughPages/Fawn";
 import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
 import Meow from "./WalkthroughPages/Meow";
+import { FTPconnect } from "./FTP/FTPconnect";
 
 export interface RouteProperties {
     name: string;
@@ -295,6 +296,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Meow",
         element: <Meow />,
         description: "A walkthrough on the Redeemer HackTheBox challenge showcasing nmap tool",
+    },
+    {
+        name: "FTPconnect",
+        path: "/tools/FTPconnect",
+        element: <FTPconnect />,
+        description: "FTPconnect tool",
     },
 ];
 
