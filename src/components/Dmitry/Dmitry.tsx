@@ -10,32 +10,31 @@ interface FormValuesType {
     delay: number;
 }
 
-const title = "DNS Mapping for Subdomains (DNSMap)";
+const title = "Deepmagic Information Gathering Tool";
 const description_userguide =
-    "dnsmap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
-    "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall servicios and smtp. " +
-    "So it will be possible search for smtp.example.com inside example.com automatically. \n\n" +
-    "Step 1: Enter a valid domain to be mapped.\n" +
-    "Step 2: Enter a delay between requests. Default is 10 (milliseconds). Can be left blank.\n" +
+    "DMitry is a UNIX/(GNU)Linux command line application written in C. " +
+    "DMitry will scan to try and find possible subdomains, email addresses, uptime information, perform tcp port scan, and whois lookups. \n\n" +
+    "Step 1: Enter a valid domain or IP address to be scanned.\n" +
+    "Step 2: Enter a delay between requests. Default is 2 (milliseconds). Can be left blank.\n" +
     "Step 3: Results will be shown below";
 
-const DNSMap = () => {
+const dmitry = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
 
     let form = useForm({
         initialValues: {
             domain: "",
-            delay: 10,
+            delay: 2,
         },
     });
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-        const args = [`${values.domain}`, "-d", `${values.delay}`];
+        const args = [`${values.domain}`, "-winsep", "-t", `${values.delay}`];
 
         try {
-            const output = await CommandHelper.runCommand("dnsmap", args);
+            const output = await CommandHelper.runCommand("dmitry", args);
             setOutput(output);
         } catch (e: any) {
             setOutput(e);
@@ -53,17 +52,17 @@ const DNSMap = () => {
             <LoadingOverlay visible={loading} />
             <Stack>
                 {UserGuide(title, description_userguide)}
-                <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
+                <TextInput label={"Domain or IP"} required {...form.getInputProps("domain")} />
                 <TextInput
-                    label={"Random delay between requests (default 10)(milliseconds)"}
+                    label={"Set TTL in seconds when scanning a TCP port (default 2)"}
                     type="number"
                     {...form.getInputProps("delay")}
                 />
-                <Button type={"submit"}>Start Mapping</Button>
+                <Button type={"submit"}>Start Scanning</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
     );
 };
 
-export default DNSMap;
+export default dmitry;
