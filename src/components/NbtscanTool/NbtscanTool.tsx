@@ -7,13 +7,19 @@ import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "Nbtscan Tool";
 const description_userguide =
-    "Nbtscan is a command-line tool designed to scan for NetBIOS information on a network." +
+    "Nbtscan is a command-line tool designed to scan for NetBIOS information on a network. " +
     "It can help identify devices, workgroups, and NetBIOS names on a network, providing valuable " +
-    "information for network reconnaissance and security assessments. Nbtscan is particularly useful" +
+    "information for network reconnaissance and security assessments. Nbtscan is particularly useful " +
     "for identifying legacy systems and applications that rely on NetBIOS. The tool is easy to use " +
-    "and supports scanning for multiple IP addresses or IP address ranges. More information on how " +
+    "and supports scanning for multiple IP addresses or IP address ranges.\n\nMore information on how " +
     "to use nbtscan, along with usage examples, can be found in its official documentation: " +
-    "https://www.kali.org/tools/nbtscan/";
+    "https://www.kali.org/tools/nbtscan/\n\n" +
+    "Using Nbtscan Tool:\n" +
+    "Step 1: Enter a Target Subnet to scan.\n" +
+    "       Eg: 192.168.1.0/24\n\n" +
+    "Step 2: Click Scan Subnet to commence the Nbtscan tools operation.\n\n" +
+    "Step 3: View the Output block below to view the results of the tools execution.\n\n" +
+    "Switch to Advanced Mode for further options.";
 
 //list of input values collected by the form
 interface FormValuesType {
