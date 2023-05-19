@@ -31,7 +31,7 @@ export function FTPconnect() {
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(false);
-        let args = ["/usr/share/ddt/FTPterminal.sh"];
+        let args = ["/usr/share/ddt/Bash-Scripts/FTPterminal.sh"];
         args.push(`${values.IPaddress}`);
 
         const output = await CommandHelper.runCommand("bash", args);
