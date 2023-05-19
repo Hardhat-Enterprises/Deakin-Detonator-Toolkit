@@ -12,11 +12,16 @@ interface FormValuesType {
 
 const title = "Deepmagic Information Gathering Tool";
 const description_userguide =
-    "DMitry is a UNIX/(GNU)Linux command line application written in C. " +
-    "DMitry will scan to try and find possible subdomains, email addresses, uptime information, perform tcp port scan, and whois lookups. \n\n" +
+    "DMitry is a UNIX/(GNU) Linux command line application written in C. DMitry will scan to try and find " +
+    "possible subdomains, email addresses and uptime information, and further perform tcp port scans, and " +
+    "whois lookups.\n\nInformation on the tool can be found at: https://www.kali.org/tools/dmitry/\n\n" +
+    "Using Dmitry:\n" +
     "Step 1: Enter a valid domain or IP address to be scanned.\n" +
+    "       Eg: 192.168.0.1\n\n" +
     "Step 2: Enter a delay between requests. Default is 2 (milliseconds). Can be left blank.\n" +
-    "Step 3: Results will be shown below";
+    "       Eg: 2\n\n" +
+    "Step 3: Click Start Scanning to commence Dmirty's operation.\n\n" +
+    "Step 4: View the Output block below to view the results of the tools execution.";
 
 const dmitry = () => {
     const [loading, setLoading] = useState(false);
