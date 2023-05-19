@@ -14,7 +14,6 @@ const Cewl = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
 
-
     let form = useForm({
         initialValues: {
             depth: "",
@@ -22,7 +21,6 @@ const Cewl = () => {
             url: "",
         },
     });
-
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);

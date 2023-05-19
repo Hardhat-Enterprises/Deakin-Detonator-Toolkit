@@ -1,31 +1,29 @@
-
 {
-	"arg1": {
-		"name":"ip",
-		"req_flag":false,
-		"flag_val":"",
-		"have_preset":false,
-		"preset_vals":"",
-		"label": "IP to be enumerated",
-		"is_required":true
-
-	},
-	"arg2": {
-		"name":"port",
-		"req_flag":true,
-		"flag_val":"p",
-		"have_preset":false,
-		"preset_vals":"",
-		"label": "Port to be scanned",
-		"is_required":true
-	},
-	"arg3": {
-		"name":"speed",
-		"req_flag":true,
-		"flag_val":"speed",
-		"have_preset":true,
-		"preset_vals":["T0", "T1", "T2", "T3", "T4", "T5"],
-		"label": "speed of the scan",
-		"is_required":false
-	}
+    "arg1": {
+        "name": "ip",
+        "req_flag": false,
+        "flag_val": "",
+        "have_preset": false,
+        "preset_vals": "",
+        "label": "IP to be enumerated",
+        "is_required": true
+    },
+    "arg2": {
+        "name": "port",
+        "req_flag": true,
+        "flag_val": "p",
+        "have_preset": false,
+        "preset_vals": "",
+        "label": "Port to be scanned",
+        "is_required": true
+    },
+    "arg3": {
+        "name": "speed",
+        "req_flag": true,
+        "flag_val": "speed",
+        "have_preset": true,
+        "preset_vals": ["T0", "T1", "T2", "T3", "T4", "T5"],
+        "label": "speed of the scan",
+        "is_required": false
+    }
 }
