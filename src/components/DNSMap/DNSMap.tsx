@@ -106,3 +106,5 @@ const DNSMap = () => {
         </form>
     );
 };
+
+export default DNSMap;
