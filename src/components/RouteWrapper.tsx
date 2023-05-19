@@ -101,7 +101,7 @@ export const ROUTES: RouteProperties[] = [
         name: "SnmpCheck",
         path: "/tools/snmpcheck",
         element: <SnmpCheck />,
-        description: "SNMP enumeration tool",
+        description: "Detects network devices using SNMP protocol",
     },
     {
         name: "Shodan API tool",
