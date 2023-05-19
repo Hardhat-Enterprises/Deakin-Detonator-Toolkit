@@ -3,6 +3,7 @@
 import json
 import os
 import config
+import argparse
 
 def get_add_dec(values):
 
@@ -234,18 +235,38 @@ def create_files_for_tool(tool_name, json_file, description):
 	print(script_path)
 	# op_script = "/home/pushkar/Documents/deakin/sit764/test_automation/test1.tsx"
 
+	#create the config file
 	insert_conf(conf_file, tool_name)
+	# modify the route file by adding the tool
 	insert_route(route_file, tool_name.title(), description)
 
+	# creating the tsx file for the tool
 	create_script_for_tool(tool_name, json_file, script_path)
+
+
+def parse_args():
+
+	parser = argparse.ArgumentParser()
+
+	parser.add_argument('-d', '--desc', type=str, help='Description of the tool')
+	parser.add_argument('-n', '--name', type=str, help='Name of the tool')
+	parser.add_argument('-j', '--json', type=str, help='Path of the json file to be used')
+
+	args = parser.parse_args()
+
+	description = args.desc
+	tool_name = args.name
+	json_file = args.json
+	return description, tool_name, json_file
 
 
 
 def main():
 
-	description = "test for creating cewl command"
-	tool_name = "cewl"
-	json_file = "test/template_json.json"
+#	description = "test for creating cewl command"
+#	tool_name = "cewl"
+#	json_file = "test/template_json.json"
+	description, tool_name, json_file = parse_args()
 	create_files_for_tool(tool_name, json_file, description)
 
 
