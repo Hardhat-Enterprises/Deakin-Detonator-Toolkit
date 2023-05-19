@@ -118,7 +118,7 @@ const NetcatTool = () => {
                 //The script executes a separate qterminal session that runs netcat listen command
                 //The script runs like the normal netcat listen where the user can communicate between the attacker (kali) and the victim (VM2)
                 //Not sure how to add output to the tool
-                args = [`/usr/share/ddt/netcatTerminal.sh`];
+                args = [`/usr/share/ddt/Bash-Scripts/netcatTerminal.sh`];
                 args.push(`${values.portNumber}`);
 
                 try {
