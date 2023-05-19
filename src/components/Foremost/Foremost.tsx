@@ -76,6 +76,7 @@ const Foremost = () => {
             </form>
         );
     } catch (e: any) {
+        const [output, setOutput] = useState("");
         setOutput(e);
     }
 };
