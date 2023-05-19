@@ -107,7 +107,11 @@
                         "cmd": "metagoofil",
                         "args": true
                     },
-
+                    {
+                        "name": "dmitry",
+                        "cmd": "dmitry",
+                        "args": true
+                    },
                     {
                         "name": "dnsenum",
                         "cmd": "dnsenum",

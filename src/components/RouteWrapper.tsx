@@ -23,6 +23,7 @@ import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import Metagoofil from "./metagoofil/metagoofil";
+import Dmitry from "./Dmitry/Dmitry";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import NbtscanTool from "./NbtscanTool/NbtscanTool";
@@ -209,6 +210,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2022-24112",
         element: <CVE202224112 />,
         description: "Apache APISIX Remote Code Execution Vulnerability",
+    },
+    {
+        name: "dmitry",
+        path: "/tools/dmitry",
+        element: <Dmitry />,
+        description: "Deepmagic Information Gathering Tool",
     },
     {
         name: "DNSMap",
