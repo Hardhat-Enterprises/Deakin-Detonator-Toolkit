@@ -196,10 +196,20 @@
                         "name": "traceroute",
                         "cmd": "sudo traceroute",
                         "args": true
-                     },
+                    },
                     {
                         "name": "crunch",
                         "cmd": "crunch",
+                        "args": true
+                    },
+                    {
+                        "name": "goldeneye",
+                        "cmd": "goldeneye",
+                        "args": true
+                    },
+                    {
+                        "name": "WPScan",
+                        "cmd": "WPScan",
                         "args": true
                     }
                 ]
