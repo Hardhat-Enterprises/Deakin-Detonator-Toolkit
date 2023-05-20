@@ -3,6 +3,29 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { UserGuide } from "../UserGuide/UserGuide";
+
+const title = "Hydra";
+const description =
+    "Hydra is a login cracking tool that supports several protocols within " +
+    "its attacks. The tool can be applied for cracking singular passwords, " +
+    "files, and character sets. These brute-force attacks can be applied to " +
+    "SMTP, SSH, NFS,and several other protocols.\n\n" +
+    "How to use Hydra:\n\n" +
+    "Step 1: Select the Login settings\n" +
+    "       E.g. Single Login\n\n" +
+    "Step 2: Specify the Username for the Login\n" +
+    "       E.g. kali\n\n" +
+    "Step 3: Select the Password setting\n" +
+    "       E.g. Single Password\n\n" +
+    "Step 4: Input password for the Login\n" +
+    "       E.g. root\n\n" +
+    "Step 5: Select the number of Threads and Service Type\n" +
+    "       E.g. 6, SSH\n\n" +
+    "Step 6: Enter an IP address and Port number.\n" +
+    "       E.g. 192.168.1.1:22\n\n" +
+    "Step 7: Click Crack to commence Hydra's operation.\n\n" +
+    "Step 8: View the Output block below to view the results";
 
 interface FormValuesType {
     loginInputType: string;
@@ -103,7 +126,7 @@ const Hydra = () => {
         >
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>Hydra</Title>
+                {UserGuide(title, description)}
                 <Grid>
                     <Grid.Col span={12}>
                         <NativeSelect
