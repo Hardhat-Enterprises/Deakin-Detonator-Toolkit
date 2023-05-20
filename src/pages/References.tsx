@@ -130,7 +130,18 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/traceroute/"}
                     />
-
+                    <Reference
+                        name={"GoldenEye"}
+                        description={"GoldenEye is a HTTP DoS Test Tool."}
+                        url={"https://www.kali.org/tools/goldeneye/"}
+                    />
+                    <Reference
+                        name={"WPScan"}
+                        description={
+                            "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues."
+                        }
+                        url={"https://www.kali.org/tools/wpscan/"}
+                    />
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2022-24112"}
