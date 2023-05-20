@@ -206,7 +206,7 @@
                         "name": "eyewitness",
                         "cmd": "eyewitness",
                         "args": true
-                    },
+                    }
                 ]
             },
             "fs": {
