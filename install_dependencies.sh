@@ -44,7 +44,7 @@ sudo apt install -y mitmproxy \
 		enum4linux \
 		dnsmap \
 		goldeneye \
-		wpscan \
+		wpscan 
 
 echo "-----------------------------"
 echo "Installing yarn..."
