@@ -60,7 +60,7 @@ const TracerouteTool = () => {
         //Switch case
         switch (values.tracerouteSwitch) {
             case "Traceroute ICMP scan": //traceroute syntax: traceroute -I <hostname>
-                args = [`/usr/share/ddt/Tracerouteshell.sh`];
+                args = [`usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
                 args.push(`${values.hostname}`);
                 try {
@@ -73,7 +73,7 @@ const TracerouteTool = () => {
                 break;
 
             case "Traceroute TCP scan": //traceroute syntax: traceroute -T <hostname>
-                args = [`/usr/share/ddt/Tracerouteshell.sh`];
+                args = [`usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-T`);
                 args.push(`${values.hostname}`);
                 try {
@@ -86,7 +86,7 @@ const TracerouteTool = () => {
                 break;
 
             case "Traceroute UDP scan": //traceroute syntax: traceroute -U <hostname>
-                args = [`/usr/share/ddt/Tracerouteshell.sh`];
+                args = [`usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-U`);
                 args.push(`${values.hostname}`);
                 try {
@@ -99,7 +99,7 @@ const TracerouteTool = () => {
                 break;
 
             case "Traceroute custom scan": //traceroute syntax: traceroute <options> <hostname>
-                args = [`/home/kali/Desktop/Deakin-Detonator-Toolkit/src/components/Traceroute/Tracerouteshell.sh`];
+                args = [`usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`${values.tracerouteOptions}`);
                 args.push(`${values.hostname}`);
                 try {
