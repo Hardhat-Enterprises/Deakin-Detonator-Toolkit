@@ -201,6 +201,11 @@
                         "name": "crunch",
                         "cmd": "crunch",
                         "args": true
+                    },
+                    {
+                        "name": "eyewitness",
+                        "cmd": "eyewitness",
+                        "args": true
                     }
                 ]
             },
