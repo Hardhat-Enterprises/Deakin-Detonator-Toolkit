@@ -210,6 +210,9 @@
                     {
                         "name": "WPScan",
                         "cmd": "WPScan",
+                    },
+                        "name": "eyewitness",
+                        "cmd": "eyewitness",
                         "args": true
                     }
                 ]

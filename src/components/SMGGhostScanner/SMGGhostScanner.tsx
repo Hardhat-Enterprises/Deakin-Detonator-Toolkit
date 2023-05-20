@@ -6,13 +6,16 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { IconAlertCircle } from "@tabler/icons";
 import { UserGuide } from "../UserGuide/UserGuide";
 
-const title = "SNMP Enumeration Tool";
+const title = "SMG-Ghost Scanner";
 const description_userguide =
-    "SMG-Ghost Scanner is a tool used to scan a target to see if they are vulnerable to the attack vector\n" +
-    "CVE2020-0796. This vulnerability fell within Microsoft's SMB 3.1.1 protocol stack implementation where\n" +
-    "due to the failure of handling particular requests and response messages, an attacker could perform\n" +
-    "remote code execution to act as the systems user. \n\nUsing the tool: \nStep 1: Enter a Target IP address." +
-    "\n               Eg: 192.168.1.1 \n\nStep 2:Click scan to commence SMG-Ghost Scanners operation.\n\n" +
+    "SMG-Ghost Scanner is a tool used to scan a target to see if they are vulnerable to the attack vector " +
+    "CVE2020-0796. This vulnerability fell within Microsoft's SMB 3.1.1 protocol stack implementation where " +
+    "due to the failure of handling particular requests and response messages, an attacker could perform " +
+    "remote code execution to act as the systems user.\n\n" +
+    "Using SMG-Ghost Scanner:\n" +
+    "Step 1: Enter a Target IP address.\n" +
+    "       Eg: 192.168.1.1 \n\n" +
+    "Step 2: Click scan to commence SMG-Ghost Scanners operation.\n\n" +
     "Step 3: View the Output block below to view the results of the tools execution.";
 
 interface FormValues {

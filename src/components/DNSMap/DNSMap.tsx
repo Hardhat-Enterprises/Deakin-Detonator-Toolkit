@@ -7,12 +7,17 @@ import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "DNS Mapping for Subdomains (DNSMap)";
 const description_userguide =
-    "dnsmap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
+    "DNSMap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
     "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall servicios and smtp. " +
-    "So it will be possible search for smtp.example.com inside example.com automatically. \n\n" +
+    "So it will be possible search for smtp.example.com inside example.com automatically.\n\nInformation on the tool " +
+    "can be found at: https://www.kali.org/tools/dnsmap/\n\n" +
     "Step 1: Enter a valid domain to be mapped.\n" +
+    "       Eg: google.com\n\n" +
     "Step 2: Enter a delay between requests. Default is 10 (milliseconds). Can be left blank.\n" +
-    "Step 3: Results will be shown below";
+    "       Eg: 10\n\n" +
+    "Step 3: Click Start Mapping to commence the DNSMap tools operation.\n\n" +
+    "Step 4: View the Output block below to view the results of the tools execution.\n\n" +
+    "Switch to Advanced Mode for further options.";
 
 interface FormValuesType {
     domain: string;

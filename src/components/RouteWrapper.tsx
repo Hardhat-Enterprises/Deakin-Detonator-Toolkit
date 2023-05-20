@@ -42,6 +42,7 @@ import Meow from "./WalkthroughPages/Meow";
 import { FTPconnect } from "./FTP/FTPconnect";
 import GoldenEye from "./GoldenEye/GoldenEye";
 import WPScan from "./WPScan/WPScan";
+import Eyewitness from "./eyewitness/eyewitness";
 
 export interface RouteProperties {
     name: string;
@@ -324,6 +325,12 @@ export const ROUTES: RouteProperties[] = [
         element: <WPScan />,
         description:
             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
+    },
+    {
+        name: "Eyewitness",
+        path: "/tools/eyewitness",
+        element: <Eyewitness />,
+        description: "Eyewitness takes screenshot of important websites.",
     },
 ];
 
