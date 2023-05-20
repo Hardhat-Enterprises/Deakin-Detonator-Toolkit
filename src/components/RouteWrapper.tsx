@@ -41,6 +41,7 @@ import Crunch from "./Crunch/Crunch";
 import Meow from "./WalkthroughPages/Meow";
 import GoldenEye from "./GoldenEye/GoldenEye";
 import WPScan from "./WPScan/WPScan";
+import { FTPconnect } from "./FTP/FTPconnect";
 
 export interface RouteProperties {
     name: string;
@@ -102,7 +103,7 @@ export const ROUTES: RouteProperties[] = [
         name: "SnmpCheck",
         path: "/tools/snmpcheck",
         element: <SnmpCheck />,
-        description: "SNMP enumeration tool",
+        description: "Detects network devices using SNMP protocol",
     },
     {
         name: "Shodan API tool",
@@ -317,6 +318,12 @@ export const ROUTES: RouteProperties[] = [
         element: <WPScan />,
         description:
             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
+    },
+    {
+        name: "FTPconnect",
+        path: "/tools/FTPconnect",
+        element: <FTPconnect />,
+        description: "FTPconnect tool",
     },
 ];
 
