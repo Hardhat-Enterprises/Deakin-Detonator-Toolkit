@@ -37,12 +37,14 @@ sudo apt install -y mitmproxy \
         libjavascriptcoregtk-4.0-dev \
         libwebkit2gtk-4.1-0 \
         libwebkit2gtk-4.1-dev \
-		openjdk-11-jdk
+		openjdk-11-jdk \
 		cargo \
 		nodejs \
 		dsniff \
 		enum4linux \
-		dnsmap
+		dnsmap \
+		goldeneye \
+		wpscan \
 
 echo "-----------------------------"
 echo "Installing yarn..."
