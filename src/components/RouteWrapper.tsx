@@ -39,6 +39,8 @@ import Fawn from "./WalkthroughPages/Fawn";
 import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
 import Meow from "./WalkthroughPages/Meow";
+import GoldenEye from "./GoldenEye/GoldenEye";
+import WPScan from "./WPScan/WPScan";
 
 export interface RouteProperties {
     name: string;
@@ -302,6 +304,19 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Meow",
         element: <Meow />,
         description: "A walkthrough on the Redeemer HackTheBox challenge showcasing nmap tool",
+    },
+    {
+        name: "GoldenEye",
+        path: "/tools/GoldenEye",
+        element: <GoldenEye />,
+        description: "HTTP DoS Test Tool",
+    },
+    {
+        name: "WPScan",
+        path: "/tools/WPScan",
+        element: <WPScan />,
+        description:
+            "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
     },
 ];
 
