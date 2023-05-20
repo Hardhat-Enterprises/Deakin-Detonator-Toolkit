@@ -7,12 +7,14 @@ import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "Sherlock Tool";
 const description_guide =
-    "Sherlock is a tool used for searching social netowkrs for the certain username. \n\n" +
-    "Steps to use Sherlock: \n" +
-    "Note: For multiple username add a space in between. 'Sherlock John Billy'\n\n" +
+    "Sherlock is a tool used for searching social networks for the certain username.\n\n" +
+    "Further information can be found at: https://www.kali.org/tools/sherlock/\n\n" +
+    "Using Sherlock:\n" +
+    "*Note: For multiple usernames, add a space in between. 'Sherlock John Billy'*\n" +
     "Step 1: Input the username you need to search in the input box.\n" +
-    "Step 2: Click Start Searching \n" +
-    "Step 3: View results in the Output block below.";
+    "       Eg: John Billy\n\n" +
+    "Step 2: Click Start Searching to commence Sherlock's operation.\n\n" +
+    "Step 3: View the Output block below to view the results of the tools execution.";
 
 interface FormValuesType {
     username: string;

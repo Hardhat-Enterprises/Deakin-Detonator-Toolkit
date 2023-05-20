@@ -7,13 +7,23 @@ import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "DNS Enumeration Tool";
 const description_userguide =
-    "DNSenum is a command-line tool used for DNS enumeration." +
-    "It is used to gather information about a domain, including subdomains, hosts, and IP addresses." +
+    "DNSenum is a command-line tool used for DNS enumeration. " +
+    "It is used to gather information about a domain, including subdomains, hosts, and IP addresses. " +
     "The tool is useful for penetration testers and security researchers, " +
-    "as it can help identify potential attack vectors and vulnerabilities in a network." +
-    "DNSenum supports a variety of DNS record types, including A, MX, NS, and SOA records." +
-    "You can find more information about the tool, including usage instructions and examples," +
-    "in its official documentation: https://tools.kali.org/information-gathering/dnsenum";
+    "as it can help identify potential attack vectors and vulnerabilities in a network. " +
+    "DNSenum supports a variety of DNS record types, including A, MX, NS, and SOA records. " +
+    "\n\nYou can find more information about the tool, including usage instructions and examples, " +
+    "in its official documentation: https://tools.kali.org/information-gathering/dnsenum\n\n" +
+    "Using DNS Enumeration Tool:\n" +
+    "Step 1: Enter a Target Domain.\n" +
+    "       Eg: google.com\n\n" +
+    "Step 2: Enter any Subdomains to include.\n" +
+    "       Eg: yahoo.com,firefox.com\n\n" +
+    "Step 3: Enter the number of Threads to use for reverse/forward lookups, brute force and SRV enumeration.\n" +
+    "       Eg: 10\n\n" +
+    "Step 4: Click Start Enumeration to commence the DNS Enumeration tools operation.\n\n" +
+    "Step 5: View the Output block below to view the results of the tools execution.\n\n" +
+    "Switch to Advanced Mode for further options.";
 
 //list of input values collected by the form
 interface FormValuesType {
