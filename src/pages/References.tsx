@@ -123,6 +123,14 @@ const ReferencesPage = () => {
                         description={"Sherlock is used to search for usernames across social networks."}
                         url={"https://www.kali.org/tools/sherlock/"}
                     />
+                    <Reference
+                        name={"Traceroute"}
+                        description={
+                            "The traceroute utility displays the route used by IP packets on their way to a specified network (or Internet) host."
+                        }
+                        url={"https://www.kali.org/tools/traceroute/"}
+                    />
+
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2022-24112"}

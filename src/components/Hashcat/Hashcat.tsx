@@ -4,6 +4,28 @@ import { IconAlertCircle } from "@tabler/icons";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { UserGuide } from "../UserGuide/UserGuide";
+
+const title = "Hashcat";
+const description_userguide =
+    "Hashcat is an advanced password recovery tool that provides brute-force " +
+    "attacks that are conducted with the hash values of passwords that are either " +
+    "guessed or applied by the tool. DDT currently supports 3 " +
+    "attack modes including Straight, Brute-force and Hybrid Wordlist + Mask.\n\n" +
+    "A list of the Hashing Algorithm codes can be found at: https://hashcat.net/hashcat\n\n" +
+    "How to use Hashcat:\n\n" +
+    "Step 1: Pick an attack mode\n" +
+    "       E.g. Straight\n\n" +
+    "Step 2: Input hash type and hash algorithm code\n" +
+    "       E.g. Hash Value, 2\n\n" +
+    "Step 3: Input the hash value\n" +
+    "       E.g. ae71a4222ef1893879b442f14c40c370\n\n" +
+    "Step 4: Input password file.\n" +
+    "        E.g. /root/pwd.txt\n\n" +
+    "Step 5: Add additional commands as required, refer to weblink above.\n" +
+    "       E.g. --force\n\n" +
+    "Step 6: Click Scan to commence the Hashcat operation.\n\n" +
+    "Step 7: View the Output block below to view the results";
 
 interface FormValuesType {
     attackMode: string;
@@ -114,7 +136,7 @@ const Hashcat = () => {
         >
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title> Hashcat </Title>
+                {UserGuide(title, description_userguide)}
                 <NativeSelect
                     value={selectedModeOption}
                     onChange={(e) => setSelectedModeOption(e.target.value)}
