@@ -60,7 +60,7 @@ const TracerouteTool = () => {
         //Switch case
         switch (values.tracerouteSwitch) {
             case "Traceroute ICMP scan": //traceroute syntax: traceroute -I <hostname>
-                args = [`/usr/share/ddt/Tracerouteshell.sh`];
+                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
                 args.push(`${values.hostname}`);
                 try {
