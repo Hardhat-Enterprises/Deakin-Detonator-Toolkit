@@ -167,6 +167,11 @@
                         "name": "bed",
                         "cmd": "bed",
                         "args": true
+                    },
+                    {
+                        "name": "eyewitness",
+                        "cmd": "eyewitness",
+                        "args": true
                     }
                 ]
             },
