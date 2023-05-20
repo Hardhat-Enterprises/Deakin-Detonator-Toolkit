@@ -40,6 +40,8 @@ import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
 import Meow from "./WalkthroughPages/Meow";
 import { FTPconnect } from "./FTP/FTPconnect";
+import GoldenEye from "./GoldenEye/GoldenEye";
+import WPScan from "./WPScan/WPScan";
 import Eyewitness from "./eyewitness/eyewitness";
 
 export interface RouteProperties {
@@ -310,6 +312,19 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/FTPconnect",
         element: <FTPconnect />,
         description: "FTPconnect tool",
+    },
+    {
+        name: "GoldenEye",
+        path: "/tools/GoldenEye",
+        element: <GoldenEye />,
+        description: "HTTP DoS Test Tool",
+    },
+    {
+        name: "WPScan",
+        path: "/tools/WPScan",
+        element: <WPScan />,
+        description:
+            "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
     },
     {
         name: "Eyewitness",
