@@ -37,7 +37,9 @@ import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
 import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
-
+import Harvest from "./Harvest/Harvest";
+import Gobuster from "./buster/buster";
+import Msfvenom from "./Msfvenom/msfvenom";
 export interface RouteProperties {
     name: string;
     path: string;
@@ -93,6 +95,24 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/SMBEnumeration",
         element: <SMBEnumeration />,
         description: "SMB Enumeration tool",
+    },
+    {
+        name: "Harvest",
+        path: "/tools/harvest",
+        element: <Harvest />,
+        description: "Harvest tool",
+    },
+    {
+        name: "Gobuster",
+        path: "/tools/gobuster",
+        element: <Gobuster />,
+        description: "Gobuster tool",
+    },
+    {
+        name: "Msfvenom",
+        path: "/tools/msfvenom",
+        element: <Msfvenom />,
+        description: "Msfvenom tool",
     },
     {
         name: "SnmpCheck",
