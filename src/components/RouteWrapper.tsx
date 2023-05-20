@@ -316,7 +316,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/eyewitness",
         element: <Eyewitness />,
         description: "Eyewitness takes screenshot of important websites.",
-    }
+    },
 ];
 
 export function getTools() {
