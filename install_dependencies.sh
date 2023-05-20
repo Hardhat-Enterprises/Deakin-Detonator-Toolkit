@@ -42,7 +42,9 @@ sudo apt install -y mitmproxy \
 		nodejs \
 		dsniff \
 		enum4linux \
-		dnsmap
+		dnsmap \
+		goldeneye \
+		wpscan
 
 echo "-----------------------------"
 echo "Installing yarn..."
