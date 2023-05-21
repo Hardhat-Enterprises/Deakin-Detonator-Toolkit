@@ -36,6 +36,7 @@ import Crackmapexec from "./Crackmapexec/Crackmapexec";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
+import Pentesting from "./WalkthroughPages/Pentesting";
 import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
 import Meow from "./WalkthroughPages/Meow";
@@ -284,6 +285,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Fawn",
         element: <Fawn />,
         description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
+    },
+    {
+        name: "Pentesting",
+        path: "/walkthroughs/Pentesting",
+        element: <Pentesting />,
+        description: "A walkthrough on a Pentesting room with focus on brute force attack and privilege escalation",
     },
     {
         name: "Traceroute",
