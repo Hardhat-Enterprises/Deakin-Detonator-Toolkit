@@ -45,6 +45,7 @@ import GoldenEye from "./GoldenEye/GoldenEye";
 import WPScan from "./WPScan/WPScan";
 import Eyewitness from "./eyewitness/eyewitness";
 import MrRobot from "./WalkthroughPages/MrRobot";
+import Parsero from "./parsero/parsero";
 
 export interface RouteProperties {
     name: string;
@@ -345,6 +346,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/MrRobot",
         element: <MrRobot />,
         description: "A walkthrough on the Mr Robot TryHackMe Capture the flag",
+    },
+    {
+        name: "Parsero",
+        path: "/tools/parsero",
+        element: <Parsero />,
+        description: "Python Script that reads Robots.txt of w webserver to view Disallow entries",
     },
 ];
 
