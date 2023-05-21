@@ -23,6 +23,7 @@ import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import Metagoofil from "./metagoofil/metagoofil";
+import Dmitry from "./Dmitry/Dmitry";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import NbtscanTool from "./NbtscanTool/NbtscanTool";
@@ -35,11 +36,18 @@ import Crackmapexec from "./Crackmapexec/Crackmapexec";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
+import Pentesting from "./WalkthroughPages/Pentesting";
 import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
 import Harvest from "./Harvest/Harvest";
 import Gobuster from "./buster/buster";
 import Msfvenom from "./Msfvenom/msfvenom";
+import Meow from "./WalkthroughPages/Meow";
+import { FTPconnect } from "./FTP/FTPconnect";
+import GoldenEye from "./GoldenEye/GoldenEye";
+import WPScan from "./WPScan/WPScan";
+import Eyewitness from "./eyewitness/eyewitness";
+import MrRobot from "./WalkthroughPages/MrRobot";
 export interface RouteProperties {
     name: string;
     path: string;
@@ -118,7 +126,7 @@ export const ROUTES: RouteProperties[] = [
         name: "SnmpCheck",
         path: "/tools/snmpcheck",
         element: <SnmpCheck />,
-        description: "SNMP enumeration tool",
+        description: "Detects network devices using SNMP protocol",
     },
     {
         name: "Shodan API tool",
@@ -230,6 +238,12 @@ export const ROUTES: RouteProperties[] = [
         description: "Apache APISIX Remote Code Execution Vulnerability",
     },
     {
+        name: "dmitry",
+        path: "/tools/dmitry",
+        element: <Dmitry />,
+        description: "Deepmagic Information Gathering Tool",
+    },
+    {
         name: "DNSMap",
         path: "/tools/dnsmap",
         element: <DNSMap />,
@@ -297,6 +311,12 @@ export const ROUTES: RouteProperties[] = [
         description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
     },
     {
+        name: "Pentesting",
+        path: "/walkthroughs/Pentesting",
+        element: <Pentesting />,
+        description: "A walkthrough on a Pentesting room with focus on brute force attack and privilege escalation",
+    },
+    {
         name: "Traceroute",
         path: "/tools/Traceroute",
         element: <Traceroute />,
@@ -308,6 +328,43 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Crunch",
         element: <Crunch />,
         description: "Crunch is a wordlist generator where you can specify a standard character set or a custom one.",
+    },
+    {
+        name: "Meow",
+        path: "/walkthroughs/Meow",
+        element: <Meow />,
+        description: "A walkthrough on the Redeemer HackTheBox challenge showcasing nmap tool",
+    },
+    {
+        name: "FTPconnect",
+        path: "/tools/FTPconnect",
+        element: <FTPconnect />,
+        description: "FTPconnect tool",
+    },
+    {
+        name: "GoldenEye",
+        path: "/tools/GoldenEye",
+        element: <GoldenEye />,
+        description: "HTTP DoS Test Tool",
+    },
+    {
+        name: "WPScan",
+        path: "/tools/WPScan",
+        element: <WPScan />,
+        description:
+            "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
+    },
+    {
+        name: "Eyewitness",
+        path: "/tools/eyewitness",
+        element: <Eyewitness />,
+        description: "Eyewitness takes screenshot of important websites.",
+    },
+    {
+        name: "MrRobot",
+        path: "/walkthroughs/MrRobot",
+        element: <MrRobot />,
+        description: "A walkthrough on the Mr Robot TryHackMe Capture the flag",
     },
 ];
 
