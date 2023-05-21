@@ -44,6 +44,7 @@ import { FTPconnect } from "./FTP/FTPconnect";
 import GoldenEye from "./GoldenEye/GoldenEye";
 import WPScan from "./WPScan/WPScan";
 import Eyewitness from "./eyewitness/eyewitness";
+import MrRobot from "./WalkthroughPages/MrRobot";
 
 export interface RouteProperties {
     name: string;
@@ -338,6 +339,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/eyewitness",
         element: <Eyewitness />,
         description: "Eyewitness takes screenshot of important websites.",
+    },
+    {
+        name: "MrRobot",
+        path: "/walkthroughs/MrRobot",
+        element: <MrRobot />,
+        description: "A walkthrough on the Mr Robot TryHackMe Capture the flag",
     },
 ];
 
