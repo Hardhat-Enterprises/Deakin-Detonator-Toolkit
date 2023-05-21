@@ -216,6 +216,11 @@
                         "name": "eyewitness",
                         "cmd": "eyewitness",
                         "args": true
+                    },
+                    {
+                        "name": "parsero",
+                        "cmd": "parsero",
+                        "args": true
                     }
                 ]
             },
