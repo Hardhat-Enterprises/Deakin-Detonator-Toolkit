@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Button, LoadingOverlay, Stack, Select, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { CommandHelper } from "../../utils/CommandHelper";
 
 interface FormValues {
     payloadType: string;
@@ -20,7 +21,6 @@ const payloadTypes = [
 export function Msfvenom() {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
-
     const form = useForm<FormValues>({
         initialValues: {
             payloadType: "",
@@ -35,43 +35,21 @@ export function Msfvenom() {
 
         const args = [
             "/home/blank/Desktop/Deakin-Detonator-Toolkit/src-tauri/exploits/msfvenom.py",
-            "-p",
             values.payloadType,
-            "LHOST=" + values.lhost,
-            "LPORT=" + values.lport,
-            "-o",
+            values.lhost,
+            values.lport,
             values.outputFile,
         ];
 
-        try {
-            const response = await fetch("/execute-command", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ command: args }),
-            });
+        const output = await CommandHelper.runCommand("python3", args);
 
-            if (response.ok) {
-                const data = await response.json();
-                if (data.error) {
-                    setOutput(`Error: ${data.error}`);
-                } else {
-                    setOutput("Payload generated successfully.");
-                }
-            } else {
-                setOutput(`Error: ${response.statusText}`);
-            }
-        } catch (error) {
-            setOutput(`Error: ${(error as Error).message}`);
-        }
-
+        setOutput(output);
         setLoading(false);
     };
 
     const clearOutput = useCallback(() => {
         setOutput("");
-    }, []);
+    }, [setOutput]);
 
     const handlePayloadTypeChange = (value: string) => {
         form.setFieldValue("payloadType", value);
@@ -95,7 +73,7 @@ export function Msfvenom() {
                     label="Output File"
                     required
                     {...form.getInputProps("outputFile")}
-                    defaultValue="/home/blank/Desktop/payload.bin"
+                    defaultValue="/path/to/output/file"
                 />
                 <Button type="submit">Generate Payload</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
