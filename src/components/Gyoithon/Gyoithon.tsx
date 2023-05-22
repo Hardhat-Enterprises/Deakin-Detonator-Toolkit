@@ -15,6 +15,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { IconAlertCircle } from "@tabler/icons";
+import { UserGuide } from "../UserGuide/UserGuide";
 interface FormValues {
     ip: string;
     port: string;
@@ -25,6 +26,15 @@ interface FormValues {
     export_path: string;
 }
 
+const title = "AI-based pen-testing tool (Gyoithon)";
+const description_userguide =
+    "Gyoithon is a tool primarily used for gathering intelligence for a Web Server. The tool allows for remote access to " +
+    "be inflicted against a targeted web server to allow for products to be identified that are being operated on the server. " +
+    "This may include CMS, web server software, programming language and framework. Gyoithon is further capable of automatically " +
+    "executing exploitation modules designed to target these identified products. \n\nThe current version of this tool utilises " +
+    "Naive Bayes and Deep Neural Network to allow for HTTP/HTTPS port detection. \n\nFurther information on the tool can be found at: " +
+    "https://github.com/gyoisamurai/GyoiThon \n\nUsing the tool:\nPlease follow the steps listed within the tool.";
+
 const Gyoithon = () => {
     const [value, setValue] = useState<string | null>("install");
     const [loading, setLoading] = useState(false);
@@ -32,7 +42,8 @@ const Gyoithon = () => {
     const [selectedProtocolOption, setSelectedProtocolOption] = useState("");
     const protocolType = ["HTTPS", "HTTP"];
     const [selectedMLOption, setSelectedMLOption] = useState("");
-    const MLType = ["Naive Bayes", "Deep Neural Network"];
+    const Ml = ["Naive Bayes", "Deep Neural Network"];
+    const isDNN = selectedMLOption == "Deep Neural Network";
 
     let form = useForm({
         initialValues: {
@@ -104,6 +115,14 @@ const Gyoithon = () => {
         setValue("run");
     };
 
+    const GridSearch = async () => {
+        setLoading(true);
+        const args = [`/usr/share/ddt/GyoiThon/modules/Deep_Neural_Network.py`, `-grid`];
+        const output = await CommandHelper.runCommand("python3", args);
+        setOutput(output);
+        setLoading(false);
+    };
+
     const Run = async (values: FormValues) => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/gyoithon.py`, `-m`];
@@ -153,7 +172,7 @@ const Gyoithon = () => {
         <p>
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>AI-based pen-testing tool (Gyoithon)</Title>
+                {UserGuide(title, description_userguide)}
                 <Alert
                     icon={<IconAlertCircle size={16} />}
                     radius="md"
@@ -214,20 +233,27 @@ const Gyoithon = () => {
                             </form>
                         </Accordion.Panel>
                     </Accordion.Item>
-                    <form onSubmit={form.onSubmit((values) => Run(values))}>
+                    <form onSubmit={form.onSubmit((values) => Run({ ...values, Ml: selectedMLOption }))}>
                         <Accordion.Item value="run">
                             <Accordion.Control>Step 3: Run The Tool</Accordion.Control>
                             <Accordion.Panel>
+                                <Text align={"center"}>
+                                    * Each target will takes about 5 min * Grid Search only works on DNN now
+                                </Text>
                                 <Group grow>
                                     <NativeSelect
                                         value={selectedMLOption}
                                         onChange={(e) => setSelectedMLOption(e.target.value)}
                                         label={"ML model Type"}
-                                        data={MLType}
+                                        data={Ml}
                                         required
                                         placeholder={"Naive Bayes/ Deep Neural Network"}
-                                        {...form.getInputProps("ML")}
                                     />
+                                    {isDNN && (
+                                        <Button onClick={GridSearch} style={{ marginTop: 20 }}>
+                                            Grid Search
+                                        </Button>
+                                    )}
                                     <Button style={{ marginTop: 20 }} type={"submit"}>
                                         RUN
                                     </Button>
