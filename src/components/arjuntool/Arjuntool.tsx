@@ -5,18 +5,19 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 
-const title = "Arjuntool";
+const title = "Arjun";
 const description_userguide =
-    "Dirb is a Web Content Scanner that acts to seek out any existing or hidden Web Objects. " +
-    "This is a dictionary-based attack that takes place upon a web server and will analyse the " +
-    "results within this process.\n\nHow to use Dirb:\n\nStep 1: Enter a valid URL.\n" +
-    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter a file directory pathway to access " +
-    "a wordlist\n       E.g. home/wordlist/wordlist.txt\n\nStep 3: Click Scan to commence " +
-    "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
+    "Arjun is a command-line tool specifically designed to look for hidden HTTP parameters. " +
+    "Arjun will try to discover parameters and give you new set of endpoints to test on. " +
+    "It is a multi-threaded application, can handle rate limits and supports GET,POST,XML and JSON methods. " +
+    " \n\nKali's Arjun Information Page: https://www.kali.org/tools/arjun/ \n\nHow to use Arjun:\n\nStep 1: Enter a valid URL.\n" +
+    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter an Optional Json Output filename.\n        E.g. arjunoutput " +
+    "\n\nStep 3: Click the scan option to commence scan. " +
+    "\n\nStep 4: View the Output block below to view the results of the tool's execution.";
 
 interface FormValues {
     url: string;
-    oJ: string;
+    o: string;
 }
 
 export function Arjuntool() {
@@ -26,14 +27,14 @@ export function Arjuntool() {
     let form = useForm({
         initialValues: {
             url: "",
-            oJ: "",
+            o: "",
         },
     });
 
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = ["-u", values.url, "-oJ", values.oJ];
+        const args = ["-u", values.url, "-o", values.o];
         const output = await CommandHelper.runCommand("arjun", args);
 
         setOutput(output);
@@ -48,12 +49,11 @@ export function Arjuntool() {
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                <title>Arjuntool</title>
+                {UserGuide(title, description_userguide)}
                 <TextInput label={"URL"} required {...form.getInputProps("url")} />
                 <TextInput
-                    label={"Please enter the parameters as -oT/-oJ/-oB/-d/-t"}
-                    required
-                    {...form.getInputProps("oJ")}
+                    label={"Optional Json output file: provide file name if required"}
+                    {...form.getInputProps("o")}
                 />
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />

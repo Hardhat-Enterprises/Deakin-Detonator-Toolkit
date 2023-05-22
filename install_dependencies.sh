@@ -42,7 +42,8 @@ sudo apt install -y mitmproxy \
 		nodejs \
 		dsniff \
 		enum4linux \
-		dnsmap
+		dnsmap \
+		arjun
 
 echo "-----------------------------"
 echo "Installing yarn..."
