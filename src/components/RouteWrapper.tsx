@@ -46,6 +46,7 @@ import WPScan from "./WPScan/WPScan";
 import Eyewitness from "./eyewitness/eyewitness";
 import MrRobot from "./WalkthroughPages/MrRobot";
 import Parsero from "./parsero/parsero";
+import Arjuntool from "./Arjuntool/Arjuntool";
 
 export interface RouteProperties {
     name: string;
@@ -352,6 +353,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/parsero",
         element: <Parsero />,
         description: "Python Script that reads Robots.txt of w webserver to view Disallow entries",
+    },
+    {
+        name: "Arjuntool",
+        path: "/tools/Arjuntool",
+        element: <Arjuntool />,
+        description: "Arjun can find query parameters for URL endpoints.",
     },
 ];
 
