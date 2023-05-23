@@ -45,7 +45,8 @@ sudo apt install -y mitmproxy \
 		dnsmap \
 		goldeneye \
 		wpscan \
-		parsero
+		parsero \
+		arjun
 
 echo "-----------------------------"
 echo "Installing yarn..."

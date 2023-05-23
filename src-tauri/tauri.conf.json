@@ -221,6 +221,11 @@
                         "name": "parsero",
                         "cmd": "parsero",
                         "args": true
+                    },
+                    {
+                        "name": "arjun",
+                        "cmd": "arjun",
+                        "args": true
                     }
                 ]
             },
