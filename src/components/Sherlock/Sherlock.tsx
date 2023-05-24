@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Title, Switch } from "@mantine/core";
+import { Button, Checkbox, LoadingOverlay, Stack, TextInput, Title, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -18,28 +18,43 @@ const description_guide =
 
 interface FormValuesType {
     username: string;
+    site: string;
     timeout: number;
+    verbose: boolean;
 }
 
 const Sherlock = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
+    const [verbose, setVerbose] = useState(false);
 
     let form = useForm({
         initialValues: {
             username: "",
+            site: "",
             timeout: 60,
+            verbose: false,
         },
     });
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-        const args = [`${values.username}`];
+        const args = [];
+
+        if (values.site) {
+            args.push("--site", `${values.site}`);
+        }
 
         if (values.timeout) {
-            args.push(`--timeout ${values.timeout}`);
+            args.push("--timeout", `${values.timeout}`);
         }
+
+        if (values.verbose) {
+            args.push("--verbose");
+        }
+
+        args.push(...values.username.split(" "));
 
         try {
             const output = await CommandHelper.runCommand("sherlock", args);
@@ -66,13 +81,27 @@ const Sherlock = () => {
                     checked={checkedAdvanced}
                     onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                 />
-                <TextInput label={"Username"} required {...form.getInputProps("username")} />
+                <TextInput
+                    label={"Username"}
+                    placeholder="For multiple user, leave space between username."
+                    required
+                    {...form.getInputProps("username")}
+                />
                 {checkedAdvanced && (
                     <>
                         <TextInput
                             label={"Timeout"}
                             placeholder={"Time (in seconds) to wait for response to requests. Default is 60"}
                             {...form.getInputProps("timeout")}
+                        />
+                        <TextInput
+                            label={"Site"}
+                            placeholder={"Specific social networking to search on"}
+                            {...form.getInputProps("site")}
+                        />
+                        <Checkbox
+                            label={"Display detailed information about the search process."}
+                            {...form.getInputProps("verbose")}
                         />
                     </>
                 )}
