@@ -7,12 +7,14 @@ import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "Dnsrecon";
 const description_userguide =
-    "Dnsrecon is a python script that is used to find domain name servers and PLACEHOLDER . " +
-    "This is a dictionary-based attack that takes place upon a web server and will analyse the PLACEHOLDER " +
-    "results within this process.\n\nHow to use Dirb:\n\nStep 1: Enter a valid URL.\n PLACEHOLDER" +
-    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter a file directory pathway to access PLACEHOLDER" +
-    "a wordlist\n       E.g. home/wordlist/wordlist.txt\n\nStep 3: Click Scan to commence " +
-    "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
+    "Dnsrecon is a Python script that has an extensive list of functionalities. This tool is primarily used for " +
+    "DNS enumeration and scanning, where for example, it may enumerate DNS records, SRV records, and hosts and " +
+    "domains using google.\n\nFurther usages for the tool can be found at: https://www.kali.org/tools/dnsrecon/\n\n" +
+    "Using Dnsrecon:\n" +
+    "Step 1: Enter a Target Domain URL.\n" +
+    "       Eg: https://www.deakin.edu.au\n\n" +
+    "Step 2: Click Scan to commence Dnsrecon's operation.\n\n" +
+    "Step 3: View the Output block below to view the results of the tools execution.";
 
 interface FormValues {
     url: string;

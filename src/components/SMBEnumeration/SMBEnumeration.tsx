@@ -4,6 +4,27 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 
+import { UserGuide } from "../UserGuide/UserGuide";
+
+const title = "SMB Enumeration";
+const description_userguide =
+    "SMB (Server Message Block) represents a network protocol widely used to " +
+    "provide shared access across files, printers, and serial ports within a network. " +
+    "This tool acts to enumerate an SMB server in order for potential vulnerabilities " +
+    "or misconfigurations tobe identified. \n\n" +
+    "How to use SMB Enumeration:\n\n" +
+    "Step 1: Enter an IP or Hostname.\n" +
+    "       E.g. 127.0.0.1\n\n" +
+    "Step 2: Enter a port number\n" +
+    "       E.g. 445\n\n" +
+    "Step 3: Pick a scan speed -Note; Higher speeds require a faster host network.\n" +
+    "T0 -Paranoid / T1 -Sneaky / T2 -Polite / T3 -Normal / T4 -Aggressive / T5 -Insane\n" +
+    "       E.g. T3\n\n" +
+    "Step 4: Select an SMB Enumeration Script to run against the target\n" +
+    "       E.g smb-flood.nse";
+"\n\nStep 5: Click Scan to commence the SMB Enumeration operation.\n\n" +
+    "Step 6: View the Output block below to view the results of the Scan.";
+
 interface FormValuesType {
     ip: string;
     port: string;
@@ -99,7 +120,7 @@ const SMBEnumeration = () => {
         >
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>SMB Enumeration</Title>
+                {UserGuide(title, description_userguide)}
                 <TextInput label={"Target IP or Hostname"} required {...form.getInputProps("ip")} />
                 <TextInput label={"Port"} required {...form.getInputProps("port")} placeholder={"Example: 445"} />
 
