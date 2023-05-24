@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Title, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -26,24 +26,32 @@ interface FormValues {
     ip: string;
     username: string;
     password: string;
+    timeout: number;
 }
 
 const Crackmapexec = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
 
     let form = useForm({
         initialValues: {
             ip: "",
             username: "",
             password: "",
+            timeout: 60,
         },
     });
 
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
-        const args = ["smb", `${values.ip}`, "-u", `${values.username}`, "-p", `${values.password}`];
+        const args = [];
 
+        if (values.timeout) {
+            args.push(`--timeout ${values.timeout}`);
+        }
+
+        args.push("smb", `${values.ip}`, "-u", `${values.username}`, "-p", `${values.password}`);
         try {
             const output = await CommandHelper.runCommand("crackmapexec", args);
             setOutput(output);
@@ -63,9 +71,25 @@ const Crackmapexec = () => {
             <LoadingOverlay visible={loading} />
             <Stack>
                 {UserGuide(title, description_userguide)}
+                <Switch
+                    size="md"
+                    label="Advanced Mode"
+                    checked={checkedAdvanced}
+                    onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                />
+
                 <TextInput label={"IP"} required {...form.getInputProps("ip")} />
                 <TextInput label={"Username"} required {...form.getInputProps("username")} />
                 <TextInput label={"Password"} required {...form.getInputProps("password")} />
+                {checkedAdvanced && (
+                    <>
+                        <TextInput
+                            label={"Timeout"}
+                            placeholder={"Time (in seconds) to wait for response to requests. Default is 60"}
+                            {...form.getInputProps("timeout")}
+                        />
+                    </>
+                )}
                 <Button type={"submit"}>Start Searching!</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
