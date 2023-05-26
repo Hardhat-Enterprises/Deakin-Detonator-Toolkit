@@ -6,6 +6,25 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { Text } from "@mantine/core";
 import { List } from "@mantine/core";
 import { Accordion } from "@mantine/core";
+import { UserGuide } from "../UserGuide/UserGuide";
+
+const title = "SearchSploit";
+const description_userguide =
+    "SearchSploit is a command-line tool used for searching through Exploit-DB that allows an offline " +
+    "copy of the exploited database to be withheld. This tool is useful for conducting security assessments " +
+    "on segregated networks and provides several search options within its operation.\n\nInformation on the " +
+    "tool can be found at: https://www.exploit-db.com/documentation/Offsec-SearchSploit.pdf\n\n" +
+    "Using SearchSploit:\n" +
+    "Step 1: Enter a Search Term followed by selecting a Search Option.\n" +
+    "       Eg: data, Exact\n\n" +
+    "Step 2: Select an Output type.\n" +
+    "       Eg: json\n\n" +
+    "Step 3: Select a Non-Searching option.\n" +
+    "       Eg: Mirror\n\n" +
+    "Step 4: Enter an Exploit Database ID.\n" +
+    "       Eg: PLACEHOLDER (required when using the 'Path' output or Non-Search options)\n\n" +
+    "Step 5: Click Scan to commence SearchSploit's operation.\n\n" +
+    "Step 6: View the Output block below to view the results of the tools execution.";
 
 interface FormValuesType {
     searchTerm: string;
@@ -99,7 +118,7 @@ const SearchSploit = () => {
         >
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>SearchSploit</Title>
+                {UserGuide(title, description_userguide)}
                 <TextInput label={"Search Term"} {...form.getInputProps("searchTerm")} />
                 <NativeSelect
                     value={selectedSearchOption}

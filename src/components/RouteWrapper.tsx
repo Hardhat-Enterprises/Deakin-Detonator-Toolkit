@@ -22,14 +22,32 @@ import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
+import Metagoofil from "./metagoofil/metagoofil";
+import Dmitry from "./Dmitry/Dmitry";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
+import NbtscanTool from "./NbtscanTool/NbtscanTool";
 import Cewl from "./Cewl/Cewl";
 import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
 import NSLookupTool from "./nslookuptool/nslookuptool";
-
+import Dnsrecon from "./Dnsrecon/Dnsrecon";
+import Crackmapexec from "./Crackmapexec/Crackmapexec";
+import FfufTool from "./Ffuf/FfufTool";
+import Redeemer from "./WalkthroughPages/Redeemer";
+import Fawn from "./WalkthroughPages/Fawn";
+import Pentesting from "./WalkthroughPages/Pentesting";
+import Traceroute from "./Traceroute/Traceroute";
+import Crunch from "./Crunch/Crunch";
+import Meow from "./WalkthroughPages/Meow";
+import { FTPconnect } from "./FTP/FTPconnect";
+import GoldenEye from "./GoldenEye/GoldenEye";
+import WPScan from "./WPScan/WPScan";
+import Eyewitness from "./eyewitness/eyewitness";
+import MrRobot from "./WalkthroughPages/MrRobot";
+import Parsero from "./parsero/parsero";
+import Arjuntool from "./Arjuntool/Arjuntool";
 
 export interface RouteProperties {
     name: string;
@@ -91,7 +109,7 @@ export const ROUTES: RouteProperties[] = [
         name: "SnmpCheck",
         path: "/tools/snmpcheck",
         element: <SnmpCheck />,
-        description: "SNMP enumeration tool",
+        description: "Detects network devices using SNMP protocol",
     },
     {
         name: "Shodan API tool",
@@ -154,6 +172,12 @@ export const ROUTES: RouteProperties[] = [
         description: "DNS enumeration tool",
     },
     {
+        name: "Nbtscan",
+        path: "/tools/nbtscan",
+        element: <NbtscanTool />,
+        description: "Tool used for scanning NetBIOS information on a network",
+    },
+    {
         name: "Urlsnarf",
         path: "/tools/Urlsnarf",
         element: <Urlsnarf />,
@@ -184,10 +208,23 @@ export const ROUTES: RouteProperties[] = [
         description: "Windows and Samba information enumeration tool",
     },
     {
+        name: "Metagoofil",
+        path: "/tools/metagoofil",
+        element: <Metagoofil />,
+        description:
+            "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company.",
+    },
+    {
         name: "CVE-2022-24112",
         path: "/attack-vectors/cve-2022-24112",
         element: <CVE202224112 />,
         description: "Apache APISIX Remote Code Execution Vulnerability",
+    },
+    {
+        name: "dmitry",
+        path: "/tools/dmitry",
+        element: <Dmitry />,
+        description: "Deepmagic Information Gathering Tool",
     },
     {
         name: "DNSMap",
@@ -232,6 +269,104 @@ export const ROUTES: RouteProperties[] = [
         element: <NSLookupTool />,
         description:
             "The nslookup command is a tool used to query Domain Name System (DNS) servers and retrieve information about a specific domain or IP address.",
+    },
+    {
+        name: "Dnsrecon",
+        path: "/tools/Dnsrecon",
+        element: <Dnsrecon />,
+        description: "Dnsrecon is a python script that is used to find different hosts",
+    },
+    {
+        name: "Crackmapexec",
+        path: "/tools/Crackmapexec",
+        element: <Crackmapexec />,
+        description: "Crackmapexec is a swiss army knife use for pentesting Active Directory or Windows  environments.",
+    },
+    {
+        name: "Ffuf",
+        path: "/tools/Ffuf",
+        element: <FfufTool />,
+        description: "FFuf is a brute force web fuzzer for directory and resource discovery",
+    },
+    {
+        name: "Redeemer",
+        path: "/walkthroughs/Redeemer",
+        element: <Redeemer />,
+        description: "A walkthrough on the Redeemer HackTheBox challenge showcasing nmap tool",
+    },
+    {
+        name: "Fawn",
+        path: "/walkthroughs/Fawn",
+        element: <Fawn />,
+        description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
+    },
+    {
+        name: "Pentesting",
+        path: "/walkthroughs/Pentesting",
+        element: <Pentesting />,
+        description: "A walkthrough on a Pentesting room with focus on brute force attack and privilege escalation",
+    },
+    {
+        name: "Traceroute",
+        path: "/tools/Traceroute",
+        element: <Traceroute />,
+        description:
+            "The traceroute utility displays the route used by IP packets on their way to a specified network (or Internet) host.",
+    },
+    {
+        name: "Crunch",
+        path: "/tools/Crunch",
+        element: <Crunch />,
+        description: "Crunch is a wordlist generator where you can specify a standard character set or a custom one.",
+    },
+    {
+        name: "Meow",
+        path: "/walkthroughs/Meow",
+        element: <Meow />,
+        description: "A walkthrough on the Redeemer HackTheBox challenge showcasing nmap tool",
+    },
+    {
+        name: "FTPconnect",
+        path: "/tools/FTPconnect",
+        element: <FTPconnect />,
+        description: "FTPconnect tool",
+    },
+    {
+        name: "GoldenEye",
+        path: "/tools/GoldenEye",
+        element: <GoldenEye />,
+        description: "HTTP DoS Test Tool",
+    },
+    {
+        name: "WPScan",
+        path: "/tools/WPScan",
+        element: <WPScan />,
+        description:
+            "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
+    },
+    {
+        name: "Eyewitness",
+        path: "/tools/eyewitness",
+        element: <Eyewitness />,
+        description: "Eyewitness takes screenshot of important websites.",
+    },
+    {
+        name: "MrRobot",
+        path: "/walkthroughs/MrRobot",
+        element: <MrRobot />,
+        description: "A walkthrough on the Mr Robot TryHackMe Capture the flag",
+    },
+    {
+        name: "Parsero",
+        path: "/tools/parsero",
+        element: <Parsero />,
+        description: "Python Script that reads Robots.txt of w webserver to view Disallow entries",
+    },
+    {
+        name: "Arjuntool",
+        path: "/tools/Arjuntool",
+        element: <Arjuntool />,
+        description: "Arjun can find query parameters for URL endpoints.",
     },
 ];
 

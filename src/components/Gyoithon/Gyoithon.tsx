@@ -15,6 +15,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { IconAlertCircle } from "@tabler/icons";
+import { UserGuide } from "../UserGuide/UserGuide";
 interface FormValues {
     ip: string;
     port: string;
@@ -24,6 +25,15 @@ interface FormValues {
     import_file: string;
     export_path: string;
 }
+
+const title = "AI-based pen-testing tool (Gyoithon)";
+const description_userguide =
+    "Gyoithon is a tool primarily used for gathering intelligence for a Web Server. The tool allows for remote access to " +
+    "be inflicted against a targeted web server to allow for products to be identified that are being operated on the server. " +
+    "This may include CMS, web server software, programming language and framework. Gyoithon is further capable of automatically " +
+    "executing exploitation modules designed to target these identified products. \n\nThe current version of this tool utilises " +
+    "Naive Bayes and Deep Neural Network to allow for HTTP/HTTPS port detection. \n\nFurther information on the tool can be found at: " +
+    "https://github.com/gyoisamurai/GyoiThon \n\nUsing the tool:\nPlease follow the steps listed within the tool.";
 
 const Gyoithon = () => {
     const [value, setValue] = useState<string | null>("install");
@@ -162,7 +172,7 @@ const Gyoithon = () => {
         <p>
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>AI-based pen-testing tool (Gyoithon)</Title>
+                {UserGuide(title, description_userguide)}
                 <Alert
                     icon={<IconAlertCircle size={16} />}
                     radius="md"
