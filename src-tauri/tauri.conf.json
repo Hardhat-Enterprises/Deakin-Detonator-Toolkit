@@ -161,6 +161,11 @@
                         "name": "bed",
                         "cmd": "bed",
                         "args": true
+                    },
+                    {
+                        "name": "nslookup",
+                        "cmd": "nslookup",
+                        "args": true
                     }
                 ]
             },

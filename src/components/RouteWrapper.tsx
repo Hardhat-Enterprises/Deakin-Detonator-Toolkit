@@ -28,6 +28,8 @@ import Cewl from "./Cewl/Cewl";
 import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
+import NSLookupTool from "./nslookuptool/nslookuptool";
+
 
 export interface RouteProperties {
     name: string;
@@ -223,6 +225,13 @@ export const ROUTES: RouteProperties[] = [
         element: <BEDTool />,
         description:
             "BED is a program which is designed to check daemons for potential buffer overflows, format strings",
+    },
+    {
+        name: "nslookuptool",
+        path: "/tools/nslookuptool",
+        element: <NSLookupTool />,
+        description:
+            "The nslookup command is a tool used to query Domain Name System (DNS) servers and retrieve information about a specific domain or IP address.",
     },
 ];
 
