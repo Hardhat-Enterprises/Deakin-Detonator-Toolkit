@@ -46,7 +46,8 @@ sudo apt install -y mitmproxy \
 		goldeneye \
 		wpscan \
 		parsero \
-		arjun
+		arjun \
+		sherlock
 
 echo "-----------------------------"
 echo "Installing yarn..."
