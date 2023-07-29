@@ -3,7 +3,7 @@
     "private": true,
     "version": "0.1.1",
     "scripts": {
-        "install": "bash install_dependencies.sh",
+        "dependency": "bash install_dependencies.sh",
         "dev": "vite",
         "build": "tsc && vite build",
         "preview": "vite preview",
