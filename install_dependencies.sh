@@ -42,13 +42,16 @@ sudo apt install -y python3-impacket \
 # Install yarn.
 #npm install -g yarn
 
-#echo "----------------------------------"
-#echo "Yarn install complete"
-#echo "Installing project dependencies..."
-#echo "----------------------------------"
+echo "----------------------------------"
+echo "Installing yarn dependencies..."
+echo "----------------------------------"
 
 # Install all yarn deps.
 yarn install
+
+echo "----------------------------------"
+echo "Installing project dependencies..."
+echo "----------------------------------"
 
 # Install exploits to their expected location.
 ./install_exploits.sh
