@@ -63,6 +63,11 @@
                         "args": true
                     },
                     {
+                        "name": "foremost",
+                        "cmd": "foremost",
+                        "args": true
+                    },
+                    {
                         "name": "hydra",
                         "cmd": "hydra",
                         "args": true
