@@ -47,6 +47,7 @@ import Eyewitness from "./eyewitness/eyewitness";
 import MrRobot from "./WalkthroughPages/MrRobot";
 import Parsero from "./parsero/parsero";
 import Arjuntool from "./Arjuntool/Arjuntool";
+import ForemostTool from "./Foremost/Foremost";
 
 export interface RouteProperties {
     name: string;
@@ -169,6 +170,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/dnsenum",
         element: <DnsenumTool />,
         description: "DNS enumeration tool",
+    },
+    {
+        name: "Foremost",
+        path: "/tools/foremost",
+        element: <ForemostTool />,
+        description: "File/Data recovery tool",
     },
     {
         name: "Nbtscan",
