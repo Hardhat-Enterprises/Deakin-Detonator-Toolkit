@@ -20,21 +20,19 @@ interface FormValuesType {
     username: string;
     site: string;
     timeout: number;
-    verbose: boolean;
 }
 
 const Sherlock = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [verbose, setVerbose] = useState(false);
+    const [checkedVerbose, setCheckedVerbose] = useState(false);
 
     let form = useForm({
         initialValues: {
             username: "",
             site: "",
             timeout: 60,
-            verbose: false,
         },
     });
 
@@ -42,16 +40,16 @@ const Sherlock = () => {
         setLoading(true);
         const args = [];
 
+        if (checkedVerbose) {
+            args.push("--verbose");
+        }
+
         if (values.site) {
             args.push("--site", `${values.site}`);
         }
 
         if (values.timeout) {
             args.push("--timeout", `${values.timeout}`);
-        }
-
-        if (values.verbose) {
-            args.push("--verbose");
         }
 
         args.push(...values.username.split(" "));
@@ -101,7 +99,8 @@ const Sherlock = () => {
                         />
                         <Checkbox
                             label={"Display detailed information about the search process."}
-                            {...form.getInputProps("verbose")}
+                            checked={checkedVerbose}
+                            onChange={(e) => setCheckedVerbose(e.currentTarget.checked)}
                         />
                     </>
                 )}
