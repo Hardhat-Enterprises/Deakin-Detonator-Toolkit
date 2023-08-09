@@ -52,8 +52,8 @@ const TheHarvester = () => {
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-        const args = ["-d", `${values.domain}`, "-l",`${values.resultlimit}`, "-b", `${values.source}`];
-        
+        const args = ["-d", `${values.domain}`, "-l", `${values.resultlimit}`, "-b", `${values.source}`];
+
         if (values.startresult) {
             args.push(`-S ${values.startresult}`);
         }
@@ -182,6 +182,6 @@ const TheHarvester = () => {
             </Stack>
         </form>
     );
-}
+};
 
 export default TheHarvester;
