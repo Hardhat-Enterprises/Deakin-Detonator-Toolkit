@@ -23,6 +23,12 @@ interface FormValuesType {
     domain: string;
     resultlimit: number;
     source: string;
+    startresult: number;
+    useshodan: boolean;
+    dnslookup: boolean;
+    dnsbrute: boolean;
+    virtualhost: boolean;
+    takeover: boolean;
 }
 
 const TheHarvester = () => {
@@ -35,12 +41,43 @@ const TheHarvester = () => {
             domain: "",
             resultlimit: 500,
             source: "",
+            startresult: 0,
+            useshodan: false,
+            dnslookup: false,
+            dnsbrute: false,
+            virtualhost: false,
+            takeover: false,
         },
     });
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
         const args = ["-d", `${values.domain}`, "-l",`${values.resultlimit}`, "-b", `${values.source}`];
+        
+        if (values.startresult) {
+            args.push(`-S ${values.startresult}`);
+        }
+
+        if (values.useshodan === true) {
+            args.push(`-s`);
+        }
+
+        if (values.dnslookup === true) {
+            args.push(`-n`);
+        }
+
+        if (values.dnsbrute === true) {
+            args.push(`-c`);
+        }
+
+        if (values.virtualhost === true) {
+            args.push(`-v`);
+        }
+
+        if (values.takeover === true) {
+            args.push(`-t`);
+        }
+
         const filteredArgs = args.filter((arg) => arg !== "");
 
         try {
@@ -77,7 +114,6 @@ const TheHarvester = () => {
                 />
                 <label>Source</label>
                 <select {...form.getInputProps("source")}>
-                    <option value="all">All</option>
                     <option value="baidu">Baidu</option>
                     <option value="bing">Bing</option>
                     <option value="censys">Censys</option>
@@ -106,6 +142,40 @@ const TheHarvester = () => {
                     <option value="virustotal">Virustotal</option>
                     <option value="yahoo">Yahoo</option>
                 </select>
+                {checkedAdvanced && (
+                    <>
+                        <TextInput
+                            label={"Start with result number X. (default 0)"}
+                            type="number"
+                            {...form.getInputProps("startresult")}
+                        />
+                        <input
+                            label={"Use ShodanUse Shodan to query discovered hosts."}
+                            type="checkbox"
+                            {...form.getInputProps("useshodan")}
+                        />
+                        <input
+                            label={"DNS Lookup (Enable DNS server lookup)"}
+                            type="checkbox"
+                            {...form.getInputProps("dnslookup")}
+                        />
+                        <input
+                            label={"DNS Brute (Perform a DNS brute force on the domain.)"}
+                            type="checkbox"
+                            {...form.getInputProps("dnsbrute")}
+                        />
+                        <input
+                            label={"Virtual Host (Verify host name via DNS resolution and search for virtual hosts.)"}
+                            type="checkbox"
+                            {...form.getInputProps("virtualhost")}
+                        />
+                        <input
+                            label={"Takeover (Check for takeovers.)"}
+                            type="checkbox"
+                            {...form.getInputProps("takeover")}
+                        />
+                    </>
+                )}
                 <br></br>
                 <Button type={"submit"}>Start Harvesting</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
