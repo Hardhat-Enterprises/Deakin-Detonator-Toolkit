@@ -48,6 +48,7 @@ import MrRobot from "./WalkthroughPages/MrRobot";
 import Parsero from "./parsero/parsero";
 import Arjuntool from "./Arjuntool/Arjuntool";
 import ForemostTool from "./Foremost/Foremost";
+import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 
 export interface RouteProperties {
@@ -373,6 +374,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Arjuntool",
         element: <Arjuntool />,
         description: "Arjun can find query parameters for URL endpoints.",
+    },
+    {
+        name: "Busqueda",
+        path: "/walkthroughs/Busqueda",
+        element: <Busqueda />,
+        description: "A walkthrough on Busqueda Hack the Box challenge",
     },
 ];
 
