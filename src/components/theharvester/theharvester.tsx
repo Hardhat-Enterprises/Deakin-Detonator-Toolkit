@@ -150,7 +150,7 @@ const TheHarvester = () => {
                             {...form.getInputProps("startresult")}
                         />
                         <input
-                            label={"Use ShodanUse Shodan to query discovered hosts."}
+                            label={"Use Shodan to query discovered hosts."}
                             type="checkbox"
                             {...form.getInputProps("useshodan")}
                         />
