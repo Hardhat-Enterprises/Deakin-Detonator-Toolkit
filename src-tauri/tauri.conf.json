@@ -118,8 +118,8 @@
                         "args": true
                     },
                     {
-                        "name": "theharvester",
-                        "cmd": "theharvester",
+                        "name": "theHarvester",
+                        "cmd": "theHarvester",
                         "args": true
                     },
                     {
