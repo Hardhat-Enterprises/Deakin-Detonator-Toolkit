@@ -49,6 +49,7 @@ import Parsero from "./parsero/parsero";
 import Arjuntool from "./Arjuntool/Arjuntool";
 import ForemostTool from "./Foremost/Foremost";
 import Busqueda from "./WalkthroughPages/Busqueda";
+import TheHarvester from "./theharvester/theharvester";
 
 export interface RouteProperties {
     name: string;
@@ -129,6 +130,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/JohnTheRipper",
         element: <JohnTheRipper />,
         description: "Utility for cracking passwords",
+    },
+    {
+        name: "The Harvester",
+        path: "/tools/theharvester",
+        element: <TheHarvester />,
+        description: "Harvest subdomain names, e-mail addresses, etc. from different public sources",
     },
     {
         name: "CVE-2021-41773",

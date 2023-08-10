@@ -118,6 +118,11 @@
                         "args": true
                     },
                     {
+                        "name": "theharvester",
+                        "cmd": "theharvester",
+                        "args": true
+                    },
+                    {
                         "name": "dnsenum",
                         "cmd": "dnsenum",
                         "args": true
