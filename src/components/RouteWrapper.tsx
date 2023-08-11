@@ -51,6 +51,7 @@ import ForemostTool from "./Foremost/Foremost";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import FcrackzipTool from "./Fcrackzip/fcrackzip";
+import PayloadGenerator from "./msfvenom/msfvenom";
 
 export interface RouteProperties {
     name: string;
@@ -185,6 +186,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/foremost",
         element: <ForemostTool />,
         description: "File/Data recovery tool",
+    },
+    {
+        name: "msfvenom",
+        path: "/tools/msfvenom",
+        element: <PayloadGenerator />,
+        description: "Generates payload files for use in exploits",
     },
     {
         name: "Nbtscan",

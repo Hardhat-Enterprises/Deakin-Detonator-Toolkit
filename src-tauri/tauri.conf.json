@@ -113,6 +113,11 @@
                         "args": true
                     },
                     {
+                        "name": "msfvenom",
+                        "cmd": "msfvenom",
+                        "args": true
+                    },
+                    {
                         "name": "dmitry",
                         "cmd": "dmitry",
                         "args": true
