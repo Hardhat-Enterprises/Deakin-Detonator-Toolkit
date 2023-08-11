@@ -50,6 +50,7 @@ import Arjuntool from "./Arjuntool/Arjuntool";
 import ForemostTool from "./Foremost/Foremost";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
+import PayloadGenerator from "./msfvenom/msfvenom";
 
 export interface RouteProperties {
     name: string;
@@ -227,6 +228,12 @@ export const ROUTES: RouteProperties[] = [
         element: <Metagoofil />,
         description:
             "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company.",
+    },
+    {
+        name: "Msfvenom",
+        path: "/tools/msfvenom",
+        element: <PayloadGenerator />,
+        description:"tool for generating payload files"
     },
     {
         name: "CVE-2022-24112",

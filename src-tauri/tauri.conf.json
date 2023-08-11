@@ -118,6 +118,11 @@
                         "args": true
                     },
                     {
+                        "name": "msfvenom",
+                        "cmd": "msfvenom",
+                        "args": true
+                    },
+                    {
                         "name": "theHarvester",
                         "cmd": "theHarvester",
                         "args": true
