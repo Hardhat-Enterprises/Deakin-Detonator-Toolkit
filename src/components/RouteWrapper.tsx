@@ -50,6 +50,7 @@ import Arjuntool from "./Arjuntool/Arjuntool";
 import ForemostTool from "./Foremost/Foremost";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
+import FcrackzipTool from "./Fcrackzip/fcrackzip";
 
 export interface RouteProperties {
     name: string;
@@ -381,6 +382,12 @@ export const ROUTES: RouteProperties[] = [
         element: <Busqueda />,
         description: "A walkthrough on Busqueda Hack the Box challenge",
     },
+    {
+        name: "Fcrackzip",
+        path: "/tools/fcrackzip",
+        element: <FcrackzipTool />,
+        description: "zip password cracker",
+    }
 ];
 
 export function getTools() {
