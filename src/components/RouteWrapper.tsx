@@ -387,7 +387,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/fcrackzip",
         element: <FcrackzipTool />,
         description: "zip password cracker",
-    }
+    },
 ];
 
 export function getTools() {
