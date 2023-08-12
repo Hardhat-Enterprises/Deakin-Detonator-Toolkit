@@ -35,7 +35,7 @@ const SMGGhostScanner = () => {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = [`/usr/share/ddt/SMGGhostScanner.py`, values.ip];
+        const args = [`./exploits/SMGGhostScanner.py`, values.ip];
         const output = await CommandHelper.runCommand("python3", args);
 
         setOutput(output);
