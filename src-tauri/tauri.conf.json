@@ -246,7 +246,7 @@
             },
             "fs": {
                 "all": true,
-                "scope": ["$TEMP/**"]
+                "scope": ["$TEMP/**", "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**"]
             },
             "path": {
                 "all": true
