@@ -37,7 +37,7 @@ export function ShodanAPITool() {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = ["/usr/share/ddt/shodkey.py", "-i", values.hostIP, "-k", values.shodanKey];
+        const args = ["./exploits/shodkey.py", "-i", values.hostIP, "-k", values.shodanKey];
         const output = await CommandHelper.runCommand("python3", args);
 
         setOutput(output);
