@@ -49,6 +49,10 @@ import Parsero from "./parsero/parsero";
 import Arjuntool from "./Arjuntool/Arjuntool";
 import ForemostTool from "./Foremost/Foremost";
 import Racecar from "./WalkthroughPages/Racecar";
+import Busqueda from "./WalkthroughPages/Busqueda";
+import TheHarvester from "./theharvester/theharvester";
+import PayloadGenerator from "./msfvenom/msfvenom";
+
 
 export interface RouteProperties {
     name: string;
@@ -131,6 +135,12 @@ export const ROUTES: RouteProperties[] = [
         description: "Utility for cracking passwords",
     },
     {
+        name: "The Harvester",
+        path: "/tools/theharvester",
+        element: <TheHarvester />,
+        description: "Harvest subdomain names, e-mail addresses, etc. from different public sources",
+    },
+    {
         name: "CVE-2021-41773",
         path: "/attack-vectors/cve-2021-41773",
         element: <CVE202141773 />,
@@ -177,6 +187,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/foremost",
         element: <ForemostTool />,
         description: "File/Data recovery tool",
+    },
+    {
+        name: "msfvenom",
+        path: "/tools/msfvenom",
+        element: <PayloadGenerator />,
+        description: "Generates payload files for use in exploits",
     },
     {
         name: "Nbtscan",
@@ -373,6 +389,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Racecar",
         element: <Racecar />,
         description: "A walkthrough on the Racecar HackTheBox capture the flag challenge",
+    },
+    {
+        name: "Busqueda",
+        path: "/walkthroughs/Busqueda",
+        element: <Busqueda />,
+        description: "A walkthrough on Busqueda Hack the Box challenge",
     },
 ];
 

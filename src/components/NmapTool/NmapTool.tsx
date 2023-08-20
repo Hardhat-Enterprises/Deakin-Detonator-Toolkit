@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput } from "@mantine/core";
+import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Switch, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -27,25 +27,31 @@ interface FormValuesType {
     speed: string;
     scanOption: string;
     numTopPorts: number;
+    exclusion: string;
+    verbose: boolean;
+    ipv6: boolean;
 }
 
 const speeds = ["T0", "T1", "T2", "T3", "T4", "T5"];
 
 const scanOptions = [
-    "All",
+    "Default",
     "Operating System",
     "Firewall Status",
     "Services",
     "Stealth",
     "Device Discovery",
+    "Aggressive",
     "Top ports",
 ];
 
 const NmapTool = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [selectedScanOption, setSelectedScanOption] = useState("");
     const [selectedSpeedOption, setSelectedSpeedOption] = useState("");
+    const [verbose, setVerbose] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -54,6 +60,9 @@ const NmapTool = () => {
             speed: "T3",
             scanOption: "All",
             numTopPorts: 100,
+            exclusion: "",
+            verbose: false,
+            ipv6: false,
         },
     });
 
@@ -65,8 +74,18 @@ const NmapTool = () => {
             args.push(`-p ${values.port}`);
         }
 
-        if (values.scanOption === "All") {
-            args.push("-A");
+        if (values.verbose) {
+            args.push("-v");
+        }
+
+        /*if (values.scanOption === "All") {
+            args.push("-A -O -sA -sV -sN -sn");
+        } 
+            Previous "all" option was actually an aggressive scan. Looking to implement a functional 
+            all option but will need to look into necessary iputs
+        */
+        if (values.scanOption === "Default") {
+            args.push("");
         } else if (values.scanOption === "Operating System") {
             args.push("-O");
         } else if (values.scanOption === "Firewall Status") {
@@ -77,11 +96,21 @@ const NmapTool = () => {
             args.push("-sN");
         } else if (values.scanOption === "Device Discovery") {
             args.push("-sn");
+        } else if (values.scanOption == "Aggressive") {
+            args.push("-A");
         } else if (values.scanOption === "Top ports") {
             args.push("--top-ports", `${values.numTopPorts}`);
         }
 
-        args.push(values.ip);
+        if (values.ipv6) {
+            args.push("-6");
+        }
+
+        args.push(...values.ip.split(" "));
+
+        if (values.exclusion) {
+            args.push(`-exclude ${values.exclusion.split(" ")}`);
+        }
 
         try {
             const output = await CommandHelper.runCommand("nmap", args);
@@ -109,7 +138,25 @@ const NmapTool = () => {
             <LoadingOverlay visible={loading} />
             <Stack>
                 {UserGuide(title, description_userguide)}
+
+                <Switch
+                    size="md"
+                    label="Advanced Mode"
+                    checked={checkedAdvanced}
+                    onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                />
                 <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
+                {checkedAdvanced && (
+                    <>
+                        <TextInput
+                            label={"Exclusions to range"}
+                            placeholder={"Form of xxx.xxx.xxx.xxx"}
+                            {...form.getInputProps("exclusion")}
+                        />
+                        <Checkbox label={"Verbose"} {...form.getInputProps("verbose" as keyof FormValuesType)} />
+                        <Checkbox label={"IPv6"} {...form.getInputProps("ipv6" as keyof FormValuesType)} />
+                    </>
+                )}
                 {!isTopPortScan && <TextInput label={"Port"} {...form.getInputProps("port")} />}
                 {isTopPortScan && <NumberInput label={"Number of top ports"} {...form.getInputProps("numTopPorts")} />}
                 <NativeSelect
