@@ -51,7 +51,6 @@ import ForemostTool from "./Foremost/Foremost";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
-import FcrackzipTool from "./Fcrackzip/fcrackzip";
 import GoBusterTool from "./Gobuster/Gobuster";
 
 export interface RouteProperties {
@@ -389,13 +388,6 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Busqueda",
         element: <Busqueda />,
         description: "A walkthrough on Busqueda Hack the Box challenge",
-    },
-    {
-        name: "FcrackzipTool",
-        path: "/tools/Fcrackzip",
-        element: <FcrackzipTool />,
-        description:
-            "fcrackzip is a fast password cracker partly written in assembler. It is able to crack password protected zip files with brute force or dictionary based attacks, optionally testing with unzip its results. It can also crack cpmasked images.",
     },
     {
         name: "GobusterTool",
