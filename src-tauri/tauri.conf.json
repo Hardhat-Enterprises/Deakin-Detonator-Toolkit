@@ -243,11 +243,6 @@
                         "args": true
                     },
                     {
-                        "name": "fcrackzip",
-                        "cmd": "fcrackzip",
-                        "args": true
-                    },
-                    {
                         "name": "gobuster",
                         "cmd": "gobuster",
                         "args": true
