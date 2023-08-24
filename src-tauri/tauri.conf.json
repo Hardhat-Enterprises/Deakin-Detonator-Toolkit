@@ -241,6 +241,11 @@
                         "name": "arjun",
                         "cmd": "arjun",
                         "args": true
+                    },
+                    {
+                        "name": "gobuster",
+                        "cmd": "gobuster",
+                        "args": true
                     }
                 ]
             },

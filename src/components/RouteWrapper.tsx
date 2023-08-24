@@ -52,6 +52,7 @@ import Racecar from "./WalkthroughPages/Racecar";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
+import GoBusterTool from "./Gobuster/Gobuster";
 
 export interface RouteProperties {
     name: string;
@@ -394,6 +395,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Busqueda",
         element: <Busqueda />,
         description: "A walkthrough on Busqueda Hack the Box challenge",
+    },
+    {
+        name: "GobusterTool",
+        path: "/tools/Gobuster",
+        element: <GoBusterTool />,
+        description: "Gobuster is a tool used to brute-force: URIs (directories and files)",
     },
 ];
 
