@@ -53,7 +53,6 @@ import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
 
-
 export interface RouteProperties {
     name: string;
     path: string;
