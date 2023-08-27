@@ -48,6 +48,7 @@ import MrRobot from "./WalkthroughPages/MrRobot";
 import Parsero from "./parsero/parsero";
 import Arjuntool from "./Arjuntool/Arjuntool";
 import ForemostTool from "./Foremost/Foremost";
+import Racecar from "./WalkthroughPages/Racecar";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
@@ -382,6 +383,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Arjuntool",
         element: <Arjuntool />,
         description: "Arjun can find query parameters for URL endpoints.",
+    },
+    {
+        name: "Racecar",
+        path: "/walkthroughs/Racecar",
+        element: <Racecar />,
+        description: "A walkthrough on the Racecar HackTheBox capture the flag challenge",
     },
     {
         name: "Busqueda",

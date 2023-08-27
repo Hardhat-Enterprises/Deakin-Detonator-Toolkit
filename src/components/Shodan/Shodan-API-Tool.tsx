@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "Shodan API Tool";
 const description_userguide =
@@ -36,7 +37,7 @@ export function ShodanAPITool() {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = ["/usr/share/ddt/shodkey.py", "-i", values.hostIP, "-k", values.shodanKey];
+        const args = ["./exploits/shodkey.py", "-i", values.hostIP, "-k", values.shodanKey];
         const output = await CommandHelper.runCommand("python3", args);
 
         setOutput(output);
@@ -55,6 +56,7 @@ export function ShodanAPITool() {
                 <TextInput label={"Valid API Key"} required {...form.getInputProps("shodanKey")} />
                 <TextInput label={"Host IP"} required {...form.getInputProps("hostIP")} />
                 <Button type={"submit"}>Scan</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
