@@ -51,6 +51,7 @@ import ForemostTool from "./Foremost/Foremost";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
+import Pilgrimage from "./WalkthroughPages/Pilgrimage";
 
 export interface RouteProperties {
     name: string;
@@ -387,6 +388,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Busqueda",
         element: <Busqueda />,
         description: "A walkthrough on Busqueda Hack the Box challenge",
+    },
+    {
+        name: "Pilgrimage",
+        path: "/walkthroughs/Pilgrimage",
+        element: <Pilgrimage />,
+        description: "A walkthrough on Pilgrimage Hack the Box challenge",
     },
 ];
 
