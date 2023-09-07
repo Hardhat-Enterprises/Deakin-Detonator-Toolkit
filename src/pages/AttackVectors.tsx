@@ -4,7 +4,7 @@ import ToolItem from "../components/ToolItem/ToolItem";
 
 export function AttackVectors() {
     const rows = getAttackVectors().map((tool) => {
-        return <ToolItem title={tool.name} description={tool.description} route={tool.path} key={tool.name} />;
+        return <ToolItem title={tool.name} description={tool.description} route={tool.path} category={tool.category} key={tool.name} />;
     });
 
     return (
