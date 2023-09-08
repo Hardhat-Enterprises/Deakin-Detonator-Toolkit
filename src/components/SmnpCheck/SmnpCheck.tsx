@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "SnmpCheck";
 const description_userguide =
@@ -54,6 +55,7 @@ const SnmpCheck = () => {
                 <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
                 <NumberInput label={"Port"} {...form.getInputProps("port")} />
                 <Button type={"submit"}>Scan</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

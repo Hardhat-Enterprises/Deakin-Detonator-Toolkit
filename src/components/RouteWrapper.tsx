@@ -53,6 +53,8 @@ import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
 import Keeper from "./WalkthroughPages/Keeper";
+import Pilgrimage from "./WalkthroughPages/Pilgrimage";
+import Fcrackzip from "./Fcrackzip/Fcrackzip";
 
 export interface RouteProperties {
     name: string;
@@ -401,6 +403,18 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Keeper",
         element: <Keeper />,
         description: "A walkthrough of the Keeper HackTheBox capture the flag challenge",
+    },
+    {
+        name: "Pilgrimage",
+        path: "/walkthroughs/Pilgrimage",
+        element: <Pilgrimage />,
+        description: "A walkthrough on Pilgrimage Hack the Box challenge",
+    },
+    {
+        name: "Fcrackzip",
+        path: "/tools/Fcrackzip",
+        element: <Fcrackzip />,
+        description: "Fcrackzip is a tool for cracking password of a protected zip file.",
     },
 ];
 
