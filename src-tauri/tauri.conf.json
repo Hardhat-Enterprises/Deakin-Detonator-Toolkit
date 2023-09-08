@@ -113,8 +113,18 @@
                         "args": true
                     },
                     {
+                        "name": "msfvenom",
+                        "cmd": "msfvenom",
+                        "args": true
+                    },
+                    {
                         "name": "dmitry",
                         "cmd": "dmitry",
+                        "args": true
+                    },
+                    {
+                        "name": "theHarvester",
+                        "cmd": "theHarvester",
                         "args": true
                     },
                     {
@@ -236,7 +246,7 @@
             },
             "fs": {
                 "all": true,
-                "scope": ["$TEMP/**"]
+                "scope": ["$TEMP/**", "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**"]
             },
             "path": {
                 "all": true

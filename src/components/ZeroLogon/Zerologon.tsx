@@ -47,7 +47,7 @@ export function ZeroLogon() {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = ["/usr/share/ddt/zerologon_tester.py", values.dcName, values.targetIP];
+        const args = ["./exploits/zerologon_tester.py", values.dcName, values.targetIP];
         const output = await CommandHelper.runCommand("python3", args);
 
         setOutput(output);
