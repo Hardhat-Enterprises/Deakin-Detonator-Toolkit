@@ -52,6 +52,7 @@ import Racecar from "./WalkthroughPages/Racecar";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
+import Keeper from "./WalkthroughPages/Keeper";
 import Pilgrimage from "./WalkthroughPages/Pilgrimage";
 import Fcrackzip from "./Fcrackzip/Fcrackzip";
 
@@ -396,6 +397,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Busqueda",
         element: <Busqueda />,
         description: "A walkthrough on Busqueda Hack the Box challenge",
+    },
+    {
+        name: "Keeper",
+        path: "/walkthroughs/Keeper",
+        element: <Keeper />,
+        description: "A walkthrough of the Keeper HackTheBox capture the flag challenge",
     },
     {
         name: "Pilgrimage",
