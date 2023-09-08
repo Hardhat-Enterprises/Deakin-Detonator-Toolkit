@@ -1,5 +1,5 @@
 import { TextInput, Checkbox } from "@mantine/core";
-import { BaseDirectory, writeTextFile } from "@tauri-apps/api/fs";
+import { BaseDirectory, writeTextFile, createDir } from "@tauri-apps/api/fs";
 import { useState } from "react";
 
 export function SaveOutputToTextFile(outputToSave: string) {
@@ -12,7 +12,9 @@ export function SaveOutputToTextFile(outputToSave: string) {
     };
 
     if (outputToSave && filename && checkedSaveOutputToFile) {
-        writeTextFile(`./Deakin-Detonator-Toolkit/OutputFiles/` + filename, outputToSave, { dir: BaseDirectory.Home });
+        const outputDir = `./Deakin-Detonator-Toolkit/OutputFiles/`;
+        createDir(outputDir, { dir: BaseDirectory.Home, recursive: true });
+        writeTextFile(outputDir + filename, outputToSave, { dir: BaseDirectory.Home });
     }
 
     return (
