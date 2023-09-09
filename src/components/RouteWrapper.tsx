@@ -55,6 +55,7 @@ import PayloadGenerator from "./msfvenom/msfvenom";
 import Keeper from "./WalkthroughPages/Keeper";
 import Pilgrimage from "./WalkthroughPages/Pilgrimage";
 import Fcrackzip from "./Fcrackzip/Fcrackzip";
+import GoBusterTool from "./GobusterTool/Gobuster";
 
 export interface RouteProperties {
     name: string;
@@ -415,6 +416,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Fcrackzip",
         element: <Fcrackzip />,
         description: "Fcrackzip is a tool for cracking password of a protected zip file.",
+    },
+    {
+        name: "Gobuster",
+        path: "/tools/Gobuster",
+        element: <GoBusterTool />,
+        description: "Gobuster is a tool used to brute force: URIs in websites.",
     },
 ];
 
