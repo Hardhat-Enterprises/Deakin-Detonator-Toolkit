@@ -11,7 +11,7 @@ import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
 import SMBEnumeration from "./SMBEnumeration/SMBEnumeration";
-import SnmpCheck from "./SmnpCheck/SmnpCheck";
+import SnmpCheck from "./SnmpCheck/SnmpCheck";
 import Hydra from "./Hydra/Hydra";
 import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
