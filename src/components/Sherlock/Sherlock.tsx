@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "Sherlock Tool";
 const description_guide =
@@ -152,6 +153,7 @@ const Sherlock = () => {
                     </>
                 )}
                 <Button type={"submit"}>Start Searching!</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
