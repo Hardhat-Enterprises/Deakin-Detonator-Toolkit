@@ -53,6 +53,7 @@ import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
 import Pilgrimage from "./WalkthroughPages/Pilgrimage";
+import Topology from "./WalkthroughPages/Topology";
 
 export interface RouteProperties {
     name: string;
@@ -401,6 +402,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Pilgrimage",
         element: <Pilgrimage />,
         description: "A walkthrough on Pilgrimage Hack the Box challenge",
+    },
+    {
+        name: "Topology",
+        path: "/walkthroughs/Topology",
+        element: <Topology />,
+        description: "A walkthrough on Topology Hack the Box challenge",
     },
 ];
 
