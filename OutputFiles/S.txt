@@ -1,0 +1,12 @@
+$ bed -s HTTP -t localhost -p 80 -o 2
+
+
+
+
+ BED 0.5 by mjm ( www.codito.de ) & eric ( www.snake-basket.de )
+
+ + Buffer overflow testing:
+		testing: 1	HEAD XAXAX HTTP/1.0	...........
+		testing: 2	HEAD / XAXAX	.........
+
+Process was manually terminated.
