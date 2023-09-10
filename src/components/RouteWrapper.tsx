@@ -54,6 +54,7 @@ import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
 import Keeper from "./WalkthroughPages/Keeper";
 import Pilgrimage from "./WalkthroughPages/Pilgrimage";
+import Topology from "./WalkthroughPages/Topology";
 import Fcrackzip from "./Fcrackzip/Fcrackzip";
 import GoBusterTool from "./GobusterTool/Gobuster";
 
@@ -410,6 +411,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Pilgrimage",
         element: <Pilgrimage />,
         description: "A walkthrough on Pilgrimage Hack the Box challenge",
+    },
+    {
+        name: "Topology",
+        path: "/walkthroughs/Topology",
+        element: <Topology />,
+        description: "A walkthrough on Topology Hack the Box challenge",
     },
     {
         name: "Fcrackzip",
