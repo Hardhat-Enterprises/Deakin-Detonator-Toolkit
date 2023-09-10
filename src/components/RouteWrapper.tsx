@@ -11,7 +11,7 @@ import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
 import NmapTool from "./NmapTool/NmapTool";
 import { ShodanAPITool } from "./Shodan/Shodan-API-Tool";
 import SMBEnumeration from "./SMBEnumeration/SMBEnumeration";
-import SnmpCheck from "./SmnpCheck/SmnpCheck";
+import SnmpCheck from "./SnmpCheck/SnmpCheck";
 import Hydra from "./Hydra/Hydra";
 import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
@@ -52,8 +52,11 @@ import Racecar from "./WalkthroughPages/Racecar";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
+import Keeper from "./WalkthroughPages/Keeper";
 import Pilgrimage from "./WalkthroughPages/Pilgrimage";
 import Topology from "./WalkthroughPages/Topology";
+import Fcrackzip from "./Fcrackzip/Fcrackzip";
+import GoBusterTool from "./GobusterTool/Gobuster";
 
 export interface RouteProperties {
     name: string;
@@ -398,6 +401,12 @@ export const ROUTES: RouteProperties[] = [
         description: "A walkthrough on Busqueda Hack the Box challenge",
     },
     {
+        name: "Keeper",
+        path: "/walkthroughs/Keeper",
+        element: <Keeper />,
+        description: "A walkthrough of the Keeper HackTheBox capture the flag challenge",
+    },
+    {
         name: "Pilgrimage",
         path: "/walkthroughs/Pilgrimage",
         element: <Pilgrimage />,
@@ -408,6 +417,18 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Topology",
         element: <Topology />,
         description: "A walkthrough on Topology Hack the Box challenge",
+    },
+    {
+        name: "Fcrackzip",
+        path: "/tools/Fcrackzip",
+        element: <Fcrackzip />,
+        description: "Fcrackzip is a tool for cracking password of a protected zip file.",
+    },
+    {
+        name: "Gobuster",
+        path: "/tools/Gobuster",
+        element: <GoBusterTool />,
+        description: "Gobuster is a tool used to brute force: URIs in websites.",
     },
 ];
 

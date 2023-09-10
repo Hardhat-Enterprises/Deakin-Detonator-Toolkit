@@ -1,9 +1,11 @@
-import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Switch, Checkbox } from "@mantine/core";
+import { Button, NativeSelect, NumberInput, Stack, TextInput, Switch, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "Network port scanner (NMAP)";
 const description_userguide =
@@ -94,12 +96,12 @@ const NmapTool = () => {
     );
 
     // Sends a SIGTERM signal to gracefully terminate the process
-    const handleCancel = () => {
-        if (pid !== null) {
-            const args = [`-15`, pid];
-            CommandHelper.runCommand("kill", args);
-        }
-    };
+    //const handleCancel = () => {
+    //    if (pid !== null) {
+    //        const args = [`-15`, pid];
+    //        CommandHelper.runCommand("kill", args);
+    //    }
+    //};
 
     const onSubmit = async (values: FormValuesType) => {
         // Start the Loading Overlay
@@ -175,17 +177,9 @@ const NmapTool = () => {
                 onSubmit({ ...values, scanOption: selectedScanOption, speed: selectedSpeedOption })
             )}
         >
-            <LoadingOverlay visible={loading} />
-            {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
-            )}
+            {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
-
                 <Switch
                     size="md"
                     label="Advanced Mode"
@@ -224,6 +218,7 @@ const NmapTool = () => {
                     placeholder={"Pick a scan option"}
                     description={"Type of scan to perform"}
                 />
+                {SaveOutputToTextFile(output)}
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
