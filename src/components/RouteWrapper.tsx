@@ -58,6 +58,7 @@ import Topology from "./WalkthroughPages/Topology";
 import Fcrackzip from "./Fcrackzip/Fcrackzip";
 import GoBusterTool from "./GobusterTool/Gobuster";
 import Monitorstwo from "./WalkthroughPages/Monitorstwo";
+import AircrackNG from "./AircrackNG/AircrackNG";
 
 export interface RouteProperties {
     name: string;
@@ -436,6 +437,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Monitorstwo",
         element: <Monitorstwo />,
         description: "A walkthrough on Monitorstwo Hack the Box challenge",
+    },
+    {
+        name: "Aircrack-ng",
+        path: "/tools/Aircrack-ng",
+        element: <AircrackNG />,
+        description:
+            "is the tool within the aircrack-ng suite that is responsible for the actual cracking of WEP and WPA/WPA2 encryption keys using captured network packets.",
     },
 ];
 

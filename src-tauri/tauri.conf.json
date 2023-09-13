@@ -251,6 +251,11 @@
                         "name": "Gobuster",
                         "cmd": "Gobuster",
                         "args": true
+                    },
+                    {
+                        "name": "aircrack-ng",
+                        "cmd": "aircrack-ng",
+                        "args": true
                     }
                 ]
             },
