@@ -57,6 +57,7 @@ import Pilgrimage from "./WalkthroughPages/Pilgrimage";
 import Topology from "./WalkthroughPages/Topology";
 import Fcrackzip from "./Fcrackzip/Fcrackzip";
 import GoBusterTool from "./GobusterTool/Gobuster";
+import Monitorstwo from "./WalkthroughPages/Monitorstwo";
 
 export interface RouteProperties {
     name: string;
@@ -429,6 +430,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Gobuster",
         element: <GoBusterTool />,
         description: "Gobuster is a tool used to brute force: URIs in websites.",
+    },
+    {
+        name: "Monitorstwo",
+        path: "/walkthroughs/Monitorstwo",
+        element: <Monitorstwo />,
+        description: "A walkthrough on Monitorstwo Hack the Box challenge",
     },
 ];
 
