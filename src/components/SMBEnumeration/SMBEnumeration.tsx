@@ -128,14 +128,17 @@ const SMBEnumeration = () => {
 
         try {
             //const output = await CommandHelper.runCommand("nmap", args);
-            const result = await CommandHelper.runCommandGetPidAndOutput("nmap", args, handleProcessData, handleProcessTermination);
+            const result = await CommandHelper.runCommandGetPidAndOutput(
+                "nmap",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
             setPid(result.pid);
             setOutput(result.output);
         } catch (e: any) {
             setOutput(e);
         }
-
-        
     };
 
     const clearOutput = useCallback(() => {
