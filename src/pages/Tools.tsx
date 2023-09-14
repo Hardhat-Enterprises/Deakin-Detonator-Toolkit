@@ -20,7 +20,7 @@ const ToolsPage = () => {
 
     return (
         <Stack align={"center"}>
-            <Title>Tools Categories</Title>
+            <Title>Tools</Title>
             <NativeSelect
                 value={selectedCategory}
                 onChange={(e) => {
