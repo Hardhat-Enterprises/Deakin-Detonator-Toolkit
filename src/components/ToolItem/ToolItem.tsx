@@ -6,10 +6,9 @@ interface ToolItemProps {
     title: string;
     description: string;
     route: string;
-    category: string;
 }
 
-const ToolItem = ({ title, description, route, category }: ToolItemProps) => {
+const ToolItem = ({ title, description, route }: ToolItemProps) => {
     let navigate = useNavigate();
 
     const handleNavigate = () => {
@@ -20,7 +19,6 @@ const ToolItem = ({ title, description, route, category }: ToolItemProps) => {
         <tr>
             <td>{title}</td>
             <td>{description}</td>
-            <td>{category}</td>
             <td>
                 <Button leftIcon={<IconRocket />} onClick={handleNavigate}>
                     Go

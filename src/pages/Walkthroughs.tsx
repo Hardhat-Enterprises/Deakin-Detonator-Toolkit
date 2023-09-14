@@ -14,15 +14,7 @@ export function WalkthroughsPage() {
         NAME: string;
     }
     const rows = getWalkthroughs().map((tool) => {
-        return (
-            <ToolItem
-                title={tool.name}
-                description={tool.description}
-                route={tool.path}
-                category={tool.category}
-                key={tool.name}
-            />
-        );
+        return <ToolItem title={tool.name} description={tool.description} route={tool.path} key={tool.name} />;
     });
     const [opened, { toggle, close }] = useDisclosure(false);
 
