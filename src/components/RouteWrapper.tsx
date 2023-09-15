@@ -51,6 +51,14 @@ import ForemostTool from "./Foremost/Foremost";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
+import AircrackNG from "./AircrackNG/AircrackNG";
+import Fcrackzip from "./Fcrackzip/Fcrackzip";
+import GoBusterTool from "./GobusterTool/Gobuster";
+import Keeper from "./WalkthroughPages/Keeper";
+import Monitorstwo from "./WalkthroughPages/Monitorstwo";
+import Pilgrimage from "./WalkthroughPages/Pilgrimage";
+import Racecar from "./WalkthroughPages/Racecar";
+import Topology from "./WalkthroughPages/Topology";
 
 export interface RouteProperties {
     name: string;
@@ -138,12 +146,42 @@ export const ROUTES: RouteProperties[] = [
         description: "Apache APISIX Remote Code Execution Vulnerability",
         category: "",
     },
-
+    {
+        name: "Busqueda",
+        path: "/walkthroughs/Busqueda",
+        element: <Busqueda />,
+        description: "A walkthrough on Busqueda Hack the Box challenge",
+        category: "",
+    },
     {
         name: "Fawn",
         path: "/walkthroughs/Fawn",
         element: <Fawn />,
         description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
+        category: "",
+    },
+    {
+        name: "Keeper",
+        path: "/walkthroughs/Keeper",
+        element: <Keeper />,
+        description:
+            "A walkthrough on the Keeper HackTheBox Challenge showcasing privilege escalation and web application security",
+        category: "",
+    },
+    {
+        name: "Monitorstwo",
+        path: "/walkthroughs/Monitorstwo",
+        element: <Monitorstwo />,
+        description:
+            "A walkthrough on the Monitorstwo HackTheBox Challenge centered around network monitoring and intrusion detection systems",
+        category: "",
+    },
+    {
+        name: "Meow",
+        path: "/walkthroughs/Meow",
+        element: <Meow />,
+        description:
+            "A walkthrough on the Meow HackTheBox challenge involving basic enumeration and exploitation techniques to gain access to the target system.",
         category: "",
     },
     {
@@ -160,22 +198,46 @@ export const ROUTES: RouteProperties[] = [
         description: "A walkthrough on a Pentesting room with focus on brute force attack and privilege escalation",
         category: "",
     },
-
     {
-        name: "Meow",
-        path: "/walkthroughs/Meow",
-        element: <Meow />,
-        description: "A walkthrough on the Redeemer HackTheBox challenge showcasing nmap tool",
+        name: "Pilgrimage",
+        path: "/walkthroughs/Pilgrimage",
+        element: <Pilgrimage />,
+        description:
+            "A walkthrough on the Pilgrimage Hack the Box challenge focused on exploiting a web application vulnerability to gain access to the system",
         category: "",
     },
     {
-        name: "Busqueda",
-        path: "/walkthroughs/Busqueda",
-        element: <Busqueda />,
-        description: "A walkthrough on Busqueda Hack the Box challenge",
+        name: "Racecar",
+        path: "/walkthroughs/Racecar",
+        element: <Racecar />,
+        description:
+            "A walkthrough on Racecar Hack the Box challenge utilizing cryptographic analysis and reverse engineering skills to decipher and exploit a custom encryption algorithm",
+        category: "",
+    },
+    {
+        name: "Redeemer",
+        path: "/walkthroughs/Redeemer",
+        element: <Redeemer />,
+        description:
+            "A walkthrough on the Redeemer HackTheBox challenge showcasing enumeration and post-exploitation tasks, testing your expertise in penetration testing",
+        category: "",
+    },
+    {
+        name: "Topology",
+        path: "/walkthroughs/Topology",
+        element: <Topology />,
+        description:
+            "A walkthrough on Topology Hack the Box challenge which requires knowledge of network protocols, routing, and security configurations",
         category: "",
     },
     //TOOLS BELOW THIS COMMENT - PLEASE ADDE NEW TOOLS IN ALPHABETICAL ORDER
+    {
+        name: "Aircrack NG",
+        path: "/tools/AircrackNG",
+        element: <AircrackNG />,
+        description: "A tool for cracking WEP and WPA/WPA2 passphrases using captured network packets",
+        category: "Password Cracking and Authentication Testing",
+    },
     {
         name: "AI-based pen-testing tool (Gyoithon)",
         path: "/tools/gyoithon",
@@ -276,6 +338,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Fcrackzip",
+        path: "/tools/Fcrackzip",
+        element: <Fcrackzip />,
+        description: "A tool for cracking password of a protected zip file",
+        category: "Password Cracking and Authentication Testing",
+    },
+    {
         name: "Ffuf",
         path: "/tools/Ffuf",
         element: <FfufTool />,
@@ -295,6 +364,13 @@ export const ROUTES: RouteProperties[] = [
         element: <FTPconnect />,
         description: "FTPconnect tool",
         category: "Miscellaneous",
+    },
+    {
+        name: "GoBuster",
+        path: "/tools/GoBusterTool",
+        element: <GoBusterTool />,
+        description: "A tool used for directory and file brute-forcing on web servers.",
+        category: "Web Application Testing",
     },
     {
         name: "GoldenEye",
