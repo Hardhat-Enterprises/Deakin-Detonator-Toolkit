@@ -53,6 +53,7 @@ import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
 import Pilgrimage from "./WalkthroughPages/Pilgrimage";
+import RTsort from "./RTsort/RTsort";
 
 export interface RouteProperties {
     name: string;
@@ -248,6 +249,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/dmitry",
         element: <Dmitry />,
         description: "Deepmagic Information Gathering Tool",
+    },
+    {
+        name: "RTsort",
+        path: "/tools/RTsort",
+        element: <RTsort />,
+        description: "Rainbow Table Sort Tool",
     },
     {
         name: "DNSMap",
