@@ -20,7 +20,7 @@ const rtsort = () => {
 
     let form = useForm({
         initialValues: {
-            path: "",
+            path: "./",
         },
     });
 
