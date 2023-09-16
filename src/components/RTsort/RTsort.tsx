@@ -53,7 +53,7 @@ const rtsort = () => {
                 <TextInput 
                 label={"Path"} 
                 required
-                placeholder="/home/user/rainbowcrack/tables/" 
+                placeholder="/home/user/rainbowcrack/tables/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt" 
                 {...form.getInputProps("path")}
                 />
                 <br></br>
