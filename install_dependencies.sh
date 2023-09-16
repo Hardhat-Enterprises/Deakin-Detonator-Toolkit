@@ -47,7 +47,8 @@ sudo apt install -y mitmproxy \
 		wpscan \
 		parsero \
 		arjun \
-		sherlock
+		sherlock \
+		rainbowcrack
 
 echo "-----------------------------"
 echo "Installing yarn..."
