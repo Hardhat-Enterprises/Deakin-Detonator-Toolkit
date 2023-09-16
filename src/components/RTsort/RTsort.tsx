@@ -7,7 +7,7 @@ import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "Rainbow Table Sort (rtsort)";
 const description_userguide =
-    "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables."
+    "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables.";
 
 interface FormValuesType {
     path: string;
@@ -44,17 +44,17 @@ const rtsort = () => {
         setOutput("");
     }, [setOutput]);
 
-    // placeholder="/home/user/rainbowcrack/tables/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt" 
+    // placeholder="/home/user/rainbowcrack/tables/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt"
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
             <LoadingOverlay visible={loading} />
             <Stack>
                 {UserGuide(title, description_userguide)}
-                <TextInput 
-                label={"Path"} 
-                required
-                placeholder="/home/user/rainbowcrack/tables/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt" 
-                {...form.getInputProps("path")}
+                <TextInput
+                    label={"Path"}
+                    required
+                    placeholder="/home/user/rainbowcrack/tables/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt"
+                    {...form.getInputProps("path")}
                 />
                 <br></br>
                 <Button type={"submit"}>Start Sort</Button>
