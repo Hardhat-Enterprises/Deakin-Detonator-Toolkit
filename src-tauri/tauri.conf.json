@@ -258,10 +258,15 @@
                         "args": true
                     },
                     {
+                        "name": "wpscan",
+                        "cmd": "wpscan",
+                        "args": true
+                     },
+                     {
                         "name": "rtsort",
                         "cmd": "rtsort",
                         "args": true
-                    }
+                     }
                 ]
             },
             "fs": {
