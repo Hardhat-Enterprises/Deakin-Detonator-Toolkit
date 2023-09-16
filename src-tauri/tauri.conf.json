@@ -256,6 +256,11 @@
                         "name": "aircrack-ng",
                         "cmd": "aircrack-ng",
                         "args": true
+                    },
+                    {
+                        "name": "rtsort",
+                        "cmd": "rtsort",
+                        "args": true
                     }
                 ]
             },

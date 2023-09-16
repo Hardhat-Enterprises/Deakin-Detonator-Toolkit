@@ -59,6 +59,7 @@ import Monitorstwo from "./WalkthroughPages/Monitorstwo";
 import Pilgrimage from "./WalkthroughPages/Pilgrimage";
 import Racecar from "./WalkthroughPages/Racecar";
 import Topology from "./WalkthroughPages/Topology";
+import RTsort from "./RTsort/RTsort";
 
 export interface RouteProperties {
     name: string;
@@ -442,6 +443,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Parsero />,
         description: "Python Script that reads Robots.txt of w webserver to view Disallow entries",
         category: "Web Application Testing",
+    },
+    {
+        name: "RTsort",
+        path: "/tools/RTsort",
+        element: <RTsort />,
+        description: "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables.",
+        category: "Password Cracking and Authentication Testing",
     },
     {
         name: "SearchSploit",
