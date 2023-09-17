@@ -4,6 +4,8 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { Child } from "@tauri-apps/api/shell";
+
 
 const title = "Dnsrecon";
 const description_userguide =
@@ -18,9 +20,11 @@ interface FormValues {
     url: string;
 }
 
+
 export function Dnsrecon() {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
+    const [pid, setPid] =useState("");
 
     let form = useForm({
         initialValues: {
@@ -28,13 +32,51 @@ export function Dnsrecon() {
         },
     });
 
+    // call back function
+    const handleProcessData  = useCallback(
+        (data: String) => {
+            setOutput((prevOutput) => prevOutput + "\n" + data);
+        },
+        []
+    );
+    const handleProcessTermination = useCallback(
+        ({code, signal}: {code: number, signal: number}) =>{
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+            } else {
+                handleProcessData('\nProcess terminated with exit code: ${code} and signal code: ${signal}');
+            }    
+            // clear the child process
+            setPid("");
+            //cancel the loading Overlay
+            setLoading(false);
+
+        },
+        [handleProcessData]
+    );
+
+    // sends a Sigterm signal to terminate
+    const handleCancel = () => {
+        if (pid !==null) {
+            const args = ['-15', pid];
+            CommandHelper.runCommand("kill",args);
+        }
+    };
+            
+
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
         const args = ["-d", values.url];
-        const output = await CommandHelper.runCommand("dnsrecon", args);
-
-        setOutput(output);
+        try{
+            const result = await CommandHelper.runCommandGetPidAndOutput("dnsrecon", args, handleProcessData, handleProcessTermination);
+            setPid(result.pid);
+            setOutput(result.output);
+        } catch (e: any){
+            setOutput(e.message);
+        }    
         setLoading(false);
     };
 
@@ -45,6 +87,13 @@ export function Dnsrecon() {
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
+            {loading && (
+                <div>
+                    <Button variant="outline" color="red" style={{zIndex: 1001}} onClick={handleCancel}>
+                        Cancel
+                    </Button>
+                </div>
+            )}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"URL"} required {...form.getInputProps("url")} />
