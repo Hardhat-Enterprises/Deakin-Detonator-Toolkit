@@ -147,6 +147,11 @@
                         "name": "dnsrecon",
                         "cmd": "dnsrecon",
                         "args": true
+                    },
+                    {
+                        "name": "rcrack",
+                        "cmd": "rcrack",
+                        "args": true
                     }
                 ]
             },

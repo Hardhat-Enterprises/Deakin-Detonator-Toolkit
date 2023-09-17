@@ -26,6 +26,7 @@ import Metagoofil from "./metagoofil/metagoofil";
 import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
+import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 export interface RouteProperties {
     name: string;
     path: string;
@@ -208,6 +209,12 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Dnsrecon",
         element: <Dnsrecon />,
         description: "Dnsrecon is a python script that is used to find different hosts",
+    },
+    {
+        name: "Rainbowcrack",
+        path: "/tools/Rainbowcrack",
+        element: <Rainbowcrack />,
+        description: "RainbowCrack is a computer program which generates rainbow tables to be used in password cracking",
     },
 ];
 
