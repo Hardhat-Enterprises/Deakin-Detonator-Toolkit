@@ -128,8 +128,9 @@ const Enum4Linux = () => {
                 />
                 <TextInput label={"Parameters"} placeholder={"Example: o"} {...form.getInputProps("paramMain")} />
                 <TextInput label={"Additional Options"} {...form.getInputProps("argumentAlt")} />
-                <TextInput label={"Additional Options Parameters"} {...form.getInputProps("paramAlt")} />
-                {SaveOutputToTextFile(output)};<Button type={"submit"}>Scan</Button>
+                <TextInput label={"Additional Options Parameters"} {...form.getInputProps("paramAlt")} />;
+                <Button type={"submit"}>Scan</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
