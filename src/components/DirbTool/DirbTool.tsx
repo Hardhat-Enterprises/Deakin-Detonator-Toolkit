@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 const title = "Dirb";
 const description_userguide =
     "Dirb is a Web Content Scanner that acts to seek out any existing or hidden Web Objects. " +
@@ -93,10 +93,11 @@ export function DirbTool() {
                             type="number"
                             {...form.getInputProps("ignoreHttpCode")}
                         />
-                        <Button type={"submit"}>Scan</Button>
-                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                     </>
                 )}
+                <Button type={"submit"}>Scan</Button>
+                {SaveOutputToTextFile(output)}
+                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
     );
