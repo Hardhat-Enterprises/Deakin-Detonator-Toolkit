@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "Crunch Password Generator";
 const description_userguide =
@@ -100,6 +101,7 @@ const Crunch = () => {
                 />
                 <TextInput label={"Output file (optional)"} {...form.getInputProps("outputFile")} />
                 <Button type={"submit"}>Generate Password List</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
