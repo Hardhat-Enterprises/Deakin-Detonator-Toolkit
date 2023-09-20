@@ -59,6 +59,7 @@ import Monitorstwo from "./WalkthroughPages/Monitorstwo";
 import Pilgrimage from "./WalkthroughPages/Pilgrimage";
 import Racecar from "./WalkthroughPages/Racecar";
 import Topology from "./WalkthroughPages/Topology";
+import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 
 export interface RouteProperties {
@@ -197,6 +198,14 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Pentesting",
         element: <Pentesting />,
         description: "A walkthrough on a Pentesting room with focus on brute force attack and privilege escalation",
+        category: "",
+    },
+    {
+        name: "Persistence",
+        path: "/walkthroughs/Persistence",
+        element: <Persistence />,
+        description:
+            "A walkthrough on HTB challenge: Persistence is Key with focus on forensics investigation on an FTP server",
         category: "",
     },
     {
