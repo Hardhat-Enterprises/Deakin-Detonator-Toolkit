@@ -5,6 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "FTP Tool";
 const description_userguide =
@@ -84,6 +85,7 @@ export function FTPconnect() {
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"IP address"} required {...form.getInputProps("IPaddress")} />
                 <Button type={"submit"}>Start FTP</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

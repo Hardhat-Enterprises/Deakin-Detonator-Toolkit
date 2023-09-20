@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "GoldenEye";
 const description_userguide =
@@ -72,6 +73,7 @@ const GoldenEye = () => {
                 <TextInput label={"Options"} placeholder={"Example: U"} {...form.getInputProps("options")} />
                 <TextInput label={"Parameters"} placeholder={""} {...form.getInputProps("param")} />
                 <Button type={"submit"}>Scan</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
