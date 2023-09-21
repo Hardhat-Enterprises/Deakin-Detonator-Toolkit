@@ -1,4 +1,3 @@
-
 import { Button, LoadingOverlay, Stack, TextInput, Checkbox, Switch, NativeSelect } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
@@ -87,20 +86,20 @@ const Cewl = () => {
         setLoading(true);
         const args = [];
         if (values.depth) {
-            args.push("-d", `${values.depth}`)
+            args.push("-d", `${values.depth}`);
         }
         if (values.minLength) {
-            args.push("-m", `${values.minLength}`)
+            args.push("-m", `${values.minLength}`);
         }
         if (values.maxLength) {
-            args.push("-x", `${values.maxLength}`)
+            args.push("-x", `${values.maxLength}`);
         }
         if (checkedNumber) args.push("--with-numbers");
         if (checkedCount) args.push("-c");
         if (checkedLowercase) args.push("--lowercase");
         if (checkedEmail) args.push("-e");
         if (values.url) {
-            args.push(values.url)
+            args.push(values.url);
         }
         if (authType === "Basic") {
             args.push("--auth_type", "basic");
@@ -119,13 +118,18 @@ const Cewl = () => {
                 args.push("--auth_pass", `${values.password}`);
             }
         }
-        if (values.wordlist){
-            args.push("-w", `${values.wordlist}`)
+        if (values.wordlist) {
+            args.push("-w", `${values.wordlist}`);
         }
 
         try {
-            const result = await CommandHelper.runCommandGetPidAndOutput("cewl", args, handleProcessData, handleProcessTermination);
-            setPid(result.pid)
+            const result = await CommandHelper.runCommandGetPidAndOutput(
+                "cewl",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+            setPid(result.pid);
             setOutput(result.output);
         } catch (e: any) {
             setOutput(e.message);
@@ -154,20 +158,25 @@ const Cewl = () => {
                     checked={checkedAdvanced}
                     onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                 />
-                <TextInput label={"Target URL"}
-                    placeholder={"https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit"}
-                    required {...form.getInputProps("url")} />
                 <TextInput
-                            label={"Save wordlist"}
-                            placeholder={"/home/kali/Desktop/Wordlist.txt"}
-                            {...form.getInputProps("wordlist")} />
+                    label={"Target URL"}
+                    placeholder={"https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit"}
+                    required
+                    {...form.getInputProps("url")}
+                />
+                <TextInput
+                    label={"Save wordlist"}
+                    placeholder={"/home/kali/Desktop/Wordlist.txt"}
+                    {...form.getInputProps("wordlist")}
+                />
                 {checkedAdvanced && (
                     <>
                         <TextInput
                             label={"Max depth"}
                             type="number"
                             placeholder={"Deafult is set to 2"}
-                            {...form.getInputProps("depth")} />
+                            {...form.getInputProps("depth")}
+                        />
                         <div style={{ display: "flex", alignItems: "center" }}>
                             <TextInput
                                 label={"Min Length"}
@@ -196,35 +205,27 @@ const Cewl = () => {
                         )}
                         {isBasicAuth && (
                             <>
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                                <TextInput
-                                    label={"Username"}
-                                    required
-                                    style={{ flex: 1 }}
-                                    {...form.getInputProps("username")}
-                                />
-                                <span style={{ margin: "0 10px" }}></span>
-                                <TextInput
-                                    label={"Password"}
-                                    required
-                                    style={{ flex: 1 }}
-                                    {...form.getInputProps("password")}
-                                />
+                                <div style={{ display: "flex", alignItems: "center" }}>
+                                    <TextInput
+                                        label={"Username"}
+                                        required
+                                        style={{ flex: 1 }}
+                                        {...form.getInputProps("username")}
+                                    />
+                                    <span style={{ margin: "0 10px" }}></span>
+                                    <TextInput
+                                        label={"Password"}
+                                        required
+                                        style={{ flex: 1 }}
+                                        {...form.getInputProps("password")}
+                                    />
                                 </div>
                             </>
                         )}
                         {isDigestAuth && (
                             <>
-                                <TextInput
-                                    label={"Username"}
-                                    required
-                                    {...form.getInputProps("username")}
-                                />
-                                <TextInput
-                                    label={"Password"}
-                                    required
-                                    {...form.getInputProps("password")}
-                                />
+                                <TextInput label={"Username"} required {...form.getInputProps("username")} />
+                                <TextInput label={"Password"} required {...form.getInputProps("password")} />
                             </>
                         )}
                         <Checkbox
