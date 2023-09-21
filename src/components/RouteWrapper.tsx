@@ -61,6 +61,7 @@ import Racecar from "./WalkthroughPages/Racecar";
 import Topology from "./WalkthroughPages/Topology";
 import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
+import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 
 export interface RouteProperties {
     name: string;
@@ -459,6 +460,14 @@ export const ROUTES: RouteProperties[] = [
         element: <RTsort />,
         description: "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables.",
         category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "Rainbowcrack",
+        path: "/tools/Rainbowcrack",
+        element: <Rainbowcrack />,
+        description:
+            "RainbowCrack is a computer program which generates rainbow tables to be used in password cracking",
+        category: "Password cracking and Authentication testing",
     },
     {
         name: "SearchSploit",
