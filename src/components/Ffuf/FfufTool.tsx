@@ -1,10 +1,11 @@
-import { Button, LoadingOverlay, Stack, TextInput, Group, Switch } from "@mantine/core";
+import { Button, Stack, TextInput, Group, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "Fuzz Faster U Fool (ffuf)";
 const description_userguide =
@@ -15,7 +16,7 @@ const description_userguide =
     "For further information on ffuf: https://github.com/ffuf/ffufS\n\n" +
     "Wordlist directory: /src-tauri/exploits/ffuf_wordlists/\n\n" +
     "Basic ffuf brute force discovery:\n\n" +
-    "Step 1: Enter a URL, and use FUZZ to indicate where words from wordlist will be fuzzed\n" +
+    "Step 1: Enter a URL to be fuzzed\n" +
     "       E.g. http://www.example.com/FUZZ\n\n" +
     "Step 2: Optionally enter a wordlist other than the default\n" +
     "       E.g. wordlist.txt\n\n" +
@@ -41,6 +42,8 @@ const FfufTool = () => {
     const [checkedVerboseOutput, setCheckedVerboseOutput] = useState(false);
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [pid, setPid] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -76,22 +79,30 @@ const FfufTool = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
 
-    // Sends a SIGTERM signal to gracefully terminate the process
-    const handleCancel = () => {
-        if (pid !== null) {
-            const args = [`-15`, pid];
-            CommandHelper.runCommand("kill", args);
-        }
+    // Actions taken after saving the output
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
     };
 
     const onSubmit = async (values: FormValuesType) => {
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+
+        // Start the Loading Overlay
         setLoading(true);
 
-        const args = [`-u`, `${values.url}`];
+        const args = [`-u`, `${values.url}/FUZZ`];
 
         if (values.wordlist) {
             args.push(`-w`, `./exploits/ffuf_wordlists/${values.wordlist}`);
@@ -141,18 +152,13 @@ const FfufTool = () => {
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values }))}>
-            <LoadingOverlay visible={loading} />
-            {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
-            )}
+            {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <Switch
@@ -163,7 +169,7 @@ const FfufTool = () => {
                 />
                 <TextInput
                     label={"Target URL"}
-                    placeholder={"https://www.example.com/FUZZ"}
+                    placeholder={"https://www.example.com"}
                     required
                     {...form.getInputProps("url")}
                 />
@@ -214,7 +220,7 @@ const FfufTool = () => {
                 <Button type={"submit"} style={{ fontSize: "24px", paddingTop: "8px" }}>
                     Scan
                 </Button>
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
