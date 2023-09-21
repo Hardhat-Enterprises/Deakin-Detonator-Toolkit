@@ -1,22 +1,22 @@
-import { Button, Checkbox, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
+import { Button, Checkbox, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "Sherlock Tool";
 const description_guide =
-    "Sherlock is a tool used for searching social networks for the certain username.\n\n" +
+    "Sherlock is a tool used for searching social networks for specified usernames.\n\n" +
     "Further information can be found at: https://www.kali.org/tools/sherlock/\n\n" +
-    "Using Sherlock:\n" +
-    "*Note: For multiple usernames, add a space in between. 'Sherlock John Billy'*\n" +
-    "Step 1: Input the username you need to search in the input box.\n" +
-    "       Eg: John Billy\n\n" +
+    "Using Sherlock:\n\n" +
+    "*Note: For multiple usernames, add a space in between. E.g. 'Greg John Billy'*\n\n" +
+    "Step 1: Input the username you wish to search for in the Username field.\n" +
+    "       Eg: socialperson38\n\n" +
     "Step 2: Click Start Searching to commence Sherlock's operation.\n\n" +
-    "Step 3: View the Output block below to view the results of the tools execution.";
+    "Step 3: View the Output block below to view the results of the tool's execution.";
 
 interface FormValuesType {
     username: string;
@@ -30,6 +30,8 @@ const Sherlock = () => {
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [checkedVerbose, setCheckedVerbose] = useState(false);
     const [pid, setPid] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -61,21 +63,29 @@ const Sherlock = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
 
-    // Sends a SIGTERM signal to gracefully terminate the process
-    const handleCancel = () => {
-        if (pid !== null) {
-            const args = [`-15`, pid];
-            CommandHelper.runCommand("kill", args);
-        }
+    // Actions taken after saving the output
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
     };
 
     const onSubmit = async (values: FormValuesType) => {
         // Makes the Loading Overlay visible
         setLoading(true);
+
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+
         const args = [];
 
         if (checkedVerbose) {
@@ -108,6 +118,8 @@ const Sherlock = () => {
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
 
     return (
@@ -147,7 +159,7 @@ const Sherlock = () => {
                     </>
                 )}
                 <Button type={"submit"}>Start Searching!</Button>
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
