@@ -458,8 +458,9 @@ export const ROUTES: RouteProperties[] = [
         name: "Rainbowcrack",
         path: "/tools/Rainbowcrack",
         element: <Rainbowcrack />,
-        description: "RainbowCrack is a computer program which generates rainbow tables to be used in password cracking",
-        category: "Password cracking and Authentication testing"
+        description:
+            "RainbowCrack is a computer program which generates rainbow tables to be used in password cracking",
+        category: "Password cracking and Authentication testing",
     },
     {
         name: "RTsort",
@@ -540,7 +541,6 @@ export const ROUTES: RouteProperties[] = [
             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
         category: "Web Application Testing",
     },
-    
 ];
 
 export function getTools() {
