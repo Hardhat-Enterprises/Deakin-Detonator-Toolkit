@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "Traceroute Tool";
 const description_userguide =
@@ -133,6 +134,7 @@ const TracerouteTool = () => {
                     description={"Type of scan to perform"}
                 />
                 <Button type={"submit"}>start netcat</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
