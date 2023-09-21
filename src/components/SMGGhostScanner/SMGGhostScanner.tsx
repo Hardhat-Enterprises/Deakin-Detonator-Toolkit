@@ -1,9 +1,23 @@
-import { Button, LoadingOverlay, Stack, TextInput, Title, Alert } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { IconAlertCircle } from "@tabler/icons";
+import { UserGuide } from "../UserGuide/UserGuide";
+
+const title = "SMG-Ghost Scanner";
+const description_userguide =
+    "SMG-Ghost Scanner is a tool used to scan a target to see if they are vulnerable to the attack vector " +
+    "CVE2020-0796. This vulnerability fell within Microsoft's SMB 3.1.1 protocol stack implementation where " +
+    "due to the failure of handling particular requests and response messages, an attacker could perform " +
+    "remote code execution to act as the systems user.\n\n" +
+    "Using SMG-Ghost Scanner:\n" +
+    "Step 1: Enter a Target IP address.\n" +
+    "       Eg: 192.168.1.1 \n\n" +
+    "Step 2: Click scan to commence SMG-Ghost Scanners operation.\n\n" +
+    "Step 3: View the Output block below to view the results of the tools execution.";
+
 interface FormValues {
     ip: string;
 }
@@ -21,7 +35,7 @@ const SMGGhostScanner = () => {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = [`/usr/share/ddt/SMGGhostScanner.py`, values.ip];
+        const args = [`./exploits/SMGGhostScanner.py`, values.ip];
         const output = await CommandHelper.runCommand("python3", args);
 
         setOutput(output);
@@ -36,7 +50,7 @@ const SMGGhostScanner = () => {
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>SMGGhost Scanner</Title>
+                {UserGuide(title, description_userguide)}
                 <Alert
                     icon={<IconAlertCircle size={16} />}
                     radius="md"

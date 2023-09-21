@@ -123,6 +123,25 @@ const ReferencesPage = () => {
                         description={"Sherlock is used to search for usernames across social networks."}
                         url={"https://www.kali.org/tools/sherlock/"}
                     />
+                    <Reference
+                        name={"Traceroute"}
+                        description={
+                            "The traceroute utility displays the route used by IP packets on their way to a specified network (or Internet) host."
+                        }
+                        url={"https://www.kali.org/tools/traceroute/"}
+                    />
+                    <Reference
+                        name={"GoldenEye"}
+                        description={"GoldenEye is a HTTP DoS Test Tool."}
+                        url={"https://www.kali.org/tools/goldeneye/"}
+                    />
+                    <Reference
+                        name={"WPScan"}
+                        description={
+                            "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues."
+                        }
+                        url={"https://www.kali.org/tools/wpscan/"}
+                    />
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2022-24112"}

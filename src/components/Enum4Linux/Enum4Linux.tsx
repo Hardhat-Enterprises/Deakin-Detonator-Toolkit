@@ -1,8 +1,28 @@
-import { Button, LoadingOverlay, Stack, TextInput, Title } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { UserGuide } from "../UserGuide/UserGuide";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+
+const title = "Enum4Linux";
+const description_userguide =
+    "Enum4linux is a tool used for the enumeration of information from Windows and Samba operating systems. " +
+    "It is particularly useful for identifying the remote OS of a system and providing a list of the users " +
+    "and group memberships found within the system.\n\nOptions for the tool can be found at: " +
+    "https://www.kali.org/tools/enum4linux/\n\n" +
+    "Using Enum4Linux:\n" +
+    "Step 1: Enter a Target IP address.\n" +
+    "       Eg: 192.168.1.1\n\n" +
+    "Step 2: Enter an Option for the Enumeration.\n" +
+    "       Eg: U (get userlist)\n\n" +
+    "Step 3: Enter any Parameters.\n" +
+    "       Eg: example.txt\n\n" +
+    "Step 4: Enter any Additional Options/Parameters.\n\n" +
+    "Step 5: Click Scan to commence Enum4Linux's operation.\n\n" +
+    "Step 6: View the Output block below to view the results of the tools execution.";
 
 interface FormValues {
     ipAddress: string;
@@ -15,6 +35,7 @@ interface FormValues {
 const Enum4Linux = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
+    const [pid, setPid] = useState("");
 
     let form = useForm({
         initialValues: {
@@ -25,6 +46,41 @@ const Enum4Linux = () => {
             paramAlt: "",
         },
     });
+
+    /**
+     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data received to the existing output.
+     *
+     * @param {string} data - The data received from the child process.
+     */
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+    }, []);
+
+    /**
+     * handleProcessTermination: Callback to handle the termination of the child process.
+     * Once the process termination is handled, it clears the process PID reference and
+     * deactivates the loading overlay.
+     * @param {object} param0 - An object containing information about the process termination.
+     * @param {number} param0.code - The exit code of the terminated process.
+     * @param {number} param0.signal - The signal code indicating how the process was terminated.
+     */
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            }
+            // Clear the child process pid reference
+            setPid("");
+            // Cancel the Loading Overlay
+            setLoading(false);
+        },
+        [handleProcessData] // Dependency on the handleProcessData callback
+    );
 
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
@@ -38,11 +94,15 @@ const Enum4Linux = () => {
         } else {
             args = [options, values.paramMain, values.ipAddress];
         }
-
-        const result = await CommandHelper.runCommand("enum4linux", args);
-
-        setOutput(result);
-        setLoading(false);
+        CommandHelper.runCommandGetPidAndOutput("enum4linux", args, handleProcessData, handleProcessTermination)
+            .then(({ pid, output }) => {
+                setPid(pid);
+                setOutput(output);
+            })
+            .catch((error) => {
+                setLoading(false);
+                setOutput(`Error: ${error.message}`);
+            });
     };
 
     const clearOutput = useCallback(() => {
@@ -51,9 +111,9 @@ const Enum4Linux = () => {
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            <LoadingOverlay visible={loading} />
+            {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
-                <Title>Enum4Linux</Title>
+                {UserGuide(title, description_userguide)}
                 <TextInput
                     label={"IP Address of Target"}
                     placeholder={"Example: 192.168.1.200"}
@@ -68,8 +128,9 @@ const Enum4Linux = () => {
                 />
                 <TextInput label={"Parameters"} placeholder={"Example: o"} {...form.getInputProps("paramMain")} />
                 <TextInput label={"Additional Options"} {...form.getInputProps("argumentAlt")} />
-                <TextInput label={"Additional Options Parameters"} {...form.getInputProps("paramAlt")} />
+                <TextInput label={"Additional Options Parameters"} {...form.getInputProps("paramAlt")} />;
                 <Button type={"submit"}>Scan</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

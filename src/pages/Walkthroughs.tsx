@@ -14,7 +14,15 @@ export function WalkthroughsPage() {
         NAME: string;
     }
     const rows = getWalkthroughs().map((tool) => {
-        return <ToolItem title={tool.name} description={tool.description} route={tool.path} key={tool.name} />;
+        return (
+            <ToolItem
+                title={tool.name}
+                description={tool.description}
+                route={tool.path}
+                category={tool.category}
+                key={tool.name}
+            />
+        );
     });
     const [opened, { toggle, close }] = useDisclosure(false);
 
@@ -25,7 +33,7 @@ export function WalkthroughsPage() {
         },
     });
     const onSubmit = async (values: FormValues) => {
-        const args = [`../components/WalkthroughPages/AddVideo.py`, values.URL, values.NAME];
+        const args = [`exploits/AddVideo.py`, values.URL, values.NAME];
         const result = await CommandHelper.runCommand("python3", args);
         console.log(result);
     };

@@ -9,6 +9,9 @@ import {
     MediaQuery,
     Text,
     useMantineTheme,
+    Button,
+    Aside,
+    Group,
 } from "@mantine/core";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -31,6 +34,14 @@ export default function App() {
         setOpened(!opened);
     };
 
+    const handleGoBack = () => {
+        window.history.back();
+    };
+
+    const handleGoForward = () => {
+        window.history.forward();
+    };
+
     return (
         <div className="App">
             <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
@@ -40,6 +51,18 @@ export default function App() {
                         asideOffsetBreakpoint="sm"
                         fixed
                         navbar={<Navigation hidden={!opened} onNavBarClickCallback={toggleOpened} />}
+                        aside={
+                            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+                                <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 120, lg: 120 }}>
+                                    <Group style={{ justifyContent: "center" }}>
+                                        <Button onClick={handleGoBack} color="red">
+                                            Back
+                                        </Button>
+                                        <Button onClick={handleGoForward}>Forward</Button>
+                                    </Group>
+                                </Aside>
+                            </MediaQuery>
+                        }
                         header={
                             <Header height={70} p="md">
                                 <Center inline>

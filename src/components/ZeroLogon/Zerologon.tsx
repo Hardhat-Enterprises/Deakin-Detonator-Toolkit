@@ -1,8 +1,28 @@
-import { Button, LoadingOverlay, Stack, TextInput, Title } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { UserGuide } from "../UserGuide/UserGuide";
+
+const title = "ZeroLogon";
+const description_userguide =
+    "The ZeroLogon CVE allows an attacker that has unauthenticated access to a domain controller within their network " +
+    "access to create a Netlogon session that can be exploited to grant domain administrative privileges. The vulnerability " +
+    "here lays within an implementation flaw for AES-CFB8 where a cryptographic transformation takes place with use of a " +
+    "session key.\n\nFurther information can be found at: https://www.crowdstrike.com/blog/cve-2020-1472-zerologon-" +
+    "security-advisory/\n\n" +
+    "Using ZeroLogon:\n" +
+    "Step 1: Enter a Doman Controller name.\n" +
+    "       Eg: TEST-AD\n\n" +
+    "Step 2: Enter a Target IP address.\n" +
+    "       Eg: 192.168.1.1\n\n" +
+    "Step 3: Enter an Administrative name @ Domain Controller IP.\n" +
+    "       Eg: Administrator\n\n" +
+    "Step 4: Enter any relevant Hashes.\n" +
+    "       Eg: Administrator:500:CEEB0FA9F240C200417EAF40CFAC29C3:D280553F0103F2E643406517296E7582:::\n\n" +
+    "Step 5: Click Exploit to commence ZeroLogon’s operation.\n\n" +
+    "Step 6: View the Output block below to view the results of the attack vectors execution.";
 
 interface FormValues {
     dcName: string;
@@ -27,7 +47,7 @@ export function ZeroLogon() {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = ["/usr/share/ddt/zerologon_tester.py", values.dcName, values.targetIP];
+        const args = ["./exploits/zerologon_tester.py", values.dcName, values.targetIP];
         const output = await CommandHelper.runCommand("python3", args);
 
         setOutput(output);
@@ -42,7 +62,7 @@ export function ZeroLogon() {
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values }))}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                <Title>ZeroLogon</Title>
+                {UserGuide(title, description_userguide)}
                 <TextInput label={"DC Name"} required {...form.getInputProps("dcName")} />
                 <TextInput label={"Target IP"} required {...form.getInputProps("targetIP")} />
                 <TextInput label={"Administrative Name@DC-IP"} required {...form.getInputProps("adminName")} />
