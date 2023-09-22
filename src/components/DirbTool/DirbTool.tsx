@@ -5,6 +5,8 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+
 const title = "Dirb";
 const description_userguide =
     "Dirb is a Web Content Scanner that acts to seek out any existing or hidden Web Objects. " +
@@ -98,14 +100,15 @@ export function DirbTool() {
             args.push(`-t ${values.ignoreHttpCode}`);
         }
 
-        try {
-            const output = await CommandHelper.runCommand("dirb", args);
-            setOutput(output);
-        } catch (e: any) {
-            setOutput(e);
-        }
-
-        setLoading(false);
+        CommandHelper.runCommandGetPidAndOutput("dirb", args, handleProcessData, handleProcessTermination)
+            .then(({ pid, output }) => {
+                setPid(pid);
+                setOutput(output);
+            })
+            .catch((error) => {
+                setLoading(false);
+                setOutput(`Error: ${error.message}`);
+            });
     };
 
     const clearOutput = useCallback(() => {
@@ -116,7 +119,7 @@ export function DirbTool() {
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            <LoadingOverlay visible={loading} />
+            {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <Switch
