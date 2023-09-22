@@ -5,6 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "Crunch Password Generator";
 const description_userguide =
@@ -102,15 +103,18 @@ const Crunch = () => {
             args.push(`-o ${values.outputFile}`);
         }
 
-        //try the crunch command with provided arguments, show output if successful or error message if not.
         try {
-            const output = await CommandHelper.runCommand("crunch", args);
-            setOutput(output);
+            const result = await CommandHelper.runCommandGetPidAndOutput(
+                "nmap",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+            setPid(result.pid);
+            setOutput(result.output);
         } catch (e: any) {
-            setOutput(e);
+            setOutput(e.message);
         }
-
-        setLoading(false);
     };
 
     //clears output without completely refreshing the tool
@@ -123,6 +127,7 @@ const Crunch = () => {
     return (
         //define user interface of the tool
         <form onSubmit={form.onSubmit(onSubmit)}>
+            {LoadingOverlayAndCancelButton(loading, pid)}
             <LoadingOverlay visible={loading} />
             <Stack>
                 {UserGuide(title, description_userguide)}
