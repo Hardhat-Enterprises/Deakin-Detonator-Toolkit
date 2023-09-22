@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 interface FormValues {
     filepath: string;
@@ -64,6 +65,7 @@ export function Eyewitness() {
                 />
                 <TextInput label={"Enter the timeout time"} required {...form.getInputProps("timeout")} />
                 <Button type={"submit"}>Scan</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
