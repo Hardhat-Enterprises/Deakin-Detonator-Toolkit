@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 const title = "Cewl";
 const description_userguide =
     "The tool Cewl, renown for being a Custom Word List Generator, is a ruby app which spiders given URLs to " +
@@ -42,6 +42,9 @@ const Cewl = () => {
     const [checkedEmail, setCheckedEmail] = useState(false);
     const [checkedLowercase, setCheckedLowercase] = useState(false);
     const [authType, setAuthType] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+
     let form = useForm({
         initialValues: {
             depth: "",
@@ -72,6 +75,10 @@ const Cewl = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
@@ -82,7 +89,19 @@ const Cewl = () => {
             CommandHelper.runCommand("kill", args);
         }
     };
+
+    // Actions taken after saving the output
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
+
     const onSubmit = async (values: FormValuesType) => {
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+
         setLoading(true);
         const args = [];
         if (values.depth) {
@@ -137,7 +156,10 @@ const Cewl = () => {
     };
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
+
     const isBasicAuth = authType === "Basic";
     const isDigestAuth = authType === "Digest";
     return (
@@ -250,7 +272,7 @@ const Cewl = () => {
                         />
                     </>
                 )}
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
