@@ -119,6 +119,7 @@ export function Eyewitness() {
                 <TextInput label={"Enter the timeout time"} required {...form.getInputProps("timeout")} />
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Scan</Button>
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

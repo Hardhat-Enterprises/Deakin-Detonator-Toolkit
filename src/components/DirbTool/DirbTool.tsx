@@ -84,6 +84,7 @@ export function DirbTool() {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
 
+        // Enable the Loading Overlay
         setLoading(true);
 
         const args = [values.url, values.wordlistPath];
@@ -100,6 +101,7 @@ export function DirbTool() {
             args.push(`-t ${values.ignoreHttpCode}`);
         }
 
+        // Execute Dirb
         CommandHelper.runCommandGetPidAndOutput("dirb", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 setPid(pid);
