@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "BEDTool";
@@ -34,6 +34,8 @@ export function BEDTool() {
     const [loading, setLoading] = useState(false);
     const [pid, setPid] = useState("");
     const [output, setOutput] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -75,6 +77,10 @@ export function BEDTool() {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
@@ -85,7 +91,19 @@ export function BEDTool() {
      * If an error occurs during the command execution, it updates the output with the error message.
      * @param {FormValues} values - An object containing the form input values.
      */
+
+    // Actions taken after saving the output
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
+
     const onSubmit = (values: FormValues) => {
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+
         setLoading(true);
         const args = ["-s", values.plugin, "-t", values.target, "-p", values.port, "-o", values.timeout];
         CommandHelper.runCommandGetPidAndOutput("bed", args, handleProcessData, handleProcessTermination)
@@ -105,6 +123,8 @@ export function BEDTool() {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]); // Dependency on the setOutput function.
 
     return (
@@ -132,7 +152,7 @@ export function BEDTool() {
                     required
                     {...form.getInputProps("timeout")}
                 />
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
