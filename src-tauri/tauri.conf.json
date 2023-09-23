@@ -18,6 +18,11 @@
                 "sidecar": true,
                 "scope": [
                     {
+                        "name": "pkexec",
+                        "cmd": "pkexec",
+                        "args": true
+                    },
+                    {
                         "name": "nmap",
                         "cmd": "nmap",
                         "args": true
@@ -258,6 +263,11 @@
                         "args": true
                     },
                     {
+                        "name": "airbase-ng",
+                        "cmd": "airbase-ng",
+                        "args": true
+                    },
+                    {
                         "name": "wpscan",
                         "cmd": "wpscan",
                         "args": true
@@ -273,6 +283,7 @@
                         "cmd": "rcrack",
                         "args": true
                     }
+
                 ]
             },
             "fs": {
