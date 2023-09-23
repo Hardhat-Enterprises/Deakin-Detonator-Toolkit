@@ -101,14 +101,6 @@ const NmapTool = () => {
         [handleProcessData]
     );
 
-    // Sends a SIGTERM signal to gracefully terminate the process
-    //const handleCancel = () => {
-    //    if (pid !== null) {
-    //        const args = [`-15`, pid];
-    //        CommandHelper.runCommand("kill", args);
-    //    }
-    //};
-
     // Actions taken after saving the output
     const handleSaveComplete = () => {
         // Indicating that the file has saved which is passed
@@ -167,18 +159,16 @@ const NmapTool = () => {
             args.push(`-exclude ${values.exclusion.split(" ")}`);
         }
 
-        try {
-            const result = await CommandHelper.runCommandGetPidAndOutput(
-                "nmap",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
-            setPid(result.pid);
-            setOutput(result.output);
-        } catch (e: any) {
-            setOutput(e.message);
-        }
+        // Execute nmap
+        CommandHelper.runCommandGetPidAndOutput("nmap", args, handleProcessData, handleProcessTermination)
+            .then(({ pid, output }) => {
+                setPid(pid);
+                setOutput(output);
+            })
+            .catch((error) => {
+                setLoading(false);
+                setOutput(`Error: ${error.message}`);
+            });
     };
 
     const clearOutput = useCallback(() => {
