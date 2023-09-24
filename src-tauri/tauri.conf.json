@@ -277,13 +277,16 @@
                         "cmd": "rtsort",
                         "args": true
                     },
-
                     {
                         "name": "rcrack",
                         "cmd": "rcrack",
                         "args": true
+                    },
+                    {
+                        "name": "nslookup",
+                        "cmd": "nslookup",
+                        "args": true
                     }
-
                 ]
             },
             "fs": {
