@@ -63,6 +63,7 @@ import Topology from "./WalkthroughPages/Topology";
 import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
+import NSLookup from "./NSLookupTool/NSLookupTool";
 
 export interface RouteProperties {
     name: string;
@@ -452,6 +453,13 @@ export const ROUTES: RouteProperties[] = [
         name: "Nmap",
         path: "/tools/nmap",
         element: <NmapTool />,
+        description: "Network scanning tool",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "NSLookup",
+        path: "/tools/nslookuptool",
+        element: <NSLookup />,
         description: "Network scanning tool",
         category: "Network Scanning and Enumeration",
     },
