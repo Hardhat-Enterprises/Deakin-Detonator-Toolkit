@@ -52,6 +52,7 @@ import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
 import AircrackNG from "./AircrackNG/AircrackNG";
+import AirbaseNG from "./AirbaseNG/AirbaseNG";
 import Fcrackzip from "./Fcrackzip/Fcrackzip";
 import GoBusterTool from "./GobusterTool/Gobuster";
 import Keeper from "./WalkthroughPages/Keeper";
@@ -242,6 +243,13 @@ export const ROUTES: RouteProperties[] = [
         category: "",
     },
     //TOOLS BELOW THIS COMMENT - PLEASE ADDE NEW TOOLS IN ALPHABETICAL ORDER
+    {
+        name: "Airbase NG",
+        path: "/tools/AirbaseNG",
+        element: <AirbaseNG />,
+        description: "Airbase-ng is a tool to create fake access points",
+        category: "Wireless Attacks and Rogue Access Point Creation",
+    },
     {
         name: "Aircrack NG",
         path: "/tools/AircrackNG",
