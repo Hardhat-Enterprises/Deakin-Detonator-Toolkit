@@ -248,7 +248,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/AirbaseNG",
         element: <AirbaseNG />,
         description: "Airbase-ng is a tool to create fake access points",
-        category: "Wireless Attacks and Rouge Access Point Creation",
+        category: "Wireless Attacks and Rogue Access Point Creation",
     },
     {
         name: "Aircrack NG",
