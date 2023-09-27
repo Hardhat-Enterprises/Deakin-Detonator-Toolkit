@@ -122,7 +122,7 @@ const NbtscanTool = () => {
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "python3",
+                "nbtscan",
                 args,
                 handleProcessData,
                 handleProcessTermination
