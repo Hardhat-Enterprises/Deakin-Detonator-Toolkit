@@ -101,7 +101,7 @@ const Urlsnarf = () => {
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "python3",
+                "urlsnarf",
                 args,
                 handleProcessData,
                 handleProcessTermination
