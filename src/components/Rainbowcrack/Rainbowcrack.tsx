@@ -89,7 +89,7 @@ export function rcrack() {
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "python3",
+                "rcrack",
                 args,
                 handleProcessData,
                 handleProcessTermination
