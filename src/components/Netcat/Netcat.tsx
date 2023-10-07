@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "Netcat Tool";
@@ -155,6 +156,7 @@ const NetcatTool = () => {
                     description={"Type of scan to perform"}
                 />
                 <Button type={"submit"}>start netcat</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
