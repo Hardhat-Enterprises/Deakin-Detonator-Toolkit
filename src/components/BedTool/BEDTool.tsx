@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Select, Stack, Switch, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -7,27 +7,41 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
+//plugin header selection field
+const plugin_list = ["FTP", "SMTP", "POP", "HTTP", "IRC", "IMAP", "PJL", "LPD", "FINGER", "SOCKS4", "SOCKS5"];
+//plugin that require Authentication
+const pluginsRequiringAuth = ["FTP", "IMAP", "POP"];
+//plugin that require Email address
+const pluginRequiringEmail = ["SMTP"];
+//plugin that require username
+const pluginsRequiringUsername = ["SOCKS4", "SOCKS5"];
+//const pluginRequiring IP and port
+const pluginsRequiringIP = ["HTTP", "IRC", "PJL", "LPD", "FINGER"];
+
+//Default value for Target IP
+const defaultTarget = "localhost";
+
 const title = "BEDTool";
 const description_userguide =
     "BED is a tool created for checking daemons to identify any potential buffer overflows, format strings, " +
     "and other parameters.\n\nFurther information can be found at: https://www.kali.org/tools/bed/\n\n" +
     "Using BED:\n" +
-    "Step 1: Enter a Plugin to be used for the scan.\n" +
+    "Step 1: Select a Plugin to be used for the scan.\n" +
     "       Eg: HTTP\n\n" +
-    "Step 2: Enter a Target IP address.\n" +
-    "       Eg: Localhost\n\n" +
-    "Step 3: Enter a Port to connect to.\n" +
-    "       Eg: 80\n\n" +
-    "Step 4: Enter a Timeout value.\n" +
-    "       Eg: 5\n\n" +
-    "Step 5: Click Scan to commence BED's operation.\n\n" +
-    "Step 6: View the Output block below to view the results of the tools execution.";
+    "Step 2: Field in the require field that show on the UI\n" +
+    "       Eg: For HTTP we need to have a target port.\n\n" +
+    "Step 3: Click Scan to commence BED's operation.\n\n" +
+    "Step 4: View the Output block below to view the results of the tools execution. \n\n" +
+    "Optional: For more advance usage, turn on advance mode.";
 
 interface FormValues {
     plugin: string;
     target: string;
     port: string;
     timeout: string;
+    email: string;
+    username: string;
+    password: string;
 }
 
 export function BEDTool() {
@@ -36,6 +50,10 @@ export function BEDTool() {
     const [output, setOutput] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
+
+    // state for selected plugin
+    const [selectedPlugin, setSelectedPlugin] = useState("");
 
     let form = useForm({
         initialValues: {
@@ -43,6 +61,9 @@ export function BEDTool() {
             target: "",
             port: "",
             timeout: "",
+            email: "",
+            username: "",
+            password: "",
         },
     });
 
@@ -105,7 +126,21 @@ export function BEDTool() {
         setAllowSave(false);
 
         setLoading(true);
-        const args = ["-s", values.plugin, "-t", values.target, "-p", values.port, "-o", values.timeout];
+        const baseArgs = ["-s", values.plugin];
+        const conditionalArgs: string[][] = [
+            pluginsRequiringIP.includes(selectedPlugin)
+                ? ["-t", checkedAdvanced ? values.port : defaultTarget, "-p", values.port]
+                : [],
+            checkedAdvanced ? ["-o", values.timeout] : [],
+            pluginsRequiringAuth.includes(selectedPlugin) || selectedPlugin === "SMTP"
+                ? ["-u", selectedPlugin === "SMTP" ? values.email : values.username]
+                : [],
+            pluginsRequiringAuth.includes(selectedPlugin) ? ["-v", values.password] : [],
+        ];
+
+        // Flatten the array and remove any falsey entries created by the conditions not met
+        const args = baseArgs.concat(conditionalArgs.filter(Boolean).flat());
+
         CommandHelper.runCommandGetPidAndOutput("bed", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 setPid(pid);
@@ -127,31 +162,71 @@ export function BEDTool() {
         setAllowSave(false);
     }, [setOutput]); // Dependency on the setOutput function.
 
+    const handlePluginChange = (value: string) => {
+        form.setFieldValue("plugin", value);
+        setSelectedPlugin(value);
+    };
+
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
-                <TextInput
-                    label={"plugin Ex: FTP/SMTP/POP/HTTP/IRC/IMAP/PJL/LPD/FINGER/SOCKS4/SOCKS5"}
-                    required
-                    {...form.getInputProps("plugin")}
+                <Switch
+                    size="md"
+                    label="Advanced Mode"
+                    checked={checkedAdvanced}
+                    onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                 />
-                <TextInput
-                    label={"Target -> Host to check (default: localhost)"}
+                <Select
+                    label="Plugin"
+                    placeholder="Select a plugin"
+                    data={plugin_list}
                     required
-                    {...form.getInputProps("target")}
+                    value={selectedPlugin}
+                    onChange={handlePluginChange}
                 />
                 <TextInput
                     label={"port -> Port to connect to (default: standard port)"}
                     required
                     {...form.getInputProps("port")}
                 />
-                <TextInput
-                    label={"Timeout -> seconds to wait after each test (default: 2 seconds)"}
-                    required
-                    {...form.getInputProps("timeout")}
-                />
+                {pluginsRequiringAuth.includes(selectedPlugin) && (
+                    <>
+                        <TextInput
+                            label={"username -> Default user is your login creditial of Kali linux"}
+                            required
+                            {...form.getInputProps("username")}
+                        />
+                        <TextInput label={"Password -> your password"} required {...form.getInputProps("password")} />
+                    </>
+                )}
+                {pluginsRequiringUsername.includes(selectedPlugin) && (
+                    <>
+                        <TextInput label={"username"} required {...form.getInputProps("username")} />
+                    </>
+                )}
+                {checkedAdvanced && (
+                    <>
+                        <TextInput
+                            label={"Target -> Host to check (default: localhost)"}
+                            {...form.getInputProps("target")}
+                        />
+                        <TextInput
+                            label={"Timeout -> seconds to wait after each test (default: 2 seconds)"}
+                            {...form.getInputProps("timeout")}
+                        />
+                    </>
+                )}
+                {pluginRequiringEmail.includes(selectedPlugin) && (
+                    <>
+                        <TextInput
+                            label={"Email address -> abc@example.com"}
+                            required
+                            {...form.getInputProps("email")}
+                        />
+                    </>
+                )}
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
