@@ -118,6 +118,11 @@ const SMBEnumeration = () => {
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
+        // Check if the values.speed is not empty. If it is empty set it to T3.
+        if (!values.speed) {
+            values.speed = "T3";
+        }
+
         const args = [`-${values.speed}`, `--script=${values.scripts}`];
 
         if (values.port) {
