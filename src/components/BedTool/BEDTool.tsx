@@ -53,8 +53,6 @@ export function BEDTool() {
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
     const [customconfig, setCustomconfig] = useState(false);
-
-    // state for selected plugin
     const [selectedPlugin, setSelectedPlugin] = useState("");
 
     let form = useForm({
@@ -65,6 +63,31 @@ export function BEDTool() {
             email: "",
             username: "",
             password: "",
+        },
+
+        //input validation
+        validate: {
+            username: (value, values) => {
+                // Only validate username if the selected plugin requires it
+                if (pluginsRequiringAuth.includes(values.plugin) || pluginsRequiringUsername.includes(values.plugin)) {
+                    return /^[a-zA-Z0-9_]+$/.test(value) ? null : "Invalid username";
+                }
+                return null; // No validation if the field is not relevant
+            },
+            password: (value, values) => {
+                // Only validate password if the selected plugin requires it
+                if (pluginsRequiringAuth.includes(values.plugin)) {
+                    return value.length >= 8 ? null : "Password must be at least 8 characters";
+                }
+                return null; // No validation if the field is not relevant
+            },
+            email: (value, values) => {
+                // Only validate email if the selected plugin is SMTP
+                if (values.plugin === "SMTP") {
+                    return /^\S+@\S+\.\S+$/.test(value) ? null : "Invalid email";
+                }
+                return null; // No validation if the field is not relevant
+            },
         },
     });
 
@@ -106,13 +129,6 @@ export function BEDTool() {
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
-    /**
-     * onSubmit: Handler function that is triggered when the form is submitted.
-     * It prepares the arguments and initiates the execution of the `bed` command.
-     * Upon successful execution, it updates the state with the process PID and output.
-     * If an error occurs during the command execution, it updates the output with the error message.
-     * @param {FormValues} values - An object containing the form input values.
-     */
 
     // Actions taken after saving the output
     const handleSaveComplete = () => {
@@ -122,12 +138,24 @@ export function BEDTool() {
         setAllowSave(false);
     };
 
+    /**
+     * onSubmit: Handler function that is triggered when the form is submitted.
+     * It prepares the arguments and initiates the execution of the `bed` command.
+     * Upon successful execution, it updates the state with the process PID and output.
+     * If an error occurs during the command execution, it updates the output with the error message.
+     * @param {FormValues} values - An object containing the form input values.
+     */
     const onSubmit = (values: FormValues) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
 
         setLoading(true);
+
+        // base args that is require to run the basic BED kali linux
         const baseArgs = ["-s", values.plugin];
+
+        // options args that get added depend on what plugin the user is using
+        // ternary operators are used to push the correct argument to the args
         const conditionalArgs: string[][] = [
             customconfig ? ["-t", values.target, "-p", values.port] : [],
 
@@ -161,6 +189,13 @@ export function BEDTool() {
         setAllowSave(false);
     }, [setOutput]); // Dependency on the setOutput function.
 
+    /**
+     * Handler for selecting a service plugin from the dropdown menu.
+     * This function updates the form state with the chosen plugin and
+     * sets the corresponding state variable for conditional rendering.
+     *
+     * @param {string} value - The selected plugin's value.
+     */
     const handlePluginChange = (value: string) => {
         form.setFieldValue("plugin", value);
         setSelectedPlugin(value);
@@ -178,8 +213,8 @@ export function BEDTool() {
                     onChange={(e) => setCustomconfig(e.currentTarget.checked)}
                 />
                 <Select
-                    label="Plugin"
-                    placeholder="Select a plugin"
+                    label="Plugin Type"
+                    placeholder="Select a plugin to test"
                     data={plugin_list}
                     required
                     value={selectedPlugin}
@@ -189,11 +224,11 @@ export function BEDTool() {
                 {pluginsRequiringAuth.includes(selectedPlugin) && (
                     <>
                         <TextInput
-                            label={"username -> Default user is your login creditial of Kali linux"}
+                            label="Username (default user is the same as your Kali Linux login)"
                             required
                             {...form.getInputProps("username")}
                         />
-                        <TextInput label={"Password -> your password"} required {...form.getInputProps("password")} />
+                        <TextInput label="Password" type="password" required {...form.getInputProps("password")} />
                     </>
                 )}
                 {pluginsRequiringUsername.includes(selectedPlugin) && (
@@ -203,22 +238,18 @@ export function BEDTool() {
                 )}
                 {pluginRequiringEmail.includes(selectedPlugin) && (
                     <>
-                        <TextInput
-                            label={"Email address -> abc@example.com"}
-                            required
-                            {...form.getInputProps("email")}
-                        />
+                        <TextInput label="Email Address" required {...form.getInputProps("email")} />
                     </>
                 )}
                 {customconfig && (
                     <>
                         <TextInput
-                            label={"Target -> Host to check (default: localhost)"}
+                            label="Custom IP Address (default: localhost)"
                             required
                             {...form.getInputProps("target")}
                         />
                         <TextInput
-                            label={"port -> Port to connect to (default: standard port)"}
+                            label="Port Number (default: service-specific standard port)"
                             required
                             {...form.getInputProps("port")}
                         />
