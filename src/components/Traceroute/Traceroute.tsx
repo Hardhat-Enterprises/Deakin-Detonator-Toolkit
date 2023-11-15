@@ -34,7 +34,7 @@ interface FormValuesType {
     tracerouteOptions: string;
 }
 
-//Netcat Options
+//Traceroute Options
 const tracerouteSwitch = [
     "Traceroute ICMP scan",
     "Traceroute TCP scan",
@@ -133,7 +133,7 @@ const TracerouteTool = () => {
                     placeholder={"Pick a scan option"}
                     description={"Type of scan to perform"}
                 />
-                <Button type={"submit"}>start netcat</Button>
+                <Button type={"submit"}>start traceroute</Button>
                 {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
