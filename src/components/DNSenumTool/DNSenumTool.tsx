@@ -29,14 +29,11 @@ const description_userguide =
 //list of input values collected by the form
 interface FormValuesType {
     domain: string;
-    subdomains: string;
     threads: number;
-    dnsServer: string;
-    queryType: string;
-    userAgents: string;
-    blacklist: string;
-    whitelist: string;
-    bruteForce: boolean;
+    pages: number;
+    scrap: number;
+    reverseLookup: boolean;
+    timeout: number;
 }
 
 const DnsenumTool = () => {
@@ -52,14 +49,11 @@ const DnsenumTool = () => {
     let form = useForm({
         initialValues: {
             domain: "",
-            subdomains: "",
             threads: 10,
-            dnsServer: "",
-            queryType: "",
-            userAgents: "",
-            blacklist: "",
-            whitelist: "",
-            bruteForce: false,
+            pages: 10,
+            scrap: 10,
+            reverseLookup: false,
+            timeout: 5,
         },
     });
 
@@ -112,36 +106,19 @@ const DnsenumTool = () => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
         setLoading(true);
-        const args = ["--enum", "--threads", `${values.threads}`, `${values.domain}`];
+        const args = ["--nocolor", `${values.domain}`];
 
-        //pushes the subdomain argument if one is provided by user
-        if (values.subdomains) {
-            args.push(`-S ${values.subdomains}`);
+        args.push("-threads", `${values.threads}`);
+        args.push("-pages", `${values.pages}`);
+        args.push("-scrap", `${values.scrap}`);
+
+        // Conditional. If the user has not specified to conduct a reverse lookup omit reverse lookup argument results.
+        if (!values.reverseLookup) {
+            args.push("-noreverse");
         }
 
-        if (values.dnsServer) {
-            args.push(`-s ${values.dnsServer}`);
-        }
-
-        if (values.queryType) {
-            args.push(`-t ${values.queryType}`);
-        }
-
-        if (values.userAgents) {
-            args.push(`-u ${values.userAgents}`);
-        }
-
-        if (values.blacklist) {
-            args.push(`-b ${values.blacklist}`);
-        }
-
-        if (values.whitelist) {
-            args.push(`-w ${values.whitelist}`);
-        }
-
-        if (values.bruteForce) {
-            args.push(`-B`);
-        }
+        args.push("-timeout", `${values.timeout}`);
+        
         //try the dnsenum command with provided arguments, show output if succesful or error message if not.
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
@@ -165,7 +142,8 @@ const DnsenumTool = () => {
     }, [setOutput]);
 
     return (
-        //define user interface of the tool
+
+        //form for the tool, with input fields and submit button
         <form onSubmit={form.onSubmit(onSubmit)}>
             <LoadingOverlay visible={loading} />
             {loading && (
@@ -177,37 +155,24 @@ const DnsenumTool = () => {
             )}
             <Stack>
                 {UserGuide(title, description_userguide)}
+
+                <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
                 <Switch
                     size="md"
                     label="Advanced Mode"
                     checked={checkedAdvanced}
                     onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                 />
-                <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
-                <TextInput label={"Subdomains to include (comma-separated)"} {...form.getInputProps("subdomains")} />
-                <TextInput label={"Threads"} type="number" min={1} {...form.getInputProps("threads")} />
                 {checkedAdvanced && (
                     <>
-                        <TextInput label={"DNS Server"} {...form.getInputProps("dnsServer")} />
-                        <TextInput label={"Query Type"} {...form.getInputProps("queryType")} />
-                        <TextInput
-                            label={"User Agents"}
-                            placeholder={"Comma-separated list"}
-                            {...form.getInputProps("userAgents")}
-                        />
-                        <TextInput
-                            label={"Blacklist"}
-                            placeholder={"Comma-separated list"}
-                            {...form.getInputProps("blacklist")}
-                        />
-                        <TextInput
-                            label={"Whitelist"}
-                            placeholder={"Comma-separated list"}
-                            {...form.getInputProps("whitelist")}
-                        />
-                        <Checkbox
-                            label={"Brute Force Mode"}
-                            {...form.getInputProps("bruteForce" as keyof FormValuesType)}
+                        <TextInput label={"Threads"} {...form.getInputProps("threads")} />
+                        <TextInput label={"Pages"} type="number" min={1} {...form.getInputProps("pages")} />
+                        <TextInput label={"Scrap"} {...form.getInputProps("scrap")} />
+                        <TextInput label={"Timeout"} {...form.getInputProps("timeout")} />
+                        <Switch
+                            size="md"
+                            label="Reverse Lookup"
+                            {...form.getInputProps("reverseLookup" as keyof FormValuesType)}
                         />
                     </>
                 )}
