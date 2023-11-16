@@ -8,9 +8,9 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 //plugin header selection field
-const plugin_list = ["FTP", "SMTP", "POP", "HTTP", "IRC", "IMAP", "PJL", "LPD", "FINGER", "SOCKS4"];
+const plugin_list = ["FTP", "SMTP", "POP", "HTTP", "IRC", "IMAP", "PJL", "LPD", "FINGER", "SOCKS4", "SOCKS5"];
 //plugin that require Authentication
-const pluginsRequiringAuth = ["FTP", "IMAP", "POP"];
+const pluginsRequiringAuth = ["FTP", "IMAP", "POP", "SOCKS5"];
 //plugin that require Email address
 const pluginRequiringEmail = ["SMTP"];
 //plugin that require username
@@ -19,6 +19,7 @@ const pluginsRequiringUsername = ["SOCKS4"];
 const title = "BEDTool";
 
 const description_userguide = `
+
 BED (Bruteforce Exploit Detector) is a sophisticated tool designed to check network services for a range of security vulnerabilities including buffer overflows and format string weaknesses.
 
 For detailed information, please visit: https://www.kali.org/tools/bed/
@@ -32,8 +33,6 @@ Instructions for using BED:
 
 4. Start Scan: Click the 'Scan' button to begin the evaluation.
 
-5. View Results: The results, including any potential vulnerabilities, will be displayed in the output section below after the scan is completed.
-
 Note: The 'Custom Configuration' option is designed for advanced users who wish to target a specific network address or require custom settings. If not used, BED will assume the target is the local host.
 `;
 
@@ -44,16 +43,17 @@ interface FormValues {
     email: string;
     username: string;
     password: string;
+    a: string;
 }
 
 export function BEDTool() {
     const [loading, setLoading] = useState(false);
     const [pid, setPid] = useState("");
     const [output, setOutput] = useState("");
+    const [selectedPlugin, setSelectedPlugin] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
     const [customconfig, setCustomconfig] = useState(false);
-    const [selectedPlugin, setSelectedPlugin] = useState("");
 
     let form = useForm({
         initialValues: {
@@ -63,6 +63,7 @@ export function BEDTool() {
             email: "",
             username: "",
             password: "",
+            a: "",
         },
 
         //input validation
@@ -158,7 +159,6 @@ export function BEDTool() {
         // ternary operators are used to push the correct argument to the args
         const conditionalArgs: string[][] = [
             customconfig ? ["-t", values.target, "-p", values.port] : [],
-
             pluginsRequiringAuth.includes(selectedPlugin) || selectedPlugin === "SMTP"
                 ? ["-u", selectedPlugin === "SMTP" ? values.email : values.username]
                 : [],
