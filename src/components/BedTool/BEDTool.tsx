@@ -8,9 +8,9 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 //plugin header selection field
-const plugin_list = ["FTP", "SMTP", "POP", "HTTP", "IRC", "IMAP", "PJL", "LPD", "FINGER", "SOCKS4", "SOCKS5"];
+const plugin_list = ["FTP", "SMTP", "POP", "HTTP", "IRC", "IMAP", "PJL", "LPD", "FINGER", "SOCKS4"];
 //plugin that require Authentication
-const pluginsRequiringAuth = ["FTP", "IMAP", "POP", "SOCKS5"];
+const pluginsRequiringAuth = ["FTP", "IMAP", "POP"];
 //plugin that require Email address
 const pluginRequiringEmail = ["SMTP"];
 //plugin that require username
