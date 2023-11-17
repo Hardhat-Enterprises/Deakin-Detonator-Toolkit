@@ -94,7 +94,7 @@ const JohnTheRipper = () => {
             setLoading(false);
             //if hash is specified
         } else {
-            const args = [`--format=${values.fileType}`, `${values.hash}`];
+            const args = [`--format=${values.fileType}-${values.hash}`, `${values.filePath}`];
             try {
                 const result = await CommandHelper.runCommand("john", args);
                 setOutput(output + "\n" + result);
