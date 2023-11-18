@@ -10,15 +10,15 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 const title = "DNS Mapping for Subdomains (DNSMap)";
 const description_userguide =
     "DNSMap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
-    "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall servicios and smtp. " +
+    "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall services and smtp. " +
     "So it will be possible search for smtp.example.com inside example.com automatically.\n\nInformation on the tool " +
     "can be found at: https://www.kali.org/tools/dnsmap/\n\n" +
     "Step 1: Enter a valid domain to be mapped.\n" +
     "       Eg: google.com\n\n" +
     "Step 2: Enter a delay between requests. Default is 10 (milliseconds). Can be left blank.\n" +
     "       Eg: 10\n\n" +
-    "Step 3: Click Start Mapping to commence the DNSMap tools operation.\n\n" +
-    "Step 4: View the Output block below to view the results of the tools execution.\n\n" +
+    "Step 3: Click 'Start Mapping' to commence the DNSMap tool's operation.\n\n" +
+    "Step 4: View the Output block below to view the results of the tool's execution.\n\n" +
     "Switch to Advanced Mode for further options.";
 
 interface FormValuesType {
@@ -110,15 +110,15 @@ const DNSMap = () => {
         const args = [`${values.domain}`, "-d", `${values.delay}`];
 
         if (values.wordlistPath) {
-            args.push(`-S ${values.wordlistPath}`);
+            args.push(`-w ${values.wordlistPath}`);
         }
 
         if (values.csvResultsFile) {
-            args.push(`-s ${values.csvResultsFile}`);
+            args.push(`-c ${values.csvResultsFile}`);
         }
 
         if (values.ipsToIgnore) {
-            args.push(`-t ${values.ipsToIgnore}`);
+            args.push(`-i ${values.ipsToIgnore}`);
         }
         const filteredArgs = args.filter((arg) => arg !== "");
         CommandHelper.runCommandGetPidAndOutput("dnsmap", filteredArgs, handleProcessData, handleProcessTermination)
