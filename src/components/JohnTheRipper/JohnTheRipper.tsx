@@ -103,9 +103,9 @@ const JohnTheRipper = () => {
 
         //if hash is stored in a textfile
         if (values.fileType === "raw") {
-            //change argument according to mode selected
             var args: string[];
 
+            //change argument according to mode selected
             if (selectedModeOption === "dictionary") {
                 args = [`--wordlist=${values.wordlist}`, `${values.filePath}`];
             } else if (selectedModeOption === "incremental") {
@@ -123,7 +123,7 @@ const JohnTheRipper = () => {
 
             setLoading(false);
         } else {
-            const args = [`${values.filePath}`];
+            var args = [`${values.filePath}`];
 
             //extract password hash from zip/rar files
             try {
@@ -134,9 +134,17 @@ const JohnTheRipper = () => {
                 setOutput(e);
             }
 
+            //change argument according to mode selected
+            if (selectedModeOption === "dictionary") {
+                args = [`--wordlist=${values.wordlist}`, `/tmp/hash.txt`];
+            } else if (selectedModeOption === "incremental") {
+                args = [`-incremental:${values.incrementorder}`, `/tmp/hash.txt`];
+            } else {
+                args = [`--single`, `/tmp/hash.txt`];
+            }
+
             //crack password
             try {
-                const args = [`--wordlist=/usr/share/wordlists/john.lst`, "/tmp/hash.txt"];
                 const result = await CommandHelper.runCommand("john", args);
                 setOutput(output + "\n" + result);
             } catch (e: any) {
