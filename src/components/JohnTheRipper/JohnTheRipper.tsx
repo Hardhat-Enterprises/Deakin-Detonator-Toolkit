@@ -114,11 +114,21 @@ const JohnTheRipper = () => {
                 args = [`--single`, `${values.filePath}`];
             }
 
-            try {
-                const result = await CommandHelper.runCommand(`john`, args);
-                setOutput(output + "\n" + result);
-            } catch (e: any) {
-                setOutput(e);
+            //if hash is unknown
+            if (values.hash.length === 0) {
+                try {
+                    const result = await CommandHelper.runCommand(`john`, args);
+                    setOutput(output + "\n" + result);
+                } catch (e: any) {
+                    setOutput(e);
+                }
+            } else {
+                try {
+                    const result = await CommandHelper.runCommand(`john --format=${values.hash}`, args);
+                    setOutput(output + "\n" + result);
+                } catch (e: any) {
+                    setOutput(e);
+                }
             }
 
             setLoading(false);
@@ -144,13 +154,22 @@ const JohnTheRipper = () => {
             }
 
             //crack password
-            try {
-                const result = await CommandHelper.runCommand("john", args);
-                setOutput(output + "\n" + result);
-            } catch (e: any) {
-                setOutput(e);
+            //if hash is unknown
+            if (values.hash.length === 0) {
+                try {
+                    const result = await CommandHelper.runCommand(`john`, args);
+                    setOutput(output + "\n" + result);
+                } catch (e: any) {
+                    setOutput(e);
+                }
+            } else {
+                try {
+                    const result = await CommandHelper.runCommand(`john --format=${values.hash}`, args);
+                    setOutput(output + "\n" + result);
+                } catch (e: any) {
+                    setOutput(e);
+                }
             }
-
             setLoading(false);
         }
     };
