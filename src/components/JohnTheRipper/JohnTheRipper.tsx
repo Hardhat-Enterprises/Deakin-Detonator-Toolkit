@@ -105,15 +105,15 @@ const JohnTheRipper = () => {
             //change argument according to mode selected
             const args = [``];
             if (selectedModeOption === "dictionary") {
-                const args = [`--wordlist=${values.wordlist}`];
+                const args = [`--wordlist=${values.wordlist}`, `${values.filePath}`];
             } else if (selectedModeOption === "incremental") {
-                const args = [`-incremental:${values.incrementorder}`];
+                const args = [`-incremental:${values.incrementorder}`, `${values.filePath}`];
             } else {
-                const args = [`--single`];
+                const args = [`--single`, `${values.filePath}`];
             }
 
             try {
-                const result = await CommandHelper.runCommand(`john ${values.filePath}`, args);
+                const result = await CommandHelper.runCommand(`john`, args);
                 setOutput(output + "\n" + result);
             } catch (e: any) {
                 setOutput(e);
