@@ -8,7 +8,7 @@ import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 
 const modeRequiringWordList = ["dictionary"];
-const modeRequiringIncrementOrder = ["increment"];
+const modeRequiringIncrementOrder = ["incremental"];
 
 const title = "John the Ripper tool";
 const descritpion_userguide =
@@ -103,13 +103,14 @@ const JohnTheRipper = () => {
         //if hash is stored in a textfile
         if (values.fileType === "raw") {
             //change argument according to mode selected
-            const args = [``];
-            if (selectedModeOption === "dictionary") {
-                const args = [`--wordlist=${values.wordlist}`, `${values.filePath}`];
-            } else if (selectedModeOption === "incremental") {
-                const args = [`-incremental:${values.incrementorder}`, `${values.filePath}`];
+            var args: string[];
+
+            if (values.mode === "dictionary") {
+                args = [`--wordlist=${values.wordlist}`, `${values.filePath}`];
+            } else if (values.mode === "incremental") {
+                args = [`-incremental:${values.incrementorder}`, `${values.filePath}`];
             } else {
-                const args = [`--single`, `${values.filePath}`];
+                args = [`--single`, `${values.filePath}`];
             }
 
             try {
