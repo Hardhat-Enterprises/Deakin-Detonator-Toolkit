@@ -105,9 +105,9 @@ const JohnTheRipper = () => {
             //change argument according to mode selected
             var args: string[];
 
-            if (values.mode === "dictionary") {
+            if (selectedModeOption === "dictionary") {
                 args = [`--wordlist=${values.wordlist}`, `${values.filePath}`];
-            } else if (values.mode === "incremental") {
+            } else if (selectedModeOption === "incremental") {
                 args = [`-incremental:${values.incrementorder}`, `${values.filePath}`];
             } else {
                 args = [`--single`, `${values.filePath}`];
