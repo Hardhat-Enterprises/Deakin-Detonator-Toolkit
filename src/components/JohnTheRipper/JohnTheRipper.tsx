@@ -7,6 +7,9 @@ import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 
+const modeRequiringWordList = ["dictionary"];
+const modeRequiringIncrementOrder = ["increment"];
+
 const title = "John the Ripper tool";
 const descritpion_userguide =
     "John the Ripper is a popular and powerful open-source password cracking tool used to test the strength of passwords. It can be used by system administrators and security professionals to audit the passwords on their systems. John the Ripper is available for multiple platforms, including Unix, Windows, macOS, and DOS. It uses various techniques to crack passwords, such as dictionary attacks, brute-force attacks, and hybrid attacks. The tool is highly customizable and has a command-line interface, making it suitable for advanced users. John the Ripper is widely regarded as one of the most effective and efficient password cracking tools available." +
@@ -21,15 +24,32 @@ interface FormValuesType {
     filePath: string;
     hash: string;
     fileType: string;
+    mode: string;
+    wordlist: string;
+    incrementorder: string;
 }
 
 const fileTypes = ["zip", "rar", "raw"];
-const mode = ["Incremental", "Dictionary", "Single"];
+const mode = ["incremental", "dictionary", "single"];
+const incrementorder = [
+    "ASCII",
+    "LM_ASCII",
+    "AlNum",
+    "Alpha",
+    "LowerNum",
+    "UpperNum",
+    "LowerSpace",
+    "Lower",
+    "Upper",
+    "Digits",
+    "LM_ASCII",
+];
 
 const JohnTheRipper = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [selectedFileTypeOption, setSelectedFileTypeOption] = useState("");
+    const [selectedModeOption, setselectedModeOption] = useState("");
     const [pid, setPid] = useState("");
 
     let form = useForm({
@@ -39,6 +59,7 @@ const JohnTheRipper = () => {
             fileType: "",
             wordlist: "",
             mode: "",
+            incrementorder: "",
         },
     });
 
@@ -79,11 +100,20 @@ const JohnTheRipper = () => {
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
-        //if hash is not specified
-        if (values.fileType == "raw") {
-            const args = [`--format=${values.hash}`, `${values.filePath}`];
+        //if hash is stored in a textfile
+        if (values.fileType === "raw") {
+            //change argument according to mode selected
+            const args = [``];
+            if (selectedModeOption === "dictionary") {
+                const args = [`--wordlist=${values.wordlist}`];
+            } else if (selectedModeOption === "incremental") {
+                const args = [`-incremental:${values.incrementorder}`];
+            } else {
+                const args = [`--single`];
+            }
+
             try {
-                const result = await CommandHelper.runCommand("john", args);
+                const result = await CommandHelper.runCommand(`john ${values.filePath}`, args);
                 setOutput(output + "\n" + result);
             } catch (e: any) {
                 setOutput(e);
@@ -127,6 +157,15 @@ const JohnTheRipper = () => {
                 <TextInput label={"Filepath"} required {...form.getInputProps("filePath")} />
                 <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
                 <NativeSelect
+                    value={selectedModeOption}
+                    onChange={(e) => setselectedModeOption(e.target.value)}
+                    title={"Crack Mode"}
+                    data={mode}
+                    required
+                    placeholder={"Crack Mode"}
+                    description={"Please select a crack mode"}
+                />
+                <NativeSelect
                     value={selectedFileTypeOption}
                     onChange={(e) => setSelectedFileTypeOption(e.target.value)}
                     title={"File Type"}
@@ -135,6 +174,17 @@ const JohnTheRipper = () => {
                     placeholder={"File Type"}
                     description={"Please select the type of file you want to crack"}
                 />
+                {modeRequiringWordList.includes(selectedModeOption) && (
+                    <>
+                        <TextInput label={"Dictionary File Path"} required {...form.getInputProps("wordlist")} />
+                    </>
+                )}
+                {modeRequiringIncrementOrder.includes(selectedModeOption) && (
+                    <>
+                        <TextInput label={"Increment Order"} required {...form.getInputProps("incrementorder")} />
+                    </>
+                )}
+
                 <Button type={"submit"}>Crack</Button>
                 {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
