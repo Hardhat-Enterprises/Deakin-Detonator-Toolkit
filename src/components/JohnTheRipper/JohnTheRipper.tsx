@@ -105,30 +105,32 @@ const JohnTheRipper = () => {
         if (values.fileType === "raw") {
             var args: string[];
 
-            //change argument according to mode selected
-            if (selectedModeOption === "dictionary") {
-                args = [`--wordlist=${values.wordlist}`, `${values.filePath}`];
-            } else if (selectedModeOption === "incremental") {
-                args = [`-incremental:${values.incrementorder}`, `${values.filePath}`];
-            } else {
-                args = [`--single`, `${values.filePath}`];
-            }
-
             //if hash is unknown
             if (values.hash.length === 0) {
-                try {
-                    const result = await CommandHelper.runCommand(`john`, args);
-                    setOutput(output + "\n" + result);
-                } catch (e: any) {
-                    setOutput(e);
+                //change argument according to mode selected
+                if (selectedModeOption === "dictionary") {
+                    args = [`--wordlist=${values.wordlist}`, `${values.filePath}`];
+                } else if (selectedModeOption === "incremental") {
+                    args = [`-incremental:${values.incrementorder}`, `${values.filePath}`];
+                } else {
+                    args = [`--single`, `${values.filePath}`];
                 }
             } else {
-                try {
-                    const result = await CommandHelper.runCommand(`john --format=${values.hash}`, args);
-                    setOutput(output + "\n" + result);
-                } catch (e: any) {
-                    setOutput(e);
+                //change argument according to mode selected
+                if (selectedModeOption === "dictionary") {
+                    args = [`--format=${values.hash}`, `--wordlist=${values.wordlist}`, `${values.filePath}`];
+                } else if (selectedModeOption === "incremental") {
+                    args = [`--format=${values.hash}`, `-incremental:${values.incrementorder}`, `${values.filePath}`];
+                } else {
+                    args = [`--format=${values.hash}`, `--single`, `${values.filePath}`];
                 }
+            }
+
+            try {
+                const result = await CommandHelper.runCommand(`john`, args);
+                setOutput(output + "\n" + result);
+            } catch (e: any) {
+                setOutput(e);
             }
 
             setLoading(false);
@@ -144,32 +146,34 @@ const JohnTheRipper = () => {
                 setOutput(e);
             }
 
-            //change argument according to mode selected
-            if (selectedModeOption === "dictionary") {
-                args = [`--wordlist=${values.wordlist}`, `/tmp/hash.txt`];
-            } else if (selectedModeOption === "incremental") {
-                args = [`-incremental:${values.incrementorder}`, `/tmp/hash.txt`];
+            //if hash type is unknown
+            if (values.hash.length === 0) {
+                //change argument according to mode selected
+                if (selectedModeOption === "dictionary") {
+                    args = [`--wordlist=${values.wordlist}`, `/tmp/hash.txt`];
+                } else if (selectedModeOption === "incremental") {
+                    args = [`-incremental:${values.incrementorder}`, `/tmp/hash.txt`];
+                } else {
+                    args = [`--single`, `/tmp/hash.txt`];
+                }
             } else {
-                args = [`--single`, `/tmp/hash.txt`];
+                //change argument according to mode selected
+                if (selectedModeOption === "dictionary") {
+                    args = [`--format=${values.hash}`, `--wordlist=${values.wordlist}`, `/tmp/hash.txt`];
+                } else if (selectedModeOption === "incremental") {
+                    args = [`--format=${values.hash}`, `-incremental:${values.incrementorder}`, `/tmp/hash.txt`];
+                } else {
+                    args = [`--format=${values.hash}`, `--single`, `/tmp/hash.txt`];
+                }
             }
 
-            //crack password
-            //if hash is unknown
-            if (values.hash.length === 0) {
-                try {
-                    const result = await CommandHelper.runCommand(`john`, args);
-                    setOutput(output + "\n" + result);
-                } catch (e: any) {
-                    setOutput(e);
-                }
-            } else {
-                try {
-                    const result = await CommandHelper.runCommand(`john --format=${values.hash}`, args);
-                    setOutput(output + "\n" + result);
-                } catch (e: any) {
-                    setOutput(e);
-                }
+            try {
+                const result = await CommandHelper.runCommand(`john`, args);
+                setOutput(output + "\n" + result);
+            } catch (e: any) {
+                setOutput(e);
             }
+
             setLoading(false);
         }
     };
