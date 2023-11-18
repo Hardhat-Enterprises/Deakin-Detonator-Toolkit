@@ -110,15 +110,15 @@ const DNSMap = () => {
         const args = [`${values.domain}`, "-d", `${values.delay}`];
 
         if (values.wordlistPath) {
-            args.push(`-w ${values.wordlistPath}`);
+            args.push(`-w`, `${values.wordlistPath}`);
         }
 
         if (values.csvResultsFile) {
-            args.push(`-c ${values.csvResultsFile}`);
+            args.push(`-c`, `${values.csvResultsFile}`);
         }
 
         if (values.ipsToIgnore) {
-            args.push(`-i ${values.ipsToIgnore}`);
+            args.push(`-i`, `${values.ipsToIgnore}`);
         }
         const filteredArgs = args.filter((arg) => arg !== "");
         CommandHelper.runCommandGetPidAndOutput("dnsmap", filteredArgs, handleProcessData, handleProcessTermination)
