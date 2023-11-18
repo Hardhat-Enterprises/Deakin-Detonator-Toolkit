@@ -50,6 +50,7 @@ const JohnTheRipper = () => {
     const [output, setOutput] = useState("");
     const [selectedFileTypeOption, setSelectedFileTypeOption] = useState("");
     const [selectedModeOption, setselectedModeOption] = useState("");
+    const [selectedIncrementOption, setselectedIncrementOption] = useState("");
     const [pid, setPid] = useState("");
 
     let form = useForm({
@@ -182,7 +183,15 @@ const JohnTheRipper = () => {
                 )}
                 {modeRequiringIncrementOrder.includes(selectedModeOption) && (
                     <>
-                        <TextInput label={"Increment Order"} required {...form.getInputProps("incrementorder")} />
+                        <NativeSelect
+                            value={selectedIncrementOption}
+                            onChange={(e) => setselectedIncrementOption(e.target.value)}
+                            title={"Increment Order"}
+                            data={incrementorder}
+                            required
+                            placeholder={"Increment Order"}
+                            description={"Please select a Increment Order"}
+                        />
                     </>
                 )}
 
