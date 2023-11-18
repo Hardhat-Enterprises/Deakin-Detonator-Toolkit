@@ -16,9 +16,12 @@ interface FormValuesType {
     filePath: string;
     hash: string;
     fileType: string;
+    wordlist: string;
+    mode: string;
 }
 
 const fileTypes = ["zip", "rar"];
+const mode = ["Incremental", "Dictionary", "Single"];
 
 const JohnTheRipper = () => {
     const [loading, setLoading] = useState(false);
@@ -31,6 +34,8 @@ const JohnTheRipper = () => {
             filePath: "",
             hash: "",
             fileType: "",
+            wordlist: "",
+            mode: "",
         },
     });
 
@@ -116,7 +121,7 @@ const JohnTheRipper = () => {
             <Stack>
                 {UserGuide(title, descritpion_userguide)}
                 <TextInput label={"Filepath"} required {...form.getInputProps("filePath")} />
-                <TextInput label={"Hash (if known)"} {...form.getInputProps("hash")} />
+                <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
                 <NativeSelect
                     value={selectedFileTypeOption}
                     onChange={(e) => setSelectedFileTypeOption(e.target.value)}
