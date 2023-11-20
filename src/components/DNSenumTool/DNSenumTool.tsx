@@ -25,7 +25,7 @@ const description_userguide =
     "Step 4: Enter the number of pages to search.\n" +
     "Step 5: Enter the number of scrapes to perform.\n" +
     "Step 6: Enter the timeout value.\n" +
-    "Step 7: Select Reverse Lookup if required.\n"
+    "Step 7: Select Reverse Lookup if required.\n";
 
 //list of input values collected by the form
 interface FormValuesType {
@@ -119,7 +119,7 @@ const DnsenumTool = () => {
         }
 
         args.push("-timeout", `${values.timeout}`);
-        
+
         //try the dnsenum command with provided arguments, show output if succesful or error message if not.
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
@@ -143,7 +143,6 @@ const DnsenumTool = () => {
     }, [setOutput]);
 
     return (
-
         //form for the tool, with input fields and submit button
         <form onSubmit={form.onSubmit(onSubmit)}>
             <LoadingOverlay visible={loading} />
