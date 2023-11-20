@@ -17,7 +17,7 @@ const descritpion_userguide =
     "\n\nStep 1: Specify the filepath to the password file that you wish to crack. \nE.g /home/user/passwords.txt" +
     "\n\nStep 2: Specify the hash that is utilized in the password file. A wide range of hashes are supported by the tool. (For full list, open new terminal and use john --list=formats command) \nE.g md5" +
     "\n\nStep 3: Specify which crack mode to use. \nE.g Dictionary, Incremental and Single mode" +
-    "\n\nStep 4: This specifies the format of the password file. A variety of file extensions are supported, including Unix password files, Windows SAM files, and more. This is necessary so as to enable John the Ripper to correctly read the file. \nE.g rar" +
+    "\n\nStep 4: This specifies the format of the password file. This is necessary so as to enable John the Ripper to correctly read the file. \nE.g rar" +
     "\n\nStep 5: Depending on what is chosen on step3, a follow up option may appear. This option specializes the mode of cracking" +
     "\n\nStep 6: Click crack to commence the tool's execution." +
     "\n\nStep 7: View the output block below to view the results of the tool's execution.";
