@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Select, Stack, Switch, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -7,42 +7,88 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
+//plugin header selection field
+const plugin_list = ["FTP", "SMTP", "POP", "HTTP", "IRC", "IMAP", "PJL", "LPD", "FINGER", "SOCKS4"];
+//plugin that require Authentication
+const pluginsRequiringAuth = ["FTP", "IMAP", "POP"];
+//plugin that require Email address
+const pluginRequiringEmail = ["SMTP"];
+//plugin that require username
+const pluginsRequiringUsername = ["SOCKS4"];
+
 const title = "BEDTool";
-const description_userguide =
-    "BED is a tool created for checking daemons to identify any potential buffer overflows, format strings, " +
-    "and other parameters.\n\nFurther information can be found at: https://www.kali.org/tools/bed/\n\n" +
-    "Using BED:\n" +
-    "Step 1: Enter a Plugin to be used for the scan.\n" +
-    "       Eg: HTTP\n\n" +
-    "Step 2: Enter a Target IP address.\n" +
-    "       Eg: Localhost\n\n" +
-    "Step 3: Enter a Port to connect to.\n" +
-    "       Eg: 80\n\n" +
-    "Step 4: Enter a Timeout value.\n" +
-    "       Eg: 5\n\n" +
-    "Step 5: Click Scan to commence BED's operation.\n\n" +
-    "Step 6: View the Output block below to view the results of the tools execution.";
+
+const description_userguide = `
+
+BED (Bruteforce Exploit Detector) is a sophisticated tool designed to check network services for a range of security vulnerabilities including buffer overflows and format string weaknesses.
+
+For detailed information, please visit: https://www.kali.org/tools/bed/
+
+Instructions for using BED:
+1. Select a Service: Choose the service to test from the dropdown menu, for instance, "HTTP" to test a web server.
+
+2. Input Required Fields: Fill in the fields that appear based on the selected service. For example, choosing "FTP" will prompt for additional required fields, such as username and password.
+
+3. Custom Configuration (Optional): Activate 'Custom Configuration' to enter a specific target IP address and port number. If this is not enabled, the tool will default to scanning the local machine.
+
+4. Start Scan: Click the 'Scan' button to begin the evaluation.
+
+Note: The 'Custom Configuration' option is designed for advanced users who wish to target a specific network address or require custom settings. If not used, BED will assume the target is the local host.
+`;
 
 interface FormValues {
     plugin: string;
     target: string;
     port: string;
-    timeout: string;
+    email: string;
+    username: string;
+    password: string;
+    a: string;
 }
 
 export function BEDTool() {
     const [loading, setLoading] = useState(false);
     const [pid, setPid] = useState("");
     const [output, setOutput] = useState("");
+    const [selectedPlugin, setSelectedPlugin] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [customconfig, setCustomconfig] = useState(false);
 
     let form = useForm({
         initialValues: {
             plugin: "",
             target: "",
             port: "",
-            timeout: "",
+            email: "",
+            username: "",
+            password: "",
+            a: "",
+        },
+
+        //input validation
+        validate: {
+            username: (value, values) => {
+                // Only validate username if the selected plugin requires it
+                if (pluginsRequiringAuth.includes(values.plugin) || pluginsRequiringUsername.includes(values.plugin)) {
+                    return /^[a-zA-Z0-9_]+$/.test(value) ? null : "Invalid username";
+                }
+                return null; // No validation if the field is not relevant
+            },
+            password: (value, values) => {
+                // Only validate password if the selected plugin requires it
+                if (pluginsRequiringAuth.includes(values.plugin)) {
+                    return value.length >= 8 ? null : "Password must be at least 8 characters";
+                }
+                return null; // No validation if the field is not relevant
+            },
+            email: (value, values) => {
+                // Only validate email if the selected plugin is SMTP
+                if (values.plugin === "SMTP") {
+                    return /^\S+@\S+\.\S+$/.test(value) ? null : "Invalid email";
+                }
+                return null; // No validation if the field is not relevant
+            },
         },
     });
 
@@ -84,13 +130,6 @@ export function BEDTool() {
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
-    /**
-     * onSubmit: Handler function that is triggered when the form is submitted.
-     * It prepares the arguments and initiates the execution of the `bed` command.
-     * Upon successful execution, it updates the state with the process PID and output.
-     * If an error occurs during the command execution, it updates the output with the error message.
-     * @param {FormValues} values - An object containing the form input values.
-     */
 
     // Actions taken after saving the output
     const handleSaveComplete = () => {
@@ -100,12 +139,35 @@ export function BEDTool() {
         setAllowSave(false);
     };
 
+    /**
+     * onSubmit: Handler function that is triggered when the form is submitted.
+     * It prepares the arguments and initiates the execution of the `bed` command.
+     * Upon successful execution, it updates the state with the process PID and output.
+     * If an error occurs during the command execution, it updates the output with the error message.
+     * @param {FormValues} values - An object containing the form input values.
+     */
     const onSubmit = (values: FormValues) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
 
         setLoading(true);
-        const args = ["-s", values.plugin, "-t", values.target, "-p", values.port, "-o", values.timeout];
+
+        // base args that is require to run the basic BED kali linux
+        const baseArgs = ["-s", values.plugin];
+
+        // options args that get added depend on what plugin the user is using
+        // ternary operators are used to push the correct argument to the args
+        const conditionalArgs: string[][] = [
+            customconfig ? ["-t", values.target, "-p", values.port] : [],
+            pluginsRequiringAuth.includes(selectedPlugin) || selectedPlugin === "SMTP"
+                ? ["-u", selectedPlugin === "SMTP" ? values.email : values.username]
+                : [],
+            pluginsRequiringAuth.includes(selectedPlugin) ? ["-v", values.password] : [],
+        ];
+
+        // Flatten the array and remove any falsey entries created by the conditions not met
+        const args = baseArgs.concat(conditionalArgs.filter(Boolean).flat());
+
         CommandHelper.runCommandGetPidAndOutput("bed", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 setPid(pid);
@@ -127,31 +189,72 @@ export function BEDTool() {
         setAllowSave(false);
     }, [setOutput]); // Dependency on the setOutput function.
 
+    /**
+     * Handler for selecting a service plugin from the dropdown menu.
+     * This function updates the form state with the chosen plugin and
+     * sets the corresponding state variable for conditional rendering.
+     *
+     * @param {string} value - The selected plugin's value.
+     */
+    const handlePluginChange = (value: string) => {
+        form.setFieldValue("plugin", value);
+        setSelectedPlugin(value);
+    };
+
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
-                <TextInput
-                    label={"plugin Ex: FTP/SMTP/POP/HTTP/IRC/IMAP/PJL/LPD/FINGER/SOCKS4/SOCKS5"}
-                    required
-                    {...form.getInputProps("plugin")}
+                <Switch
+                    size="md"
+                    label="Manual Network Configuration"
+                    checked={customconfig}
+                    onChange={(e) => setCustomconfig(e.currentTarget.checked)}
                 />
-                <TextInput
-                    label={"Target -> Host to check (default: localhost)"}
+                <Select
+                    label="Plugin Type"
+                    placeholder="Select a plugin to test"
+                    data={plugin_list}
                     required
-                    {...form.getInputProps("target")}
+                    value={selectedPlugin}
+                    onChange={handlePluginChange}
                 />
-                <TextInput
-                    label={"port -> Port to connect to (default: standard port)"}
-                    required
-                    {...form.getInputProps("port")}
-                />
-                <TextInput
-                    label={"Timeout -> seconds to wait after each test (default: 2 seconds)"}
-                    required
-                    {...form.getInputProps("timeout")}
-                />
+
+                {pluginsRequiringAuth.includes(selectedPlugin) && (
+                    <>
+                        <TextInput
+                            label="Username (default user is the same as your Kali Linux login)"
+                            required
+                            {...form.getInputProps("username")}
+                        />
+                        <TextInput label="Password" type="password" required {...form.getInputProps("password")} />
+                    </>
+                )}
+                {pluginsRequiringUsername.includes(selectedPlugin) && (
+                    <>
+                        <TextInput label={"username"} required {...form.getInputProps("username")} />
+                    </>
+                )}
+                {pluginRequiringEmail.includes(selectedPlugin) && (
+                    <>
+                        <TextInput label="Email Address" required {...form.getInputProps("email")} />
+                    </>
+                )}
+                {customconfig && (
+                    <>
+                        <TextInput
+                            label="Custom IP Address (default: localhost)"
+                            required
+                            {...form.getInputProps("target")}
+                        />
+                        <TextInput
+                            label="Port Number (default: service-specific standard port)"
+                            required
+                            {...form.getInputProps("port")}
+                        />
+                    </>
+                )}
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
