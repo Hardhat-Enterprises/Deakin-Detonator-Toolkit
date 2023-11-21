@@ -6,6 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { l } from "vitest/dist/index-60e2a8e1";
 
 const title = "DNS Mapping for Subdomains (DNSMap)";
 const description_userguide =
@@ -107,19 +108,14 @@ const DNSMap = () => {
         setAllowSave(false);
 
         setLoading(true);
-        const args = [`${values.domain}`, "-d", `${values.delay}`];
+        const args = [values.domain, "-d", `${values.delay}`];
 
-        if (values.wordlistPath) {
-            args.push(`-w`, `${values.wordlistPath}`);
-        }
+        values.wordlistPath ? args.push(`-w`, values.wordlistPath) : undefined;
 
-        if (values.csvResultsFile) {
-            args.push(`-c`, `${values.csvResultsFile}`);
-        }
+        values.csvResultsFile ? args.push(`-c`, values.csvResultsFile) : undefined;
 
-        if (values.ipsToIgnore) {
-            args.push(`-i`, `${values.ipsToIgnore}`);
-        }
+        values.ipsToIgnore ? args.push(`-i`, values.ipsToIgnore) : undefined;
+
         const filteredArgs = args.filter((arg) => arg !== "");
         CommandHelper.runCommandGetPidAndOutput("dnsmap", filteredArgs, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
