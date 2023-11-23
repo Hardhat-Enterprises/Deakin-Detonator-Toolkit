@@ -105,7 +105,7 @@ const Crunch = () => {
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "nmap",
+                "Crunch",
                 args,
                 handleProcessData,
                 handleProcessTermination
