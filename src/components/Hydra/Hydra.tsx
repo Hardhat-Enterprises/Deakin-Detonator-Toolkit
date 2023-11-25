@@ -41,7 +41,7 @@ interface FormValuesType {
 
 const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic"];
 const loginInputTypes = ["Single Login", "File"];
-const serviceType = ["SMTP", "SSH", "NFS"];
+const serviceType = ["SMTP", "SSH"];
 
 const Hydra = () => {
     const [loading, setLoading] = useState(false);
