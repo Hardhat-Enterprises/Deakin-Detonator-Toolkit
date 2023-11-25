@@ -37,11 +37,45 @@ interface FormValuesType {
     service: string;
     serviceArgs: string;
     nsr: string;
+    config: string;
 }
 
 const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic"];
 const loginInputTypes = ["Single Login", "File"];
-const serviceType = ["SMTP", "SSH"];
+const serviceType = [
+    "FTP",
+    "FTPS",
+    "HTTP-Get",
+    "HTTP-Get-Form",
+    "HTTP-Head",
+    "HTTP-Post-Form",
+    "HTTPS-Get",
+    "HTTPS-Get-Form",
+    "HTTPS-Head",
+    "HTTPS-Post-Form",
+    "RDP",
+    "RSH",
+    "SMB",
+    "SMTP",
+    "SNMP",
+    "SOCK5",
+    "SSH",
+    "Telnet",
+];
+
+const serviceTypeRequiringConfig = [
+    "HTTP-Head",
+    "HTTP-Get",
+    "HTTP-Get-Form",
+    "HTTP-Post-Form",
+    "HTTP-Head",
+    "HTTPS-Get",
+    "HTTPS-Get-Form",
+    "HTTPS-Post-Form",
+    "SMB",
+    "SNMP",
+    "Telnet",
+];
 
 const Hydra = () => {
     const [loading, setLoading] = useState(false);
@@ -61,6 +95,7 @@ const Hydra = () => {
             service: "",
             serviceArgs: "",
             nsr: "nsr",
+            config: "",
         },
     });
 
@@ -117,12 +152,12 @@ const Hydra = () => {
         if (values.threads) {
             args.push(`-t ${values.threads}`);
         }
-        if (selectedService === "SMTP") {
-            args.push(`smtp://${values.serviceArgs}`);
-        } else if (selectedService === "SSH") {
-            args.push(`ssh://${values.serviceArgs}`);
-        } else if (selectedService === "NFS") {
-            args.push(`nfs://${values.serviceArgs}`);
+
+        //If the selected protocol is form the list
+        if (serviceTypeRequiringConfig.includes(selectedService)) {
+            args.push(`${values.serviceArgs}`, `${values.service.toLowerCase()}`, `${values.config}`);
+        } else {
+            args.push(`${values.service.toLowerCase()}://${values.serviceArgs}`);
         }
 
         try {
@@ -179,7 +214,6 @@ const Hydra = () => {
                             onChange={(e) => setSelectedLoginInput(e.target.value)}
                             label={"Login settings"}
                             data={loginInputTypes}
-                            required
                             placeholder={"Select logins"}
                         />
                     </Grid.Col>
@@ -209,7 +243,6 @@ const Hydra = () => {
                             onChange={(e) => setSelectedPasswordInput(e.target.value)}
                             label={"Password settings"}
                             data={passwordInputTypes}
-                            required
                             placeholder={"Select a tool to crack with"}
                         />
                     </Grid.Col>
@@ -258,16 +291,24 @@ const Hydra = () => {
                         />
                     </Grid.Col>
                     <Grid.Col span={12}>
+                        {serviceTypeRequiringConfig.includes(selectedService) && (
+                            <>
+                                <TextInput label={"Custom Configuration"} required {...form.getInputProps("config")} />
+                            </>
+                        )}
+                    </Grid.Col>
+                    <Grid.Col span={12}>
                         {isService && (
                             <TextInput
                                 {...form.getInputProps("serviceArgs")}
-                                label={"IP address and Port number"}
-                                placeholder={"eg: 192.168.1.1:22"}
+                                label={"IP address"}
+                                placeholder={"eg: 192.168.1.1"}
                                 required
                             />
                         )}
                     </Grid.Col>
                 </Grid>
+
                 <Button type={"submit"} color="cyan">
                     Crack
                 </Button>
