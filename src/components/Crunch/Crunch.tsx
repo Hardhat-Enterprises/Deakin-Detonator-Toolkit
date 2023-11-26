@@ -100,7 +100,7 @@ const Crunch = () => {
 
         //pushes the output file argument if one is provided by user
         if (values.outputFile) {
-            args.push(`-o ${values.outputFile}`);
+            args.push("-o", values.outputFile);
         }
 
         try {
