@@ -7,23 +7,52 @@ import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 
+const modeRequiringWordList = ["dictionary"];
+const modeRequiringIncrementOrder = ["incremental"];
+
 const title = "John the Ripper tool";
 const descritpion_userguide =
     "John the Ripper is a popular and powerful open-source password cracking tool used to test the strength of passwords. It can be used by system administrators and security professionals to audit the passwords on their systems. John the Ripper is available for multiple platforms, including Unix, Windows, macOS, and DOS. It uses various techniques to crack passwords, such as dictionary attacks, brute-force attacks, and hybrid attacks. The tool is highly customizable and has a command-line interface, making it suitable for advanced users. John the Ripper is widely regarded as one of the most effective and efficient password cracking tools available." +
-    "\n\nHow to use John the Ripper:\n\nStep 1: Specify the filepath to the password file that you wish to crack. \nE.g /home/user/passwords.txt\n\nStep 2: Specify the hash that is utilized in the password file. This field is mandatory, as you must specify the hash in order for John the Ripper to crack the password. A wide range of hashes are supported by the tool. \nE.g md5\n\nStep 3: This specifies the format of the password file. A variety of file extensions are supported, including Unix password files, Windows SAM files, and more. This is necessary so as to enable John the Ripper to correctly read the file. \nE.g rar\n\nStep 4: Click crack to commence the tool's execution.\n\nStep 5: View the output block below to view the results of the tool's execution.";
+    "\n\nHow to use John the Ripper:" +
+    "\n\nStep 1: Specify the filepath to the password file that you wish to crack. \nE.g /home/user/passwords.txt" +
+    "\n\nStep 2: Specify the hash that is utilized in the password file. A wide range of hashes are supported by the tool. (For full list, open new terminal and use john --list=formats command) \nE.g md5" +
+    "\n\nStep 3: Specify which crack mode to use. \nE.g Dictionary, Incremental and Single mode" +
+    "\n\nStep 4: This specifies the format of the password file. This is necessary so as to enable John the Ripper to correctly read the file. \nE.g rar" +
+    "\n\nStep 5: Depending on what is chosen on step3, a follow up option may appear. This option specializes the mode of cracking" +
+    "\n\nStep 6: Click crack to commence the tool's execution." +
+    "\n\nStep 7: View the output block below to view the results of the tool's execution.";
 
 interface FormValuesType {
     filePath: string;
     hash: string;
     fileType: string;
+    mode: string;
+    wordlist: string;
+    incrementorder: string;
 }
 
-const fileTypes = ["zip", "rar"];
+const fileTypes = ["zip", "rar", "raw"];
+const mode = ["incremental", "dictionary", "single"];
+const incrementorder = [
+    "ASCII",
+    "LM_ASCII",
+    "AlNum",
+    "Alpha",
+    "LowerNum",
+    "UpperNum",
+    "LowerSpace",
+    "Lower",
+    "Upper",
+    "Digits",
+    "LM_ASCII",
+];
 
 const JohnTheRipper = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [selectedFileTypeOption, setSelectedFileTypeOption] = useState("");
+    const [selectedModeOption, setselectedModeOption] = useState("");
+    const [selectedIncrementOption, setselectedIncrementOption] = useState("");
     const [pid, setPid] = useState("");
 
     let form = useForm({
@@ -31,6 +60,9 @@ const JohnTheRipper = () => {
             filePath: "",
             hash: "",
             fileType: "",
+            wordlist: "",
+            mode: "",
+            incrementorder: "",
         },
     });
 
@@ -71,10 +103,43 @@ const JohnTheRipper = () => {
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
-        //if hash is not specified
-        if (values.hash.length === 0) {
-            const args = [`${values.filePath}`];
+        //if hash is stored in a textfile
+        if (values.fileType === "raw") {
+            var args: string[];
 
+            //if hash is unknown
+            if (values.hash.length === 0) {
+                //change argument according to mode selected
+                if (selectedModeOption === "dictionary") {
+                    args = [`--wordlist=${values.wordlist}`, `${values.filePath}`];
+                } else if (selectedModeOption === "incremental") {
+                    args = [`-incremental:${values.incrementorder}`, `${values.filePath}`];
+                } else {
+                    args = [`--single`, `${values.filePath}`];
+                }
+            } else {
+                //change argument according to mode selected
+                if (selectedModeOption === "dictionary") {
+                    args = [`--format=${values.hash}`, `--wordlist=${values.wordlist}`, `${values.filePath}`];
+                } else if (selectedModeOption === "incremental") {
+                    args = [`--format=${values.hash}`, `-incremental:${values.incrementorder}`, `${values.filePath}`];
+                } else {
+                    args = [`--format=${values.hash}`, `--single`, `${values.filePath}`];
+                }
+            }
+
+            try {
+                const result = await CommandHelper.runCommand(`john`, args);
+                setOutput(output + "\n" + result);
+            } catch (e: any) {
+                setOutput(e);
+            }
+
+            setLoading(false);
+        } else {
+            var args = [`${values.filePath}`];
+
+            //extract password hash from zip/rar files
             try {
                 const result = await CommandHelper.runCommand(`${values.fileType}2john`, args);
                 await writeTextFile("hash.txt", result, { dir: BaseDirectory.Temp });
@@ -83,20 +148,29 @@ const JohnTheRipper = () => {
                 setOutput(e);
             }
 
-            try {
-                const args = [`--format=${values.fileType}`, "/tmp/hash.txt"];
-                const result = await CommandHelper.runCommand("john", args);
-                setOutput(output + "\n" + result);
-            } catch (e: any) {
-                setOutput(e);
+            //if hash type is unknown
+            if (values.hash.length === 0) {
+                //change argument according to mode selected
+                if (selectedModeOption === "dictionary") {
+                    args = [`--wordlist=${values.wordlist}`, `/tmp/hash.txt`];
+                } else if (selectedModeOption === "incremental") {
+                    args = [`-incremental:${values.incrementorder}`, `/tmp/hash.txt`];
+                } else {
+                    args = [`--single`, `/tmp/hash.txt`];
+                }
+            } else {
+                //change argument according to mode selected
+                if (selectedModeOption === "dictionary") {
+                    args = [`--format=${values.hash}`, `--wordlist=${values.wordlist}`, `/tmp/hash.txt`];
+                } else if (selectedModeOption === "incremental") {
+                    args = [`--format=${values.hash}`, `-incremental:${values.incrementorder}`, `/tmp/hash.txt`];
+                } else {
+                    args = [`--format=${values.hash}`, `--single`, `/tmp/hash.txt`];
+                }
             }
 
-            setLoading(false);
-            //if hash is specified
-        } else {
-            const args = [`--format=${values.fileType}`, `${values.hash}`];
             try {
-                const result = await CommandHelper.runCommand("john", args);
+                const result = await CommandHelper.runCommand(`john`, args);
                 setOutput(output + "\n" + result);
             } catch (e: any) {
                 setOutput(e);
@@ -116,7 +190,16 @@ const JohnTheRipper = () => {
             <Stack>
                 {UserGuide(title, descritpion_userguide)}
                 <TextInput label={"Filepath"} required {...form.getInputProps("filePath")} />
-                <TextInput label={"Hash (if known)"} {...form.getInputProps("hash")} />
+                <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
+                <NativeSelect
+                    value={selectedModeOption}
+                    onChange={(e) => setselectedModeOption(e.target.value)}
+                    title={"Crack Mode"}
+                    data={mode}
+                    required
+                    placeholder={"Crack Mode"}
+                    description={"Please select a crack mode"}
+                />
                 <NativeSelect
                     value={selectedFileTypeOption}
                     onChange={(e) => setSelectedFileTypeOption(e.target.value)}
@@ -126,6 +209,25 @@ const JohnTheRipper = () => {
                     placeholder={"File Type"}
                     description={"Please select the type of file you want to crack"}
                 />
+                {modeRequiringWordList.includes(selectedModeOption) && (
+                    <>
+                        <TextInput label={"Dictionary File Path"} required {...form.getInputProps("wordlist")} />
+                    </>
+                )}
+                {modeRequiringIncrementOrder.includes(selectedModeOption) && (
+                    <>
+                        <NativeSelect
+                            value={selectedIncrementOption}
+                            onChange={(e) => setselectedIncrementOption(e.target.value)}
+                            title={"Increment Order"}
+                            data={incrementorder}
+                            required
+                            placeholder={"Increment Order"}
+                            description={"Please select a Increment Order"}
+                        />
+                    </>
+                )}
+
                 <Button type={"submit"}>Crack</Button>
                 {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
