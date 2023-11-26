@@ -8,15 +8,15 @@ import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "Traceroute Tool";
 const description_userguide =
-    "The Traceroute tool provides a utility for displaying the route that has been used by IP packets as they travel to a " +
-    "particular network or host. For these routes, where possible, the tool will display both the IP address and host name " +
+    "The Traceroute tool provides a utility for displaying the route that IP packets have used as they travel to a " +
+    "particular network or host. For these routes, where possible, the tool will display both the IP address and hostname " +
     "for any machines visited along the route by the packets. This tool proves useful for network debugging where traceroute " +
     "will show where the issue is located along the route.\n\nFurther information can be found at: https://www.kali.org/tools" +
     "/traceroute/\n\n" +
     "Using Traceroute:\n" +
     "You will need to upgrade your terminal to a root terminal by typing your password to the terminal you used to open DDT.\n\n" +
-    "If you chose one of these three scans: ICMP, TCP, UDP you will only need to provide a hostname.\n\n" +
-    "If you chose custom scan you can type your customized traceroute option.\n" +
+    "If you chose one of these three scans: ICMP, TCP, or UDP, you only need to provide a hostname.\n\n" +
+    "If you chose custom scan, you can type your customized traceroute option.\n" +
     "For example: -I -p 12345\n\n" +
     "Step 1: Enter a Hostname/IP address.\n" +
     "       Eg: 192.168.0.1\n\n" +
@@ -34,7 +34,7 @@ interface FormValuesType {
     tracerouteOptions: string;
 }
 
-//Netcat Options
+//Traceroute Options
 const tracerouteSwitch = [
     "Traceroute ICMP scan",
     "Traceroute TCP scan",
@@ -61,7 +61,7 @@ const TracerouteTool = () => {
         //Switch case
         switch (values.tracerouteSwitch) {
             case "Traceroute ICMP scan": //traceroute syntax: traceroute -I <hostname>
-                args = [`usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
+                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
                 args.push(`${values.hostname}`);
                 try {
@@ -74,7 +74,7 @@ const TracerouteTool = () => {
                 break;
 
             case "Traceroute TCP scan": //traceroute syntax: traceroute -T <hostname>
-                args = [`usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
+                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-T`);
                 args.push(`${values.hostname}`);
                 try {
@@ -87,7 +87,7 @@ const TracerouteTool = () => {
                 break;
 
             case "Traceroute UDP scan": //traceroute syntax: traceroute -U <hostname>
-                args = [`usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
+                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-U`);
                 args.push(`${values.hostname}`);
                 try {
@@ -100,7 +100,7 @@ const TracerouteTool = () => {
                 break;
 
             case "Traceroute custom scan": //traceroute syntax: traceroute <options> <hostname>
-                args = [`usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
+                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`${values.tracerouteOptions}`);
                 args.push(`${values.hostname}`);
                 try {
@@ -133,7 +133,7 @@ const TracerouteTool = () => {
                     placeholder={"Pick a scan option"}
                     description={"Type of scan to perform"}
                 />
-                <Button type={"submit"}>start netcat</Button>
+                <Button type={"submit"}>start traceroute</Button>
                 {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
