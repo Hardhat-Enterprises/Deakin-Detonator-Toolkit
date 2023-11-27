@@ -25,7 +25,6 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 🔧 Setup
 
-
 1. (New Method) Run the following command.
 
     ```
