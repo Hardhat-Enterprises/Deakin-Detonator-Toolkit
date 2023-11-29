@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -36,6 +36,7 @@ export function Metagoofil() {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
+    const [customconfig, setCustomconfig] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -83,10 +84,19 @@ export function Metagoofil() {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = ["-d", values.webname, "-l", values.searchmax, "-n", values.filelimit, "-t", values.filetype];
+        const args = [`-d`, `${values.webname}`, `-t`, `${values.filetype}`];
+
+        if (values.searchmax) {
+            args.push(`-l`, `${values.searchmax}`);
+        }
+
+        if (values.filelimit) {
+            args.push(`-n`, `${values.filelimit}`);
+        }
+
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "metagoofill",
+                "metagoofil",
                 args,
                 handleProcessData,
                 handleProcessTermination
@@ -107,18 +117,27 @@ export function Metagoofil() {
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
+                <Switch
+                    size="md"
+                    label="Manual Network Configuration"
+                    checked={customconfig}
+                    onChange={(e) => setCustomconfig(e.currentTarget.checked)}
+                />
                 <TextInput label={"Enter the website for search"} required {...form.getInputProps("webname")} />
-                <TextInput
-                    label={"Enter number of results (default 100)"}
-                    required
-                    {...form.getInputProps("searchmax")}
-                />
-                <TextInput
-                    label={"Enter the value for Download file limit)"}
-                    required
-                    {...form.getInputProps("filelimit")}
-                />
                 <TextInput label={"Enter your file type"} required {...form.getInputProps("filetype")} />
+                {customconfig && (
+                    <>
+                        <TextInput
+                            label={"Enter number of results (default 100)"}
+                            {...form.getInputProps("searchmax")}
+                        />
+                        <TextInput
+                            label={"Enter the value for Download file limit)"}
+                            {...form.getInputProps("filelimit")}
+                        />
+                    </>
+                )}
+
                 <Button type={"submit"}>Scan</Button>
                 {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
