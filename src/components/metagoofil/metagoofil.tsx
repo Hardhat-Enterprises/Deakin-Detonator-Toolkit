@@ -23,7 +23,7 @@ const description_userguide =
     "Step 4: Enter the file type name to be extracted.\n" +
     "       Eg: pdf\n\n" +
     "Step 5: Click scan to commence the Metagoofil operation.\n\n" +
-    "Step 6: View the Output block below to view the results of the tools execution.";
+    "Step 6: View the Output block below to view the results of the tool's execution.";
 
 interface FormValues {
     webname: string;
