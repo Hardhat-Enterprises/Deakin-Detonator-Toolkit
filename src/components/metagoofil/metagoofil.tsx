@@ -30,6 +30,7 @@ interface FormValues {
     searchmax: string;
     filelimit: string;
     filetype: string;
+    filepath: string;
 }
 
 export function Metagoofil() {
@@ -37,6 +38,7 @@ export function Metagoofil() {
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
     const [customconfig, setCustomconfig] = useState(false);
+    const [downloadconfig, setDownloadConfig] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -44,6 +46,7 @@ export function Metagoofil() {
             searchmax: "",
             filelimit: "",
             filetype: "",
+            filepath: "",
         },
     });
 
@@ -85,13 +88,19 @@ export function Metagoofil() {
         setLoading(true);
 
         const args = [`-d`, `${values.webname}`, `-t`, `${values.filetype}`];
-
+        //number of searches made
         if (values.searchmax) {
             args.push(`-l`, `${values.searchmax}`);
         }
 
+        //number of files wanted to be downloaded
         if (values.filelimit) {
             args.push(`-n`, `${values.filelimit}`);
+        }
+
+        //filepath of where downloaded files are to be stored
+        if (values.filepath) {
+            args.push(`-o`, `${values.filepath}`, `-w`);
         }
 
         try {
@@ -119,9 +128,15 @@ export function Metagoofil() {
                 {UserGuide(title, description_userguide)}
                 <Switch
                     size="md"
-                    label="Manual Network Configuration"
+                    label="Manual Configuration"
                     checked={customconfig}
                     onChange={(e) => setCustomconfig(e.currentTarget.checked)}
+                />
+                <Switch
+                    size="md"
+                    label="Download Files"
+                    checked={downloadconfig}
+                    onChange={(e) => setDownloadConfig(e.currentTarget.checked)}
                 />
                 <TextInput label={"Enter the website for search"} required {...form.getInputProps("webname")} />
                 <TextInput label={"Enter your file type"} required {...form.getInputProps("filetype")} />
@@ -131,10 +146,15 @@ export function Metagoofil() {
                             label={"Enter number of results (default 100)"}
                             {...form.getInputProps("searchmax")}
                         />
+                    </>
+                )}
+                {downloadconfig && (
+                    <>
                         <TextInput
-                            label={"Enter the value for Download file limit)"}
+                            label={"Enter the value for Download file limit"}
                             {...form.getInputProps("filelimit")}
                         />
+                        <TextInput label={"Enter file path"} {...form.getInputProps("filepath")} />
                     </>
                 )}
 
