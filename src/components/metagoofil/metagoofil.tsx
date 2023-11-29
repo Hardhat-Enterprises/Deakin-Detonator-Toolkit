@@ -86,7 +86,7 @@ export function Metagoofil() {
         const args = ["-d", values.webname, "-l", values.searchmax, "-n", values.filelimit, "-t", values.filetype];
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "cewl",
+                "metagoofill",
                 args,
                 handleProcessData,
                 handleProcessTermination
