@@ -7,7 +7,6 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-
 const title = "DNS Mapping for Subdomains (DNSMap)";
 const description_userguide =
     "DNSMap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
@@ -111,15 +110,20 @@ const DNSMap = () => {
         const args = [`${values.domain}`, "-d", `${values.delay}`];
 
         if (values.wordlistPath) {
-            args.push("-w", values.wordlistPath);}
-        else {undefined;}
+            args.push("-w", values.wordlistPath);
+        } else {
+            undefined;
+        }
 
         if (values.csvResultsFile) {
-            args.push("-c", values.csvResultsFile);}
+            args.push("-c", values.csvResultsFile);
+        }
 
         if (values.ipsToIgnore) {
-            args.push("-i", values.ipsToIgnore);}
-        else {undefined;}
+            args.push("-i", values.ipsToIgnore);
+        } else {
+            undefined;
+        }
 
         const filteredArgs = args.filter((arg) => arg !== "");
         CommandHelper.runCommandGetPidAndOutput("dnsmap", filteredArgs, handleProcessData, handleProcessTermination)
@@ -158,9 +162,7 @@ const DNSMap = () => {
                 />
                 {checkedAdvanced && (
                     <>
-                        <TextInput 
-                            label={"Path to external wordlist file"} 
-                            {...form.getInputProps("wordlistPath")} />
+                        <TextInput label={"Path to external wordlist file"} {...form.getInputProps("wordlistPath")} />
                         <TextInput
                             label={"CSV results file name (optional)"}
                             {...form.getInputProps("csvResultsFile")}
