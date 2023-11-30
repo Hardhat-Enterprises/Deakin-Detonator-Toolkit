@@ -98,8 +98,11 @@ const NbtscanTool = () => {
 
         // Start the Loading Overlay
         setLoading(true);
-        const args = [`${values.subnet}`];
+        const args = [];
 
+        if (values.subnet) {
+            args.push(`${values.subnet}`);
+        }
         if (values.dumpPacket) {
             args.push(`-d`);
         }
