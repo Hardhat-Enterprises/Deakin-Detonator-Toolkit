@@ -105,7 +105,7 @@ const NbtscanTool = () => {
         }
 
         if (values.scanRange) {
-            args.push(`<scan_range> ${values.scanRange}`);
+            args.push(values.scanRange);
         }
 
         if (values.timeout) {
@@ -153,7 +153,9 @@ const NbtscanTool = () => {
                     checked={checkedAdvanced}
                     onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                 />
+                {!checkedAdvanced && (
                 <TextInput label={"Subnet"} required {...form.getInputProps("subnet")} />
+                )}
                 {checkedAdvanced && (
                     <>
                         <Checkbox
