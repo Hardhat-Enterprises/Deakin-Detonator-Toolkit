@@ -7,6 +7,10 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
+interface FormValuesType {
+    checkedAdvanced: boolean;
+}
+
 const title = "Foremost Tool";
 const description_userguide =
     "Foremost is a console program to recover files based on their headers, footers, and internal data structures. " +
