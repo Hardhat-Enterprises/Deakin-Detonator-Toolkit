@@ -8,6 +8,9 @@ import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 interface FormValuesType {
+    input: string;
+    outputDir: string;
+    config: string;
     checkedAdvanced: boolean;
 }
 
