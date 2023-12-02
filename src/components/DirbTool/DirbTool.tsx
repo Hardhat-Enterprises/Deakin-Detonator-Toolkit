@@ -146,7 +146,11 @@ export function DirbTool() {
                         />
                     </>
                 )}
-                <Button type={"submit"}>Scan</Button>
+                {checkedAdvanced ? (
+                    <Button type={"submit"}>Scan (Verbose)</Button>
+                ) : (
+                    <Button type={"submit"}>Scan (Simple)</Button>
+                )}
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
