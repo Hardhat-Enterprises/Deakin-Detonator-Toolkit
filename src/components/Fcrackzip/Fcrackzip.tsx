@@ -104,11 +104,8 @@ const Fcrackzip = () => {
             if (checkedVerbose) args.push("-v");
 
             let charSet = "";
-
             if (useCharsetLowercase) charSet += "a";
-
             if (useCharsetUppercase) charSet += "A";
-
             if (useCharsetNumeric) charSet += "1";
 
             if (charSet) args.push("-c", charSet);
@@ -199,7 +196,6 @@ const Fcrackzip = () => {
                             <span style={{ margin: "0 10px" }}></span>
                             <Checkbox
                                 label="Numeric"
-                                typeof="number"
                                 checked={useCharsetNumeric}
                                 onChange={(e) => setCharsetNumeric(e.currentTarget.checked)}
                                 disabled={checkedUnzip}
