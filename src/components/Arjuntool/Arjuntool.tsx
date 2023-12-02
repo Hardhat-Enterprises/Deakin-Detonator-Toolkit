@@ -113,7 +113,7 @@ export function Arjuntool() {
                 <TextInput label={"URL"} required {...form.getInputProps("url")} />
                 <TextInput
                     label={"Optional Json output file: provide file name if required"}
-                    {...form.getInputProps("o")}
+                    {...form.getInputProps("output_filename")}
                 />
                 <Button type={"submit"}>Scan</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
