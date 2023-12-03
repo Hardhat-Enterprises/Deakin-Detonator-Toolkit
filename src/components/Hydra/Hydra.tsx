@@ -41,7 +41,7 @@ interface FormValuesType {
 }
 
 const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic"];
-const loginInputTypes = ["Single Login", "File"];
+const loginInputTypes = ["Single Login", "File", "No Password"];
 const serviceType = [
     "FTP",
     "FTPS",
@@ -58,7 +58,7 @@ const serviceType = [
     "SMB",
     "SMTP",
     "SNMP",
-    "SOCK5",
+    "SOCKS5",
     "SSH",
     "Telnet",
 ];
@@ -76,6 +76,8 @@ const serviceTypeRequiringConfig = [
     "SNMP",
     "Telnet",
 ];
+
+const serviceTypeOptionalConfig = [];
 
 const Hydra = () => {
     const [loading, setLoading] = useState(false);
@@ -214,7 +216,8 @@ const Hydra = () => {
                             onChange={(e) => setSelectedLoginInput(e.target.value)}
                             label={"Login settings"}
                             data={loginInputTypes}
-                            placeholder={"Select logins"}
+                            required
+                            placeholder={"Select a setting"}
                         />
                     </Grid.Col>
                     <Grid.Col span={12}>
@@ -243,7 +246,8 @@ const Hydra = () => {
                             onChange={(e) => setSelectedPasswordInput(e.target.value)}
                             label={"Password settings"}
                             data={passwordInputTypes}
-                            placeholder={"Select a tool to crack with"}
+                            placeholder={"Select a setting"}
+                            required
                         />
                     </Grid.Col>
                     <Grid.Col span={12}>
