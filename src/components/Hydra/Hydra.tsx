@@ -38,10 +38,11 @@ interface FormValuesType {
     serviceArgs: string;
     nsr: string;
     config: string;
+    optionalconfig: string;
 }
 
-const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic"];
-const loginInputTypes = ["Single Login", "File", "No Password"];
+const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic", "No Password"];
+const loginInputTypes = ["Single Login", "File", "No Username"];
 const serviceType = [
     "FTP",
     "FTPS",
@@ -72,8 +73,6 @@ const serviceTypeRequiringConfig = [
     "HTTPS-Get",
     "HTTPS-Get-Form",
     "HTTPS-Post-Form",
-    "SMB",
-    "SNMP",
     "Telnet",
 ];
 
@@ -98,6 +97,7 @@ const Hydra = () => {
             serviceArgs: "",
             nsr: "nsr",
             config: "",
+            optionalconfig: "",
         },
     });
 
@@ -160,6 +160,10 @@ const Hydra = () => {
             args.push(`${values.serviceArgs}`, `${values.service.toLowerCase()}`, `${values.config}`);
         } else {
             args.push(`${values.service.toLowerCase()}://${values.serviceArgs}`);
+        }
+
+        if (values.optionalconfig.length != 0) {
+            args.push(`${values.optionalconfig}`);
         }
 
         try {
@@ -302,14 +306,19 @@ const Hydra = () => {
                         )}
                     </Grid.Col>
                     <Grid.Col span={12}>
-                        {isService && (
-                            <TextInput
-                                {...form.getInputProps("serviceArgs")}
-                                label={"IP address"}
-                                placeholder={"eg: 192.168.1.1"}
-                                required
-                            />
-                        )}
+                        <TextInput
+                            {...form.getInputProps("serviceArgs")}
+                            label={"IP address"}
+                            placeholder={"eg: 192.168.1.1"}
+                            required
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={12}>
+                        <TextInput
+                            {...form.getInputProps("optionalconfig")}
+                            label={"Optional Configuration"}
+                            placeholder={"Please input your optional parameters"}
+                        />
                     </Grid.Col>
                 </Grid>
 
