@@ -82,26 +82,21 @@ const GoldenEye = () => {
     };
 
     const onSubmit = async (values: FormValues) => {
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
-
-        // Start the Loading Overlay
         setLoading(true);
 
-        // goldeneye url options
-        let tmp = "-" + values.options;
-        const args = [values.url, tmp, values.param];
-
-        // Execute nmap
-        CommandHelper.runCommandGetPidAndOutput("goldeneye", args, handleProcessData, handleProcessTermination)
-            .then(({ pid, output }) => {
-                setPid(pid);
-                setOutput(output);
-            })
-            .catch((error) => {
-                setLoading(false);
-                setOutput(`Error: ${error.message}`);
-            });
+        const args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/GoldenEye/goldeneye.py`, `${values.url}`];
+        try {
+            const result = await CommandHelper.runCommandGetPidAndOutput(
+                "python3",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+            setPid(result.pid);
+            setOutput(result.output);
+        } catch (e: any) {
+            setOutput(e.message);
+        }
     };
 
     const clearOutput = useCallback(() => {
