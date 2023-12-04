@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
+import { Button, LoadingOverlay, NativeSelect, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -24,9 +24,15 @@ const description_userguide =
 
 interface FormValues {
     url: string;
-    options: string;
-    param: string;
+    useragent: string;
+    worker: number;
+    sockets: number;
+    method: string;
+    sslcheck: string;
 }
+
+const DosHTTPMethod = ["get", "post", "random"];
+const SSLCheckStatus = ["Yes", "No"];
 
 const GoldenEye = () => {
     const [loading, setLoading] = useState(false);
@@ -34,12 +40,17 @@ const GoldenEye = () => {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [selectedmethod, setSelectedMethod] = useState("");
+    const [selectedSSLCheck, setSelectedSSLCheck] = useState("");
 
     let form = useForm({
         initialValues: {
             url: "",
-            options: "",
-            param: "",
+            useragent: "",
+            worker: 0,
+            sockets: 0,
+            method: "",
+            sslcheck: "",
         },
     });
 
@@ -85,6 +96,13 @@ const GoldenEye = () => {
         setLoading(true);
 
         const args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/GoldenEye/goldeneye.py`, `${values.url}`];
+
+        values.useragent ? args.push(`-u`, `${values.useragent}`) : undefined;
+        values.worker ? args.push(`-w`, `${values.worker}`) : undefined;
+        values.sockets ? args.push(`-s`, `${values.sockets}`) : undefined;
+        selectedmethod ? args.push(`-m`, selectedmethod) : undefined;
+        selectedSSLCheck === "No" ? args.push(`-n`) : undefined;
+
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "python3",
@@ -116,9 +134,38 @@ const GoldenEye = () => {
                     required
                     {...form.getInputProps("url")}
                 />
-                <TextInput label={"Options"} placeholder={"Example: U"} {...form.getInputProps("options")} />
-                <TextInput label={"Parameters"} placeholder={""} {...form.getInputProps("param")} />
-                <Button type={"submit"}>Scan</Button>
+                <TextInput
+                    label={"List of user agents"}
+                    placeholder={"Please enter filepath for the list of useragent"}
+                    {...form.getInputProps("useragent")}
+                />
+                <TextInput
+                    label={"Number of concurrent workers"}
+                    placeholder={"Please specify a number (Default = 10)"}
+                    {...form.getInputProps("worker")}
+                />
+                <TextInput
+                    label={"Number of concurrent sockets"}
+                    placeholder={"Please specify a number (Default = 500)"}
+                    {...form.getInputProps("sockets")}
+                />
+                <NativeSelect
+                    value={selectedmethod}
+                    onChange={(e) => setSelectedMethod(e.target.value)}
+                    title={"HTTP Method"}
+                    data={DosHTTPMethod}
+                    placeholder={"HTTP Method"}
+                    description={"Please select type of HTTP request to flood server with"}
+                />
+                <NativeSelect
+                    value={selectedSSLCheck}
+                    onChange={(e) => setSelectedSSLCheck(e.target.value)}
+                    title={"SSL Check"}
+                    data={SSLCheckStatus}
+                    placeholder={"SSL Check"}
+                    description={"Do you want to verify the ssl certificate"}
+                />
+                <Button type={"submit"}>Launch Dos Attack</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
