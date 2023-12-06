@@ -170,7 +170,7 @@ const GoldenEye = () => {
                     description={"Do you want to verify the ssl certificate"}
                 />
                 <Button type={"submit"}>Launch Dos Attack</Button>
-                {loading && <Alert children = {"Lauching Dos attack against" + form.values.url}></Alert>}
+                {loading && <Alert children={"Lauching Dos attack against" + form.values.url}></Alert>}
                 {loading && <Button onClick={Stop}>Stop</Button>}
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
