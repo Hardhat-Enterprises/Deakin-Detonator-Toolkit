@@ -1,8 +1,11 @@
 import { Button, Stack, TextInput, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useState } from "react";
+import { useState,useCallback } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import { UserGuide } from "../UserGuide/UserGuide";
+import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "ARP Spoofing Tool";
 const description_userguide =
@@ -27,6 +30,9 @@ interface FormValues {
 const ARPSpoofing = () => {
     const [isSpoofing, setIsSpoofing] = useState(false);
     const [pid, setPid] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+    const [output, setOutput] = useState("");
 
     let form = useForm({
         initialValues: {
@@ -34,10 +40,56 @@ const ARPSpoofing = () => {
             ip2: "",
         },
     });
+    
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+    }, []);
+
+    // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
+    // the termination of that process, resetting state variables, handling the output data,
+    // and informing the user.
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            }
+            // Clear the child process pid reference
+            setPid("");
+            // Cancel the Loading Overlay
+            setIsSpoofing(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
+        },
+        [handleProcessData]
+    );
+    
+    // Actions taken after saving the output
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
+
+    const clearOutput = useCallback(() => {
+        setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
+    }, [setOutput]);
+
+
 
     const onSubmit = async (values: FormValues) => {
-        const args = [`-t`, values.ip1, `-r`, values.ip2];
-        const handle = await CommandHelper.getCommandHandle("arpspoof", args);
+        const args = [`-t`, values.ip1, values.ip2];
+        const args2 = [`-t`, values.ip2, values.ip1]
+        const handle = await CommandHelper.runCommandGetPidAndOutput("arpspoof", args,handleProcessData,handleProcessTermination);
+        const handle2 = await CommandHelper.runCommandGetPidAndOutput("arpspoof", args2,handleProcessData,handleProcessTermination);
         setPid(handle.pid.toString());
         setIsSpoofing(true);
     };
@@ -61,6 +113,8 @@ const ARPSpoofing = () => {
                     ></Alert>
                 )}
                 {isSpoofing && <Button onClick={close}>Stop</Button>}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
     );
