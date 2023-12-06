@@ -116,6 +116,11 @@ const GoldenEye = () => {
             setOutput(e.message);
         }
     };
+    const Stop = async () => {
+        const args = [`-2`, pid];
+        await CommandHelper.runCommand("kill", args);
+        setLoading(false);
+    };
 
     const clearOutput = useCallback(() => {
         setOutput("");
@@ -125,7 +130,6 @@ const GoldenEye = () => {
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput
@@ -166,6 +170,7 @@ const GoldenEye = () => {
                     description={"Do you want to verify the ssl certificate"}
                 />
                 <Button type={"submit"}>Launch Dos Attack</Button>
+                {loading && <Button onClick={Stop}>Stop</Button>}
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
