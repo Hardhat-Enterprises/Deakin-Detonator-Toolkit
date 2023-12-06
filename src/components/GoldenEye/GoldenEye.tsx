@@ -20,7 +20,7 @@ const description_userguide =
     "Step 3: Enter any additional parameters for the scan.\n" +
     "       Eg: W 100\n\n" +
     "Step 4: Click Scan to commence GoldenEye's operation.\n\n" +
-    "Step 5: View the Output block below to view the results of the tools execution.";
+    "Step 5: View the Output block below to view the results of the tool's execution.";
 
 interface FormValues {
     url: string;
