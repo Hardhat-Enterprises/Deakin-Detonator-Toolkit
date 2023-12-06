@@ -30,6 +30,7 @@ interface FormValues {
 const ARPSpoofing = () => {
     const [isSpoofing, setIsSpoofing] = useState(false);
     const [pid, setPid] = useState("");
+    const [pid2,setPid2] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
     const [output, setOutput] = useState("");
@@ -88,14 +89,17 @@ const ARPSpoofing = () => {
     const onSubmit = async (values: FormValues) => {
         const args = [`-t`, values.ip1, values.ip2];
         const args2 = [`-t`, values.ip2, values.ip1]
-        const handle = await CommandHelper.runCommandGetPidAndOutput("arpspoof", args,handleProcessData,handleProcessTermination);
-        const handle2 = await CommandHelper.runCommandGetPidAndOutput("arpspoof", args2,handleProcessData,handleProcessTermination);
+        const handle = await CommandHelper.runCommandWithPkexec("arpspoof", args,handleProcessData,handleProcessTermination);
+        const handle2 = await CommandHelper.runCommandWithPkexec("arpspoof", args2,handleProcessData,handleProcessTermination);
         setPid(handle.pid.toString());
+        setPid2(handle2.pid.toString());
         setIsSpoofing(true);
     };
     const close = async () => {
         const args = [`-2`, pid];
+        const args2 = [`-2`,pid2]
         await CommandHelper.runCommand("kill", args);
+        await CommandHelper.runCommand("kill",args2)
         setIsSpoofing(false);
     };
 
