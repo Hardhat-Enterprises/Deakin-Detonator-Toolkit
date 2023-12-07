@@ -25,19 +25,25 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 🔧 Setup
 
-1. Update your Kali.
+1. (New Method) Run the following command.
+
+    ```
+    $ curl -sSL https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/blob/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
+    ```
+
+2. (Old Method - Use in case of errors). Update your Kali.
 
     ```bash
     $ sudo apt update
     ```
 
-2. Upgrade your Kali.
+3. Upgrade your Kali.
 
     ```bash
     $ sudo apt upgrade --fix-missing -y
     ```
 
-3. Install missing dependencies.
+4. Install missing dependencies.
 
     ```bash
     $ sudo apt install libwebkit2gtk-4.0-dev \
@@ -57,53 +63,53 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
     	foremost
     ```
 
-4. Close your current terminal and open a new one.
+5. Close your current terminal and open a new one.
 
-5. Install rust.
+6. Install rust.
 
     ```bash
     $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
     ```
 
-6. Install volta.
+7. Install volta.
 
     ```bash
     $ curl https://get.volta.sh | bash
     ```
 
-7. Close your current terminal and open a new one.
+8. Close your current terminal and open a new one.
 
-8. Install node.
+9. Install node.
 
     ```bash
     $ volta install node
     ```
 
-9. Install yarn.
+10. Install yarn.
 
     ```bash
     $ volta install yarn
     ```
 
-10. Clone the repo.
+11. Clone the repo.
 
     ```bash
     $ git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
     ```
 
-11. Change current directory to the toolkit.
+12. Change current directory to the toolkit.
 
     ```bash
     $ cd Deakin-Detonator-Toolkit
     ```
 
-12. Install project dependencies.
+13. Install project dependencies.
 
     ```bash
     $ yarn install
     ```
 
-13. Run the application (dev mode).
+14. Run the application (dev mode).
 
     ```bash
     $ yarn run tauri dev
