@@ -37,11 +37,46 @@ interface FormValuesType {
     service: string;
     serviceArgs: string;
     nsr: string;
+    config: string;
+    optionalconfig: string;
 }
 
-const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic"];
-const loginInputTypes = ["Single Login", "File"];
-const serviceType = ["SMTP", "SSH", "NFS"];
+const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic", "No Password"];
+const loginInputTypes = ["Single Login", "File", "No Username"];
+const serviceType = [
+    "FTP",
+    "FTPS",
+    "HTTP-Get",
+    "HTTP-Get-Form",
+    "HTTP-Head",
+    "HTTP-Post-Form",
+    "HTTPS-Get",
+    "HTTPS-Get-Form",
+    "HTTPS-Head",
+    "HTTPS-Post-Form",
+    "RDP",
+    "RSH",
+    "SMB",
+    "SMTP",
+    "SNMP",
+    "SOCKS5",
+    "SSH",
+    "Telnet",
+];
+
+const serviceTypeRequiringConfig = [
+    "HTTP-Head",
+    "HTTP-Get",
+    "HTTP-Get-Form",
+    "HTTP-Post-Form",
+    "HTTP-Head",
+    "HTTPS-Get",
+    "HTTPS-Get-Form",
+    "HTTPS-Post-Form",
+    "Telnet",
+];
+
+const serviceTypeOptionalConfig = [];
 
 const Hydra = () => {
     const [loading, setLoading] = useState(false);
@@ -61,6 +96,8 @@ const Hydra = () => {
             service: "",
             serviceArgs: "",
             nsr: "nsr",
+            config: "",
+            optionalconfig: "",
         },
     });
 
@@ -117,12 +154,16 @@ const Hydra = () => {
         if (values.threads) {
             args.push(`-t ${values.threads}`);
         }
-        if (selectedService === "SMTP") {
-            args.push(`smtp://${values.serviceArgs}`);
-        } else if (selectedService === "SSH") {
-            args.push(`ssh://${values.serviceArgs}`);
-        } else if (selectedService === "NFS") {
-            args.push(`nfs://${values.serviceArgs}`);
+
+        //If the selected protocol is form the list
+        if (serviceTypeRequiringConfig.includes(selectedService)) {
+            args.push(`${values.serviceArgs}`, `${values.service.toLowerCase()}`, `${values.config}`);
+        } else {
+            args.push(`${values.service.toLowerCase()}://${values.serviceArgs}`);
+        }
+
+        if (values.optionalconfig.length != 0) {
+            args.push(`${values.optionalconfig}`);
         }
 
         try {
@@ -180,7 +221,7 @@ const Hydra = () => {
                             label={"Login settings"}
                             data={loginInputTypes}
                             required
-                            placeholder={"Select logins"}
+                            placeholder={"Select a setting"}
                         />
                     </Grid.Col>
                     <Grid.Col span={12}>
@@ -209,8 +250,8 @@ const Hydra = () => {
                             onChange={(e) => setSelectedPasswordInput(e.target.value)}
                             label={"Password settings"}
                             data={passwordInputTypes}
+                            placeholder={"Select a setting"}
                             required
-                            placeholder={"Select a tool to crack with"}
                         />
                     </Grid.Col>
                     <Grid.Col span={12}>
@@ -258,16 +299,29 @@ const Hydra = () => {
                         />
                     </Grid.Col>
                     <Grid.Col span={12}>
-                        {isService && (
-                            <TextInput
-                                {...form.getInputProps("serviceArgs")}
-                                label={"IP address and Port number"}
-                                placeholder={"eg: 192.168.1.1:22"}
-                                required
-                            />
+                        {serviceTypeRequiringConfig.includes(selectedService) && (
+                            <>
+                                <TextInput label={"Custom Configuration"} required {...form.getInputProps("config")} />
+                            </>
                         )}
                     </Grid.Col>
+                    <Grid.Col span={12}>
+                        <TextInput
+                            {...form.getInputProps("serviceArgs")}
+                            label={"IP address"}
+                            placeholder={"eg: 192.168.1.1"}
+                            required
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={12}>
+                        <TextInput
+                            {...form.getInputProps("optionalconfig")}
+                            label={"Optional Configuration"}
+                            placeholder={"Please input your optional parameters"}
+                        />
+                    </Grid.Col>
                 </Grid>
+
                 <Button type={"submit"} color="cyan">
                     Crack
                 </Button>
