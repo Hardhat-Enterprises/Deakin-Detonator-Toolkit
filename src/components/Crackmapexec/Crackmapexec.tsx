@@ -156,7 +156,7 @@ const Crackmapexec = () => {
                         <TextInput
                             label={"Timeout"}
                             placeholder={"Time (in seconds) to wait for response to requests. Default is 60"}
-                            {...form.getInputProps("timeout")}
+                            required {...form.getInputProps("timeout")}
                         />
                     </>
                 )}
