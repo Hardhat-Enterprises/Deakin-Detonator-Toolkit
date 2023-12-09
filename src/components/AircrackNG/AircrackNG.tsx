@@ -191,11 +191,12 @@ const AircrackNG = () => {
                 />
                 <TextInput label={"CAP File Path"} required {...form.getInputProps("capFile")} />
                 <TextInput label={"Path to worldlist"} {...form.getInputProps("wordlist")} />
-                <TextInput label={"Access Point's MAC (BSSID)"} {...form.getInputProps("BSSID")} />
-                <TextInput label={"Network Identifier (ESSID)"} {...form.getInputProps("ESSID")} />
-                <TextInput label={"Key Output File"} {...form.getInputProps("keyFile")} />
+
                 {AdvancedMode && (
                     <>
+                        <TextInput label={"Access Point's MAC (BSSID)"} {...form.getInputProps("BSSID")} />
+                        <TextInput label={"Network Identifier (ESSID)"} {...form.getInputProps("ESSID")} />
+                        <TextInput label={"Key Output File"} {...form.getInputProps("keyFile")} />
                         <NativeSelect
                             value={selectedtype}
                             onChange={(e) => setSelectedType(e.target.value)}
