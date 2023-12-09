@@ -229,7 +229,6 @@ const WPScan = () => {
                     required
                     {...form.getInputProps("url")}
                 />
-                {/* Add the custom flags input field */}
                 <TextInput
                     label={"Custom Flags"}
                     placeholder={"Enter custom flags for WPScan"}
