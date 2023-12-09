@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, NativeSelect, Select, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -15,7 +15,10 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
  * 4. Enhance the output display to ensure optimal readability, especially for extensive outputs.
  * 5. Provide real-time feedback during the loading phase, allowing users to monitor ongoing processes.
  */
-
+const types = ["WPA", "WEP"];
+const typesRequiringAdvancedWEPConfig = ["WEP"];
+const typesRequiringAdvancedWPAConfig = ["WPA"];
+const characters = ["Alpha-Numeric", "Binary Coded Decimal", "Default"];
 const title = "WEP/WPA Cracking with Aircrack-ng";
 const description_userguide =
     "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphrases using captured network packets.\n\n" +
@@ -30,6 +33,14 @@ const description_userguide =
 interface FormValuesType {
     capFile: string;
     wordlist: string;
+    BSSID: string;
+    ESSID: string;
+    keyFile: string;
+    securitytype: string;
+    characters: string;
+    MACAddress: string;
+    PMKID: string;
+    customconfig: string;
 }
 
 const AircrackNG = () => {
@@ -38,11 +49,23 @@ const AircrackNG = () => {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [selectedtype, setSelectedType] = useState("");
+    const [AdvancedMode, setAdvancedMode] = useState(false);
+    const [selectedcharacter, setSelectedCharacter] = useState("");
+    const [CustomConfig, setCustomConfig] = useState(false);
 
     const form = useForm({
         initialValues: {
             capFile: "",
             wordlist: "",
+            BSSID: "",
+            ESSID: "",
+            keyFile: "",
+            securitytype: "",
+            characters: "",
+            MACAddress: "",
+            PMKID: "",
+            customconfig: "",
         },
     });
     /**
@@ -107,7 +130,22 @@ const AircrackNG = () => {
         setLoading(true);
 
         // Construct arguments for the aircrack-ng command based on form input
-        const args = [values.capFile, "-w", values.wordlist];
+        const args = [values.capFile];
+
+        values.wordlist ? args.push(`-w`, values.wordlist) : undefined;
+        values.BSSID ? args.push(`-b`, values.BSSID) : undefined;
+        values.ESSID ? args.push(`-e`, values.ESSID) : undefined;
+        values.keyFile ? args.push(`-l`, values.keyFile) : undefined;
+
+        if (selectedtype == "WEP") {
+            selectedcharacter === "Alpha-Numeric" ? args.push(`-c`) : undefined;
+            selectedcharacter === "Binary Coded Decimal" ? args.push(`-t`) : undefined;
+            values.MACAddress ? args.push(`-m`, values.MACAddress) : undefined;
+        } else {
+            values.PMKID ? args.push(`-I`, values.PMKID) : undefined;
+        }
+
+        values.customconfig ? args.push(values.customconfig) : undefined;
 
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("aircrack-ng", args, handleProcessData, handleProcessTermination)
@@ -139,8 +177,55 @@ const AircrackNG = () => {
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
+                <Switch
+                    size="md"
+                    label="Advanced Mode"
+                    checked={AdvancedMode}
+                    onChange={(e) => setAdvancedMode(e.currentTarget.checked)}
+                />
+                <Switch
+                    size="md"
+                    label="Custom Configuration"
+                    checked={CustomConfig}
+                    onChange={(e) => setCustomConfig(e.currentTarget.checked)}
+                />
                 <TextInput label={"CAP File Path"} required {...form.getInputProps("capFile")} />
-                <TextInput label={"Path to worldlist"} required {...form.getInputProps("wordlist")} />
+                <TextInput label={"Path to worldlist"} {...form.getInputProps("wordlist")} />
+                <TextInput label={"Access Point's MAC (BSSID)"} {...form.getInputProps("BSSID")} />
+                <TextInput label={"Network Identifier (ESSID)"} {...form.getInputProps("ESSID")} />
+                <TextInput label={"Key Output File"} {...form.getInputProps("keyFile")} />
+                {AdvancedMode && (
+                    <>
+                        <NativeSelect
+                            value={selectedtype}
+                            onChange={(e) => setSelectedType(e.target.value)}
+                            title={"Security Type"}
+                            data={types}
+                            placeholder={"security type"}
+                            description={"Please select the security type"}
+                        />
+                        {typesRequiringAdvancedWEPConfig.includes(selectedtype) && (
+                            <>
+                                <NativeSelect
+                                    value={selectedcharacter}
+                                    onChange={(e) => setSelectedCharacter(e.target.value)}
+                                    title={"Characters"}
+                                    data={characters}
+                                    placeholder={"characters"}
+                                    description={"Please select the wifi chracter types (if known)"}
+                                />
+                                <TextInput label={"MAC Address"} {...form.getInputProps("MACAddress")} />
+                            </>
+                        )}
+                        {typesRequiringAdvancedWPAConfig.includes(selectedtype) && (
+                            <>
+                                <TextInput label={"PMKID"} {...form.getInputProps("PMKID")} />
+                            </>
+                        )}
+                    </>
+                )}
+                {CustomConfig && <TextInput label={"Custom Configuration"} {...form.getInputProps("customconfig")} />}
+
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Start Cracking</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
