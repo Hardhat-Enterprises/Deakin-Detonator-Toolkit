@@ -42,11 +42,13 @@ const Crunch = () => {
     const [hasSaved, setHasSaved] = useState(false);
 
     //initial form values
+    //Update initial value for minLength = 3, maxLength = 4, charset = abcde
+    //If use select the current initial values the execution time will be very long
     let form = useForm({
         initialValues: {
-            minLength: 8,
-            maxLength: 8,
-            charset: "abcdefghijklmnopqrstuvwxyz0123456789",
+            minLength: 3,
+            maxLength: 4,
+            charset: "abcde",
             outputFile: "",
         },
     });
