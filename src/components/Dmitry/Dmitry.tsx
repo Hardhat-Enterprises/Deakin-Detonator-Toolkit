@@ -11,13 +11,13 @@ const description_userguide =
     "DMitry is a UNIX/(GNU) Linux command line application written in C. DMitry will scan to try and find " +
     "possible subdomains, email addresses and uptime information, and further perform tcp port scans, and " +
     "whois lookups.\n\nInformation on the tool can be found at: https://www.kali.org/tools/dmitry/\n\n" +
-    "Using Dmitry:\n" +
+    "Using DMitry:\n" +
     "Step 1: Enter a valid domain or IP address to be scanned.\n" +
     "       Eg: 192.168.0.1\n\n" +
     "Step 2: Enter a delay between requests. Default is 2 (milliseconds). Can be left blank.\n" +
     "       Eg: 2\n\n" +
-    "Step 3: Click Start Scanning to commence Dmirty's operation.\n\n" +
-    "Step 4: View the Output block below to view the results of the tools execution.";
+    "Step 3: Click Start Scanning to commence DMitry's operation.\n\n" +
+    "Step 4: View the Output block below to view the results of the tool's execution.";
 
 interface FormValuesType {
     domain: string;
