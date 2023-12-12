@@ -101,6 +101,11 @@ const AirbaseNG = () => {
         // Construct arguments for the aircrack-ng command based on form input
         const args = ["-e", values.FakeHost, "-c", values.Channel, values.Wlan];
 
+        values.MACAddress ? args.push(`-a`, values.MACAddress) : undefined;
+        values.interface ? args.push(`-i`, values.interface) : undefined;
+        values.filePath ? args.push(`-F`, values.filePath) : undefined;
+        values.customconfig ? args.push(values.customconfig) : undefined;
+
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("airbase-ng", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
