@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, Switch, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -29,18 +29,28 @@ interface FormValuesType {
     FakeHost: string;
     Channel: string;
     Wlan: string;
+    MACAddress:string;
+    interface: string;
+    filePath: string;
+    customconfig: string;
 }
 
 const AirbaseNG = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
+    const [customConfig, setCustomConfig] = useState(false);
+    const [advanceMode, setAdvanceMode] = useState(false);
 
     const form = useForm({
         initialValues: {
             FakeHost: "",
             Channel: "",
             Wlan: "",
+            MACAddress:"",
+            interface:"",
+            filePath:"",
+            customconfig: "",
         },
     });
     /**
@@ -107,6 +117,7 @@ const AirbaseNG = () => {
             });
     };
 
+    //Stop function to terminate process
     const close = async ()=>{
         const args = [`-2`,pid];
         await CommandHelper.runCommandWithPkexec("kill",args,handleProcessData,handleProcessTermination);
@@ -124,9 +135,29 @@ const AirbaseNG = () => {
         <form onSubmit={form.onSubmit(onSubmit)}>
             <Stack>
                 {UserGuide(title, description_userguide)}
+                <Switch
+                    size="md"
+                    label="Advanced Mode"
+                    checked={advanceMode}
+                    onChange={(e)=>setAdvanceMode(e.currentTarget.checked)}
+                />
+                <Switch
+                    size="md"
+                    label="Custom Configuration"
+                    checked={customConfig}
+                    onChange={(e)=>setCustomConfig(e.currentTarget.checked)}
+                />
                 <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
                 <TextInput label={"Channel of choice"} required {...form.getInputProps("Channel")} />
-                <TextInput label={"Your Wlan"} required {...form.getInputProps("Wlan")} />
+                <TextInput label={"Replay Interface"} required {...form.getInputProps("Replay Interface")} />
+                {advanceMode &&(
+                    <>
+                        <TextInput label={"Set AP MAC address"}{...form.getInputProps("MACAddress")}/>
+                        <TextInput label={"Capture packets from this interface"}{...form.getInputProps("interface")}/>
+                        <TextInput label={"Save as Pcap File (Please Supply FilePath)"}{...form.getInputProps("filePath")}/>
+                    </>
+                )}
+                {customConfig && <TextInput label={"Custom Configuration"}{...form.getInputProps("customconfig")}/>}
                 {SaveOutputToTextFile(output)}
                 <Button type={"submit"}>Start AP</Button>
                 {loading && <Button onClick={close}>Stop</Button>}
