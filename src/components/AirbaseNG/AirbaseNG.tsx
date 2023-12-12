@@ -29,7 +29,7 @@ interface FormValuesType {
     FakeHost: string;
     Channel: string;
     Wlan: string;
-    MACAddress:string;
+    MACAddress: string;
     interface: string;
     filePath: string;
     customconfig: string;
@@ -47,9 +47,9 @@ const AirbaseNG = () => {
             FakeHost: "",
             Channel: "",
             Wlan: "",
-            MACAddress:"",
-            interface:"",
-            filePath:"",
+            MACAddress: "",
+            interface: "",
+            filePath: "",
             customconfig: "",
         },
     });
@@ -118,11 +118,11 @@ const AirbaseNG = () => {
     };
 
     //Stop function to terminate process
-    const close = async ()=>{
-        const args = [`-2`,pid];
-        await CommandHelper.runCommandWithPkexec("kill",args,handleProcessData,handleProcessTermination);
+    const close = async () => {
+        const args = [`-2`, pid];
+        await CommandHelper.runCommandWithPkexec("kill", args, handleProcessData, handleProcessTermination);
         setLoading(false);
-    }
+    };
 
     /**
      * clearOutput: Callback function to clear the console output.
@@ -139,25 +139,28 @@ const AirbaseNG = () => {
                     size="md"
                     label="Advanced Mode"
                     checked={advanceMode}
-                    onChange={(e)=>setAdvanceMode(e.currentTarget.checked)}
+                    onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
                 />
                 <Switch
                     size="md"
                     label="Custom Configuration"
                     checked={customConfig}
-                    onChange={(e)=>setCustomConfig(e.currentTarget.checked)}
+                    onChange={(e) => setCustomConfig(e.currentTarget.checked)}
                 />
                 <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
                 <TextInput label={"Channel of choice"} required {...form.getInputProps("Channel")} />
                 <TextInput label={"Replay Interface"} required {...form.getInputProps("Replay Interface")} />
-                {advanceMode &&(
+                {advanceMode && (
                     <>
-                        <TextInput label={"Set AP MAC address"}{...form.getInputProps("MACAddress")}/>
-                        <TextInput label={"Capture packets from this interface"}{...form.getInputProps("interface")}/>
-                        <TextInput label={"Save as Pcap File (Please Supply FilePath)"}{...form.getInputProps("filePath")}/>
+                        <TextInput label={"Set AP MAC address"} {...form.getInputProps("MACAddress")} />
+                        <TextInput label={"Capture packets from this interface"} {...form.getInputProps("interface")} />
+                        <TextInput
+                            label={"Save as Pcap File (Please Supply FilePath)"}
+                            {...form.getInputProps("filePath")}
+                        />
                     </>
                 )}
-                {customConfig && <TextInput label={"Custom Configuration"}{...form.getInputProps("customconfig")}/>}
+                {customConfig && <TextInput label={"Custom Configuration"} {...form.getInputProps("customconfig")} />}
                 {SaveOutputToTextFile(output)}
                 <Button type={"submit"}>Start AP</Button>
                 {loading && <Button onClick={close}>Stop</Button>}
