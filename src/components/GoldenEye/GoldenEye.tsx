@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
+import { Alert, Button, LoadingOverlay, NativeSelect, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -20,13 +20,19 @@ const description_userguide =
     "Step 3: Enter any additional parameters for the scan.\n" +
     "       Eg: W 100\n\n" +
     "Step 4: Click Scan to commence GoldenEye's operation.\n\n" +
-    "Step 5: View the Output block below to view the results of the tools execution.";
+    "Step 5: View the Output block below to view the results of the tool's execution.";
 
 interface FormValues {
     url: string;
-    options: string;
-    param: string;
+    useragent: string;
+    worker: number;
+    sockets: number;
+    method: string;
+    sslcheck: string;
 }
+
+const DosHTTPMethod = ["get", "post", "random"];
+const SSLCheckStatus = ["Yes", "No"];
 
 const GoldenEye = () => {
     const [loading, setLoading] = useState(false);
@@ -34,12 +40,17 @@ const GoldenEye = () => {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [selectedmethod, setSelectedMethod] = useState("");
+    const [selectedSSLCheck, setSelectedSSLCheck] = useState("");
 
     let form = useForm({
         initialValues: {
             url: "",
-            options: "",
-            param: "",
+            useragent: "",
+            worker: 0,
+            sockets: 0,
+            method: "",
+            sslcheck: "",
         },
     });
 
@@ -82,26 +93,33 @@ const GoldenEye = () => {
     };
 
     const onSubmit = async (values: FormValues) => {
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
-
-        // Start the Loading Overlay
         setLoading(true);
 
-        // goldeneye url options
-        let tmp = "-" + values.options;
-        const args = [values.url, tmp, values.param];
+        const args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/GoldenEye/goldeneye.py`, `${values.url}`];
 
-        // Execute nmap
-        CommandHelper.runCommandGetPidAndOutput("goldeneye", args, handleProcessData, handleProcessTermination)
-            .then(({ pid, output }) => {
-                setPid(pid);
-                setOutput(output);
-            })
-            .catch((error) => {
-                setLoading(false);
-                setOutput(`Error: ${error.message}`);
-            });
+        values.useragent ? args.push(`-u`, `${values.useragent}`) : undefined;
+        values.worker ? args.push(`-w`, `${values.worker}`) : undefined;
+        values.sockets ? args.push(`-s`, `${values.sockets}`) : undefined;
+        selectedmethod ? args.push(`-m`, selectedmethod) : undefined;
+        selectedSSLCheck === "No" ? args.push(`-n`) : undefined;
+
+        try {
+            const result = await CommandHelper.runCommandGetPidAndOutput(
+                "python3",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+            setPid(result.pid);
+            setOutput(result.output);
+        } catch (e: any) {
+            setOutput(e.message);
+        }
+    };
+    const Stop = async () => {
+        const args = [`-2`, pid];
+        await CommandHelper.runCommand("kill", args);
+        setLoading(false);
     };
 
     const clearOutput = useCallback(() => {
@@ -112,7 +130,6 @@ const GoldenEye = () => {
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput
@@ -121,9 +138,40 @@ const GoldenEye = () => {
                     required
                     {...form.getInputProps("url")}
                 />
-                <TextInput label={"Options"} placeholder={"Example: U"} {...form.getInputProps("options")} />
-                <TextInput label={"Parameters"} placeholder={""} {...form.getInputProps("param")} />
-                <Button type={"submit"}>Scan</Button>
+                <TextInput
+                    label={"List of user agents"}
+                    placeholder={"Please enter filepath for the list of useragent"}
+                    {...form.getInputProps("useragent")}
+                />
+                <TextInput
+                    label={"Number of concurrent workers"}
+                    placeholder={"Please specify a number (Default = 10)"}
+                    {...form.getInputProps("worker")}
+                />
+                <TextInput
+                    label={"Number of concurrent sockets"}
+                    placeholder={"Please specify a number (Default = 500)"}
+                    {...form.getInputProps("sockets")}
+                />
+                <NativeSelect
+                    value={selectedmethod}
+                    onChange={(e) => setSelectedMethod(e.target.value)}
+                    title={"HTTP Method"}
+                    data={DosHTTPMethod}
+                    placeholder={"HTTP Method"}
+                    description={"Please select type of HTTP request to flood server with"}
+                />
+                <NativeSelect
+                    value={selectedSSLCheck}
+                    onChange={(e) => setSelectedSSLCheck(e.target.value)}
+                    title={"SSL Check"}
+                    data={SSLCheckStatus}
+                    placeholder={"SSL Check"}
+                    description={"Do you want to verify the ssl certificate"}
+                />
+                <Button type={"submit"}>Launch Dos Attack</Button>
+                {loading && <Alert children={"Lauching Dos attack against" + form.values.url}></Alert>}
+                {loading && <Button onClick={Stop}>Stop</Button>}
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
