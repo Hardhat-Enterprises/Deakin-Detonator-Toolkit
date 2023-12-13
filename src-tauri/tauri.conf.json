@@ -253,8 +253,8 @@
                         "args": true
                     },
                     {
-                        "name": "Gobuster",
-                        "cmd": "Gobuster",
+                        "name": "gobuster",
+                        "cmd": "gobuster",
                         "args": true
                     },
                     {
