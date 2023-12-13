@@ -89,6 +89,8 @@ export function DirbTool() {
 
         const args = [values.url, values.wordlistPath];
 
+        args.push("-S");
+
         if (values.caseInsensitive) {
             args.push(`-S ${values.caseInsensitive}`);
         }
