@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -23,19 +23,22 @@ const description_userguide =
     "Step 4: Enter the file type name to be extracted.\n" +
     "       Eg: pdf\n\n" +
     "Step 5: Click scan to commence the Metagoofil operation.\n\n" +
-    "Step 6: View the Output block below to view the results of the tools execution.";
+    "Step 6: View the Output block below to view the results of the tool's execution.";
 
 interface FormValues {
     webname: string;
     searchmax: string;
     filelimit: string;
     filetype: string;
+    filepath: string;
 }
 
 export function Metagoofil() {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
+    const [customconfig, setCustomconfig] = useState(false);
+    const [downloadconfig, setDownloadConfig] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -43,6 +46,7 @@ export function Metagoofil() {
             searchmax: "",
             filelimit: "",
             filetype: "",
+            filepath: "",
         },
     });
 
@@ -83,10 +87,25 @@ export function Metagoofil() {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = ["-d", values.webname, "-l", values.searchmax, "-n", values.filelimit, "-t", values.filetype];
+        const args = [`-d`, `${values.webname}`, `-t`, `${values.filetype}`];
+        //number of searches made
+        if (values.searchmax) {
+            args.push(`-l`, `${values.searchmax}`);
+        }
+
+        //number of files wanted to be downloaded
+        if (values.filelimit) {
+            args.push(`-n`, `${values.filelimit}`);
+        }
+
+        //filepath of where downloaded files are to be stored
+        if (values.filepath) {
+            args.push(`-o`, `${values.filepath}`, `-w`);
+        }
+
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "cewl",
+                "metagoofil",
                 args,
                 handleProcessData,
                 handleProcessTermination
@@ -107,18 +126,38 @@ export function Metagoofil() {
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
+                <Switch
+                    size="md"
+                    label="Manual Configuration"
+                    checked={customconfig}
+                    onChange={(e) => setCustomconfig(e.currentTarget.checked)}
+                />
+                <Switch
+                    size="md"
+                    label="Download Files"
+                    checked={downloadconfig}
+                    onChange={(e) => setDownloadConfig(e.currentTarget.checked)}
+                />
                 <TextInput label={"Enter the website for search"} required {...form.getInputProps("webname")} />
-                <TextInput
-                    label={"Enter number of results (default 100)"}
-                    required
-                    {...form.getInputProps("searchmax")}
-                />
-                <TextInput
-                    label={"Enter the value for Download file limit)"}
-                    required
-                    {...form.getInputProps("filelimit")}
-                />
                 <TextInput label={"Enter your file type"} required {...form.getInputProps("filetype")} />
+                {customconfig && (
+                    <>
+                        <TextInput
+                            label={"Enter number of results (default 100)"}
+                            {...form.getInputProps("searchmax")}
+                        />
+                    </>
+                )}
+                {downloadconfig && (
+                    <>
+                        <TextInput
+                            label={"Enter the value for Download file limit"}
+                            {...form.getInputProps("filelimit")}
+                        />
+                        <TextInput label={"Enter file path"} {...form.getInputProps("filepath")} />
+                    </>
+                )}
+
                 <Button type={"submit"}>Scan</Button>
                 {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
