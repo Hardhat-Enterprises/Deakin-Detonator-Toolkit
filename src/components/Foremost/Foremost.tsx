@@ -194,7 +194,8 @@ const ForemostTool = () => {
                             form.setValues((prevValues) => ({
                                 ...prevValues,
                                 quiet: e.currentTarget.checked,
-                                verbose: e.currentTarget.checked ? false : prevValues.verbose,
+                                verbose: false,
+                                //verbose: e.currentTarget.checked ? false : prevValues.verbose,
                             }));
                         }}
                     />
@@ -205,7 +206,8 @@ const ForemostTool = () => {
                             form.setValues((prevValues) => ({
                                 ...prevValues,
                                 verbose: e.currentTarget.checked,
-                                quiet: e.currentTarget.checked ? false : prevValues.quiet,
+                                quiet: false,
+                                //verbose: e.currentTarget.checked,
                             }));
                         }}
                     />
@@ -234,7 +236,7 @@ const ForemostTool = () => {
                             {...form.getInputProps("allHeaders" as keyof FormValuesType)}
                             onChange={(e) => {
                                 form.getInputProps("allHeaders" as keyof FormValuesType).onChange(e);
-                                handleExclusiveSelection("allHeaders");
+                                handleExclusiveSelection("allHeaders" as keyof FormValuesType);
                             }}
                         />
                         <Checkbox
@@ -244,7 +246,7 @@ const ForemostTool = () => {
                             {...form.getInputProps("auditFileOnly" as keyof FormValuesType)}
                             onChange={(e) => {
                                 form.getInputProps("auditFileOnly" as keyof FormValuesType).onChange(e);
-                                handleExclusiveSelection("auditFileOnly");
+                                handleExclusiveSelection("auditFileOnly" as keyof FormValuesType);
                             }}
                         />
                         {/* Quick Mode */}
