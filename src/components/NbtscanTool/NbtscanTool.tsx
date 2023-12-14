@@ -163,7 +163,7 @@ const NbtscanTool = () => {
                     onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                 />
                 {!checkedAdvanced && (
-                <TextInput label={"Subnet"} required {...form.getInputProps("subnet")} />
+                <TextInput label={"Subnet or Range to Scan"} required {...form.getInputProps("subnet")} />
                 )}
                 {checkedAdvanced && (
                     <>
@@ -174,7 +174,7 @@ const NbtscanTool = () => {
                             onChange={(e) => setcheckedPacketDump(e.currentTarget.checked)}
                                                     />
                         <TextInput
-                            label={"Range to Scan"}
+                            label={"Subnet or Range to Scan"}
                             placeholder={"Format of xxx.xxx.xxx.xxx/xx or xxx.xxx.xxx.xxx-xxx."}
                             {...form.getInputProps("scanRange")}
                         />
