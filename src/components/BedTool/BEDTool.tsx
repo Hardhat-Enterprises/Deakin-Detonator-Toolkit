@@ -2,10 +2,9 @@ import { Button, Select, Stack, Switch, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
-import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapperWithBuiltinOverlay";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 //plugin header selection field
 const plugin_list = ["FTP", "SMTP", "POP", "HTTP", "IRC", "IMAP", "PJL", "LPD", "FINGER", "SOCKS4"];
@@ -43,7 +42,6 @@ interface FormValues {
     email: string;
     username: string;
     password: string;
-    a: string;
 }
 
 export function BEDTool() {
@@ -63,7 +61,6 @@ export function BEDTool() {
             email: "",
             username: "",
             password: "",
-            a: "",
         },
 
         //input validation
@@ -203,7 +200,6 @@ export function BEDTool() {
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <Switch
@@ -257,7 +253,7 @@ export function BEDTool() {
                 )}
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Scan</Button>
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} pid={pid} loading={loading} />
             </Stack>
         </form>
     );
