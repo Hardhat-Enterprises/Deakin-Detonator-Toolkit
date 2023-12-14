@@ -99,15 +99,13 @@ const Crackmapexec = () => {
         setLoading(true);
         const args = [];
 
-        // No need to check for value since it is mandatory to provide in the portal  
+        // No need to check for value since it is mandatory to provide in the portal
         args.push("--timeout");
         args.push(`${values.timeout}`);
         args.push("smb");
         args.push(`${values.ip}`);
         args.push("-u", values.username);
         args.push("-p", values.password);
-        
-    
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
@@ -156,7 +154,8 @@ const Crackmapexec = () => {
                         <TextInput
                             label={"Timeout"}
                             placeholder={"Time (in seconds) to wait for response to requests. Default is 60"}
-                            required {...form.getInputProps("timeout")}
+                            required
+                            {...form.getInputProps("timeout")}
                         />
                     </>
                 )}
