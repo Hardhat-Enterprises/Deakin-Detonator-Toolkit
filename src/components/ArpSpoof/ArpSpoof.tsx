@@ -23,22 +23,22 @@ const description_userguide =
     "Step 4: View the Output block below to view the results of the tools execution.";
 
 interface FormValues {
-    ip1: string;
-    ip2: string;
+    ip_gateway: string;
+    ip_target: string;
 }
 
 const ARPSpoofing = () => {
     const [isSpoofing, setIsSpoofing] = useState(false);
-    const [Pid, setPid] = useState("");
-    const [Pid2, setPid2] = useState("");
+    const [PidGateway, setPidGateway] = useState("");
+    const [PidTarget, setPidTarget] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
     const [output, setOutput] = useState("");
 
     let form = useForm({
         initialValues: {
-            ip1: "",
-            ip2: "",
+            ip_gateway: "",
+            ip_target: "",
         },
     });
 
@@ -59,7 +59,8 @@ const ARPSpoofing = () => {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
             // Clear the child process pid reference
-            setPid("");
+            setPidGateway("");
+            setPidTarget("");
             // Cancel the Loading Overlay
             setIsSpoofing(false);
 
@@ -85,29 +86,29 @@ const ARPSpoofing = () => {
     }, [setOutput]);
 
     const onSubmit = async (values: FormValues) => {
-        const args = [`-t`, values.ip1, values.ip2];
-        const args2 = [`-t`, values.ip2, values.ip1];
-        const handle = await CommandHelper.runCommandWithPkexec(
+        const args_gateway = [`-t`, values.ip_gateway, values.ip_target];
+        const args_target = [`-t`, values.ip_target, values.ip_gateway];
+        const result_gateway = await CommandHelper.runCommandWithPkexec(
             "arpspoof",
-            args,
+            args_gateway,
             handleProcessData,
             handleProcessTermination
         );
-        setPid(handle.pid);
-        const handle2 = await CommandHelper.runCommandWithPkexec(
+        setPidGateway(result_gateway.pid);
+        const result_target = await CommandHelper.runCommandWithPkexec(
             "arpspoof",
-            args2,
+            args_target,
             handleProcessData,
             handleProcessTermination
         );
-        setPid2(handle2.pid);
+        setPidTarget(result_target.pid);
         setIsSpoofing(true);
     };
     const close = async () => {
-        const args = [`-2`, Pid];
-        const args2 = [`-2`, Pid2];
-        await CommandHelper.runCommandWithPkexec("kill", args, handleProcessData, handleProcessTermination);
-        await CommandHelper.runCommandWithPkexec("kill", args2, handleProcessData, handleProcessTermination);
+        const argsGateway = [`-2`, PidGateway];
+        const argsTarget = [`-2`, PidTarget];
+        await CommandHelper.runCommandWithPkexec("kill", argsGateway, handleProcessData, handleProcessTermination);
+        await CommandHelper.runCommandWithPkexec("kill", argsTarget, handleProcessData, handleProcessTermination);
         setIsSpoofing(false);
     };
 
@@ -121,7 +122,9 @@ const ARPSpoofing = () => {
                 {isSpoofing && (
                     <Alert
                         radius="md"
-                        children={"ARP spoofing between " + form.values.ip1 + " and " + form.values.ip2 + "..."}
+                        children={
+                            "ARP spoofing between " + form.values.ip_gateway + " and " + form.values.ip_target + "..."
+                        }
                     ></Alert>
                 )}
                 {isSpoofing && <Button onClick={close}>Stop</Button>}
