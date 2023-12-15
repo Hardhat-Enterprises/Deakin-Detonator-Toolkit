@@ -88,20 +88,15 @@ export function Metagoofil() {
         setLoading(true);
 
         const args = [`-d`, `${values.webname}`, `-t`, `${values.filetype}`];
+
         //number of searches made
-        if (values.searchmax) {
-            args.push(`-l`, `${values.searchmax}`);
-        }
+        values.searchmax ? args.push(`-l`, `${values.searchmax}`) : undefined;
 
         //number of files wanted to be downloaded
-        if (values.filelimit) {
-            args.push(`-n`, `${values.filelimit}`);
-        }
+        values.filelimit ? args.push(`-n`, `${values.filelimit}`) : undefined;
 
         //filepath of where downloaded files are to be stored
-        if (values.filepath) {
-            args.push(`-o`, `${values.filepath}`, `-w`);
-        }
+        values.filepath ? args.push(`-o`, `${values.filepath}`, `-w`) : undefined;
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
