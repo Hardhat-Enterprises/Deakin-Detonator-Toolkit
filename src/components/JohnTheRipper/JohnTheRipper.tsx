@@ -105,29 +105,14 @@ const JohnTheRipper = () => {
 
         //if hash is stored in a textfile
         if (values.fileType === "raw") {
-            var args: string[];
+            const args = [values.filePath];
+            values.hash ? args.push(`--format=${values.hash}`) : undefined;
 
-            //if hash is unknown
-            if (values.hash.length === 0) {
-                //change argument according to mode selected
-                if (selectedModeOption === "dictionary") {
-                    args = [`--wordlist=${values.wordlist}`, `${values.filePath}`];
-                } else if (selectedModeOption === "incremental") {
-                    args = [`-incremental:${values.incrementorder}`, `${values.filePath}`];
-                } else {
-                    args = [`--single`, `${values.filePath}`];
-                }
-            } else {
-                //change argument according to mode selected
-                if (selectedModeOption === "dictionary") {
-                    args = [`--format=${values.hash}`, `--wordlist=${values.wordlist}`, `${values.filePath}`];
-                } else if (selectedModeOption === "incremental") {
-                    args = [`--format=${values.hash}`, `-incremental:${values.incrementorder}`, `${values.filePath}`];
-                } else {
-                    args = [`--format=${values.hash}`, `--single`, `${values.filePath}`];
-                }
-            }
-
+            selectedModeOption === "dictionary"
+                ? args.push(`--wordlist=${values.wordlist}`)
+                : selectedModeOption === "incremental"
+                ? args.push(`-incremental:${values.incrementorder}`)
+                : args.push(`--single`);
             try {
                 const result = await CommandHelper.runCommand(`john`, args);
                 setOutput(output + "\n" + result);
@@ -137,40 +122,28 @@ const JohnTheRipper = () => {
 
             setLoading(false);
         } else {
-            var args = [`${values.filePath}`];
+            const argsExtract = [values.filePath];
+            const argsCrack = [`/tmp/hash.txt`];
 
             //extract password hash from zip/rar files
             try {
-                const result = await CommandHelper.runCommand(`${values.fileType}2john`, args);
+                const result = await CommandHelper.runCommand(`${values.fileType}2john`, argsExtract);
                 await writeTextFile("hash.txt", result, { dir: BaseDirectory.Temp });
                 setOutput(result);
             } catch (e: any) {
                 setOutput(e);
             }
 
-            //if hash type is unknown
-            if (values.hash.length === 0) {
-                //change argument according to mode selected
-                if (selectedModeOption === "dictionary") {
-                    args = [`--wordlist=${values.wordlist}`, `/tmp/hash.txt`];
-                } else if (selectedModeOption === "incremental") {
-                    args = [`-incremental:${values.incrementorder}`, `/tmp/hash.txt`];
-                } else {
-                    args = [`--single`, `/tmp/hash.txt`];
-                }
-            } else {
-                //change argument according to mode selected
-                if (selectedModeOption === "dictionary") {
-                    args = [`--format=${values.hash}`, `--wordlist=${values.wordlist}`, `/tmp/hash.txt`];
-                } else if (selectedModeOption === "incremental") {
-                    args = [`--format=${values.hash}`, `-incremental:${values.incrementorder}`, `/tmp/hash.txt`];
-                } else {
-                    args = [`--format=${values.hash}`, `--single`, `/tmp/hash.txt`];
-                }
-            }
+            //Crack the extracted hash
+            values.hash ? argsCrack.push(`--format=${values.hash}`) : undefined;
+            selectedModeOption === "dictionary"
+                ? argsCrack.push(`--wordlist=${values.wordlist}`)
+                : selectedModeOption === "incremental"
+                ? argsCrack.push(`-incremental:${values.incrementorder}`)
+                : argsCrack.push(`--single`);
 
             try {
-                const result = await CommandHelper.runCommand(`john`, args);
+                const result = await CommandHelper.runCommand(`john`, argsCrack);
                 setOutput(output + "\n" + result);
             } catch (e: any) {
                 setOutput(e);
