@@ -184,21 +184,21 @@ const Fcrackzip = () => {
                         <div style={{ display: "flex", alignItems: "center" }}>
                             <span style={{ marginRight: "10px" }}>Charset List:</span>
                             <Checkbox
-                                label="Lowercase"
+                                label="Use Lowercase Character"
                                 checked={useCharsetLowercase}
                                 onChange={(e) => setCharsetLowercase(e.currentTarget.checked)}
                                 disabled={checkedUnzip}
                             />
                             <span style={{ margin: "0 10px" }}></span>
                             <Checkbox
-                                label="Uppercase"
+                                label="Use Uppercase Character"
                                 checked={useCharsetUppercase}
                                 onChange={(e) => setCharsetUppercase(e.currentTarget.checked)}
                                 disabled={checkedUnzip}
                             />
                             <span style={{ margin: "0 10px" }}></span>
                             <Checkbox
-                                label="Numeric"
+                                label="Use Numeric Character"
                                 typeof="number"
                                 checked={useCharsetNumeric}
                                 onChange={(e) => setCharsetNumeric(e.currentTarget.checked)}
@@ -238,6 +238,7 @@ const Fcrackzip = () => {
                 <Button type={"submit"}>Start Cracking!</Button>
 
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                <Button onClick={clearOutput}>Clear Output</Button>
             </Stack>
         </form>
     );
