@@ -61,7 +61,8 @@ const NetcatTool = () => {
         //Switch case
         switch (values.netcatOptions) {
             case "Port Scan": //nc syntax: nc -zv <ip address/hostname> <port range>
-                args = [`-zv`];
+                //addition of -n will not perform any dns or name lookups.
+                args = [`-zvn`];
                 args.push(`${values.ipAddress}`);
                 args.push(`${values.portNumber}`);
 
