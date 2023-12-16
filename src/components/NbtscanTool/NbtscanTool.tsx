@@ -26,7 +26,6 @@ const description_userguide =
 //list of input values collected by the form
 interface FormValuesType {
     subnet: string;
-    dumpPacket: boolean;
     scanRange: string;
     timeout: number;
     bandwidth: string;
@@ -41,11 +40,12 @@ const NbtscanTool = () => {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    //const [subnet, setsubnet] = useState("");
+    const [checkedPacketDump, setcheckedPacketDump] = useState(false);
 
     let form = useForm({
         initialValues: {
             subnet: "",
-            dumpPacket: false,
             scanRange: "",
             timeout: 1000,
             bandwidth: "",
@@ -98,14 +98,18 @@ const NbtscanTool = () => {
 
         // Start the Loading Overlay
         setLoading(true);
-        const args = [`${values.subnet}`];
+        const args = [];
 
-        if (values.dumpPacket) {
+        if (values.subnet) {
+            args.push(`${values.subnet}`);
+        }
+        //Push -d parameter based on the flag
+        if (checkedPacketDump) {
             args.push(`-d`);
         }
 
         if (values.scanRange) {
-            args.push(`<scan_range> ${values.scanRange}`);
+            args.push(values.scanRange);
         }
 
         if (values.timeout) {
@@ -141,7 +145,6 @@ const NbtscanTool = () => {
         setAllowSave(false);
     }, [setOutput]);
 
-    //define user interface of the tool
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
             {LoadingOverlayAndCancelButton(loading, pid)}
@@ -153,15 +156,19 @@ const NbtscanTool = () => {
                     checked={checkedAdvanced}
                     onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                 />
-                <TextInput label={"Subnet"} required {...form.getInputProps("subnet")} />
+                {!checkedAdvanced && (
+                    <TextInput label={"Subnet or Range to Scan"} required {...form.getInputProps("subnet")} />
+                )}
                 {checkedAdvanced && (
                     <>
                         <Checkbox
                             label={"Dump Packets Mode"}
-                            {...form.getInputProps("dumpPackets" as keyof FormValuesType)}
+                            //Check the status of the option
+                            checked={checkedPacketDump}
+                            onChange={(e) => setcheckedPacketDump(e.currentTarget.checked)}
                         />
                         <TextInput
-                            label={"Range to Scan"}
+                            label={"Subnet or Range to Scan"}
                             placeholder={"Format of xxx.xxx.xxx.xxx/xx or xxx.xxx.xxx.xxx-xxx."}
                             {...form.getInputProps("scanRange")}
                         />
@@ -183,7 +190,9 @@ const NbtscanTool = () => {
                     </>
                 )}
                 <Button type={"submit"}>Scan Subnet</Button>
+
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
