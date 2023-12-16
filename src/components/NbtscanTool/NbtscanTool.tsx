@@ -26,7 +26,6 @@ const description_userguide =
 //list of input values collected by the form
 interface FormValuesType {
     subnet: string;
-    dumpPacket: boolean;
     scanRange: string;
     timeout: number;
     bandwidth: string;
@@ -41,11 +40,12 @@ const NbtscanTool = () => {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [subnet, setsubnet] = useState("");
+    //const [subnet, setsubnet] = useState("");
     const [checkedPacketDump, setcheckedPacketDump] = useState(false);
 
     let form = useForm({
         initialValues: {
+            subnet: "",
             scanRange: "",
             timeout: 1000,
             bandwidth: "",
