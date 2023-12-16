@@ -36,18 +36,6 @@ const ForemostTool = () => {
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [pid, setPid] = useState("");
 
-    // Handle exclusive selection of options in the "Advanced Options" section
-    const handleExclusiveSelection = (option: keyof FormValuesType) => {
-        // Disable all other options when one is selected
-        form.setValues((prevValues: any) => ({
-            ...prevValues,
-            indirectBlockDetection: option === "indirectBlockDetection" ? true : false,
-            allHeaders: option === "allHeaders" ? true : false,
-            auditFileOnly: option === "auditFileOnly" ? true : false,
-            quickMode: option === "quickMode" ? true : false,
-        }));
-    };
-
     // Create a form using Mantine's useForm hook
     let form = useForm<FormValuesType>({
         initialValues: {
@@ -219,10 +207,6 @@ const ForemostTool = () => {
                                 "Write All Headers - write all headers, perform no error detection (corrupted files)."
                             }
                             {...form.getInputProps("allHeaders" as keyof FormValuesType)}
-                            onChange={(e) => {
-                                form.getInputProps("indirectBlockDetection" as keyof FormValuesType).onChange(e);
-                                handleExclusiveSelection("indirectBlockDetection");
-                            }}
                         />
                         {/* Audit File Only */}
                         <Checkbox
@@ -230,10 +214,6 @@ const ForemostTool = () => {
                                 "Audit File Only - only write the audit file, do not write any detected files to the disk."
                             }
                             {...form.getInputProps("auditFileOnly" as keyof FormValuesType)}
-                            onChange={(e) => {
-                                form.getInputProps("auditFileOnly" as keyof FormValuesType).onChange(e);
-                                handleExclusiveSelection("auditFileOnly");
-                            }}
                         />
                         {/* Quick Mode */}
                         <Checkbox
