@@ -35,6 +35,7 @@ const Fcrackzip = () => {
     const [useCharsetNumeric, setCharsetNumeric] = useState(false);
     const [checkedVerbose, setCheckedVerbose] = useState(false);
     const [charsetSelected, setCharsetSelected] = useState(false);
+    //const [charSetDisabled, setCharSetDisabled] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -53,11 +54,11 @@ const Fcrackzip = () => {
             setCharsetSelected(false);
         }
 
-        if (checkedUnzip) {
-            setCharsetLowercase(false);
-            setCharsetUppercase(false);
-            setCharsetNumeric(false);
-        }
+        //if (checkedUnzip) {
+        //setCharSetDisabled(true);
+        //} else {
+        //setCharSetDisabled(false);
+        //}
     }, [useCharsetLowercase, useCharsetUppercase, useCharsetNumeric, checkedUnzip]);
 
     // Uses the callback function of runCommandGetPidAndOutput to handle and save data
@@ -187,14 +188,14 @@ const Fcrackzip = () => {
                                 label="Use Lowercase Character"
                                 checked={useCharsetLowercase}
                                 onChange={(e) => setCharsetLowercase(e.currentTarget.checked)}
-                                disabled={checkedUnzip}
+                                //disabled={charSetDisabled}
                             />
                             <span style={{ margin: "0 10px" }}></span>
                             <Checkbox
                                 label="Use Uppercase Character"
                                 checked={useCharsetUppercase}
                                 onChange={(e) => setCharsetUppercase(e.currentTarget.checked)}
-                                disabled={checkedUnzip}
+                                //disabled={charSetDisabled}
                             />
                             <span style={{ margin: "0 10px" }}></span>
                             <Checkbox
@@ -202,7 +203,7 @@ const Fcrackzip = () => {
                                 typeof="number"
                                 checked={useCharsetNumeric}
                                 onChange={(e) => setCharsetNumeric(e.currentTarget.checked)}
-                                disabled={checkedUnzip}
+                                //disabled={charSetDisabled}
                             />
                         </div>
                         <div style={{ display: "flex", alignItems: "center" }}>
