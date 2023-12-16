@@ -37,6 +37,9 @@ const Fcrackzip = () => {
     const [charsetSelected, setCharsetSelected] = useState(false);
     //const [charSetDisabled, setCharSetDisabled] = useState(false);
 
+    const isDictionary = attackMethod === "Dictionary";
+    const isBruteForce = attackMethod === "BruteForce";
+
     let form = useForm({
         initialValues: {
             dictionary: "",
@@ -46,7 +49,9 @@ const Fcrackzip = () => {
             charSet: "",
         },
     });
-
+    // Ask per request of the tester, the checkzip will not disable the Setchar anymore but the logic will only be commented out
+    //if needed in the future we can uncomment the change back
+    // the useeffect is not really useful right now and maybe remove in future implementation
     useEffect(() => {
         if (useCharsetLowercase || useCharsetUppercase || useCharsetNumeric) {
             setCharsetSelected(true);
@@ -141,9 +146,9 @@ const Fcrackzip = () => {
         setOutput("");
     }, [setOutput]);
 
-    const isDictionary = attackMethod === "Dictionary";
-    const isBruteForce = attackMethod === "BruteForce";
-
+    // the disable charset logic is commented out
+    // Please remove it if the future implementation does not need to use it
+    // for now the logic stay as commented
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
             <LoadingOverlay visible={loading} />
