@@ -36,20 +36,6 @@ const ForemostTool = () => {
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [pid, setPid] = useState("");
 
-    // Handle exclusive selection of options in the "Advanced Options" section
-    const handleExclusiveSelection = (option: keyof FormValuesType) => {
-        // Disable all other options when one is selected
-        form.setValues((prevValues: any) => ({
-            ...prevValues,
-            quiet: option === "quiet" ? true : false,
-            verbose: option === "verbose" ? true : false,
-            indirectBlockDetection: option === "indirectBlockDetection" ? true : false,
-            allHeaders: option === "allHeaders" ? true : false,
-            auditFileOnly: option === "auditFileOnly" ? true : false,
-            quickMode: option === "quickMode" ? true : false,
-        }));
-    };
-
     // Create a form using Mantine's useForm hook
     let form = useForm<FormValuesType>({
         initialValues: {
@@ -187,29 +173,18 @@ const ForemostTool = () => {
                     {...form.getInputProps("types")}
                 />
                 <Stack spacing="lg">
+                    {/* Quiet Mode */}
                     <Checkbox
                         label={"Quiet Mode - enables quiet mode. Suppress output messages."}
-                        checked={form.values.quiet}
-                        onChange={(e) => {
-                            form.setValues((prevValues) => ({
-                                ...prevValues,
-                                quiet: e.currentTarget.checked,
-                                verbose: e.currentTarget.checked ? false : prevValues.verbose,
-                            }));
-                        }}
+                        {...form.getInputProps("quiet" as keyof FormValuesType)}
                     />
+                    {/* Verbose Mode */}
                     <Checkbox
                         label={"Verbose Mode - enables verbose mode. Logs all messages to screen."}
-                        checked={form.values.verbose}
-                        onChange={(e) => {
-                            form.setValues((prevValues) => ({
-                                ...prevValues,
-                                verbose: e.currentTarget.checked,
-                                quiet: e.currentTarget.checked ? false : prevValues.quiet,
-                            }));
-                        }}
+                        {...form.getInputProps("verbose" as keyof FormValuesType)}
                     />
                 </Stack>
+
                 {/* Advanced Options */}
                 {checkedAdvanced && (
                     <Stack spacing="lg">
@@ -232,20 +207,13 @@ const ForemostTool = () => {
                                 "Write All Headers - write all headers, perform no error detection (corrupted files)."
                             }
                             {...form.getInputProps("allHeaders" as keyof FormValuesType)}
-                            onChange={(e) => {
-                                form.getInputProps("allHeaders" as keyof FormValuesType).onChange(e);
-                                handleExclusiveSelection("allHeaders");
-                            }}
                         />
+                        {/* Audit File Only */}
                         <Checkbox
                             label={
                                 "Audit File Only - only write the audit file, do not write any detected files to the disk."
                             }
                             {...form.getInputProps("auditFileOnly" as keyof FormValuesType)}
-                            onChange={(e) => {
-                                form.getInputProps("auditFileOnly" as keyof FormValuesType).onChange(e);
-                                handleExclusiveSelection("auditFileOnly");
-                            }}
                         />
                         {/* Quick Mode */}
                         <Checkbox
