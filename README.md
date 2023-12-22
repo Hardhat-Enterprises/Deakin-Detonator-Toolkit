@@ -28,7 +28,7 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 1. (New Method) Run the following command.
 
     ```
-    $ curl -sSL https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/blob/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
+    $ curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
     ```
 
 2. (Old Method - Use in case of errors). Update your Kali.
