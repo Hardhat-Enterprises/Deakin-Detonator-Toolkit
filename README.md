@@ -60,7 +60,8 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
     	arjun \
     	parsero \
     	sherlock \
-    	foremost
+    	foremost \
+        bed
     ```
 
 5. Close your current terminal and open a new one.
@@ -71,7 +72,15 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
     $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
     ```
 
-7. Install volta.
+7. Install volta or node. Volta now no longer support Apple silicon chip series (M series) therefore we can use alternative like node instead
+
+    ### for Apple silicon series user
+
+    ```bash
+    $ sudo apt install nodejs npm
+    ```
+
+    ### for window machine with Intel/AMD
 
     ```bash
     $ curl https://get.volta.sh | bash
@@ -81,11 +90,27 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 9. Install node.
 
+    ### for Apple silicon series user
+
+    ```bash
+    $ npm install node
+    ```
+
+    ### for window machine with Intel/AMD
+
     ```bash
     $ volta install node
     ```
 
 10. Install yarn.
+
+    ### for Apple silicon series user
+
+    ```bash
+    $ npm install yarn
+    ```
+
+    ### for window machine with Intel/AMD
 
     ```bash
     $ volta install yarn
