@@ -8,7 +8,7 @@
     },
     "package": {
         "productName": "Deakin-Detonator-Toolkit",
-        "version": "0.1.1"
+        "version": "0.1.2"
     },
     "tauri": {
         "allowlist": {
@@ -17,6 +17,11 @@
                 "execute": true,
                 "sidecar": true,
                 "scope": [
+                    {
+                        "name": "pkexec",
+                        "cmd": "pkexec",
+                        "args": true
+                    },
                     {
                         "name": "nmap",
                         "cmd": "nmap",
@@ -60,6 +65,11 @@
                     {
                         "name": "rar2john",
                         "cmd": "rar2john",
+                        "args": true
+                    },
+                    {
+                        "name": "foremost",
+                        "cmd": "foremost",
                         "args": true
                     },
                     {
@@ -108,8 +118,18 @@
                         "args": true
                     },
                     {
+                        "name": "msfvenom",
+                        "cmd": "msfvenom",
+                        "args": true
+                    },
+                    {
                         "name": "dmitry",
                         "cmd": "dmitry",
+                        "args": true
+                    },
+                    {
+                        "name": "theHarvester",
+                        "cmd": "theHarvester",
                         "args": true
                     },
                     {
@@ -226,12 +246,56 @@
                         "name": "arjun",
                         "cmd": "arjun",
                         "args": true
+                    },
+                    {
+                        "name": "fcrackzip",
+                        "cmd": "fcrackzip",
+                        "args": true
+                    },
+                    {
+                        "name": "gobuster",
+                        "cmd": "gobuster",
+                        "args": true
+                    },
+                    {
+                        "name": "aircrack-ng",
+                        "cmd": "aircrack-ng",
+                        "args": true
+                    },
+                    {
+                        "name": "airbase-ng",
+                        "cmd": "airbase-ng",
+                        "args": true
+                    },
+                    {
+                        "name": "wpscan",
+                        "cmd": "wpscan",
+                        "args": true
+                    },
+                    {
+                        "name": "rtsort",
+                        "cmd": "rtsort",
+                        "args": true
+                    },
+                    {
+                        "name": "rcrack",
+                        "cmd": "rcrack",
+                        "args": true
+                    },
+                    {
+                        "name": "nslookup",
+                        "cmd": "nslookup",
+                        "args": true
                     }
                 ]
             },
             "fs": {
                 "all": true,
-                "scope": ["$TEMP/**"]
+                "scope": [
+                    "$TEMP/**",
+                    "$HOME/Deakin-Detonator-Toolkit/**",
+                    "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**"
+                ]
             },
             "path": {
                 "all": true

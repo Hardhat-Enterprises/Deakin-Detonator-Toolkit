@@ -25,25 +25,116 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 🔧 Setup
 
-1. Clone the repo.
+1. (New Method) Run the following command.
+
+    ```
+    $ curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
+    ```
+
+2. (Old Method - Use in case of errors). Update your Kali.
+
+    ```bash
+    $ sudo apt update
+    ```
+
+3. Upgrade your Kali.
+
+    ```bash
+    $ sudo apt upgrade --fix-missing -y
+    ```
+
+4. Install missing dependencies.
+
+    ```bash
+    $ sudo apt install libwebkit2gtk-4.0-dev \
+        build-essential \
+        curl \
+        wget \
+        libssl-dev \
+        libgtk-3-dev \
+        libayatana-appindicator3-dev \
+        librsvg2-dev \
+        dsniff \
+    	dnsmap \
+    	goldeneye \
+    	arjun \
+    	parsero \
+    	sherlock \
+    	foremost \
+        bed
+    ```
+
+5. Close your current terminal and open a new one.
+
+6. Install rust.
+
+    ```bash
+    $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+    ```
+
+7. Install volta or node. Volta now no longer support Apple silicon chip series (M series) therefore we can use alternative like node instead
+
+    ### for Apple silicon series user
+
+    ```bash
+    $ sudo apt install nodejs npm
+    ```
+
+    ### for window machine with Intel/AMD
+
+    ```bash
+    $ curl https://get.volta.sh | bash
+    ```
+
+8. Close your current terminal and open a new one.
+
+9. Install node.
+
+    ### for Apple silicon series user
+
+    ```bash
+    $ npm install node
+    ```
+
+    ### for window machine with Intel/AMD
+
+    ```bash
+    $ volta install node
+    ```
+
+10. Install yarn.
+
+    ### for Apple silicon series user
+
+    ```bash
+    $ npm install yarn
+    ```
+
+    ### for window machine with Intel/AMD
+
+    ```bash
+    $ volta install yarn
+    ```
+
+11. Clone the repo.
 
     ```bash
     $ git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
     ```
 
-2. Change current directory to the toolkit.
+12. Change current directory to the toolkit.
 
     ```bash
     $ cd Deakin-Detonator-Toolkit
     ```
 
-3. Run the install script.
+13. Install project dependencies.
 
     ```bash
-    $ ./install_dependencies.sh
+    $ yarn install
     ```
 
-4. Run the application (dev mode).
+14. Run the application (dev mode).
 
     ```bash
     $ yarn run tauri dev

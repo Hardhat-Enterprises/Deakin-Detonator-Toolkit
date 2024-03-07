@@ -1,8 +1,9 @@
-import { Button, LoadingOverlay, NativeSelect, Stack, TextInput } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "Netcat Tool";
@@ -60,7 +61,8 @@ const NetcatTool = () => {
         //Switch case
         switch (values.netcatOptions) {
             case "Port Scan": //nc syntax: nc -zv <ip address/hostname> <port range>
-                args = [`-zv`];
+                //addition of -n will not perform any dns or name lookups.
+                args = [`-zvn`];
                 args.push(`${values.ipAddress}`);
                 args.push(`${values.portNumber}`);
 
@@ -155,6 +157,7 @@ const NetcatTool = () => {
                     description={"Type of scan to perform"}
                 />
                 <Button type={"submit"}>start netcat</Button>
+                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
