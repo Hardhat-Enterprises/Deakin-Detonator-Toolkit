@@ -28,25 +28,25 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 1. (New Method) Run the following command.
 
     ```
-    $ curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
+    curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
     ```
 
 2. (Old Method - Use in case of errors). Update your Kali.
 
     ```bash
-    $ sudo apt update
+    sudo apt update
     ```
 
 3. Upgrade your Kali.
 
     ```bash
-    $ sudo apt upgrade --fix-missing -y
+    sudo apt upgrade --fix-missing -y
     ```
 
 4. Install missing dependencies.
 
     ```bash
-    $ sudo apt install libwebkit2gtk-4.0-dev \
+    sudo apt install libwebkit2gtk-4.0-dev \
         build-essential \
         curl \
         wget \
@@ -69,7 +69,7 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 6. Install rust.
 
     ```bash
-    $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+    curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
     ```
 
 7. Install volta or node. Volta now no longer support Apple silicon chip series (M series) therefore we can use alternative like node instead
@@ -77,13 +77,13 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
     ### for Apple silicon series user
 
     ```bash
-    $ sudo apt install nodejs npm
+    sudo apt install nodejs npm
     ```
 
     ### for window machine with Intel/AMD
 
     ```bash
-    $ curl https://get.volta.sh | bash
+    curl https://get.volta.sh | bash
     ```
 
 8. Close your current terminal and open a new one.
@@ -93,13 +93,13 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
     ### for Apple silicon series user
 
     ```bash
-    $ npm install node
+    npm install node
     ```
 
     ### for window machine with Intel/AMD
 
     ```bash
-    $ volta install node
+    volta install node
     ```
 
 10. Install yarn.
@@ -107,31 +107,31 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
     ### for Apple silicon series user
 
     ```bash
-    $ npm install yarn
+    npm install yarn
     ```
 
     ### for window machine with Intel/AMD
 
     ```bash
-    $ volta install yarn
+    volta install yarn
     ```
 
 11. Clone the repo.
 
     ```bash
-    $ git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
+    git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
     ```
 
 12. Change current directory to the toolkit.
 
     ```bash
-    $ cd Deakin-Detonator-Toolkit
+    cd Deakin-Detonator-Toolkit
     ```
 
 13. Install project dependencies.
 
     ```bash
-    $ yarn install
+    yarn install
     ```
 
 14. Run the application (dev mode).
