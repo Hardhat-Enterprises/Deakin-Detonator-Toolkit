@@ -7,9 +7,9 @@ import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-const title = "SMB Enumeration";    // Title of the component. 
+const title = "SMB Enumeration"; // Title of the component.
 
-// Description for the tooltip. Contents of this variable are displayed to the user when 
+// Description for the tooltip. Contents of this variable are displayed to the user when
 // hovering over the info option.
 const description_userguide =
     "SMB (Server Message Block) represents a network protocol widely used to " +
@@ -25,20 +25,20 @@ const description_userguide =
     "       E.g. T3\n\n" +
     "Step 4: Select an SMB enumeration script to run against the target.\n" +
     "       E.g smb-flood.nse\n\n";
-    "Step 5: Click scan to commence the SMB enumeration operation.\n\n" +
+"Step 5: Click scan to commence the SMB enumeration operation.\n\n" +
     "Step 6: View the output block below to view the results of the scan.";
 
 // Represents the form values for the SMBEnumeration component.
 interface FormValuesType {
-    ip: string;         // The IP address or hostname.
-    port: string;       // The port number.
-    speed: string;      // The scan speed.
-    scripts: string;    // The selected SMB enumeration script.
+    ip: string; // The IP address or hostname.
+    port: string; // The port number.
+    speed: string; // The scan speed.
+    scripts: string; // The selected SMB enumeration script.
 }
 
 const speeds = ["T0", "T1", "T2", "T3", "T4", "T5"]; // The scan speeds.
 
-// The list of SMB enumeration scripts. 
+// The list of SMB enumeration scripts.
 const scripts = [
     "smb2-capabilities.nse",
     "smb2-security-mode.nse",
@@ -78,11 +78,11 @@ const scripts = [
 ];
 
 const SMBEnumeration = () => {
-    const [loading, setLoading] = useState(false);                          // Represents the loading state of the component. (Film over the screen.)
-    const [output, setOutput] = useState("");                               // Maintain the state (output) of the component.
-    const [selectedSpeedOption, setSelectedSpeedOption] = useState("");     // Maintain the state of the selected speed option.
-    const [selectedScriptOption, setSelectedScriptOption] = useState("");   // Maintain the state of the selected script option.
-    const [pid, setPid] = useState("");                                     // Maintain the state of the process id.
+    const [loading, setLoading] = useState(false); // Represents the loading state of the component. (Film over the screen.)
+    const [output, setOutput] = useState(""); // Maintain the state (output) of the component.
+    const [selectedSpeedOption, setSelectedSpeedOption] = useState(""); // Maintain the state of the selected speed option.
+    const [selectedScriptOption, setSelectedScriptOption] = useState(""); // Maintain the state of the selected script option.
+    const [pid, setPid] = useState(""); // Maintain the state of the process id.
 
     // useForm is a hook that provides a state object and a set of functions to handle form data.
     // The state object contains the current value of the form, and the set of functions contains
@@ -126,7 +126,6 @@ const SMBEnumeration = () => {
 
     // onSubmit is a function that is called when the form is submitted.
     const onSubmit = async (values: FormValuesType) => {
-
         // Set the loading state to true. This will display the loading overlay.
         setLoading(true);
 
@@ -161,7 +160,7 @@ const SMBEnumeration = () => {
         }
     };
 
-     // Clears the output by setting it to an empty string.
+    // Clears the output by setting it to an empty string.
     const clearOutput = useCallback(() => {
         setOutput("");
     }, [setOutput]);
