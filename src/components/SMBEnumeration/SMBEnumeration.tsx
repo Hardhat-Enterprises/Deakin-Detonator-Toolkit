@@ -4,11 +4,13 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
-
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-const title = "SMB Enumeration";
+const title = "SMB Enumeration";    // Title of the component. 
+
+// Description for the tooltip. Contents of this variable are displayed to the user when 
+// hovering over the info option.
 const description_userguide =
     "SMB (Server Message Block) represents a network protocol widely used to " +
     "provide shared access across files, printers, and serial ports within a network. " +
@@ -26,15 +28,17 @@ const description_userguide =
     "Step 5: Click scan to commence the SMB enumeration operation.\n\n" +
     "Step 6: View the output block below to view the results of the scan.";
 
+// Represents the form values for the SMBEnumeration component.
 interface FormValuesType {
-    ip: string;
-    port: string;
-    speed: string;
-    scripts: string;
+    ip: string;         // The IP address or hostname.
+    port: string;       // The port number.
+    speed: string;      // The scan speed.
+    scripts: string;    // The selected SMB enumeration script.
 }
 
-const speeds = ["T0", "T1", "T2", "T3", "T4", "T5"];
+const speeds = ["T0", "T1", "T2", "T3", "T4", "T5"]; // The scan speeds.
 
+// The list of SMB enumeration scripts. 
 const scripts = [
     "smb2-capabilities.nse",
     "smb2-security-mode.nse",
@@ -74,11 +78,15 @@ const scripts = [
 ];
 
 const SMBEnumeration = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [selectedSpeedOption, setSelectedSpeedOption] = useState("");
-    const [selectedScriptOption, setSelectedScriptOption] = useState("");
-    const [pid, setPid] = useState("");
+    const [loading, setLoading] = useState(false);                          // Represents the loading state of the component. (Film over the screen.)
+    const [output, setOutput] = useState("");                               // Maintain the state (output) of the component.
+    const [selectedSpeedOption, setSelectedSpeedOption] = useState("");     // Maintain the state of the selected speed option.
+    const [selectedScriptOption, setSelectedScriptOption] = useState("");   // Maintain the state of the selected script option.
+    const [pid, setPid] = useState("");                                     // Maintain the state of the process id.
+
+    // useForm is a hook that provides a state object and a set of functions to handle form data.
+    // The state object contains the current value of the form, and the set of functions contains
+    // the methods to update the state object.
     let form = useForm({
         initialValues: {
             ip: "",
@@ -106,28 +114,36 @@ const SMBEnumeration = () => {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
+
             // Clear the child process pid reference
             setPid("");
+
             // Cancel the Loading Overlay
             setLoading(false);
         },
         [handleProcessData]
     );
 
+    // onSubmit is a function that is called when the form is submitted.
     const onSubmit = async (values: FormValuesType) => {
+
+        // Set the loading state to true. This will display the loading overlay.
         setLoading(true);
 
         // Check if the values.speed is not empty. If it is empty set it to T3.
+        // This is the default value for the speed of the scan.
         if (!values.speed) {
             values.speed = "T3";
         }
 
-        const args = [`-${values.speed}`, `--script=${values.scripts}`];
+        const args = [`-${values.speed}`, `--script=${values.scripts}`]; // Prepare the arguments for the console.
 
+        // If the port value is set, add it to the arguments.
         if (values.port) {
             args.push(`-p ${values.port}`);
         }
 
+        // Add the IP address to the arguments.
         args.push(values.ip);
 
         try {
@@ -145,6 +161,7 @@ const SMBEnumeration = () => {
         }
     };
 
+     // Clears the output by setting it to an empty string.
     const clearOutput = useCallback(() => {
         setOutput("");
     }, [setOutput]);
