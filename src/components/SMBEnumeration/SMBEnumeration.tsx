@@ -12,20 +12,19 @@ const title = "SMB Enumeration";
 const description_userguide =
     "SMB (Server Message Block) represents a network protocol widely used to " +
     "provide shared access across files, printers, and serial ports within a network. " +
-    "This tool acts to enumerate an SMB server in order for potential vulnerabilities " +
-    "or misconfigurations tobe identified. \n\n" +
+    "This tool aims to enumerate an SMB server to find potential vulnerabilities. \n\n" +
     "How to use SMB Enumeration:\n\n" +
-    "Step 1: Enter an IP or Hostname.\n" +
+    "Step 1: Enter an IP address or hostname.\n" +
     "       E.g. 127.0.0.1\n\n" +
-    "Step 2: Enter a port number\n" +
+    "Step 2: Enter a port number.\n" +
     "       E.g. 445\n\n" +
-    "Step 3: Pick a scan speed -Note; Higher speeds require a faster host network.\n" +
+    "Step 3: Pick a scan speed. Note - higher speeds require a faster host network.\n" +
     "T0 -Paranoid / T1 -Sneaky / T2 -Polite / T3 -Normal / T4 -Aggressive / T5 -Insane\n" +
     "       E.g. T3\n\n" +
-    "Step 4: Select an SMB Enumeration Script to run against the target\n" +
-    "       E.g smb-flood.nse";
-"\n\nStep 5: Click Scan to commence the SMB Enumeration operation.\n\n" +
-    "Step 6: View the Output block below to view the results of the Scan.";
+    "Step 4: Select an SMB enumeration script to run against the target.\n" +
+    "       E.g smb-flood.nse\n\n";
+    "Step 5: Click scan to commence the SMB enumeration operation.\n\n" +
+    "Step 6: View the output block below to view the results of the scan.";
 
 interface FormValuesType {
     ip: string;
