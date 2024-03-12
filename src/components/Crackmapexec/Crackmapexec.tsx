@@ -21,7 +21,7 @@ const description_userguide =
     "Step 3: Enter a Password.\n" +
     "       Eg: admin\n\n" +
     "Step 4: Click Start Searching to commence Crackmapexec's operation.\n\n" +
-    "Step 5: View the Output block below to view the results of the tools execution.";
+    "Step 5: View the Output block below to see the results of the tool's execution.";
 
 interface FormValues {
     ip: string;
