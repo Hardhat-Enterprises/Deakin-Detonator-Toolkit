@@ -77,7 +77,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
     ```
 
-7. Install Volta or Node. Volta now no longer support Apple silicon chip series (M series). Therefore we can use alternative like Node instead:
+7. Install Volta or Node. Volta now no longer support Apple silicon chip series (M series). Therefore we can use an alternative like Node instead:
 
     ### for Apple silicon series user
 
