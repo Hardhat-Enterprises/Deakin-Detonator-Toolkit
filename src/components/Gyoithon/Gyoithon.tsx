@@ -48,7 +48,7 @@ const Gyoithon = () => {
 
     const Install = async () => {
         setLoading(true);
-        const args = [`install`, `-r`, `./exploits/GyoiThon/requirements.txt`];
+        const args = [`install`, `-r`, `/usr/share/ddt/GyoiThon/requirements.txt`];
         const output = await CommandHelper.runCommand("pip3", args);
         setOutput(output);
         setLoading(false);
@@ -57,7 +57,7 @@ const Gyoithon = () => {
 
     const ShowTarget = async () => {
         setLoading(true);
-        const args = [`./exploits/GyoiThon/host.txt`];
+        const args = [`/usr/share/ddt/GyoiThon/host.txt`];
         const output = await CommandHelper.runCommand("cat", args);
         setOutput(output);
         setLoading(false);
@@ -65,7 +65,7 @@ const Gyoithon = () => {
 
     const ClearTarget = async () => {
         setLoading(true);
-        const args = [`./exploits/GyoiThon/configure.py`, `-clear`, `./exploits/GyoiThon/host.txt`];
+        const args = [`/usr/share/ddt/GyoiThon/configure.py`, `-clear`, `/usr/share/ddt/GyoiThon/host.txt`];
         const output = await CommandHelper.runCommand("python3", args);
         setOutput(output);
         setLoading(false);
@@ -78,9 +78,9 @@ const Gyoithon = () => {
     const Configure = async (values: FormValues) => {
         setLoading(true);
         const args = [
-            `./exploits/GyoiThon/configure.py`,
+            `/usr/share/ddt/GyoiThon/configure.py`,
             `-add`,
-            `./exploits/GyoiThon/host.txt`,
+            `/usr/share/ddt/GyoiThon/host.txt`,
             values.protocol,
             values.ip,
             values.port,
@@ -93,9 +93,9 @@ const Gyoithon = () => {
     const Import = async (values: FormValues) => {
         setLoading(true);
         const args = [
-            `./exploits/GyoiThon/configure.py`,
+            `/usr/share/ddt/GyoiThon/configure.py`,
             `-import`,
-            `./exploits/GyoiThon/host.txt`,
+            `/usr/share/ddt/GyoiThon/host.txt`,
             values.import_file,
         ];
         const output = await CommandHelper.runCommand("python3", args);
@@ -106,7 +106,7 @@ const Gyoithon = () => {
 
     const GridSearch = async () => {
         setLoading(true);
-        const args = [`./exploits/GyoiThon/modules/Deep_Neural_Network.py`, `-grid`];
+        const args = [`/usr/share/ddt/GyoiThon/modules/Deep_Neural_Network.py`, `-grid`];
         const output = await CommandHelper.runCommand("python3", args);
         setOutput(output);
         setLoading(false);
@@ -114,7 +114,7 @@ const Gyoithon = () => {
 
     const Run = async (values: FormValues) => {
         setLoading(true);
-        const args = [`./exploits/GyoiThon/gyoithon.py`, `-m`];
+        const args = [`/usr/share/ddt/GyoiThon/gyoithon.py`, `-m`];
         const output = await CommandHelper.runCommand("python3", args);
         setOutput(output + "Report generated successfully!");
         setLoading(false);
@@ -123,7 +123,7 @@ const Gyoithon = () => {
 
     const ShowReport = async () => {
         setLoading(true);
-        const args = [`./exploits/GyoiThon/report`];
+        const args = [`/usr/share/ddt/GyoiThon/report`];
         const output = await CommandHelper.runCommand("ls", args);
         setOutput(output);
         setLoading(false);
@@ -131,7 +131,7 @@ const Gyoithon = () => {
 
     const ClearReport = async () => {
         setLoading(true);
-        const args = [`./exploits/GyoiThon/report`, `-type`, `f`, `-delete`];
+        const args = [`/usr/share/ddt/GyoiThon/report`, `-type`, `f`, `-delete`];
         const output = await CommandHelper.runCommand("find", args);
         setOutput(output + "Reports deleted!");
         setLoading(false);
@@ -139,7 +139,7 @@ const Gyoithon = () => {
 
     const Preview = async (values: FormValues) => {
         setLoading(true);
-        const args = [`./exploits/GyoiThon/report/` + values.select_file];
+        const args = [`/usr/share/ddt/GyoiThon/report/` + values.select_file];
         const output = await CommandHelper.runCommand("cat", args);
         setOutput(output);
         setLoading(false);
@@ -147,7 +147,7 @@ const Gyoithon = () => {
 
     const Export = async (values: FormValues) => {
         setLoading(true);
-        const args = [`./exploits/GyoiThon/report/` + values.select_file, values.export_path];
+        const args = [`/usr/share/ddt/GyoiThon/report/` + values.select_file, values.export_path];
         const output = await CommandHelper.runCommand("cp", args);
         setOutput(output + "Report exported successfully!");
         setLoading(false);
