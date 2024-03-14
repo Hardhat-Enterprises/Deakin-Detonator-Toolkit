@@ -19,8 +19,8 @@ const description_userguide =
     "Using Nbtscan Tool:\n" +
     "Step 1: Enter a Target Subnet to scan.\n" +
     "       Eg: 192.168.1.0/24\n\n" +
-    "Step 2: Click Scan Subnet to commence the Nbtscan tools operation.\n\n" +
-    "Step 3: View the Output block below to view the results of the tools execution.\n\n" +
+    "Step 2: Click Scan Subnet to commence the Nbtscan tool's operation.\n\n" +
+    "Step 3: View the Output block below to view the results of the tool's execution.\n\n" +
     "Switch to Advanced Mode for further options.";
 
 //list of input values collected by the form
