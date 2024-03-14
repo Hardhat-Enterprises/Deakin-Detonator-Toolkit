@@ -36,7 +36,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     ```
 ## Old method
 
-2. (Old Method - Use in case of errors). Update your Kali.
+1. Use this method if you get errors with the new method. Update your Kali:
 
     ```bash
     sudo apt update
