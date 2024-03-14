@@ -29,7 +29,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
 
 ## New method
 
-1. (New Method) Run the following command.
+1. Run the following command.
 
     ```
     curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
