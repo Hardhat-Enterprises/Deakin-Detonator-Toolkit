@@ -29,7 +29,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
 
 ## New method
 
-1. Run the following command.
+1. Run the following command:
 
     ```
     curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
@@ -42,13 +42,13 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     sudo apt update
     ```
 
-3. Upgrade your Kali.
+3. Upgrade your Kali:
 
     ```bash
     sudo apt upgrade --fix-missing -y
     ```
 
-4. Install missing dependencies.
+4. Install missing dependencies:
 
     ```bash
     sudo apt install libwebkit2gtk-4.0-dev \
@@ -71,13 +71,13 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
 
 5. Close your current terminal and open a new one.
 
-6. Install rust.
+6. Install rust:
 
     ```bash
     curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
     ```
 
-7. Install volta or node. Volta now no longer support Apple silicon chip series (M series) therefore we can use alternative like node instead
+7. Install volta or node. Volta now no longer support Apple silicon chip series (M series) therefore we can use alternative like node instead:
 
     ### for Apple silicon series user
 
@@ -93,7 +93,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
 
 8. Close your current terminal and open a new one.
 
-9. Install node.
+9. Install node:
 
     ### for Apple silicon series user
 
@@ -107,7 +107,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     volta install node
     ```
 
-10. Install yarn.
+10. Install yarn:
 
     ### for Apple silicon series user
 
@@ -121,25 +121,25 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     volta install yarn
     ```
 
-11. Clone the repo.
+11. Clone the repo:
 
     ```bash
     git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
     ```
 
-12. Change current directory to the toolkit.
+12. Change current directory to the toolkit:
 
     ```bash
     cd Deakin-Detonator-Toolkit
     ```
 
-13. Install project dependencies.
+13. Install project dependencies:
 
     ```bash
     yarn install
     ```
 
-14. Run the application (dev mode).
+14. Run the application (dev mode):
 
     ```bash
     $ yarn run tauri dev
