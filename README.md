@@ -71,13 +71,13 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
 
 5. Close your current terminal and open a new one.
 
-6. Install rust:
+6. Install Rust:
 
     ```bash
     curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
     ```
 
-7. Install volta or node. Volta now no longer support Apple silicon chip series (M series) therefore we can use alternative like node instead:
+7. Install Volta or Node. Volta now no longer support Apple silicon chip series (M series). Therefore we can use alternative like Node instead:
 
     ### for Apple silicon series user
 
@@ -85,7 +85,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     sudo apt install nodejs npm
     ```
 
-    ### for window machine with Intel/AMD
+    ### for Windows machine with Intel/AMD
 
     ```bash
     curl https://get.volta.sh | bash
@@ -93,7 +93,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
 
 8. Close your current terminal and open a new one.
 
-9. Install node:
+9. Install Node:
 
     ### for Apple silicon series user
 
@@ -101,13 +101,13 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     npm install node
     ```
 
-    ### for window machine with Intel/AMD
+    ### for Windows machine with Intel/AMD
 
     ```bash
     volta install node
     ```
 
-10. Install yarn:
+10. Install Yarn:
 
     ### for Apple silicon series user
 
@@ -115,7 +115,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     npm install yarn
     ```
 
-    ### for window machine with Intel/AMD
+    ### for Windows machine with Intel/AMD
 
     ```bash
     volta install yarn
