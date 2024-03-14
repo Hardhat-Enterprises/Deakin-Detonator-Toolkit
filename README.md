@@ -25,6 +25,8 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 🔧 Setup
 
+To install Deakin Detonator Toolkit on Kali, you can follow either the new or old methods. The new method is a one-step process that utilises a Python script. If that doesn't work, the old method will take you through the steps manually. 
+
 1. (New Method) Run the following command.
 
     ```
