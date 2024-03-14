@@ -23,8 +23,8 @@ const description_userguide =
     "Step 2: (Optional) Enter any additional options.\n\n" +
     "Step 3: Select a scan option.\n" +
     "       Eg: Traceroute UDP scan\n\n" +
-    "Step 4: Click Scan to commence Traceroutes operation.\n\n" +
-    "Step 5: View the Output block below to view the results of the tools execution.";
+    "Step 4: Click Scan to commence Traceroute operation.\n\n" +
+    "Step 5: View the Output block below to view the results of the tool's execution.";
 
 //Variables
 interface FormValuesType {
