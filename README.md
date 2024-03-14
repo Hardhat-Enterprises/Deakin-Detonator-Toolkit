@@ -147,6 +147,8 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
 
 # 📷 Screenshot
 
+Once you have successfully implemented either method one or two, the application should open and look like the following screenshot: 
+
 <img src="https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/blob/main/static/ddt_homepage.png" width="1000px">
 
 # 📷 Release
