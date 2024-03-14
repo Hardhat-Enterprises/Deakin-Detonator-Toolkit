@@ -9,6 +9,10 @@ This repo houses the new version of the Deakin Detonator Toolkit application bui
 `src/` contains the source code for the UI.
 `src-tauri` contains the source code and configuration for the Tauri application.
 
+## What is the Deakin Detonator Toolkit? 
+
+In its simplest definition, Deakin Detonator Toolkit is a penetration testing toolkit. The toolkit allows you to use a variety of tools, without needing the "know-how" of each command.
+
 # 🛠️ Exploit Development
 
 All exploit scripts are expected to live in `/usr/share/ddt/`, and they will be executed by the Tauri application. It is recommended that you use Python for exploit development.
