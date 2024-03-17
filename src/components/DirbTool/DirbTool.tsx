@@ -92,11 +92,11 @@ export function DirbTool() {
         args.push("-S");
 
         if (values.caseInsensitive) {
-            args.push(`-S ${values.caseInsensitive}`);
+            args.push("-I");
         }
 
         if (values.printLocation) {
-            args.push(`-s ${values.printLocation}`);
+            args.push("-l");
         }
 
         if (values.ignoreHttpCode) {
