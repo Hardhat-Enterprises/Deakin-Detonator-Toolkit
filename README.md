@@ -9,7 +9,7 @@ This repo houses the new version of the Deakin Detonator Toolkit application bui
 `src/` contains the source code for the UI.
 `src-tauri` contains the source code and configuration for the Tauri application.
 
-## What is the Deakin Detonator Toolkit? 
+## What is the Deakin Detonator Toolkit?
 
 In its simplest definition, the Deakin Detonator Toolkit is a penetration testing toolkit. The toolkit allows you to use a variety of tools, without needing the "know-how" of each command.
 
@@ -29,7 +29,7 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 🔧 Setup
 
-To install the Deakin Detonator Toolkit on Kali, you can follow either the new or old methods. The new method is a one&#8209;step process that utilises a Python script. If that doesn't work, the old method will take you through the steps manually. 
+To install the Deakin Detonator Toolkit on Kali, you can follow either the new or old methods. The new method is a one&#8209;step process that utilises a Python script. If that doesn't work, the old method will take you through the steps manually.
 
 ## New method
 
@@ -38,6 +38,7 @@ To install the Deakin Detonator Toolkit on Kali, you can follow either the new o
     ```
     curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
     ```
+
 ## Old method
 
 1. Use this method if you get errors with the new method. Update your Kali:
@@ -46,13 +47,13 @@ To install the Deakin Detonator Toolkit on Kali, you can follow either the new o
     sudo apt update
     ```
 
-3. Upgrade your Kali:
+2. Upgrade your Kali:
 
     ```bash
     sudo apt upgrade --fix-missing -y
     ```
 
-4. Install missing dependencies:
+3. Install missing dependencies:
 
     ```bash
     sudo apt install libwebkit2gtk-4.0-dev \
@@ -73,15 +74,15 @@ To install the Deakin Detonator Toolkit on Kali, you can follow either the new o
         bed
     ```
 
-5. Close your current terminal and open a new one.
+4. Close your current terminal and open a new one.
 
-6. Install Rust:
+5. Install Rust:
 
     ```bash
     curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
     ```
 
-7. Install Volta or Node. Volta no longer supports Apple silicon chip series (M series). Therefore, we can use an alternative like Node instead:
+6. Install Volta or Node. Volta no longer supports Apple silicon chip series (M series). Therefore, we can use an alternative like Node instead:
 
     ### for Apple silicon series user
 
@@ -95,9 +96,9 @@ To install the Deakin Detonator Toolkit on Kali, you can follow either the new o
     curl https://get.volta.sh | bash
     ```
 
-8. Close your current terminal and open a new one.
+7. Close your current terminal and open a new one.
 
-9. Install Node:
+8. Install Node:
 
     ### for Apple silicon series user
 
@@ -111,7 +112,7 @@ To install the Deakin Detonator Toolkit on Kali, you can follow either the new o
     volta install node
     ```
 
-10. Install Yarn:
+9. Install Yarn:
 
     ### for Apple silicon series user
 
@@ -125,25 +126,25 @@ To install the Deakin Detonator Toolkit on Kali, you can follow either the new o
     volta install yarn
     ```
 
-11. Clone the repo:
+10. Clone the repo:
 
     ```bash
     git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
     ```
 
-12. Change current directory to the toolkit:
+11. Change current directory to the toolkit:
 
     ```bash
     cd Deakin-Detonator-Toolkit
     ```
 
-13. Install project dependencies:
+12. Install project dependencies:
 
     ```bash
     yarn install
     ```
 
-14. Run the application (dev mode):
+13. Run the application (dev mode):
 
     ```bash
     $ yarn run tauri dev
@@ -151,7 +152,7 @@ To install the Deakin Detonator Toolkit on Kali, you can follow either the new o
 
 # 📷 Screenshot
 
-Once you have successfully implemented either method one or two, the application should open and look like the following screenshot: 
+Once you have successfully implemented either method one or two, the application should open and look like the following screenshot:
 
 <img src="https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/blob/main/static/ddt_homepage.png" width="1000px">
 
