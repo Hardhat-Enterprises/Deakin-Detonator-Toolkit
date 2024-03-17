@@ -11,7 +11,7 @@ This repo houses the new version of the Deakin Detonator Toolkit application bui
 
 ## What is the Deakin Detonator Toolkit? 
 
-In its simplest definition, Deakin Detonator Toolkit is a penetration testing toolkit. The toolkit allows you to use a variety of tools, without needing the "know-how" of each command.
+In its simplest definition, the Deakin Detonator Toolkit is a penetration testing toolkit. The toolkit allows you to use a variety of tools, without needing the "know-how" of each command.
 
 # 🛠️ Exploit Development
 
@@ -29,7 +29,7 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 🔧 Setup
 
-To install Deakin Detonator Toolkit on Kali, you can follow either the new or old methods. The new method is a one&#8209;step process that utilises a Python script. If that doesn't work, the old method will take you through the steps manually. 
+To install the Deakin Detonator Toolkit on Kali, you can follow either the new or old methods. The new method is a one&#8209;step process that utilises a Python script. If that doesn't work, the old method will take you through the steps manually. 
 
 ## New method
 
@@ -81,7 +81,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
     ```
 
-7. Install Volta or Node. Volta now no longer support Apple silicon chip series (M series). Therefore we can use an alternative like Node instead:
+7. Install Volta or Node. Volta no longer supports Apple silicon chip series (M series). Therefore, we can use an alternative like Node instead:
 
     ### for Apple silicon series user
 
@@ -89,7 +89,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     sudo apt install nodejs npm
     ```
 
-    ### for Windows machine with Intel/AMD
+    ### for Windows machines with an Intel/AMD chipset
 
     ```bash
     curl https://get.volta.sh | bash
@@ -105,7 +105,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     npm install node
     ```
 
-    ### for Windows machine with Intel/AMD
+    ### for Windows machines with an Intel/AMD chipset
 
     ```bash
     volta install node
@@ -119,7 +119,7 @@ To install Deakin Detonator Toolkit on Kali, you can follow either the new or ol
     npm install yarn
     ```
 
-    ### for Windows machine with Intel/AMD
+    ### for Windows machines with an Intel/AMD chipset
 
     ```bash
     volta install yarn
