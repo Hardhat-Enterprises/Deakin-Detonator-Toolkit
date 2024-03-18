@@ -9,6 +9,10 @@ This repo houses the new version of the Deakin Detonator Toolkit application bui
 `src/` contains the source code for the UI.
 `src-tauri` contains the source code and configuration for the Tauri application.
 
+## What is the Deakin Detonator Toolkit?
+
+In its simplest definition, the Deakin Detonator Toolkit is a penetration testing toolkit. The toolkit allows you to use a variety of tools, without needing the "know-how" of each command.
+
 # 🛠️ Exploit Development
 
 All exploit scripts are expected to live in `/usr/share/ddt/`, and they will be executed by the Tauri application. It is recommended that you use Python for exploit development.
@@ -25,28 +29,34 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 🔧 Setup
 
-1. (New Method) Run the following command.
+To install the Deakin Detonator Toolkit on Kali, you can follow either the new or old methods. The new method is a one&#8209;step process that utilises a Python script. If that doesn't work, the old method will take you through the steps manually.
+
+## New method
+
+1. Run the following command:
 
     ```
-    $ curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
+    curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
     ```
 
-2. (Old Method - Use in case of errors). Update your Kali.
+## Old method
+
+1. Use this method if you get errors with the new method. Update your Kali:
 
     ```bash
-    $ sudo apt update
+    sudo apt update
     ```
 
-3. Upgrade your Kali.
+2. Upgrade your Kali:
 
     ```bash
-    $ sudo apt upgrade --fix-missing -y
+    sudo apt upgrade --fix-missing -y
     ```
 
-4. Install missing dependencies.
+3. Install missing dependencies:
 
     ```bash
-    $ sudo apt install libwebkit2gtk-4.0-dev \
+    sudo apt install libwebkit2gtk-4.0-dev \
         build-essential \
         curl \
         wget \
@@ -64,83 +74,85 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
         bed
     ```
 
-5. Close your current terminal and open a new one.
+4. Close your current terminal and open a new one.
 
-6. Install rust.
+5. Install Rust:
 
     ```bash
-    $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+    curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
     ```
 
-7. Install volta or node. Volta now no longer support Apple silicon chip series (M series) therefore we can use alternative like node instead
+6. Install Volta or Node. Volta no longer supports Apple silicon chip series (M series). Therefore, we can use an alternative like Node instead:
 
     ### for Apple silicon series user
 
     ```bash
-    $ sudo apt install nodejs npm
+    sudo apt install nodejs npm
     ```
 
-    ### for window machine with Intel/AMD
+    ### for Windows machines with an Intel/AMD chipset
 
     ```bash
-    $ curl https://get.volta.sh | bash
+    curl https://get.volta.sh | bash
     ```
 
-8. Close your current terminal and open a new one.
+7. Close your current terminal and open a new one.
 
-9. Install node.
+8. Install Node:
 
     ### for Apple silicon series user
 
     ```bash
-    $ npm install node
+    npm install node
     ```
 
-    ### for window machine with Intel/AMD
+    ### for Windows machines with an Intel/AMD chipset
 
     ```bash
-    $ volta install node
+    volta install node
     ```
 
-10. Install yarn.
+9. Install Yarn:
 
     ### for Apple silicon series user
 
     ```bash
-    $ npm install yarn
+    npm install yarn
     ```
 
-    ### for window machine with Intel/AMD
+    ### for Windows machines with an Intel/AMD chipset
 
     ```bash
-    $ volta install yarn
+    volta install yarn
     ```
 
-11. Clone the repo.
+10. Clone the repo:
 
     ```bash
-    $ git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
+    git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
     ```
 
-12. Change current directory to the toolkit.
+11. Change current directory to the toolkit:
 
     ```bash
-    $ cd Deakin-Detonator-Toolkit
+    cd Deakin-Detonator-Toolkit
     ```
 
-13. Install project dependencies.
+12. Install project dependencies:
 
     ```bash
-    $ yarn install
+    yarn install
     ```
 
-14. Run the application (dev mode).
+13. Run the application (dev mode):
 
     ```bash
     $ yarn run tauri dev
     ```
 
 # 📷 Screenshot
+
+Once you have successfully implemented either method one or two, the application should open and look like the following screenshot:
 
 <img src="https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/blob/main/static/ddt_homepage.png" width="1000px">
 
