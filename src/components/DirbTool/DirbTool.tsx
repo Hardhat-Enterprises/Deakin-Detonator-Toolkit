@@ -100,7 +100,7 @@ export function DirbTool() {
         }
 
         if (values.ignoreHttpCode) {
-            args.push("-N", values.ignoreHttpCode.toString());  
+            args.push("-N", values.ignoreHttpCode.toString());
         }
 
         if (checkedAdvanced) {
