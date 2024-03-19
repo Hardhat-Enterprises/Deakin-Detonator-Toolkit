@@ -175,6 +175,18 @@ const WPScan = () => {
                 />
                 {checkedAdvanced && (
                     <>
+                        <Switch
+                            size="md"
+                            label="Stealthy"
+                            checked={stealthyChecked}
+                            onChange={(e) => setStealthyChecked(e.currentTarget.checked)}
+                        />
+                        <Switch
+                            size="md"
+                            label="Verbose"
+                            checked={verboseChecked}
+                            onChange={(e) => setVerboseChecked(e.currentTarget.checked)}
+                        />
                         <NativeSelect
                             value={selectedenumerationtype}
                             onChange={(e) => setselectedenumerationtype(e.target.value)}
@@ -207,13 +219,6 @@ const WPScan = () => {
                             placeholder={"Detection Modes"}
                             description={"Please select a detection type"}
                         />
-                        <Switch
-                            size="md"
-                            label="Verbose"
-                            checked={verboseChecked}
-                            onChange={(e) => setVerboseChecked(e.currentTarget.checked)}
-                        />
-                        <TextInput label={"Ouput to file"} placeholder={"File Name"}{...form.getInputProps("output")}/>
                         <NativeSelect
                             value={selectedoutputformat}
                             onChange={(e)=> setselectedoutputformat(e.target.value)}
@@ -222,14 +227,9 @@ const WPScan = () => {
                             placeholder={"Output Format"}
                             description={"Please select an output format"}
                         />
+                        <TextInput label={"Ouput to file"} placeholder={"File Name"}{...form.getInputProps("output")}/>
                         <TextInput label={" List of passwords to use during the password attack."} placeholder={""}{...form.getInputProps("passwords")}/>
                         <TextInput label={"List of usernames to use during the password attack."} placeholder={""}{...form.getInputProps("usernames")}/>
-                        <Switch
-                            size="md"
-                            label="Stealthy"
-                            checked={stealthyChecked}
-                            onChange={(e) => setStealthyChecked(e.currentTarget.checked)}
-                        />
                     </>
                 )}
                 <Button type={"submit"}>Scan</Button>
