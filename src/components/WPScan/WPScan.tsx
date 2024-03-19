@@ -130,13 +130,13 @@ const WPScan = () => {
         }
         
         if (values.passwords) {
-            args.push(`--passwords`);
+            args.push(`--passwords`, `${values.passwords}`);
         }
         if (values.usernames) {
-            args.push(`--usernames`);
+            args.push(`--usernames`, `${values.usernames}`);
         }
         if (values.output) {
-            args.push(`-o`);
+            args.push(`-o`,`${values.output}`);
         }        
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
