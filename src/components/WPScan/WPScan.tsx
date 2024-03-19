@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch, NativeSelect, NumberInput, Grid } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch, NativeSelect, NumberInput, Grid, PasswordInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -21,6 +21,7 @@ const description_userguide =
 const enumerationtypes = ["Vulnerable plugins","All Plugins","Popular Plugins","Vulnerable themes","All themes","Popular themes","Timthumbs","Config Backups","Db exports","UID range","MID range","Custom"]
 const enumerationtypesrequiringupdownbound = ["UID range","MID range"];
 const detectionmodes = ["mixed","passive","aggressive"];
+const outputformats = ["cli-no-colour","cli-no-color","json","cli"]
 
 
 interface FormValues {
@@ -42,12 +43,8 @@ const WPScan = () => {
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [selectedenumerationtype,setselectedenumerationtype]= useState("");
     const [selecteddetectionmode,setselecteddetectionmode] = useState("");
-
     const [verboseChecked, setVerboseChecked] = useState(false);
-    const [outputChecked, setOutputChecked] = useState(false);
     const [formatChecked, setFormatChecked] = useState(false);
-    const [passwordsChecked, setPasswordsChecked] = useState(false);
-    const [usernamesChecked, setUsernamesChecked] = useState(false);
     const [stealthyChecked, setStealthyChecked] = useState(false);
     const [pid, setPid] = useState("");
 
@@ -123,24 +120,22 @@ const WPScan = () => {
         if (verboseChecked) {
             args.push(`-v`);
         }
-        if (outputChecked) {
-            args.push(`-o`);
-        }
         if (formatChecked) {
             args.push(`-f`);
         }
- 
-        if (passwordsChecked) {
-            args.push(`--passwords`);
-        }
-        if (usernamesChecked) {
-            args.push(`--usernames`);
-        }
-
         if (stealthyChecked) {
             args.push(`--stealthy`);
         }
-
+        
+        if (values.passwords) {
+            args.push(`--passwords`);
+        }
+        if (values.usernames) {
+            args.push(`--usernames`);
+        }
+        if (values.output) {
+            args.push(`-o`);
+        }        
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "wpscan",
@@ -238,21 +233,7 @@ const WPScan = () => {
                             </>
                         )}
                         <TextInput label={" List of passwords to use during the password attack."} placeholder={""}{...form.getInputProps("passwords")}/>
-                        <Switch
-                            size="md"
-                            label="Usernames"
-                            checked={usernamesChecked}
-                            onChange={(e) => setUsernamesChecked(e.currentTarget.checked)}
-                        />
-                        {usernamesChecked && (
-                            <>
-                                <TextInput
-                                    label={"List of usernames to use during the password attack."}
-                                    placeholder={""}
-                                    {...form.getInputProps("usernames")}
-                                />
-                            </>
-                        )}
+                        <TextInput label={"List of usernames to use during the password attack."} placeholder={""}{...form.getInputProps("usernames")}/>
                         <Switch
                             size="md"
                             label="Stealthy"
