@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch, NativeSelect, NumberInput, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -18,10 +18,17 @@ const description_userguide =
     "Step 2: Click Scan to commence WPScan's operation.\n\n" +
     "Step 3: View the Output block below to view the results of the tools execution.\n\n" +
     "Switch to Advanced Mode for further options.";
+const enumerationtypes = ["Vulnerable plugins","All Plugins","Popular Plugins","Vulnerable themes","All themes","Popular themes","Timthumbs","Config Backups","Db exports","UID range","MID range","Custom"]
+const enumerationtypesrequiringupdownbound = ["UID range","MID range"];
+
 
 interface FormValues {
     url: string;
     optionBlank: string;
+    lowbound: number;
+    upbound: number;
+    customenum: string;
+
     verbose: boolean;
     output: string;
     format: string;
@@ -42,20 +49,6 @@ interface FormValues {
     apiToken: string;
     wpcontent: string;
     wpplugings: string;
-
-    vplugins: boolean;
-    aplugins: boolean;
-    pplugins: boolean;
-
-    vthemes: boolean;
-    athemes: boolean;
-    tthemes: boolean;
-
-    tthumbs: boolean;
-    cbackups: boolean;
-    dbexports: boolean;
-    uid: string;
-    mid: string;
     excludeRegexp: boolean;
     pdetectionMode: string;
     pvdetectionMode: string;
@@ -72,6 +65,8 @@ const WPScan = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
+    const [selectedenumerationtype,setselectedenumerationtype]= useState("");
+
     const [verboseChecked, setVerboseChecked] = useState(false);
     const [outputChecked, setOutputChecked] = useState(false);
     const [formatChecked, setFormatChecked] = useState(false);
@@ -92,17 +87,6 @@ const WPScan = () => {
     const [apiTokenChecked, setApiTokenChecked] = useState(false);
     const [wpcontentChecked, setWpcontentChecked] = useState(false);
     const [wppluginsChecked, setWppluginsChecked] = useState(false);
-    const [vpluginsChecked, setVpluginsChecked] = useState(false);
-    const [apluginsChecked, setApluginsChecked] = useState(false);
-    const [ppluginsChecked, setPpluginsChecked] = useState(false);
-    const [vthemesChecked, setVthemesChecked] = useState(false);
-    const [athemesChecked, setAthemesChecked] = useState(false);
-    const [tthemesChecked, setTthemesChecked] = useState(false);
-    const [tthumbsChecked, setTthumbsChecked] = useState(false);
-    const [cbackupsChecked, setCbackupsChecked] = useState(false);
-    const [dbexportsChecked, setDbexportsChecked] = useState(false);
-    const [uidChecked, setUidChecked] = useState(false);
-    const [midChecked, setMidChecked] = useState(false);
     const [excludeRegexpChecked, setExcludeRegexpChecked] = useState(false);
     const [pdetectionModeChecked, setPdetectionModeChecked] = useState(false);
     const [pvdetectionModeChecked, setPvdetectionModeChecked] = useState(false);
@@ -119,6 +103,11 @@ const WPScan = () => {
         initialValues: {
             url: "",
             optionBlank: "",
+            lowbound: 0,
+            upbound: 0,
+            customenum: "",
+
+
             verbose: false,
             output: "",
             format: "",
@@ -139,20 +128,6 @@ const WPScan = () => {
             apiToken: "",
             wpcontent: "",
             wpplugings: "",
-
-            vplugins: false,
-            aplugins: false,
-            pplugins: false,
-
-            vthemes: false,
-            athemes: false,
-            tthemes: false,
-
-            tthumbs: false,
-            cbackups: false,
-            dbexports: false,
-            uid: "",
-            mid: "",
             excludeRegexp: false,
             pdetectionMode: "",
             pvdetectionMode: "",
@@ -196,6 +171,23 @@ const WPScan = () => {
         setLoading(true);
 
         const args = [`--url`, values.url];
+
+        //Insantiate enumeration arguments
+        if(selectedenumerationtype != "" && checkedAdvanced)
+        {
+            selectedenumerationtype === "Vulnerable plugins" ? args.push(`-e`,`vp`): undefined;
+            selectedenumerationtype === "All Plugins"? args.push(`-e`,`ap`): undefined;
+            selectedenumerationtype === "Popular Plugins"? args.push(`-e`, `p`): undefined;
+            selectedenumerationtype === "Vulnerable themes"? args.push(`-e`, `vt`): undefined;
+            selectedenumerationtype === "All themes" ? args.push(`-e`, `at`):undefined;
+            selectedenumerationtype === "Popular themes" ? args.push(`-e`, `t`):undefined;
+            selectedenumerationtype === "Timthumbs" ? args.push(`-e`, `tt`): undefined;
+            selectedenumerationtype === "Config Backups" ? args.push(`-e`, `cb`): undefined;
+            selectedenumerationtype === "Db exports" ? args.push(`-e`, `dbe`): undefined;
+            selectedenumerationtype === "UID range" ? args.push(`-e`, `u${values.lowbound}-${values.upbound}`): undefined;
+            selectedenumerationtype === "MID range" ? args.push(`-e`, `m${values.lowbound}-${values.upbound}`):undefined;
+            selectedenumerationtype === "Custom" ? args.push(`${values.customenum}`) : undefined;
+        }
 
         if (verboseChecked) {
             args.push(`-v`);
@@ -256,39 +248,6 @@ const WPScan = () => {
         }
         if (wppluginsChecked) {
             args.push(`--wp-plugins-dir`);
-        }
-        if (vpluginsChecked) {
-            args.push(`-e -vp`);
-        }
-        if (apluginsChecked) {
-            args.push(`-e -ap`);
-        }
-        if (ppluginsChecked) {
-            args.push(`-e -p`);
-        }
-        if (vthemesChecked) {
-            args.push(`-e -vt`);
-        }
-        if (athemesChecked) {
-            args.push(`-e -at`);
-        }
-        if (tthemesChecked) {
-            args.push(`-e -t`);
-        }
-        if (tthumbsChecked) {
-            args.push(`-e -tt`);
-        }
-        if (cbackupsChecked) {
-            args.push(`-e -cb`);
-        }
-        if (dbexportsChecked) {
-            args.push(`-e -dbe`);
-        }
-        if (uidChecked) {
-            args.push(`-e -u`);
-        }
-        if (midChecked) {
-            args.push(`-e -m`);
         }
         if (excludeRegexpChecked) {
             args.push(`--exclude-content-based`);
@@ -358,6 +317,35 @@ const WPScan = () => {
                 />
                 {checkedAdvanced && (
                     <>
+                        <NativeSelect
+                            value={selectedenumerationtype}
+                            onChange={(e) => setselectedenumerationtype(e.target.value)}
+                            title={"Enumeration Options"}
+                            data={enumerationtypes}
+                            placeholder={"Types"}
+                            description={"Please select an enumeration type"}
+                        />
+                        {enumerationtypesrequiringupdownbound.includes(selectedenumerationtype)&&(
+                            <>
+                                <Grid>
+                                    <Grid.Col span={6}>
+                                    <NumberInput label ={"Lower Range"} placeholder={"e.g. 1"} {...form.getInputProps("lowbound")}/>
+                                    </Grid.Col>
+
+                                    <Grid.Col span={6}>
+                                    <NumberInput label ={"Upper Range"} placeholder={"e.g. 5"} {...form.getInputProps("upbound")}/>
+                                    </Grid.Col>
+                                </Grid>
+                            </>                               
+                        )}
+                        {selectedenumerationtype === "Custom" &&(
+                            <TextInput label ={"Custom Enumeration"} placeholder= {"e.g. vp ap u1-5"}{...form.getInputProps("customenum")}/>
+                        )}
+                      
+                        
+
+
+
                         <Switch
                             size="md"
                             label="Verbose"
@@ -621,90 +609,6 @@ const WPScan = () => {
                                     label={"The plugins directory if custom or not detected"}
                                     placeholder={"Example: wp-content/plugins"}
                                     {...form.getInputProps("wpplugings")}
-                                />
-                            </>
-                        )}
-                        <Switch
-                            size="md"
-                            label="Vulnerable Plugins"
-                            checked={vpluginsChecked}
-                            onChange={(e) => setVpluginsChecked(e.currentTarget.checked)}
-                        />
-                        <Switch
-                            size="md"
-                            label="All Plugins"
-                            checked={apluginsChecked}
-                            onChange={(e) => setApluginsChecked(e.currentTarget.checked)}
-                        />
-                        <Switch
-                            size="md"
-                            label="Popular Plugins"
-                            checked={ppluginsChecked}
-                            onChange={(e) => setPpluginsChecked(e.currentTarget.checked)}
-                        />
-                        <Switch
-                            size="md"
-                            label="Vulnerable Themes"
-                            checked={vthemesChecked}
-                            onChange={(e) => setVthemesChecked(e.currentTarget.checked)}
-                        />
-                        <Switch
-                            size="md"
-                            label="All Themes"
-                            checked={athemesChecked}
-                            onChange={(e) => setAthemesChecked(e.currentTarget.checked)}
-                        />
-                        <Switch
-                            size="md"
-                            label="Popular Themes"
-                            checked={tthemesChecked}
-                            onChange={(e) => setTthemesChecked(e.currentTarget.checked)}
-                        />
-                        <Switch
-                            size="md"
-                            label="Timthumbs"
-                            checked={tthumbsChecked}
-                            onChange={(e) => setTthumbsChecked(e.currentTarget.checked)}
-                        />
-                        <Switch
-                            size="md"
-                            label="Config Backups"
-                            checked={cbackupsChecked}
-                            onChange={(e) => setCbackupsChecked(e.currentTarget.checked)}
-                        />
-                        <Switch
-                            size="md"
-                            label="Db Exports"
-                            checked={dbexportsChecked}
-                            onChange={(e) => setDbexportsChecked(e.currentTarget.checked)}
-                        />
-                        <Switch
-                            size="md"
-                            label="User IDs Range"
-                            checked={uidChecked}
-                            onChange={(e) => setUidChecked(e.currentTarget.checked)}
-                        />
-                        {uidChecked && (
-                            <>
-                                <TextInput
-                                    label={"User IDs range. "}
-                                    placeholder={"Example: u1-5"}
-                                    {...form.getInputProps("uid")}
-                                />
-                            </>
-                        )}
-                        <Switch
-                            size="md"
-                            label="Media IDs Range"
-                            checked={midChecked}
-                            onChange={(e) => setMidChecked(e.currentTarget.checked)}
-                        />
-                        {midChecked && (
-                            <>
-                                <TextInput
-                                    label={"Media IDs range."}
-                                    placeholder={"Example: m1-15"}
-                                    {...form.getInputProps("mid")}
                                 />
                             </>
                         )}
