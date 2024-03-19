@@ -207,11 +207,6 @@ const WPScan = () => {
                             placeholder={"Detection Modes"}
                             description={"Please select a detection type"}
                         />
-                      
-                        
-
-
-
                         <Switch
                             size="md"
                             label="Verbose"
