@@ -1,4 +1,14 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch, NativeSelect, NumberInput, Grid, PasswordInput } from "@mantine/core";
+import {
+    Button,
+    LoadingOverlay,
+    Stack,
+    TextInput,
+    Switch,
+    NativeSelect,
+    NumberInput,
+    Grid,
+    PasswordInput,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -18,11 +28,23 @@ const description_userguide =
     "Step 2: Click Scan to commence WPScan's operation.\n\n" +
     "Step 3: View the Output block below to view the results of the tool's execution.\n\n" +
     "Switch to Advanced Mode for further options.";
-const enumerationtypes = ["Vulnerable plugins","All Plugins","Popular Plugins","Vulnerable themes","All themes","Popular themes","Timthumbs","Config Backups","Db exports","UID range","MID range","Custom"]
-const enumerationtypesrequiringupdownbound = ["UID range","MID range"];
-const detectionmodes = ["mixed","passive","aggressive"];
-const outputformats = ["cli-no-colour","cli-no-color","json","cli"]
-
+const enumerationtypes = [
+    "Vulnerable plugins",
+    "All Plugins",
+    "Popular Plugins",
+    "Vulnerable themes",
+    "All themes",
+    "Popular themes",
+    "Timthumbs",
+    "Config Backups",
+    "Db exports",
+    "UID range",
+    "MID range",
+    "Custom",
+];
+const enumerationtypesrequiringupdownbound = ["UID range", "MID range"];
+const detectionmodes = ["mixed", "passive", "aggressive"];
+const outputformats = ["cli-no-colour", "cli-no-color", "json", "cli"];
 
 interface FormValues {
     url: string;
@@ -31,7 +53,7 @@ interface FormValues {
     customenum: string;
     verbose: boolean;
     output: string;
-    format: string;  
+    format: string;
     passwords: string;
     usernames: string;
     stealthy: boolean;
@@ -43,9 +65,9 @@ const WPScan = () => {
     const [output, setOutput] = useState("");
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [checkedCustom, setcheckedCustom] = useState(false);
-    const [selectedenumerationtype,setselectedenumerationtype]= useState("");
-    const [selecteddetectionmode,setselecteddetectionmode] = useState("");
-    const [selectedoutputformat,setselectedoutputformat]= useState("");   
+    const [selectedenumerationtype, setselectedenumerationtype] = useState("");
+    const [selecteddetectionmode, setselecteddetectionmode] = useState("");
+    const [selectedoutputformat, setselectedoutputformat] = useState("");
     const [verboseChecked, setVerboseChecked] = useState(false);
     const [stealthyChecked, setStealthyChecked] = useState(false);
     const [pid, setPid] = useState("");
@@ -60,10 +82,10 @@ const WPScan = () => {
             verbose: false,
             output: "",
             format: "",
-            stealthy: false,  
+            stealthy: false,
             passwords: "",
             usernames: "",
-            custom:"",
+            custom: "",
         },
     });
 
@@ -99,39 +121,40 @@ const WPScan = () => {
         const args = [`--url`, values.url];
 
         //Insantiate enumeration arguments
-        if(selectedenumerationtype != "" && checkedAdvanced)
-        {
-            selectedenumerationtype === "Vulnerable plugins" ? args.push(`-e`,`vp`): undefined;
-            selectedenumerationtype === "All Plugins"? args.push(`-e`,`ap`): undefined;
-            selectedenumerationtype === "Popular Plugins"? args.push(`-e`, `p`): undefined;
-            selectedenumerationtype === "Vulnerable themes"? args.push(`-e`, `vt`): undefined;
-            selectedenumerationtype === "All themes" ? args.push(`-e`, `at`):undefined;
-            selectedenumerationtype === "Popular themes" ? args.push(`-e`, `t`):undefined;
-            selectedenumerationtype === "Timthumbs" ? args.push(`-e`, `tt`): undefined;
-            selectedenumerationtype === "Config Backups" ? args.push(`-e`, `cb`): undefined;
-            selectedenumerationtype === "Db exports" ? args.push(`-e`, `dbe`): undefined;
-            selectedenumerationtype === "UID range" ? args.push(`-e`, `u${values.lowbound}-${values.upbound}`): undefined;
-            selectedenumerationtype === "MID range" ? args.push(`-e`, `m${values.lowbound}-${values.upbound}`):undefined;
-            selectedenumerationtype === "Custom" ? args.push(`-e`,`${values.customenum}`) : undefined;
+        if (selectedenumerationtype != "" && checkedAdvanced) {
+            selectedenumerationtype === "Vulnerable plugins" ? args.push(`-e`, `vp`) : undefined;
+            selectedenumerationtype === "All Plugins" ? args.push(`-e`, `ap`) : undefined;
+            selectedenumerationtype === "Popular Plugins" ? args.push(`-e`, `p`) : undefined;
+            selectedenumerationtype === "Vulnerable themes" ? args.push(`-e`, `vt`) : undefined;
+            selectedenumerationtype === "All themes" ? args.push(`-e`, `at`) : undefined;
+            selectedenumerationtype === "Popular themes" ? args.push(`-e`, `t`) : undefined;
+            selectedenumerationtype === "Timthumbs" ? args.push(`-e`, `tt`) : undefined;
+            selectedenumerationtype === "Config Backups" ? args.push(`-e`, `cb`) : undefined;
+            selectedenumerationtype === "Db exports" ? args.push(`-e`, `dbe`) : undefined;
+            selectedenumerationtype === "UID range"
+                ? args.push(`-e`, `u${values.lowbound}-${values.upbound}`)
+                : undefined;
+            selectedenumerationtype === "MID range"
+                ? args.push(`-e`, `m${values.lowbound}-${values.upbound}`)
+                : undefined;
+            selectedenumerationtype === "Custom" ? args.push(`-e`, `${values.customenum}`) : undefined;
         }
 
-        if(selecteddetectionmode)
-        {
-            args.push(`detection-mode`,`${selecteddetectionmode}`)
+        if (selecteddetectionmode) {
+            args.push(`detection-mode`, `${selecteddetectionmode}`);
         }
 
         if (verboseChecked) {
             args.push(`-v`);
         }
 
-        if(selectedoutputformat)
-        {
-            args.push(`-f`,`${selectedoutputformat}`)
+        if (selectedoutputformat) {
+            args.push(`-f`, `${selectedoutputformat}`);
         }
         if (stealthyChecked) {
             args.push(`--stealthy`);
         }
-        
+
         if (values.passwords) {
             args.push(`--passwords`, `${values.passwords}`);
         }
@@ -139,13 +162,13 @@ const WPScan = () => {
             args.push(`--usernames`, `${values.usernames}`);
         }
         if (values.output) {
-            args.push(`-o`,`${values.output}`);
-        }  
-        
-        if(checkedCustom){
+            args.push(`-o`, `${values.output}`);
+        }
+
+        if (checkedCustom) {
             args.push(`${values.custom}`);
         }
-        
+
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "wpscan",
@@ -203,21 +226,33 @@ const WPScan = () => {
                             placeholder={"Types"}
                             description={"Please select an enumeration type"}
                         />
-                        {enumerationtypesrequiringupdownbound.includes(selectedenumerationtype)&&(
+                        {enumerationtypesrequiringupdownbound.includes(selectedenumerationtype) && (
                             <>
                                 <Grid>
                                     <Grid.Col span={6}>
-                                    <NumberInput label ={"Lower Range"} placeholder={"e.g. 1"} {...form.getInputProps("lowbound")}/>
+                                        <NumberInput
+                                            label={"Lower Range"}
+                                            placeholder={"e.g. 1"}
+                                            {...form.getInputProps("lowbound")}
+                                        />
                                     </Grid.Col>
 
                                     <Grid.Col span={6}>
-                                    <NumberInput label ={"Upper Range"} placeholder={"e.g. 5"} {...form.getInputProps("upbound")}/>
+                                        <NumberInput
+                                            label={"Upper Range"}
+                                            placeholder={"e.g. 5"}
+                                            {...form.getInputProps("upbound")}
+                                        />
                                     </Grid.Col>
                                 </Grid>
-                            </>                               
+                            </>
                         )}
-                        {selectedenumerationtype === "Custom" &&(
-                            <TextInput label ={"Custom Enumeration"} placeholder= {"e.g. vp ap u1-5"}{...form.getInputProps("customenum")}/>
+                        {selectedenumerationtype === "Custom" && (
+                            <TextInput
+                                label={"Custom Enumeration"}
+                                placeholder={"e.g. vp ap u1-5"}
+                                {...form.getInputProps("customenum")}
+                            />
                         )}
                         <NativeSelect
                             value={selecteddetectionmode}
@@ -227,17 +262,29 @@ const WPScan = () => {
                             placeholder={"Detection Modes"}
                             description={"Please select a detection type"}
                         />
-                        <TextInput label={"Ouput to file"} placeholder={"File Name"}{...form.getInputProps("output")}/>
+                        <TextInput
+                            label={"Ouput to file"}
+                            placeholder={"File Name"}
+                            {...form.getInputProps("output")}
+                        />
                         <NativeSelect
                             value={selectedoutputformat}
-                            onChange={(e)=> setselectedoutputformat(e.target.value)}
+                            onChange={(e) => setselectedoutputformat(e.target.value)}
                             title={"Output Format"}
                             data={outputformats}
                             placeholder={"Output Format"}
                             description={"Please select an output format"}
                         />
-                        <TextInput label={" List of passwords to use during the password attack."} placeholder={"Input Filepath"}{...form.getInputProps("passwords")}/>
-                        <TextInput label={"List of usernames to use during the password attack."} placeholder={"Input Filepath"}{...form.getInputProps("usernames")}/>
+                        <TextInput
+                            label={" List of passwords to use during the password attack."}
+                            placeholder={"Input Filepath"}
+                            {...form.getInputProps("passwords")}
+                        />
+                        <TextInput
+                            label={"List of usernames to use during the password attack."}
+                            placeholder={"Input Filepath"}
+                            {...form.getInputProps("usernames")}
+                        />
                     </>
                 )}
                 <Switch
@@ -246,9 +293,7 @@ const WPScan = () => {
                     checked={checkedCustom}
                     onChange={(e) => setcheckedCustom(e.currentTarget.checked)}
                 />
-                {checkedCustom &&(
-                    <TextInput label = {"Custom Configuration"}{...form.getInputProps("custom")}/>
-                )}
+                {checkedCustom && <TextInput label={"Custom Configuration"} {...form.getInputProps("custom")} />}
 
                 <Button type={"submit"}>Scan</Button>
                 {SaveOutputToTextFile(output)}
