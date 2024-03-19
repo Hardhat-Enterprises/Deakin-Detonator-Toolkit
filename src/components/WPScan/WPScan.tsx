@@ -35,12 +35,14 @@ interface FormValues {
     passwords: string;
     usernames: string;
     stealthy: boolean;
+    custom: string;
 }
 
 const WPScan = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
+    const [checkedCustom, setcheckedCustom] = useState(false);
     const [selectedenumerationtype,setselectedenumerationtype]= useState("");
     const [selecteddetectionmode,setselecteddetectionmode] = useState("");
     const [selectedoutputformat,setselectedoutputformat]= useState("");   
@@ -61,6 +63,7 @@ const WPScan = () => {
             stealthy: false,  
             passwords: "",
             usernames: "",
+            custom:"",
         },
     });
 
@@ -137,7 +140,12 @@ const WPScan = () => {
         }
         if (values.output) {
             args.push(`-o`,`${values.output}`);
-        }        
+        }  
+        
+        if(checkedCustom){
+            args.push(`${values.custom}`);
+        }
+        
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "wpscan",
@@ -219,6 +227,7 @@ const WPScan = () => {
                             placeholder={"Detection Modes"}
                             description={"Please select a detection type"}
                         />
+                        <TextInput label={"Ouput to file"} placeholder={"File Name"}{...form.getInputProps("output")}/>
                         <NativeSelect
                             value={selectedoutputformat}
                             onChange={(e)=> setselectedoutputformat(e.target.value)}
@@ -227,11 +236,20 @@ const WPScan = () => {
                             placeholder={"Output Format"}
                             description={"Please select an output format"}
                         />
-                        <TextInput label={"Ouput to file"} placeholder={"File Name"}{...form.getInputProps("output")}/>
                         <TextInput label={" List of passwords to use during the password attack."} placeholder={""}{...form.getInputProps("passwords")}/>
                         <TextInput label={"List of usernames to use during the password attack."} placeholder={""}{...form.getInputProps("usernames")}/>
                     </>
                 )}
+                <Switch
+                    size="md"
+                    label="Custom Mode"
+                    checked={checkedCustom}
+                    onChange={(e) => setcheckedCustom(e.currentTarget.checked)}
+                />
+                {checkedCustom &&(
+                    <TextInput label = {"Custom Configuration"}{...form.getInputProps("custom")}/>
+                )}
+
                 <Button type={"submit"}>Scan</Button>
                 {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
