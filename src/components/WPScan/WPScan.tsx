@@ -43,8 +43,8 @@ const WPScan = () => {
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [selectedenumerationtype,setselectedenumerationtype]= useState("");
     const [selecteddetectionmode,setselecteddetectionmode] = useState("");
+    const [selectedoutputformat,setselectedoutputformat]= useState("");   
     const [verboseChecked, setVerboseChecked] = useState(false);
-    const [formatChecked, setFormatChecked] = useState(false);
     const [stealthyChecked, setStealthyChecked] = useState(false);
     const [pid, setPid] = useState("");
 
@@ -120,8 +120,10 @@ const WPScan = () => {
         if (verboseChecked) {
             args.push(`-v`);
         }
-        if (formatChecked) {
-            args.push(`-f`);
+
+        if(selectedoutputformat)
+        {
+            args.push(`-f`,`${selectedoutputformat}`)
         }
         if (stealthyChecked) {
             args.push(`--stealthy`);
@@ -217,21 +219,14 @@ const WPScan = () => {
                             onChange={(e) => setVerboseChecked(e.currentTarget.checked)}
                         />
                         <TextInput label={"Ouput to file"} placeholder={"File Name"}{...form.getInputProps("output")}/>
-                        <Switch
-                            size="md"
-                            label="Format"
-                            checked={formatChecked}
-                            onChange={(e) => setFormatChecked(e.currentTarget.checked)}
+                        <NativeSelect
+                            value={selectedoutputformat}
+                            onChange={(e)=> setselectedoutputformat(e.target.value)}
+                            title={"Output Format"}
+                            data={outputformats}
+                            placeholder={"Output Format"}
+                            description={"Please select an output format"}
                         />
-                        {formatChecked && (
-                            <>
-                                <TextInput
-                                    label={"Format"}
-                                    placeholder={"cli-no-colour, cli-no-color, json, cli"}
-                                    {...form.getInputProps("format")}
-                                />
-                            </>
-                        )}
                         <TextInput label={" List of passwords to use during the password attack."} placeholder={""}{...form.getInputProps("passwords")}/>
                         <TextInput label={"List of usernames to use during the password attack."} placeholder={""}{...form.getInputProps("usernames")}/>
                         <Switch
