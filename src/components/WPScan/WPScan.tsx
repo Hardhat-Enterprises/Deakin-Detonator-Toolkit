@@ -16,7 +16,7 @@ const description_userguide =
     "Step 1: Enter a WordPress URL.\n" +
     "       Eg: http://www.wordpress.com/sample\n\n" +
     "Step 2: Click Scan to commence WPScan's operation.\n\n" +
-    "Step 3: View the Output block below to view the results of the tools execution.\n\n" +
+    "Step 3: View the Output block below to view the results of the tool's execution.\n\n" +
     "Switch to Advanced Mode for further options.";
 const enumerationtypes = ["Vulnerable plugins","All Plugins","Popular Plugins","Vulnerable themes","All themes","Popular themes","Timthumbs","Config Backups","Db exports","UID range","MID range","Custom"]
 const enumerationtypesrequiringupdownbound = ["UID range","MID range"];
@@ -236,8 +236,8 @@ const WPScan = () => {
                             placeholder={"Output Format"}
                             description={"Please select an output format"}
                         />
-                        <TextInput label={" List of passwords to use during the password attack."} placeholder={""}{...form.getInputProps("passwords")}/>
-                        <TextInput label={"List of usernames to use during the password attack."} placeholder={""}{...form.getInputProps("usernames")}/>
+                        <TextInput label={" List of passwords to use during the password attack."} placeholder={"Input Filepath"}{...form.getInputProps("passwords")}/>
+                        <TextInput label={"List of usernames to use during the password attack."} placeholder={"Input Filepath"}{...form.getInputProps("usernames")}/>
                     </>
                 )}
                 <Switch
