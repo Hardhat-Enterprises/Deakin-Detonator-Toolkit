@@ -20,6 +20,7 @@ const description_userguide =
     "Switch to Advanced Mode for further options.";
 const enumerationtypes = ["Vulnerable plugins","All Plugins","Popular Plugins","Vulnerable themes","All themes","Popular themes","Timthumbs","Config Backups","Db exports","UID range","MID range","Custom"]
 const enumerationtypesrequiringupdownbound = ["UID range","MID range"];
+const detectionmodes = ["mixed","passive","aggressive"];
 
 
 interface FormValues {
@@ -28,11 +29,11 @@ interface FormValues {
     lowbound: number;
     upbound: number;
     customenum: string;
+    detectionmode:string;
 
     verbose: boolean;
     output: string;
     format: string;
-    detectionMode: string;
     userAgent: string; //add random to options to use it
     httpAuth: string;
     maxThreads: string;
@@ -66,11 +67,11 @@ const WPScan = () => {
     const [output, setOutput] = useState("");
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [selectedenumerationtype,setselectedenumerationtype]= useState("");
+    const [selecteddetectionmode,setselecteddetectionmode] = useState("");
 
     const [verboseChecked, setVerboseChecked] = useState(false);
     const [outputChecked, setOutputChecked] = useState(false);
     const [formatChecked, setFormatChecked] = useState(false);
-    const [detectionModeChecked, setDetectionModeChecked] = useState(false);
     const [userAgentChecked, setUserAgentChecked] = useState(false);
     const [httpAuthChecked, setHttpAuthChecked] = useState(false);
     const [maxThreadsChecked, setMaxThreadsChecked] = useState(false);
@@ -106,12 +107,11 @@ const WPScan = () => {
             lowbound: 0,
             upbound: 0,
             customenum: "",
-
+            detectionmode: "",
 
             verbose: false,
             output: "",
             format: "",
-            detectionMode: "",
             userAgent: "", //add random to options to use it
             httpAuth: "",
             maxThreads: "",
@@ -186,7 +186,12 @@ const WPScan = () => {
             selectedenumerationtype === "Db exports" ? args.push(`-e`, `dbe`): undefined;
             selectedenumerationtype === "UID range" ? args.push(`-e`, `u${values.lowbound}-${values.upbound}`): undefined;
             selectedenumerationtype === "MID range" ? args.push(`-e`, `m${values.lowbound}-${values.upbound}`):undefined;
-            selectedenumerationtype === "Custom" ? args.push(`${values.customenum}`) : undefined;
+            selectedenumerationtype === "Custom" ? args.push(`-e`,`${values.customenum}`) : undefined;
+        }
+
+        if(selecteddetectionmode)
+        {
+            args.push(`detection-mode`,`${selecteddetectionmode}`)
         }
 
         if (verboseChecked) {
@@ -197,9 +202,6 @@ const WPScan = () => {
         }
         if (formatChecked) {
             args.push(`-f`);
-        }
-        if (detectionModeChecked) {
-            args.push(`--detection-mode`);
         }
         if (userAgentChecked) {
             args.push(`--ua`);
@@ -341,6 +343,14 @@ const WPScan = () => {
                         {selectedenumerationtype === "Custom" &&(
                             <TextInput label ={"Custom Enumeration"} placeholder= {"e.g. vp ap u1-5"}{...form.getInputProps("customenum")}/>
                         )}
+                        <NativeSelect
+                            value={selecteddetectionmode}
+                            onChange={(e) => setselecteddetectionmode(e.target.value)}
+                            title={"Detectionmode"}
+                            data={detectionmodes}
+                            placeholder={"Detection Modes"}
+                            description={"Please select a detection type"}
+                        />
                       
                         
 
@@ -379,21 +389,6 @@ const WPScan = () => {
                                     label={"Format"}
                                     placeholder={"cli-no-colour, cli-no-color, json, cli"}
                                     {...form.getInputProps("format")}
-                                />
-                            </>
-                        )}
-                        <Switch
-                            size="md"
-                            label="Detection Mode"
-                            checked={detectionModeChecked}
-                            onChange={(e) => setDetectionModeChecked(e.currentTarget.checked)}
-                        />
-                        {detectionModeChecked && (
-                            <>
-                                <TextInput
-                                    label={"Detection Mode"}
-                                    placeholder={"mixed, passive, aggressive"}
-                                    {...form.getInputProps("detectionMode")}
                                 />
                             </>
                         )}
