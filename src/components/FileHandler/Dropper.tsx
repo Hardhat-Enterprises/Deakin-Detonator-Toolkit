@@ -6,14 +6,32 @@ import { invoke } from '@tauri-apps/api'
 export function Dropper(props: Partial<DropzoneProps>) {
     const theme = useMantineTheme();
 
+    /**
+     *  Handles the drop event.
+     * @remarks
+     * This function is used to handle the drop event and save the file.
+     * It exists to enable debugging and a iterative call of the save_file function. 
+     * 
+     * @param files - An array of files to be saved.
+     */
     const handle_drop = async (files: File[]) => {
         console.log("handleDrop called")
         await save_file(files);
     }
 
+    /**
+     * Saves the selected file. 
+     * 
+     * @remarks 
+     * This function is used to create a call to the backend (rust) to
+     * save a file within the allowed path.
+     * 
+     * @param files - An array of files to be saved.
+     * @returns The filepath and file name tuple.
+     */
     const save_file = async (files: File[]) => {
         try {
-            console.log("save_file function called with files: ", files);
+            console.log("Saving file: ", files); 
             const file = files[0];
             const reader = new FileReader();
         
