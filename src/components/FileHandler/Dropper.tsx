@@ -1,6 +1,6 @@
 import { Group, Text, useMantineTheme } from '@mantine/core';
 import { IconUpload, IconFile, IconX } from '@tabler/icons';
-import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from '@mantine/dropzone';
+import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE, MIME_TYPES } from '@mantine/dropzone';
 import { invoke } from '@tauri-apps/api'
 import { generateFileName, generateFilePath } from './FileHandler';
 import React, { useState } from 'react';
@@ -74,27 +74,6 @@ export function Dropper({ fileNames, setFileNames, componentName, ...dropzonePro
             maxSize={3 * 1024 ** 2}
         >
             <Group position="center" spacing="xl" style={{ minHeight: 220, pointerEvents: 'none' }}>
-                <Dropzone.Accept>
-                    <IconUpload
-                        size={50}
-                        stroke={1.5}
-                        color={theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]}
-                    />
-                </Dropzone.Accept>
-                <Dropzone.Reject>
-                    <IconX
-                        size={50}
-                        stroke={1.5}
-                        color={theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]}
-                    />
-                </Dropzone.Reject>
-                <Dropzone.Idle>
-                    <IconFile
-                        size={50}
-                        stroke={1.5}
-                    />
-                </Dropzone.Idle>
-
                 <div>
                     <Text size="xl" inline>
                         Click to select a file
