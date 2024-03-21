@@ -1,3 +1,4 @@
+import { invoke } from '@tauri-apps/api';
 import { v4 as uuidv4 } from 'uuid';
 
 export function generateFileName(fileName: string): string {
@@ -8,5 +9,9 @@ export function generateFileName(fileName: string): string {
 }
 
 export function generateFilePath(componentName: string): string {
-    return "/$HOME/Deakin-Detonator-Toolkit/temp/**" + componentName;
+    return "/usr/share/ddt/file_handler/" + componentName;
+}
+
+export async function readFile(filePath: string): File {
+    let data: File = await invoke("load_file", {filePath})
 }
