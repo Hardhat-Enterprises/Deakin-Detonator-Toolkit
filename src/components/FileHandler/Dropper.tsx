@@ -2,9 +2,18 @@ import { Group, Text, useMantineTheme } from '@mantine/core';
 import { IconUpload, IconFile, IconX } from '@tabler/icons';
 import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { invoke } from '@tauri-apps/api'
+import { generateFileName, generateFilePath } from './FileHandler';
+import React, { useState } from 'react';
 
-export function Dropper(props: Partial<DropzoneProps>) {
+interface DropperProps {
+    fileNames: string[];
+    setFileNames: React.Dispatch<React.SetStateAction<string[]>>;
+    componentName: string;
+}
+
+export function Dropper({ fileNames, setFileNames, componentName, ...dropzoneProps }: DropperProps) {
     const theme = useMantineTheme();
+    const fileDatahPath = generateFilePath(componentName);
 
     /**
      *  Handles the drop event.
@@ -15,8 +24,13 @@ export function Dropper(props: Partial<DropzoneProps>) {
      * @param files - An array of files to be saved.
      */
     const handle_drop = async (files: File[]) => {
-        console.log("handleDrop called")
-        await save_file(files);
+        console.log("handleDrop called");
+        const fileNamesUpload = files.map((file) => generateFileName(file.name));
+        setFileNames(fileNamesUpload);
+
+        for (let i = 0; i < files.length; i++) {
+            await save_file([files[i]], fileNamesUpload[i], fileDatahPath);
+        }
     }
 
     /**
@@ -29,7 +43,7 @@ export function Dropper(props: Partial<DropzoneProps>) {
      * @param files - An array of files to be saved.
      * @returns The filepath and file name tuple.
      */
-    const save_file = async (files: File[]) => {
+    const save_file = async (files: File[], fileNameUpload: String, filePathUpload: string) => {
         try {
             console.log("Saving file: ", files); 
             const file = files[0];
@@ -38,8 +52,6 @@ export function Dropper(props: Partial<DropzoneProps>) {
             reader.onload = async (event) => {
                 if (event.target?.result) {
                     const fileDataUpload = Array.from(new Uint8Array(event.target.result as ArrayBuffer));
-                    const filePathUpload = '/usr/share/ddt/test';
-                    const fileNameUpload = 'testupload';
                     console.log("saving file");
                     await invoke("save_file", { fileData: fileDataUpload, filePath: filePathUpload, fileName: fileNameUpload });
                 }
@@ -56,11 +68,10 @@ export function Dropper(props: Partial<DropzoneProps>) {
     }
 
     return (
-        <Dropzone
+        <Dropzone {...dropzoneProps}
             onDrop={handle_drop}
             onReject={(files) => console.log('rejected files', files)}
             maxSize={3 * 1024 ** 2}
-            {...props}
         >
             <Group position="center" spacing="xl" style={{ minHeight: 220, pointerEvents: 'none' }}>
                 <Dropzone.Accept>
