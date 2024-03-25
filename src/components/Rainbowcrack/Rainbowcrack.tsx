@@ -7,6 +7,8 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import React from "react";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { Dropper } from "../FileHandler/Dropper";
+import { generateFilePath } from '../FileHandler/FileHandler';
 
 const title = "Rainbowcrack";
 const description_userguide =
@@ -27,6 +29,7 @@ export function rcrack() {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [fileNames, setFileNames] = useState<string[]>([]);
 
     let form = useForm({
         initialValues: {
@@ -78,14 +81,24 @@ export function rcrack() {
 
         // Start the Loading Overlay
         setLoading(true);
-
         const args = ["."];
-        args.push("-h", values.hashcode);
 
-        //This is the old version for runCommand
-        //const output = await CommandHelper.runCommand("rcrack", args);
-        //setOutput(output);
-        //setLoading(false);
+        if (fileNames.length === 0) {
+
+            
+            args.push("-h", values.hashcode);
+
+
+        } else {
+            const filePath = generateFilePath("Rainbowcrack");
+            const dataUploadPath = filePath + "/" + fileNames[0];
+            args.push("-l", dataUploadPath);
+        }
+
+            //This is the old version for runCommand
+            //const output = await CommandHelper.runCommand("rcrack", args);
+            //setOutput(output);
+            //setLoading(false);
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
@@ -112,7 +125,18 @@ export function rcrack() {
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
-                <TextInput label={"Enter the Hash code"} required {...form.getInputProps("hashcode")} />
+                <TextInput
+                    label={"Enter the Hash code"}
+                    required
+                    disabled={fileNames.length > 0}
+                    value={fileNames.length > 0 ? "" : form.values.hashcode}
+                    onChange={(event) => {
+                        if (fileNames.length === 0) {
+                            form.setFieldValue("hashcode", event.currentTarget.value);
+                        }
+                    }}
+                />
+                <Dropper fileNames={fileNames} setFileNames={setFileNames} maxFileNum={1} componentName="Rainbowcrack" />
                 <Button type={"submit"}>Crack</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
