@@ -1,9 +1,8 @@
 import { Group, Text, useMantineTheme } from '@mantine/core';
-import { IconUpload, IconFile, IconX } from '@tabler/icons';
 import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE, MIME_TYPES } from '@mantine/dropzone';
 import { invoke } from '@tauri-apps/api'
 import { generateFileName, generateFilePath } from './FileHandler';
-import React, { useState } from 'react';
+import React from 'react';
 
 interface DropperProps {
     fileNames: string[];
