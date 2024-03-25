@@ -1,5 +1,6 @@
 import { Group, Text, useMantineTheme } from '@mantine/core';
 import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE, MIME_TYPES } from '@mantine/dropzone';
+import { IconFile } from '@tabler/icons';
 import { invoke } from '@tauri-apps/api'
 import { generateFileName, generateFilePath } from './FileHandler';
 import React from 'react';
@@ -8,9 +9,10 @@ interface DropperProps {
     fileNames: string[];
     setFileNames: React.Dispatch<React.SetStateAction<string[]>>;
     componentName: string;
+    maxFileNum: number;
 }
 
-export function Dropper({ fileNames, setFileNames, componentName, ...dropzoneProps }: DropperProps) {
+export function Dropper({ fileNames, setFileNames, componentName, maxFileNum, ...dropzoneProps }: DropperProps) {
     const theme = useMantineTheme();
     const fileDatahPath = generateFilePath(componentName);
 
@@ -25,6 +27,13 @@ export function Dropper({ fileNames, setFileNames, componentName, ...dropzonePro
     const handle_drop = async (files: File[]) => {
         console.log("handleDrop called");
         const fileNamesUpload = files.map((file) => generateFileName(file.name));
+        
+        // Limit the number of files to allow imported
+        if (fileNamesUpload.length > maxFileNum) {
+            console.log(`Only ${maxFileNum} files can be imported at a time.`);
+            return;
+        }
+        
         setFileNames(fileNamesUpload);
 
         for (let i = 0; i < files.length; i++) {
@@ -73,11 +82,20 @@ export function Dropper({ fileNames, setFileNames, componentName, ...dropzonePro
             maxSize={3 * 1024 ** 2}
         >
             <Group position="center" spacing="xl" style={{ minHeight: 220, pointerEvents: 'none' }}>
-                <div>
-                    <Text size="xl" inline>
-                        Click to select a file
-                    </Text>
-                </div>
+                {fileNames.length === 0 ? (
+                    <div>
+                        <Text size="xl" inline>
+                            Click to select a file
+                        </Text>
+                    </div>
+                ) : (
+                    fileNames.map((fileName) => (
+                        <div key={fileName} style={{ display: 'flex', alignItems: 'center' }}>
+                            <IconFile size={50} />
+                            <Text>{fileName.split('_')[0]}</Text>
+                        </div>
+                    ))
+                )}
             </Group>
         </Dropzone>
     );
