@@ -11,7 +11,3 @@ export function generateFileName(fileName: string): string {
 export function generateFilePath(componentName: string): string {
     return "/usr/share/ddt/file_handler/" + componentName;
 }
-
-export async function readFile(filePath: string): File {
-    let data: File = await invoke("load_file", {filePath})
-}
