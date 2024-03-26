@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Title, Checkbox, Switch } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Title, Checkbox, Switch, Slider } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -33,6 +33,8 @@ const ForemostTool = () => {
     // State hooks for loading, output, and advanced mode switch
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
+    const [checkedVerbose, setCheckedverbose] = useState(false);
+    const [checkedQuiet, setCheckedQuiet] = useState(false);
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [pid, setPid] = useState("");
 
@@ -89,11 +91,11 @@ const ForemostTool = () => {
             args.push(`-c`, `${values.config}`);
         }
 
-        if (values.quiet) {
+        if (checkedQuiet) {
             args.push(`-Q`);
         }
 
-        if (values.verbose) {
+        if (checkedVerbose) {
             args.push(`-v`);
         }
 
@@ -172,18 +174,20 @@ const ForemostTool = () => {
                     placeholder={"Specify types (comma-separated) e.g., jpg,doc. if blank will retrieve all."}
                     {...form.getInputProps("types")}
                 />
-                <Stack spacing="lg">
-                    {/* Quiet Mode */}
-                    <Checkbox
-                        label={"Quiet Mode - enables quiet mode. Suppress output messages."}
-                        {...form.getInputProps("quiet" as keyof FormValuesType)}
+                {!checkedVerbose && (
+                    <Switch
+                        label="Quiet Mode"
+                        checked={checkedQuiet}
+                        onChange={(e) => setCheckedQuiet(e.currentTarget.checked)}
                     />
-                    {/* Verbose Mode */}
-                    <Checkbox
-                        label={"Verbose Mode - enables verbose mode. Logs all messages to screen."}
-                        {...form.getInputProps("verbose" as keyof FormValuesType)}
+                )}
+                {!checkedQuiet && (
+                    <Switch
+                        label="Verbose Mode"
+                        checked={checkedVerbose}
+                        onChange={(e) => setCheckedverbose(e.currentTarget.checked)}
                     />
-                </Stack>
+                )}
 
                 {/* Advanced Options */}
                 {checkedAdvanced && (
