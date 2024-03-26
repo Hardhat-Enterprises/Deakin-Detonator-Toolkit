@@ -23,10 +23,10 @@
     "dependencies": {
         "@actions/github": "^5.1.1",
         "@emotion/react": "^11.10.4",
-        "@mantine/core": "^5.3.0",
+        "@mantine/core": "^5.10.5",
         "@mantine/dropzone": "5.10.5",
         "@mantine/form": "^5.3.0",
-        "@mantine/hooks": "^5.3.0",
+        "@mantine/hooks": "^5.10.5",
         "@mantine/notifications": "5.3.0",
         "@mantine/prism": "^5.3.0",
         "@mantine/spotlight": "^5.3.0",
