@@ -92,15 +92,15 @@ export function DirbTool() {
         args.push("-S");
 
         if (values.caseInsensitive) {
-            args.push(`-S ${values.caseInsensitive}`);
+            args.push("-I");
         }
 
         if (values.printLocation) {
-            args.push(`-s ${values.printLocation}`);
+            args.push("-l");
         }
 
         if (values.ignoreHttpCode) {
-            args.push(`-t ${values.ignoreHttpCode}`);
+            args.push("-N", values.ignoreHttpCode.toString());
         }
 
         if (checkedAdvanced) {
