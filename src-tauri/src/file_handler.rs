@@ -8,7 +8,7 @@ pub fn save_file(file_data: Vec<u8>, file_path: String, file_name: String) -> Re
     let path = Path::new(&full_path);
 
     // Check if the file already exists and starts with "DDT-Import"
-    if path.exists() && file_name.starts_with("DDT-Import") {
+    if path.exists() {
         // Clear the existing file and write new data
         let mut file = match fs::OpenOptions::new().write(true).truncate(true).open(&full_path) {
             Ok(file) => file,
