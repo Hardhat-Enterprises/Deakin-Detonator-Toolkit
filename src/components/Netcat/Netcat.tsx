@@ -91,12 +91,11 @@ const NetcatTool = () => {
                 
                 break;
 
-            case "Send File": //Sends file from attacker to victim, syntax: nc -w 15 <Dest IP address> <Port number> < <FileName>
-                args = [`-w 15`]; //I set the timeout on 15 by default, you can remove it if you want
-                args.push(`${values.ipAddress} ${values.portNumber} < ${values.filePath}`);
+            case "Send File": //Sends file from attacker to victim, syntax: nc -v <Dest IP address> <Port number> < <FileName>
 
                 try {
-                    let output = await CommandHelper.runCommand("nc", args);
+                    let command = `nc -v ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
+                    let output = await CommandHelper.runCommand(command, []);
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
