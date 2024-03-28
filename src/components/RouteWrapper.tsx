@@ -354,7 +354,7 @@ export const ROUTES: RouteProperties[] = [
         name: "EyeWitness",
         path: "/tools/eyewitness",
         element: <Eyewitness />,
-        description: "Eyewitness takes screenshot of important websites.",
+        description: "EyeWitness scans listed URLs and provides a HTML report about them, including screenshots",
         category: "Web Application Testing",
     },
     {
