@@ -104,11 +104,10 @@ const NetcatTool = () => {
                 break;
 
             case "Receive File": //Receives file from victim to attacker, syntax: nc -l <port number> > filename.file
-                args = [`-lp`];
-                args.push(`${values.portNumber} > ${values.filePath}`);
 
                 try {
-                    let output = await CommandHelper.runCommand("nc", args);
+                    let command = `nc -lvp ${values.portNumber} > ${values.filePath}`;
+                    let output = await CommandHelper.runCommand(command, []);
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
