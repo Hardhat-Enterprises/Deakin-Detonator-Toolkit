@@ -92,7 +92,7 @@ export function DirbTool() {
         args.push("-S");
 
         if (values.caseInsensitive) {
-            args.push("-I");
+            args.push("-i");
         }
 
         if (values.printLocation) {
