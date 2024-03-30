@@ -12,10 +12,10 @@ const title = "Rainbowcrack";
 const description_userguide =
     "RainbowCrack is a computer program which generates rainbow tables to be used in password cracking . " +
     "This is a dictionary-based attack that takes place upon a web server and will analyse the PLACEHOLDER " +
-    "results within this process.\n\nHow to use Dirb:\n\nStep 1: Enter a valid URL.\n PLACEHOLDER" +
-    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter a file directory pathway to access PLACEHOLDER" +
-    "a wordlist\n       E.g. home/wordlist/wordlist.txt\n\nStep 3: Click Scan to commence " +
-    "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
+    "results within this process.\n\nHow to use RainbowCrack:\n\nStep 1: Provide a valid hash or hashes to be cracked.\n PLACEHOLDER" +
+    "       E.g. Provide the MD5 hash: 5f4dcc3b5aa765d61d8327deb882cf99\n\nStep 2: Choose the appropriate rainbow table set for the hash algorithm used. PLACEHOLDER" +
+    "a wordlist\n       E.g. hSelect the MD5 rainbow table set.\n\nStep 3: Initiate the cracking process by executing RainbowCrack. " +
+    "\n\nStep 4: Review the Output section to access the cracked passwords upon completion of the operation.";
 
 interface FormValues {
     hashcode: string;
