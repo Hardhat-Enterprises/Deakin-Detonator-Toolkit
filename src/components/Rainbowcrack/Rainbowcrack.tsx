@@ -11,11 +11,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 const title = "Rainbowcrack";
 const description_userguide =
     "RainbowCrack is a computer program which generates rainbow tables to be used in password cracking . " +
-    "This is a dictionary-based attack that takes place upon a web server and will analyse the PLACEHOLDER " +
-    "results within this process.\n\nHow to use Dirb:\n\nStep 1: Enter a valid URL.\n PLACEHOLDER" +
-    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter a file directory pathway to access PLACEHOLDER" +
-    "a wordlist\n       E.g. home/wordlist/wordlist.txt\n\nStep 3: Click Scan to commence " +
-    "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
+    "Simply enter or paste the hash code you want to crack and press crack. You will see your rainbow table after some time .";
 
 interface FormValues {
     hashcode: string;
