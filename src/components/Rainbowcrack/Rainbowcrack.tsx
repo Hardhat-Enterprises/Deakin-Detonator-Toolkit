@@ -10,15 +10,15 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 
 const title = "Rainbowcrack";
 const description_userguide =
-"RainbowCrack is a computer program that generates rainbow tables to be used in password cracking. " +
-"This is a dictionary-based attack that takes place on a web server and will analyze the results within this process.\n\n" +
-"How to use RainbowCrack:\n\n" +
-"Step 1: Provide a valid hash or hashes to be cracked.\n" +
-"       E.g. Provide the MD5 hash: 5f4dcc3b5aa765d61d8327deb882cf99\n\n" +
-"Step 2: Choose the appropriate rainbow table set for the hash algorithm used.\n" +
-"       E.g. Select the MD5 rainbow table set.\n\n" +
-"Step 3: Initiate the cracking process by executing RainbowCrack.\n\n" +
-"Step 4: Review the Output section to access the cracked passwords upon completion of the operation.";
+    "RainbowCrack is a computer program that generates rainbow tables to be used in password cracking. " +
+    "This is a dictionary-based attack that takes place on a web server and will analyze the results within this process.\n\n" +
+    "How to use RainbowCrack:\n\n" +
+    "Step 1: Provide a valid hash or hashes to be cracked.\n" +
+    "       E.g. Provide the MD5 hash: 5f4dcc3b5aa765d61d8327deb882cf99\n\n" +
+    "Step 2: Choose the appropriate rainbow table set for the hash algorithm used.\n" +
+    "       E.g. Select the MD5 rainbow table set.\n\n" +
+    "Step 3: Initiate the cracking process by executing RainbowCrack.\n\n" +
+    "Step 4: Review the Output section to access the cracked passwords upon completion of the operation.";
 
 interface FormValues {
     hashcode: string;
