@@ -12,8 +12,8 @@ const title = "Rainbowcrack";
 const description_userguide =
     "RainbowCrack is a computer program which generates rainbow tables to be used in password cracking . " +
     "Simply enter or paste the hash code you want to crack and press crack. " +
-    "You will see your rainbow table after some time and you could use that to crack your password hashes. \n";
-"How to use RainbowCrack:\n\n" +
+    "You will see your rainbow table after some time and you could use that to crack your password hashes. \n" +
+    "How to use RainbowCrack:\n\n" +
     "Step 1: Provide a valid hash or hashes to be cracked.\n" +
     "       E.g. Provide the MD5 hash: 5f4dcc3b5aa765d61d8327deb882cf99\n\n" +
     "Step 2: Choose the appropriate rainbow table set for the hash algorithm used.\n" +
