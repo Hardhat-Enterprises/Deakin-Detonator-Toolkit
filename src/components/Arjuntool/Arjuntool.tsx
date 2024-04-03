@@ -20,6 +20,7 @@ const description_userguide =
 interface FormValues {
     url: string;
     output_filename: string;
+    stability: boolean;
 }
 
 export function Arjuntool() {
