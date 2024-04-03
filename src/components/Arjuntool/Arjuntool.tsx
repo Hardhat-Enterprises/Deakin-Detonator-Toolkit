@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -111,6 +111,11 @@ export function Arjuntool() {
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"URL"} required {...form.getInputProps("url")} />
+                <Switch
+                            size="md"
+                            label="Stability mode"
+                            /*{...form.getInputProps("reverseLookup" as keyof FormValuesType)}*/
+                        />
                 <Button type={"submit"}>Scan</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
