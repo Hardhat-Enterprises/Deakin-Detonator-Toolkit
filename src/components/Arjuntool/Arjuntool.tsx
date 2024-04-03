@@ -34,6 +34,7 @@ export function Arjuntool() {
         initialValues: {
             url: "",
             output_filename: "",
+            stability: false,
         },
     });
 
