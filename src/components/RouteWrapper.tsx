@@ -46,7 +46,7 @@ import WPScan from "./WPScan/WPScan";
 import Eyewitness from "./eyewitness/eyewitness";
 import MrRobot from "./WalkthroughPages/MrRobot";
 import Parsero from "./parsero/parsero";
-import Arjuntool from "./Arjuntool/Arjuntool";
+import Arjun from "./Arjuntool/Arjuntool";
 import ForemostTool from "./Foremost/Foremost";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
@@ -266,9 +266,9 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
-        name: "Arjuntool",
-        path: "/tools/Arjuntool",
-        element: <Arjuntool />,
+        name: "Arjun",
+        path: "/tools/Arjun",
+        element: <Arjun />,
         description: "Arjun can find query parameters for URL endpoints.",
         category: "Web Application Testing",
     },
