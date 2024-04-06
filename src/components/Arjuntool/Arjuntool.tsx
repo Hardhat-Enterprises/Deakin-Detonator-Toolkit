@@ -85,6 +85,10 @@ export function Arjuntool() {
 
         const args = ["-u", values.url];
 
+        if (values.stability) {
+            args.push("--stable")
+        }
+
         if (values.output_filename) {
             args.push("-o", values.output_filename);
         }
