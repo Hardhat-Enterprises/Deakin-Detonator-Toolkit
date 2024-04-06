@@ -88,7 +88,7 @@ export function Arjuntool() {
 
         // Conditional. If the user has specified stability, add the --stable option to the command.
         if (values.stability == true) {
-            args.push("--stable")
+            args.push("--stable");
         }
 
         if (values.output_filename) {
@@ -119,11 +119,7 @@ export function Arjuntool() {
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                <Switch
-                            size="md"
-                            label="Stability mode"
-                            {...form.getInputProps("stability" as keyof FormValues)}
-                        />
+                <Switch size="md" label="Stability mode" {...form.getInputProps("stability" as keyof FormValues)} />
                 <Button type={"submit"}>Scan</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
