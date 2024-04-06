@@ -86,7 +86,7 @@ export function Arjuntool() {
         const args = ["-u", values.url];
 
         // Conditional. If the user has specified stability, add the --stable option to the command.
-        if (values.stability) {
+        if (values.stability == true) {
             args.push("--stable")
         }
 
@@ -121,7 +121,7 @@ export function Arjuntool() {
                 <Switch
                             size="md"
                             label="Stability mode"
-                            /*{...form.getInputProps("reverseLookup" as keyof FormValuesType)}*/
+                            {...form.getInputProps("stability" as keyof FormValues)}
                         />
                 <Button type={"submit"}>Scan</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
