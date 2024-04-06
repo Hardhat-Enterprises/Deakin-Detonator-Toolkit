@@ -24,7 +24,7 @@ interface FormValues {
     stability: boolean;
 }
 
-export function Arjun() {
+export function Arjuntool() {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
@@ -132,4 +132,4 @@ export function Arjun() {
     );
 }
 
-export default Arjun;
+export default Arjuntool;
