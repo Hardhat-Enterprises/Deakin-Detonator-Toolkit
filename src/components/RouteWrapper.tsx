@@ -455,7 +455,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Nikto",
         element: <Nikto />,
         description: "Web server scanner",
-        category: "Security Assessment",
+        category: "Web Application Testing",
     },
     {
         name: "Nmap",

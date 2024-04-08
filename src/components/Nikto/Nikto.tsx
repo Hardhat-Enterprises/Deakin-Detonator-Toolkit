@@ -19,7 +19,22 @@ interface FormValuesType {
 }
 
 const Nikto = () => {
-    return (null);
+// Initialize state for output and form
+const [loading, setLoading] = useState(false);
+const [output, setOutput] = useState("");
+const form = useForm<FormValuesType>({
+    initialValues: {
+        TargetURL: "",
+    },
+});
+
+const onSubmit = async (values: FormValuesType) => {
+}
+
+return (
+    <form onSubmit={form.onSubmit((values) => onSubmit(values))}></form>
+);
+
 }
 
 export default Nikto;
