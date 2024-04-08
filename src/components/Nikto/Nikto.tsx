@@ -19,36 +19,56 @@ interface FormValuesType {
 }
 
 const Nikto = () => {
-// Initialize state for output and form
-const [loading, setLoading] = useState(false);
-const [output, setOutput] = useState("");
-const form = useForm<FormValuesType>({
-    initialValues: {
-        TargetURL: "",
-    },
-});
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
-// Define form submission function
-const onSubmit = async (values: FormValuesType) => {
-    // Disable save button during execution
-    setLoading(true);
+    let form = useForm({
+        initialValues: {
+            TargetURL: "",
+        },
+    });
 
-    // Run Nikto command with provided target URL
-    try {
-        const args = ['-h', values.TargetURL];
-        const commandOutput = await CommandHelper.runCommand("nikto", args);
-        setOutput(commandOutput);
-    } catch (error: any) {
-        setOutput(`Error: ${error.message}`);
-    } finally {
-        // Enable save button after execution
-        setLoading(false);
-    }
+    const onSubmit = async (values: FormValuesType) => {
+        setLoading(true);
+        setAllowSave(false);
+
+        try {
+            const args = ['-h', values.TargetURL];
+            const commandOutput = await CommandHelper.runCommand("nikto", args);
+            setOutput(commandOutput);
+        } catch (error: any) {
+            setOutput(`Error: ${error.message}`);
+        } finally {
+            setLoading(false);
+            setAllowSave(true);
+        }
+    };
+
+    const handleSaveComplete = () => {
+        setHasSaved(true);
+        setAllowSave(false);
+    };
+
+    const clearOutput = () => {
+        setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
+    };
+
+    return (
+        <form onSubmit={form.onSubmit(onSubmit)}>
+            <LoadingOverlay visible={loading} />
+            <Stack>
+                {UserGuide(title, description_userguide)}
+                <TextInput label="Target URL" required {...form.getInputProps("TargetURL")} />
+                <Button type="submit" disabled={loading}>Start Nikto Scan</Button>
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+            </Stack>
+        </form>
+    );
 };
-return (
-    <form onSubmit={form.onSubmit((values) => onSubmit(values))}></form>
-);
-
-}
 
 export default Nikto;
