@@ -66,10 +66,10 @@ const NetcatTool = () => {
                 args = [`-zvn`];
                 args.push(`${values.ipAddress}`);
 
-                if (values.portNumber.includes("-")){ //checks for port range specifed by the inclusion of "-"
+                if (values.portNumber.includes("-")) { //checks for port range specifed by the inclusion of "-"
                     const [portStart, portEnd] = values.portNumber.split("-").map(Number); //Splits range by "-", assigns two consts with the split port numbers
 
-                    for (let currentPort = portStart; currentPort <= portEnd; currentPort++){ //Iterates through every port from start to end 
+                    for (let currentPort = portStart; currentPort <= portEnd; currentPort++) { //Iterates through every port from start to end 
                         try {
                             let output = await CommandHelper.runCommand("nc", [...args, String(currentPort)]);
                             setOutput(output);
@@ -78,7 +78,7 @@ const NetcatTool = () => {
                         }
                     }
                 }
-                else{ //else port number has been inputted
+                else { //else port number has been inputted
                     args.push(`${values.portNumber}`);
 
                     try {
@@ -88,23 +88,23 @@ const NetcatTool = () => {
                         setOutput(e);
                     }
                 }
-                
+
                 break;
 
             case "Send File": //Sends file from attacker to victim, syntax: nc -v -w <timeout seconds> <IP address> <port number> < <file path>
-                              //File to send needs to be located within the DDT folder
-                    try {
-                        let command = `nc -v -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
-                        let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction 
-                        setOutput(output);
-                    } catch (e: any) {
-                        setOutput(e);
-                    }
-                    break;
-                
+                //File to send needs to be located within the DDT folder
+                try {
+                    let command = `nc -v -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
+                    let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction 
+                    setOutput(output);
+                } catch (e: any) {
+                    setOutput(e);
+                }
+                break;
+
 
             case "Receive File": //Receives file from victim to attacker, syntax: nc -lvp <port number> > <file path and file name>
-                                 //Files can be recieved outside of DDT folder
+                //Files can be recieved outside of DDT folder
                 try {
                     let command = `nc -lvp ${values.portNumber} > ${values.filePath}`;
                     let output = await CommandHelper.runCommand("bash", ["-c", command]);
