@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
+import { Button, Checkbox, LoadingOverlay, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -18,6 +18,7 @@ const description_userguide =
 // Define the type for form values
 interface FormValuesType {
     TargetURL: string;
+    sslScan: boolean;
 }
 
 // Define the Nikto component
@@ -27,11 +28,13 @@ const Nikto = () => {
     const [output, setOutput] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [sslScan, setSslScan] = useState(false);
 
     // Initialize form state using the useForm hook
-    let form = useForm({
+    let form = useForm<FormValuesType>({
         initialValues: {
             TargetURL: "",
+            sslScan: false,
         },
     });
 
@@ -43,7 +46,11 @@ const Nikto = () => {
 
         // Execute Nikto command with provided target URL
         try {
+            // Adjusting the command arguments based on checkbox state for SSL scanning
             const args = ['-h', values.TargetURL];
+            if (values.sslScan) {
+                args.push('-ssl'); // Add -ssl option for SSL scanning
+            }
             const commandOutput = await CommandHelper.runCommand("nikto", args);
             // Update output state with command output
             setOutput(commandOutput);
@@ -76,6 +83,11 @@ const Nikto = () => {
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput label="Target URL" required {...form.getInputProps("TargetURL")} />
+                <Checkbox
+                    label="SSL Scan"
+                    checked={sslScan}
+                    onChange={(event) => setSslScan(event.currentTarget.checked)}
+                />
                 <Button type="submit" disabled={loading}>Start Nikto Scan</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
