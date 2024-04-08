@@ -14,6 +14,10 @@ const description_userguide =
     "- Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
     "- Review the scan output to identify any security issues.\n";
 
+interface FormValuesType {
+    TargetURL: string;
+}
+
 const Nikto = () => {
     return (null);
 }
