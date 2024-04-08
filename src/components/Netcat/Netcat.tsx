@@ -40,6 +40,7 @@ const netcatOptions = [
 
 //Tool name must be capital or jsx will cry out errors :P
 const NetcatTool = () => {
+
     var [output, setOutput] = useState("");
     const [selectedScanOption, setSelectedNetcatOption] = useState("");
 
@@ -64,36 +65,49 @@ const NetcatTool = () => {
                 //addition of -n will not perform any dns or name lookups.
                 args = [`-zvn`];
                 args.push(`${values.ipAddress}`);
-                args.push(`${values.portNumber}`);
 
-                try {
-                    let output = await CommandHelper.runCommand("nc", args);
-                    setOutput(output);
-                } catch (e: any) {
-                    setOutput(e);
+                if (values.portNumber.includes("-")){ //checks for port range specifed by the inclusion of "-"
+                    const [portStart, portEnd] = values.portNumber.split("-").map(Number); //Splits range by "-", assigns two consts with the split port numbers
+
+                    for (let currentPort = portStart; currentPort <= portEnd; currentPort++){ //Iterates through every port from start to end 
+                        try {
+                            let output = await CommandHelper.runCommand("nc", [...args, String(currentPort)]);
+                            setOutput(output);
+                        } catch (e: any) {
+                            setOutput(e);
+                        }
+                    }
                 }
+                else{ //else port number has been inputted
+                    args.push(`${values.portNumber}`);
 
+                    try {
+                        let output = await CommandHelper.runCommand("nc", args);
+                        setOutput(output);
+                    } catch (e: any) {
+                        setOutput(e);
+                    }
+                }
+                
                 break;
 
-            case "Send File": //Sends file from attacker to victim, syntax: nc -w 15 <Dest IP address> <Port number> < <FileName>
-                args = [`-w 15`]; //I set the timeout on 15 by default, you can remove it if you want
-                args.push(`${values.ipAddress} ${values.portNumber} < ${values.filePath}`);
+            case "Send File": //Sends file from attacker to victim, syntax: nc -v -w <timeout seconds> <IP address> <port number> < <file path>
+                              //File to send needs to be located within the DDT folder
+                    try {
+                        let command = `nc -v -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
+                        let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction 
+                        setOutput(output);
+                    } catch (e: any) {
+                        setOutput(e);
+                    }
+                    break;
+                
 
+            case "Receive File": //Receives file from victim to attacker, syntax: nc -lvp <port number> > <file path and file name>
+                                 //Files can be recieved outside of DDT folder
                 try {
-                    let output = await CommandHelper.runCommand("nc", args);
-                    setOutput(output);
-                } catch (e: any) {
-                    setOutput(e);
-                }
-
-                break;
-
-            case "Receive File": //Receives file from victim to attacker, syntax: nc -l <port number> > filename.file
-                args = [`-lp`];
-                args.push(`${values.portNumber} > ${values.filePath}`);
-
-                try {
-                    let output = await CommandHelper.runCommand("nc", args);
+                    let command = `nc -lvp ${values.portNumber} > ${values.filePath}`;
+                    let output = await CommandHelper.runCommand("bash", ["-c", command]);
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
