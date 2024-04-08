@@ -91,17 +91,17 @@ const NetcatTool = () => {
                 
                 break;
 
-            case "Send File": //Sends file from attacker to victim, syntax: nc -v <Dest IP address> <Port number> < <FileName>
-
-                try {
-                    let command = `nc -v ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
-                    let output = await CommandHelper.runCommand(command, []);
-                    setOutput(output);
-                } catch (e: any) {
-                    setOutput(e);
-                }
-
-                break;
+                case "Send File": //Sends file from attacker to victim, syntax: nc -v -w <timeout seconds> <IP address> <port number> < <file path>
+                                  //File to send needs to be located within the DDT folder
+                    try {
+                        let command = `nc -v -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
+                        let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction 
+                        setOutput(output);
+                    } catch (e: any) {
+                        setOutput(e);
+                    }
+                    break;
+                
 
             case "Receive File": //Receives file from victim to attacker, syntax: nc -l <port number> > filename.file
 
