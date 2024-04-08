@@ -28,9 +28,23 @@ const form = useForm<FormValuesType>({
     },
 });
 
+// Define form submission function
 const onSubmit = async (values: FormValuesType) => {
-}
+    // Disable save button during execution
+    setLoading(true);
 
+    // Run Nikto command with provided target URL
+    try {
+        const args = ['-h', values.TargetURL];
+        const commandOutput = await CommandHelper.runCommand("nikto", args);
+        setOutput(commandOutput);
+    } catch (error: any) {
+        setOutput(`Error: ${error.message}`);
+    } finally {
+        // Enable save button after execution
+        setLoading(false);
+    }
+};
 return (
     <form onSubmit={form.onSubmit((values) => onSubmit(values))}></form>
 );
