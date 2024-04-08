@@ -6,6 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 
+// Define title and user guide description for the Nikto tool
 const title = "Nikto";
 const description_userguide =
     "Nikto is a powerful web server scanner that can perform comprehensive tests against web servers for multiple items.\n" +
@@ -14,49 +15,61 @@ const description_userguide =
     "- Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
     "- Review the scan output to identify any security issues.\n";
 
+// Define the type for form values
 interface FormValuesType {
     TargetURL: string;
 }
 
+// Define the Nikto component
 const Nikto = () => {
+    // Initialize state variables
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
 
+    // Initialize form state using the useForm hook
     let form = useForm({
         initialValues: {
             TargetURL: "",
         },
     });
 
+    // Function to handle form submission
     const onSubmit = async (values: FormValuesType) => {
+        // Set loading state to true and disallow output saving
         setLoading(true);
         setAllowSave(false);
 
+        // Execute Nikto command with provided target URL
         try {
             const args = ['-h', values.TargetURL];
             const commandOutput = await CommandHelper.runCommand("nikto", args);
+            // Update output state with command output
             setOutput(commandOutput);
         } catch (error: any) {
             setOutput(`Error: ${error.message}`);
         } finally {
+            // Set loading state to false and allow output saving
             setLoading(false);
             setAllowSave(true);
         }
     };
 
+    // Function to handle completion of output saving
     const handleSaveComplete = () => {
         setHasSaved(true);
         setAllowSave(false);
     };
 
+    // Function to clear command output
     const clearOutput = () => {
         setOutput("");
         setHasSaved(false);
         setAllowSave(false);
     };
 
+    // Render component
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
             <LoadingOverlay visible={loading} />
