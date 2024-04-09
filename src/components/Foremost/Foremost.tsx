@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "Foremost Tool";
@@ -35,6 +35,8 @@ const ForemostTool = () => {
     const [output, setOutput] = useState("");
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [pid, setPid] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
     // Create a form using Mantine's useForm hook
     let form = useForm<FormValuesType>({
@@ -74,6 +76,10 @@ const ForemostTool = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
@@ -81,6 +87,10 @@ const ForemostTool = () => {
     // Handle form submission
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+
         // Initialize the command arguments with the input and output options
         const args = [`-i`, `${values.input}`, `-o`, `${values.outputDir}`];
 
@@ -132,13 +142,23 @@ const ForemostTool = () => {
         } catch (e: any) {
             // In case of an error, update the output state with the error message
             setOutput(e.message);
+            setAllowSave(true);
         }
     };
 
     // Clear the output state
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
+
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
     // Render the GUI
     return (
@@ -225,7 +245,7 @@ const ForemostTool = () => {
                 {/* Submit Button */}
                 <Button type={"submit"}>Run Foremost</Button>
                 {/* Saving the output to a text file if requested */}
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 {/* Console Output */}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
