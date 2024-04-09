@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -29,18 +29,21 @@ interface FormValuesType {
     FakeHost: string;
     Channel: string;
     Wlan: string;
+    WepKey: string;
 }
 
 const AirbaseNG = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
 
     const form = useForm({
         initialValues: {
             FakeHost: "",
             Channel: "",
             Wlan: "",
+            WepKey: "",
         },
     });
     /**
@@ -90,6 +93,9 @@ const AirbaseNG = () => {
 
         // Construct arguments for the aircrack-ng command based on form input
         const args = ["-e", values.FakeHost, "-c", values.Channel, values.Wlan];
+        if (checkedAdvanced) {
+            args.push("-w", values.WepKey);
+        }
 
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("airbase-ng", args, handleProcessData, handleProcessTermination)
@@ -119,9 +125,16 @@ const AirbaseNG = () => {
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
+                <Switch
+                    size="md"
+                    label="Advanced Mode"
+                    checked={checkedAdvanced}
+                    onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                />
                 <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
                 <TextInput label={"Channel of choice"} required {...form.getInputProps("Channel")} />
                 <TextInput label={"Your Wlan"} required {...form.getInputProps("Wlan")} />
+                {checkedAdvanced && <TextInput label={"Wep Key"} required {...form.getInputProps("WepKey")} />}
                 {SaveOutputToTextFile(output)}
                 <Button type={"submit"}>Start AP</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
