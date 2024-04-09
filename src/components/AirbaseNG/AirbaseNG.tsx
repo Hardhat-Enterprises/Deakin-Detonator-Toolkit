@@ -107,6 +107,13 @@ const AirbaseNG = () => {
             });
     };
 
+    const close = async ()=>{
+        const args = [`-2`,pid];
+        await CommandHelper.runCommandWithPkexec("kill",args,handleProcessData,handleProcessTermination):
+        setLoading(false);
+    };
+
+
     /**
      * clearOutput: Callback function to clear the console output.
      * It resets the state variable holding the output, thereby clearing the display.
@@ -116,7 +123,6 @@ const AirbaseNG = () => {
     }, [setOutput]);
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
@@ -124,6 +130,7 @@ const AirbaseNG = () => {
                 <TextInput label={"Your Wlan"} required {...form.getInputProps("Wlan")} />
                 {SaveOutputToTextFile(output)}
                 <Button type={"submit"}>Start AP</Button>
+                {loading && <Button onClick={close}>Stop</Button>}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
