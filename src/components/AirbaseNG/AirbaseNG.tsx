@@ -28,10 +28,11 @@ const description_userguide =
 interface FormValuesType {
     FakeHost: string;
     Channel: string;
-    Wlan: string;
+    replayInterface: string;
     macAddress: string;
     interface: string;
     filePath: string;
+    customConfig: string;
 }
 
 const AirbaseNG = () => {
@@ -39,15 +40,17 @@ const AirbaseNG = () => {
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
     const [advanceMode, setAdvanceMode] = useState(false);
+    const [customMode, setCustomMode] = useState(false);
 
     const form = useForm({
         initialValues: {
             FakeHost: "",
             Channel: "",
-            Wlan: "",
+            replayInterface: "",
             macAddress: "",
             interface: "",
             filePath:"",
+            customConfig:"",
         },
     });
     /**
@@ -96,7 +99,7 @@ const AirbaseNG = () => {
         setLoading(true);
 
         // Construct arguments for the aircrack-ng command based on form input
-        const args = ["-e", values.FakeHost, "-c", values.Channel, values.Wlan];
+        const args = ["-e", values.FakeHost, "-c", values.Channel, values.replayInterface];
 
         values.macAddress ? args.push(`-a`,values.macAddress): undefined;
         values.interface ? args.push(`-i`,values.interface) : undefined;
@@ -142,9 +145,26 @@ const AirbaseNG = () => {
                     checked={advanceMode}
                     onChange={(e)=>setAdvanceMode(e.currentTarget.checked)}
                 />
+                <Switch
+                    size="md"
+                    label="Custom Mode"
+                    checked={customMode}
+                    onChange={(e)=>setCustomMode(e.currentTarget.checked)}
+                />               
                 <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
                 <TextInput label={"Channel of choice"} required {...form.getInputProps("Channel")} />
-                <TextInput label={"Your Wlan"} required {...form.getInputProps("Wlan")} />
+                <TextInput label={"Replay Interface"} required {...form.getInputProps("replayInterface")} />
+                {advanceMode && (
+                    <>
+                        <TextInput label={"Set AP MAC address"}{...form.getInputProps("macAddress")}/>
+                        <TextInput label={"Capture packets from this interface"}{...form.getInputProps("interface")}/>
+                        <TextInput label={"Output results as Pcap file (Please supply file path)"}{...form.getInputProps("filePath")}/>
+                    </>
+                )}
+                {customMode && (
+                    <TextInput label={"Custom Configuration"}{...form.getInputProps("customConfig")}/>
+                )
+                }
                 {SaveOutputToTextFile(output)}
                 <Button type={"submit"}>Start AP</Button>
                 {loading && <Button onClick={close}>Stop</Button>}
