@@ -39,8 +39,8 @@ const AirbaseNG = () => {
             replayInterface: "",
             macAddress: "",
             interface: "",
-            filePath:"",
-            customConfig:"",
+            filePath: "",
+            customConfig: "",
         },
     });
     /**
@@ -91,8 +91,8 @@ const AirbaseNG = () => {
         // Construct arguments for the aircrack-ng command based on form input
         const args = ["-e", values.fakeHost, "-c", values.channel, values.replayInterface];
 
-        values.macAddress ? args.push(`-a`,values.macAddress): undefined;
-        values.interface ? args.push(`-i`,values.interface) : undefined;
+        values.macAddress ? args.push(`-a`, values.macAddress) : undefined;
+        values.interface ? args.push(`-i`, values.interface) : undefined;
         values.filePath ? args.push(`-F`, values.filePath) : undefined;
 
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
@@ -111,12 +111,11 @@ const AirbaseNG = () => {
             });
     };
 
-    const close = async ()=>{
-        const args = [`-2`,pid];
-        await CommandHelper.runCommandWithPkexec("kill",args,handleProcessData,handleProcessTermination);
+    const close = async () => {
+        const args = [`-2`, pid];
+        await CommandHelper.runCommandWithPkexec("kill", args, handleProcessData, handleProcessTermination);
         setLoading(false);
     };
-
 
     /**
      * clearOutput: Callback function to clear the console output.
@@ -133,28 +132,28 @@ const AirbaseNG = () => {
                     size="md"
                     label="Advanced Mode"
                     checked={advanceMode}
-                    onChange={(e)=>setAdvanceMode(e.currentTarget.checked)}
+                    onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
                 />
                 <Switch
                     size="md"
                     label="Custom Mode"
                     checked={customMode}
-                    onChange={(e)=>setCustomMode(e.currentTarget.checked)}
-                />               
+                    onChange={(e) => setCustomMode(e.currentTarget.checked)}
+                />
                 <TextInput label={"Name of your fake Host"} required {...form.getInputProps("fakeHost")} />
                 <TextInput label={"Channel of choice"} required {...form.getInputProps("channel")} />
                 <TextInput label={"Replay Interface"} required {...form.getInputProps("replayInterface")} />
                 {advanceMode && (
                     <>
-                        <TextInput label={"Set AP MAC address"}{...form.getInputProps("macAddress")}/>
-                        <TextInput label={"Capture packets from this interface"}{...form.getInputProps("interface")}/>
-                        <TextInput label={"Output results as Pcap file (Please supply file path)"}{...form.getInputProps("filePath")}/>
+                        <TextInput label={"Set AP MAC address"} {...form.getInputProps("macAddress")} />
+                        <TextInput label={"Capture packets from this interface"} {...form.getInputProps("interface")} />
+                        <TextInput
+                            label={"Output results as Pcap file (Please supply file path)"}
+                            {...form.getInputProps("filePath")}
+                        />
                     </>
                 )}
-                {customMode && (
-                    <TextInput label={"Custom Configuration"}{...form.getInputProps("customConfig")}/>
-                )
-                }
+                {customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
                 {SaveOutputToTextFile(output)}
                 <Button type={"submit"}>Start AP</Button>
                 {loading && <Button onClick={close}>Stop</Button>}
