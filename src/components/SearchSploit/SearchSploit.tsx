@@ -7,7 +7,7 @@ import { Text } from "@mantine/core";
 import { List } from "@mantine/core";
 import { Accordion } from "@mantine/core";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "SearchSploit";
 const description_userguide =
@@ -46,6 +46,8 @@ const SearchSploit = () => {
     const [output, setOutput] = useState("");
     const [selectedSearchOption, setSelectedSearchOption] = useState("");
     const [selectedout_putOption, setSelectedOut_putOption] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false); 
     const [selectedNonSearchOption, setSelectedNonSearchOption] = useState("");
     const [pid, setPid] = useState("");
 
@@ -78,6 +80,8 @@ const SearchSploit = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+            setAllowSave(true); 
+            setHasSaved(false); 
         },
         [handleProcessData]
     );
@@ -88,6 +92,10 @@ const SearchSploit = () => {
             CommandHelper.runCommand("kill", args);
         }
     };
+    const handleSaveComplete = useCallback(() => {
+        setHasSaved(true);
+        setAllowSave(false);
+    }, []);
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
@@ -143,6 +151,8 @@ const SearchSploit = () => {
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setAllowSave(false);
+        setHasSaved(false); 
     }, [setOutput]);
 
     return (
@@ -244,6 +254,7 @@ const SearchSploit = () => {
                         </Accordion.Panel>
                     </Accordion.Item>
                 </Accordion>
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
