@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, Switch, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -29,18 +29,25 @@ interface FormValuesType {
     FakeHost: string;
     Channel: string;
     Wlan: string;
+    macAddress: string;
+    interface: string;
+    filePath: string;
 }
 
 const AirbaseNG = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
+    const [advanceMode, setAdvanceMode] = useState(false);
 
     const form = useForm({
         initialValues: {
             FakeHost: "",
             Channel: "",
             Wlan: "",
+            macAddress: "",
+            interface: "",
+            filePath:"",
         },
     });
     /**
@@ -91,6 +98,10 @@ const AirbaseNG = () => {
         // Construct arguments for the aircrack-ng command based on form input
         const args = ["-e", values.FakeHost, "-c", values.Channel, values.Wlan];
 
+        values.macAddress ? args.push(`-a`,values.macAddress): undefined;
+        values.interface ? args.push(`-i`,values.interface) : undefined;
+        values.filePath ? args.push(`-F`, values.filePath) : undefined;
+
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("airbase-ng", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
@@ -109,7 +120,7 @@ const AirbaseNG = () => {
 
     const close = async ()=>{
         const args = [`-2`,pid];
-        await CommandHelper.runCommandWithPkexec("kill",args,handleProcessData,handleProcessTermination):
+        await CommandHelper.runCommandWithPkexec("kill",args,handleProcessData,handleProcessTermination);
         setLoading(false);
     };
 
@@ -125,6 +136,12 @@ const AirbaseNG = () => {
         <form onSubmit={form.onSubmit(onSubmit)}>
             <Stack>
                 {UserGuide(title, description_userguide)}
+                <Switch
+                    size="md"
+                    label="Advanced Mode"
+                    checked={advanceMode}
+                    onChange={(e)=>setAdvanceMode(e.currentTarget.checked)}
+                />
                 <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
                 <TextInput label={"Channel of choice"} required {...form.getInputProps("Channel")} />
                 <TextInput label={"Your Wlan"} required {...form.getInputProps("Wlan")} />
