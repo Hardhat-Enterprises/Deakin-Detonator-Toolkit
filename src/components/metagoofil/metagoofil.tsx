@@ -4,8 +4,9 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { useClickOutside } from "@mantine/hooks";
 
 const title = "Metagoofil";
 const description_userguide =
@@ -39,6 +40,9 @@ export function Metagoofil() {
     const [pid, setPid] = useState("");
     const [customconfig, setCustomconfig] = useState(false);
     const [downloadconfig, setDownloadConfig] = useState(false);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+   
 
     let form = useForm({
         initialValues: {
@@ -58,6 +62,7 @@ export function Metagoofil() {
      */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+        if (!allowSave) setAllowSave(true);
     }, []);
     /**
      * handleProcessTermination: Callback to handle the termination of the child process.
@@ -80,12 +85,15 @@ export function Metagoofil() {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+            setAllowSave(true);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
 
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
+        setAllowSave(false); // new code
+        setHasSaved(false);
 
         const args = [`-d`, `${values.webname}`, `-t`, `${values.filetype}`];
 
@@ -114,7 +122,15 @@ export function Metagoofil() {
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setAllowSave(false);
+        setHasSaved(false);
     }, [setOutput]);
+
+    const handleSaveComplete = useCallback(() => { 
+        setHasSaved(true);
+        setAllowSave(false);
+    }, []);
+
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
@@ -154,7 +170,7 @@ export function Metagoofil() {
                 )}
 
                 <Button type={"submit"}>Scan</Button>
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 
 const title = "ZeroLogon";
@@ -34,6 +35,8 @@ interface FormValues {
 export function ZeroLogon() {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
+    const [allowSave, setAllowSave] = useState(false); 
+    const [hasSaved, setHasSaved] = useState(false); 
 
     let form = useForm({
         initialValues: {
@@ -52,11 +55,20 @@ export function ZeroLogon() {
 
         setOutput(output);
         setLoading(false);
+        setAllowSave(true); 
     };
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setAllowSave(false); 
+        setHasSaved(false); 
     }, [setOutput]);
+
+    const handleSaveComplete = useCallback(() => {
+        setHasSaved(true); 
+        setAllowSave(false); 
+    }, []);
+
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values }))}>
@@ -69,6 +81,7 @@ export function ZeroLogon() {
                 <TextInput label={"Hashes"} required {...form.getInputProps("hashes")} />
 
                 <Button type={"submit"}>Exploit</Button>
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)} 
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { IconAlertCircle } from "@tabler/icons";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 interface FormValues {
     ip: string;
@@ -33,6 +34,8 @@ const Gyoithon = () => {
     const [selectedMLOption, setSelectedMLOption] = useState("");
     const Ml = ["Naive Bayes", "Deep Neural Network"];
     const isDNN = selectedMLOption == "Deep Neural Network";
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false); 
 
     let form = useForm({
         initialValues: {
@@ -155,7 +158,14 @@ const Gyoithon = () => {
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false); 
+        setAllowSave(false); 
     }, [setOutput]);
+
+    const handleSaveComplete = () => { 
+        setHasSaved(true);
+        setAllowSave(false);
+    }
 
     return (
         <p>
@@ -289,6 +299,7 @@ const Gyoithon = () => {
                         </Accordion.Panel>
                     </Accordion.Item>
                 </Accordion>
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)} 
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </p>
