@@ -5,16 +5,6 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-
-/**
- * TODO:
- * 1. Refine the user interface for better usability and integrate a mechanism for file selection from the local machine.
- * 2. Introduce an 'Advanced Mode' for users familiar with the nuances of the tool.
- * 3. Gradually expand input options in 'Advanced Mode' with the eventual aim of encompassing all functionalities of `airbase-ng`.
- * 4. Enhance the output display to ensure optimal readability, especially for extensive outputs.
- * 5. Unblock the loading screen during the up time of the Airbase ng and provide real time data update
- */
 
 const title = "Create Fake Access Point with Airbase-ng";
 const description_userguide =
@@ -26,8 +16,8 @@ const description_userguide =
     "Step 5: View the Output block below to see the results.\n\n";
 
 interface FormValuesType {
-    FakeHost: string;
-    Channel: string;
+    fakeHost: string;
+    channel: string;
     replayInterface: string;
     macAddress: string;
     interface: string;
@@ -44,8 +34,8 @@ const AirbaseNG = () => {
 
     const form = useForm({
         initialValues: {
-            FakeHost: "",
-            Channel: "",
+            fakeHost: "",
+            channel: "",
             replayInterface: "",
             macAddress: "",
             interface: "",
@@ -99,7 +89,7 @@ const AirbaseNG = () => {
         setLoading(true);
 
         // Construct arguments for the aircrack-ng command based on form input
-        const args = ["-e", values.FakeHost, "-c", values.Channel, values.replayInterface];
+        const args = ["-e", values.fakeHost, "-c", values.channel, values.replayInterface];
 
         values.macAddress ? args.push(`-a`,values.macAddress): undefined;
         values.interface ? args.push(`-i`,values.interface) : undefined;
@@ -151,8 +141,8 @@ const AirbaseNG = () => {
                     checked={customMode}
                     onChange={(e)=>setCustomMode(e.currentTarget.checked)}
                 />               
-                <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
-                <TextInput label={"Channel of choice"} required {...form.getInputProps("Channel")} />
+                <TextInput label={"Name of your fake Host"} required {...form.getInputProps("fakeHost")} />
+                <TextInput label={"Channel of choice"} required {...form.getInputProps("channel")} />
                 <TextInput label={"Replay Interface"} required {...form.getInputProps("replayInterface")} />
                 {advanceMode && (
                     <>
