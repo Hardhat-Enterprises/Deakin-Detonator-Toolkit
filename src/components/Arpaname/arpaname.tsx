@@ -11,7 +11,6 @@ const title = "Arpaname Tool";
 const description_userguide =
     "Arpaname translates IP addresses (IPv4 and IPv6) to the corresponding IN-ADDR.ARPA or IP6.ARPA names.";
 
-
 interface FormValuesType {
     ipAddress: string;
 }
@@ -20,6 +19,7 @@ const ArpanameTool = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     let form = useForm<FormValuesType>({
         initialValues: {
@@ -46,27 +46,41 @@ const ArpanameTool = () => {
         [handleProcessData]
     );
 
+    const validateIPAddress = (ip: string) => {
+        const ipPattern = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$/
+        return ipPattern.test(ip);
+    };
+
     const onSubmit = async (values: FormValuesType) => {
+        if (!validateIPAddress(values.ipAddress)) {
+            setOutput("The input is not a valid IP address. Please try again.");
+            return;
+        }
+        
         setLoading(true);
         const args = [values.ipAddress];
-
+      
         try {
-            const result = await CommandHelper.runCommandGetPidAndOutput(
-                "arpaname",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
-            setOutput(result.output);
-            setPid(result.pid);
+          const result = await CommandHelper.runCommandGetPidAndOutput(
+            "arpaname",
+            args,
+            handleProcessData,
+            handleProcessTermination
+          );
+          setOutput(result.output);
+          setPid(result.pid);
         } catch (e: any) {
-            setOutput(e.message);
+          setOutput(`An error occurred: ${e.message}`);
+          setPid("");
+        } finally {
+          setLoading(false);
         }
-    };
+      };
 
     const clearOutput = useCallback(() => {
         setOutput("");
-    }, [setOutput]);
+        setErrorMessage("");
+    }, [setOutput, setErrorMessage]);
 
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
@@ -77,6 +91,7 @@ const ArpanameTool = () => {
                     label={"IP Address"}
                     placeholder={"Enter IP Address"}
                     required
+                    error={errorMessage}
                     {...form.getInputProps("ipAddress")}
                 />
                 <Button type={"submit"}>Lookup</Button>
