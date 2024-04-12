@@ -10,7 +10,7 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 const title = "Arjun";
 const description_userguide =
     "Arjun is a command-line tool specifically designed to look for hidden HTTP parameters. " +
-    "Arjun will try to discover parameters and give you new set of endpoints to test on. " +
+    "Arjun will try to discover parameters and give you a new set of endpoints to test on. " +
     "It is a multi-threaded application, can handle rate limits and supports GET,POST,XML and JSON methods. " +
     " \n\nKali's Arjun Information Page: https://www.kali.org/tools/arjun/ \n\nHow to use Arjun:\n\nStep 1: Enter a valid URL.\n" +
     "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter an Optional Json Output filename.\n        E.g. arjunoutput " +
