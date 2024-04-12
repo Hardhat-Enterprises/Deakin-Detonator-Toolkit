@@ -13,7 +13,7 @@ const description_userguide =
     "Arjun will try to discover parameters and give you a new set of endpoints to test on. " +
     "It is a multi-threaded application that can handle rate limits and supports GET,POST,XML and JSON methods. " +
     " \n\nKali's Arjun Information Page: https://www.kali.org/tools/arjun/ \n\nHow to use Arjun:\n\nStep 1: Enter a valid URL.\n" +
-    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter an Optional Json Output filename.\n        E.g. arjunoutput " +
+    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter an optional JSON output filename.\n        E.g. arjunoutput " +
     "\n\nStep 3: Turn on the stability function if you want Arjun to prioritise stability over speed (can take a long time, so get a coffee if using this functionality)." +
     "\n\nStep 4: Click the scan option to commence scanning. " +
     "\n\nStep 5: View the Output block below to view the results of the tool's execution.";
