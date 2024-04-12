@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "Hydra";
 const description =
@@ -85,6 +85,8 @@ const Hydra = () => {
     const [selectedLoginInput, setSelectedLoginInput] = useState("");
     const [selectedService, setSelectedService] = useState("");
     const [pid, setPid] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -122,6 +124,9 @@ const Hydra = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
@@ -135,6 +140,9 @@ const Hydra = () => {
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
 
         const args = [];
         if (selectedLoginInput === "Single Login") {
@@ -176,11 +184,14 @@ const Hydra = () => {
             setOutput(result.output);
         } catch (e: any) {
             setOutput(e.message);
+            setAllowSave(true);
         }
     };
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
 
     const isLoginSingle = selectedLoginInput === "Single Login";
@@ -190,6 +201,13 @@ const Hydra = () => {
     const isPasswordSet = selectedPasswordInput === "Character Set";
     const isPasswordBasic = selectedPasswordInput === "Basic";
     const isService = selectedService;
+
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
     return (
         <form
@@ -325,7 +343,7 @@ const Hydra = () => {
                 <Button type={"submit"} color="cyan">
                     Crack
                 </Button>
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

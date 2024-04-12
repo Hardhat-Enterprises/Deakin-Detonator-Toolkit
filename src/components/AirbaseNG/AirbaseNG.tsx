@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
@@ -35,6 +35,8 @@ const AirbaseNG = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
     const form = useForm({
         initialValues: {
@@ -73,6 +75,10 @@ const AirbaseNG = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
@@ -87,6 +93,9 @@ const AirbaseNG = () => {
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
+
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
 
         // Construct arguments for the aircrack-ng command based on form input
         const args = ["-e", values.FakeHost, "-c", values.Channel, values.Wlan];
@@ -104,6 +113,7 @@ const AirbaseNG = () => {
                 setOutput(error.message);
                 // Deactivate loading state
                 setLoading(false);
+                setAllowSave(true);
             });
     };
 
@@ -113,7 +123,17 @@ const AirbaseNG = () => {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
+
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
+
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
             {LoadingOverlayAndCancelButton(loading, pid)}
@@ -122,7 +142,7 @@ const AirbaseNG = () => {
                 <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
                 <TextInput label={"Channel of choice"} required {...form.getInputProps("Channel")} />
                 <TextInput label={"Your Wlan"} required {...form.getInputProps("Wlan")} />
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Start AP</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
