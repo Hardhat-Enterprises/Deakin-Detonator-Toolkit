@@ -41,8 +41,8 @@ const FindOffset = () => {
 
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
+        const args = ["/usr/share/ddt/find_offset.py", values.pathToBinary, "--count", values.count.toString()];
 
-        const args = ["./exploits/find_offset.py", values.pathToBinary, "--count", values.count.toString()];
         const result = await CommandHelper.runCommand("python3", args);
 
         setOutput(result);
