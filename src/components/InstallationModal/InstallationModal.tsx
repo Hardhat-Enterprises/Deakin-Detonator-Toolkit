@@ -59,7 +59,7 @@ const InstallationModal: React.FC<InstallationModalProps> = ({
             onClose={() => setOpened(false)}
             title="Component Installation"
             size={"auto"}
-            style={{ maxWidth: "30%", margin: "auto" }}
+            style={{ maxWidth: "50%", margin: "auto" }}
         >
             <div>
                 {loading ? (
@@ -82,10 +82,10 @@ const InstallationModal: React.FC<InstallationModalProps> = ({
                             <Text key={index}>{dependency}</Text>
                         ))}
 
-                        <Button onClick={() => setOpened(false)}>Close</Button>
                         <Button onClick={() => handleInstall(dependencies, setOutput, setLoading)}>
                             Install Component
                         </Button>
+                        <Button color="red" onClick={() => setOpened(false)}>Close</Button>
                     </Stack>
                 )}
             </div>
