@@ -1,4 +1,4 @@
-import { Command } from '@tauri-apps/api/shell';
+import { Command } from "@tauri-apps/api/shell";
 
 /**
  * Checks the availability of a command in the system.
@@ -12,12 +12,12 @@ import { Command } from '@tauri-apps/api/shell';
  */
 export const checkCommandAvailability = (commandString: string): Promise<boolean> => {
     return new Promise(async (resolve, reject) => {
-        try{
+        try {
             // Create a new Command instance with the "which" command and the specified commandString
             const command = new Command("which", [commandString]);
             // Execute the command and get the handle
             const handle = await command.execute();
-    
+
             // Check if the stdout of the handle has any output
             if (handle.stdout.length > 0) {
                 // If there is output, resolve the promise with true indicating that the command is available
@@ -26,8 +26,7 @@ export const checkCommandAvailability = (commandString: string): Promise<boolean
                 // If there is no output, resolve the promise with false indicating that the command is not available
                 resolve(false);
             }
-        }
-        catch (error) {
+        } catch (error) {
             // If there is an error, reject the promise with the error
             reject(error);
         }

@@ -6,7 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-import { checkCommandAvailability, checkAllCommandsAvailability } from '../../utils/CommandAvailability';
+import { checkCommandAvailability, checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
 const title = "Foremost Tool";
@@ -41,17 +41,17 @@ const ForemostTool = () => {
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
 
-    const dependencies = ["foremost"]
+    const dependencies = ["foremost"];
 
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
-            .then(isAvailable => {
+            .then((isAvailable) => {
                 setIsCommandAvailable(isAvailable);
                 setOpened(!isAvailable);
                 setLoadingModal(false); // Set loading to false after the check is done
             })
-            .catch(error => {
-                console.error('An error occurred:', error);
+            .catch((error) => {
+                console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
     }, []);
@@ -100,7 +100,6 @@ const ForemostTool = () => {
 
     // Handle form submission
     const onSubmit = async (values: FormValuesType) => {
-
         setLoading(true);
         // Initialize the command arguments with the input and output options
         const args = [`-i`, `${values.input}`, `-o`, `${values.outputDir}`];
@@ -164,14 +163,14 @@ const ForemostTool = () => {
     // Render the GUI
     return (
         <>
-            {!loadingModal && 
-                <InstallationModal 
-                    isOpen={opened} 
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
                     setOpened={setOpened}
                     feature_description={description_userguide}
                     dependencies={dependencies}
-                    >
-                </InstallationModal>}
+                ></InstallationModal>
+            )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack spacing="lg">
@@ -247,7 +246,9 @@ const ForemostTool = () => {
                             />
                             {/* Quick Mode */}
                             <Checkbox
-                                label={"Quick Mode - enables quick mode. Searches are performed on 512 byte boundaries."}
+                                label={
+                                    "Quick Mode - enables quick mode. Searches are performed on 512 byte boundaries."
+                                }
                                 {...form.getInputProps("quickMode" as keyof FormValuesType)}
                             />
                         </Stack>
