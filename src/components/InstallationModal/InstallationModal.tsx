@@ -85,7 +85,9 @@ const InstallationModal: React.FC<InstallationModalProps> = ({
                         <Button onClick={() => handleInstall(dependencies, setOutput, setLoading)}>
                             Install Component
                         </Button>
-                        <Button color="red" onClick={() => setOpened(false)}>Close</Button>
+                        <Button color="red" onClick={() => setOpened(false)}>
+                            Close
+                        </Button>
                     </Stack>
                 )}
             </div>
