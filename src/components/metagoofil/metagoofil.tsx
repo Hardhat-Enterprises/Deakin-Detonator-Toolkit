@@ -42,7 +42,6 @@ export function Metagoofil() {
     const [downloadconfig, setDownloadConfig] = useState(false);
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-   
 
     let form = useForm({
         initialValues: {
@@ -126,11 +125,10 @@ export function Metagoofil() {
         setHasSaved(false);
     }, [setOutput]);
 
-    const handleSaveComplete = useCallback(() => { 
+    const handleSaveComplete = useCallback(() => {
         setHasSaved(true);
         setAllowSave(false);
     }, []);
-
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>

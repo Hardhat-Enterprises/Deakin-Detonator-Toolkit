@@ -47,7 +47,7 @@ const SearchSploit = () => {
     const [selectedSearchOption, setSelectedSearchOption] = useState("");
     const [selectedout_putOption, setSelectedOut_putOption] = useState("");
     const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false); 
+    const [hasSaved, setHasSaved] = useState(false);
     const [selectedNonSearchOption, setSelectedNonSearchOption] = useState("");
     const [pid, setPid] = useState("");
 
@@ -80,8 +80,8 @@ const SearchSploit = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
-            setAllowSave(true); 
-            setHasSaved(false); 
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
@@ -152,7 +152,7 @@ const SearchSploit = () => {
     const clearOutput = useCallback(() => {
         setOutput("");
         setAllowSave(false);
-        setHasSaved(false); 
+        setHasSaved(false);
     }, [setOutput]);
 
     return (

@@ -35,7 +35,7 @@ const Gyoithon = () => {
     const Ml = ["Naive Bayes", "Deep Neural Network"];
     const isDNN = selectedMLOption == "Deep Neural Network";
     const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false); 
+    const [hasSaved, setHasSaved] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -158,14 +158,14 @@ const Gyoithon = () => {
 
     const clearOutput = useCallback(() => {
         setOutput("");
-        setHasSaved(false); 
-        setAllowSave(false); 
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
 
-    const handleSaveComplete = () => { 
+    const handleSaveComplete = () => {
         setHasSaved(true);
         setAllowSave(false);
-    }
+    };
 
     return (
         <p>
@@ -299,7 +299,7 @@ const Gyoithon = () => {
                         </Accordion.Panel>
                     </Accordion.Item>
                 </Accordion>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)} 
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </p>

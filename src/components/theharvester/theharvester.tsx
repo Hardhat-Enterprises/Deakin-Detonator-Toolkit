@@ -125,7 +125,7 @@ const TheHarvester = () => {
         setHasSaved(false);
     }, [setOutput]);
 
-    const handleSaveComplete = useCallback(() => { 
+    const handleSaveComplete = useCallback(() => {
         setHasSaved(true);
         setAllowSave(false);
     }, []);

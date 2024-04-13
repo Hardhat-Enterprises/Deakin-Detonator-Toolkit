@@ -58,7 +58,6 @@ const TracerouteTool = () => {
     });
 
     const onSubmit = async (values: FormValuesType) => {
-
         let args = [``];
 
         //Switch case
@@ -127,7 +126,7 @@ const TracerouteTool = () => {
         setAllowSave(false);
     }, [setOutput]);
 
-    const handleSaveComplete = useCallback(() => { 
+    const handleSaveComplete = useCallback(() => {
         setHasSaved(true);
         setAllowSave(false);
     }, []);

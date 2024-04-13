@@ -196,7 +196,7 @@ const WPScan = () => {
         [handleProcessData]
     );
 
-    const handleSaveComplete = useCallback(() => { 
+    const handleSaveComplete = useCallback(() => {
         setHasSaved(true);
         setAllowSave(false);
     }, []);
