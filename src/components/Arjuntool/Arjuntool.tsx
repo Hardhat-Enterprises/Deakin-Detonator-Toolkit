@@ -87,7 +87,7 @@ export function Arjuntool() {
         const args = ["-u", values.url];
 
         // Conditional. If the user has specified stability, add the --stable option to the command.
-        if (values.stability == true) {
+        if (values.stability) {
             args.push("--stable");
         }
 
