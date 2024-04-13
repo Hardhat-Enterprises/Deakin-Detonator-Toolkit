@@ -16,7 +16,7 @@ const description_userguide =
     "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter an optional JSON output filename.\n        E.g. arjunoutput " +
     "\n\nStep 3: Turn on the stability function if you want Arjun to prioritise stability over speed (can take a long time, so get a coffee if using this functionality)." +
     "\n\nStep 4: Click the scan option to commence scanning. " +
-    "\n\nStep 5: View the Output block below to view the results of the tool's execution.";
+    "\n\nStep 5: View the output block below to view the results of the tool's execution.";
 
 interface FormValues {
     url: string;
