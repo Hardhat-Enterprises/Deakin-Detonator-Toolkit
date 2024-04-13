@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; //v2
 import { UserGuide } from "../UserGuide/UserGuide";
 
 const modeRequiringWordList = ["dictionary"];
@@ -54,6 +54,8 @@ const JohnTheRipper = () => {
     const [selectedModeOption, setselectedModeOption] = useState("");
     const [selectedIncrementOption, setselectedIncrementOption] = useState("");
     const [pid, setPid] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -88,6 +90,9 @@ const JohnTheRipper = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
@@ -103,6 +108,8 @@ const JohnTheRipper = () => {
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
         //if hash is stored in a textfile
         if (values.fileType === "raw") {
             const args = [values.filePath];
@@ -150,12 +157,22 @@ const JohnTheRipper = () => {
             }
 
             setLoading(false);
+            setAllowSave(true);
         }
     };
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
+
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, fileType: selectedFileTypeOption }))}>
@@ -202,7 +219,7 @@ const JohnTheRipper = () => {
                 )}
 
                 <Button type={"submit"}>Crack</Button>
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

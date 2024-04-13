@@ -4,7 +4,7 @@ import { useEffect, useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; //v2
 
 const title = "Fcrackzip Tool";
 const description_guide =
@@ -39,6 +39,9 @@ const Fcrackzip = () => {
 
     const isDictionary = attackMethod === "Dictionary";
     const isBruteForce = attackMethod === "BruteForce";
+
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -87,6 +90,10 @@ const Fcrackzip = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
@@ -100,6 +107,10 @@ const Fcrackzip = () => {
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+
         const args = [];
 
         if (attackMethod === "Dictionary") {
@@ -139,16 +150,28 @@ const Fcrackzip = () => {
             setOutput(result.output);
         } catch (e: any) {
             setOutput(e.message);
+            setLoading(false);
         }
+        setAllowSave(true);
     };
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
+
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
     // the disable charset logic is commented out
     // Please remove it if the future implementation does not need to use it
     // for now the logic stay as commented
+
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
             <LoadingOverlay visible={loading} />
@@ -240,9 +263,8 @@ const Fcrackzip = () => {
                         />
                     </>
                 )}
-                {SaveOutputToTextFile(output)}
                 <Button type={"submit"}>Start Cracking!</Button>
-
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 <Button onClick={clearOutput}>Clear Output</Button>
             </Stack>
