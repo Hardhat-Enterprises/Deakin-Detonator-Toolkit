@@ -9,7 +9,7 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 
 const title = "Enum4Linux";
 const description_userguide =
-    "Enum4linux is a tool used for the enumeration of information from Windows and Samba operating systems. " +
+    "test: Enum4linux is a tool used for the enumeration of information from Windows and Samba operating systems. " +
     "It is particularly useful for identifying the remote OS of a system and providing a list of the users " +
     "and group memberships found within the system.\n\nOptions for the tool can be found at: " +
     "https://www.kali.org/tools/enum4linux/\n\n" +
