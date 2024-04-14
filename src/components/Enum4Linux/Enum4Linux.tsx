@@ -22,7 +22,7 @@ const description_userguide =
     "       Eg: example.txt\n\n" +
     "Step 4: Enter any additional options/parameters.\n\n" +
     "Step 5: Click Scan to commence Enum4Linux's operation.\n\n" +
-    "Step 6: View the output block below to view the results of the tool's execution.";
+    "Step 6: View the output block below to view the results of the tools execution.";
 
 interface FormValues {
     ipAddress: string;
