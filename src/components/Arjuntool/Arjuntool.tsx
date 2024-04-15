@@ -26,7 +26,7 @@ const description_userguide =
  */  
 interface FormValues {
     url: string;
-    output_filename: string;
+    outputFileName: string;
 }
 
 function Arjuntool() {
@@ -41,7 +41,7 @@ function Arjuntool() {
     let form = useForm({
         initialValues: {
             url: "",
-            output_filename: "",
+            outputFileName: "",
         },
     });
 
@@ -106,8 +106,8 @@ function Arjuntool() {
         // Construct arguments for the aircrack-ng command based on form input
         const args = ["-u", values.url];
 
-        if (values.output_filename) {
-            args.push("-o", values.output_filename);
+        if (values.outputFileName) {
+            args.push("-o", values.outputFileName);
         }
 
         // Execute the arjun command via helper method and handle its output or potential errors
