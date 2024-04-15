@@ -7,18 +7,7 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-/**
- * TODO:
- * 1. Refine the user interface for better usability and integrate a mechanism for file selection from the local machine.
- * 2. Introduce an 'Advanced Mode' for users familiar with the nuances of the tool.
- * 3. Gradually expand input options in 'Advanced Mode' with the eventual aim of encompassing all functionalities of `aircrack-ng`.
- * 4. Enhance the output display to ensure optimal readability, especially for extensive outputs.
- * 5. Provide real-time feedback during the loading phase, allowing users to monitor ongoing processes.
- */
-const types = ["WPA", "WEP"];
-const typesRequiringAdvancedWEPConfig = ["WEP"];
-const typesRequiringAdvancedWPAConfig = ["WPA"];
-const characters = ["Alpha-Numeric", "Binary Coded Decimal", "Default"];
+
 const title = "WEP/WPA Cracking with Aircrack-ng";
 const description_userguide =
     "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphrases using captured network packets.\n\n" +
@@ -53,6 +42,11 @@ const AircrackNG = () => {
     const [AdvancedMode, setAdvancedMode] = useState(false);
     const [selectedcharacter, setSelectedCharacter] = useState("");
     const [CustomConfig, setCustomConfig] = useState(false);
+
+    const types = ["WPA", "WEP"];
+    const typesRequiringAdvancedWEPConfig = ["WEP"];
+    const typesRequiringAdvancedWPAConfig = ["WPA"];
+    const characters = ["Alpha-Numeric", "Binary Coded Decimal", "Default"];
 
     const form = useForm({
         initialValues: {
