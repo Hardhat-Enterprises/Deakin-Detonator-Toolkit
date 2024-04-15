@@ -18,8 +18,11 @@ const description_userguide =
     "Step 2: Type in the name of your password file including the extension. E.g 'password.txt'.\n" +
     "Step 3: Click 'Start Cracking' to begin the process.\n" +
     "Step 4: View the output block below to see the results.\n" +
-    "Optionally you may select additinoal advanced options.";
+    "Optionally you may select additional advanced options.";
 
+/**
+ * Represents the form values for the Aircrack-ng component.
+ */
 interface FormValuesType {
     capFile: string;
     wordlist: string;
@@ -34,21 +37,26 @@ interface FormValuesType {
 }
 
 const AircrackNG = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-    const [selectedtype, setSelectedType] = useState("");
-    const [AdvancedMode, setAdvancedMode] = useState(false);
-    const [selectedcharacter, setSelectedCharacter] = useState("");
-    const [CustomConfig, setCustomConfig] = useState(false);
+    // Component State Variables.
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
 
-    const types = ["WPA", "WEP"];
-    const typesRequiringAdvancedWEPConfig = ["WEP"];
-    const typesRequiringAdvancedWPAConfig = ["WPA"];
-    const characters = ["Alpha-Numeric", "Binary Coded Decimal", "Default"];
+    // AirCrack-ng specific state variables.
+    const [selectedtype, setSelectedType] = useState(""); // State variable to store the selected security type.
+    const [AdvancedMode, setAdvancedMode] = useState(false); // State variable to store the selected mode.
+    const [selectedcharacter, setSelectedCharacter] = useState(""); // State variable to store the selected character type.
+    const [CustomConfig, setCustomConfig] = useState(false); // State variable to store the selected custom configuration.
 
+    // Component Constants.
+    const types = ["WPA", "WEP"]; // Security types supported by Aircrack-ng.
+    const typesRequiringAdvancedWEPConfig = ["WEP"]; // Security types requiring advanced WEP configuration.
+    const typesRequiringAdvancedWPAConfig = ["WPA"]; // Security types requiring advanced WPA configuration.
+    const characters = ["Alpha-Numeric", "Binary Coded Decimal", "Default"]; // Character types supported by Aircrack-ng.
+
+    // Form Hook to handle form input.
     const form = useForm({
         initialValues: {
             capFile: "",
@@ -63,6 +71,7 @@ const AircrackNG = () => {
             customConfig: "",
         },
     });
+
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
      * It updates the state by appending the new data received to the existing output.
@@ -82,32 +91,29 @@ const AircrackNG = () => {
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was terminated successfully, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+            // If the process was terminated due to a signal, display the signal code.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+            // If the process was terminated with an error, display the exit code and signal code.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            // Clear the child process pid reference
+
+            // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
-            // Cancel the Loading Overlay
+
+            // Cancel the loading overlay. The process has completed.
             setLoading(false);
 
-            // Allow Saving as the output is finalised
+            // Now that loading has completed, allow the user to save the output to a file.
             setAllowSave(true);
             setHasSaved(false);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
-
-    /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the aircrack-ng tool with the given parameters.
-     * Once the command is executed, the results or errors are displayed in the output.
-     *
-     * @param {FormValuesType} values - The form values, containing the CAP file path and wordlist path.
-     */
 
     // Actions taken after saving the output
     const handleSaveComplete = () => {
@@ -117,6 +123,13 @@ const AircrackNG = () => {
         setAllowSave(false);
     };
 
+    /**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the aircrack-ng tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the CAP file path and wordlist path.
+     */
     const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
@@ -145,14 +158,17 @@ const AircrackNG = () => {
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("aircrack-ng", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
-                // Update the UI with the results from the executed command
+                // Update the output with the results of the command execution.
                 setOutput(output);
+
+                // Store the process ID of the executed command.
                 setPid(pid);
             })
             .catch((error) => {
-                // Display any errors encountered during command execution
+                // Display any errors encountered during command execution.
                 setOutput(error.message);
-                // Deactivate loading state
+
+                // Deactivate loading state.
                 setLoading(false);
             });
     };
