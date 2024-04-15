@@ -7,15 +7,17 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
+
 const title = "Arjun";
 const description_userguide =
     "Arjun is a command-line tool specifically designed to look for hidden HTTP parameters. " +
-    "Arjun will try to discover parameters and give you new set of endpoints to test on. " +
-    "It is a multi-threaded application, can handle rate limits and supports GET,POST,XML and JSON methods. " +
-    " \n\nKali's Arjun Information Page: https://www.kali.org/tools/arjun/ \n\nHow to use Arjun:\n\nStep 1: Enter a valid URL.\n" +
-    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter an Optional Json Output filename.\n        E.g. arjunoutput " +
-    "\n\nStep 3: Click the scan option to commence scan. " +
-    "\n\nStep 4: View the Output block below to view the results of the tool's execution.";
+    "Arjun will try to discover parameters and give you a new set of endpoints to test on. " +
+    "It is a multi-threaded application and can handle rate limits. It supports GET,POST,XML and JSON methods.\n\n" +
+    "How to use Arjun:\n\n" +
+    "Step 1: Enter a valid URL. E.g. https://www.deakin.edu.au\n\n" +
+    "Step 2: Enter an optional JSON Ootput filename. E.g. arjunoutput.\n" +
+    "Step 3: Click the scan option to commence scanning.\n" +
+    "Step 4: View the output block below to see the results.";
 
 interface FormValues {
     url: string;
