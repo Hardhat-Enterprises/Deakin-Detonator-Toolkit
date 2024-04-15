@@ -24,19 +24,26 @@ const description_userguide =
     "Step 3: Click spoof to commence the ARP spoofing operation.\n" +
     "Step 4: View the output block below to view the results.";
 
+/**
+ * Represents the form values for the ARPSpoof component.
+ */
 interface FormValuesType {
     ipGateway: string;
     ipTarget: string;
 }
 
 const ARPSpoofing = () => {
+    // Component State Variables.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [PidGateway, setPidGateway] = useState(""); // State variable to store the PID of the gateway process.
+    const [PidTarget, setPidTarget] = useState(""); // State variable to store the PID of the target process.
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+    
+    // ARPSpoof specific state variables.
     const [isSpoofing, setIsSpoofing] = useState(false);
-    const [PidGateway, setPidGateway] = useState("");
-    const [PidTarget, setPidTarget] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-    const [output, setOutput] = useState("");
 
+    // Form Hook to handle form input.
     let form = useForm({
         initialValues: {
             ipGateway: "",
@@ -44,33 +51,49 @@ const ARPSpoofing = () => {
         },
     });
 
+    /**
+     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data received to the existing output.
+     * @param {string} data - The data received from the child process.
+     */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
-
-    // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
-    // the termination of that process, resetting state variables, handling the output data,
-    // and informing the user.
+    
+    /**
+     * handleProcessTermination: Callback to handle the termination of the child process.
+     * Once the process termination is handled, it clears the process PID reference and
+     * deactivates the loading overlay.
+     * @param {object} param - An object containing information about the process termination.
+     * @param {number} param.code - The exit code of the terminated process.
+     * @param {number} param.signal - The signal code indicating how the process was terminated.
+     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was terminated successfully, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+                // If the process was terminated due to a signal, display the signal code.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+                // If the process was terminated with an error, display the exit code and signal code.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            // Clear the child process pid reference
+
+            // Clear the child process pid reference. There is no longer a valid process running.
+            // We complete this process for both gateway and target processes.
             setPidGateway("");
             setPidTarget("");
+
             // Cancel the Loading Overlay
             setIsSpoofing(false);
 
-            // Allow Saving as the output is finalised
+            // Now that loading has completed, allow the user to save the output to a file.
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData] // Dependency on the handleProcessData callback
     );
 
     // Actions taken after saving the output
@@ -81,6 +104,9 @@ const ARPSpoofing = () => {
         setAllowSave(false);
     };
 
+    /**
+     * Clears the output and resets the save state.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
