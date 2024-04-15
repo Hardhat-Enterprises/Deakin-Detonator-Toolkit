@@ -25,8 +25,8 @@ const description_userguide =
     "Step 4: View the output block below to view the results.";
 
 interface FormValuesType {
-    ip_gateway: string;
-    ip_target: string;
+    ipGateway: string;
+    ipTarget: string;
 }
 
 const ARPSpoofing = () => {
@@ -39,8 +39,8 @@ const ARPSpoofing = () => {
 
     let form = useForm({
         initialValues: {
-            ip_gateway: "",
-            ip_target: "",
+            ipGateway: "",
+            ipTarget: "",
         },
     });
 
@@ -87,9 +87,9 @@ const ARPSpoofing = () => {
         setAllowSave(false);
     }, [setOutput]);
 
-    const onSubmit = async (values: FormValues) => {
-        const args_gateway = [`-t`, values.ip_gateway, values.ip_target];
-        const args_target = [`-t`, values.ip_target, values.ip_gateway];
+    const onSubmit = async (values: FormValuesType) => {
+        const args_gateway = [`-t`, values.ipGateway, values.ipTarget];
+        const args_target = [`-t`, values.ipTarget, values.ipGateway];
         const result_gateway = await CommandHelper.runCommandWithPkexec(
             "arpspoof",
             args_gateway,
@@ -125,7 +125,7 @@ const ARPSpoofing = () => {
                     <Alert
                         radius="md"
                         children={
-                            "ARP spoofing between " + form.values.ip_gateway + " and " + form.values.ip_target + "..."
+                            "ARP spoofing between " + form.values.ipGateway + " and " + form.values.ipTarget + "..."
                         }
                     ></Alert>
                 )}
