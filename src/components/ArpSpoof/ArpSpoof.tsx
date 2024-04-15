@@ -5,6 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 // Component Constants
 const title = "ARPSpoof";
@@ -34,14 +35,12 @@ interface FormValuesType {
 
 const ARPSpoofing = () => {
     // Component State Variables.
+    const [loading, setLoading] = useState(false); // State variable to indicate if the process is loading.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [PidGateway, setPidGateway] = useState(""); // State variable to store the PID of the gateway process.
-    const [PidTarget, setPidTarget] = useState(""); // State variable to store the PID of the target process.
+    const [pidGateway, setPidGateway] = useState(""); // State variable to store the PID of the gateway process.
+    const [pidTarget, setPidTarget] = useState(""); // State variable to store the PID of the target process.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
-    
-    // ARPSpoof specific state variables.
-    const [isSpoofing, setIsSpoofing] = useState(false);
 
     // Form Hook to handle form input.
     let form = useForm({
@@ -87,7 +86,7 @@ const ARPSpoofing = () => {
             setPidTarget("");
 
             // Cancel the Loading Overlay
-            setIsSpoofing(false);
+            setLoading(false);
 
             // Now that loading has completed, allow the user to save the output to a file.
             setAllowSave(true);
@@ -104,8 +103,9 @@ const ARPSpoofing = () => {
         setAllowSave(false);
     };
 
-    /**
-     * Clears the output and resets the save state.
+   /**
+     * clearOutput: Callback function to clear the console output.
+     * It resets the state variable holding the output, thereby clearing the display.
      */
     const clearOutput = useCallback(() => {
         setOutput("");
@@ -114,48 +114,46 @@ const ARPSpoofing = () => {
     }, [setOutput]);
 
     const onSubmit = async (values: FormValuesType) => {
-        const args_gateway = [`-t`, values.ipGateway, values.ipTarget];
-        const args_target = [`-t`, values.ipTarget, values.ipGateway];
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false)
+
+        // Activate loading state to indicate ongoing process
+        setLoading(true);
+
+        // Construct arguments for the ARPSpoof command based on form input
+        const argsGateway = [`-t`, values.ipGateway, values.ipTarget];
+        const argsTarget = [`-t`, values.ipTarget, values.ipGateway];
+
+        // Execute arpspoof command for the gateway
         const result_gateway = await CommandHelper.runCommandWithPkexec(
             "arpspoof",
-            args_gateway,
+            argsGateway,
             handleProcessData,
             handleProcessTermination
         );
         setPidGateway(result_gateway.pid);
+
+        // Execute arpspoof command for the target
         const result_target = await CommandHelper.runCommandWithPkexec(
             "arpspoof",
-            args_target,
+            argsTarget,
             handleProcessData,
             handleProcessTermination
         );
         setPidTarget(result_target.pid);
-        setIsSpoofing(true);
-    };
-    const close = async () => {
-        const argsGateway = [`-2`, PidGateway];
-        const argsTarget = [`-2`, PidTarget];
-        await CommandHelper.runCommandWithPkexec("kill", argsGateway, handleProcessData, handleProcessTermination);
-        await CommandHelper.runCommandWithPkexec("kill", argsTarget, handleProcessData, handleProcessTermination);
-        setIsSpoofing(false);
+
+        setLoading(false);
     };
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+            {LoadingOverlayAndCancelButton(loading, pidGateway)}
+            {LoadingOverlayAndCancelButton(loading, pidTarget)}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"Target one IP address"} required {...form.getInputProps("ip1")} />
                 <TextInput label={"Target two IP address"} required {...form.getInputProps("ip2")} />
-                {!isSpoofing && <Button type={"submit"}>Spoof</Button>}
-                {isSpoofing && (
-                    <Alert
-                        radius="md"
-                        children={
-                            "ARP spoofing between " + form.values.ipGateway + " and " + form.values.ipTarget + "..."
-                        }
-                    ></Alert>
-                )}
-                {isSpoofing && <Button onClick={close}>Stop</Button>}
+                <Button type={"submit"}>Spoof</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
