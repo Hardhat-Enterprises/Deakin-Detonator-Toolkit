@@ -132,7 +132,7 @@ const payloadRequiredVariables = [
     ],
 ];
 
-const PayloadGenerator = () => {
+const payloadGenerator = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [isCustomMode, setIsCustomMode] = useState(false);
@@ -452,4 +452,4 @@ const PayloadGenerator = () => {
     );
 };
 
-export default PayloadGenerator;
+export default payloadGenerator;
