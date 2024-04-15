@@ -12,11 +12,13 @@ const title = "WEP/WPA Cracking with Aircrack-ng"; // Contains the title of the 
 
 // Contains the description of the component.
 const description_userguide =
-    "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphrases using captured network packets.\n\n" +
-    "Step 1: Type in your capture packets name including the extension .cap";
-    "Step 2: Type your password file name including the extension .txt or .lst).\n" +
+    "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphrases using captured network traffic.\n\n" +
+    "How to use Aircrack-ng:\n\n"
+    "Step 1: Type in the name of your packet capture file including the extension .cap. E.g. 'example.cap'.\n";
+    "Step 2: Type in the name of your password file including the extension. E.g 'password.txt'.\n" +
     "Step 3: Click 'Start Cracking' to begin the process.\n" +
-    "Step 4: View the Output block below to see the results.\n\n";
+    "Step 4: View the output block below to see the results.\n" +
+    "Optionally you may select additinoal advanced options.";
 
 interface FormValuesType {
     capFile: string;
