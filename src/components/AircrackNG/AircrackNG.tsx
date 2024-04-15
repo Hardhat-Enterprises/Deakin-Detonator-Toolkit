@@ -8,13 +8,13 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 // Component Constants
-const title = "WEP/WPA Cracking with Aircrack-ng"; // Contains the title of the component.
+const title = "Aircrack-ng"; // Contains the title of the component.
 
 // Contains the description of the component.
 const description_userguide =
     "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphrases using captured network traffic.\n\n" +
-    "How to use Aircrack-ng:\n\n"
-    "Step 1: Type in the name of your packet capture file including the extension .cap. E.g. 'example.cap'.\n";
+    "How to use Aircrack-ng:\n\n" +
+    "Step 1: Type in the name of your packet capture file including the extension .cap. E.g. 'example.cap'.\n" +
     "Step 2: Type in the name of your password file including the extension. E.g 'password.txt'.\n" +
     "Step 3: Click 'Start Cracking' to begin the process.\n" +
     "Step 4: View the output block below to see the results.\n" +
@@ -94,10 +94,10 @@ const AircrackNG = () => {
             // If the process was terminated successfully, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-            // If the process was terminated due to a signal, display the signal code.
+                // If the process was terminated due to a signal, display the signal code.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-            // If the process was terminated with an error, display the exit code and signal code.
+                // If the process was terminated with an error, display the exit code and signal code.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
