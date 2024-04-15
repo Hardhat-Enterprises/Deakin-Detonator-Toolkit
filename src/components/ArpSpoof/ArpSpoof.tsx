@@ -24,7 +24,7 @@ const description_userguide =
     "Step 3: Click spoof to commence the ARP spoofing operation.\n" +
     "Step 4: View the output block below to view the results.";
 
-interface FormValues {
+interface FormValuesType {
     ip_gateway: string;
     ip_target: string;
 }
