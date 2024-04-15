@@ -17,7 +17,7 @@ const description_userguide =
     "It is a multi-threaded application and can handle rate limits. It supports GET,POST,XML and JSON methods.\n\n" +
     "How to use Arjun:\n\n" +
     "Step 1: Enter a valid URL. E.g. https://www.deakin.edu.au\n" +
-    "Step 2: Enter an optional JSON Ootput filename. E.g. arjunoutput.\n" +
+    "Step 2: Enter an optional JSON output filename. E.g. arjunoutput.\n" +
     "Step 3: Click the scan option to commence scanning.\n" +
     "Step 4: View the output block below to see the results.";
 
