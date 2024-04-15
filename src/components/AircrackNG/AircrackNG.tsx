@@ -188,6 +188,8 @@ const AircrackNG = () => {
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
+                <TextInput label={"CAP File Path"} required {...form.getInputProps("capFile")} />
+                <TextInput label={"Path to worldlist"} {...form.getInputProps("wordlist")} />
                 <Switch
                     size="md"
                     label="Advanced Mode"
@@ -200,9 +202,6 @@ const AircrackNG = () => {
                     checked={CustomConfig}
                     onChange={(e) => setCustomConfig(e.currentTarget.checked)}
                 />
-                <TextInput label={"CAP File Path"} required {...form.getInputProps("capFile")} />
-                <TextInput label={"Path to worldlist"} {...form.getInputProps("wordlist")} />
-
                 {AdvancedMode && (
                     <>
                         <TextInput label={"Access Point's MAC (BSSID)"} {...form.getInputProps("BSSID")} />
@@ -213,8 +212,8 @@ const AircrackNG = () => {
                             onChange={(e) => setSelectedType(e.target.value)}
                             title={"Security Type"}
                             data={types}
-                            placeholder={"security type"}
-                            description={"Please select the security type"}
+                            placeholder={"Security Type"}
+                            description={"Please select the security type."}
                         />
                         {typesRequiringAdvancedWEPConfig.includes(selectedtype) && (
                             <>
@@ -224,7 +223,7 @@ const AircrackNG = () => {
                                     title={"Characters"}
                                     data={characters}
                                     placeholder={"characters"}
-                                    description={"Please select the wifi chracter types (if known)"}
+                                    description={"Please select the WiFi character types (if known)"}
                                 />
                                 <TextInput label={"MAC Address"} {...form.getInputProps("MACAddress")} />
                             </>
@@ -237,7 +236,6 @@ const AircrackNG = () => {
                     </>
                 )}
                 {CustomConfig && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
-
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Start Cracking</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
