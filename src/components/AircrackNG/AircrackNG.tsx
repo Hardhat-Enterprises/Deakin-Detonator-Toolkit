@@ -26,11 +26,11 @@ interface FormValuesType {
     BSSID: string;
     ESSID: string;
     keyFile: string;
-    securitytype: string;
+    securityType: string;
     characters: string;
     MACAddress: string;
     PMKID: string;
-    customconfig: string;
+    customConfig: string;
 }
 
 const AircrackNG = () => {
@@ -56,11 +56,11 @@ const AircrackNG = () => {
             BSSID: "",
             ESSID: "",
             keyFile: "",
-            securitytype: "",
+            securityType: "",
             characters: "",
             MACAddress: "",
             PMKID: "",
-            customconfig: "",
+            customConfig: "",
         },
     });
     /**
@@ -140,7 +140,7 @@ const AircrackNG = () => {
             values.PMKID ? args.push(`-I`, values.PMKID) : undefined;
         }
 
-        values.customconfig ? args.push(values.customconfig) : undefined;
+        values.customConfig ? args.push(values.customConfig) : undefined;
 
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("aircrack-ng", args, handleProcessData, handleProcessTermination)
@@ -220,7 +220,7 @@ const AircrackNG = () => {
                         )}
                     </>
                 )}
-                {CustomConfig && <TextInput label={"Custom Configuration"} {...form.getInputProps("customconfig")} />}
+                {CustomConfig && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
 
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Start Cracking</Button>
