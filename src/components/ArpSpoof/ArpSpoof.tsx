@@ -6,20 +6,23 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
+// Component Constants
 const title = "ARPSpoof";
+
+// Contains the description of the component.
 const description_userguide =
-    "ARP Spoofing is a Man in the Middle attack where an interception can be made on the communication between " +
-    "devices on a network. The tool will send out forged ARP responses to the IP addresses of at least two devices, " +
-    "where the devices will connect to the attackers MAC address due to confusion on the router and workstation. " +
-    "These devices will further communicate with the attacker whilst being unknowing that an attack has even taken " +
-    "place. \n\nFurther information can be found at: https://www.kali.org/tools/dsniff/#arpspoof\n\n" +
-    "Using ARP Spoofing Tool:\n" +
-    "Step 1: Enter the IP address of the 1st target.\n" +
-    "       Eg: 192.168.1.1\n\n" +
-    "Step 2: Enter the IP address of the 2nd target.\n" +
-    "       Eg: 127.0.0.1\n\n" +
-    "Step 3: Click Spoof to commence ARP Spoofing's operation.\n\n" +
-    "Step 4: View the Output block below to view the results of the tools execution.";
+    "ARP (Address Resolution Protocol) spoofing is a Man-in-the-Middle (MitM) style attack.\n" +
+    "This attack involves a malicious actor sending false ARP messages over a local area network.\n" +
+    "This will link the attacker's MAC address with the IP address of a legitimate device or the default gateway.\n" +
+    "This will cause the traffic meant for the legitimate device to be sent to the attacker instead.\n" +
+    "The attacker can then inspect the traffic before forwarding it to the actual default gateway.\n" +
+    "The attacker can also modify the traffic before forwarding it. \n" +
+    "ARP spoofing can be used to intercept data frames, modify traffic, or stop the traffic altogether.\n\n" +
+    "How to use ARPSpoofing:\n\n" +
+    "Step 1: Enter the IP address of the 1st target. Eg: 192.168.1.1\n" +
+    "Step 2: Enter the IP address of the 2nd target. Eg: 192.168.1.2\n" +
+    "Step 3: Click spoof to commence the ARP spoofing operation.\n" +
+    "Step 4: View the output block below to view the results.";
 
 interface FormValues {
     ip_gateway: string;
