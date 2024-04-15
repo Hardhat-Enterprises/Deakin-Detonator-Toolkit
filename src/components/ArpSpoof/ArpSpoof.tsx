@@ -6,7 +6,7 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
-const title = "ARP Spoofing Tool";
+const title = "ARPSpoof";
 const description_userguide =
     "ARP Spoofing is a Man in the Middle attack where an interception can be made on the communication between " +
     "devices on a network. The tool will send out forged ARP responses to the IP addresses of at least two devices, " +
