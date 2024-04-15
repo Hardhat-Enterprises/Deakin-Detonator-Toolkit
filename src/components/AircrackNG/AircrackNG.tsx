@@ -7,15 +7,14 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
+// Component Constants
+const title = "WEP/WPA Cracking with Aircrack-ng"; // Contains the title of the component.
 
-const title = "WEP/WPA Cracking with Aircrack-ng";
+// Contains the description of the component.
 const description_userguide =
     "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphrases using captured network packets.\n\n" +
-    "IMPORTANT NOTE: this tools require real capture packets containing 4 ways handshake to work.\n\n" +
-    "                For tester move your both your capture file and password file into src-tauri folder.\n\n" +
-    "                before Step 1.\n\n" +
     "Step 1: Type in your capture packets name including the extension .cap";
-"Step 2: Type your password file name including the extension .txt or .lst).\n" +
+    "Step 2: Type your password file name including the extension .txt or .lst).\n" +
     "Step 3: Click 'Start Cracking' to begin the process.\n" +
     "Step 4: View the Output block below to see the results.\n\n";
 
