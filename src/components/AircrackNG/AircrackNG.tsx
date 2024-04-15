@@ -222,7 +222,7 @@ const AircrackNG = () => {
                                     onChange={(e) => setSelectedCharacter(e.target.value)}
                                     title={"Characters"}
                                     data={characters}
-                                    placeholder={"characters"}
+                                    placeholder={"Characters"}
                                     description={"Please select the WiFi character types (if known)"}
                                 />
                                 <TextInput label={"MAC Address"} {...form.getInputProps("MACAddress")} />
