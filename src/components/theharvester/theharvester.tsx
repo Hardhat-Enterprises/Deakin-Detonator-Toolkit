@@ -141,34 +141,26 @@ const TheHarvester = () => {
                     {...form.getInputProps("resultlimit")}
                 />
                 <label>Source</label>
-                <select {...form.getInputProps("source")}>
-                    <option value="baidu">Baidu</option>
-                    <option value="bing">Bing</option>
-                    <option value="censys">Censys</option>
-                    <option value="certspotter">Certspotter</option>
-                    <option value="crtsh">Crtsh</option>
-                    <option value="dnsdumpster">DNSdumpster</option>
-                    <option value="duckduckgo">DuckDuckGo</option>
-                    <option value="exalead">Exalead</option>
-                    <option value="google">Google</option>
-                    <option value="hackertarget">Hackertarget</option>
-                    <option value="hunter">Hunter</option>
-                    <option value="intelx">Intelx</option>
-                    <option value="linkedin">Linkedin</option>
-                    <option value="linkedin_links">Linkedin Links</option>
-                    <option value="netcraft">Netcraft</option>
-                    <option value="otx">Otx</option>
-                    <option value="securityTrails">SecurityTrails</option>
-                    <option value="shodan">Shodan</option>
-                    <option value="spyse">Spyse</option>
-                    <option value="sublist3r">Sublist3r</option>
-                    <option value="threatcrowd">Threatcrowd</option>
-                    <option value="threatminer">Threatminer</option>
-                    <option value="trello">Trello</option>
-                    <option value="twitter">Twitter</option>
-                    <option value="vhost">Vhost</option>
-                    <option value="virustotal">Virustotal</option>
-                    <option value="yahoo">Yahoo</option>
+                <select {...form.getInputProps("source")} required>
+        	    <option value="" disabled hidden>Select an option</option>
+        	    <option value="anubis">Anubis</option>
+        	    <option value="baidu">Baidu</option>
+        	    <option value="brave">Brave</option>
+        	    <option value="certspotter">Certspotter</option>
+        	    <option value="crtsh">Crtsh</option>
+        	    <option value="dnsdumpster">DNSdumpster</option>
+        	    <option value="duckduckgo">DuckDuckGo</option>
+        	    <option value="hackertarget">Hackertarget</option>
+        	    <option value="otx">OTX</option>
+        	    <option value="rapiddns">RapidDNS</option>
+        	    <option value="sitedossier">Sitedossier</option>
+        	    <option value="subdomaincenter">Subdomaincenter</option>
+        	    <option value="subdomainfinderc99">Subdomainfinderc99</option>
+        	    <option value="threatminer">Threatminer</option>
+        	    <option value="urlscan">URLScan</option>
+        	    <option value="virustotal">Virustotal</option>
+        	    <option value="yahoo">Yahoo</option>
+
                 </select>
                 {checkedAdvanced && (
                     <>
