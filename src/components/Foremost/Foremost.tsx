@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Title, Checkbox, Switch, Modal } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Title, Checkbox, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -6,7 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-import { checkCommandAvailability, checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
 const title = "Foremost Tool";
