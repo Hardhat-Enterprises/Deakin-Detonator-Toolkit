@@ -81,7 +81,7 @@ const ARPSpoofing = () => {
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
-    
+
     /**
      * handleProcessTermination: Callback to handle the termination of the child process.
      * Once the process termination is handled, it clears the process PID reference and
@@ -126,7 +126,7 @@ const ARPSpoofing = () => {
         setAllowSave(false);
     };
 
-   /**
+    /**
      * clearOutput: Callback function to clear the console output.
      * It resets the state variable holding the output, thereby clearing the display.
      */
@@ -138,7 +138,7 @@ const ARPSpoofing = () => {
 
     const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
-        setAllowSave(false)
+        setAllowSave(false);
 
         // Activate loading state to indicate ongoing process
         setLoading(true);
@@ -191,7 +191,6 @@ const ARPSpoofing = () => {
                 </Stack>
             </form>
         </>
-
     );
 };
 
