@@ -43,6 +43,12 @@ const ARPSpoofing = () => {
     const [pidTarget, setPidTarget] = useState(""); // State variable to store the PID of the target process.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+
+    // Component Constants.
+    const dependencies = ["arpspoof"]; // Contains the dependencies required for the component.
 
     // Form Hook to handle form input.
     let form = useForm({
