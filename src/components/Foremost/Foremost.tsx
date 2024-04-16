@@ -91,16 +91,6 @@ const ForemostTool = () => {
             args.push(`-c`, `${values.config}`);
         }
 
-        //Run the command in quiet mode
-        if (checkedQuiet) {
-            args.push(`-Q`);
-        }
-
-        //Run the command in verbose mode
-        if (checkedVerbose) {
-            args.push(`-v`);
-        }
-
         //specify file type
         if (values.types) {
             args.push(`-t`, `${values.types}`);
@@ -108,6 +98,16 @@ const ForemostTool = () => {
 
         //Advanced Mode
         if (checkedAdvanced) {
+            //Run the command in quiet mode
+            if (checkedQuiet) {
+                args.push(`-Q`);
+            }
+
+            //Run the command in verbose mode
+            if (checkedVerbose) {
+                args.push(`-v`);
+            }
+
             //Enable indirect block detection
             if (values.indirectBlockDetection) {
                 args.push(`-d`);
