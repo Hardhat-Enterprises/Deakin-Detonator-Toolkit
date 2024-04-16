@@ -79,7 +79,7 @@ const SMGGhostScanner = () => {
         // Start the Loading Overlay
         setLoading(true);
 
-        const args = [`./exploits/SMGGhostScanner.py`, values.ip];
+        const args = [`/usr/share/ddt/SMGGhostScanner.py`, values.ip];
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
