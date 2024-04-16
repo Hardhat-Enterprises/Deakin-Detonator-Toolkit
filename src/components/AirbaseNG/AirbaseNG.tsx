@@ -18,7 +18,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 
 const title = "Create Fake Access Point with Airbase-ng";
 
-const description_userguide = "Airbase-ng is a tool to create fake access points.\n\n";
+const description = "Airbase-ng is a tool to create fake access points.\n\n";
 
 const steps =
     "Step 1: Type in the name of your fake host.\n" +
@@ -132,7 +132,7 @@ const AirbaseNG = () => {
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
             {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>{UserguideTab(title, description_userguide, steps, forms(), "", "")}</Stack>
+            <Stack>{UserguideTab(title, description, steps, forms(), "", "")}</Stack>
         </form>
     );
 };

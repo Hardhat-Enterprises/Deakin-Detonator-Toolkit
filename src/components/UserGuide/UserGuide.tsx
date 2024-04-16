@@ -1,9 +1,7 @@
 import { Title, HoverCard, Text, Button, Group, Collapse, Box, Tabs } from "@mantine/core";
 import { IconAbacus, IconBuildingLighthouse, IconManualGearbox, IconQuestionMark, IconSettings } from "@tabler/icons";
 import styles from "./UserGuide.module.css";
-import { useDisclosure } from "@mantine/hooks";
 import { jsx } from "@emotion/react";
-import { useState } from "react";
 
 export function UserGuide(title: string, description: string) {
     return (
@@ -44,27 +42,25 @@ export function UserguideTab(
     steps: string,
     form: jsx.JSX.Element,
     tutorial: string,
-    sourcelink: string
+    sourceLink: string
 ) {
-    const iconStyle = { width: 12, height: 12 };
-
     return (
         <>
             <Title>{title}</Title>
-            <Tabs defaultValue="UserGuide">
+            <Tabs defaultValue="userGuide">
                 <Tabs.List grow>
-                    <Tabs.Tab value="UserGuide" icon={<IconBuildingLighthouse width={16} height={16} />}>
+                    <Tabs.Tab value="userGuide" icon={<IconBuildingLighthouse width={16} height={16} />}>
                         User Guide
                     </Tabs.Tab>
                     <Tabs.Tab value="Configuration" icon={<IconSettings width={16} height={16} />}>
                         Configuration
                     </Tabs.Tab>
-                    <Tabs.Tab value="Tutorial" disabled={tutorial =="" && sourcelink == ""} icon={<IconAbacus width={16} height={16}/>}>
+                    <Tabs.Tab value="Tutorial" disabled={tutorial =="" && sourceLink == ""} icon={<IconAbacus width={16} height={16}/>}>
                         Tutorial
                     </Tabs.Tab>
                 </Tabs.List>
 
-                <Tabs.Panel value="UserGuide">
+                <Tabs.Panel value="userGuide">
                     <Text className={styles.text} size="md">
                         <pre style={{ whiteSpace: "pre-wrap" }}>{description}</pre>
                         <pre style={{ whiteSpace: "pre-wrap" }}>{steps}</pre>
@@ -80,7 +76,7 @@ export function UserguideTab(
                 <Tabs.Panel value="Tutorial">
                     <Text className={styles.text} size="md">
                         <pre style={{ whiteSpace: "pre-wrap" }}>{tutorial}</pre>
-                        <pre style={{ whiteSpace: "pre-wrap" }}>{sourcelink}</pre>
+                        <pre style={{ whiteSpace: "pre-wrap" }}>{sourceLink}</pre>
                     </Text>
                 </Tabs.Panel>
             </Tabs>
