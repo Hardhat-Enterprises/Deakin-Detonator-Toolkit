@@ -33,7 +33,7 @@ const ForemostTool = () => {
     // State hooks for loading, output, and advanced mode switch
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
-    const [checkedVerbose, setCheckedverbose] = useState(false);
+    const [checkedVerbose, setCheckedVerbose] = useState(false);
     const [checkedQuiet, setCheckedQuiet] = useState(false);
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [pid, setPid] = useState("");
@@ -91,31 +91,38 @@ const ForemostTool = () => {
             args.push(`-c`, `${values.config}`);
         }
 
+        //Run the command in quiet mode
         if (checkedQuiet) {
             args.push(`-Q`);
         }
 
+        //Run the command in verbose mode
         if (checkedVerbose) {
             args.push(`-v`);
         }
 
+        //specify file type
         if (values.types) {
             args.push(`-t`, `${values.types}`);
         }
 
+        //Advanced Mode
         if (checkedAdvanced) {
+            //Enable indirect block detection
             if (values.indirectBlockDetection) {
                 args.push(`-d`);
             }
 
+            //Write all headers option
             if (values.allHeaders) {
                 args.push(`-a`);
             }
 
+            //Only write audit files 
             if (values.auditFileOnly) {
                 args.push(`-w`);
             }
-
+            //Enable Quick Mode
             if (values.quickMode) {
                 args.push(`-q`);
             }
@@ -185,7 +192,7 @@ const ForemostTool = () => {
                     <Switch
                         label="Verbose Mode"
                         checked={checkedVerbose}
-                        onChange={(e) => setCheckedverbose(e.currentTarget.checked)}
+                        onChange={(e) => setCheckedVerbose(e.currentTarget.checked)}
                     />
                 )}
 
