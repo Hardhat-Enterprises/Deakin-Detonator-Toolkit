@@ -6,6 +6,9 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
+
 
 // Component constants.
 const title = "Arjun";
