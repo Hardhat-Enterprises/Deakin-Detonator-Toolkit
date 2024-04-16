@@ -6,6 +6,8 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 // Component Constants
 const title = "Aircrack-ng"; // Contains the title of the component.
