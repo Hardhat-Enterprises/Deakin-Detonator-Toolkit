@@ -45,6 +45,9 @@ const AircrackNG = () => {
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
 
     // AirCrack-ng specific state variables.
     const [selectedtype, setSelectedType] = useState(""); // State variable to store the selected security type.
