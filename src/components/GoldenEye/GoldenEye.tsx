@@ -5,7 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButton, LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "GoldenEye";
 const description_userguide =
@@ -116,11 +116,6 @@ const GoldenEye = () => {
             setOutput(e.message);
         }
     };
-    const Stop = async () => {
-        const args = [`-2`, pid];
-        await CommandHelper.runCommand("kill", args);
-        setLoading(false);
-    };
 
     const clearOutput = useCallback(() => {
         setOutput("");
@@ -131,6 +126,7 @@ const GoldenEye = () => {
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <Stack>
+                {LoadingOverlayAndCancelButtonPkexec(loading,pid,handleProcessData,handleProcessTermination)}
                 {UserGuide(title, description_userguide)}
                 <TextInput
                     label={"Url of the target"}
@@ -171,7 +167,6 @@ const GoldenEye = () => {
                 />
                 <Button type={"submit"}>Launch Dos Attack</Button>
                 {loading && <Alert children={"Lauching Dos attack against" + form.values.url}></Alert>}
-                {loading && <Button onClick={Stop}>Stop</Button>}
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
