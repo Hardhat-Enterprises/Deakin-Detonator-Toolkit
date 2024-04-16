@@ -1,11 +1,13 @@
 import { Button, Stack, TextInput, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 // Component Constants
 const title = "ARPSpoof";
