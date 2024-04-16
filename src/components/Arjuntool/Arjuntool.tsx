@@ -164,16 +164,26 @@ function Arjuntool() {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                <Button type={"submit"}>Scan</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+        <>
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description_userguide}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                <Stack>
+                    {UserGuide(title, description_userguide)}
+                    <TextInput label={"URL"} required {...form.getInputProps("url")} />
+                    <Button type={"submit"}>Scan</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </>
     );
 }
 
