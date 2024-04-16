@@ -48,7 +48,7 @@ const ARPSpoofing = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
 
     // Component Constants.
-    const dependencies = ["arpspoof"]; // Contains the dependencies required for the component.
+    const dependencies = ["dsniff"]; // Contains the dependencies required for the component.
 
     // Form Hook to handle form input.
     let form = useForm({
