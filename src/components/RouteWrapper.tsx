@@ -141,7 +141,7 @@ export const ROUTES: RouteProperties[] = [
     {
         name: "CVE-2022-36804",
         path: "/attack-vectors/cve-2022-36804",
-        element: <CVE202236804/>,
+        element: <CVE202236804 />,
         description: "Pre-Auth RCE in Atlassian Bitbucket Server Vulnerability",
         category: "",
     },
