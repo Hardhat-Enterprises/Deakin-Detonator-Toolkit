@@ -1,6 +1,6 @@
 import { Button, NativeSelect, Select, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
@@ -60,6 +60,25 @@ const AircrackNG = () => {
     const typesRequiringAdvancedWEPConfig = ["WEP"]; // Security types requiring advanced WEP configuration.
     const typesRequiringAdvancedWPAConfig = ["WPA"]; // Security types requiring advanced WPA configuration.
     const characters = ["Alpha-Numeric", "Binary Coded Decimal", "Default"]; // Character types supported by Aircrack-ng.
+    const dependencies = ["aircrack-ng"]; // Dependencies required for the Aircrack-ng tool.
+
+    useEffect(() => {
+        // Check the availability of all commands in the dependencies array.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                // Set the state variable to indicate if the command is available.
+                setIsCommandAvailable(isAvailable);
+                // Set the state variable to indicate if the installation modal should be open.
+                setOpened(!isAvailable);
+                // Set the loading state of the installation modal to false after the check is done.
+                setLoadingModal(false);
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                // Set the loading state of the installation modal to false in case of error.
+                setLoadingModal(false);
+            });
+    }, []);
 
     // Form Hook to handle form input.
     const form = useForm({
@@ -189,63 +208,75 @@ const AircrackNG = () => {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit(onSubmit)}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <TextInput label={"CAP File Path"} required {...form.getInputProps("capFile")} />
-                <TextInput label={"Path to worldlist"} {...form.getInputProps("wordlist")} />
-                <Switch
-                    size="md"
-                    label="Advanced Mode"
-                    checked={AdvancedMode}
-                    onChange={(e) => setAdvancedMode(e.currentTarget.checked)}
-                />
-                <Switch
-                    size="md"
-                    label="Custom Configuration"
-                    checked={CustomConfig}
-                    onChange={(e) => setCustomConfig(e.currentTarget.checked)}
-                />
-                {AdvancedMode && (
-                    <>
-                        <TextInput label={"Access Point's MAC (BSSID)"} {...form.getInputProps("BSSID")} />
-                        <TextInput label={"Network Identifier (ESSID)"} {...form.getInputProps("ESSID")} />
-                        <TextInput label={"Key Output File"} {...form.getInputProps("keyFile")} />
-                        <NativeSelect
-                            value={selectedtype}
-                            onChange={(e) => setSelectedType(e.target.value)}
-                            title={"Security Type"}
-                            data={types}
-                            placeholder={"Security Type"}
-                            description={"Please select the security type."}
-                        />
-                        {typesRequiringAdvancedWEPConfig.includes(selectedtype) && (
-                            <>
-                                <NativeSelect
-                                    value={selectedcharacter}
-                                    onChange={(e) => setSelectedCharacter(e.target.value)}
-                                    title={"Characters"}
-                                    data={characters}
-                                    placeholder={"Characters"}
-                                    description={"Please select the WiFi character types (if known)"}
-                                />
-                                <TextInput label={"MAC Address"} {...form.getInputProps("MACAddress")} />
-                            </>
-                        )}
-                        {typesRequiringAdvancedWPAConfig.includes(selectedtype) && (
-                            <>
-                                <TextInput label={"PMKID"} {...form.getInputProps("PMKID")} />
-                            </>
-                        )}
-                    </>
-                )}
-                {CustomConfig && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <Button type={"submit"}>Start Cracking</Button>
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+        <>
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description_userguide}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            
+            <form onSubmit={form.onSubmit(onSubmit)}>
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                <Stack>
+                    {UserGuide(title, description_userguide)}
+                    <TextInput label={"CAP File Path"} required {...form.getInputProps("capFile")} />
+                    <TextInput label={"Path to worldlist"} {...form.getInputProps("wordlist")} />
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={AdvancedMode}
+                        onChange={(e) => setAdvancedMode(e.currentTarget.checked)}
+                    />
+                    <Switch
+                        size="md"
+                        label="Custom Configuration"
+                        checked={CustomConfig}
+                        onChange={(e) => setCustomConfig(e.currentTarget.checked)}
+                    />
+                    {AdvancedMode && (
+                        <>
+                            <TextInput label={"Access Point's MAC (BSSID)"} {...form.getInputProps("BSSID")} />
+                            <TextInput label={"Network Identifier (ESSID)"} {...form.getInputProps("ESSID")} />
+                            <TextInput label={"Key Output File"} {...form.getInputProps("keyFile")} />
+                            <NativeSelect
+                                value={selectedtype}
+                                onChange={(e) => setSelectedType(e.target.value)}
+                                title={"Security Type"}
+                                data={types}
+                                placeholder={"Security Type"}
+                                description={"Please select the security type."}
+                            />
+                            {typesRequiringAdvancedWEPConfig.includes(selectedtype) && (
+                                <>
+                                    <NativeSelect
+                                        value={selectedcharacter}
+                                        onChange={(e) => setSelectedCharacter(e.target.value)}
+                                        title={"Characters"}
+                                        data={characters}
+                                        placeholder={"Characters"}
+                                        description={"Please select the WiFi character types (if known)"}
+                                    />
+                                    <TextInput label={"MAC Address"} {...form.getInputProps("MACAddress")} />
+                                </>
+                            )}
+                            {typesRequiringAdvancedWPAConfig.includes(selectedtype) && (
+                                <>
+                                    <TextInput label={"PMKID"} {...form.getInputProps("PMKID")} />
+                                </>
+                            )}
+                        </>
+                    )}
+                    {CustomConfig && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <Button type={"submit"}>Start Cracking</Button>
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </>
+        
     );
 };
 
