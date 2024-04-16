@@ -55,7 +55,11 @@ export function UserguideTab(
                     <Tabs.Tab value="Configuration" icon={<IconSettings width={16} height={16} />}>
                         Configuration
                     </Tabs.Tab>
-                    <Tabs.Tab value="Tutorial" disabled={tutorial =="" && sourceLink == ""} icon={<IconAbacus width={16} height={16}/>}>
+                    <Tabs.Tab
+                        value="Tutorial"
+                        disabled={tutorial == "" && sourceLink == ""}
+                        icon={<IconAbacus width={16} height={16} />}
+                    >
                         Tutorial
                     </Tabs.Tab>
                 </Tabs.List>
