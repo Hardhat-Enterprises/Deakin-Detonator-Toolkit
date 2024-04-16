@@ -1,9 +1,9 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Collapse, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { UserguideTab } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
@@ -17,8 +17,10 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
  */
 
 const title = "Create Fake Access Point with Airbase-ng";
-const description_userguide =
-    "Airbase-ng is a tool to create fake access points.\n\n" +
+
+const description_userguide = "Airbase-ng is a tool to create fake access points.\n\n";
+
+const steps =
     "Step 1: Type in the name of your fake host.\n" +
     "Step 2: Select your desired channel.\n" +
     "Step 3: Specify the WLAN interface to be used.\n" +
@@ -107,6 +109,19 @@ const AirbaseNG = () => {
             });
     };
 
+    function forms() {
+        return (
+            <Stack>
+                <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
+                <TextInput label={"Channel of choice"} required {...form.getInputProps("Channel")} />
+                <TextInput label={"Your Wlan"} required {...form.getInputProps("Wlan")} />
+                {SaveOutputToTextFile(output)}
+                <Button type={"submit"}>Start AP</Button>
+                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+            </Stack>
+        );
+    }
+
     /**
      * clearOutput: Callback function to clear the console output.
      * It resets the state variable holding the output, thereby clearing the display.
@@ -117,15 +132,7 @@ const AirbaseNG = () => {
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
             {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
-                <TextInput label={"Channel of choice"} required {...form.getInputProps("Channel")} />
-                <TextInput label={"Your Wlan"} required {...form.getInputProps("Wlan")} />
-                {SaveOutputToTextFile(output)}
-                <Button type={"submit"}>Start AP</Button>
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
+            <Stack>{UserguideTab(title, description_userguide, steps, forms(), "", "")}</Stack>
         </form>
     );
 };
