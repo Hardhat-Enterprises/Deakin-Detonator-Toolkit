@@ -217,7 +217,7 @@ const AircrackNG = () => {
                     dependencies={dependencies}
                 ></InstallationModal>
             )}
-            
+
             <form onSubmit={form.onSubmit(onSubmit)}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
@@ -269,14 +269,15 @@ const AircrackNG = () => {
                             )}
                         </>
                     )}
-                    {CustomConfig && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
+                    {CustomConfig && (
+                        <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />
+                    )}
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type={"submit"}>Start Cracking</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
         </>
-        
     );
 };
 
