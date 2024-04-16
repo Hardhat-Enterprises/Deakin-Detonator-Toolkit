@@ -181,20 +181,6 @@ const ForemostTool = () => {
                     placeholder={"Specify types (comma-separated) e.g., jpg,doc. if blank will retrieve all."}
                     {...form.getInputProps("types")}
                 />
-                {!checkedVerbose && (
-                    <Switch
-                        label="Quiet Mode"
-                        checked={checkedQuiet}
-                        onChange={(e) => setCheckedQuiet(e.currentTarget.checked)}
-                    />
-                )}
-                {!checkedQuiet && (
-                    <Switch
-                        label="Verbose Mode"
-                        checked={checkedVerbose}
-                        onChange={(e) => setCheckedVerbose(e.currentTarget.checked)}
-                    />
-                )}
 
                 {/* Advanced Options */}
                 {checkedAdvanced && (
