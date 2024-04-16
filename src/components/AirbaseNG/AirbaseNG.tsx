@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserguideTab } from "../UserGuide/UserGuide";
+import { UserGuideTab } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
@@ -132,7 +132,7 @@ const AirbaseNG = () => {
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
             {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>{UserguideTab(title, description, steps, forms(), "", "")}</Stack>
+            <Stack>{UserGuideTab(title, description, steps, forms(), "", "")}</Stack>
         </form>
     );
 };

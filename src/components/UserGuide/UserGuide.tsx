@@ -36,7 +36,7 @@ export function UserGuide2(description: string) {
     );
 }
 
-export function UserguideTab(
+export function UserGuideTab(
     title: string,
     description: string,
     steps: string,
@@ -52,11 +52,11 @@ export function UserguideTab(
                     <Tabs.Tab value="userGuide" icon={<IconBuildingLighthouse width={16} height={16} />}>
                         User Guide
                     </Tabs.Tab>
-                    <Tabs.Tab value="Configuration" icon={<IconSettings width={16} height={16} />}>
+                    <Tabs.Tab value="configuration" icon={<IconSettings width={16} height={16} />}>
                         Configuration
                     </Tabs.Tab>
                     <Tabs.Tab
-                        value="Tutorial"
+                        value="tutorial"
                         disabled={tutorial == "" && sourceLink == ""}
                         icon={<IconAbacus width={16} height={16} />}
                     >
@@ -71,13 +71,13 @@ export function UserguideTab(
                     </Text>
                 </Tabs.Panel>
 
-                <Tabs.Panel value="Configuration">
+                <Tabs.Panel value="configuration">
                     <Text className={styles.text} size="md">
                         <pre style={{ whiteSpace: "pre-wrap" }}>{form}</pre>
                     </Text>
                 </Tabs.Panel>
 
-                <Tabs.Panel value="Tutorial">
+                <Tabs.Panel value="tutorial">
                     <Text className={styles.text} size="md">
                         <pre style={{ whiteSpace: "pre-wrap" }}>{tutorial}</pre>
                         <pre style={{ whiteSpace: "pre-wrap" }}>{sourceLink}</pre>
