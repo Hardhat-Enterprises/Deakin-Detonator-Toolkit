@@ -5,7 +5,10 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton, LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import {
+    LoadingOverlayAndCancelButton,
+    LoadingOverlayAndCancelButtonPkexec,
+} from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "GoldenEye";
 const description_userguide =
@@ -126,7 +129,7 @@ const GoldenEye = () => {
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <Stack>
-                {LoadingOverlayAndCancelButtonPkexec(loading,pid,handleProcessData,handleProcessTermination)}
+                {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                 {UserGuide(title, description_userguide)}
                 <TextInput
                     label={"Url of the target"}
