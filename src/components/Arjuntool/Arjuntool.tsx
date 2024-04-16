@@ -9,7 +9,6 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
-
 // Component constants.
 const title = "Arjun";
 
@@ -26,7 +25,7 @@ const description_userguide =
 
 /**
  * Represents the form values for the Arjun component.
- */  
+ */
 interface FormValues {
     url: string;
     outputFileName: string;
@@ -142,7 +141,6 @@ function Arjuntool() {
 
                 // Store the process ID of the executed command.
                 setPid(pid);
-                
             })
             .catch((error) => {
                 // Display any errors encountered during command execution.
