@@ -50,6 +50,21 @@ const ARPSpoofing = () => {
     // Component Constants.
     const dependencies = ["dsniff"]; // Contains the dependencies required for the component.
 
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
+
     // Form Hook to handle form input.
     let form = useForm({
         initialValues: {
@@ -154,18 +169,29 @@ const ARPSpoofing = () => {
     };
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            {LoadingOverlayAndCancelButton(loading, pidGateway)}
-            {LoadingOverlayAndCancelButton(loading, pidTarget)}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <TextInput label={"Target one IP address"} required {...form.getInputProps("ip1")} />
-                <TextInput label={"Target two IP address"} required {...form.getInputProps("ip2")} />
-                <Button type={"submit"}>Spoof</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+        <>
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description_userguide}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                {LoadingOverlayAndCancelButton(loading, pidGateway)}
+                {LoadingOverlayAndCancelButton(loading, pidTarget)}
+                <Stack>
+                    {UserGuide(title, description_userguide)}
+                    <TextInput label={"Target one IP address"} required {...form.getInputProps("ip1")} />
+                    <TextInput label={"Target two IP address"} required {...form.getInputProps("ip2")} />
+                    <Button type={"submit"}>Spoof</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </>
+
     );
 };
 
