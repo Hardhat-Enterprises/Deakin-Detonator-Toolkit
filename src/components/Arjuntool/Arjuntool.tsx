@@ -1,6 +1,6 @@
 import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
@@ -39,6 +39,27 @@ function Arjuntool() {
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
+
+    // Component Constants.
+    const dependencies = ["arjun"]; // Contains the dependencies required for the component.
+
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
 
     // Form Hook to handle form input.
     let form = useForm({
