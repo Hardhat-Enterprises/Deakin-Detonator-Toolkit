@@ -118,7 +118,7 @@ const ForemostTool = () => {
                 args.push(`-a`);
             }
 
-            //Only write audit files 
+            //Only write audit files
             if (values.auditFileOnly) {
                 args.push(`-w`);
             }
@@ -199,6 +199,20 @@ const ForemostTool = () => {
                 {/* Advanced Options */}
                 {checkedAdvanced && (
                     <Stack spacing="lg">
+                        {!checkedVerbose && (
+                            <Switch
+                                label="Quiet Mode"
+                                checked={checkedQuiet}
+                                onChange={(e) => setCheckedQuiet(e.currentTarget.checked)}
+                            />
+                        )}
+                        {!checkedQuiet && (
+                            <Switch
+                                label="Verbose Mode"
+                                checked={checkedVerbose}
+                                onChange={(e) => setCheckedVerbose(e.currentTarget.checked)}
+                            />
+                        )}
                         {/* Configuration File */}
                         <TextInput
                             label={"Configuration File"}
