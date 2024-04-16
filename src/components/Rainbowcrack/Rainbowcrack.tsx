@@ -60,7 +60,7 @@ export function rcrack() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData],
+        [handleProcessData]
     );
 
     // Actions taken after saving the output
@@ -91,7 +91,7 @@ export function rcrack() {
                 "rcrack",
                 args,
                 handleProcessData,
-                handleProcessTermination,
+                handleProcessTermination
             );
             setPid(result.pid);
             setOutput(result.output);
