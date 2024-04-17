@@ -69,7 +69,7 @@ export function RenderComponent(component: ComponentProps) {
         <>
             <Title align="center" style={{ paddingBottom: '10px' }}>{component.title}</Title>
 
-            <Tabs defaultValue="componentRender">
+            <Tabs defaultValue="configuration">
                 <Tabs.List grow style={{ marginBottom: '10px' }}>
                     <Tabs.Tab value="userGuide" icon={<IconBuildingLighthouse width={16} height={16} />}>
                         User Guide
