@@ -1,50 +1,53 @@
-import { Button, Collapse, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuideTab } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
- * TODO:
- * 1. Refine the user interface for better usability and integrate a mechanism for file selection from the local machine.
- * 2. Introduce an 'Advanced Mode' for users familiar with the nuances of the tool.
- * 3. Gradually expand input options in 'Advanced Mode' with the eventual aim of encompassing all functionalities of `airbase-ng`.
- * 4. Enhance the output display to ensure optimal readability, especially for extensive outputs.
- * 5. Unblock the loading screen during the up time of the Airbase ng and provide real time data update
+ * Represents the form values for the AirbaseNG component.
  */
+interface FormValuesType {
+    fakeHost: string;
+    channel: string;
+    wlan: string;
+}
 
-const title = "Create Fake Access Point with Airbase-ng";
+/**
+ * The AirbaseNG component.
+ * @returns The AirbaseNG component.
+ */
+const AirbaseNG = () => {
+    // Component State Variables.
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state. 
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
 
-const description = "Airbase-ng is a tool to create fake access points.\n\n";
-
-const steps =
+    // Component Constants.
+    const title = "Airbase-ng"; // Title of the component.
+    const description = "Airbase-ng is a tool to create fake access points."; // Description of the component.
+    const steps = 
     "Step 1: Type in the name of your fake host.\n" +
     "Step 2: Select your desired channel.\n" +
     "Step 3: Specify the WLAN interface to be used.\n" +
     "Step 4: Click 'Start AP' to begin the process.\n" +
-    "Step 5: View the Output block below to see the results.\n\n";
+    "Step 5: View the Output block below to see the results. ";
+    const sourceLink = ""; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
 
-interface FormValuesType {
-    FakeHost: string;
-    Channel: string;
-    Wlan: string;
-}
-
-const AirbaseNG = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
-
+    // Form hook to handle form input.
     const form = useForm({
         initialValues: {
-            FakeHost: "",
-            Channel: "",
-            Wlan: "",
+            fakeHost: "",
+            channel: "",
+            wlan: "",
         },
     });
+
+
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
      * It updates the state by appending the new data received to the existing output.
@@ -54,26 +57,33 @@ const AirbaseNG = () => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
-    /**
+     /**
      * handleProcessTermination: Callback to handle the termination of the child process.
      * Once the process termination is handled, it clears the process PID reference and
      * deactivates the loading overlay.
-     * @param {object} param0 - An object containing information about the process termination.
-     * @param {number} param0.code - The exit code of the terminated process.
-     * @param {number} param0.signal - The signal code indicating how the process was terminated.
+     * @param {object} param - An object containing information about the process termination.
+     * @param {number} param.code - The exit code of the terminated process.
+     * @param {number} param.signal - The signal code indicating how the process was terminated.
      */
-    const handleProcessTermination = useCallback(
+     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+
+                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            // Clear the child process pid reference
+
+            // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
-            // Cancel the Loading Overlay
+
+            // Cancel the loading overlay. The process has completed.
             setLoading(false);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
@@ -91,7 +101,7 @@ const AirbaseNG = () => {
         setLoading(true);
 
         // Construct arguments for the aircrack-ng command based on form input
-        const args = ["-e", values.FakeHost, "-c", values.Channel, values.Wlan];
+        const args = ["-e", values.fakeHost, "-c", values.channel, values.wlan];
 
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("airbase-ng", args, handleProcessData, handleProcessTermination)
@@ -109,31 +119,27 @@ const AirbaseNG = () => {
             });
     };
 
-    function forms() {
-        return (
-            <Stack>
-                <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
-                <TextInput label={"Channel of choice"} required {...form.getInputProps("Channel")} />
-                <TextInput label={"Your Wlan"} required {...form.getInputProps("Wlan")} />
-                {SaveOutputToTextFile(output)}
-                <Button type={"submit"}>Start AP</Button>
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        );
-    }
-
     /**
-     * clearOutput: Callback function to clear the console output.
-     * It resets the state variable holding the output, thereby clearing the display.
+     * Clears the output state.
      */
     const clearOutput = useCallback(() => {
         setOutput("");
     }, [setOutput]);
+
     return (
-        <form onSubmit={form.onSubmit(onSubmit)}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>{UserGuideTab(title, description, steps, forms(), "", "")}</Stack>
-        </form>
+        <RenderComponent title={title} description={description} steps={steps} tutorial={tutorial} sourceLink={sourceLink}>
+            <form onSubmit={form.onSubmit(onSubmit)}>
+                <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <TextInput label={"Name of your fake Host"} required {...form.getInputProps("fakeHost")} />
+                    <TextInput label={"Channel of choice"} required {...form.getInputProps("channel")} />
+                    <TextInput label={"Your Wlan"} required {...form.getInputProps("wlan")} />
+                    {SaveOutputToTextFile(output)}
+                    <Button type={"submit"}>Start AP</Button>
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>                
+            </form>
+        </RenderComponent>
     );
 };
 
