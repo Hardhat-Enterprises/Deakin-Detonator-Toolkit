@@ -159,7 +159,7 @@ const AirbaseNG = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput label={"Name of your fake Host"} required {...form.getInputProps("fakeHost")} />
+                    <TextInput label={"Name of your fake host"} required {...form.getInputProps("fakeHost")} />
                     <TextInput label={"Channel of choice"} required {...form.getInputProps("channel")} />
                     <TextInput label={"Your Wlan"} required {...form.getInputProps("wlan")} />
                     {SaveOutputToTextFile(output)}
