@@ -27,6 +27,9 @@ const AirbaseNG = () => {
     const [loading, setLoading] = useState(false); // State variable to indicate loading state. 
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
 
     // Component Constants.
     const title = "Airbase-ng"; // Title of the component.
@@ -39,6 +42,7 @@ const AirbaseNG = () => {
     "Step 5: View the Output block below to see the results. ";
     const sourceLink = ""; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["aircrack-ng"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
     const form = useForm({
@@ -49,6 +53,20 @@ const AirbaseNG = () => {
         },
     });
 
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
