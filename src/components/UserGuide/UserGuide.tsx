@@ -1,5 +1,5 @@
 import { Title, HoverCard, Text, Tabs } from "@mantine/core";
-import { IconAbacus, IconBuildingLighthouse, IconManualGearbox, IconQuestionMark, IconSettings } from "@tabler/icons";
+import { IconAbacus, IconBuildingLighthouse, IconQuestionMark, IconSettings } from "@tabler/icons";
 import styles from "./UserGuide.module.css";
 import React from "react";
 
