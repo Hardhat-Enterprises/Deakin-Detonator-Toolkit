@@ -24,7 +24,7 @@ interface FormValuesType {
  */
 const AirbaseNG = () => {
     // Component State Variables.
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state. 
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
@@ -34,12 +34,12 @@ const AirbaseNG = () => {
     // Component Constants.
     const title = "Airbase-ng"; // Title of the component.
     const description = "Airbase-ng is a tool to create fake access points."; // Description of the component.
-    const steps = 
-    "Step 1: Type in the name of your fake host.\n" +
-    "Step 2: Select your desired channel.\n" +
-    "Step 3: Specify the WLAN interface to be used.\n" +
-    "Step 4: Click 'Start AP' to begin the process.\n" +
-    "Step 5: View the output block to see the results. ";
+    const steps =
+        "Step 1: Type in the name of your fake host.\n" +
+        "Step 2: Select your desired channel.\n" +
+        "Step 3: Specify the WLAN interface to be used.\n" +
+        "Step 4: Click 'Start AP' to begin the process.\n" +
+        "Step 5: View the output block to see the results. ";
     const sourceLink = ""; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["aircrack-ng"]; // Contains the dependencies required by the component.
@@ -77,7 +77,7 @@ const AirbaseNG = () => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
-     /**
+    /**
      * handleProcessTermination: Callback to handle the termination of the child process.
      * Once the process termination is handled, it clears the process PID reference and
      * deactivates the loading overlay.
@@ -85,7 +85,7 @@ const AirbaseNG = () => {
      * @param {number} param.code - The exit code of the terminated process.
      * @param {number} param.signal - The signal code indicating how the process was terminated.
      */
-     const handleProcessTermination = useCallback(
+    const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             // If the process was successful, display a success message.
             if (code === 0) {
@@ -147,7 +147,13 @@ const AirbaseNG = () => {
     }, [setOutput]);
 
     return (
-        <RenderComponent title={title} description={description} steps={steps} tutorial={tutorial} sourceLink={sourceLink}>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
             {!loadingModal && (
                 <InstallationModal
                     isOpen={opened}
@@ -165,7 +171,7 @@ const AirbaseNG = () => {
                     {SaveOutputToTextFile(output)}
                     <Button type={"submit"}>Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </Stack>                
+                </Stack>
             </form>
         </RenderComponent>
     );

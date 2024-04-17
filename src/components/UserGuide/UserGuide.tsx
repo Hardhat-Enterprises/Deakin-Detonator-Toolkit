@@ -6,7 +6,7 @@ import React from "react";
 interface ComponentProps {
     title: string; // Title of the component. This should be strictly limited to the title.
     description: string; // Description of the component. This should not include steps.
-    steps: string; // Steps to use the component. This should be strictly limited to the steps. 
+    steps: string; // Steps to use the component. This should be strictly limited to the steps.
     tutorial: string; // Tutorial for the component.
     sourceLink: string; // Source link for the component.
     children: React.ReactNode; // Children of the component. Used to render the configuration.
@@ -60,28 +60,26 @@ export function UserGuide2(description: string) {
 
 /**
  * Renders a component with tabs for user guide, configuration, and tutorial.
- * 
+ *
  * @param component - The component props.
  * @returns The rendered component.
  */
 export function RenderComponent(component: ComponentProps) {
     return (
         <>
-            <Title align="center" style={{ paddingBottom: '10px' }}>{component.title}</Title>
+            <Title align="center" style={{ paddingBottom: "10px" }}>
+                {component.title}
+            </Title>
 
             <Tabs defaultValue="configuration">
-                <Tabs.List grow style={{ marginBottom: '10px' }}>
+                <Tabs.List grow style={{ marginBottom: "10px" }}>
                     <Tabs.Tab value="userGuide" icon={<IconBuildingLighthouse width={16} height={16} />}>
                         User Guide
                     </Tabs.Tab>
                     <Tabs.Tab value="configuration" icon={<IconSettings width={16} height={16} />}>
                         Configuration
                     </Tabs.Tab>
-                    <Tabs.Tab
-                        value="tutorial"
-                        disabled
-                        icon={<IconAbacus width={16} height={16} />}
-                    >
+                    <Tabs.Tab value="tutorial" disabled icon={<IconAbacus width={16} height={16} />}>
                         Tutorial
                     </Tabs.Tab>
                 </Tabs.List>
