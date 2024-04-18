@@ -53,33 +53,32 @@ const ArpanameTool = () => {
         const ipv6Pattern = /^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4}|:)$/;
         return ipv4Pattern.test(ip) || ipv6Pattern.test(ip);
     };
-    
 
     const onSubmit = async (values: FormValuesType) => {
         if (!validateIPAddress(values.ipAddress)) {
             setOutput("The input is not a valid IP address. Please try again.");
             return;
         }
-        
+
         setLoading(true);
         const args = [values.ipAddress];
-      
+
         try {
-          const result = await CommandHelper.runCommandGetPidAndOutput(
-            "arpaname",
-            args,
-            handleProcessData,
-            handleProcessTermination
-          );
-          setOutput(result.output);
-          setPid(result.pid);
+            const result = await CommandHelper.runCommandGetPidAndOutput(
+                "arpaname",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+            setOutput(result.output);
+            setPid(result.pid);
         } catch (e: any) {
-          setOutput(`An error occurred: ${e.message}`);
-          setPid("");
+            setOutput(`An error occurred: ${e.message}`);
+            setPid("");
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
+    };
 
     const clearOutput = useCallback(() => {
         setOutput("");
@@ -107,4 +106,3 @@ const ArpanameTool = () => {
 };
 
 export default ArpanameTool;
-  
