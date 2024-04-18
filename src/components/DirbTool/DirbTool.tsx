@@ -31,6 +31,7 @@ export function DirbTool() {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [silentMode, setSilentMode] = useState(false); // Track silent mode state
 
     let form = useForm({
         initialValues: {
@@ -88,18 +89,22 @@ export function DirbTool() {
         setLoading(true);
 
         const args = [values.url, values.wordlistPath];
-
-        args.push("-S");
+        if (silentMode){
+        args.push("-S");// Include silent mode flag
+        }
 
         if (values.caseInsensitive) {
+            // Add the -i flag to make the search case-insensitive
             args.push("-i");
         }
 
         if (values.printLocation) {
+            // Add the -l flag to print the location of the match
             args.push("-l");
         }
 
         if (values.ignoreHttpCode) {
+            // Add the -N flag followed by the HTTP response code to ignore
             args.push("-N", values.ignoreHttpCode.toString());
         }
 
@@ -135,6 +140,12 @@ export function DirbTool() {
                     label="Advanced Mode"
                     checked={checkedAdvanced}
                     onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                />
+                <Switch
+                    size="md"
+                    label="Slient Mode"
+                    checked={silentMode}
+                    onChange={(e) => setSilentMode(e.currentTarget.checked)}
                 />
                 <TextInput label={"URL"} required {...form.getInputProps("url")} />
                 <TextInput label={"Path to wordlist"} required {...form.getInputProps("wordlistPath")} />
