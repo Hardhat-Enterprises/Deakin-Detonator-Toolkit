@@ -12,7 +12,7 @@ const description_userguide =
     "ffuf is a web directory and resource discovery tool. It takes a wordlist " +
     "and uses a brute force fuzzing technique against a target URL to attempt to discover valid files " +
     "and directories. This can reveal vulnerabilities in web applications as well generally data-mine " +
-    "and map out the target. Ffuf can even be used to brute force credentials used in web authentication.\n\n" +
+    "and map out the target. ffuf can even be used to brute force credentials used in web authentication.\n\n" +
     "For further information on ffuf: https://github.com/ffuf/ffufS\n\n" +
     "Wordlist directory: /usr/share/ddt/ffuf_wordlists/\n\n" +
     "Basic ffuf brute force discovery:\n\n" +
@@ -84,7 +84,7 @@ const FfufTool = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // Actions taken after saving the output
@@ -141,7 +141,7 @@ const FfufTool = () => {
                 "ffuf",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);
