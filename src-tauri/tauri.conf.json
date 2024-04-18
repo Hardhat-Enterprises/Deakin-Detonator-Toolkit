@@ -23,6 +23,11 @@
                         "args": true
                     },
                     {
+                        "name": "which",
+                        "cmd": "which",
+                        "args": true
+                    },
+                    {
                         "name": "nmap",
                         "cmd": "nmap",
                         "args": true
