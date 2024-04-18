@@ -570,3 +570,4 @@ export function getAttackVectors() {
 export function getWalkthroughs() {
     return ROUTES.filter((route) => route.path.startsWith("/walkthroughs/"));
 }
+ 
