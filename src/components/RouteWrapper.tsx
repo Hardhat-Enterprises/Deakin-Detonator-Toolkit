@@ -244,7 +244,7 @@ export const ROUTES: RouteProperties[] = [
             "A walkthrough on Topology Hack the Box challenge which requires knowledge of network protocols, routing, and security configurations",
         category: "",
     },
-    //TOOLS BELOW THIS COMMENT - PLEASE ADD NEW TOOLS IN ALPHABETICAL ORDER
+    //TOOLS BELOW THIS COMMENT - PLEASE ADDE NEW TOOLS IN ALPHABETICAL ORDER
     {
         name: "Airbase NG",
         path: "/tools/AirbaseNG",
@@ -267,7 +267,7 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
-        name: "Arjuntool",
+        name: "Arjun",
         path: "/tools/Arjuntool",
         element: <Arjuntool />,
         description: "Arjun can find query parameters for URL endpoints.",
@@ -359,10 +359,10 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
-        name: "Eyewitness",
+        name: "EyeWitness",
         path: "/tools/eyewitness",
         element: <Eyewitness />,
-        description: "Eyewitness takes screenshot of important websites.",
+        description: "EyeWitness scans listed URLs and provides a HTML report about them, including screenshots.",
         category: "Web Application Testing",
     },
     {
