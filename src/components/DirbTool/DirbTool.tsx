@@ -89,8 +89,8 @@ export function DirbTool() {
         setLoading(true);
 
         const args = [values.url, values.wordlistPath];
-        if (silentMode){
-        args.push("-S");// Include silent mode flag
+        if (silentMode) {
+            args.push("-S"); // Include silent mode flag
         }
 
         if (values.caseInsensitive) {
