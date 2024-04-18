@@ -5,26 +5,6 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
-<<<<<<< HEAD
-
-const title = "Create Fake Access Point with Airbase-ng";
-const description_userguide =
-    "Airbase-ng is a tool to create fake access points.\n\n" +
-    "Step 1: Type in the name of your fake host.\n" +
-    "Step 2: Select your desired channel.\n" +
-    "Step 3: Specify the WLAN interface to be used.\n" +
-    "Step 4: Click 'Start AP' to begin the process.\n" +
-    "Step 5: View the Output block below to see the results.\n\n";
-
-interface FormValuesType {
-    fakeHost: string;
-    channel: string;
-    replayInterface: string;
-    macAddress: string;
-    interface: string;
-    filePath: string;
-    customConfig: string;
-=======
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -35,8 +15,11 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     fakeHost: string;
     channel: string;
-    wlan: string;
->>>>>>> main
+    replayInterface: string;
+    macAddress: string;
+    interface: string;
+    filePath: string;
+    customConfig: string;
 }
 
 /**
@@ -44,13 +27,6 @@ interface FormValuesType {
  * @returns The AirbaseNG component.
  */
 const AirbaseNG = () => {
-<<<<<<< HEAD
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
-    const [advanceMode, setAdvanceMode] = useState(false);
-    const [customMode, setCustomMode] = useState(false);
-=======
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
@@ -58,7 +34,8 @@ const AirbaseNG = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
->>>>>>> main
+    const [advanceMode, setAdvanceMode] = useState(false);
+    const [customMode, setCustomMode] = useState(false);
 
     // Component Constants.
     const title = "Airbase-ng"; // Title of the component.
@@ -78,15 +55,11 @@ const AirbaseNG = () => {
         initialValues: {
             fakeHost: "",
             channel: "",
-<<<<<<< HEAD
             replayInterface: "",
             macAddress: "",
             interface: "",
             filePath: "",
             customConfig: "",
-=======
-            wlan: "",
->>>>>>> main
         },
     });
 
@@ -158,15 +131,11 @@ const AirbaseNG = () => {
         setLoading(true);
 
         // Construct arguments for the aircrack-ng command based on form input
-<<<<<<< HEAD
         const args = ["-e", values.fakeHost, "-c", values.channel, values.replayInterface];
 
         values.macAddress ? args.push(`-a`, values.macAddress) : undefined;
         values.interface ? args.push(`-i`, values.interface) : undefined;
         values.filePath ? args.push(`-F`, values.filePath) : undefined;
-=======
-        const args = ["-e", values.fakeHost, "-c", values.channel, values.wlan];
->>>>>>> main
 
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("airbase-ng", args, handleProcessData, handleProcessTermination)
@@ -198,43 +167,6 @@ const AirbaseNG = () => {
     }, [setOutput]);
 
     return (
-<<<<<<< HEAD
-        <form onSubmit={form.onSubmit(onSubmit)}>
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <Switch
-                    size="md"
-                    label="Advanced Mode"
-                    checked={advanceMode}
-                    onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
-                />
-                <Switch
-                    size="md"
-                    label="Custom Mode"
-                    checked={customMode}
-                    onChange={(e) => setCustomMode(e.currentTarget.checked)}
-                />
-                <TextInput label={"Name of your fake Host"} required {...form.getInputProps("fakeHost")} />
-                <TextInput label={"Channel of choice"} required {...form.getInputProps("channel")} />
-                <TextInput label={"Replay Interface"} required {...form.getInputProps("replayInterface")} />
-                {advanceMode && (
-                    <>
-                        <TextInput label={"Set AP MAC address"} {...form.getInputProps("macAddress")} />
-                        <TextInput label={"Capture packets from this interface"} {...form.getInputProps("interface")} />
-                        <TextInput
-                            label={"Output results as Pcap file (Please supply file path)"}
-                            {...form.getInputProps("filePath")}
-                        />
-                    </>
-                )}
-                {customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
-                {SaveOutputToTextFile(output)}
-                <Button type={"submit"}>Start AP</Button>
-                {loading && <Button onClick={close}>Stop</Button>}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
-=======
         <RenderComponent
             title={title}
             description={description}
@@ -262,7 +194,6 @@ const AirbaseNG = () => {
                 </Stack>
             </form>
         </RenderComponent>
->>>>>>> main
     );
 };
 
