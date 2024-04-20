@@ -157,7 +157,12 @@ const Bully = () => {
         }
 
         try {
-            const { pid, output } = await CommandHelper.runCommandGetPidAndOutput("bully", args, handleProcessData, handleProcessTermination);
+            const { pid, output } = await CommandHelper.runCommandGetPidAndOutput(
+                "bully",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
             setPid(pid);
             setOutput(output);
         } catch (error: any) {
