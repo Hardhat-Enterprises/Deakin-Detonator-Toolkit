@@ -40,15 +40,15 @@ const enumerationtypes = [
     "MID range",
     "Custom",
 ];
-const enumerationtypesrequiringupdownbound = ["UID range", "MID range"];
-const detectionmodes = ["mixed", "passive", "aggressive"];
-const outputformats = ["cli-no-colour", "cli-no-color", "json", "cli"];
+const enumerationRequiringRange = ["UID range", "MID range"];
+const detectionModes = ["mixed", "passive", "aggressive"];
+const outputFormats = ["cli-no-colour", "cli-no-color", "json", "cli"];
 
 interface FormValues {
     url: string;
-    lowbound: number;
-    upbound: number;
-    customenum: string;
+    lowBound: number;
+    upBound: number;
+    customEnum: string;
     verbose: boolean;
     output: string;
     format: string;
@@ -62,10 +62,10 @@ const WPScan = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [checkedCustom, setcheckedCustom] = useState(false);
-    const [selectedenumerationtype, setselectedenumerationtype] = useState("");
-    const [selecteddetectionmode, setselecteddetectionmode] = useState("");
-    const [selectedoutputformat, setselectedoutputformat] = useState("");
+    const [checkedCustom, setCheckedCustom] = useState(false);
+    const [selectedEnumerationType, setselectedEnumerationType] = useState("");
+    const [selectedDetectionMode, setSelectedDetectionMode] = useState("");
+    const [selectedOutputFormat, setSelectedOutputFormat] = useState("");
     const [verboseChecked, setVerboseChecked] = useState(false);
     const [stealthyChecked, setStealthyChecked] = useState(false);
     const [pid, setPid] = useState("");
@@ -73,9 +73,9 @@ const WPScan = () => {
     let form = useForm({
         initialValues: {
             url: "",
-            lowbound: 0,
-            upbound: 0,
-            customenum: "",
+            lowBound: 0,
+            upBound: 0,
+            customEnum: "",
 
             verbose: false,
             output: "",
@@ -119,35 +119,35 @@ const WPScan = () => {
         const args = [`--url`, values.url];
 
         //Insantiate enumeration arguments
-        if (selectedenumerationtype != "" && checkedAdvanced) {
-            selectedenumerationtype === "Vulnerable plugins" ? args.push(`-e`, `vp`) : undefined;
-            selectedenumerationtype === "All Plugins" ? args.push(`-e`, `ap`) : undefined;
-            selectedenumerationtype === "Popular Plugins" ? args.push(`-e`, `p`) : undefined;
-            selectedenumerationtype === "Vulnerable themes" ? args.push(`-e`, `vt`) : undefined;
-            selectedenumerationtype === "All themes" ? args.push(`-e`, `at`) : undefined;
-            selectedenumerationtype === "Popular themes" ? args.push(`-e`, `t`) : undefined;
-            selectedenumerationtype === "Timthumbs" ? args.push(`-e`, `tt`) : undefined;
-            selectedenumerationtype === "Config Backups" ? args.push(`-e`, `cb`) : undefined;
-            selectedenumerationtype === "Db exports" ? args.push(`-e`, `dbe`) : undefined;
-            selectedenumerationtype === "UID range"
-                ? args.push(`-e`, `u${values.lowbound}-${values.upbound}`)
+        if (selectedEnumerationType != "" && checkedAdvanced) {
+            selectedEnumerationType === "Vulnerable plugins" ? args.push(`-e`, `vp`) : undefined;
+            selectedEnumerationType === "All Plugins" ? args.push(`-e`, `ap`) : undefined;
+            selectedEnumerationType === "Popular Plugins" ? args.push(`-e`, `p`) : undefined;
+            selectedEnumerationType === "Vulnerable themes" ? args.push(`-e`, `vt`) : undefined;
+            selectedEnumerationType === "All themes" ? args.push(`-e`, `at`) : undefined;
+            selectedEnumerationType === "Popular themes" ? args.push(`-e`, `t`) : undefined;
+            selectedEnumerationType === "Timthumbs" ? args.push(`-e`, `tt`) : undefined;
+            selectedEnumerationType === "Config Backups" ? args.push(`-e`, `cb`) : undefined;
+            selectedEnumerationType === "Db exports" ? args.push(`-e`, `dbe`) : undefined;
+            selectedEnumerationType === "UID range"
+                ? args.push(`-e`, `u${values.lowBound}-${values.upBound}`)
                 : undefined;
-            selectedenumerationtype === "MID range"
-                ? args.push(`-e`, `m${values.lowbound}-${values.upbound}`)
+            selectedEnumerationType === "MID range"
+                ? args.push(`-e`, `m${values.lowBound}-${values.upBound}`)
                 : undefined;
-            selectedenumerationtype === "Custom" ? args.push(`-e`, `${values.customenum}`) : undefined;
+            selectedEnumerationType === "Custom" ? args.push(`-e`, `${values.customEnum}`) : undefined;
         }
 
-        if (selecteddetectionmode) {
-            args.push(`detection-mode`, `${selecteddetectionmode}`);
+        if (selectedDetectionMode) {
+            args.push(`detection-mode`, `${selectedDetectionMode}`);
         }
 
         if (verboseChecked) {
             args.push(`-v`);
         }
 
-        if (selectedoutputformat) {
-            args.push(`-f`, `${selectedoutputformat}`);
+        if (selectedOutputFormat) {
+            args.push(`-f`, `${selectedOutputFormat}`);
         }
         if (stealthyChecked) {
             args.push(`--stealthy`);
@@ -217,14 +217,14 @@ const WPScan = () => {
                             onChange={(e) => setVerboseChecked(e.currentTarget.checked)}
                         />
                         <NativeSelect
-                            value={selectedenumerationtype}
-                            onChange={(e) => setselectedenumerationtype(e.target.value)}
+                            value={selectedEnumerationType}
+                            onChange={(e) => setselectedEnumerationType(e.target.value)}
                             title={"Enumeration Options"}
                             data={enumerationtypes}
                             placeholder={"Types"}
                             description={"Please select an enumeration type"}
                         />
-                        {enumerationtypesrequiringupdownbound.includes(selectedenumerationtype) && (
+                        {enumerationRequiringRange.includes(selectedEnumerationType) && (
                             <>
                                 <Grid>
                                     <Grid.Col span={6}>
@@ -245,7 +245,7 @@ const WPScan = () => {
                                 </Grid>
                             </>
                         )}
-                        {selectedenumerationtype === "Custom" && (
+                        {selectedEnumerationType === "Custom" && (
                             <TextInput
                                 label={"Custom Enumeration"}
                                 placeholder={"e.g. vp ap u1-5"}
@@ -253,10 +253,10 @@ const WPScan = () => {
                             />
                         )}
                         <NativeSelect
-                            value={selecteddetectionmode}
-                            onChange={(e) => setselecteddetectionmode(e.target.value)}
+                            value={selectedDetectionMode}
+                            onChange={(e) => setSelectedDetectionMode(e.target.value)}
                             title={"Detectionmode"}
-                            data={detectionmodes}
+                            data={detectionModes}
                             placeholder={"Detection Modes"}
                             description={"Please select a detection type"}
                         />
@@ -266,10 +266,10 @@ const WPScan = () => {
                             {...form.getInputProps("output")}
                         />
                         <NativeSelect
-                            value={selectedoutputformat}
-                            onChange={(e) => setselectedoutputformat(e.target.value)}
+                            value={selectedOutputFormat}
+                            onChange={(e) => setSelectedOutputFormat(e.target.value)}
                             title={"Output Format"}
-                            data={outputformats}
+                            data={outputFormats}
                             placeholder={"Output Format"}
                             description={"Please select an output format"}
                         />
@@ -289,7 +289,7 @@ const WPScan = () => {
                     size="md"
                     label="Custom Mode"
                     checked={checkedCustom}
-                    onChange={(e) => setcheckedCustom(e.currentTarget.checked)}
+                    onChange={(e) => setCheckedCustom(e.currentTarget.checked)}
                 />
                 {checkedCustom && <TextInput label={"Custom Configuration"} {...form.getInputProps("custom")} />}
 
