@@ -1,12 +1,4 @@
-import {
-    Button,
-    Stack,
-    TextInput,
-    Switch,
-    NativeSelect,
-    NumberInput,
-    Grid,
-} from "@mantine/core";
+import { Button, Stack, TextInput, Switch, NativeSelect, NumberInput, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
