@@ -184,7 +184,7 @@ function WhatWeb() {
                 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Stack>
-                        <TextInput label={"URL"} required {...form.getInputProps("url")} />
+                        <TextInput label={"URL or IP address"} required {...form.getInputProps("url")} />
                         <Button type={"submit"}>Scan</Button>
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
