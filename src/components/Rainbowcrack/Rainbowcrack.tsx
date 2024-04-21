@@ -12,8 +12,8 @@ const title = "Rainbowcrack";
 const description_userguide =
     "RainbowCrack is a computer program which utilises rainbow tables to be used in password cracking.\n" +
     "How to use Rainbowcrack \n" +
-    "Step 1: Enter a hash value. (E.g. 5d41402abc4b2a76b9719d911017c592) \n " +
-    "Step 2: Simply tap on the button crack to crack the hash key. \n" +
+    "Step 1:Enter a hash value. (E.g. 5d41402abc4b2a76b9719d911017c592) \n " +
+    "Step 2:Simply tap on the button crack to crack the hash key. \n" +
     "The user can even save the output to a file by simply assigning a file-name under 'save output to file' option.";
 
 interface FormValues {
