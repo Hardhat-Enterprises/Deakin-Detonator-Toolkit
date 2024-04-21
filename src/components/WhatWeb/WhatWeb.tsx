@@ -13,12 +13,13 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 const title = "WhatWeb";
 
 // Contains the description of the component.
-const description = "WhatWeb identifies websites. It recognises web technologies including content management systems, blogging platforms, statistic/analytics packages, JavaScript libraries, web servers, and embedded devices." 
+const description =
+    "WhatWeb identifies websites. It recognises web technologies including content management systems, blogging platforms, statistic/analytics packages, JavaScript libraries, web servers, and embedded devices.";
 
-const steps = 
-"Step 1: Enter a valid URL or IP address. E.g. https://www.deakin.edu.au\n" +
-"Step 2: Click the scan option to commence scanning.\n" +
-"Step 3: View the output block below to see the results.";
+const steps =
+    "Step 1: Enter a valid URL or IP address. E.g. https://www.deakin.edu.au\n" +
+    "Step 2: Click the scan option to commence scanning.\n" +
+    "Step 3: View the output block below to see the results.";
 
 const sourceLink = ""; // Link to the source code (or Kali Tools).
 
@@ -130,9 +131,9 @@ function WhatWeb() {
         // Construct arguments for the aircrack-ng command based on form input
         const args = [values.url];
 
-       // Execute the whatweb command via helper method and handle its output or potential errors
+        // Execute the whatweb command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("whatweb", args, handleProcessData, handleProcessTermination)
-        
+
             .then(({ pid, output }) => {
                 // Update the output with the results of the command execution.
                 setOutput(output);
@@ -144,13 +145,13 @@ function WhatWeb() {
             .catch((error) => {
                 // Display any errors encountered during command execution.
                 setOutput(error.message);
-console.log("An error has been caught");
+                console.log("An error has been caught");
                 // Deactivate loading state.
                 setLoading(false);
             });
-            console.log("This is the PID: " + pid);
-            console.log("args is " + args);
-            console.log("OnSubmit has run");
+        console.log("This is the PID: " + pid);
+        console.log("args is " + args);
+        console.log("OnSubmit has run");
     };
 
     /**
@@ -165,30 +166,30 @@ console.log("An error has been caught");
 
     return (
         <>
-         <RenderComponent
-            title={title}
-            description={description}
-            steps={steps}
-            tutorial={tutorial}
-            sourceLink={sourceLink}
-        >
-            {!loadingModal && (
-                <InstallationModal
-                    isOpen={opened}
-                    setOpened={setOpened}
-                    feature_description={description}
-                    dependencies={dependencies}
-                ></InstallationModal>
-            )}
-            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                {LoadingOverlayAndCancelButton(loading, pid)}
-                <Stack>
-                    <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                    <Button type={"submit"}>Scan</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </Stack>
-            </form>
+            <RenderComponent
+                title={title}
+                description={description}
+                steps={steps}
+                tutorial={tutorial}
+                sourceLink={sourceLink}
+            >
+                {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+                )}
+                <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Stack>
+                        <TextInput label={"URL"} required {...form.getInputProps("url")} />
+                        <Button type={"submit"}>Scan</Button>
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    </Stack>
+                </form>
             </RenderComponent>
         </>
     );
