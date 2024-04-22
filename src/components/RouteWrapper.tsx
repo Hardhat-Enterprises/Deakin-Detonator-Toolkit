@@ -266,7 +266,7 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
-        name: "Arjuntool",
+        name: "Arjun",
         path: "/tools/Arjuntool",
         element: <Arjuntool />,
         description: "Arjun can find query parameters for URL endpoints.",
@@ -351,10 +351,10 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
-        name: "Eyewitness",
+        name: "EyeWitness",
         path: "/tools/eyewitness",
         element: <Eyewitness />,
-        description: "Eyewitness takes screenshot of important websites.",
+        description: "EyeWitness scans listed URLs and provides a HTML report about them, including screenshots.",
         category: "Web Application Testing",
     },
     {
