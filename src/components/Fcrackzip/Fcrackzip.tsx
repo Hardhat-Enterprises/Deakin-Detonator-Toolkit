@@ -28,7 +28,7 @@ const Fcrackzip = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [attackMethod, setAttackmethod] = useState("");
-    const [checkedUnzip, setCheckedUnzip] = useState(false);
+    const [checkedUnzip, setCheckedUnzip] = useState(true);
     const [pid, setPid] = useState("");
     const [useCharsetUppercase, setCharsetUppercase] = useState(false);
     const [useCharsetLowercase, setCharsetLowercase] = useState(false);
