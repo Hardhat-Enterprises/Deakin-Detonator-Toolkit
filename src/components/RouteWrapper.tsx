@@ -64,6 +64,7 @@ import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
+import AMAP from "./Amap/Amap";
 
 export interface RouteProperties {
     name: string;
@@ -264,6 +265,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Gyoithon />,
         description: "A HTTP/HTTPS port detector based on Naive Bayes and Deep Nueral Network",
         category: "Web Application Testing",
+    },
+    {
+        name: "Amap", 
+        path: "/tools/Amap", 
+        element: <AMAP />, 
+        description: "AMAP is a network scanning tool used to identify open ports and services on target hosts.", 
+        category: "Network Scanning and Enumeration", 
     },
     {
         name: "Arjun",
