@@ -31,6 +31,7 @@ interface FormValuesType {
 
 //Netcat Options
 const netcatOptions = [
+    "Listen",
     "Port Scan",
     "Send File",
     "Receive File",
@@ -59,6 +60,20 @@ const NetcatTool = () => {
 
         //Switch case
         switch (values.netcatOptions) {
+            case "Listen":
+                args = ["-lvp"];
+                args.push(values.portNumber);
+
+                try{
+                    let output = await CommandHelper.runCommand("nc", args);
+                    setOutput(output);
+
+                }catch (e: any){
+                    setOutput(e);
+                }
+
+                break;
+                
             case "Port Scan": //nc syntax: nc -zv <ip address/hostname> <port range>
                 //addition of -n will not perform any dns or name lookups.
                 args = [`-zvn`];
