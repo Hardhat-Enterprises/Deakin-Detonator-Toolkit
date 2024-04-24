@@ -88,9 +88,7 @@ const Fcrackzip = () => {
             let charSet = "";
 
             if (useCharsetLowercase) charSet += "a";
-
             if (useCharsetUppercase) charSet += "A";
-
             if (useCharsetNumeric) charSet += "1";
 
             if (charSet) args.push("-c", charSet);
@@ -111,10 +109,29 @@ const Fcrackzip = () => {
                 handleProcessData,
                 handleProcessTermination
             );
+
             setPid(result.pid);
-            setOutput(result.output);
+
+            // Extract cracked password from output
+            const crackedPasswordRegex = /PASSWORD FOUND\! : (.+)/;
+            const crackedPasswordMatch = result.output.match(crackedPasswordRegex);
+
+            if (crackedPasswordMatch) {
+                // Display and save cracked password
+                const crackedPassword = crackedPasswordMatch[1];
+                setOutput(result.output + `\nCracked Password: ${crackedPassword}`);
+                if (checkedUnzip) {
+                    // Save cracked password to disk if option is selected
+                    SaveOutputToTextFile(crackedPassword);
+                }
+            } else {
+                // If no cracked password found, just display the output
+                setOutput(result.output);
+            }
         } catch (e: any) {
             setOutput(e.message);
+        } finally {
+            setLoading(false);
         }
     };
 
