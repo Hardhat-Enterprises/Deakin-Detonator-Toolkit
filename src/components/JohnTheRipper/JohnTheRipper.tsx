@@ -11,7 +11,7 @@ const modeRequiringWordList = ["dictionary"];
 const modeRequiringIncrementOrder = ["incremental"];
 
 const title = "John the Ripper tool";
-const descritpion_userguide =
+const descritpionUserguide =
     "John the Ripper is a popular and powerful open-source password cracking tool used to test the strength of passwords. It can be used by system administrators and security professionals to audit the passwords on their systems. John the Ripper is available for multiple platforms, including Unix, Windows, macOS, and DOS. It uses various techniques to crack passwords, such as dictionary attacks, brute-force attacks, and hybrid attacks. The tool is highly customizable and has a command-line interface, making it suitable for advanced users. John the Ripper is widely regarded as one of the most effective and efficient password cracking tools available." +
     "\n\nHow to use John the Ripper:" +
     "\n\nStep 1: Specify the filepath to the password file that you wish to crack. \nE.g /home/user/passwords.txt" +
@@ -27,13 +27,13 @@ interface FormValuesType {
     hash: string;
     fileType: string;
     mode: string;
-    wordlist: string;
-    incrementorder: string;
+    wordList: string;
+    incrementOrder: string;
 }
 
 const fileTypes = ["zip", "rar", "raw"];
 const mode = ["incremental", "dictionary", "single"];
-const incrementorder = [
+const incrementOrder = [
     "ASCII",
     "LM_ASCII",
     "AlNum",
@@ -51,8 +51,8 @@ const JohnTheRipper = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [selectedFileTypeOption, setSelectedFileTypeOption] = useState("");
-    const [selectedModeOption, setselectedModeOption] = useState("");
-    const [selectedIncrementOption, setselectedIncrementOption] = useState("");
+    const [selectedModeOption, setSelectedModeOption] = useState("");
+    const [selectedIncrementOption, setSelectedIncrementOption] = useState("");
     const [pid, setPid] = useState("");
 
     let form = useForm({
@@ -60,9 +60,9 @@ const JohnTheRipper = () => {
             filePath: "",
             hash: "",
             fileType: "",
-            wordlist: "",
+            wordList: "",
             mode: "",
-            incrementorder: "",
+            incrementOrder: "",
         },
     });
 
@@ -109,9 +109,9 @@ const JohnTheRipper = () => {
             values.hash ? args.push(`--format=${values.hash}`) : undefined;
 
             selectedModeOption === "dictionary"
-                ? args.push(`--wordlist=${values.wordlist}`)
+                ? args.push(`--wordlist=${values.wordList}`)
                 : selectedModeOption === "incremental"
-                ? args.push(`-incremental:${values.incrementorder}`)
+                ? args.push(`-incremental:${values.incrementOrder}`)
                 : args.push(`--single`);
             try {
                 const result = await CommandHelper.runCommand(`john`, args);
@@ -137,9 +137,9 @@ const JohnTheRipper = () => {
             //Crack the extracted hash
             values.hash ? argsCrack.push(`--format=${values.hash}`) : undefined;
             selectedModeOption === "dictionary"
-                ? argsCrack.push(`--wordlist=${values.wordlist}`)
+                ? argsCrack.push(`--wordlist=${values.wordList}`)
                 : selectedModeOption === "incremental"
-                ? argsCrack.push(`-incremental:${values.incrementorder}`)
+                ? argsCrack.push(`-incremental:${values.incrementOrder}`)
                 : argsCrack.push(`--single`);
 
             try {
@@ -161,12 +161,12 @@ const JohnTheRipper = () => {
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, fileType: selectedFileTypeOption }))}>
             <LoadingOverlay visible={loading} />
             <Stack>
-                {UserGuide(title, descritpion_userguide)}
+                {UserGuide(title, descritpionUserguide)}
                 <TextInput label={"Filepath"} required {...form.getInputProps("filePath")} />
                 <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
                 <NativeSelect
                     value={selectedModeOption}
-                    onChange={(e) => setselectedModeOption(e.target.value)}
+                    onChange={(e) => setSelectedModeOption(e.target.value)}
                     title={"Crack Mode"}
                     data={mode}
                     required
@@ -191,9 +191,9 @@ const JohnTheRipper = () => {
                     <>
                         <NativeSelect
                             value={selectedIncrementOption}
-                            onChange={(e) => setselectedIncrementOption(e.target.value)}
+                            onChange={(e) => setSelectedIncrementOption(e.target.value)}
                             title={"Increment Order"}
-                            data={incrementorder}
+                            data={incrementOrder}
                             required
                             placeholder={"Increment Order"}
                             description={"Please select a Increment Order"}
