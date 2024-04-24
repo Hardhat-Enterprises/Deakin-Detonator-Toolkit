@@ -182,20 +182,20 @@ const Fcrackzip = () => {
                             <Checkbox
                                 label="Use Lowercase Character"
                                 checked={useCharsetLowercase}
-                                onChange={(e) => setCharsetLowercase(e.currentTarget.checked)}                                
+                                onChange={(e) => setCharsetLowercase(e.currentTarget.checked)}
                             />
                             <span style={{ margin: "0 10px" }}></span>
                             <Checkbox
                                 label="Use Uppercase Character"
                                 checked={useCharsetUppercase}
-                                onChange={(e) => setCharsetUppercase(e.currentTarget.checked)}                                
+                                onChange={(e) => setCharsetUppercase(e.currentTarget.checked)}
                             />
                             <span style={{ margin: "0 10px" }}></span>
                             <Checkbox
                                 label="Use Numeric Character"
                                 typeof="number"
                                 checked={useCharsetNumeric}
-                                onChange={(e) => setCharsetNumeric(e.currentTarget.checked)}                                
+                                onChange={(e) => setCharsetNumeric(e.currentTarget.checked)}
                             />
                         </div>
                         <div style={{ display: "flex", alignItems: "center" }}>
