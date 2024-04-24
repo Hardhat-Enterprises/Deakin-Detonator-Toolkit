@@ -5,6 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "Netcat Tool";
 const description_userguide =
@@ -42,6 +43,8 @@ const netcatOptions = [
 const NetcatTool = () => {
     var [output, setOutput] = useState("");
     const [selectedScanOption, setSelectedNetcatOption] = useState("");
+    const [pid, setPid] = useState("");
+    const [loading, setLoading] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -53,6 +56,36 @@ const NetcatTool = () => {
         },
     });
 
+    //handleProcessData for the CommandHelper.runCommandGetPidAndOutput
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+    }, []);
+
+    //handleProcessTermination for the CommandHelper.runCommandGetPidAndOutput
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+
+                // If the process was terminated manually, display a termination message.
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+
+                // If the process was terminated with an error, display the exit and signal codes.
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            }
+
+            // Clear the child process pid reference. There is no longer a valid process running.
+            setPid("");
+
+            // Cancel the loading overlay. The process has completed.
+            setLoading(false);
+        },
+        [handleProcessData] // Dependency on the handleProcessData callback
+    );
+
     const onSubmit = async (values: FormValuesType) => {
         //Starts off with the IP address after netcat
         //Ex: nc <ip address>
@@ -60,20 +93,26 @@ const NetcatTool = () => {
 
         //Switch case
         switch (values.netcatOptions) {
-            case "Listen":
+            case "Listen": //Sets up nc listener, nc syntax: nc -lvp <port number>
                 args = ["-lvp"];
                 args.push(values.portNumber);
 
-                try{
-                    let output = await CommandHelper.runCommand("nc", args);
+                CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
+                    .then(({ output, pid }) => {
+                // Update the UI with the results from the executed command
                     setOutput(output);
-
-                }catch (e: any){
-                    setOutput(e);
-                }
+                    console.log(pid);
+                    setPid(pid);
+                })
+                .catch((error) => {
+                    // Display any errors encountered during command execution
+                    setOutput(error.message);
+                    // Deactivate loading state
+                    setLoading(false);
+                });
 
                 break;
-                
+
             case "Port Scan": //nc syntax: nc -zv <ip address/hostname> <port range>
                 //addition of -n will not perform any dns or name lookups.
                 args = [`-zvn`];
@@ -139,6 +178,7 @@ const NetcatTool = () => {
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
             <Stack>
+                {LoadingOverlayAndCancelButton(loading, pid)}
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
                 <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
