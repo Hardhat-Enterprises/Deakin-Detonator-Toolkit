@@ -14,7 +14,7 @@ const description_userguide =
     "and directories. This can reveal vulnerabilities in web applications as well generally data-mine " +
     "and map out the target. Ffuf can even be used to brute force credentials used in web authentication.\n\n" +
     "For further information on ffuf: https://github.com/ffuf/ffufS\n\n" +
-    "Wordlist directory: /src-tauri/exploits/ffuf_wordlists/\n\n" +
+    "Wordlist directory: /usr/share/ddt/ffuf_wordlists/\n\n" +
     "Basic ffuf brute force discovery:\n\n" +
     "Step 1: Enter a URL to be fuzzed\n" +
     "       E.g. http://www.example.com/FUZZ\n\n" +
@@ -105,8 +105,8 @@ const FfufTool = () => {
         const args = [`-u`, `${values.url}/FUZZ`];
 
         if (values.wordlist) {
-            args.push(`-w`, `./exploits/ffuf_wordlists/${values.wordlist}`);
-        } else args.push(`-w`, `./exploits/ffuf_wordlists/default_SECLIST_wordlist.txt`);
+            args.push(`-w`, `/usr/share/ddt/ffuf_wordlists/${values.wordlist}`);
+        } else args.push(`-w`, `/usr/share/ddt/ffuf_wordlists/default_SECLIST_wordlist.txt`);
 
         if (values.extensions) {
             args.push(`-e`, `${values.extensions}`);
