@@ -33,6 +33,7 @@ interface FormValuesType {
 //Netcat Options
 const netcatOptions = [
     "Listen",
+    "Connect",
     "Port Scan",
     "Send File",
     "Receive File",
@@ -95,6 +96,27 @@ const NetcatTool = () => {
         switch (values.netcatOptions) {
             case "Listen": //Sets up nc listener, nc syntax: nc -lvp <port number>
                 args = ["-lvp"];
+                args.push(values.portNumber);
+
+                CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
+                    .then(({ output, pid }) => {
+                // Update the UI with the results from the executed command
+                    setOutput(output);
+                    console.log(pid);
+                    setPid(pid);
+                })
+                .catch((error) => {
+                    // Display any errors encountered during command execution
+                    setOutput(error.message);
+                    // Deactivate loading state
+                    setLoading(false);
+                });
+
+                break;
+
+                case "Connect": //Connects to an nc listener, nc syntax: nc -v <ip address> <port number>
+                args = ["-v"];
+                args.push(values.ipAddress);
                 args.push(values.portNumber);
 
                 CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
