@@ -197,9 +197,7 @@ const AMAP = () => {
                         checked={advancedMode}
                         onChange={(e) => setAdvancedMode(e.currentTarget.checked)}
                     />
-                    {advancedMode && (
-                        <TextInput label={"Additional Options"} {...form.getInputProps("options")} />
-                    )}
+                    {advancedMode && <TextInput label={"Additional Options"} {...form.getInputProps("options")} />}
                     <NativeSelect
                         value={selectedScanType}
                         onChange={(e) => setSelectedScanType(e.target.value)}

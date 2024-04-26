@@ -267,11 +267,11 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
-        name: "Amap", 
-        path: "/tools/Amap", 
-        element: <AMAP />, 
-        description: "AMAP is a network scanning tool used to identify open ports and services on target hosts.", 
-        category: "Network Scanning and Enumeration", 
+        name: "Amap",
+        path: "/tools/Amap",
+        element: <AMAP />,
+        description: "AMAP is a network scanning tool used to identify open ports and services on target hosts.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Arjun",
