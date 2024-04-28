@@ -113,6 +113,13 @@ function WhatWeb() {
         setAllowSave(false);
     };
 
+    /**
+ * onSubmit: Asynchronous handler for the form submission event.
+ * It sets up and triggers the airbase-ng tool with the given parameters.
+ * Once the command is executed, the results or errors are displayed in the output.
+ *
+ * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
+ */
     const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
