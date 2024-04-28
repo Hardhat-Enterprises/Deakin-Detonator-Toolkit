@@ -148,10 +148,7 @@ function WhatWeb() {
                 // Deactivate loading state.
                 setLoading(false);
             });
-        console.log("This is the PID: " + pid);
-        console.log("args is " + args);
-        console.log("OnSubmit has run");
-    };
+        };
 
     /**
      * clearOutput: Callback function to clear the console output.
