@@ -280,11 +280,7 @@ export const ROUTES: RouteProperties[] = [
         description: "ARP fingerprint tool to gather information about devices on the network.",
         category: "Network Scanning and Enumeration",
     },
-    
-    
-    
-    
-    
+
     {
         name: "ARP Spoofing",
         path: "/tools/ARPSpoofing",
