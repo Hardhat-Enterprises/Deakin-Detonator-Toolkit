@@ -64,6 +64,9 @@ import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
+import DigTool  from "./DigTool/DigTool";
+
+
 
 export interface RouteProperties {
     name: string;
@@ -307,6 +310,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Crunch />,
         description: "Crunch is a wordlist generator where you can specify a standard character set or a custom one.",
         category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "Dig",
+        path: "/tools/DigTool",
+        element: <DigTool />,
+        description: "Dig tool",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "Dirb",

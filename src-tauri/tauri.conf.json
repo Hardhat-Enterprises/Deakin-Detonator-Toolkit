@@ -258,6 +258,11 @@
                         "args": true
                     },
                     {
+                        "name": "digtool",
+                        "cmd": "digtool",
+                        "args": true
+                    },
+                    {
                         "name": "aircrack-ng",
                         "cmd": "aircrack-ng",
                         "args": true

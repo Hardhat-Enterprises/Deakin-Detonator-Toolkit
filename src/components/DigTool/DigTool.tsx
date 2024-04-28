@@ -46,7 +46,9 @@ const DigTool: React.FC = () => {
     // Render the component
     return (
         <div>
-            <h1><u>Dig Tool.</u></h1>
+            <h1>
+                <u>Dig Tool.</u>
+            </h1>
             <label>Domain:</label>
             <input type="text" value={domain} onChange={(e) => setDomain(e.target.value)} />
 
