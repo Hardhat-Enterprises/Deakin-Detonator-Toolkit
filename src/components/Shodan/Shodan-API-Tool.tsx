@@ -90,7 +90,7 @@ export function ShodanAPITool() {
         // Enable the loading overlay while the tool executes
         setLoading(true);
 
-        const args = ["./exploits/shodkey.py", "-i", values.hostIP, "-k", values.shodanKey];
+        const args = ["/usr/share/ddt/shodkey.py", "-i", values.hostIP, "-k", values.shodanKey];
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(

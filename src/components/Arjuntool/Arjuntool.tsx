@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -10,16 +10,18 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 const title = "Arjun";
 const description_userguide =
     "Arjun is a command-line tool specifically designed to look for hidden HTTP parameters. " +
-    "Arjun will try to discover parameters and give you new set of endpoints to test on. " +
-    "It is a multi-threaded application, can handle rate limits and supports GET,POST,XML and JSON methods. " +
+    "Arjun will try to discover parameters and give you a new set of endpoints to test on. " +
+    "It is a multi-threaded application that can handle rate limits and supports GET,POST,XML and JSON methods. " +
     " \n\nKali's Arjun Information Page: https://www.kali.org/tools/arjun/ \n\nHow to use Arjun:\n\nStep 1: Enter a valid URL.\n" +
-    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter an Optional Json Output filename.\n        E.g. arjunoutput " +
-    "\n\nStep 3: Click the scan option to commence scan. " +
-    "\n\nStep 4: View the Output block below to view the results of the tool's execution.";
+    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter an optional JSON output filename.\n        E.g. arjunoutput " +
+    "\n\nStep 3: Turn on the stability function if you want Arjun to prioritise stability over speed (can take a long time, so get a coffee if using this functionality)." +
+    "\n\nStep 4: Click the scan option to commence scanning. " +
+    "\n\nStep 5: View the output block below to view the results of the tool's execution.";
 
 interface FormValues {
     url: string;
     output_filename: string;
+    stability: boolean;
 }
 
 export function Arjuntool() {
@@ -33,6 +35,7 @@ export function Arjuntool() {
         initialValues: {
             url: "",
             output_filename: "",
+            stability: false,
         },
     });
 
@@ -83,6 +86,11 @@ export function Arjuntool() {
 
         const args = ["-u", values.url];
 
+        // Conditional. If the user has specified stability, add the --stable option to the command.
+        if (values.stability) {
+            args.push("--stable");
+        }
+
         if (values.output_filename) {
             args.push("-o", values.output_filename);
         }
@@ -111,6 +119,7 @@ export function Arjuntool() {
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"URL"} required {...form.getInputProps("url")} />
+                <Switch size="md" label="Stability mode" {...form.getInputProps("stability" as keyof FormValues)} />
                 <Button type={"submit"}>Scan</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />

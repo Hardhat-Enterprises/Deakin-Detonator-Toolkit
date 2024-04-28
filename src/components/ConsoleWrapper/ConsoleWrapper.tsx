@@ -6,9 +6,10 @@ interface ConsoleWrapperProps {
     output: string;
     clearOutputCallback?: () => void;
     hideClearButton?: boolean;
+    title?: string;
 }
 
-const ConsoleWrapper = ({ output, clearOutputCallback, hideClearButton }: ConsoleWrapperProps) => {
+const ConsoleWrapper = ({ output, clearOutputCallback, hideClearButton, title = "Output" }: ConsoleWrapperProps) => {
     // Use ref to refer to the output container
     const outputContainerRef = useRef<HTMLDivElement>(null);
 
@@ -23,7 +24,7 @@ const ConsoleWrapper = ({ output, clearOutputCallback, hideClearButton }: Consol
     if (output) {
         return (
             <>
-                <Title>Output</Title>
+                <Title>{title}</Title>
                 <div ref={outputContainerRef} style={{ maxHeight: "250px", overflowY: "auto" }}>
                     <Prism language={"bash"}>{output}</Prism>
                 </div>
