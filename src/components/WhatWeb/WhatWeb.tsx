@@ -9,22 +9,6 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
-// Component constants.
-const title = "WhatWeb";
-
-// Contains the description of the component.
-const description =
-    "WhatWeb identifies websites. It recognises web technologies including content management systems, blogging platforms, statistic/analytics packages, JavaScript libraries, web servers, and embedded devices.";
-
-const steps =
-    "Step 1: Enter a valid URL or IP address. E.g. https://www.deakin.edu.au\n" +
-    "Step 2: Click the scan option to commence scanning.\n" +
-    "Step 3: View the output block below to see the results.";
-
-const sourceLink = ""; // Link to the source code (or Kali Tools).
-
-const tutorial = ""; // Link to the official documentation/tutorial.
-
 /**
  * Represents the form values for the WhatWeb component.
  */
@@ -46,6 +30,14 @@ function WhatWeb() {
 
     // Component Constants.
     const dependencies = ["whatweb"]; // Contains the dependencies required for the component.
+    const title = "WhatWeb"; // Title of component. 
+    const description = "WhatWeb identifies websites. It recognises web technologies including content management systems, blogging platforms, statistic/analytics packages, JavaScript libraries, web servers, and embedded devices."; // Contains the description of the component.
+    const steps =
+    "Step 1: Enter a valid URL or IP address. E.g. https://www.deakin.edu.au\n" +
+    "Step 2: Click the scan option to commence scanning.\n" +
+    "Step 3: View the output block below to see the results.";
+    const sourceLink = ""; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
