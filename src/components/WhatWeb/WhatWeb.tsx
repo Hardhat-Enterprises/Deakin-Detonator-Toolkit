@@ -104,11 +104,11 @@ function WhatWeb() {
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
-
-    // Actions taken after saving the output
+    /**
+    * handSaveComplete: Recognises that the output file has been saved. 
+    * Passes the saved status back to SaveOutputToTextFile_v2
+     */
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
         setHasSaved(true);
         setAllowSave(false);
     };
