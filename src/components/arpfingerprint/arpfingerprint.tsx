@@ -70,19 +70,19 @@ const ARPFingerprinting = () => {
 
     const onSubmit = async (values: FormValues) => {
         const args = [values.target_ip]; // Command arguments
-    
+
         try {
             // Execute the command with elevated privileges using CommandHelper
             const result = await CommandHelper.runCommandWithPkexec(
-                "arp-scan", 
+                "arp-scan",
                 args,
                 handleProcessData,
                 handleProcessTermination
             );
-    
+
             // Set the process ID obtained from the command result
             setPidScan(result.pid);
-    
+
             // Set scanning state to true
             setIsScanning(true);
         } catch (error) {
@@ -90,7 +90,6 @@ const ARPFingerprinting = () => {
             console.error("Error executing command:", error);
         }
     };
-    
 
     const stopScan = async () => {
         const args = ["-2", pidScan]; // Command arguments for killing process
@@ -105,10 +104,7 @@ const ARPFingerprinting = () => {
                 <TextInput label={"Target IP address"} required {...form.getInputProps("target_ip")} />
                 {!isScanning && <Button type={"submit"}>Scan</Button>}
                 {isScanning && (
-                    <Alert
-                        radius="md"
-                        children={"Scanning device at " + form.values.target_ip + "..."}
-                    ></Alert>
+                    <Alert radius="md" children={"Scanning device at " + form.values.target_ip + "..."}></Alert>
                 )}
                 {isScanning && <Button onClick={stopScan}>Stop</Button>}
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
