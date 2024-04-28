@@ -64,9 +64,7 @@ import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
-import DigTool  from "./DigTool/DigTool";
-
-
+import DigTool from "./DigTool/DigTool";
 
 export interface RouteProperties {
     name: string;
