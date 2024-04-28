@@ -30,12 +30,13 @@ function WhatWeb() {
 
     // Component Constants.
     const dependencies = ["whatweb"]; // Contains the dependencies required for the component.
-    const title = "WhatWeb"; // Title of component. 
-    const description = "WhatWeb identifies websites. It recognises web technologies including content management systems, blogging platforms, statistic/analytics packages, JavaScript libraries, web servers, and embedded devices."; // Contains the description of the component.
+    const title = "WhatWeb"; // Title of component.
+    const description =
+        "WhatWeb identifies websites. It recognises web technologies including content management systems, blogging platforms, statistic/analytics packages, JavaScript libraries, web servers, and embedded devices."; // Contains the description of the component.
     const steps =
-    "Step 1: Enter a valid URL or IP address. E.g. https://www.deakin.edu.au\n" +
-    "Step 2: Click the scan option to commence scanning.\n" +
-    "Step 3: View the output block below to see the results.";
+        "Step 1: Enter a valid URL or IP address. E.g. https://www.deakin.edu.au\n" +
+        "Step 2: Click the scan option to commence scanning.\n" +
+        "Step 3: View the output block below to see the results.";
     const sourceLink = ""; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
 
@@ -105,8 +106,8 @@ function WhatWeb() {
         [handleProcessData] // Dependency on the handleProcessData callback
     );
     /**
-    * handSaveComplete: Recognises that the output file has been saved. 
-    * Passes the saved status back to SaveOutputToTextFile_v2
+     * handSaveComplete: Recognises that the output file has been saved.
+     * Passes the saved status back to SaveOutputToTextFile_v2
      */
     const handleSaveComplete = () => {
         setHasSaved(true);
@@ -114,12 +115,12 @@ function WhatWeb() {
     };
 
     /**
- * onSubmit: Asynchronous handler for the form submission event.
- * It sets up and triggers the airbase-ng tool with the given parameters.
- * Once the command is executed, the results or errors are displayed in the output.
- *
- * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
- */
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the airbase-ng tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
+     */
     const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
@@ -148,7 +149,7 @@ function WhatWeb() {
                 // Deactivate loading state.
                 setLoading(false);
             });
-        };
+    };
 
     /**
      * clearOutput: Callback function to clear the console output.
