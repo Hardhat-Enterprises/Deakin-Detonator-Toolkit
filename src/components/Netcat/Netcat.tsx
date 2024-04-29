@@ -44,7 +44,10 @@ const NetcatTool = () => {
     var [output, setOutput] = useState("");
     const [selectedScanOption, setSelectedNetcatOption] = useState("");
     const [pid, setPid] = useState("");
-    
+    const [loading, setLoading] = useState(false);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+
     let form = useForm({
         initialValues: {
             ipAddress: "",
