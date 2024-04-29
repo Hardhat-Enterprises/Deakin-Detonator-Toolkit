@@ -5,22 +5,10 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 
 const modeRequiringWordList = ["dictionary"];
 const modeRequiringIncrementOrder = ["incremental"];
-
-const title = "John the Ripper tool";
-const descritpionUserguide =
-    "John the Ripper is a popular and powerful open-source password cracking tool used to test the strength of passwords. It can be used by system administrators and security professionals to audit the passwords on their systems. John the Ripper is available for multiple platforms, including Unix, Windows, macOS, and DOS. It uses various techniques to crack passwords, such as dictionary attacks, brute-force attacks, and hybrid attacks. The tool is highly customizable and has a command-line interface, making it suitable for advanced users. John the Ripper is widely regarded as one of the most effective and efficient password cracking tools available." +
-    "\n\nHow to use John the Ripper:" +
-    "\n\nStep 1: Specify the filepath to the password file that you wish to crack. \nE.g /home/user/passwords.txt" +
-    "\n\nStep 2: Specify the hash that is utilized in the password file. A wide range of hashes are supported by the tool. (For full list, open new terminal and use john --list=formats command) \nE.g md5" +
-    "\n\nStep 3: Specify which crack mode to use. \nE.g Dictionary, Incremental and Single mode" +
-    "\n\nStep 4: This specifies the format of the password file. This is necessary so as to enable John the Ripper to correctly read the file. \nE.g rar" +
-    "\n\nStep 5: Depending on what is chosen on step3, a follow up option may appear. This option specializes the mode of cracking" +
-    "\n\nStep 6: Click crack to commence the tool's execution." +
-    "\n\nStep 7: View the output block below to view the results of the tool's execution.";
 
 interface FormValuesType {
     filePath: string;
@@ -54,6 +42,21 @@ const JohnTheRipper = () => {
     const [selectedModeOption, setSelectedModeOption] = useState("");
     const [selectedIncrementOption, setSelectedIncrementOption] = useState("");
     const [pid, setPid] = useState("");
+
+    const title = "John the Ripper";
+    const description =
+        "John the Ripper is a fast password cracker, its primary purpose is to detect weak Unix passwords.";
+    const steps =
+        "Step 1: Specify the filepath to the password file that you wish to crack E.g /home/user/passwords.txt\n" +
+        "Step 2: Specify the hash that is utilized in the password file. A wide range of hashes are supported by the tool. (For full list, open new terminal and use john --list=formats command) E.g md5\n" +
+        "Step 3: Specify which crack mode to use. \nE.g Dictionary, Incremental and Single mode" +
+        "Step 4: This specifies the format of the password file. This is necessary so as to enable John the Ripper to correctly read the file. E.g rar\n" +
+        "Step 5: Depending on what is chosen on step3, a follow up option may appear. This option specializes the mode of cracking\n" +
+        "Step 6: Click crack to commence the tool's execution.\n" +
+        "Step 7: View the output block below to view the results of the tool's execution.\n";
+    const sourceLink = "https://github.com/openwall/john";
+    const tutorial = "";
+    const dependencies = "";
 
     let form = useForm({
         initialValues: {
@@ -158,54 +161,61 @@ const JohnTheRipper = () => {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, fileType: selectedFileTypeOption }))}>
-            <LoadingOverlay visible={loading} />
-            <Stack>
-                {UserGuide(title, descritpionUserguide)}
-                <TextInput label={"Filepath"} required {...form.getInputProps("filePath")} />
-                <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
-                <NativeSelect
-                    value={selectedModeOption}
-                    onChange={(e) => setSelectedModeOption(e.target.value)}
-                    title={"Crack Mode"}
-                    data={mode}
-                    required
-                    placeholder={"Crack Mode"}
-                    description={"Please select a crack mode"}
-                />
-                <NativeSelect
-                    value={selectedFileTypeOption}
-                    onChange={(e) => setSelectedFileTypeOption(e.target.value)}
-                    title={"File Type"}
-                    data={fileTypes}
-                    required
-                    placeholder={"File Type"}
-                    description={"Please select the type of file you want to crack"}
-                />
-                {modeRequiringWordList.includes(selectedModeOption) && (
-                    <>
-                        <TextInput label={"Dictionary File Path"} required {...form.getInputProps("wordlist")} />
-                    </>
-                )}
-                {modeRequiringIncrementOrder.includes(selectedModeOption) && (
-                    <>
-                        <NativeSelect
-                            value={selectedIncrementOption}
-                            onChange={(e) => setSelectedIncrementOption(e.target.value)}
-                            title={"Increment Order"}
-                            data={incrementOrder}
-                            required
-                            placeholder={"Increment Order"}
-                            description={"Please select a Increment Order"}
-                        />
-                    </>
-                )}
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, fileType: selectedFileTypeOption }))}>
+                <LoadingOverlay visible={loading} />
+                <Stack>
+                    <TextInput label={"Filepath"} required {...form.getInputProps("filePath")} />
+                    <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
+                    <NativeSelect
+                        value={selectedModeOption}
+                        onChange={(e) => setSelectedModeOption(e.target.value)}
+                        title={"Crack Mode"}
+                        data={mode}
+                        required
+                        placeholder={"Crack Mode"}
+                        description={"Please select a crack mode"}
+                    />
+                    <NativeSelect
+                        value={selectedFileTypeOption}
+                        onChange={(e) => setSelectedFileTypeOption(e.target.value)}
+                        title={"File Type"}
+                        data={fileTypes}
+                        required
+                        placeholder={"File Type"}
+                        description={"Please select the type of file you want to crack"}
+                    />
+                    {modeRequiringWordList.includes(selectedModeOption) && (
+                        <>
+                            <TextInput label={"Dictionary File Path"} required {...form.getInputProps("wordlist")} />
+                        </>
+                    )}
+                    {modeRequiringIncrementOrder.includes(selectedModeOption) && (
+                        <>
+                            <NativeSelect
+                                value={selectedIncrementOption}
+                                onChange={(e) => setSelectedIncrementOption(e.target.value)}
+                                title={"Increment Order"}
+                                data={incrementOrder}
+                                required
+                                placeholder={"Increment Order"}
+                                description={"Please select a Increment Order"}
+                            />
+                        </>
+                    )}
 
-                <Button type={"submit"}>Crack</Button>
-                {SaveOutputToTextFile(output)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+                    <Button type={"submit"}>Crack</Button>
+                    {SaveOutputToTextFile(output)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 
