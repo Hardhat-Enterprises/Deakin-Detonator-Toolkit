@@ -5,6 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "Netcat Tool";
 const description_userguide =
@@ -42,7 +43,8 @@ const netcatOptions = [
 const NetcatTool = () => {
     var [output, setOutput] = useState("");
     const [selectedScanOption, setSelectedNetcatOption] = useState("");
-
+    const [pid, setPid] = useState("");
+    
     let form = useForm({
         initialValues: {
             ipAddress: "",
@@ -53,8 +55,41 @@ const NetcatTool = () => {
         },
     });
 
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+    }, []);
+    // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
+    // the termination of that process, resetting state variables, handling the output data,
+    // and informing the user.
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            }
+            // Clear the child process pid reference
+            setPid("");
+            // Cancel the Loading Overlay
+            setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
+        },
+        [handleProcessData]
+    );
+
+
     const onSubmit = async (values: FormValuesType) => {
+        
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+        setLoading(true);
         //Starts off with the IP address after netcat
+
         //Ex: nc <ip address>
         let args = [``];
 
@@ -67,11 +102,13 @@ const NetcatTool = () => {
                 args.push(`${values.portNumber}`);
 
                 try {
-                    let output = await CommandHelper.runCommand("nc", args);
-                    setOutput(output);
+                    let result = await CommandHelper.runCommandGetPidAndOutput("nc", args,handleProcessData,handleProcessTermination);
+                    setPid(result.pid);
+                    setOutput(result.output);
                 } catch (e: any) {
-                    setOutput(e);
+                    setOutput(e.message);
                 }
+                
 
                 break;
 
@@ -80,10 +117,11 @@ const NetcatTool = () => {
                 args.push(`${values.ipAddress} ${values.portNumber} < ${values.filePath}`);
 
                 try {
-                    let output = await CommandHelper.runCommand("nc", args);
-                    setOutput(output);
+                    let result = await CommandHelper.runCommandGetPidAndOutput("nc", args,handleProcessData,handleProcessTermination);
+                    setPid(result.pid);
+                    setOutput(result.output);
                 } catch (e: any) {
-                    setOutput(e);
+                    setOutput(e.message);
                 }
 
                 break;
@@ -93,10 +131,11 @@ const NetcatTool = () => {
                 args.push(`${values.portNumber} > ${values.filePath}`);
 
                 try {
-                    let output = await CommandHelper.runCommand("nc", args);
-                    setOutput(output);
+                    let result = await CommandHelper.runCommandGetPidAndOutput("nc", args,handleProcessData,handleProcessTermination);
+                    setPid(result.pid);
+                    setOutput(result.output);
                 } catch (e: any) {
-                    setOutput(e);
+                    setOutput(e.message);
                 }
 
                 break;
@@ -107,10 +146,11 @@ const NetcatTool = () => {
                 args.push(`${values.portNumber}`);
 
                 try {
-                    let output = await CommandHelper.runCommand("nc", args);
-                    setOutput(output);
+                    let result = await CommandHelper.runCommandGetPidAndOutput("nc", args,handleProcessData,handleProcessTermination);
+                    setPid(result.pid);
+                    setOutput(result.output);
                 } catch (e: any) {
-                    setOutput(e);
+                    setOutput(e.message);
                 }
 
                 break;
@@ -124,10 +164,11 @@ const NetcatTool = () => {
                 args.push(`${values.portNumber}`);
 
                 try {
-                    let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output);
+                    let result = await CommandHelper.runCommandGetPidAndOutput("nc", args,handleProcessData,handleProcessTermination);
+                    setPid(result.pid);
+                    setOutput(result.output);
                 } catch (e: any) {
-                    setOutput(e);
+                    setOutput(e.message);
                 }
 
                 break;
@@ -136,11 +177,14 @@ const NetcatTool = () => {
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
 
     //<ConsoleWrapper output={output} clearOutputCallback={clearOutput} /> prints the terminal on the tool
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
+            {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
