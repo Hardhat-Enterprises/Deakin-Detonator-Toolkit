@@ -14,12 +14,9 @@ const description_userguide =
     "and group memberships found within the system.\n\nOptions for the tool can be found at: " +
     "https://www.kali.org/tools/enum4linux/\n\n" +
     "Using Enum4Linux:\n" +
-    "Step 1: Enter a target IP address.\n" +
-    "       Eg: 192.168.1.1\n\n" +
-    "Step 2: Enter an option for the enumeration.\n" +
-    "       Eg: U (get userlist)\n\n" +
-    "Step 3: Enter any parameters.\n" +
-    "       Eg: example.txt\n\n" +
+    "Step 1: Enter a target IP address. Eg: 192.168.1.1\n\n" +
+    "Step 2: Enter an option for the enumeration. Eg: U (get userlist)\n\n" +
+    "Step 3: Enter any parameters. Eg: example.txt\n\n" +
     "Step 4: Enter any additional options/parameters.\n\n" +
     "Step 5: Click Scan to commence Enum4Linux's operation.\n\n" +
     "Step 6: View the output block below to view the results of the tools execution.";
