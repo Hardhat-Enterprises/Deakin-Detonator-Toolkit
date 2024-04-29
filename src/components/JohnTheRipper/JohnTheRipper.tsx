@@ -6,6 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 const modeRequiringWordList = ["dictionary"];
 const modeRequiringIncrementOrder = ["incremental"];
@@ -42,6 +43,7 @@ const JohnTheRipper = () => {
     const [selectedModeOption, setSelectedModeOption] = useState("");
     const [selectedIncrementOption, setSelectedIncrementOption] = useState("");
     const [pid, setPid] = useState("");
+    const [loadingModal, setLoadingModal] = useState(true);
 
     const title = "John the Ripper";
     const description =
@@ -168,6 +170,14 @@ const JohnTheRipper = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
             <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, fileType: selectedFileTypeOption }))}>
                 <LoadingOverlay visible={loading} />
                 <Stack>
