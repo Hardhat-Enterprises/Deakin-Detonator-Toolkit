@@ -1,4 +1,4 @@
-import { Button, NativeSelect, Stack, TextInput } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput,LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -6,6 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "Netcat Tool";
 const description_userguide =
@@ -84,6 +85,22 @@ const NetcatTool = () => {
         },
         [handleProcessData]
     );
+
+    // Sends a SIGTERM signal to gracefully terminate the process
+    const handleCancel = () => {
+        if (pid !== null) {
+            const args = [`-15`, pid];
+            CommandHelper.runCommand("kill", args);
+        }
+    };
+
+    // Actions taken after saving the output
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
 
     const onSubmit = async (values: FormValuesType) => {
@@ -188,6 +205,7 @@ const NetcatTool = () => {
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
             {LoadingOverlayAndCancelButton(loading, pid)}
+            <LoadingOverlay visible={loading} />
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
@@ -203,8 +221,9 @@ const NetcatTool = () => {
                     placeholder={"Pick a scan option"}
                     description={"Type of scan to perform"}
                 />
+                
+                {SaveOutputToTextFile_v2 (output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>start netcat</Button>
-                {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
