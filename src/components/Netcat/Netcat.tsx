@@ -1,4 +1,4 @@
-import { Button, NativeSelect, Stack, TextInput } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -42,6 +42,7 @@ const netcatOptions = [
 const NetcatTool = () => {
     var [output, setOutput] = useState("");
     const [selectedScanOption, setSelectedNetcatOption] = useState("");
+    const [checkedVerboseMode, setCheckedVerboseMode] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -157,6 +158,11 @@ const NetcatTool = () => {
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
             <Stack>
                 {UserGuide(title, description_userguide)}
+                <Checkbox
+                label={"Verbose Mode"}
+                checked={checkedVerboseMode}
+                onChange={(e) => setCheckedVerboseMode(e.currentTarget.checked)}
+                />
                 <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
                 <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
                 <TextInput label={"File path"} {...form.getInputProps("filePath")} />
