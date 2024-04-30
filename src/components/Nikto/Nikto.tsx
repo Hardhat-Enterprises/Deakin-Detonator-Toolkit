@@ -28,12 +28,13 @@ const Nikto = () => {
 
     // Component Constants
     const title = "Nikto";
-    const description = "Nikto is a powerful web server scanner that can perform comprehensive tests against web servers for multiple items.";
+    const description =
+        "Nikto is a powerful web server scanner that can perform comprehensive tests against web servers for multiple items.";
     const steps =
-    "Step 1: Provide the target URL or IP address to scan.\n" +
-    "Step 2: Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
-    "Step 3: Review the scan output to identify any security issues.\n";
-    const sourceLink = "https://github.com/sullo/nikto"; // Link to the source code 
+        "Step 1: Provide the target URL or IP address to scan.\n" +
+        "Step 2: Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
+        "Step 3: Review the scan output to identify any security issues.\n";
+    const sourceLink = "https://github.com/sullo/nikto"; // Link to the source code
     const tutorial = "https://github.com/sullo/nikto/wiki"; // Link to the official documentation/tutorial
 
     // Form hook to handle form input
@@ -45,9 +46,9 @@ const Nikto = () => {
     });
 
     /**
-    * Handles form submission for the Nikto component.
-    * @param {FormValuesType} values - The form values containing the target URL and SSL scan option.
-    */
+     * Handles form submission for the Nikto component.
+     * @param {FormValuesType} values - The form values containing the target URL and SSL scan option.
+     */
     const onSubmit = async (values: FormValuesType) => {
         // Set loading state to true and disallow output saving
         setLoading(true);
@@ -73,16 +74,16 @@ const Nikto = () => {
     };
 
     /**
-    * Handles the completion of output saving by updating state variables.
-    */
+     * Handles the completion of output saving by updating state variables.
+     */
     const handleSaveComplete = () => {
         setHasSaved(true); // Set hasSaved state to true
         setAllowSave(false); // Disallow further output saving
     };
 
     /**
-    * Clears the command output and resets state variables related to output saving.
-    */
+     * Clears the command output and resets state variables related to output saving.
+     */
     const clearOutput = () => {
         setOutput(""); // Clear the command output
         setHasSaved(false); // Reset hasSaved state
@@ -91,7 +92,7 @@ const Nikto = () => {
 
     // Render component
     return (
-        <RenderComponent 
+        <RenderComponent
             title={title}
             description={description}
             steps={steps}
