@@ -4,41 +4,50 @@ import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 
-// Define title and user guide description for the Nikto tool
-const title = "Nikto";
-const description_userguide =
-    "Nikto is a powerful web server scanner that can perform comprehensive tests against web servers for multiple items.\n" +
-    "How to use this Nikto tool:\n" +
-    "- Provide the target URL or IP address to scan.\n" +
-    "- Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
-    "- Review the scan output to identify any security issues.\n";
-
-// Define the type for form values
+/**
+ * Represents the form values for the Nikto component.
+ */
 interface FormValuesType {
-    TargetURL: string;
+    targetURL: string;
     sslScan: boolean;
 }
 
-// Define the Nikto component
+/**
+ * The Nikto component.
+ * @returns The Nikto component.
+ */
 const Nikto = () => {
-    // Initialize state variables
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-    const [sslScan, setSslScan] = useState(false);
+    // Component state variables
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving of output
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
+    const [sslScan, setSslScan] = useState(false); // State variable for SSL scanning
 
-    // Initialize form state using the useForm hook
-    let form = useForm<FormValuesType>({
+    // Component Constants
+    const title = "Nikto";
+    const description = "Nikto is a powerful web server scanner that can perform comprehensive tests against web servers for multiple items.";
+    const steps =
+    "Step 1: Provide the target URL or IP address to scan.\n" +
+    "Step 2: Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
+    "Step 3: Review the scan output to identify any security issues.\n";
+    const sourceLink = "https://github.com/sullo/nikto"; // Link to the source code 
+    const tutorial = "https://github.com/sullo/nikto/wiki"; // Link to the official documentation/tutorial
+
+    // Form hook to handle form input
+    let form = useForm({
         initialValues: {
-            TargetURL: "",
+            targetURL: "",
             sslScan: false,
         },
     });
 
-    // Function to handle form submission
+    /**
+    * Handles form submission for the Nikto component.
+    * @param {FormValuesType} values - The form values containing the target URL and SSL scan option.
+    */
     const onSubmit = async (values: FormValuesType) => {
         // Set loading state to true and disallow output saving
         setLoading(true);
@@ -47,7 +56,7 @@ const Nikto = () => {
         // Execute Nikto command with provided target URL
         try {
             // Adjusting the command arguments based on checkbox state for SSL scanning
-            const args = ["-h", values.TargetURL];
+            const args = ["-h", values.targetURL];
             if (values.sslScan) {
                 args.push("-ssl"); // Add -ssl option for SSL scanning
             }
@@ -63,38 +72,47 @@ const Nikto = () => {
         }
     };
 
-    // Function to handle completion of output saving
+    /**
+    * Handles the completion of output saving by updating state variables.
+    */
     const handleSaveComplete = () => {
-        setHasSaved(true);
-        setAllowSave(false);
+        setHasSaved(true); // Set hasSaved state to true
+        setAllowSave(false); // Disallow further output saving
     };
 
-    // Function to clear command output
+    /**
+    * Clears the command output and resets state variables related to output saving.
+    */
     const clearOutput = () => {
-        setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
+        setOutput(""); // Clear the command output
+        setHasSaved(false); // Reset hasSaved state
+        setAllowSave(false); // Disallow further output saving
     };
 
     // Render component
     return (
-        <form onSubmit={form.onSubmit(onSubmit)}>
-            <LoadingOverlay visible={loading} />
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <TextInput label="Target URL" required {...form.getInputProps("TargetURL")} />
-                <Checkbox
-                    label="SSL Scan"
-                    checked={sslScan}
-                    onChange={(event) => setSslScan(event.currentTarget.checked)}
-                />
-                <Button type="submit" disabled={loading}>
-                    Start Nikto Scan
-                </Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+        <RenderComponent 
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            <form onSubmit={form.onSubmit(onSubmit)}>
+                <Stack>
+                    {loading && <LoadingOverlay visible={true} />}
+                    <TextInput label="Target URL" required {...form.getInputProps("targetURL")} />
+                    <Checkbox
+                        label="SSL Scan"
+                        checked={sslScan}
+                        onChange={(event) => setSslScan(event.currentTarget.checked)}
+                    />
+                    <Button type={"submit"}>Start {title}</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 
