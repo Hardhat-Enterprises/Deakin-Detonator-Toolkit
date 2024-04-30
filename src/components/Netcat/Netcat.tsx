@@ -1,12 +1,12 @@
-import { Button, NativeSelect, Stack, TextInput,LoadingOverlay } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput, LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "Netcat Tool";
 const description_userguide =
@@ -102,14 +102,11 @@ const NetcatTool = () => {
         setAllowSave(false);
     };
 
-
     const onSubmit = async (values: FormValuesType) => {
-        
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
         setLoading(true);
         //Starts off with the IP address after netcat
-
         //Ex: nc <ip address>
         let args = [``];
 
@@ -122,13 +119,17 @@ const NetcatTool = () => {
                 args.push(`${values.portNumber}`);
 
                 try {
-                    let result = await CommandHelper.runCommandGetPidAndOutput("nc", args,handleProcessData,handleProcessTermination);
+                    let result = await CommandHelper.runCommandGetPidAndOutput(
+                        "nc",
+                        args,
+                        handleProcessData,
+                        handleProcessTermination
+                    );
                     setPid(result.pid);
                     setOutput(result.output);
                 } catch (e: any) {
                     setOutput(e.message);
                 }
-                
 
                 break;
 
@@ -137,7 +138,12 @@ const NetcatTool = () => {
                 args.push(`${values.ipAddress} ${values.portNumber} < ${values.filePath}`);
 
                 try {
-                    let result = await CommandHelper.runCommandGetPidAndOutput("nc", args,handleProcessData,handleProcessTermination);
+                    let result = await CommandHelper.runCommandGetPidAndOutput(
+                        "nc",
+                        args,
+                        handleProcessData,
+                        handleProcessTermination
+                    );
                     setPid(result.pid);
                     setOutput(result.output);
                 } catch (e: any) {
@@ -151,7 +157,12 @@ const NetcatTool = () => {
                 args.push(`${values.portNumber} > ${values.filePath}`);
 
                 try {
-                    let result = await CommandHelper.runCommandGetPidAndOutput("nc", args,handleProcessData,handleProcessTermination);
+                    let result = await CommandHelper.runCommandGetPidAndOutput(
+                        "nc",
+                        args,
+                        handleProcessData,
+                        handleProcessTermination
+                    );
                     setPid(result.pid);
                     setOutput(result.output);
                 } catch (e: any) {
@@ -166,7 +177,12 @@ const NetcatTool = () => {
                 args.push(`${values.portNumber}`);
 
                 try {
-                    let result = await CommandHelper.runCommandGetPidAndOutput("nc", args,handleProcessData,handleProcessTermination);
+                    let result = await CommandHelper.runCommandGetPidAndOutput(
+                        "nc",
+                        args,
+                        handleProcessData,
+                        handleProcessTermination
+                    );
                     setPid(result.pid);
                     setOutput(result.output);
                 } catch (e: any) {
@@ -184,7 +200,12 @@ const NetcatTool = () => {
                 args.push(`${values.portNumber}`);
 
                 try {
-                    let result = await CommandHelper.runCommandGetPidAndOutput("nc", args,handleProcessData,handleProcessTermination);
+                    let result = await CommandHelper.runCommandGetPidAndOutput(
+                        "nc",
+                        args,
+                        handleProcessData,
+                        handleProcessTermination
+                    );
                     setPid(result.pid);
                     setOutput(result.output);
                 } catch (e: any) {
@@ -221,8 +242,8 @@ const NetcatTool = () => {
                     placeholder={"Pick a scan option"}
                     description={"Type of scan to perform"}
                 />
-                
-                {SaveOutputToTextFile_v2 (output, allowSave, hasSaved, handleSaveComplete)}
+
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>start netcat</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
