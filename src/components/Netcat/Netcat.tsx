@@ -34,8 +34,7 @@ const netcatOptions = [
     "Port Scan",
     "Send File",
     "Receive File",
-    "Website Port scan",
-    "Interactive terminal/Listen (for chat or reverse shell) [Beta]",
+    "Website Port scan"
 ];
 
 //Tool name must be capital or jsx will cry out errors :P
@@ -127,23 +126,6 @@ const NetcatTool = () => {
 
                 try {
                     let output = await CommandHelper.runCommand("nc", args);
-                    setOutput(output);
-                } catch (e: any) {
-                    setOutput(e);
-                }
-
-                break;
-
-            case "Interactive terminal/Listen (for chat or reverse shell) [Beta]":
-                //Beta stage
-                //The script executes a separate qterminal session that runs netcat listen command
-                //The script runs like the normal netcat listen where the user can communicate between the attacker (kali) and the victim (VM2)
-                //Not sure how to add output to the tool
-                args = [`/usr/share/ddt/Bash-Scripts/netcatTerminal.sh`];
-                args.push(`${values.portNumber}`);
-
-                try {
-                    let output = await CommandHelper.runCommand("bash", args);
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
