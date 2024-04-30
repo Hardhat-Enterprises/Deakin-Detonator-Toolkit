@@ -59,11 +59,15 @@ const NetcatTool = () => {
         //Ex: nc <ip address>
         let args = [``];
 
+        //If verbose mode is checked, v flag is added to args
+        const verboseFlag = checkedVerboseMode ? "v" : "";
+
         //Switch case
         switch (values.netcatOptions) {
             case "Port Scan": //nc syntax: nc -zv <ip address/hostname> <port range>
                 //addition of -n will not perform any dns or name lookups.
-                args = [`-zvn`];
+
+                args = [`-z${verboseFlag}n`];
                 args.push(`${values.ipAddress}`);
 
                 if (values.portNumber.includes("-")) {
@@ -96,7 +100,7 @@ const NetcatTool = () => {
             case "Send File": //Sends file from attacker to victim, syntax: nc -v -w <timeout seconds> <IP address> <port number> < <file path>
                 //File to send can be located anywhere, as long as file path is correctly specified 
                 try {
-                    let command = `nc -v -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
+                    let command = `nc -${verboseFlag} -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
                     let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction
                     setOutput(output);
                 } catch (e: any) {
@@ -107,7 +111,7 @@ const NetcatTool = () => {
             case "Receive File": //Receives file from victim to attacker, syntax: nc -lvp <port number> > <file path and file name>
                 //Files can be recieved in any directory
                 try {
-                    let command = `nc -lvp ${values.portNumber} > ${values.filePath}`;
+                    let command = `nc -l${verboseFlag}p ${values.portNumber} > ${values.filePath}`;
                     let output = await CommandHelper.runCommand("bash", ["-c", command]);
                     setOutput(output);
                 } catch (e: any) {
@@ -117,7 +121,7 @@ const NetcatTool = () => {
                 break;
 
             case "Website Port scan": //Scans a website for ports, syntax: nc -zv <hostname> <port range>
-                args = [`-zv`]; //PLease only use website portscan on a website/Domain that you own
+                args = [`-z${verboseFlag}`]; //PLease only use website portscan on a website/Domain that you own
                 args.push(`${values.websiteUrl}`);
                 args.push(`${values.portNumber}`);
 
