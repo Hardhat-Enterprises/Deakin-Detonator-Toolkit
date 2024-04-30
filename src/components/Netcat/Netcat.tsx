@@ -30,12 +30,7 @@ interface FormValuesType {
 }
 
 //Netcat Options
-const netcatOptions = [
-    "Port Scan",
-    "Send File",
-    "Receive File",
-    "Website Port scan"
-];
+const netcatOptions = ["Port Scan", "Send File", "Receive File", "Website Port scan"];
 
 //Tool name must be capital or jsx will cry out errors :P
 const NetcatTool = () => {
@@ -97,7 +92,7 @@ const NetcatTool = () => {
                 break;
 
             case "Send File": //Sends file from attacker to victim, syntax: nc -v -w <timeout seconds> <IP address> <port number> < <file path>
-                //File to send can be located anywhere, as long as file path is correctly specified 
+                //File to send can be located anywhere, as long as file path is correctly specified
                 try {
                     let command = `nc -${verboseFlag} -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
                     let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction
@@ -145,9 +140,9 @@ const NetcatTool = () => {
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <Checkbox
-                label={"Verbose Mode"}
-                checked={checkedVerboseMode}
-                onChange={(e) => setCheckedVerboseMode(e.currentTarget.checked)}
+                    label={"Verbose Mode"}
+                    checked={checkedVerboseMode}
+                    onChange={(e) => setCheckedVerboseMode(e.currentTarget.checked)}
                 />
                 <NativeSelect
                     value={selectedScanOption}
