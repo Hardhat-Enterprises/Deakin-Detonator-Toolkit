@@ -15,7 +15,7 @@ import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
  */
 interface FormValuesType {
     hostname: string;
-    portNumber: string; // Consider implementing or removing this as it's currently unused.
+    portNumber: string;
     tracerouteSwitch: string;
     tracerouteOptions: string;
 }
@@ -29,13 +29,15 @@ const steps =
     "Step 3: Select a scan option.\n" +
     "Step 4: Click Scan to commence Traceroute operation.\n" +
     "Step 5: View the Output block below to view the results of the tool's execution.";
-const sourceLink = "https://www.kali.org/tools/"; //Link to the source code(or kali tools)
-const tutorial = ""; //Link to the official documentation/tutorial
-const dependencies = ["traceroute"];
+const sourceLink = "https://www.kali.org/tools/"; //Link to the source code(or kali tools).
+const tutorial = ""; //Link to the official documentation/tutorial.
+const dependencies = ["traceroute"]; //Contains the dependencies required by the component.
+
 const TracerouteTool = () => {
     var [output, setOutput] = useState(""); //State to store the output from the traceroute command
     const [selectedScanOption, setSelectedTracerouteOption] = useState(""); // State to store the selected scan type
 
+    // Form hook to handle form input.
     let form = useForm({
         initialValues: {
             hostname: "",
