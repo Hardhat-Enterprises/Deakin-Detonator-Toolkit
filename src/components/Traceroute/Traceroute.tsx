@@ -29,8 +29,9 @@ const steps =
     "Step 3: Select a scan option.\n" +
     "Step 4: Click Scan to commence Traceroute operation.\n" +
     "Step 5: View the Output block below to view the results of the tool's execution.";
-const sourceLink = "https://www.kali.org/tools/";
-//Tool name must be capital or jsx will cry out errors :P
+const sourceLink = "https://www.kali.org/tools/"; //Link to the source code(or kali tools)
+const tutorial = ""; //Link to the official documentation/tutorial
+
 const TracerouteTool = () => {
     var [output, setOutput] = useState(""); //State to store the output from the traceroute command
     const [selectedScanOption, setSelectedTracerouteOption] = useState(""); // State to store the selected scan type
