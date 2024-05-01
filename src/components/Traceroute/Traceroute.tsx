@@ -20,8 +20,8 @@ interface FormValuesType {
     tracerouteOptions: string;
 }
 
-const title = "Traceroute Tool";
-const description_userguide =
+const title = "Traceroute Tool"; //Title of the tool as used in the UserGuide component
+const description_userguide = // Detailed user guide for the traceroute tool
     "The Traceroute tool provides a utility for displaying the route that IP packets have used as they travel to a " +
     "particular network or host. For these routes, where possible, the tool will display both the IP address and hostname " +
     "for any machines visited along the route by the packets. This tool proves useful for network debugging where traceroute " +
@@ -59,7 +59,8 @@ const TracerouteTool = () => {
         "Traceroute TCP scan",
         "Traceroute UDP scan",
         "Traceroute custom scan",
-    ];
+    ]; // Options for different types of traceroute scans
+
     /**
      * Executes the traceroute command based on user inputs and updates the output state.
      * @param values The form value containing user inputs.
