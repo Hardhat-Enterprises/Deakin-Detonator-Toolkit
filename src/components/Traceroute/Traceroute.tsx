@@ -20,24 +20,14 @@ interface FormValuesType {
     tracerouteOptions: string;
 }
 
-const title = "Traceroute Tool"; //Title of the tool as used in the UserGuide component
-const description_userguide = // Detailed user guide for the traceroute tool
-    "The Traceroute tool provides a utility for displaying the route that IP packets have used as they travel to a " +
-    "particular network or host. For these routes, where possible, the tool will display both the IP address and hostname " +
-    "for any machines visited along the route by the packets. This tool proves useful for network debugging where traceroute " +
-    "will show where the issue is located along the route.\n\nFurther information can be found at: https://www.kali.org/tools" +
-    "/traceroute/\n\n" +
-    "Using Traceroute:\n" +
-    "You will need to upgrade your terminal to a root terminal by typing your password to the terminal you used to open DDT.\n\n" +
-    "If you chose one of these three scans: ICMP, TCP, or UDP, you only need to provide a hostname.\n\n" +
-    "If you chose custom scan, you can type your customized traceroute option.\n" +
-    "For example: -I -p 12345\n\n" +
+const title = "Traceroute"; //Title of the tool.
+const description = // Description of the component
+    "The Traceroute tool provides a utility for displaying the route that IP packets have used as they travel to a particular network or host.";
+const steps =
     "Step 1: Enter a Hostname/IP address.\n" +
-    "       Eg: 192.168.0.1\n\n" +
-    "Step 2: (Optional) Enter any additional options.\n\n" +
+    "Step 2: (Optional) Enter any additional options.\n" +
     "Step 3: Select a scan option.\n" +
-    "       Eg: Traceroute UDP scan\n\n" +
-    "Step 4: Click Scan to commence Traceroute operation.\n\n" +
+    "Step 4: Click Scan to commence Traceroute operation.\n" +
     "Step 5: View the Output block below to view the results of the tool's execution.";
 
 //Tool name must be capital or jsx will cry out errors :P
@@ -134,7 +124,7 @@ const TracerouteTool = () => {
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, tracerouteSwitch: selectedScanOption }))}>
             <Stack>
-                {UserGuide(title, description_userguide)}
+                {UserGuide(title, description)}
                 <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
                 <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("tracerouteOptions")} />
                 <NativeSelect
