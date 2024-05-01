@@ -42,8 +42,8 @@ const description_userguide =
 
 //Tool name must be capital or jsx will cry out errors :P
 const TracerouteTool = () => {
-    var [output, setOutput] = useState("");
-    const [selectedScanOption, setSelectedTracerouteOption] = useState("");
+    var [output, setOutput] = useState(""); //State to store the output from the traceroute command
+    const [selectedScanOption, setSelectedTracerouteOption] = useState(""); // State to store the selected scan type
 
     let form = useForm({
         initialValues: {
@@ -127,7 +127,7 @@ const TracerouteTool = () => {
      * Clears the output displayed to the user.
      */
     const clearOutput = useCallback(() => {
-        setOutput("");
+        setOutput(""); //Memoized function to clear the output.
     }, [setOutput]);
 
     return (
