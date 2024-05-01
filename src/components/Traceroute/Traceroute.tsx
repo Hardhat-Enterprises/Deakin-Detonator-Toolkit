@@ -61,6 +61,10 @@ const TracerouteTool = () => {
         },
     });
 
+    /**
+     * Executes the traceroute command based on user inputs and updates the output state.
+     * @param values The form value containing user inputs.
+     */
     const onSubmit = async (values: FormValuesType) => {
         let args = [``];
 
@@ -120,6 +124,9 @@ const TracerouteTool = () => {
         }
     };
 
+    /**
+     * Clears the output displayed to the user.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
     }, [setOutput]);
