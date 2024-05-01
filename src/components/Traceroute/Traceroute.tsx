@@ -40,14 +40,6 @@ const description_userguide =
     "Step 4: Click Scan to commence Traceroute operation.\n\n" +
     "Step 5: View the Output block below to view the results of the tool's execution.";
 
-//Traceroute Options
-const tracerouteSwitch = [
-    "Traceroute ICMP scan",
-    "Traceroute TCP scan",
-    "Traceroute UDP scan",
-    "Traceroute custom scan",
-];
-
 //Tool name must be capital or jsx will cry out errors :P
 const TracerouteTool = () => {
     var [output, setOutput] = useState("");
@@ -61,6 +53,13 @@ const TracerouteTool = () => {
         },
     });
 
+    //Traceroute Options
+    const tracerouteSwitch = [
+        "Traceroute ICMP scan",
+        "Traceroute TCP scan",
+        "Traceroute UDP scan",
+        "Traceroute custom scan",
+    ];
     /**
      * Executes the traceroute command based on user inputs and updates the output state.
      * @param values The form value containing user inputs.
