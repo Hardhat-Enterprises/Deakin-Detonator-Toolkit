@@ -6,6 +6,20 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
+/**
+ * FormValuesType defines the structure for the form values used in the TracerouteTool component.
+ * @field hostname: The hostname or IP address for the traceroute operation.
+ * @field portNumber:The port number to be used, currently not utilized in the traceroute operations.
+ * @field tracerouteSwitch: The selected type of traceroute scan.
+ * @field tracerouteOptions: Custom traceroute options provided by the user.
+ */
+interface FormValuesType {
+    hostname: string;
+    portNumber: string; // Consider implementing or removing this as it's currently unused.
+    tracerouteSwitch: string;
+    tracerouteOptions: string;
+}
+
 const title = "Traceroute Tool";
 const description_userguide =
     "The Traceroute tool provides a utility for displaying the route that IP packets have used as they travel to a " +
@@ -25,20 +39,6 @@ const description_userguide =
     "       Eg: Traceroute UDP scan\n\n" +
     "Step 4: Click Scan to commence Traceroute operation.\n\n" +
     "Step 5: View the Output block below to view the results of the tool's execution.";
-
-/**
- * FormValuesType defines the structure for the form values used in the TracerouteTool component.
- * @field hostname: The hostname or IP address for the traceroute operation.
- * @field portNumber:The port number to be used, currently not utilized in the traceroute operations.
- * @field tracerouteSwitch: The selected type of traceroute scan.
- * @field tracerouteOptions: Custom traceroute options provided by the user.
- */
-interface FormValuesType {
-    hostname: string;
-    portNumber: string; // Consider implementing or removing this as it's currently unused.
-    tracerouteSwitch: string;
-    tracerouteOptions: string;
-}
 
 //Traceroute Options
 const tracerouteSwitch = [
