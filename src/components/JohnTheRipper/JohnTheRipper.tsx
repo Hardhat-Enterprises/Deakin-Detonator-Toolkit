@@ -57,9 +57,10 @@ const JohnTheRipper = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
 
-    const title = "John the Ripper";
+    // Component constants
+    const title = "John the Ripper"; // Title of the component.
     const description =
-        "John the Ripper is a fast password cracker, its primary purpose is to detect weak Unix passwords.";
+        "John the Ripper is a fast password cracker, its primary purpose is to detect weak Unix passwords."; // Description of the component.
     const steps =
         "Step 1: Specify the filepath to the password file that you wish to crack E.g /home/user/passwords.txt\n" +
         "Step 2: Specify the hash that is utilized in the password file. A wide range of hashes are supported by the tool. (For full list, open new terminal and use john --list=formats command) E.g md5\n" +
@@ -68,9 +69,9 @@ const JohnTheRipper = () => {
         "Step 5: Depending on what is chosen on step3, a follow up option may appear. This option specializes the mode of cracking\n" +
         "Step 6: Click crack to commence the tool's execution.\n" +
         "Step 7: View the output block below to view the results of the tool's execution.\n";
-    const sourceLink = "https://github.com/openwall/john";
-    const tutorial = "";
-    const dependencies = ["john"];
+    const sourceLink = "https://github.com/openwall/john"; // Link to the source code.
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["john"]; // Contains the dependencies required by the component
 
     let form = useForm({
         initialValues: {
