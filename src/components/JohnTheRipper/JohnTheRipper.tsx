@@ -1,6 +1,6 @@
 import { Button, LoadingOverlay, NativeSelect, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
