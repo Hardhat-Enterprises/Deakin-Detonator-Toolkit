@@ -119,62 +119,74 @@ const TracerouteTool = () => {
     ]; // Options for different types of traceroute scans
 
     /**
-     * Executes the traceroute command based on user inputs and updates the output state.
-     * @param values The form value containing user inputs.
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the airbase-ng tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
      */
     const onSubmit = async (values: FormValuesType) => {
         let args = [``];
 
-        //Switch case
+        // Switch case to handle different traceroute scan options based on user selection.
         switch (values.tracerouteSwitch) {
-            case "Traceroute ICMP scan": //traceroute syntax: traceroute -I <hostname>
+            case "Traceroute ICMP scan":
+                // Traceroute ICMP scan uses the '-I' option
+                // Syntax: traceroute -I <hostname>
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
-                args.push(`${values.hostname}`);
+                args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
+                    // Executed the traceroute command using a shell script and captures the output.
                     let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output);
+                    setOutput(output); // Sets the output to the state.
                 } catch (e: any) {
-                    setOutput(e);
+                    setOutput(e); // Sets error to the state if command fails.
                 }
 
                 break;
 
-            case "Traceroute TCP scan": //traceroute syntax: traceroute -T <hostname>
+            case "Traceroute TCP scan":
+                // TRaceroute TCP scan uses the '-T' option.
+                // Syntax: traceroute -T <hostname>
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-T`);
-                args.push(`${values.hostname}`);
+                args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output);
+                    setOutput(output); //Sets the output to the state.
                 } catch (e: any) {
-                    setOutput(e);
+                    setOutput(e); //Sets error to the state if command fails.
                 }
 
                 break;
 
-            case "Traceroute UDP scan": //traceroute syntax: traceroute -U <hostname>
+            case "Traceroute UDP scan":
+                // Traceroute UDP scan uses the '-U' option.
+                // Syntax: traceroute -U <hostname>
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-U`);
-                args.push(`${values.hostname}`);
+                args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output);
+                    setOutput(output); // Sets the output to the state.
                 } catch (e: any) {
-                    setOutput(e);
+                    setOutput(e); // Sets errors to the state if command fails.
                 }
 
                 break;
 
-            case "Traceroute custom scan": //traceroute syntax: traceroute <options> <hostname>
+            case "Traceroute custom scan":
+                // Traceroute custom scan allows specifying additional options
+                // Syntax: traceroute <options> <hostname>
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
-                args.push(`${values.tracerouteOptions}`);
-                args.push(`${values.hostname}`);
+                args.push(`${values.tracerouteOptions}`); // Adds custom options to the arguments list.
+                args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output);
+                    setOutput(output); // Set the output to the state.
                 } catch (e: any) {
-                    setOutput(e);
+                    setOutput(e); // Sets errors to the state if the command fails.
                 }
 
                 break;
