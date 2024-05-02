@@ -4,7 +4,7 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
@@ -56,6 +56,8 @@ const JohnTheRipper = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
 
     // Component constants
     const title = "John the Ripper"; // Title of the component.
@@ -150,6 +152,17 @@ const JohnTheRipper = () => {
             const args = [`-15`, pid];
             CommandHelper.runCommand("kill", args);
         }
+    };
+
+    /**
+     * handleSaveComplete: Callback to handle the completion of the file saving process.
+     * It updates the state by indicating that the file has been saved and deactivates the save button.
+     */
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
     };
 
     /**
@@ -280,7 +293,7 @@ const JohnTheRipper = () => {
                     )}
 
                     <Button type={"submit"}>Crack</Button>
-                    {SaveOutputToTextFile(output)}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
