@@ -1,10 +1,12 @@
 import { Button, NativeSelect, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
  * FormValuesType defines the structure for the form values used in the TracerouteTool component.
@@ -35,7 +37,11 @@ const dependencies = ["traceroute"]; //Contains the dependencies required by the
 
 const TracerouteTool = () => {
     var [output, setOutput] = useState(""); //State to store the output from the traceroute command
-    const [selectedScanOption, setSelectedTracerouteOption] = useState(""); // State to store the selected scan type
+
+    const [selectedScanOption, setSelectedTracerouteOption] = useState(""); // State to store the selected scan type.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the model is opened.
+    const [LoadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the model.
 
     // Form hook to handle form input.
     let form = useForm({
@@ -45,6 +51,20 @@ const TracerouteTool = () => {
             tracerouteOptions: "",
         },
     });
+
+    //Check is the command is avaliable and set the state variables accordingly.
+    useEffect(() => {
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable);
+                setOpened(!isAvailable);
+                setLoadingModal(false);
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false);
+            });
+    }, []);
 
     //Traceroute Options
     const tracerouteSwitch = [
