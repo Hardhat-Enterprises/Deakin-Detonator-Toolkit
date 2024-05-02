@@ -7,6 +7,7 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
  * FormValuesType defines the structure for the form values used in the TracerouteTool component.
@@ -120,11 +121,11 @@ const TracerouteTool = () => {
     ]; // Options for different types of traceroute scans
 
     /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the airbase-ng tool with the given parameters.
-     * Once the command is executed, the results or errors are displayed in the output.
+     * onSubmit: Asynchronous handler for the form submission event event related to executing traceroute commands.
+      It constructs command arguments, executes them via a shell script, and updates the UI with the results or errors.
      *
-     * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
+     * @param {FormValuesType} values - Contains the type of traceroute scan (ICMP, TCP, UDP, custom),
+     * the destination hostname, and optional custom traceroute options.
      */
     const onSubmit = async (values: FormValuesType) => {
         let args = [``];
@@ -213,25 +214,33 @@ const TracerouteTool = () => {
     }, []);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, tracerouteSwitch: selectedScanOption }))}>
-            <Stack>
-                {UserGuide(title, description)}
-                <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
-                <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("tracerouteOptions")} />
-                <NativeSelect
-                    value={selectedScanOption}
-                    onChange={(e) => setSelectedTracerouteOption(e.target.value)}
-                    title={"Traceroute option"}
-                    data={tracerouteSwitch}
-                    required
-                    placeholder={"Pick a scan option"}
-                    description={"Type of scan to perform"}
-                />
-                <Button type={"submit"}>start traceroute</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, tracerouteSwitch: selectedScanOption }))}>
+                <Stack>
+                    {UserGuide(title, description)}
+                    <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
+                    <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("tracerouteOptions")} />
+                    <NativeSelect
+                        value={selectedScanOption}
+                        onChange={(e) => setSelectedTracerouteOption(e.target.value)}
+                        title={"Traceroute option"}
+                        data={tracerouteSwitch}
+                        required
+                        placeholder={"Pick a scan option"}
+                        description={"Type of scan to perform"}
+                    />
+                    <Button type={"submit"}>start traceroute</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 
