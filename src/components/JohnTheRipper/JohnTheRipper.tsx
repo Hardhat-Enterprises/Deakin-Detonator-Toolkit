@@ -54,7 +54,7 @@ const JohnTheRipper = () => {
     const steps =
         "Step 1: Specify the filepath to the password file that you wish to crack E.g /home/user/passwords.txt\n" +
         "Step 2: Specify the hash that is utilized in the password file. A wide range of hashes are supported by the tool. (For full list, open new terminal and use john --list=formats command) E.g md5\n" +
-        "Step 3: Specify which crack mode to use. \nE.g Dictionary, Incremental and Single mode" +
+        "Step 3: Specify which crack mode to use. E.g Dictionary, Incremental and Single mode\n" +
         "Step 4: This specifies the format of the password file. This is necessary so as to enable John the Ripper to correctly read the file. E.g rar\n" +
         "Step 5: Depending on what is chosen on step3, a follow up option may appear. This option specializes the mode of cracking\n" +
         "Step 6: Click crack to commence the tool's execution.\n" +
