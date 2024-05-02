@@ -32,8 +32,8 @@ const TracerouteTool = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the model is opened.
     const [LoadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the model.
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+    const [allowSave, setAllowSave] = useState(false); // State variable indicating whether the current state is valid and the results can be saved.
+    const [hasSaved, setHasSaved] = useState(false); // State variable that tracks whether the results have already been saved to avoid redundant operations.
     // Form hook to handle form input.
     let form = useForm({
         initialValues: {
