@@ -22,24 +22,6 @@ interface FormValuesType {
 }
 
 // Tool options
-const modeRequiringWordList = ["dictionary"]; // Crack modes that require a wordlist
-const modeRequiringIncrementOrder = ["incremental"]; // Crack modes that require an increment order
-const fileTypes = ["zip", "rar", "raw"]; // File types supported by the tool
-const mode = ["incremental", "dictionary", "single"]; // Crack modes supported by the tool
-const incrementOrder = [
-    // Increment orders
-    "ASCII",
-    "LM_ASCII",
-    "AlNum",
-    "Alpha",
-    "LowerNum",
-    "UpperNum",
-    "LowerSpace",
-    "Lower",
-    "Upper",
-    "Digits",
-    "LM_ASCII",
-];
 
 /**
  * The JohnTheRipper component.
@@ -49,9 +31,6 @@ const JohnTheRipper = () => {
     // Component state variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [selectedFileTypeOption, setSelectedFileTypeOption] = useState(""); // State variable to store the selected file type.
-    const [selectedModeOption, setSelectedModeOption] = useState(""); // State variable to store the selected crack mode.
-    const [selectedIncrementOption, setSelectedIncrementOption] = useState(""); // State variable to store the selected increment order.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
@@ -60,6 +39,27 @@ const JohnTheRipper = () => {
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
 
     // Component constants
+    const [selectedFileTypeOption, setSelectedFileTypeOption] = useState(""); // State variable to store the selected file type.
+    const [selectedModeOption, setSelectedModeOption] = useState(""); // State variable to store the selected crack mode.
+    const [selectedIncrementOption, setSelectedIncrementOption] = useState(""); // State variable to store the selected increment order.
+    const modeRequiringWordList = ["dictionary"]; // Crack modes that require a wordlist
+    const modeRequiringIncrementOrder = ["incremental"]; // Crack modes that require an increment order
+    const fileTypes = ["zip", "rar", "raw"]; // File types supported by the tool
+    const mode = ["incremental", "dictionary", "single"]; // Crack modes supported by the tool
+    const incrementOrder = [
+        // Increment orders
+        "ASCII",
+        "LM_ASCII",
+        "AlNum",
+        "Alpha",
+        "LowerNum",
+        "UpperNum",
+        "LowerSpace",
+        "Lower",
+        "Upper",
+        "Digits",
+        "LM_ASCII",
+    ];
     const title = "John the Ripper"; // Title of the component.
     const description =
         "John the Ripper is a fast password cracker, its primary purpose is to detect weak Unix passwords."; // Description of the component.
