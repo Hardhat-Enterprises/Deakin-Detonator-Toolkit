@@ -46,13 +46,14 @@ const incrementOrder = [
  * @returns The JohnTheRipper component.
  */
 const JohnTheRipper = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [selectedFileTypeOption, setSelectedFileTypeOption] = useState("");
-    const [selectedModeOption, setSelectedModeOption] = useState("");
-    const [selectedIncrementOption, setSelectedIncrementOption] = useState("");
-    const [pid, setPid] = useState("");
-    const [loadingModal, setLoadingModal] = useState(true);
+    // Component state variables
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [selectedFileTypeOption, setSelectedFileTypeOption] = useState(""); // State variable to store the selected file type.
+    const [selectedModeOption, setSelectedModeOption] = useState(""); // State variable to store the selected crack mode.
+    const [selectedIncrementOption, setSelectedIncrementOption] = useState(""); // State variable to store the selected increment order.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
 
