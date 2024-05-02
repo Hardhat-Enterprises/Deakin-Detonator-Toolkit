@@ -37,7 +37,8 @@ const dependencies = ["traceroute"]; //Contains the dependencies required by the
 
 const TracerouteTool = () => {
     var [output, setOutput] = useState(""); //State to store the output from the traceroute command
-
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [selectedScanOption, setSelectedTracerouteOption] = useState(""); // State to store the selected scan type.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the model is opened.
@@ -75,6 +76,39 @@ const TracerouteTool = () => {
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); //Append new data to the previous output.
     }, []);
+
+    /**
+     * handleProcessTermination: Callback to handle the termination of the child process.
+     * Once the process termination is handled, it clears the process PID reference and
+     * deactivates the loading overlay.
+     * @param {object} param - An object containing information about the process termination.
+     * @param {number} param.code - The exit code of the terminated process.
+     * @param {number} param.signal - The signal code indicating how the process was terminated.
+     */
+
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+
+                // If the process was terminated manually, display a termination message.
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+
+                // If the process was terminated with an error, display the exit and signal codes.
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            }
+
+            // Clear the child process pid reference. There is no longer a valid process running.
+            setPid("");
+
+            // Cancel the loading overlay. The process has completed.
+            setLoading(false);
+        },
+        [handleProcessData] // Dependency on the handleProcessData callback
+    );
 
     //Traceroute Options
     const tracerouteSwitch = [
