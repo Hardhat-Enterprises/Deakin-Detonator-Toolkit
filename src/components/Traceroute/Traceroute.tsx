@@ -23,19 +23,7 @@ interface FormValuesType {
     tracerouteOptions: string;
 }
 
-const title = "Traceroute"; //Title of the tool.
-const description = // Description of the component
-    "The Traceroute tool provides a utility for displaying the route that IP packets have used as they travel to a particular network or host.";
-const steps =
-    "Step 1: Enter a Hostname/IP address.\n" +
-    "Step 2: (Optional) Enter any additional options.\n" +
-    "Step 3: Select a scan option.\n" +
-    "Step 4: Click Scan to commence Traceroute operation.\n" +
-    "Step 5: View the Output block below to view the results of the tool's execution.";
-const sourceLink = "https://www.kali.org/tools/"; //Link to the source code(or kali tools).
-const tutorial = ""; //Link to the official documentation/tutorial.
-const dependencies = ["traceroute"]; //Contains the dependencies required by the component.
-
+// Component State Variables.
 const TracerouteTool = () => {
     var [output, setOutput] = useState(""); //State to store the output from the traceroute command
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
@@ -54,6 +42,20 @@ const TracerouteTool = () => {
             tracerouteOptions: "",
         },
     });
+
+    // Component Constants.
+    const title = "Traceroute"; //Title of the tool.
+    const description = // Description of the component
+        "The Traceroute tool provides a utility for displaying the route that IP packets have used as they travel to a particular network or host.";
+    const steps =
+        "Step 1: Enter a Hostname/IP address.\n" +
+        "Step 2: (Optional) Enter any additional options.\n" +
+        "Step 3: Select a scan option.\n" +
+        "Step 4: Click Scan to commence Traceroute operation.\n" +
+        "Step 5: View the Output block below to view the results of the tool's execution.";
+    const sourceLink = "https://www.kali.org/tools/"; //Link to the source code(or kali tools).
+    const tutorial = ""; //Link to the official documentation/tutorial.
+    const dependencies = ["traceroute"]; //Contains the dependencies required by the component.
 
     // Check is the command is avaliable and set the state variables accordingly.
     useEffect(() => {
