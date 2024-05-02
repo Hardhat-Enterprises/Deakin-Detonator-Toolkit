@@ -62,13 +62,13 @@ const JohnTheRipper = () => {
     const description =
         "John the Ripper is a fast password cracker, its primary purpose is to detect weak Unix passwords."; // Description of the component.
     const steps =
-        "Step 1: Specify the filepath to the password file that you wish to crack E.g /home/user/passwords.txt\n" +
-        "Step 2: Specify the hash that is utilized in the password file. A wide range of hashes are supported by the tool. (For full list, open new terminal and use john --list=formats command) E.g md5\n" +
-        "Step 3: Specify which crack mode to use. E.g Dictionary, Incremental and Single mode\n" +
-        "Step 4: This specifies the format of the password file. This is necessary so as to enable John the Ripper to correctly read the file. E.g rar\n" +
-        "Step 5: Depending on what is chosen on step3, a follow up option may appear. This option specializes the mode of cracking\n" +
+        "Step 1: Specify the filepath to the password file that you wish to crack (e.g ~/passwords.txt).\n" +
+        "Step 2: Specify the hashing algorithm used by the password you are trying to crack (e.g md5). For a full list of options, open new terminal and use john --list=formats command.\n" +
+        "Step 3: Specify which cracking mode to use.\n" +
+        "Step 4: Select the file type of the password file.\n" +
+        "Step 5: If you selected the Incremental or Dictionary cracking type, an additional option will appear to select a character set or specify a filepath for a wordlist respectively." +
         "Step 6: Click crack to commence the tool's execution.\n" +
-        "Step 7: View the output block below to view the results of the tool's execution.\n";
+        "Step 7: View the output block to view the results of the tool's execution.\n";
     const sourceLink = "https://github.com/openwall/john"; // Link to the source code.
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["john"]; // Contains the dependencies required by the component
