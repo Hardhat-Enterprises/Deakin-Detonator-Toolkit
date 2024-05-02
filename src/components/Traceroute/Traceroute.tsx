@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
@@ -43,7 +43,8 @@ const TracerouteTool = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the model is opened.
     const [LoadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the model.
-
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
     // Form hook to handle form input.
     let form = useForm({
         initialValues: {
@@ -140,6 +141,7 @@ const TracerouteTool = () => {
                     // Executed the traceroute command using a shell script and captures the output.
                     let output = await CommandHelper.runCommand("bash", args);
                     setOutput(output); // Sets the output to the state.
+                    setAllowSave(true);
                 } catch (e: any) {
                     setOutput(e); // Sets error to the state if command fails.
                 }
@@ -155,6 +157,7 @@ const TracerouteTool = () => {
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
                     setOutput(output); //Sets the output to the state.
+                    setAllowSave(true);
                 } catch (e: any) {
                     setOutput(e); //Sets error to the state if command fails.
                 }
@@ -170,6 +173,7 @@ const TracerouteTool = () => {
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
                     setOutput(output); // Sets the output to the state.
+                    setAllowSave(true);
                 } catch (e: any) {
                     setOutput(e); // Sets errors to the state if command fails.
                 }
@@ -185,6 +189,7 @@ const TracerouteTool = () => {
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
                     setOutput(output); // Set the output to the state.
+                    setAllowSave(true);
                 } catch (e: any) {
                     setOutput(e); // Sets errors to the state if the command fails.
                 }
@@ -198,7 +203,14 @@ const TracerouteTool = () => {
      */
     const clearOutput = useCallback(() => {
         setOutput(""); //Memoized function to clear the output.
+        setHasSaved(true);
+        setAllowSave(false);
     }, [setOutput]);
+
+    const handleSaveComplete = useCallback(() => {
+        setHasSaved(true);
+        setAllowSave(false);
+    }, []);
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, tracerouteSwitch: selectedScanOption }))}>
@@ -216,7 +228,7 @@ const TracerouteTool = () => {
                     description={"Type of scan to perform"}
                 />
                 <Button type={"submit"}>start traceroute</Button>
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
