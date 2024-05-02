@@ -58,7 +58,7 @@ const JohnTheRipper = () => {
         "Step 7: View the output block below to view the results of the tool's execution.\n";
     const sourceLink = "https://github.com/openwall/john";
     const tutorial = "";
-    const dependencies = "";
+    const dependencies = ["john"];
 
     let form = useForm({
         initialValues: {
