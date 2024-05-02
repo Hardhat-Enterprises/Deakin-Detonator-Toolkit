@@ -21,11 +21,13 @@ interface FormValuesType {
     incrementOrder: string;
 }
 
-const modeRequiringWordList = ["dictionary"];
-const modeRequiringIncrementOrder = ["incremental"];
-const fileTypes = ["zip", "rar", "raw"];
-const mode = ["incremental", "dictionary", "single"];
+// Tool options
+const modeRequiringWordList = ["dictionary"]; // Crack modes that require a wordlist
+const modeRequiringIncrementOrder = ["incremental"]; // Crack modes that require an increment order
+const fileTypes = ["zip", "rar", "raw"]; // File types supported by the tool
+const mode = ["incremental", "dictionary", "single"]; // Crack modes supported by the tool
 const incrementOrder = [
+    // Increment orders
     "ASCII",
     "LM_ASCII",
     "AlNum",
@@ -39,6 +41,10 @@ const incrementOrder = [
     "LM_ASCII",
 ];
 
+/**
+ * The JohnTheRipper component.
+ * @returns The JohnTheRipper component.
+ */
 const JohnTheRipper = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
