@@ -21,8 +21,6 @@ interface FormValuesType {
     incrementOrder: string;
 }
 
-// Tool options
-
 /**
  * The JohnTheRipper component.
  * @returns The JohnTheRipper component.
