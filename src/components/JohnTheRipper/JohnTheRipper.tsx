@@ -73,7 +73,8 @@ const JohnTheRipper = () => {
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["john"]; // Contains the dependencies required by the component
 
-    let form = useForm({
+    // Form hook to handle form input.
+    const form = useForm({
         initialValues: {
             filePath: "",
             hash: "",
