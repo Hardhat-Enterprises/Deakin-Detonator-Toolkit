@@ -9,9 +9,9 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
-const modeRequiringWordList = ["dictionary"];
-const modeRequiringIncrementOrder = ["incremental"];
-
+/**
+ * Represents the form values for the AirbaseNG component.
+ */
 interface FormValuesType {
     filePath: string;
     hash: string;
@@ -21,6 +21,8 @@ interface FormValuesType {
     incrementOrder: string;
 }
 
+const modeRequiringWordList = ["dictionary"];
+const modeRequiringIncrementOrder = ["incremental"];
 const fileTypes = ["zip", "rar", "raw"];
 const mode = ["incremental", "dictionary", "single"];
 const incrementOrder = [
