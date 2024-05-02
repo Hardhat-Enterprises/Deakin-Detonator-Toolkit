@@ -52,18 +52,28 @@ const TracerouteTool = () => {
         },
     });
 
-    //Check is the command is avaliable and set the state variables accordingly.
+    // Check is the command is avaliable and set the state variables accordingly.
     useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable);
-                setOpened(!isAvailable);
-                setLoadingModal(false);
+                setIsCommandAvailable(isAvailable); // Set the command availability state.
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available.
+                setLoadingModal(false); // Set loading to false after check is done.
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false);
             });
+    }, []);
+
+    /**
+     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data recieved to the existing output.
+     * @param {string} data - The data recieved from the child process.
+     */
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data); //Append new data to the previous output.
     }, []);
 
     //Traceroute Options
