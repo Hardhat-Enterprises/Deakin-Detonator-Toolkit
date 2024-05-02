@@ -7,6 +7,7 @@ import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
 const modeRequiringWordList = ["dictionary"];
 const modeRequiringIncrementOrder = ["incremental"];
