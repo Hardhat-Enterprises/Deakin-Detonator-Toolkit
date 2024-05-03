@@ -243,33 +243,33 @@ const NetcatTool = () => {
                 )}
                 {selectedScanOption === "Connect" && (
                     <>
-                        <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
+                        <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
                         <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
                     </>
                 )}
                 {selectedScanOption === "Port Scan" && (
                     <>
-                        <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
+                        <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
                         <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
                     </>
                 )}
                 {selectedScanOption === "Send File" && (
                     <>
-                        <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
+                        <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
                         <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
-                        <TextInput label={"File path"} {...form.getInputProps("filePath")} />
+                        <TextInput label={"File path"} required {...form.getInputProps("filePath")} />
                     </>
                 )}
                 {selectedScanOption === "Receive File" && (
                     <>
                         <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
-                        <TextInput label={"File path"} {...form.getInputProps("filePath")} />
+                        <TextInput label={"File path"} required {...form.getInputProps("filePath")} />
                     </>
                 )}
                 {selectedScanOption === "Website Port Scan" && (
                     <>
                         <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
-                        <TextInput label={"Domain name"} {...form.getInputProps("websiteUrl")} />
+                        <TextInput label={"Domain name"} required {...form.getInputProps("websiteUrl")} />
                     </>
                 )}
                 <Button type={"submit"}>start netcat</Button>
