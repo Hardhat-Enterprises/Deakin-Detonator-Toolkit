@@ -291,6 +291,11 @@
                         "name": "nslookup",
                         "cmd": "nslookup",
                         "args": true
+                    },
+                    {
+                        "name": "tshark",
+                        "cmd": "tshark",
+                        "args": true
                     }
                 ]
             },
