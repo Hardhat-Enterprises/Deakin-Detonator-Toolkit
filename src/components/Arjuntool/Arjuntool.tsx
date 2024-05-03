@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -23,12 +23,14 @@ const description_userguide =
     "Step 3: Click the scan option to commence scanning.\n" +
     "Step 4: View the output block below to see the results.";
 
+
 /**
  * Represents the form values for the Arjun component.
  */
 interface FormValues {
     url: string;
     outputFileName: string;
+    stability: boolean;
 }
 
 function Arjuntool() {
@@ -65,6 +67,7 @@ function Arjuntool() {
         initialValues: {
             url: "",
             outputFileName: "",
+            stability: false,
         },
     });
 
@@ -129,6 +132,10 @@ function Arjuntool() {
         // Construct arguments for the aircrack-ng command based on form input
         const args = ["-u", values.url];
 
+        // Conditional. If the user has specified stability, add the --stable option to the command.
+        if (values.stability) {
+            args.push("--stable");
+        }
         if (values.outputFileName) {
             args.push("-o", values.outputFileName);
         }
@@ -176,6 +183,7 @@ function Arjuntool() {
                 <Stack>
                     {UserGuide(title, description_userguide)}
                     <TextInput label={"URL"} required {...form.getInputProps("url")} />
+                    <Switch size="md" label="Stability mode" {...form.getInputProps("stability" as keyof FormValues)} />
                     <Button type={"submit"}>Scan</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
