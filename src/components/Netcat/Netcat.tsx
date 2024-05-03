@@ -95,6 +95,7 @@ const NetcatTool = () => {
 
         //If verbose mode is checked, v flag is added to args
         const verboseFlag = checkedVerboseMode ? "v" : "";
+        const verboseFlagWithDash = checkedVerboseMode ? " -v" : "";
 
         //Switch case
         switch (values.netcatOptions) {
@@ -119,7 +120,7 @@ const NetcatTool = () => {
                 break;
 
                 case "Connect": //Connects to an nc listener, nc syntax: nc -v <ip address> <port number>
-                args = [`-${verboseFlag}`];
+                args = [`${verboseFlagWithDash}`];
                 args.push(values.ipAddress);
                 args.push(values.portNumber);
 
@@ -175,7 +176,7 @@ const NetcatTool = () => {
             case "Send File": //Sends file from attacker to victim, syntax: nc -v -w <timeout seconds> <IP address> <port number> < <file path>
                 //File to send can be located anywhere, as long as file path is correctly specified
                 try {
-                    let command = `nc -${verboseFlag} -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
+                    let command = `nc${verboseFlagWithDash} -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
                     let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction
                     setOutput(output);
                 } catch (e: any) {
