@@ -23,7 +23,6 @@ const description_userguide =
     "Step 3: Click the scan option to commence scanning.\n" +
     "Step 4: View the output block below to see the results.";
 
-
 /**
  * Represents the form values for the Arjun component.
  */
