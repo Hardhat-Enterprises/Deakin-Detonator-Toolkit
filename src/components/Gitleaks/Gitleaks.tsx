@@ -36,7 +36,8 @@ function Gitleaks() {
 
     // Component Constants.
     const title = "Gitleaks"; // Title of the component.
-    const description = "Gitleaks is a tool for detecting hardcoded secrets like passwords, API keys, and tokens in git repositories."; // Description of the component.
+    const description =
+        "Gitleaks is a tool for detecting hardcoded secrets like passwords, API keys, and tokens in git repositories."; // Description of the component.
     const steps =
         "Step 1: Enter the path to the directory you want to scan for secrets.\n" +
         "Step 2: (Optional) Enable advanced mode and configure additional options.\n" +
