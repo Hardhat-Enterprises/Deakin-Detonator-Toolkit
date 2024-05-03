@@ -64,7 +64,7 @@ import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
-
+import Gitleaks from "./Gitleaks/Gitleaks";
 export interface RouteProperties {
     name: string;
     path: string;
@@ -384,6 +384,13 @@ export const ROUTES: RouteProperties[] = [
         element: <FTPconnect />,
         description: "FTPconnect tool",
         category: "Miscellaneous",
+    },
+    {
+        name: "Gitleaks",
+        path: "/tools/gitleaks",
+        element: <Gitleaks />,
+        description: "Detect hardcoded secrets in git repositories",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "GoBuster",
