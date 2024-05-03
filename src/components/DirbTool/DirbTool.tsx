@@ -148,7 +148,7 @@ export function DirbTool() {
                     onChange={(e) => setSilentMode(e.currentTarget.checked)}
                 />
                 <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                <TextInput label={"Path to wordlist"} required {...form.getInputProps("wordlistPath")} />
+                <TextInput label={"Path to wordlist"} {...form.getInputProps("wordlistPath")} />
                 {checkedAdvanced && (
                     <>
                         <Checkbox label={"Use case-insensitive search"} {...form.getInputProps("caseInsensitive")} />
