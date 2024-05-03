@@ -95,6 +95,7 @@ const GoldenEye = () => {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
+
         const args = [`/usr/share/ddt/Goldeneye/goldeneye.py`, `${values.url}`];
 
         values.useragent ? args.push(`-u`, `${values.useragent}`) : undefined;

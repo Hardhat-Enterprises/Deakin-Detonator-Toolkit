@@ -75,7 +75,7 @@ export function FTPconnect() {
         // Enable the Loading Overlay
         setLoading(true);
 
-        let args = ["../../Deakin-Detonator-Toolkit/src-tauri/exploits/Bash-Scripts/FTPterminal.sh"];
+        let args = ["/usr/share/ddt/Bash-Scripts/FTPterminal.sh"];
 
         args.push(`${values.IPaddress}`);
 
