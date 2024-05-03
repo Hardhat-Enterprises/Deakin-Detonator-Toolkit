@@ -37,7 +37,7 @@ const netcatOptions = [
     "Port Scan",
     "Send File",
     "Receive File",
-    "Website Port scan",
+    "Website Port Scan",
 ];
 
 //Tool name must be capital or jsx will cry out errors :P
