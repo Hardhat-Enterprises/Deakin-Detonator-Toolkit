@@ -95,7 +95,7 @@ const GoldenEye = () => {
     const onSubmit = async (values: FormValues) => {
         setLoading(true);
 
-        const args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/GoldenEye/goldeneye.py`, `${values.url}`];
+        const args = [`/usr/share/ddt/Goldeneye/goldeneye.py`, `${values.url}`];
 
         values.useragent ? args.push(`-u`, `${values.useragent}`) : undefined;
         values.worker ? args.push(`-w`, `${values.worker}`) : undefined;
