@@ -108,10 +108,7 @@ export function DirbTool() {
             args.push("-N", values.ignoreHttpCode.toString());
         }
 
-        if (checkedAdvanced) {
-            args.push("-v");
-        }
-
+     
         // Execute Dirb
         CommandHelper.runCommandGetPidAndOutput("dirb", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
