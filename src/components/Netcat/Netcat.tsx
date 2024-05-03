@@ -99,7 +99,7 @@ const NetcatTool = () => {
         //Switch case
         switch (values.netcatOptions) {
             case "Listen": //Sets up nc listener, nc syntax: nc -lvp <port number>
-                args = ["-lvp"];
+                args = [`-l${verboseFlag}p`];
                 args.push(values.portNumber);
 
                 CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
@@ -119,7 +119,7 @@ const NetcatTool = () => {
                 break;
 
                 case "Connect": //Connects to an nc listener, nc syntax: nc -v <ip address> <port number>
-                args = ["-v"];
+                args = [`-${verboseFlag}`];
                 args.push(values.ipAddress);
                 args.push(values.portNumber);
 
