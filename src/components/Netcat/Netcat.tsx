@@ -235,6 +235,17 @@ const NetcatTool = () => {
                     placeholder={"Pick a scan option"}
                     description={"Type of scan to perform"}
                 />
+                {selectedScanOption === "Listen" && (
+                    <>
+                        <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
+                    </>
+                )}
+                {selectedScanOption === "Connect" && (
+                    <>
+                        <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
+                        <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
+                    </>
+                )}
                 {selectedScanOption === "Port Scan" && (
                     <>
                         <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
@@ -244,13 +255,13 @@ const NetcatTool = () => {
                 {selectedScanOption === "Send File" && (
                     <>
                         <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
-                        <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
+                        <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
                         <TextInput label={"File path"} {...form.getInputProps("filePath")} />
                     </>
                 )}
                 {selectedScanOption === "Receive File" && (
                     <>
-                        <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
+                        <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
                         <TextInput label={"File path"} {...form.getInputProps("filePath")} />
                     </>
                 )}
