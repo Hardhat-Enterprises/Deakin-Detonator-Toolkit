@@ -18,7 +18,7 @@ const description_userguide =
 
 interface FormValues {
     url: string;
-    wordlistPath: string;
+    wordlistPath?: string; // Made wordlistPath optional
     caseInsensitive: boolean;
     printLocation: boolean;
     ignoreHttpCode: number;
@@ -36,7 +36,7 @@ export function DirbTool() {
     let form = useForm({
         initialValues: {
             url: "",
-            wordlistPath: "",
+            wordlistPath: "", // Set initial value to an empty string
             caseInsensitive: false,
             printLocation: false,
             ignoreHttpCode: 0,
@@ -88,27 +88,32 @@ export function DirbTool() {
         // Enable the Loading Overlay
         setLoading(true);
 
-        const args = [values.url, values.wordlistPath];
+        const args = [values.url];
+        if (values.wordlistPath) {
+            args.push(values.wordlistPath); // Add wordlist path if provided
+        }
         if (silentMode) {
             args.push("-S"); // Include silent mode flag
         }
 
-        if (values.caseInsensitive) {
-            // Add the -i flag to make the search case-insensitive
-            args.push("-i");
+        // Only add advanced mode parameters if checkedAdvanced is true
+        if (checkedAdvanced) {
+            if (values.caseInsensitive) {
+                // Add the -i flag to make the search case-insensitive
+                args.push("-i");
+            }
+
+            if (values.printLocation) {
+                // Add the -l flag to print the location of the match
+                args.push("-l");
+            }
+
+            if (values.ignoreHttpCode) {
+                // Add the -N flag followed by the HTTP response code to ignore
+                args.push("-N", values.ignoreHttpCode.toString());
+            }
         }
 
-        if (values.printLocation) {
-            // Add the -l flag to print the location of the match
-            args.push("-l");
-        }
-
-        if (values.ignoreHttpCode) {
-            // Add the -N flag followed by the HTTP response code to ignore
-            args.push("-N", values.ignoreHttpCode.toString());
-        }
-
-     
         // Execute Dirb
         CommandHelper.runCommandGetPidAndOutput("dirb", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
@@ -160,11 +165,7 @@ export function DirbTool() {
                         />
                     </>
                 )}
-                {checkedAdvanced ? (
-                    <Button type={"submit"}>Scan (Verbose)</Button>
-                ) : (
-                    <Button type={"submit"}>Scan (Simple)</Button>
-                )}
+                <Button type={"submit"}>{checkedAdvanced ? "Scan (Advanced)" : "Scan"}</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
