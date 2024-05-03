@@ -31,14 +31,7 @@ interface FormValuesType {
 }
 
 //Netcat Options
-const netcatOptions = [
-    "Listen",
-    "Connect",
-    "Port Scan",
-    "Send File",
-    "Receive File",
-    "Website Port Scan",
-];
+const netcatOptions = ["Listen", "Connect", "Port Scan", "Send File", "Receive File", "Website Port Scan"];
 
 //Tool name must be capital or jsx will cry out errors :P
 const NetcatTool = () => {
@@ -105,38 +98,38 @@ const NetcatTool = () => {
 
                 CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
                     .then(({ output, pid }) => {
-                // Update the UI with the results from the executed command
-                    setOutput(output);
-                    console.log(pid);
-                    setPid(pid);
-                })
-                .catch((error) => {
-                    // Display any errors encountered during command execution
-                    setOutput(error.message);
-                    // Deactivate loading state
-                    setLoading(false);
-                });
+                        // Update the UI with the results from the executed command
+                        setOutput(output);
+                        console.log(pid);
+                        setPid(pid);
+                    })
+                    .catch((error) => {
+                        // Display any errors encountered during command execution
+                        setOutput(error.message);
+                        // Deactivate loading state
+                        setLoading(false);
+                    });
 
                 break;
 
-                case "Connect": //Connects to an nc listener, nc syntax: nc -v <ip address> <port number>
+            case "Connect": //Connects to an nc listener, nc syntax: nc -v <ip address> <port number>
                 args = [`${verboseFlagWithDash}`];
                 args.push(values.ipAddress);
                 args.push(values.portNumber);
 
                 CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
                     .then(({ output, pid }) => {
-                // Update the UI with the results from the executed command
-                    setOutput(output);
-                    console.log(pid);
-                    setPid(pid);
-                })
-                .catch((error) => {
-                    // Display any errors encountered during command execution
-                    setOutput(error.message);
-                    // Deactivate loading state
-                    setLoading(false);
-                });
+                        // Update the UI with the results from the executed command
+                        setOutput(output);
+                        console.log(pid);
+                        setPid(pid);
+                    })
+                    .catch((error) => {
+                        // Display any errors encountered during command execution
+                        setOutput(error.message);
+                        // Deactivate loading state
+                        setLoading(false);
+                    });
 
                 break;
 
