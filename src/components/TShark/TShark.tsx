@@ -1,10 +1,11 @@
 import { Button, NativeSelect, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 // Component Constants.
 const title = "TShark"; // Title of the component.
@@ -36,6 +37,7 @@ const TShark = () => {
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving of output
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
     const [loading, setLoading] = useState(false); // State variable to indicate loading state
+    const [pid, setPid] = useState("");
 
     let form = useForm({ //Relevant form values to be added as tshark options are added
         initialValues: {
@@ -44,6 +46,36 @@ const TShark = () => {
             sniffDuration: ""
         },
     });
+
+    //handleProcessData for the CommandHelper.runCommandGetPidAndOutput
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+    }, []);
+
+    //handleProcessTermination for the CommandHelper.runCommandGetPidAndOutput
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+
+                // If the process was terminated manually, display a termination message.
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+
+                // If the process was terminated with an error, display the exit and signal codes.
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            }
+
+            // Clear the child process pid reference. There is no longer a valid process running.
+            setPid("");
+
+            // Cancel the loading overlay. The process has completed.
+            setLoading(false);
+        },
+        [handleProcessData] // Dependency on the handleProcessData callback
+    );
 
     const onSubmit = async (values: FormValuesType) => {
         // Set loading state to true and disallow output saving
@@ -100,7 +132,7 @@ const TShark = () => {
         >
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, tsharkOptions: selectedTSharkOption }))}>
             <Stack>
-                
+            {LoadingOverlayAndCancelButton(loading, pid)}
                 <NativeSelect
                     value={selectedTSharkOption}
                     onChange={(e) => setSelectedTSharkOption(e.target.value)}
