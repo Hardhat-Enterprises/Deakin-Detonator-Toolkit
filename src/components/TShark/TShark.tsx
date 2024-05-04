@@ -106,9 +106,9 @@ const TShark = () => {
                 break;
 
             case "Sniffer": //Sniffs for packets and outputs it to a fule, duration set to 60 as default
-                args = [`-i ${values.interface} -w ${values.filePath}${duration}`];
+                let command = `tshark -i ${values.interface} -w ${values.filePath}${duration}`;
 
-                CommandHelper.runCommandGetPidAndOutput("tshark", args, handleProcessData, handleProcessTermination)
+                CommandHelper.runCommandGetPidAndOutput("bash", ["-c", command], handleProcessData, handleProcessTermination)
                     .then(({ output, pid }) => {
                         // Update the UI with the results from the executed command
                         setOutput(output);
