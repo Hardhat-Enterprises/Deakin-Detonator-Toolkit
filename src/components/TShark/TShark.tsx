@@ -18,12 +18,16 @@ const dependencies = ["tshark"]; // Contains the dependencies required by the co
 
 //Variables
 interface FormValuesType { //Relevant form values to be added as tshark options are added
-    tsharkOptions: string; 
+    tsharkOptions: string;
+    interface: string;
+    filePath: string; 
+    sniffDuration: string;
 }
 
 //TShark Options
 const tsharkOptions = [ //More options to be added (version check could be kept?)
-    "Version Check"
+    "Version Check",
+    "Sniffer"
 ];
 
 const TShark = () => {
@@ -35,7 +39,9 @@ const TShark = () => {
 
     let form = useForm({ //Relevant form values to be added as tshark options are added
         initialValues: {
-            input1: "",
+            interface: "",
+            filePath: "",
+            sniffDuration: ""
         },
     });
 
@@ -104,7 +110,9 @@ const TShark = () => {
                     placeholder={"Pick a TShark option"}
                     description={"Type of action to perform"}
                 />
-                <TextInput label={"Input 1"} {...form.getInputProps("input1")} />
+                <TextInput label={"Interface"} {...form.getInputProps("interface")} />
+                <TextInput label={"File/File Path"} {...form.getInputProps("filePath")} />
+                <TextInput label={"Sniff Duration (seconds)"} {...form.getInputProps("sniffDuration")} />
                 <Button type={"submit"}>start tshark</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
