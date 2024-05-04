@@ -84,6 +84,9 @@ const TShark = () => {
 
         let args = [``];
 
+        //duration set to 60 as defualt if Sniff Duration field is empty
+        const duration = values.sniffDuration == "" ? " -a duration:60" : ` -a duration:${values.sniffDuration}`
+
         //Switch case
         switch (values.tsharkOptions) {
             case "Version Check": //This version check option is a baseline to test that TShark functions
@@ -100,6 +103,29 @@ const TShark = () => {
                     setAllowSave(true);
                 }
 
+                break;
+
+            case "Sniffer": //Sniffs for packets and outputs it to a fule, duration set to 60 as default
+                args = [`-i ${values.interface} -w ${values.filePath}${duration}`];
+
+                CommandHelper.runCommandGetPidAndOutput("tshark", args, handleProcessData, handleProcessTermination)
+                    .then(({ output, pid }) => {
+                        // Update the UI with the results from the executed command
+                        setOutput(output);
+                        console.log(pid);
+                        setPid(pid);
+                    })
+                    .catch((error) => {
+                        // Display any errors encountered during command execution
+                        setOutput(error.message);
+                        // Deactivate loading state
+                        setLoading(false);
+                    })
+                    .finally(() => {
+                        // Set loading state to false and allow output saving
+                        setLoading(false);
+                        setAllowSave(true);
+                    });
                 break;
         }
     };
@@ -142,8 +168,8 @@ const TShark = () => {
                     placeholder={"Pick a TShark option"}
                     description={"Type of action to perform"}
                 />
-                <TextInput label={"Interface"} {...form.getInputProps("interface")} />
-                <TextInput label={"File/File Path"} {...form.getInputProps("filePath")} />
+                <TextInput label={"Interface"} required {...form.getInputProps("interface")} />
+                <TextInput label={"File/File Path"} required {...form.getInputProps("filePath")} />
                 <TextInput label={"Sniff Duration (seconds)"} {...form.getInputProps("sniffDuration")} />
                 <Button type={"submit"}>start tshark</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
