@@ -48,6 +48,7 @@ export const CommandHelper = {
 
         if (command.stdout) {
             command.stdout.on("data", (data) => {
+                data = data.replace(/\u001b[^m]*?m/g, ""); // Uses regex to look for and remove any ANSI color stylings 
                 stdout += data.toString() + "\n";
                 onData(data.toString());
             });
