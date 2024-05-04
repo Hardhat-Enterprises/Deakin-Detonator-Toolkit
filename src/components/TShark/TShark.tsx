@@ -181,3 +181,11 @@ const TShark = () => {
 };
 
 export default TShark;
+
+//  Seth tasks:
+// -Incorporate the -f (filter) flag to the sniffer, which applies a capture filter to capture only packets that match specific criteria.
+//
+// -Implement a Reader feature, this feature will use the -r (read) flag to read the file genereated from running the sniffer. 
+//  This command can use the same structure as version checker.
+//
+// *Note: don't worry about making it fancy, just make these additions simple, I will touch up the code after the basic functions are there.*
