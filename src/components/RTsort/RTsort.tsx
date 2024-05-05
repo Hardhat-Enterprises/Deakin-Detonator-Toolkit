@@ -6,7 +6,6 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-
 const title = "Rainbow Table Sort (rtsort)";
 const description_userguide =
     "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables.";
@@ -20,7 +19,6 @@ const rtsort = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
-
 
     let form = useForm({
         initialValues: {
@@ -63,7 +61,7 @@ const rtsort = () => {
         const filteredArgs = args.filter((arg) => arg !== "");
 
         // Please note this command should not be cancelled as this will cause the rainbow table to be corrupted
-        
+
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "rtsort",
