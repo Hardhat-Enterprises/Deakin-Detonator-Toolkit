@@ -61,7 +61,7 @@ const JohnTheRipper = () => {
     const steps =
         "Step 1: Specify the filepath to the password file that you wish to crack (e.g ~/passwords.txt).\n" +
         "Step 2: Specify the hashing algorithm used by the password you are trying to crack (e.g md5).\n" +
-        "Step 3: Specify which cracking mode to use.\n" +
+        "Step 3: Specify the cracking mode to use.\n" +
         "Step 4: Select the file type of the password file.\n" +
         "Step 5: If you selected the Incremental or Dictionary cracking type, an additional option will appear to select a character set or specify a filepath for a wordlist respectively." +
         "Step 6: Click crack to commence the tool's execution.\n" +
