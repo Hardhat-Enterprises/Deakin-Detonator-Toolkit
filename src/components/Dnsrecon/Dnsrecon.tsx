@@ -19,12 +19,16 @@ interface FormValues {
 * @returns The Dnsrecon component.
 */
   function Dnsrecon() {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-
+    // Component State Variables.
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
+    
     // Component Constants.
     const title = "DNSRecon"; // Title of the component.
     const description = "DNSRecon is a tool for DNS enumeration and scanning."; // Description of the component.
