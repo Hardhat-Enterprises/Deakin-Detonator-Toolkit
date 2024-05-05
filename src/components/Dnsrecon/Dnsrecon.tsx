@@ -40,7 +40,8 @@ interface FormValues {
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["dnsrecon"]; // Dependencies required for the Dnsrecon tool.
 
-    let form = useForm({
+    // Form hook to handle form input.
+    const form = useForm<FormValuesType>({
         initialValues: {
             url: "",
         },
