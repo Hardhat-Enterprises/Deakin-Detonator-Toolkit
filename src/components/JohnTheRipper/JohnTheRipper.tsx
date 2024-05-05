@@ -39,7 +39,6 @@ const JohnTheRipper = () => {
     const [selectedModeOption, setSelectedModeOption] = useState(""); // State variable to store the selected crack mode.
     const [selectedIncrementOption, setSelectedIncrementOption] = useState(""); // State variable to store the selected increment order.
 
-
     // Component constants
     const modeRequiringWordList = ["dictionary"]; // Crack modes that require a wordlist
     const modeRequiringIncrementOrder = ["incremental"]; // Crack modes that require an increment order
