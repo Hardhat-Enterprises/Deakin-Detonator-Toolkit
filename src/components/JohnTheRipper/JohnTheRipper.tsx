@@ -64,7 +64,7 @@ const JohnTheRipper = () => {
         "Step 3: Specify the cracking mode to use.\n" +
         "Step 4: Select the file type of the password file.\n" +
         "Step 5: If you selected the Incremental or Dictionary cracking type, an additional option will appear to select a character set or specify a filepath for a wordlist respectively." +
-        "Step 6: Click crack to commence the tool's execution.\n" +
+        "Step 6: Click 'Start John the Ripper'.\n" +
         "Step 7: View the output block to view the results of the tools execution.\n";
     const sourceLink = "https://github.com/openwall/john"; // Link to the source code.
     const tutorial = ""; // Link to the official documentation/tutorial.
