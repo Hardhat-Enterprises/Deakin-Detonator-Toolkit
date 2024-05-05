@@ -118,7 +118,12 @@ const NetcatTool = () => {
                 let command = `nc${verboseFlagWithSpaceAndDash} ${values.ipAddress} ${values.portNumber}`;
 
                 //CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
-                CommandHelper.runCommandGetPidAndOutput("bash", ["-c", command], handleProcessData, handleProcessTermination)
+                CommandHelper.runCommandGetPidAndOutput(
+                    "bash",
+                    ["-c", command],
+                    handleProcessData,
+                    handleProcessTermination
+                )
                     .then(({ output, pid }) => {
                         // Update the UI with the results from the executed command
                         setOutput(output);
