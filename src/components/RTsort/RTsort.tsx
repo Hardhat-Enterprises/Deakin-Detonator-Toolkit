@@ -63,17 +63,11 @@ const rtsort = () => {
         const filteredArgs = args.filter((arg) => arg !== "");
 
         // Please note this command should not be cancelled as this will cause the rainbow table to be corrupted
-        /*try {
-            const output = await CommandHelper.runCommand("rtsort", filteredArgs);
-            setOutput(output);
-        } catch (e: any) {
-            setOutput(e);
-        }*/
+        
         try {
-            //const output = await CommandHelper.runCommand("nmap", args);
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "rtsort",
-                args,
+                filteredArgs,
                 handleProcessData,
                 handleProcessTermination
             );
