@@ -35,6 +35,10 @@ const JohnTheRipper = () => {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+    const [selectedFileTypeOption, setSelectedFileTypeOption] = useState(""); // State variable to store the selected file type.
+    const [selectedModeOption, setSelectedModeOption] = useState(""); // State variable to store the selected crack mode.
+    const [selectedIncrementOption, setSelectedIncrementOption] = useState(""); // State variable to store the selected increment order.
+
 
     // Component constants
     const modeRequiringWordList = ["dictionary"]; // Crack modes that require a wordlist
