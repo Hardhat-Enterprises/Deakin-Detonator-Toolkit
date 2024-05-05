@@ -203,6 +203,6 @@ function Dnsrecon() {
             </RenderComponent>
         </>
     );
-};
+}
 
 export default Dnsrecon;
