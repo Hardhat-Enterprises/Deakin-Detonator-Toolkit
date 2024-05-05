@@ -38,6 +38,9 @@ const NetcatTool = () => {
     const [selectedScanOption, setSelectedNetcatOption] = useState("");
     const [checkedVerboseMode, setCheckedVerboseMode] = useState(false);
     const [pid, setPid] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -55,6 +58,29 @@ const NetcatTool = () => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
     }, []);
 
+    // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
+    // the termination of that process, resetting state variables, handling the output data,
+    // and informing the user.
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            }
+            // Clear the child process pid reference
+            setPid("");
+            // Cancel the Loading Overlay
+            setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
+        },
+        [handleProcessData]
+    );
 
     const onSubmit = async (values: FormValuesType) => {
         //Starts off with the IP address after netcat
