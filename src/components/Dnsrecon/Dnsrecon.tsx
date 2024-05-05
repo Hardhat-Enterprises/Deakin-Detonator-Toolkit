@@ -6,16 +6,6 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-const title = "Dnsrecon";
-const description_userguide =
-    "Dnsrecon is a Python script that has an extensive list of functionalities. This tool is primarily used for " +
-    "DNS enumeration and scanning, where for example, it may enumerate DNS records, SRV records, and hosts and " +
-    "domains using google.\n\nFurther usages for the tool can be found at: https://www.kali.org/tools/dnsrecon/\n\n" +
-    "Using Dnsrecon:\n" +
-    "Step 1: Enter a Target Domain URL.\n" +
-    "       Eg: https://www.deakin.edu.au\n\n" +
-    "Step 2: Click Scan to commence Dnsrecon's operation.\n\n" +
-    "Step 3: View the Output block below to view the results of the tools execution.";
 
 /**
 * Represents the form values for the Dnsrecon component.
@@ -24,12 +14,27 @@ interface FormValues {
     url: string;
 }
 
-export function Dnsrecon() {
+/**
+* The Dnsrecon component.
+* @returns The Dnsrecon component.
+*/
+  function Dnsrecon() {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+
+    // Component Constants.
+    const title = "DNSRecon"; // Title of the component.
+    const description = "DNSRecon is a tool for DNS enumeration and scanning."; // Description of the component.
+    const steps =
+        "Step 1: Enter a target domain URL, for example, https://www.deakin.edu.au\n" +
+        "Step 2: Click scan to commence DNSRecon's operation.\n" +
+        "Step 3: View the output block below to view the results of the tool's execution.\n";
+    const sourceLink = "https://www.kali.org/tools/dnsrecon/"; // Link to the source code or Kali Tools page.
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["dnsrecon"]; // Dependencies required for the Dnsrecon tool.
 
     let form = useForm({
         initialValues: {
@@ -38,11 +43,10 @@ export function Dnsrecon() {
     });
 
     /**
-     * handleProcessData: Callback to handle and append new data from the child process to the output.
-     * It updates the state by appending the new data received to the existing output.
-     *
-     * @param {string} data - The data received from the child process.
-     */
+    * handleProcessData: Callback to handle and append new data from the child process to the output.
+    * It updates the state by appending the new data received to the existing output.
+    * @param {string} data - The data received from the child process.
+    */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
@@ -83,7 +87,12 @@ export function Dnsrecon() {
         setHasSaved(true);
         setAllowSave(false);
     };
-
+     /**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the Dnsrecon tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     * @param {FormValuesType} values - The form values, containing the URL.
+     */
     const onSubmit = async (values: FormValues) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
