@@ -120,22 +120,47 @@ const NetcatTool = () => {
 
                     for (let currentPort = portStart; currentPort <= portEnd; currentPort++) {
                         //Iterates through every port from start to end
-                        try {
+                        /*try {
                             let output = await CommandHelper.runCommand("nc", [...args, String(currentPort)]);
                             setOutput(output);
                         } catch (e: any) {
                             setOutput(e);
+                        }*/
+                        try {
+                            const result = await CommandHelper.runCommandGetPidAndOutput(
+                                "nc",
+                                [...args, String(currentPort)],
+                                handleProcessData,
+                                handleProcessTermination
+                            );
+                            setPid(result.pid);
+                            setOutput(result.output);
+                        } catch (e: any) {
+                            setOutput(e.message);
                         }
+
                     }
                 } else {
                     //else port number has been inputted
                     args.push(`${values.portNumber}`);
 
-                    try {
+                    /*try {
                         let output = await CommandHelper.runCommand("nc", args);
                         setOutput(output);
                     } catch (e: any) {
                         setOutput(e);
+                    }*/
+                    try {
+                        const result = await CommandHelper.runCommandGetPidAndOutput(
+                            "nc",
+                            args,
+                            handleProcessData,
+                            handleProcessTermination
+                        );
+                        setPid(result.pid);
+                        setOutput(result.output);
+                    } catch (e: any) {
+                        setOutput(e.message);
                     }
                 }
 
@@ -145,22 +170,46 @@ const NetcatTool = () => {
                 //File to send can be located anywhere, as long as file path is correctly specified
                 try {
                     let command = `nc -${verboseFlag} -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
-                    let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction
+                    const result = await CommandHelper.runCommandGetPidAndOutput(
+                        "bash",
+                        ["-c", command],
+                        handleProcessData,
+                        handleProcessTermination
+                    );
+                    setPid(result.pid);
+                    setOutput(result.output);
+                } catch (e: any) {
+                    setOutput(e.message);
+                }
+                    /*let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
-                }
+                }*/
+
                 break;
 
             case "Receive File": //Receives file from victim to attacker, syntax: nc -lvp <port number> > <file path and file name>
                 //Files can be recieved in any directory
                 try {
                     let command = `nc -l${verboseFlag}p ${values.portNumber} > ${values.filePath}`;
+                    const result = await CommandHelper.runCommandGetPidAndOutput(
+                        "bash",
+                        ["-c", command],
+                        handleProcessData,
+                        handleProcessTermination
+                    );
+                    setPid(result.pid);
+                    setOutput(result.output);
+                } catch (e: any) {
+                    setOutput(e.message);
+                }
+                    /*
                     let output = await CommandHelper.runCommand("bash", ["-c", command]);
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
-                }
+                }*/
 
                 break;
 
@@ -170,11 +219,24 @@ const NetcatTool = () => {
                 args.push(`${values.portNumber}`);
 
                 try {
+                    const result = await CommandHelper.runCommandGetPidAndOutput(
+                        "nc",
+                        args,
+                        handleProcessData,
+                        handleProcessTermination
+                    );
+                    setPid(result.pid);
+                    setOutput(result.output);
+                } catch (e: any) {
+                    setOutput(e.message);
+                }
+
+                /*try {
                     let output = await CommandHelper.runCommand("nc", args);
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
-                }
+                }*/
 
                 break;
         }
@@ -182,6 +244,8 @@ const NetcatTool = () => {
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
 
     //<ConsoleWrapper output={output} clearOutputCallback={clearOutput} /> prints the terminal on the tool
