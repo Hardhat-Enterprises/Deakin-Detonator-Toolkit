@@ -203,7 +203,7 @@ const JohnTheRipper = () => {
                 setOutput(e);
             }
 
-            //Crack the extracted hash
+            // Crack the extracted hash
             values.hash ? argsCrack.push(`--format=${values.hash}`) : undefined;
             selectedModeOption === "dictionary"
                 ? argsCrack.push(`--wordlist=${values.wordList}`)
