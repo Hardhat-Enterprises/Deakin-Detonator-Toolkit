@@ -1,10 +1,13 @@
-import { Button, NativeSelect, Stack, TextInput, Checkbox } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput, Checkbox,LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+
 
 const title = "Netcat Tool";
 const description_userguide =
@@ -251,6 +254,8 @@ const NetcatTool = () => {
     //<ConsoleWrapper output={output} clearOutputCallback={clearOutput} /> prints the terminal on the tool
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
+            {LoadingOverlayAndCancelButton(loading, pid)}
+            <LoadingOverlay visible={loading} />
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <Checkbox
@@ -292,8 +297,8 @@ const NetcatTool = () => {
                         <TextInput label={"Domain name"} {...form.getInputProps("websiteUrl")} />
                     </>
                 )}
-                <Button type={"submit"}>start netcat</Button>
-                {SaveOutputToTextFile(output)}
+                <Button type={"submit"}>start netcat</Button>                
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
