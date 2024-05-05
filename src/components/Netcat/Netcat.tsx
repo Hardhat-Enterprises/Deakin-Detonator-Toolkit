@@ -1,4 +1,4 @@
-import { Button, NativeSelect, Stack, TextInput } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -30,18 +30,13 @@ interface FormValuesType {
 }
 
 //Netcat Options
-const netcatOptions = [
-    "Port Scan",
-    "Send File",
-    "Receive File",
-    "Website Port scan",
-    "Interactive terminal/Listen (for chat or reverse shell) [Beta]",
-];
+const netcatOptions = ["Port Scan", "Send File", "Receive File", "Website Port scan"];
 
 //Tool name must be capital or jsx will cry out errors :P
 const NetcatTool = () => {
     var [output, setOutput] = useState("");
     const [selectedScanOption, setSelectedNetcatOption] = useState("");
+    const [checkedVerboseMode, setCheckedVerboseMode] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -58,42 +53,60 @@ const NetcatTool = () => {
         //Ex: nc <ip address>
         let args = [``];
 
+        //If verbose mode is checked, v flag is added to args
+        const verboseFlag = checkedVerboseMode ? "v" : "";
+
         //Switch case
         switch (values.netcatOptions) {
             case "Port Scan": //nc syntax: nc -zv <ip address/hostname> <port range>
                 //addition of -n will not perform any dns or name lookups.
-                args = [`-zvn`];
+
+                args = [`-z${verboseFlag}n`];
                 args.push(`${values.ipAddress}`);
-                args.push(`${values.portNumber}`);
 
-                try {
-                    let output = await CommandHelper.runCommand("nc", args);
-                    setOutput(output);
-                } catch (e: any) {
-                    setOutput(e);
+                if (values.portNumber.includes("-")) {
+                    //checks for port range specifed by the inclusion of "-"
+                    const [portStart, portEnd] = values.portNumber.split("-").map(Number); //Splits range by "-", assigns two consts with the split port numbers
+
+                    for (let currentPort = portStart; currentPort <= portEnd; currentPort++) {
+                        //Iterates through every port from start to end
+                        try {
+                            let output = await CommandHelper.runCommand("nc", [...args, String(currentPort)]);
+                            setOutput(output);
+                        } catch (e: any) {
+                            setOutput(e);
+                        }
+                    }
+                } else {
+                    //else port number has been inputted
+                    args.push(`${values.portNumber}`);
+
+                    try {
+                        let output = await CommandHelper.runCommand("nc", args);
+                        setOutput(output);
+                    } catch (e: any) {
+                        setOutput(e);
+                    }
                 }
 
                 break;
 
-            case "Send File": //Sends file from attacker to victim, syntax: nc -w 15 <Dest IP address> <Port number> < <FileName>
-                args = [`-w 15`]; //I set the timeout on 15 by default, you can remove it if you want
-                args.push(`${values.ipAddress} ${values.portNumber} < ${values.filePath}`);
-
+            case "Send File": //Sends file from attacker to victim, syntax: nc -v -w <timeout seconds> <IP address> <port number> < <file path>
+                //File to send can be located anywhere, as long as file path is correctly specified
                 try {
-                    let output = await CommandHelper.runCommand("nc", args);
+                    let command = `nc -${verboseFlag} -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
+                    let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
                 }
-
                 break;
 
-            case "Receive File": //Receives file from victim to attacker, syntax: nc -l <port number> > filename.file
-                args = [`-lp`];
-                args.push(`${values.portNumber} > ${values.filePath}`);
-
+            case "Receive File": //Receives file from victim to attacker, syntax: nc -lvp <port number> > <file path and file name>
+                //Files can be recieved in any directory
                 try {
-                    let output = await CommandHelper.runCommand("nc", args);
+                    let command = `nc -l${verboseFlag}p ${values.portNumber} > ${values.filePath}`;
+                    let output = await CommandHelper.runCommand("bash", ["-c", command]);
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
@@ -102,29 +115,12 @@ const NetcatTool = () => {
                 break;
 
             case "Website Port scan": //Scans a website for ports, syntax: nc -zv <hostname> <port range>
-                args = [`-zv`]; //PLease only use website portscan on a website/Domain that you own
+                args = [`-z${verboseFlag}`]; //PLease only use website portscan on a website/Domain that you own
                 args.push(`${values.websiteUrl}`);
                 args.push(`${values.portNumber}`);
 
                 try {
                     let output = await CommandHelper.runCommand("nc", args);
-                    setOutput(output);
-                } catch (e: any) {
-                    setOutput(e);
-                }
-
-                break;
-
-            case "Interactive terminal/Listen (for chat or reverse shell) [Beta]":
-                //Beta stage
-                //The script executes a separate qterminal session that runs netcat listen command
-                //The script runs like the normal netcat listen where the user can communicate between the attacker (kali) and the victim (VM2)
-                //Not sure how to add output to the tool
-                args = [`/usr/share/ddt/Bash-Scripts/netcatTerminal.sh`];
-                args.push(`${values.portNumber}`);
-
-                try {
-                    let output = await CommandHelper.runCommand("bash", args);
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
@@ -143,10 +139,11 @@ const NetcatTool = () => {
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
             <Stack>
                 {UserGuide(title, description_userguide)}
-                <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
-                <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
-                <TextInput label={"File path"} {...form.getInputProps("filePath")} />
-                <TextInput label={"Domain name"} {...form.getInputProps("websiteUrl")} />
+                <Checkbox
+                    label={"Verbose Mode"}
+                    checked={checkedVerboseMode}
+                    onChange={(e) => setCheckedVerboseMode(e.currentTarget.checked)}
+                />
                 <NativeSelect
                     value={selectedScanOption}
                     onChange={(e) => setSelectedNetcatOption(e.target.value)}
@@ -156,6 +153,31 @@ const NetcatTool = () => {
                     placeholder={"Pick a scan option"}
                     description={"Type of scan to perform"}
                 />
+                {selectedScanOption === "Port Scan" && (
+                    <>
+                        <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
+                        <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
+                    </>
+                )}
+                {selectedScanOption === "Send File" && (
+                    <>
+                        <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
+                        <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
+                        <TextInput label={"File path"} {...form.getInputProps("filePath")} />
+                    </>
+                )}
+                {selectedScanOption === "Receive File" && (
+                    <>
+                        <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
+                        <TextInput label={"File path"} {...form.getInputProps("filePath")} />
+                    </>
+                )}
+                {selectedScanOption === "Website Port Scan" && (
+                    <>
+                        <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
+                        <TextInput label={"Domain name"} {...form.getInputProps("websiteUrl")} />
+                    </>
+                )}
                 <Button type={"submit"}>start netcat</Button>
                 {SaveOutputToTextFile(output)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />

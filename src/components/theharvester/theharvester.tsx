@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch, Checkbox } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch, Checkbox, NativeSelect } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -29,10 +29,31 @@ interface FormValuesType {
     virtualhost: boolean;
     takeover: boolean;
 }
+const sources = [
+    { value: "anubis", label: "Anubis" },
+    { value: "baidu", label: "Baidu" },
+    { value: "brave", label: "Brave" },
+    { value: "certspotter", label: "Certspotter" },
+    { value: "crtsh", label: "Crtsh" },
+    { value: "dnsdumpster", label: "DNSdumpster" },
+    { value: "duckduckgo", label: "DuckDuckGo" },
+    { value: "hackertarget", label: "Hackertarget" },
+    { value: "otx", label: "OTX" },
+    { value: "rapiddns", label: "RapidDNS" },
+    { value: "sitedossier", label: "Sitedossier" },
+    { value: "subdomaincenter", label: "Subdomaincenter" },
+    { value: "subdomainfinderc99", label: "Subdomainfinderc99" },
+    { value: "threatminer", label: "Threatminer" },
+    { value: "urlscan", label: "URLScan" },
+    { value: "virustotal", label: "Virustotal" },
+    { value: "yahoo", label: "Yahoo" },
+];
+
 const TheHarvester = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
+    const [selectedSource, setSelectedSource] = useState("");
     const [pid, setPid] = useState("");
     let form = useForm({
         initialValues: {
@@ -80,7 +101,7 @@ const TheHarvester = () => {
     };
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-        const args = ["-d", `${values.domain}`, "-l", `${values.resultlimit}`, "-b", `${values.source}`];
+        const args = ["-d", `${values.domain}`, "-l", `${values.resultlimit}`, "-b", `${selectedSource}`];
         if (values.startresult) {
             args.push(`-S ${values.startresult}`);
         }
@@ -140,36 +161,15 @@ const TheHarvester = () => {
                     type="number"
                     {...form.getInputProps("resultlimit")}
                 />
-                <label>Source</label>
-                <select {...form.getInputProps("source")}>
-                    <option value="baidu">Baidu</option>
-                    <option value="bing">Bing</option>
-                    <option value="censys">Censys</option>
-                    <option value="certspotter">Certspotter</option>
-                    <option value="crtsh">Crtsh</option>
-                    <option value="dnsdumpster">DNSdumpster</option>
-                    <option value="duckduckgo">DuckDuckGo</option>
-                    <option value="exalead">Exalead</option>
-                    <option value="google">Google</option>
-                    <option value="hackertarget">Hackertarget</option>
-                    <option value="hunter">Hunter</option>
-                    <option value="intelx">Intelx</option>
-                    <option value="linkedin">Linkedin</option>
-                    <option value="linkedin_links">Linkedin Links</option>
-                    <option value="netcraft">Netcraft</option>
-                    <option value="otx">Otx</option>
-                    <option value="securityTrails">SecurityTrails</option>
-                    <option value="shodan">Shodan</option>
-                    <option value="spyse">Spyse</option>
-                    <option value="sublist3r">Sublist3r</option>
-                    <option value="threatcrowd">Threatcrowd</option>
-                    <option value="threatminer">Threatminer</option>
-                    <option value="trello">Trello</option>
-                    <option value="twitter">Twitter</option>
-                    <option value="vhost">Vhost</option>
-                    <option value="virustotal">Virustotal</option>
-                    <option value="yahoo">Yahoo</option>
-                </select>
+                <NativeSelect
+                    value={selectedSource}
+                    onChange={(e) => setSelectedSource(e.target.value)}
+                    title={"Source"}
+                    data={sources}
+                    required
+                    placeholder={"Select a source"}
+                    description={"Source to search from"}
+                />
                 {checkedAdvanced && (
                     <>
                         <TextInput
@@ -212,4 +212,5 @@ const TheHarvester = () => {
         </form>
     );
 };
+
 export default TheHarvester;
