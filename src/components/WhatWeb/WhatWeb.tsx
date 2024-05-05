@@ -1,38 +1,23 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
-
-// Component constants.
-const title = "Arjun";
-
-// Contains the description of the component.
-const description_userguide =
-    "Arjun is a command-line tool specifically designed to look for hidden HTTP parameters. " +
-    "Arjun will try to discover parameters and give you a new set of endpoints to test on. " +
-    "It is a multi-threaded application and can handle rate limits. It supports GET,POST,XML and JSON methods.\n\n" +
-    "How to use Arjun:\n\n" +
-    "Step 1: Enter a valid URL. E.g. https://www.deakin.edu.au\n" +
-    "Step 2: Enter an optional JSON output filename. E.g. arjunoutput.\n" +
-    "Step 3: Click the scan option to commence scanning.\n" +
-    "Step 4: View the output block below to see the results.";
+import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
- * Represents the form values for the Arjun component.
+ * Represents the form values for the WhatWeb component.
  */
-interface FormValues {
+interface FormValuesType {
     url: string;
     outputFileName: string;
-    stability: boolean;
 }
 
-function Arjuntool() {
+function WhatWeb() {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
@@ -44,7 +29,16 @@ function Arjuntool() {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
 
     // Component Constants.
-    const dependencies = ["arjun"]; // Contains the dependencies required for the component.
+    const dependencies = ["whatweb"]; // Contains the dependencies required for the component.
+    const title = "WhatWeb"; // Title of component.
+    const description =
+        "WhatWeb identifies websites. It recognises web technologies including content management systems, blogging platforms, statistic/analytics packages, JavaScript libraries, web servers, and embedded devices."; // Contains the description of the component.
+    const steps =
+        "Step 1: Enter a valid URL or IP address. E.g. https://www.deakin.edu.au\n" +
+        "Step 2: Click the scan option to commence scanning.\n" +
+        "Step 3: View the output block below to see the results.";
+    const sourceLink = ""; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
@@ -66,7 +60,6 @@ function Arjuntool() {
         initialValues: {
             url: "",
             outputFileName: "",
-            stability: false,
         },
     });
 
@@ -112,16 +105,23 @@ function Arjuntool() {
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
-
-    // Actions taken after saving the output
+    /**
+     * handSaveComplete: Recognises that the output file has been saved.
+     * Passes the saved status back to SaveOutputToTextFile_v2
+     */
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
         setHasSaved(true);
         setAllowSave(false);
     };
 
-    const onSubmit = async (values: FormValues) => {
+    /**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the airbase-ng tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
+     */
+    const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
 
@@ -129,29 +129,23 @@ function Arjuntool() {
         setLoading(true);
 
         // Construct arguments for the aircrack-ng command based on form input
-        const args = ["-u", values.url];
+        const args = [values.url];
 
-        // Conditional. If the user has specified stability, add the --stable option to the command.
-        if (values.stability) {
-            args.push("--stable");
-        }
-        if (values.outputFileName) {
-            args.push("-o", values.outputFileName);
-        }
+        // Execute the whatweb command via helper method and handle its output or potential errors
+        CommandHelper.runCommandGetPidAndOutput("whatweb", args, handleProcessData, handleProcessTermination)
 
-        // Execute the arjun command via helper method and handle its output or potential errors
-        CommandHelper.runCommandGetPidAndOutput("arjun", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 // Update the output with the results of the command execution.
                 setOutput(output);
 
                 // Store the process ID of the executed command.
                 setPid(pid);
+                console.log("The then statement has been run");
             })
             .catch((error) => {
                 // Display any errors encountered during command execution.
                 setOutput(error.message);
-
+                console.log("An error has been caught");
                 // Deactivate loading state.
                 setLoading(false);
             });
@@ -169,27 +163,33 @@ function Arjuntool() {
 
     return (
         <>
-            {!loadingModal && (
-                <InstallationModal
-                    isOpen={opened}
-                    setOpened={setOpened}
-                    feature_description={description_userguide}
-                    dependencies={dependencies}
-                ></InstallationModal>
-            )}
-            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                {LoadingOverlayAndCancelButton(loading, pid)}
-                <Stack>
-                    {UserGuide(title, description_userguide)}
-                    <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                    <Switch size="md" label="Stability mode" {...form.getInputProps("stability" as keyof FormValues)} />
-                    <Button type={"submit"}>Scan</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </Stack>
-            </form>
+            <RenderComponent
+                title={title}
+                description={description}
+                steps={steps}
+                tutorial={tutorial}
+                sourceLink={sourceLink}
+            >
+                {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+                )}
+                <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Stack>
+                        <TextInput label={"URL or IP address"} required {...form.getInputProps("url")} />
+                        <Button type={"submit"}>Scan</Button>
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    </Stack>
+                </form>
+            </RenderComponent>
         </>
     );
 }
 
-export default Arjuntool;
+export default WhatWeb;
