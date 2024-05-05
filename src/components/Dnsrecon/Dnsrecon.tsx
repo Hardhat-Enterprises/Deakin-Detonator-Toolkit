@@ -17,6 +17,9 @@ const description_userguide =
     "Step 2: Click Scan to commence Dnsrecon's operation.\n\n" +
     "Step 3: View the Output block below to view the results of the tools execution.";
 
+/**
+* Represents the form values for the Dnsrecon component.
+*/    
 interface FormValues {
     url: string;
 }
