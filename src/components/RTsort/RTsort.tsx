@@ -4,6 +4,8 @@ import React, { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+
 
 const title = "Rainbow Table Sort (rtsort)";
 const description_userguide =
@@ -81,7 +83,7 @@ const rtsort = () => {
             setOutput(e);
         }
 
-        setLoading(false);
+        //setLoading(false);
     };
 
     const clearOutput = useCallback(() => {
@@ -91,7 +93,7 @@ const rtsort = () => {
     // placeholder="/home/user/rainbowcrack/tables/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt"
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
-            <LoadingOverlay visible={loading} />
+            {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput
