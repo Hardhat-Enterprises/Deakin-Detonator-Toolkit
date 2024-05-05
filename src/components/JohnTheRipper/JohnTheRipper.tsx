@@ -37,9 +37,6 @@ const JohnTheRipper = () => {
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
 
     // Component constants
-    const [selectedFileTypeOption, setSelectedFileTypeOption] = useState(""); // State variable to store the selected file type.
-    const [selectedModeOption, setSelectedModeOption] = useState(""); // State variable to store the selected crack mode.
-    const [selectedIncrementOption, setSelectedIncrementOption] = useState(""); // State variable to store the selected increment order.
     const modeRequiringWordList = ["dictionary"]; // Crack modes that require a wordlist
     const modeRequiringIncrementOrder = ["incremental"]; // Crack modes that require an increment order
     const fileTypes = ["zip", "rar", "raw"]; // File types supported by the tool
