@@ -37,6 +37,7 @@ const NetcatTool = () => {
     var [output, setOutput] = useState("");
     const [selectedScanOption, setSelectedNetcatOption] = useState("");
     const [checkedVerboseMode, setCheckedVerboseMode] = useState(false);
+    const [pid, setPid] = useState("");
 
     let form = useForm({
         initialValues: {
