@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -184,7 +184,7 @@ function Dnsrecon() {
                     <InstallationModal
                         isOpen={opened}
                         setOpened={setOpened}
-                        feature-description={description}
+                        feature_description={description}
                         dependencies={dependencies}
                     ></InstallationModal>
                 )}
