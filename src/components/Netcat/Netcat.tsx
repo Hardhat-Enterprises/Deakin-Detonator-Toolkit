@@ -87,8 +87,10 @@ const NetcatTool = () => {
         let args = [``];
 
         //If verbose mode is checked, v flag is added to args
+        //These two lines are used for different command structures so typos don't occur in the presence or absence of verbose mode
+        //A task for future students could be to reduce it to one line of code that works across all commands without creating syntax errors
         const verboseFlag = checkedVerboseMode ? "v" : "";
-        const verboseFlagWithDash = checkedVerboseMode ? " -v" : "";
+        const verboseFlagWithSpaceAndDash = checkedVerboseMode ? " -v" : "";
 
         //Switch case
         switch (values.netcatOptions) {
@@ -113,11 +115,10 @@ const NetcatTool = () => {
                 break;
 
             case "Connect": //Connects to an nc listener, nc syntax: nc -v <ip address> <port number>
-                args = [`${verboseFlagWithDash}`];
-                args.push(values.ipAddress);
-                args.push(values.portNumber);
+                let command = `nc${verboseFlagWithSpaceAndDash} ${values.ipAddress} ${values.portNumber}`;
 
-                CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
+                //CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
+                CommandHelper.runCommandGetPidAndOutput("bash", ["-c", command], handleProcessData, handleProcessTermination)
                     .then(({ output, pid }) => {
                         // Update the UI with the results from the executed command
                         setOutput(output);
@@ -169,7 +170,7 @@ const NetcatTool = () => {
             case "Send File": //Sends file from attacker to victim, syntax: nc -v -w <timeout seconds> <IP address> <port number> < <file path>
                 //File to send can be located anywhere, as long as file path is correctly specified
                 try {
-                    let command = `nc${verboseFlagWithDash} -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
+                    let command = `nc${verboseFlagWithSpaceAndDash} -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
                     let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction
                     setOutput(output);
                 } catch (e: any) {
