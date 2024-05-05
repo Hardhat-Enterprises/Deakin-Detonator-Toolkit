@@ -9,24 +9,10 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
-
 /**
  * Represents the form values for the Dnsrecon component.
  */
 interface FormValuesType {
-
-const title = "DNSRecon";
-const description_userguide =
-    "DNSRecon is a python script that has an extensive list of functions. This tool is primarily used for " +
-    "DNS enumeration and scanning, for example, it may enumerate DNS records, SRV records, and hosts and " +
-    "domains using Google.\n\nFurther uses for the tool can be found at: https://www.kali.org/tools/dnsrecon/\n\n" +
-    "Using DNSRecon:\n" +
-    "Step 1: Enter a target domain URL, for example, https://www.deakin.edu.au\n\n" +
-    "Step 2: Click scan to commence DNSRecon's operation.\n\n" +
-    "Step 3: View the output block below to view the results of the tool's execution.";
-
-interface FormValues {
-
     url: string;
 }
 
