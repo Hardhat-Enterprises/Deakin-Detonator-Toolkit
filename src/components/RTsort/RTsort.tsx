@@ -17,6 +17,7 @@ interface FormValuesType {
 const rtsort = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
+    const [pid, setPid] = useState("");
 
     let form = useForm({
         initialValues: {
