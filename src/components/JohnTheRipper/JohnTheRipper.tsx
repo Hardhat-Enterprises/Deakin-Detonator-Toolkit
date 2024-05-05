@@ -60,7 +60,7 @@ const JohnTheRipper = () => {
         "John the Ripper is a fast password cracker, its primary purpose is to detect weak Unix passwords."; // Description of the component.
     const steps =
         "Step 1: Specify the filepath to the password file that you wish to crack (e.g ~/passwords.txt).\n" +
-        "Step 2: Specify the hashing algorithm used by the password you are trying to crack (e.g md5). For a full list of options, open new terminal and use john --list=formats command.\n" +
+        "Step 2: Specify the hashing algorithm used by the password you are trying to crack (e.g md5).\n" +
         "Step 3: Specify which cracking mode to use.\n" +
         "Step 4: Select the file type of the password file.\n" +
         "Step 5: If you selected the Incremental or Dictionary cracking type, an additional option will appear to select a character set or specify a filepath for a wordlist respectively." +
