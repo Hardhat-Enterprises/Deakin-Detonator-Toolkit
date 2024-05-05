@@ -67,7 +67,6 @@ import NSLookup from "./NSLookupTool/NSLookupTool";
 import AMAP from "./Amap/Amap";
 import WhatWeb from "./WhatWeb/WhatWeb";
 
-
 export interface RouteProperties {
     name: string;
     path: string;
