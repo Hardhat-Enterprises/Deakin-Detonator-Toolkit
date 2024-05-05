@@ -1,4 +1,4 @@
-import { Button, NativeSelect, Stack, TextInput, Checkbox } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput, Checkbox, LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -91,6 +91,13 @@ const NetcatTool = () => {
         // back into SaveOutputToTextFile to inform the user
         setHasSaved(true);
         setAllowSave(false);
+    };
+
+    const handleCancel = () => {
+        if (pid !== null) {
+            const args = [`-15`, pid];
+            CommandHelper.runCommand("kill", args);
+        }
     };
 
 
@@ -250,7 +257,14 @@ const NetcatTool = () => {
     //<ConsoleWrapper output={output} clearOutputCallback={clearOutput} /> prints the terminal on the tool
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
+            <LoadingOverlay visible={loading} />
+            {loading && (
+                <div>
+                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
+                        Cancel
+                    </Button>
+                </div>
+            )}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <Checkbox
