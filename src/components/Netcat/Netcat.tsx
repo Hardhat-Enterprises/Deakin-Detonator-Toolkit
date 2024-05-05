@@ -82,6 +82,22 @@ const NetcatTool = () => {
         [handleProcessData]
     );
 
+    // Sends a SIGTERM signal to gracefully terminate the process
+    const handleCancel = () => {
+        if (pid !== null) {
+            const args = [`-15`, pid];
+            CommandHelper.runCommand("kill", args);
+        }
+    };
+
+    // Actions taken after saving the output
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
+
     const onSubmit = async (values: FormValuesType) => {
         //Starts off with the IP address after netcat
         //Ex: nc <ip address>
