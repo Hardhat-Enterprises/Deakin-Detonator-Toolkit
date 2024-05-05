@@ -42,7 +42,6 @@ const JohnTheRipper = () => {
     const fileTypes = ["zip", "rar", "raw"]; // File types supported by the tool
     const mode = ["incremental", "dictionary", "single"]; // Crack modes supported by the tool
     const incrementOrder = [
-        // Increment orders
         "ASCII",
         "LM_ASCII",
         "AlNum",
