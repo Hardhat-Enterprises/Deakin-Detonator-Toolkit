@@ -1,11 +1,13 @@
+import { useState, useCallback } from "react";
 import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
+import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
 * Represents the form values for the Dnsrecon component.
@@ -61,7 +63,7 @@ interface FormValues {
                 setLoadingModal(false); // Also set loading to false in case of error
             });
     }, []);
-    
+
     /**
     * handleProcessData: Callback to handle and append new data from the child process to the output.
     * It updates the state by appending the new data received to the existing output.
