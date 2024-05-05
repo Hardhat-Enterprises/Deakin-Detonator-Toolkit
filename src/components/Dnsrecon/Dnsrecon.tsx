@@ -120,16 +120,39 @@ interface FormValues {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                <Button type={"submit"}>Scan</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+        <>
+            {/* Render the UserGuide component with component details */}
+            <RenderComponent
+                title={title}
+                description={description}
+                steps={steps}
+                tutorial={tutorial}
+                sourceLink={sourceLink}
+            >
+                {/* Render the installation modal if the command is not available */}
+                {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        featureDescription={description}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+                )}
+                <form onSubmit={form.onSubmit(onSubmit)}>
+                    {/* Render the loading overlay and cancel button */}
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Stack>
+                        <TextInput label={"URL"} required {...form.getInputProps("url")} />
+                        <Button type={"submit"}>Start {title}</Button>
+                        {/* Render the save output to file component */}
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        {/* Render the console wrapper component */}
+                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    </Stack>
+                </form>
+            </RenderComponent>
+        </>
     );
 }
+
 export default Dnsrecon;
