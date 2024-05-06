@@ -29,7 +29,8 @@ interface FormValuesType { //Relevant form values to be added as tshark options 
 //TShark Options
 const tsharkOptions = [ //More options to be added (version check could be kept?)
     "Version Check",
-    "Sniffer"
+    "Sniffer",
+    "Reader"
 ];
 
 const TShark = () => {
@@ -130,6 +131,23 @@ const TShark = () => {
                         setAllowSave(true);
                     });
                 break;
+
+            case "Reader": //The Reader function reads the traffic from the sniffers output file 
+                args = [`-r`];
+                args.push(values.filePath);
+
+                try {
+                    let output = await CommandHelper.runCommand("tshark", args);
+                    setOutput(output);
+                } catch (e: any) {
+                    setOutput(e);
+                } finally{
+                    // Set loading state to false and allow output saving
+                    setLoading(false);
+                    setAllowSave(true);
+                }
+
+                break;
         }
     };
 
@@ -185,10 +203,3 @@ const TShark = () => {
 };
 
 export default TShark;
-
-//  Seth tasks:
-// 
-// -Implement a Reader feature, this feature will use the -r (read) flag to read the file genereated from running the sniffer. 
-//  This command can use the same structure as version checker.
-//
-// *Note: don't worry about making it fancy, just make these additions simple, I will touch up the code after the basic functions are there.*
