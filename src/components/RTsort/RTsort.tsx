@@ -89,8 +89,6 @@ const rtsort = () => {
         } catch (e: any) {
             setOutput(e);
         }
-
-        //setLoading(false);
     };
 
     const clearOutput = useCallback(() => {
