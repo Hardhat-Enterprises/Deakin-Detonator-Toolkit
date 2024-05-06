@@ -62,6 +62,13 @@ const rtsort = () => {
         [handleProcessData]
     );
 
+    /**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the rt-sort tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form value, containing path.
+     */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
         const args = [`${values.path}`];
