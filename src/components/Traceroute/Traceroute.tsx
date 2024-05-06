@@ -18,8 +18,8 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 interface FormValuesType {
     hostname: string;
     portNumber: string;
-    tracerouteSwitch: string;
-    tracerouteOptions: string;
+    traceRouteSwitch: string;
+    traceRouteOptions: string;
 }
 
 // Component State Variables.
@@ -38,7 +38,7 @@ const TracerouteTool = () => {
         initialValues: {
             hostname: "",
             portNumber: "",
-            tracerouteOptions: "",
+            traceRouteOptions: "",
         },
     });
 
@@ -114,7 +114,7 @@ const TracerouteTool = () => {
     );
 
     //Traceroute Options
-    const tracerouteSwitch = [
+    const traceRouteSwitch = [
         "Traceroute ICMP scan",
         "Traceroute TCP scan",
         "Traceroute UDP scan",
@@ -132,7 +132,7 @@ const TracerouteTool = () => {
         let args = [``];
 
         // Switch case to handle different traceroute scan options based on user selection.
-        switch (values.tracerouteSwitch) {
+        switch (values.traceRouteSwitch) {
             case "Traceroute ICMP scan":
                 // Traceroute ICMP scan uses the '-I' option
                 // Syntax: traceroute -I <hostname>
@@ -186,7 +186,7 @@ const TracerouteTool = () => {
                 // Traceroute custom scan allows specifying additional options
                 // Syntax: traceroute <options> <hostname>
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
-                args.push(`${values.tracerouteOptions}`); // Adds custom options to the arguments list.
+                args.push(`${values.traceRouteOptions}`); // Adds custom options to the arguments list.
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
@@ -222,7 +222,7 @@ const TracerouteTool = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
-            <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, tracerouteSwitch: selectedScanOption }))}>
+            <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, traceRouteSwitch: selectedScanOption }))}>
                 <Stack>
                     <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
                     <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("tracerouteOptions")} />
@@ -230,7 +230,7 @@ const TracerouteTool = () => {
                         value={selectedScanOption}
                         onChange={(e) => setSelectedTracerouteOption(e.target.value)}
                         title={"Traceroute option"}
-                        data={tracerouteSwitch}
+                        data={traceRouteSwitch}
                         required
                         placeholder={"Pick a scan option"}
                         description={"Type of scan to perform"}
