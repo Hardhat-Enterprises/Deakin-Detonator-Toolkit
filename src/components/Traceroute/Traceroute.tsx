@@ -26,7 +26,7 @@ interface FormValuesType {
  * The Traceroute component.
  * @returns The Traceroute component.
  */
-const TracerouteTool = () => {
+const Traceroute = () => {
     // Component State Variables.
     var [output, setOutput] = useState(""); //State to store the output from the traceroute command
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
@@ -248,4 +248,4 @@ const TracerouteTool = () => {
     );
 };
 
-export default TracerouteTool;
+export default Traceroute;
