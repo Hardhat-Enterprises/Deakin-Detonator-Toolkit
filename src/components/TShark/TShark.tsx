@@ -201,16 +201,16 @@ const TShark = () => {
                 />
                 {selectedTSharkOption === "Sniffer" && (
                     <>
-                        <TextInput label={"Interface"} required {...form.getInputProps("interface")} />
-                        <TextInput label={"File/File Path"} required {...form.getInputProps("filePath")} />
-                        <TextInput label={"Sniff Duration (seconds)"} {...form.getInputProps("sniffDuration")} />
-                        <TextInput label={"Packet Count"} {...form.getInputProps("packetCount")} />
-                        <TextInput label={"Traffic Filter"} {...form.getInputProps("trafficFilter")} />
+                        <TextInput label={"Interface"} placeholder="e.g. eth0" required {...form.getInputProps("interface")} />
+                        <TextInput label={"File/File Path"} placeholder="e.g. /path/to/destination/capture.pcap" required {...form.getInputProps("filePath")} />
+                        <TextInput label={"Sniff Duration (seconds)"} placeholder="e.g. 30" {...form.getInputProps("sniffDuration")} />
+                        <TextInput label={"Packet Count"} placeholder="e.g. 10" {...form.getInputProps("packetCount")} />
+                        <TextInput label={"Traffic Filter"} placeholder="e.g. tcp" {...form.getInputProps("trafficFilter")} />
                     </>
                 )}
                 {selectedTSharkOption === "Reader" && (
                     <>
-                        <TextInput label={"File/File Path"} required {...form.getInputProps("filePath")} />
+                        <TextInput label={"File/File Path"} placeholder="e.g. /path/to/destination/capture.pcap" required {...form.getInputProps("filePath")} />
                     </>
                 )}
                 <Button type={"submit"}>start tshark</Button>
