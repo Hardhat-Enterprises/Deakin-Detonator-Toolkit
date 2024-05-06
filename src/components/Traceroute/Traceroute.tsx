@@ -139,13 +139,15 @@ const Traceroute = () => {
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
-                try {
-                    let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output); // Sets the output to the state.
-                    setAllowSave(true);
-                } catch (e: any) {
-                    setOutput(e); // Sets error to the state if command fails.
-                }
+                CommandHelper.runCommandGetPidAndOutput("traceroute", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                    })
+                    .catch((error) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
 
                 break;
             // Traceroute TCP scan uses the '-T' option.
@@ -154,7 +156,7 @@ const Traceroute = () => {
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-T`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
-                CommandHelper.runCommandGetPidAndOutput("arjun", args, handleProcessData, handleProcessTermination)
+                CommandHelper.runCommandGetPidAndOutput("traceroute", args, handleProcessData, handleProcessTermination)
                     .then(({ pid, output }) => {
                         setPid(pid);
                         setOutput(output);
