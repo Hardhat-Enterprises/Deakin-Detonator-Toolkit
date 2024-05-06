@@ -53,6 +53,14 @@ const Traceroute = () => {
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["traceroute"]; // Contains the dependencies required by the component.
 
+    // Traceroute Options - Types of traceroute scans available.
+    const traceRouteSwitch = [
+        "Traceroute ICMP scan",
+        "Traceroute TCP scan",
+        "Traceroute UDP scan",
+        "Traceroute custom scan",
+    ];
+
     let form = useForm({
         initialValues: {
             hostname: "",
@@ -99,32 +107,20 @@ const Traceroute = () => {
             // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-
                 // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-
                 // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-
             // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
-
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
-
-    //Traceroute Options
-    const traceRouteSwitch = [
-        "Traceroute ICMP scan",
-        "Traceroute TCP scan",
-        "Traceroute UDP scan",
-        "Traceroute custom scan",
-    ]; // Options for different types of traceroute scans
 
     /**
      * onSubmit: Asynchronous handler for the form submission event event related to executing traceroute commands.
@@ -144,10 +140,10 @@ const Traceroute = () => {
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output); //Sets the output to the state.
+                    setOutput(output); // Sets the output to the state.
                     setAllowSave(true);
                 } catch (e: any) {
-                    setOutput(e); //Sets error to the state if command fails.
+                    setOutput(e); // Sets error to the state if command fails.
                 }
 
                 break;
@@ -160,10 +156,10 @@ const Traceroute = () => {
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output); //Sets the output to the state.
+                    setOutput(output); // Sets the output to the state.
                     setAllowSave(true);
                 } catch (e: any) {
-                    setOutput(e); //Sets error to the state if command fails.
+                    setOutput(e); // Sets error to the state if command fails.
                 }
 
                 break;
@@ -176,10 +172,10 @@ const Traceroute = () => {
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output); //Sets the output to the state.
+                    setOutput(output); // Sets the output to the state.
                     setAllowSave(true);
                 } catch (e: any) {
-                    setOutput(e); //Sets error to the state if command fails.
+                    setOutput(e); // Sets error to the state if command fails.
                 }
 
                 break;
@@ -192,10 +188,10 @@ const Traceroute = () => {
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output); //Sets the output to the state.
+                    setOutput(output); // Sets the output to the state.
                     setAllowSave(true);
                 } catch (e: any) {
-                    setOutput(e); //Sets error to the state if command fails.
+                    setOutput(e); // Sets error to the state if command fails.
                 }
 
                 break;
@@ -206,7 +202,7 @@ const Traceroute = () => {
      * Clears the output displayed to the user.
      */
     const clearOutput = useCallback(() => {
-        setOutput(""); //Memoized function to clear the output.
+        setOutput(""); // Memoized function to clear the output.
         setHasSaved(true);
         setAllowSave(false);
     }, [setOutput]);
