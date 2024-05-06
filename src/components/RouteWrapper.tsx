@@ -548,8 +548,7 @@ export const ROUTES: RouteProperties[] = [
         name: "TShark",
         path: "/tools/TShark",
         element: <TShark />,
-        description:
-            "Captures data packet's info and display in different fromats.",
+        description: "Captures data packet's info and display in different fromats.",
         category: "Network Scanning and Enumeration",
     },
     {
