@@ -84,7 +84,7 @@ const NetcatTool = () => {
     const onSubmit = async (values: FormValuesType) => {
         //Starts off with the IP address after netcat
         //Ex: nc <ip address>
-        let args = [``];
+        let args = [];
 
         //If verbose mode is checked, v flag is added to args
         //These two lines are used for different command structures so typos don't occur in the presence or absence of verbose mode
