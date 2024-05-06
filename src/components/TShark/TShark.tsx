@@ -23,7 +23,6 @@ const steps =
     "Step 9: Provide the file path for the capture file and click start.";
 const sourceLink = ""; // Link to the source code (or Kali Tools).
 const tutorial = ""; // Link to the official documentation/tutorial.
-const dependencies = ["tshark"]; // Contains the dependencies required by the component.
 
 //Variables
 interface FormValuesType {
