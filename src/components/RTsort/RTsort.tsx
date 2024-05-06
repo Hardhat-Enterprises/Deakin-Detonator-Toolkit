@@ -35,7 +35,14 @@ const rtsort = () => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
     }, []);
 
-   
+    /**
+     * handleProcessTermination: Callback to handle the termination of the child process.
+     * Once the process termination is handled, it clears the process PID reference and
+     * deactivates the loading overlay.
+     * @param {object} param - An object containing information about the process termination.
+     * @param {number} param.code - The exit code of the terminated process.
+     * @param {number} param.signal - The signal code indicating how the process was terminated.
+     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
