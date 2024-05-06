@@ -38,13 +38,6 @@ const Traceroute = () => {
     const [allowSave, setAllowSave] = useState(false); // State variable indicating whether the current state is valid and the results can be saved.
     const [hasSaved, setHasSaved] = useState(false); // State variable that tracks whether the results have already been saved to avoid redundant operations.
     // Form hook to handle form input.
-    let form = useForm({
-        initialValues: {
-            hostname: "",
-            portNumber: "",
-            traceRouteOptions: "",
-        },
-    });
 
     // Component Constants.
     const title = "Traceroute"; //Title of the tool.
@@ -59,6 +52,14 @@ const Traceroute = () => {
     const sourceLink = "https://www.kali.org/tools/"; //Link to the source code(or kali tools).
     const tutorial = ""; //Link to the official documentation/tutorial.
     const dependencies = ["traceroute"]; //Contains the dependencies required by the component.
+
+    let form = useForm({
+        initialValues: {
+            hostname: "",
+            portNumber: "",
+            traceRouteOptions: "",
+        },
+    });
 
     // Check is the command is avaliable and set the state variables accordingly.
     useEffect(() => {
@@ -133,23 +134,20 @@ const Traceroute = () => {
      * the destination hostname, and optional custom traceroute options.
      */
     const onSubmit = async (values: FormValuesType) => {
-        let args = [``];
+        setLoading(true); // Activate loading state to indicate ongoing process
+        let args = [""];
 
         // Switch case to handle different traceroute scan options based on user selection.
         switch (values.traceRouteSwitch) {
             case "Traceroute ICMP scan":
-                // Traceroute ICMP scan uses the '-I' option
-                // Syntax: traceroute -I <hostname>
-                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
-                    // Executed the traceroute command using a shell script and captures the output.
                     let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output); // Sets the output to the state.
+                    setOutput(output); //Sets the output to the state.
                     setAllowSave(true);
                 } catch (e: any) {
-                    setOutput(e); // Sets error to the state if command fails.
+                    setOutput(e); //Sets error to the state if command fails.
                 }
 
                 break;
@@ -178,10 +176,10 @@ const Traceroute = () => {
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output); // Sets the output to the state.
+                    setOutput(output); //Sets the output to the state.
                     setAllowSave(true);
                 } catch (e: any) {
-                    setOutput(e); // Sets errors to the state if command fails.
+                    setOutput(e); //Sets error to the state if command fails.
                 }
 
                 break;
@@ -194,10 +192,10 @@ const Traceroute = () => {
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
                     let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output); // Set the output to the state.
+                    setOutput(output); //Sets the output to the state.
                     setAllowSave(true);
                 } catch (e: any) {
-                    setOutput(e); // Sets errors to the state if the command fails.
+                    setOutput(e); //Sets error to the state if command fails.
                 }
 
                 break;
