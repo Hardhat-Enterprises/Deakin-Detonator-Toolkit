@@ -35,7 +35,7 @@ interface FormValuesType {
 }
 
 //TShark Options
-const tsharkOptions = ["Version Check", "Sniffer", "Reader"];
+const tsharkOptions = ["Sniffer", "Reader"];
 
 const TShark = () => {
     var [output, setOutput] = useState("");
@@ -101,22 +101,6 @@ const TShark = () => {
 
         //Switch case
         switch (values.tsharkOptions) {
-            case "Version Check":
-                args = [`-version`];
-
-                try {
-                    let output = await CommandHelper.runCommand("tshark", args);
-                    setOutput(output);
-                } catch (e: any) {
-                    setOutput(e);
-                } finally {
-                    // Set loading state to false and allow output saving
-                    setLoading(false);
-                    setAllowSave(true);
-                }
-
-                break;
-
             case "Sniffer": //Sniffs for packets and outputs it to a capture file, duration set to 60 as default, filter and count set to nothing as default
                 let command = `tshark -i ${values.interface} -w ${values.filePath}${duration}${filter}${count}`;
 
