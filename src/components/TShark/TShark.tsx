@@ -8,7 +8,7 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 // Component Constants.
-const title = "TShark"; // Title of the component.
+const title = "TShark"; 
 const description = "TShark is a tool used to capture network traffic and write it to a capture file. The captured traffic can be view directly by opening the file, otherwise the Reader option can be used to output the file contents to the output box."; // Description of the component.
 const steps =
     "Step 1: Select Sniffer mode.\n" +
@@ -25,7 +25,7 @@ const tutorial = ""; // Link to the official documentation/tutorial.
 const dependencies = ["tshark"]; // Contains the dependencies required by the component.
 
 //Variables
-interface FormValuesType { //Relevant form values to be added as tshark options are added
+interface FormValuesType { 
     tsharkOptions: string;
     interface: string;
     filePath: string; 
@@ -35,7 +35,7 @@ interface FormValuesType { //Relevant form values to be added as tshark options 
 }
 
 //TShark Options
-const tsharkOptions = [ //More options to be added (version check could be kept?)
+const tsharkOptions = [ 
     "Version Check",
     "Sniffer",
     "Reader"
@@ -49,7 +49,7 @@ const TShark = () => {
     const [loading, setLoading] = useState(false); // State variable to indicate loading state
     const [pid, setPid] = useState("");
 
-    let form = useForm({ //Relevant form values to be added as tshark options are added
+    let form = useForm({ 
         initialValues: {
             interface: "",
             filePath: "",
@@ -98,12 +98,14 @@ const TShark = () => {
 
         //duration set to 60 as defualt if Sniff Duration field is empty
         const duration = values.sniffDuration == "" ? " -a duration:60" : ` -a duration:${values.sniffDuration}`;
+        //traffic filter set to nothing as default
         const filter = values.trafficFilter == "" ? "" : ` -f ${values.trafficFilter}`;
+        //packet count set to nothing as default
         const count = values.packetCount == "" ? "" : ` -c ${values.packetCount}`;
 
         //Switch case
         switch (values.tsharkOptions) {
-            case "Version Check": //This version check option is a baseline to test that TShark functions
+            case "Version Check": 
                 args = [`-version`];
 
                 try {
@@ -119,7 +121,7 @@ const TShark = () => {
 
                 break;
 
-            case "Sniffer": //Sniffs for packets and outputs it to a fule, duration set to 60 as default, filter set to nothing as default
+            case "Sniffer": //Sniffs for packets and outputs it to a capture file, duration set to 60 as default, filter and count set to nothing as default
                 let command = `tshark -i ${values.interface} -w ${values.filePath}${duration}${filter}${count}`;
 
                 CommandHelper.runCommandGetPidAndOutput("bash", ["-c", command], handleProcessData, handleProcessTermination)
@@ -142,7 +144,7 @@ const TShark = () => {
                     });
                 break;
 
-            case "Reader": //The Reader function reads the traffic from the sniffers output file 
+            case "Reader": //The Reader function reads the traffic from the sniffers output file and displays it in the output box
                 args = [`-r`];
                 args.push(values.filePath);
 
