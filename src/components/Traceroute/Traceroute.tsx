@@ -40,7 +40,7 @@ const Traceroute = () => {
     // Form hook to handle form input.
 
     // Component Constants.
-    const title = "Traceroute"; //Title of the tool.
+    const title = "Traceroute"; // Title of the tool.
     const description = // Description of the component
         "The Traceroute tool provides a utility for displaying the route that IP packets have used as they travel to a particular network or host.";
     const steps =
@@ -49,9 +49,9 @@ const Traceroute = () => {
         "Step 3: Select a scan option.\n" +
         "Step 4: Click Scan to commence Traceroute operation.\n" +
         "Step 5: View the Output block below to view the results of the tool's execution.";
-    const sourceLink = "https://www.kali.org/tools/"; //Link to the source code(or kali tools).
-    const tutorial = ""; //Link to the official documentation/tutorial.
-    const dependencies = ["traceroute"]; //Contains the dependencies required by the component.
+    const sourceLink = "https://www.kali.org/tools/traceroute/"; // Link to the source code(or kali tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["traceroute"]; // Contains the dependencies required by the component.
 
     let form = useForm({
         initialValues: {
@@ -82,7 +82,7 @@ const Traceroute = () => {
      * @param {string} data - The data recieved from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); //Append new data to the previous output.
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
     /**
