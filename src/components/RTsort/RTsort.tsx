@@ -71,8 +71,8 @@ const rtsort = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-        const args = [`${values.path}`];
-
+        //const args = [`${values.path}`];
+        const args = [values.path];
         const filteredArgs = args.filter((arg) => arg !== ""); //variable to store non empty string as argument
 
         // Please note this command should not be cancelled as this will cause the rainbow table to be corrupted
