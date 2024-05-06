@@ -118,7 +118,7 @@ const NetcatTool = () => {
                 let command = `nc${verboseFlagWithSpaceAndDash} ${values.ipAddress} ${values.portNumber}`;
 
                 //Using a "command" variable and executing it through bash makes it easier to avoid syntax errors associated with
-                //verbose mode selection and using the args[] structure (syntax error is an extra space when verbose is unchecked). 
+                //verbose mode selection and using the args[] structure (syntax error is an extra space when verbose is unchecked).
                 CommandHelper.runCommandGetPidAndOutput(
                     "bash",
                     ["-c", command],
