@@ -23,6 +23,7 @@ interface FormValuesType { //Relevant form values to be added as tshark options 
     interface: string;
     filePath: string; 
     sniffDuration: string;
+    trafficFilter: string;
 }
 
 //TShark Options
@@ -43,7 +44,8 @@ const TShark = () => {
         initialValues: {
             interface: "",
             filePath: "",
-            sniffDuration: ""
+            sniffDuration: "",
+            trafficFilter: "",
         },
     });
 
@@ -85,7 +87,8 @@ const TShark = () => {
         let args = [``];
 
         //duration set to 60 as defualt if Sniff Duration field is empty
-        const duration = values.sniffDuration == "" ? " -a duration:60" : ` -a duration:${values.sniffDuration}`
+        const duration = values.sniffDuration == "" ? " -a duration:60" : ` -a duration:${values.sniffDuration}`;
+        const filter = values.trafficFilter == "" ? "" : ` -f ${values.trafficFilter}`;
 
         //Switch case
         switch (values.tsharkOptions) {
@@ -105,8 +108,8 @@ const TShark = () => {
 
                 break;
 
-            case "Sniffer": //Sniffs for packets and outputs it to a fule, duration set to 60 as default
-                let command = `tshark -i ${values.interface} -w ${values.filePath}${duration}`;
+            case "Sniffer": //Sniffs for packets and outputs it to a fule, duration set to 60 as default, filter set to nothing as default
+                let command = `tshark -i ${values.interface} -w ${values.filePath}${duration}${filter}`;
 
                 CommandHelper.runCommandGetPidAndOutput("bash", ["-c", command], handleProcessData, handleProcessTermination)
                     .then(({ output, pid }) => {
@@ -171,6 +174,7 @@ const TShark = () => {
                 <TextInput label={"Interface"} required {...form.getInputProps("interface")} />
                 <TextInput label={"File/File Path"} required {...form.getInputProps("filePath")} />
                 <TextInput label={"Sniff Duration (seconds)"} {...form.getInputProps("sniffDuration")} />
+                <TextInput label={"Traffic Filter"} {...form.getInputProps("trafficFilter")} />
                 <Button type={"submit"}>start tshark</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
@@ -183,8 +187,7 @@ const TShark = () => {
 export default TShark;
 
 //  Seth tasks:
-// -Incorporate the -f (filter) flag to the sniffer, which applies a capture filter to capture only packets that match specific criteria.
-//
+// 
 // -Implement a Reader feature, this feature will use the -r (read) flag to read the file genereated from running the sniffer. 
 //  This command can use the same structure as version checker.
 //
