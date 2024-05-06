@@ -293,6 +293,11 @@
                         "args": true
                     },
                     {
+                        "name": "whatweb",
+                        "cmd": "whatweb",
+                        "args": true
+                    },
+                    {
                         "name": "nikto",
                         "cmd": "nikto",
                         "args": true
