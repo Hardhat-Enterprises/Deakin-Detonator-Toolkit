@@ -28,7 +28,7 @@ interface FormValuesType {
  */
 const Traceroute = () => {
     // Component State Variables.
-    var [output, setOutput] = useState(""); //State to store the output from the traceroute command
+    const [output, setOutput] = useState(""); //State to store the output from the traceroute command
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [selectedScanOption, setSelectedTracerouteOption] = useState(""); // State to store the selected scan type.
