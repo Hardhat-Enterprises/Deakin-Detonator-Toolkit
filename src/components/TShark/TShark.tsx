@@ -189,10 +189,19 @@ const TShark = () => {
                     placeholder={"Pick a TShark option"}
                     description={"Type of action to perform"}
                 />
-                <TextInput label={"Interface"} required {...form.getInputProps("interface")} />
-                <TextInput label={"File/File Path"} required {...form.getInputProps("filePath")} />
-                <TextInput label={"Sniff Duration (seconds)"} {...form.getInputProps("sniffDuration")} />
-                <TextInput label={"Traffic Filter"} {...form.getInputProps("trafficFilter")} />
+                {selectedTSharkOption === "Sniffer" && (
+                    <>
+                        <TextInput label={"Interface"} required {...form.getInputProps("interface")} />
+                        <TextInput label={"File/File Path"} required {...form.getInputProps("filePath")} />
+                        <TextInput label={"Sniff Duration (seconds)"} {...form.getInputProps("sniffDuration")} />
+                        <TextInput label={"Traffic Filter"} {...form.getInputProps("trafficFilter")} />
+                    </>
+                )}
+                {selectedTSharkOption === "Reader" && (
+                    <>
+                        <TextInput label={"File/File Path"} required {...form.getInputProps("filePath")} />
+                    </>
+                )}
                 <Button type={"submit"}>start tshark</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
