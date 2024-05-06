@@ -22,6 +22,10 @@ interface FormValuesType {
     traceRouteOptions: string;
 }
 
+/**
+ * The Traceroute component.
+ * @returns The Traceroute component.
+ */
 const TracerouteTool = () => {
     // Component State Variables.
     var [output, setOutput] = useState(""); //State to store the output from the traceroute command
