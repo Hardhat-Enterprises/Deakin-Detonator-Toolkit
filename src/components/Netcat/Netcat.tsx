@@ -117,7 +117,6 @@ const NetcatTool = () => {
             case "Connect": //Connects to an nc listener, nc syntax: nc -v <ip address> <port number>
                 let command = `nc${verboseFlagWithSpaceAndDash} ${values.ipAddress} ${values.portNumber}`;
 
-                //CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
                 CommandHelper.runCommandGetPidAndOutput(
                     "bash",
                     ["-c", command],
