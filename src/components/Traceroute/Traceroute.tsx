@@ -34,7 +34,7 @@ const Traceroute = () => {
     const [selectedScanOption, setSelectedTracerouteOption] = useState(""); // State to store the selected scan type.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the model is opened.
-    const [LoadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the model.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the model.
     const [allowSave, setAllowSave] = useState(false); // State variable indicating whether the current state is valid and the results can be saved.
     const [hasSaved, setHasSaved] = useState(false); // State variable that tracks whether the results have already been saved to avoid redundant operations.
     // Form hook to handle form input.
@@ -226,6 +226,14 @@ const Traceroute = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
             <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, traceRouteSwitch: selectedScanOption }))}>
                 <Stack>
                     <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
