@@ -3,7 +3,6 @@ import { useForm } from "@mantine/form";
 import { useCallback, useEffect, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -225,7 +224,6 @@ const TracerouteTool = () => {
         >
             <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, tracerouteSwitch: selectedScanOption }))}>
                 <Stack>
-                    {UserGuide(title, description)}
                     <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
                     <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("tracerouteOptions")} />
                     <NativeSelect
