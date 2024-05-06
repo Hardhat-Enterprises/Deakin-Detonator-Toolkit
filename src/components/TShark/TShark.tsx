@@ -8,8 +8,9 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 // Component Constants.
-const title = "TShark"; 
-const description = "TShark is a tool used to capture network traffic and write it to a capture file. The captured traffic can be view directly by opening the file, otherwise the Reader option can be used to output the file contents to the output box."; // Description of the component.
+const title = "TShark";
+const description =
+    "TShark is a tool used to capture network traffic and write it to a capture file. The captured traffic can be view directly by opening the file, otherwise the Reader option can be used to output the file contents to the output box."; // Description of the component.
 const steps =
     "Step 1: Select Sniffer mode.\n" +
     "Step 2: Specify the interface to capture traffic from such as eth0.\n" +
@@ -25,21 +26,17 @@ const tutorial = ""; // Link to the official documentation/tutorial.
 const dependencies = ["tshark"]; // Contains the dependencies required by the component.
 
 //Variables
-interface FormValuesType { 
+interface FormValuesType {
     tsharkOptions: string;
     interface: string;
-    filePath: string; 
+    filePath: string;
     sniffDuration: string;
     trafficFilter: string;
     packetCount: string;
 }
 
 //TShark Options
-const tsharkOptions = [ 
-    "Version Check",
-    "Sniffer",
-    "Reader"
-];
+const tsharkOptions = ["Version Check", "Sniffer", "Reader"];
 
 const TShark = () => {
     var [output, setOutput] = useState("");
@@ -49,7 +46,7 @@ const TShark = () => {
     const [loading, setLoading] = useState(false); // State variable to indicate loading state
     const [pid, setPid] = useState("");
 
-    let form = useForm({ 
+    let form = useForm({
         initialValues: {
             interface: "",
             filePath: "",
@@ -105,7 +102,7 @@ const TShark = () => {
 
         //Switch case
         switch (values.tsharkOptions) {
-            case "Version Check": 
+            case "Version Check":
                 args = [`-version`];
 
                 try {
@@ -113,7 +110,7 @@ const TShark = () => {
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
-                } finally{
+                } finally {
                     // Set loading state to false and allow output saving
                     setLoading(false);
                     setAllowSave(true);
@@ -124,7 +121,12 @@ const TShark = () => {
             case "Sniffer": //Sniffs for packets and outputs it to a capture file, duration set to 60 as default, filter and count set to nothing as default
                 let command = `tshark -i ${values.interface} -w ${values.filePath}${duration}${filter}${count}`;
 
-                CommandHelper.runCommandGetPidAndOutput("bash", ["-c", command], handleProcessData, handleProcessTermination)
+                CommandHelper.runCommandGetPidAndOutput(
+                    "bash",
+                    ["-c", command],
+                    handleProcessData,
+                    handleProcessTermination
+                )
                     .then(({ output, pid }) => {
                         // Update the UI with the results from the executed command
                         setOutput(output);
@@ -153,7 +155,7 @@ const TShark = () => {
                     setOutput(output);
                 } catch (e: any) {
                     setOutput(e);
-                } finally{
+                } finally {
                     // Set loading state to false and allow output saving
                     setLoading(false);
                     setAllowSave(true);
@@ -163,10 +165,10 @@ const TShark = () => {
         }
     };
 
-     /**
+    /**
      * Handles the completion of output saving by updating state variables.
      */
-     const handleSaveComplete = () => {
+    const handleSaveComplete = () => {
         setHasSaved(true); // Set hasSaved state to true
         setAllowSave(false); // Disallow further output saving
     };
@@ -189,37 +191,64 @@ const TShark = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
-        <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, tsharkOptions: selectedTSharkOption }))}>
-            <Stack>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-                <NativeSelect
-                    value={selectedTSharkOption}
-                    onChange={(e) => setSelectedTSharkOption(e.target.value)}
-                    title={"TShark option"}
-                    data={tsharkOptions}
-                    required
-                    placeholder={"Pick a TShark option"}
-                    description={"Type of action to perform"}
-                />
-                {selectedTSharkOption === "Sniffer" && (
-                    <>
-                        <TextInput label={"Interface"} placeholder="e.g. eth0" required {...form.getInputProps("interface")} />
-                        <TextInput label={"File/File Path"} placeholder="e.g. /path/to/destination/capture.pcap" required {...form.getInputProps("filePath")} />
-                        <TextInput label={"Sniff Duration (seconds)"} placeholder="e.g. 30" {...form.getInputProps("sniffDuration")} />
-                        <TextInput label={"Packet Count"} placeholder="e.g. 10" {...form.getInputProps("packetCount")} />
-                        <TextInput label={"Traffic Filter"} placeholder="e.g. tcp" {...form.getInputProps("trafficFilter")} />
-                    </>
-                )}
-                {selectedTSharkOption === "Reader" && (
-                    <>
-                        <TextInput label={"File/File Path"} placeholder="e.g. /path/to/destination/capture.pcap" required {...form.getInputProps("filePath")} />
-                    </>
-                )}
-                <Button type={"submit"}>start tshark</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+            <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, tsharkOptions: selectedTSharkOption }))}>
+                <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <NativeSelect
+                        value={selectedTSharkOption}
+                        onChange={(e) => setSelectedTSharkOption(e.target.value)}
+                        title={"TShark option"}
+                        data={tsharkOptions}
+                        required
+                        placeholder={"Pick a TShark option"}
+                        description={"Type of action to perform"}
+                    />
+                    {selectedTSharkOption === "Sniffer" && (
+                        <>
+                            <TextInput
+                                label={"Interface"}
+                                placeholder="e.g. eth0"
+                                required
+                                {...form.getInputProps("interface")}
+                            />
+                            <TextInput
+                                label={"File/File Path"}
+                                placeholder="e.g. /path/to/destination/capture.pcap"
+                                required
+                                {...form.getInputProps("filePath")}
+                            />
+                            <TextInput
+                                label={"Sniff Duration (seconds)"}
+                                placeholder="e.g. 30"
+                                {...form.getInputProps("sniffDuration")}
+                            />
+                            <TextInput
+                                label={"Packet Count"}
+                                placeholder="e.g. 10"
+                                {...form.getInputProps("packetCount")}
+                            />
+                            <TextInput
+                                label={"Traffic Filter"}
+                                placeholder="e.g. tcp"
+                                {...form.getInputProps("trafficFilter")}
+                            />
+                        </>
+                    )}
+                    {selectedTSharkOption === "Reader" && (
+                        <>
+                            <TextInput
+                                label={"File/File Path"}
+                                placeholder="e.g. /path/to/destination/capture.pcap"
+                                required
+                                {...form.getInputProps("filePath")}
+                            />
+                        </>
+                    )}
+                    <Button type={"submit"}>start tshark</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
         </RenderComponent>
     );
 };
