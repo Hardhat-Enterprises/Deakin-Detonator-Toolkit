@@ -9,10 +9,17 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 
 // Component Constants.
 const title = "TShark"; // Title of the component.
-const description = "TShark is a tool used to..."; // Description of the component.
+const description = "TShark is a tool used to capture network traffic and write it to a capture file. The captured traffic can be view directly by opening the file, otherwise the Reader option can be used to output the file contents to the output box."; // Description of the component.
 const steps =
-    "Step 1: Type in the name of your fake host.\n" +
-    "Step 2: ...";
+    "Step 1: Select Sniffer mode.\n" +
+    "Step 2: Specify the interface to capture traffic from such as eth0.\n" +
+    "Step 3: Specify the output file path (should end with a pcap file).\n" +
+    "Step 4: Input the amount of seconds that TShark should capture traffic for (Optional).\n" +
+    "Step 5: Input a packet count to determine the total numbe rof packets to scan before stopping (optional).\n" +
+    "Step 6: Input a traffic filter to filter for specific trraffic such as tcp (optional).\n" +
+    "Step 7: Click start to sniff traffic.\n" +
+    "Step 8: Switch to Reader mode.\n" +
+    "Step 9: Provide the file path for the capture file and click start.";
 const sourceLink = ""; // Link to the source code (or Kali Tools).
 const tutorial = ""; // Link to the official documentation/tutorial.
 const dependencies = ["tshark"]; // Contains the dependencies required by the component.
