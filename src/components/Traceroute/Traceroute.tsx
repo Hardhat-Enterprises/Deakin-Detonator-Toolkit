@@ -136,6 +136,7 @@ const Traceroute = () => {
         // Switch case to handle different traceroute scan options based on user selection.
         switch (values.traceRouteSwitch) {
             case "Traceroute ICMP scan":
+                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 try {
@@ -147,10 +148,9 @@ const Traceroute = () => {
                 }
 
                 break;
-
+            // Traceroute TCP scan uses the '-T' option.
+            // Syntax: traceroute -T <hostname>
             case "Traceroute TCP scan":
-                // TRaceroute TCP scan uses the '-T' option.
-                // Syntax: traceroute -T <hostname>
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-T`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
@@ -163,10 +163,9 @@ const Traceroute = () => {
                 }
 
                 break;
-
+            // Traceroute UDP scan uses the '-U' option.
+            // Syntax: traceroute -U <hostname>
             case "Traceroute UDP scan":
-                // Traceroute UDP scan uses the '-U' option.
-                // Syntax: traceroute -U <hostname>
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-U`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
@@ -179,10 +178,9 @@ const Traceroute = () => {
                 }
 
                 break;
-
+            // Traceroute custom scan allows specifying additional options
+            // Syntax: traceroute <options> <hostname>
             case "Traceroute custom scan":
-                // Traceroute custom scan allows specifying additional options
-                // Syntax: traceroute <options> <hostname>
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`${values.traceRouteOptions}`); // Adds custom options to the arguments list.
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
