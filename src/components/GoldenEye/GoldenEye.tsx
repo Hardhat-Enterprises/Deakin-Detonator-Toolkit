@@ -26,19 +26,17 @@ interface FormValuesType {
  * @returns The Goldeneye component.
  */
 const GoldenEye = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-    const [selectedMethod, setSelectedMethod] = useState("");
-    const [selectedSslCheck, setSelectedSslCheck] = useState("");
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); 
-    const [loadingModal, setLoadingModal] = useState(true);
-    const [opened, setOpened] = useState(!isCommandAvailable);
-
-    const dosHttpMethod = ["get", "post", "random"];
-    const sslCheckStatus = ["Yes", "No"];
+    //Component State Variables.
+    const [loading, setLoading] = useState(false);// State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [allowSave, setAllowSave] = useState(false);// State variable to indicate if saving is allowed
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved
+    const [selectedMethod, setSelectedMethod] = useState(""); //State variable to store the method selected
+    const [selectedSslCheck, setSelectedSslCheck] = useState(""); //State variable to store selected ssl check
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable that indicates if the modal is opened.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable to indicate loading state of the modal.
 
     // Component Constants.
     const title = "Goldeneye"; // Title of the component.
@@ -52,7 +50,10 @@ const GoldenEye = () => {
     const sourceLink = "https://www.kali.org/tools/goldeneye/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["python3"] // Contains the dependencies required by the component.
+    const dosHttpMethod = ["get", "post", "random"]; //Contains types of dosHttpMethod available
+    const sslCheckStatus = ["Yes", "No"]; //Contains selection for form value sslCheckStatus
 
+    // Form hook to handle form input.
     let form = useForm({
         initialValues: {
             url: "",
@@ -85,7 +86,7 @@ const GoldenEye = () => {
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
     /**
@@ -98,16 +99,23 @@ const GoldenEye = () => {
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+
+                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            // Clear the child process pid reference
+
+            // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
-            // Cancel the Loading Overlay
+
+            // Cancel the loading overlay. The process has completed.
             setLoading(false);
 
             // Allow Saving as the output is finalised
@@ -120,11 +128,10 @@ const GoldenEye = () => {
     
     /**
      * handleSaveComplete: handle state changes when saves are completed
-     * Once the output is saved, disallow duplicate saves
+     * Once the output is saved, prevent duplicate saves
      */
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
+        //Disallow saving once the output is saved
         setHasSaved(true);
         setAllowSave(false);
     };
@@ -137,27 +144,36 @@ const GoldenEye = () => {
      * @param {FormValuesType} values - The form values, containing the url, userAgent, worker, sockets, method, sslCheck
      */
     const onSubmit = async (values: FormValuesType) => {
+        // Activate loading state to indicate ongoing process
         setLoading(true);
 
+        // Construct arguments for the aircrack-ng command based on form input
         const args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/Goldeneye/goldeneye.py`, `${values.url}`];
-
         values.userAgent ? args.push(`-u`, `${values.userAgent}`) : undefined;
         values.worker ? args.push(`-w`, `${values.worker}`) : undefined;
         values.sockets ? args.push(`-s`, `${values.sockets}`) : undefined;
         selectedMethod ? args.push(`-m`, selectedMethod) : undefined;
         selectedSslCheck === "No" ? args.push(`-n`) : undefined;
 
+
         try {
+            // Execute the aircrack-ng command via helper method and handle its output or potential errors
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "python3",
                 args,
                 handleProcessData,
                 handleProcessTermination
             );
+
+            // Update the UI with the results from the executed command
             setPid(result.pid);
             setOutput(result.output);
+            console.log(pid)
         } catch (e: any) {
+            // Display any errors encountered during command execution
             setOutput(e.message);
+            // Deactivate loading state
+            setLoading(false);
         }
     };
 
@@ -166,6 +182,8 @@ const GoldenEye = () => {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
+
+        //Disallow saving when output is cleared
         setHasSaved(false);
         setAllowSave(false);
     }, [setOutput]);
