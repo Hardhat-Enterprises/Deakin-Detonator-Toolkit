@@ -277,7 +277,7 @@ export const ROUTES: RouteProperties[] = [
         name: "ARP Fingerprint",
         path: "/tools/ARPFingerprint",
         element: <ARPFingerprint />,
-        description: "ARP fingerprint tool to gather information about devices on the network.",
+        description: "ARP Fingerprint tool to gather information about devices on the network.",
         category: "Network Scanning and Enumeration",
     },
 

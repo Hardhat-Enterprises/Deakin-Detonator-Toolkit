@@ -68,8 +68,8 @@
                         "args": true
                     },
                     {
-                        "name": "ARPFingerprinting",
-                        "cmd": "arp-scan",
+                        "name": "arp-fingerprint ",
+                        "cmd": "arp-fingerprint ",
                         "args": true
                     },
                     {
