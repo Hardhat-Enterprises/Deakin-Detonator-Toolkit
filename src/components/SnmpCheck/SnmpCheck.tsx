@@ -6,6 +6,16 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 
+/**
+ * FormValues defines the structure of the object used to hold form state in the SNMP check component.
+ * @field ip: The ip address or hostname
+ * @field port: The SNMP port, defaults to 161 if not specified.
+ */
+interface FormValues {
+    ip: string;
+    port: number;
+}
+
 const title = "SnmpCheck";
 const description_userguide =
     "The SNMP Check tool enables you to perform SNMP (Simple Network Management Protocol) checks on a specific IP " +
@@ -16,16 +26,6 @@ const description_userguide =
     "Step 3: Click the 'Scan' button to initiate the SNMP check.\n\n" +
     "The tool will establish a connection to the specified device and retrieve SNMP-related information, such as system details, interfaces, and performance metrics. The results will be displayed in the console below.";
 ("Please note that SNMP checks require appropriate permissions and credentials. Ensure that you have the necessary access rights before performing a scan.");
-
-/**
- * FormValues defines the structure of the object used to hold form state in the SNMP check component.
- * @field ip: The ip address or hostname
- * @field port: The SNMP port, defaults to 161 if not specified.
- */
-interface FormValues {
-    ip: string;
-    port: number;
-}
 
 const SnmpCheck = () => {
     const [loading, setLoading] = useState(false);
