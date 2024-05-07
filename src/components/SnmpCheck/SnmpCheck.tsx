@@ -22,8 +22,9 @@ const description_userguide = // Description of the tool.
     "address or hostname and port.";
 const steps =
     "Step 1: Enter the IP address or hostname of the target device\n" +
-    "Step 2 (Optional): Specify a target port number (default port: 161). \n" +
+    "Step 2 (Optional): Specify a target port number (default port: 161).\n" +
     "Step 3: Click the 'Scan' button to initiate the SNMP check.\n";
+const sourceLink = "https://www.kali.org/tools/snmpcheck/"; // Link to the source code.
 /**
  * The SnmpCheck component.
  * @returns The SnmpCheck component.
