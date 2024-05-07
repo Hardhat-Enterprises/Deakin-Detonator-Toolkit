@@ -9,14 +9,15 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 
 // Section: Constants and Interfaces
 const title = "ARP Fingerprint Tool";
-const description = "ARP Fingerprinting is a network reconnaissance technique used to detect the operating systems and devices in a network.";
+const description =
+    "ARP Fingerprinting is a network reconnaissance technique used to detect the operating systems and devices in a network.";
 const steps =
     "Step 1: Enter the IP address of the target device.\n" +
     "Step 2: Click Scan to start ARP fingerprinting.\n" +
     "Step 3: View the Output block below to see the fingerprinting results.";
-const sourceLink = "https://www.kali.org/tools/arp-scan/"; 
-const tutorial = ""; 
-const dependencies = ["arp-fingerprint"]; 
+const sourceLink = "https://www.kali.org/tools/arp-scan/";
+const tutorial = "";
+const dependencies = ["arp-fingerprint"];
 
 interface FormValues {
     targetIP: string;
@@ -136,7 +137,7 @@ const ARPFingerprinting = () => {
                 <Stack>
                     <TextInput label={"Target IP address"} required {...form.getInputProps("targetIP")} />
                     {!isScanning && <Button type={"submit"}>Scan</Button>}
-                   
+
                     {isScanning && <Button onClick={stopScan}>Stop</Button>}
                     {SaveOutputToTextFile(output)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
