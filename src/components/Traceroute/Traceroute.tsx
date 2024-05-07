@@ -6,6 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
@@ -139,12 +140,13 @@ const Traceroute = () => {
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
-                CommandHelper.runCommandGetPidAndOutput("traceroute", args, handleProcessData, handleProcessTermination)
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
                     .then(({ pid, output }) => {
                         setPid(pid);
                         setOutput(output);
+                        setAllowSave(true);
                     })
-                    .catch((error) => {
+                    .catch((error: any) => {
                         setLoading(false);
                         setOutput(`Error: ${error.message}`);
                     });
@@ -156,12 +158,13 @@ const Traceroute = () => {
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-T`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
-                CommandHelper.runCommandGetPidAndOutput("traceroute", args, handleProcessData, handleProcessTermination)
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
                     .then(({ pid, output }) => {
                         setPid(pid);
                         setOutput(output);
+                        setAllowSave(true);
                     })
-                    .catch((error) => {
+                    .catch((error: any) => {
                         setLoading(false);
                         setOutput(`Error: ${error.message}`);
                     });
@@ -173,13 +176,16 @@ const Traceroute = () => {
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-U`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
-                try {
-                    let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output); // Sets the output to the state.
-                    setAllowSave(true);
-                } catch (e: any) {
-                    setOutput(e); // Sets error to the state if command fails.
-                }
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                        setAllowSave(true);
+                    })
+                    .catch((error: any) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
 
                 break;
             // Traceroute custom scan allows specifying additional options
@@ -188,13 +194,16 @@ const Traceroute = () => {
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`${values.traceRouteOptions}`); // Adds custom options to the arguments list.
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
-                try {
-                    let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output); // Sets the output to the state.
-                    setAllowSave(true);
-                } catch (e: any) {
-                    setOutput(e); // Sets error to the state if command fails.
-                }
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                        setAllowSave(true);
+                    })
+                    .catch((error: any) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
 
                 break;
         }
@@ -232,6 +241,7 @@ const Traceroute = () => {
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, traceRouteSwitch: selectedScanOption }))}>
                 <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
                     <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("tracerouteOptions")} />
                     <NativeSelect
