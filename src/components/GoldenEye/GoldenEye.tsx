@@ -1,6 +1,6 @@
-import { Alert, Button, NativeSelect, Stack, TextInput } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState ,useEffect} from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -27,10 +27,10 @@ interface FormValuesType {
  */
 const GoldenEye = () => {
     //Component State Variables.
-    const [loading, setLoading] = useState(false);// State variable to indicate loading state.
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [allowSave, setAllowSave] = useState(false);// State variable to indicate if saving is allowed
+    const [allowSave, setAllowSave] = useState(false); // State variable to indicate if saving is allowed
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved
     const [selectedMethod, setSelectedMethod] = useState(""); //State variable to store the method selected
     const [selectedSslCheck, setSelectedSslCheck] = useState(""); //State variable to store selected ssl check
@@ -40,7 +40,8 @@ const GoldenEye = () => {
 
     // Component Constants.
     const title = "Goldeneye"; // Title of the component.
-    const description = "GoldenEye is a HTTP DoS Test Tool. This tool can be used to test if a site is susceptible to Deny of Service (DoS) attacks. Is possible to open several parallel connections against a URL to check if the web server can be compromised"; // Description of the component.
+    const description =
+        "GoldenEye is a HTTP DoS Test Tool. This tool can be used to test if a site is susceptible to Deny of Service (DoS) attacks. Is possible to open several parallel connections against a URL to check if the web server can be compromised"; // Description of the component.
     const steps =
         "Step 1: Enter a valid URL of the target.\n" +
         "Step 2: Enter any additional options for the scan.\n" +
@@ -49,7 +50,7 @@ const GoldenEye = () => {
         "Step 5: View the Output block below to view the results of the tool's execution.";
     const sourceLink = "https://www.kali.org/tools/goldeneye/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["python3"] // Contains the dependencies required by the component.
+    const dependencies = ["python3"]; // Contains the dependencies required by the component.
     const dosHttpMethod = ["get", "post", "random"]; //Contains types of dosHttpMethod available
     const sslCheckStatus = ["Yes", "No"]; //Contains selection for form value sslCheckStatus
 
@@ -125,7 +126,6 @@ const GoldenEye = () => {
         [handleProcessData]
     );
 
-    
     /**
      * handleSaveComplete: handle state changes when saves are completed
      * Once the output is saved, prevent duplicate saves
@@ -155,7 +155,6 @@ const GoldenEye = () => {
         selectedMethod ? args.push(`-m`, selectedMethod) : undefined;
         selectedSslCheck === "No" ? args.push(`-n`) : undefined;
 
-
         try {
             // Execute the aircrack-ng command via helper method and handle its output or potential errors
             const result = await CommandHelper.runCommandGetPidAndOutput(
@@ -168,7 +167,7 @@ const GoldenEye = () => {
             // Update the UI with the results from the executed command
             setPid(result.pid);
             setOutput(result.output);
-            console.log(pid)
+            console.log(pid);
         } catch (e: any) {
             // Display any errors encountered during command execution
             setOutput(e.message);
@@ -205,49 +204,49 @@ const GoldenEye = () => {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
-            <Stack>
-                {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-                <TextInput
-                    label={"Url of the target"}
-                    placeholder={"Example: https://www.google.com"}
-                    required
-                    {...form.getInputProps("url")}
-                />
-                <TextInput
-                    label={"List of user agents"}
-                    placeholder={"Please enter filepath for the list of useragent"}
-                    {...form.getInputProps("userAgent")}
-                />
-                <TextInput
-                    label={"Number of concurrent workers"}
-                    placeholder={"Please specify a number (Default = 10)"}
-                    {...form.getInputProps("worker")}
-                />
-                <TextInput
-                    label={"Number of concurrent sockets"}
-                    placeholder={"Please specify a number (Default = 500)"}
-                    {...form.getInputProps("sockets")}
-                />
-                <NativeSelect
-                    value={selectedMethod}
-                    onChange={(e) => setSelectedMethod(e.target.value)}
-                    title={"HTTP Method"}
-                    data={dosHttpMethod}
-                    placeholder={"HTTP Method"}
-                    description={"Please select type of HTTP request to flood server with"}
-                />
-                <NativeSelect
-                    value={selectedSslCheck}
-                    onChange={(e) => setSelectedSslCheck(e.target.value)}
-                    title={"SSL Check"}
-                    data={sslCheckStatus}
-                    placeholder={"ssl Check"}
-                    description={"Do you want to verify the ssl certificate"}
-                />
-                <Button type={"submit"}>Launch Dos Attack</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
+                <Stack>
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    <TextInput
+                        label={"Url of the target"}
+                        placeholder={"Example: https://www.google.com"}
+                        required
+                        {...form.getInputProps("url")}
+                    />
+                    <TextInput
+                        label={"List of user agents"}
+                        placeholder={"Please enter filepath for the list of useragent"}
+                        {...form.getInputProps("userAgent")}
+                    />
+                    <TextInput
+                        label={"Number of concurrent workers"}
+                        placeholder={"Please specify a number (Default = 10)"}
+                        {...form.getInputProps("worker")}
+                    />
+                    <TextInput
+                        label={"Number of concurrent sockets"}
+                        placeholder={"Please specify a number (Default = 500)"}
+                        {...form.getInputProps("sockets")}
+                    />
+                    <NativeSelect
+                        value={selectedMethod}
+                        onChange={(e) => setSelectedMethod(e.target.value)}
+                        title={"HTTP Method"}
+                        data={dosHttpMethod}
+                        placeholder={"HTTP Method"}
+                        description={"Please select type of HTTP request to flood server with"}
+                    />
+                    <NativeSelect
+                        value={selectedSslCheck}
+                        onChange={(e) => setSelectedSslCheck(e.target.value)}
+                        title={"SSL Check"}
+                        data={sslCheckStatus}
+                        placeholder={"ssl Check"}
+                        description={"Do you want to verify the ssl certificate"}
+                    />
+                    <Button type={"submit"}>Launch Dos Attack</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
             </form>
         </RenderComponent>
     );
