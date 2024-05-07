@@ -3,25 +3,11 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState ,useEffect} from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
-
-const title = "GoldenEye";
-const description_userguide =
-    "GoldenEye is a HTTP DoS Test Tool, where it withholds the potential to test whether or not a site is susceptible " +
-    "to a Denial of Service (DoS) attack. The tool allows for several connection in parallel against a URL to check " +
-    "if the web sever is able to be compromised.\n\nFurther information can be found at: https://www.kali.org/tools/goldeneye/\n\n" +
-    "Using GoldenEye:\n" +
-    "Step 1: Enter a valid URL of the target.\n" +
-    "       Eg: https://www.google.com\n\n" +
-    "Step 2: Enter any additional options for the scan.\n" +
-    "       Eg: U\n\n" +
-    "Step 3: Enter any additional parameters for the scan.\n" +
-    "       Eg: W 100\n\n" +
-    "Step 4: Click Scan to commence GoldenEye's operation.\n\n" +
-    "Step 5: View the Output block below to view the results of the tool's execution.";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 interface FormValues {
     url: string;
@@ -47,7 +33,18 @@ const GoldenEye = () => {
     const [loadingModal, setLoadingModal] = useState(true);
     const [opened, setOpened] = useState(!isCommandAvailable);
 
-    const dependencies = ["goldeneye"]
+    // Component Constants.
+    const title = "Goldeneye"; // Title of the component.
+    const description = "GoldenEye is a HTTP DoS Test Tool. This tool can be used to test if a site is susceptible to Deny of Service (DoS) attacks. Is possible to open several parallel connections against a URL to check if the web server can be compromised"; // Description of the component.
+    const steps =
+        "Step 1: Enter a valid URL of the target.\n" +
+        "Step 2: Enter any additional options for the scan.\n" +
+        "Step 3: Enter any additional parameters for the scan.\n" +
+        "Step 4: Click Scan to commence GoldenEye's operation.\n" +
+        "Step 5: View the Output block below to view the results of the tool's execution.";
+    const sourceLink = "https://www.kali.org/tools/goldeneye/"; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["goldeneye"] // Contains the dependencies required by the component.
 
     let form = useForm({
         initialValues: {
@@ -145,10 +142,24 @@ const GoldenEye = () => {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            <form onSubmit={form.onSubmit(onSubmit)}>
             <Stack>
                 {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-                {UserGuide(title, description_userguide)}
                 <TextInput
                     label={"Url of the target"}
                     placeholder={"Example: https://www.google.com"}
@@ -190,7 +201,8 @@ const GoldenEye = () => {
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
-        </form>
+            </form>
+        </RenderComponent>
     );
 };
 
