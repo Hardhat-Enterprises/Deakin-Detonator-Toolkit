@@ -25,6 +25,7 @@ const steps =
     "Step 2 (Optional): Specify a target port number (default port: 161).\n" +
     "Step 3: Click the 'Scan' button to initiate the SNMP check.\n";
 const sourceLink = "https://www.kali.org/tools/snmpcheck/"; // Link to the source code.
+const tutorial = ""; // Link to the official documentation/tutorial.
 /**
  * The SnmpCheck component.
  * @returns The SnmpCheck component.
