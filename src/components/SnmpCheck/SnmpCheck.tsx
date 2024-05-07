@@ -31,10 +31,11 @@ const description_userguide =
  * @returns The SnmpCheck component.
  */
 const SnmpCheck = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); //State to store the output from the snmpCheck command
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
 
+    // Form hook to handle form input.
     let form = useForm({
         initialValues: {
             ip: "",
@@ -47,7 +48,7 @@ const SnmpCheck = () => {
      * @param {string} data - The string data recieved from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
     /**
@@ -60,16 +61,19 @@ const SnmpCheck = () => {
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            // Clear the child process pid reference
+            // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
-            // Cancel the Loading Overlay
+            // Cancel the Loading Overlay. The process has completed.
             setLoading(false);
         },
         [handleProcessData]
