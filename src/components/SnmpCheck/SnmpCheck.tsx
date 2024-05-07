@@ -7,6 +7,7 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
  * FormValues defines the structure of the object used to hold form state in the SNMP check component.
@@ -104,15 +105,6 @@ const SnmpCheck = () => {
     );
 
     /**
-     * Sends a SIGTERM signal to the child process to request a graceful termination.
-     */
-    const handleCancel = () => {
-        if (pid !== null) {
-            const args = [`-15`, pid];
-            CommandHelper.runCommand("kill", args);
-        }
-    };
-    /**
      * Submits the form data to initiate the SNMP check command.
      * @param {FormValuesType} values - The form values containing the IP address and port number.
      */
@@ -161,15 +153,8 @@ const SnmpCheck = () => {
             sourceLink={sourceLink}
         >
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                <LoadingOverlay visible={loading} />
-                {loading && (
-                    <div>
-                        <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                            Cancel
-                        </Button>
-                    </div>
-                )}
                 <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
                     <NumberInput label={"Port"} {...form.getInputProps("port")} />
                     <Button type={"submit"}>Scan</Button>
