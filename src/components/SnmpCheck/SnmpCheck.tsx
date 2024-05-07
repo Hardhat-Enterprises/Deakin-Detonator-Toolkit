@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useEffect, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -19,7 +19,7 @@ interface FormValuesType {
 }
 // Component Constants.
 const title = "SnmpCheck"; // Title of the tool.
-const description_userguide = // Description of the tool.
+const description = // Description of the tool.
     "The SNMP Check tool enables you to perform SNMP (Simple Network Management Protocol) checks on a specific IP " +
     "address or hostname and port.";
 const steps =
@@ -153,24 +153,31 @@ const SnmpCheck = () => {
     }, []);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            <LoadingOverlay visible={loading} />
-            {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
-            )}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
-                <NumberInput label={"Port"} {...form.getInputProps("port")} />
-                <Button type={"submit"}>Scan</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                <LoadingOverlay visible={loading} />
+                {loading && (
+                    <div>
+                        <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
+                            Cancel
+                        </Button>
+                    </div>
+                )}
+                <Stack>
+                    <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
+                    <NumberInput label={"Port"} {...form.getInputProps("port")} />
+                    <Button type={"submit"}>Scan</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 
