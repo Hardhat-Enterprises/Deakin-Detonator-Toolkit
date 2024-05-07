@@ -15,9 +15,9 @@ interface FormValuesType {
     ip: string;
     port: number;
 }
-
-const title = "SnmpCheck";
-const description_userguide =
+// Component Constants.
+const title = "SnmpCheck"; // Title of the tool.
+const description_userguide = // Description of the tool.
     "The SNMP Check tool enables you to perform SNMP (Simple Network Management Protocol) checks on a specific IP " +
     "address or hostname and port. SNMP is a widely used protocol for managing and monitoring network devices." +
     " \n\nTo perform a scan, follow these steps: \n\n" +
