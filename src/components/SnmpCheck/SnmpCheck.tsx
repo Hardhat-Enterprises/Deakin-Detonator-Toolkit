@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
@@ -41,6 +41,8 @@ const SnmpCheck = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [allowSave, setAllowSave] = useState(false); // State variable indicating whether the current state is valid and the results can be saved.
+    const [hasSaved, setHasSaved] = useState(false); // State variable that tracks whether the results have already been saved to avoid redundant operations.
 
     // Form hook to handle form input.
     let form = useForm({
@@ -129,6 +131,7 @@ const SnmpCheck = () => {
             setPid(result.pid);
             // Update the UI with the results from the executed command
             setOutput(result.output);
+            setAllowSave(true);
         } catch (e: any) {
             // Display any errors encountered during command execution
             setOutput(e.message);
@@ -143,6 +146,11 @@ const SnmpCheck = () => {
         // Memoized function to clear the output.
         setOutput("");
     }, [setOutput]);
+
+    const handleSaveComplete = useCallback(() => {
+        setHasSaved(true);
+        setAllowSave(false);
+    }, []);
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
@@ -159,7 +167,7 @@ const SnmpCheck = () => {
                 <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
                 <NumberInput label={"Port"} {...form.getInputProps("port")} />
                 <Button type={"submit"}>Scan</Button>
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
