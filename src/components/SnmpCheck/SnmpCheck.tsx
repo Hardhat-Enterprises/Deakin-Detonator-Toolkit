@@ -19,13 +19,11 @@ interface FormValuesType {
 const title = "SnmpCheck"; // Title of the tool.
 const description_userguide = // Description of the tool.
     "The SNMP Check tool enables you to perform SNMP (Simple Network Management Protocol) checks on a specific IP " +
-    "address or hostname and port. SNMP is a widely used protocol for managing and monitoring network devices." +
-    " \n\nTo perform a scan, follow these steps: \n\n" +
-    "Step 1: Enter the IP address or hostname of the target device\n\n" +
-    "Step 2 (Optional): Specify a target port number (default port: 161). \n\n" +
-    "Step 3: Click the 'Scan' button to initiate the SNMP check.\n\n" +
-    "The tool will establish a connection to the specified device and retrieve SNMP-related information, such as system details, interfaces, and performance metrics. The results will be displayed in the console below.";
-("Please note that SNMP checks require appropriate permissions and credentials. Ensure that you have the necessary access rights before performing a scan.");
+    "address or hostname and port.";
+const steps =
+    "Step 1: Enter the IP address or hostname of the target device\n" +
+    "Step 2 (Optional): Specify a target port number (default port: 161). \n" +
+    "Step 3: Click the 'Scan' button to initiate the SNMP check.\n";
 /**
  * The SnmpCheck component.
  * @returns The SnmpCheck component.
