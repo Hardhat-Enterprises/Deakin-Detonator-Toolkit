@@ -6,6 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { IconAlertCircle } from "@tabler/icons";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
+
 interface FormValues {
     ip: string;
     port: string;
@@ -122,6 +123,7 @@ const Gyoithon = () => {
         setOutput(output + "Report generated successfully!");
         setLoading(false);
         setValue("export");
+        setAllowSave(true);
     };
 
     const ShowReport = async () => {
@@ -163,6 +165,8 @@ const Gyoithon = () => {
     }, [setOutput]);
 
     const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
         setHasSaved(true);
         setAllowSave(false);
     };
