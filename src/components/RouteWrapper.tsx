@@ -65,6 +65,7 @@ import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import WhatWeb from "./WhatWeb/WhatWeb";
+import Sublist3r from "./Sublist3r/Sublist3r";
 
 export interface RouteProperties {
     name: string;
@@ -563,6 +564,13 @@ export const ROUTES: RouteProperties[] = [
         element: <WPScan />,
         description:
             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
+        category: "Web Application Testing",
+    },
+    {
+        name: "Sublist3r",
+        path: "/tools/Sublist3r",
+        element: <Sublist3r />,
+        description: "Sublist3r looks up sub domains of websites.",
         category: "Web Application Testing",
     },
 ];
