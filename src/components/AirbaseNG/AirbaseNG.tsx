@@ -5,7 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; //v2
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
  * TODO:
@@ -136,7 +136,7 @@ const AirbaseNG = () => {
 
     return (
         <form onSubmit={form.onSubmit(onSubmit)}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
+            {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
             <Stack>
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"Name of your fake Host"} required {...form.getInputProps("FakeHost")} />
