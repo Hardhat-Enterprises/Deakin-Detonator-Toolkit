@@ -140,6 +140,7 @@ const SnmpCheck = () => {
      * Clears the output state.
      */
     const clearOutput = useCallback(() => {
+        // Memoized function to clear the output.
         setOutput("");
     }, [setOutput]);
 
