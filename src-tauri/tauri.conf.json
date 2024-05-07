@@ -296,6 +296,11 @@
                         "name": "whatweb",
                         "cmd": "whatweb",
                         "args": true
+                    },
+                    {
+                        "name": "sublist3r",
+                        "cmd": "sublist3r",
+                        "args": true
                     }
                 ]
             },
