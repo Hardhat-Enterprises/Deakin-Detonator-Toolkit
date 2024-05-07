@@ -108,6 +108,11 @@
                         "args": true
                     },
                     {
+                        "name": "Arpscan",
+                        "cmd": "Arpscan",
+                        "args": true
+                    },
+                    {
                         "name": "kill",
                         "cmd": "kill",
                         "args": true
