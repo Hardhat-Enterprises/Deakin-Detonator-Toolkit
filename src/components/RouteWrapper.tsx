@@ -65,6 +65,8 @@ import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import Bully from "./Bully/Bully";
+import WhatWeb from "./WhatWeb/WhatWeb";
+
 
 export interface RouteProperties {
     name: string;
@@ -556,6 +558,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Urlsnarf />,
         description: "HTTP Sniffer",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "WhatWeb",
+        path: "/tools/WhatWeb",
+        element: <WhatWeb />,
+        description: "WhatWeb scans websites and recognises web technologies.",
+        category: "Web Application Testing",
     },
     {
         name: "WPScan",
