@@ -9,7 +9,7 @@ import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/O
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
-interface FormValues {
+interface FormValuesType {
     url: string;
     userAgent: string;
     worker: number;
@@ -44,7 +44,7 @@ const GoldenEye = () => {
         "Step 5: View the Output block below to view the results of the tool's execution.";
     const sourceLink = "https://www.kali.org/tools/goldeneye/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["goldeneye"] // Contains the dependencies required by the component.
+    const dependencies = ["python3"] // Contains the dependencies required by the component.
 
     let form = useForm({
         initialValues: {
@@ -110,10 +110,10 @@ const GoldenEye = () => {
         setAllowSave(false);
     };
 
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
-        const args = [`/usr/share/ddt/Goldeneye/goldeneye.py`, `${values.url}`];
+        const args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/Goldeneye/goldeneye.py`, `${values.url}`];
 
         values.userAgent ? args.push(`-u`, `${values.userAgent}`) : undefined;
         values.worker ? args.push(`-w`, `${values.worker}`) : undefined;
