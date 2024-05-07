@@ -24,15 +24,15 @@ const description_userguide =
 
 interface FormValues {
     url: string;
-    useragent: string;
+    userAgent: string;
     worker: number;
     sockets: number;
     method: string;
-    sslcheck: string;
+    sslCheck: string;
 }
 
-const DosHTTPMethod = ["get", "post", "random"];
-const SSLCheckStatus = ["Yes", "No"];
+const dosHttpMethod = ["get", "post", "random"];
+const sslCheckStatus = ["Yes", "No"];
 
 const GoldenEye = () => {
     const [loading, setLoading] = useState(false);
@@ -40,17 +40,17 @@ const GoldenEye = () => {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [selectedmethod, setSelectedMethod] = useState("");
-    const [selectedSSLCheck, setSelectedSSLCheck] = useState("");
+    const [selectedMethod, setSelectedMethod] = useState("");
+    const [selectedSslCheck, setSelectedSslCheck] = useState("");
 
     let form = useForm({
         initialValues: {
             url: "",
-            useragent: "",
+            userAgent: "",
             worker: 0,
             sockets: 0,
             method: "",
-            sslcheck: "",
+            sslCheck: "",
         },
     });
 
@@ -97,11 +97,11 @@ const GoldenEye = () => {
 
         const args = [`/usr/share/ddt/Goldeneye/goldeneye.py`, `${values.url}`];
 
-        values.useragent ? args.push(`-u`, `${values.useragent}`) : undefined;
+        values.userAgent ? args.push(`-u`, `${values.userAgent}`) : undefined;
         values.worker ? args.push(`-w`, `${values.worker}`) : undefined;
         values.sockets ? args.push(`-s`, `${values.sockets}`) : undefined;
-        selectedmethod ? args.push(`-m`, selectedmethod) : undefined;
-        selectedSSLCheck === "No" ? args.push(`-n`) : undefined;
+        selectedMethod ? args.push(`-m`, selectedMethod) : undefined;
+        selectedSslCheck === "No" ? args.push(`-n`) : undefined;
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
@@ -137,7 +137,7 @@ const GoldenEye = () => {
                 <TextInput
                     label={"List of user agents"}
                     placeholder={"Please enter filepath for the list of useragent"}
-                    {...form.getInputProps("useragent")}
+                    {...form.getInputProps("userAgent")}
                 />
                 <TextInput
                     label={"Number of concurrent workers"}
@@ -150,19 +150,19 @@ const GoldenEye = () => {
                     {...form.getInputProps("sockets")}
                 />
                 <NativeSelect
-                    value={selectedmethod}
+                    value={selectedMethod}
                     onChange={(e) => setSelectedMethod(e.target.value)}
                     title={"HTTP Method"}
-                    data={DosHTTPMethod}
+                    data={dosHttpMethod}
                     placeholder={"HTTP Method"}
                     description={"Please select type of HTTP request to flood server with"}
                 />
                 <NativeSelect
-                    value={selectedSSLCheck}
-                    onChange={(e) => setSelectedSSLCheck(e.target.value)}
+                    value={selectedSslCheck}
+                    onChange={(e) => setSelectedSslCheck(e.target.value)}
                     title={"SSL Check"}
-                    data={SSLCheckStatus}
-                    placeholder={"SSL Check"}
+                    data={sslCheckStatus}
+                    placeholder={"ssl Check"}
                     description={"Do you want to verify the ssl certificate"}
                 />
                 <Button type={"submit"}>Launch Dos Attack</Button>
