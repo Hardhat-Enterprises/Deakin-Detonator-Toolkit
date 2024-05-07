@@ -115,7 +115,7 @@ const SnmpCheck = () => {
      * @param {FormValuesType} values - The form values containing the IP address and port number.
      */
     const onSubmit = async (values: FormValuesType) => {
-        setLoading(true);
+        setLoading(true); // Activate loading state to indicate ongoing process
 
         const args = [values.ip, "-p", `${values.port}`];
 
@@ -127,9 +127,13 @@ const SnmpCheck = () => {
                 handleProcessTermination
             );
             setPid(result.pid);
+            // Update the UI with the results from the executed command
             setOutput(result.output);
         } catch (e: any) {
+            // Display any errors encountered during command execution
             setOutput(e.message);
+            // Deactivate loading state
+            setLoading(false);
         }
     };
     /**
