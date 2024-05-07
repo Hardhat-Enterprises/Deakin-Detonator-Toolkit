@@ -134,12 +134,7 @@ function ARPScan() {
 
         try {
             // Execute the ARPScan command using the CommandHelper utility with pkexec.
-            await CommandHelper.runCommandWithPkexec(
-                "arp-scan",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
+            await CommandHelper.runCommandWithPkexec("arp-scan", args, handleProcessData, handleProcessTermination);
         } catch (error: any) {
             // If an error occurs during command execution, display the error message.
             setOutput(`Error: ${error.message}`);
@@ -187,9 +182,7 @@ function ARPScan() {
                     <Stack>
                         <TextInput label={"Network Interface"} required {...form.getInputProps("interface")} />
                         {loading && (
-                            <Alert radius="md">
-                                Scanning network on interface: {form.values.interface}...
-                            </Alert>
+                            <Alert radius="md">Scanning network on interface: {form.values.interface}...</Alert>
                         )}
                         <Button type={"submit"} disabled={loading}>
                             Start {title}
