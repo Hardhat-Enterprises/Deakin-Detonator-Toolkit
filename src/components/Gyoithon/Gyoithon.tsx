@@ -92,6 +92,7 @@ const Gyoithon = () => {
         const output = await CommandHelper.runCommand("python3", args);
         setOutput(output);
         setLoading(false);
+        setAllowSave(true);
     };
 
     const Import = async (values: FormValues) => {
