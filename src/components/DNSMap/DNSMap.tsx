@@ -3,25 +3,14 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { l } from "vitest/dist/index-60e2a8e1";
 
-const title = "DNS Mapping for Subdomains (DNSMap)";
-const description_userguide =
-    "DNSMap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
-    "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall services and smtp. " +
-    "So it will be possible to search for smtp.example.com inside example.com automatically.\n\nInformation on the tool " +
-    "can be found at: https://www.kali.org/tools/dnsmap/\n\n" +
-    "Step 1: Enter a valid domain to be mapped.\n" +
-    "       Eg: google.com\n\n" +
-    "Step 2: Enter a delay between requests. Default is 10 (milliseconds). Can be left blank.\n" +
-    "       Eg: 10\n\n" +
-    "Step 3: Click 'Start Mapping' to commence the DNSMap tool's operation.\n\n" +
-    "Step 4: View the Output block below to view the results of the tool's execution.\n\n" +
-    "Switch to Advanced Mode for further options.";
-
+/**
+* Represents the form values for the DNSMap component.
+*/
 interface FormValuesType {
     domain: string;
     delay: number;
@@ -29,15 +18,40 @@ interface FormValuesType {
     csvResultsFile: string;
     ipsToIgnore: string;
 }
+/**
+* The DNSMap component.
+* @returns The DNSMap component.
+*/
 
 const DNSMap = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [Pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+//Componenets state Variable
+    const [loading, setLoading] = useState(false); // State variable that represents loading state of the component
+    const [output, setOutput] = useState(""); // State variable that represents the output text from the DNS mapping process
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false); //State variable that represents the state of advanced mode switch
+    const [Pid, setPid] = useState(""); //State variable that represents the process ID of the DNS mapping process
+    const [allowSave, setAllowSave] = useState(false); //State variable that represents whether saving the output is allowed
+    const [hasSaved, setHasSaved] = useState(false); //State variable that represents whether the output has been saved
 
+//Components Constant Variables
+const title = "DNSMap";
+const description_userguide =
+    "DNSMap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
+    "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall services and smtp. " +
+    "So it will be possible to search for smtp.example.com inside example.com automatically.\n"
+const steps =
+    "Step 1: Enter a valid domain to be mapped.\n" +
+    "       Eg: google.com\n\n" +
+    "Step 2: Enter a delay between requests. Default is 10 (milliseconds). Can be left blank.\n" +
+    "       Eg: 10\n\n" +
+    "Step 3: Click 'Start Mapping' to commence the DNSMap tool's operation.\n\n" +
+    "Step 4: View the Output block below to view the results of the tool's execution.\n\n" +
+    "Switch to Advanced Mode for further options.";
+const sourceLink = "https://www.kali.org/tools/dnsmap/"; // Link to the source code (or Kali Tools).
+const tutorial = ""; // Link to the official documentation/tutorial.
+const dependencies = ["DNSMap"]; // Contains the dependencies required by the component.
+
+
+    //Form Hook to handle input
     let form = useForm({
         initialValues: {
             domain: "",
@@ -127,6 +141,9 @@ const DNSMap = () => {
                 setOutput(`Error: ${error.message}`);
             });
     };
+    /**
+     * Clears the output state.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
@@ -134,10 +151,16 @@ const DNSMap = () => {
     }, [setOutput]);
 
     return (
+        <RenderComponent
+        title={title}
+        description={description_userguide}
+        steps={steps}
+        tutorial={tutorial}
+        sourceLink={sourceLink}
+        >
         <form onSubmit={form.onSubmit(onSubmit)}>
             {LoadingOverlayAndCancelButton(loading, Pid)}
             <Stack>
-                {UserGuide(title, description_userguide)}
                 <Switch
                     size="md"
                     label="Advanced Mode"
@@ -169,6 +192,7 @@ const DNSMap = () => {
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
+        </RenderComponent>
     );
 };
 
