@@ -1,10 +1,12 @@
 import { Button, LoadingOverlay, NumberInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
  * FormValues defines the structure of the object used to hold form state in the SNMP check component.
@@ -22,7 +24,7 @@ const description_userguide = // Description of the tool.
     "address or hostname and port.";
 const steps =
     "Step 1: Enter the IP address or hostname of the target device\n" +
-    "Step 2 (Optional): Specify a target port number (default port: 161).\n" +
+    "Step 2: (Optional) Specify a target port number (default port: 161).\n" +
     "Step 3: Click the 'Scan' button to initiate the SNMP check.\n";
 const sourceLink = "https://www.kali.org/tools/snmpcheck/"; // Link to the source code.
 const tutorial = ""; // Link to the official documentation/tutorial.
@@ -36,6 +38,9 @@ const SnmpCheck = () => {
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); //State to store the output from the snmpCheck command
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
 
     // Form hook to handle form input.
     let form = useForm({
@@ -44,6 +49,21 @@ const SnmpCheck = () => {
             port: 161,
         },
     });
+
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
 
     /**
      * Handles incoming data from a child process and appends it to the current output state.
