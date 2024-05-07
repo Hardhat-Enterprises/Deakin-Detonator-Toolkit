@@ -26,6 +26,8 @@ const steps =
     "Step 3: Click the 'Scan' button to initiate the SNMP check.\n";
 const sourceLink = "https://www.kali.org/tools/snmpcheck/"; // Link to the source code.
 const tutorial = ""; // Link to the official documentation/tutorial.
+const dependencies = ["snmpcheck"]; // Contains the dependencies required by the component.
+
 /**
  * The SnmpCheck component.
  * @returns The SnmpCheck component.
