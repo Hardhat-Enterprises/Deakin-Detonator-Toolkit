@@ -11,7 +11,7 @@ import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
  * @field ip: The ip address or hostname
  * @field port: The SNMP port, defaults to 161 if not specified.
  */
-interface FormValues {
+interface FormValuesType {
     ip: string;
     port: number;
 }
@@ -73,7 +73,7 @@ const SnmpCheck = () => {
         }
     };
 
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
         const args = [values.ip, "-p", `${values.port}`];
