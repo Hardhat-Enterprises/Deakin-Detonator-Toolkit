@@ -108,8 +108,8 @@
                         "args": true
                     },
                     {
-                        "name": "Arpscan",
-                        "cmd": "Arpscan",
+                        "name": "arp-scan",
+                        "cmd": "arp-scan",
                         "args": true
                     },
                     {
