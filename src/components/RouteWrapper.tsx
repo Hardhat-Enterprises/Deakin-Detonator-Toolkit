@@ -65,7 +65,7 @@ import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import WhatWeb from "./WhatWeb/WhatWeb";
-import Arpscan from "./Arpscan/Arpscan";
+import Arpscan from "./ArpScan/ArpScan";
 
 export interface RouteProperties {
     name: string;
@@ -275,10 +275,10 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
-        name: "Arpscan",
+        name: "ArpScan",
         path: "/tools/arpscan",
         element: <Arpscan />,
-        description: "Scan the local network for ARP entries",
+        description: "Scan the local network for ARP entries.",
         category: "Network Scanning and Enumeration",
     },
     {
