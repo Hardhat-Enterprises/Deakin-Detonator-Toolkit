@@ -391,7 +391,7 @@ export const ROUTES: RouteProperties[] = [
         name: "Gitleaks",
         path: "/tools/gitleaks",
         element: <Gitleaks />,
-        description: "Detect hardcoded secrets in git repositories",
+        description: "Detect hardcoded secrets in git repositories.",
         category: "Information Gathering and Analysis",
     },
     {
