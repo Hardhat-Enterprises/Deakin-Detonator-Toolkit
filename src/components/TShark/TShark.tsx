@@ -55,7 +55,7 @@ const TShark = () => {
         },
     });
 
-   /**
+    /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
      * It updates the state by appending the new data received to the existing output.
      * @param {string} data - The data received from the child process.
@@ -95,7 +95,7 @@ const TShark = () => {
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
-/**
+    /**
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the tshark tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
