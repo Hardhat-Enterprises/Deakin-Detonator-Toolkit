@@ -107,7 +107,7 @@ const TShark = () => {
         setLoading(true);
         setAllowSave(false);
 
-        let args = [``];
+        let args = [``]; // Using let as this args parameter needs to hold different values throughout the code via "args.push()".
 
         //duration set to 60 as defualt if Sniff Duration field is empty
         const duration = values.sniffDuration == "" ? " -a duration:60" : ` -a duration:${values.sniffDuration}`;
