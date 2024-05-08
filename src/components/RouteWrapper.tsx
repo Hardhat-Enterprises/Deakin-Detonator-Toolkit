@@ -65,6 +65,7 @@ import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import WhatWeb from "./WhatWeb/WhatWeb";
+import Arpscan from "./ArpScan/ArpScan";
 
 export interface RouteProperties {
     name: string;
@@ -272,6 +273,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Arjuntool />,
         description: "Arjun can find query parameters for URL endpoints.",
         category: "Web Application Testing",
+    },
+    {
+        name: "ArpScan",
+        path: "/tools/arpscan",
+        element: <Arpscan />,
+        description: "Scan the local network for ARP entries.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "ARP Spoofing",
