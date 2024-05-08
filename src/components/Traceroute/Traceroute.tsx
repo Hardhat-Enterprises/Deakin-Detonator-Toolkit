@@ -5,6 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "Traceroute Tool";
 const description_userguide =
@@ -48,6 +49,8 @@ const TracerouteTool = () => {
     const [selectedScanOption, setSelectedTracerouteOption] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
 
     let form = useForm({
         initialValues: {
@@ -56,6 +59,35 @@ const TracerouteTool = () => {
             tracerouteOptions: "",
         },
     });
+
+    /**
+     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data recieved to the existing output.
+     * @param {string} data - The data recieved from the child process.
+     */
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+    }, []);
+
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+                // If the process was terminated manually, display a termination message.
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+                // If the process was terminated with an error, display the exit and signal codes.
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            }
+            // Clear the child process pid reference. There is no longer a valid process running.
+            setPid("");
+            // Cancel the loading overlay. The process has completed.
+            setLoading(false);
+        },
+        [handleProcessData] // Dependency on the handleProcessData callback
+    );
 
     const onSubmit = async (values: FormValuesType) => {
         let args = [``];
@@ -66,13 +98,16 @@ const TracerouteTool = () => {
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
                 args.push(`${values.hostname}`);
-                try {
-                    let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output);
-                    setAllowSave(true);
-                } catch (e: any) {
-                    setOutput(e);
-                }
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                        setAllowSave(true);
+                    })
+                    .catch((error: any) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
 
                 break;
 
@@ -80,13 +115,16 @@ const TracerouteTool = () => {
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-T`);
                 args.push(`${values.hostname}`);
-                try {
-                    let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output);
-                    setAllowSave(true);
-                } catch (e: any) {
-                    setOutput(e);
-                }
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                        setAllowSave(true);
+                    })
+                    .catch((error: any) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
 
                 break;
 
@@ -94,13 +132,16 @@ const TracerouteTool = () => {
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-U`);
                 args.push(`${values.hostname}`);
-                try {
-                    let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output);
-                    setAllowSave(true);
-                } catch (e: any) {
-                    setOutput(e);
-                }
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                        setAllowSave(true);
+                    })
+                    .catch((error: any) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
 
                 break;
 
@@ -108,13 +149,16 @@ const TracerouteTool = () => {
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`${values.tracerouteOptions}`);
                 args.push(`${values.hostname}`);
-                try {
-                    let output = await CommandHelper.runCommand("bash", args);
-                    setOutput(output);
-                    setAllowSave(true);
-                } catch (e: any) {
-                    setOutput(e);
-                }
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                        setAllowSave(true);
+                    })
+                    .catch((error: any) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
 
                 break;
         }
@@ -134,6 +178,7 @@ const TracerouteTool = () => {
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, tracerouteSwitch: selectedScanOption }))}>
             <Stack>
+                {LoadingOverlayAndCancelButton(loading, pid)}
                 {UserGuide(title, description_userguide)}
                 <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
                 <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("tracerouteOptions")} />
