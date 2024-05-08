@@ -243,7 +243,7 @@ const TShark = () => {
                             />
                         </>
                     )}
-                    <Button type={"submit"}>start tshark</Button>
+                    <Button type={"submit"}>Start TShark</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
