@@ -95,7 +95,13 @@ const TShark = () => {
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
-
+/**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the tshark tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the <list the form values here, e.g.  interface, packet count, etc>.
+     */
     const onSubmit = async (values: FormValuesType) => {
         // Set loading state to true and disallow output saving
         setLoading(true);
