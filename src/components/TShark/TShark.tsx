@@ -182,7 +182,6 @@ const TShark = () => {
         setAllowSave(false); // Disallow further output saving
     };
 
-    //<ConsoleWrapper output={output} clearOutputCallback={clearOutput} /> prints the terminal on the tool
     return (
         <RenderComponent // Using RenderComponent form UserGuide.
             title={title}
