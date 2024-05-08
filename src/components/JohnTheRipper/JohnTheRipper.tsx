@@ -8,6 +8,7 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
  * Represents the form values for the AirbaseNG component.
@@ -33,7 +34,7 @@ const JohnTheRipper = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
+    const [allowSave, setAllowSave] = useState(false); //   State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [selectedFileTypeOption, setSelectedFileTypeOption] = useState(""); // State variable to store the selected file type.
     const [selectedModeOption, setSelectedModeOption] = useState(""); // State variable to store the selected crack mode.
@@ -183,12 +184,25 @@ const JohnTheRipper = () => {
                 : selectedModeOption === "incremental"
                 ? args.push(`-incremental:${values.incrementOrder}`)
                 : args.push(`--single`);
-            try {
-                const result = await CommandHelper.runCommand(`john`, args);
-                setOutput(output + "\n" + result);
-            } catch (e: any) {
-                setOutput(e);
-            }
+
+            const result = await CommandHelper.runCommandGetPidAndOutput(
+                `john`,
+                args,
+                handleProcessData,
+                handleProcessTermination
+            )
+                .then(({ output, pid }) => {
+                    // Update the UI with the results from the executed command
+                    setOutput(output);
+                    console.log(pid);
+                    setPid(pid);
+                })
+                .catch((error) => {
+                    // Display any errors encountered during command execution
+                    setOutput(error.message);
+                    // Deactivate loading state
+                    setLoading(false);
+                });
 
             setLoading(false);
         } else {
@@ -213,12 +227,24 @@ const JohnTheRipper = () => {
                 ? argsCrack.push(`-incremental:${values.incrementOrder}`)
                 : argsCrack.push(`--single`);
 
-            try {
-                const result = await CommandHelper.runCommand(`john`, argsCrack);
-                setOutput(output + "\n" + result);
-            } catch (e: any) {
-                setOutput(e);
-            }
+            const result = await CommandHelper.runCommandGetPidAndOutput(
+                `john`,
+                argsCrack,
+                handleProcessData,
+                handleProcessTermination
+            )
+                .then(({ output, pid }) => {
+                    // Update the UI with the results from the executed command
+                    setOutput(output);
+                    console.log(pid);
+                    setPid(pid);
+                })
+                .catch((error) => {
+                    // Display any errors encountered during command execution
+                    setOutput(error.message);
+                    // Deactivate loading state
+                    setLoading(false);
+                });
 
             setLoading(false);
         }
@@ -248,8 +274,8 @@ const JohnTheRipper = () => {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, fileType: selectedFileTypeOption }))}>
-                <LoadingOverlay visible={loading} />
                 <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label={"Filepath"} required {...form.getInputProps("filePath")} />
                     <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
                     <NativeSelect
