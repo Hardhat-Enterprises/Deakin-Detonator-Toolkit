@@ -201,10 +201,7 @@ const JohnTheRipper = () => {
                     // Display any errors encountered during command execution
                     setOutput(error.message);
                     // Deactivate loading state
-                    setLoading(false);
                 });
-
-            setLoading(false);
         } else {
             // If hash is stored in a zip/rar file
             const argsExtract = [values.filePath];
@@ -236,17 +233,13 @@ const JohnTheRipper = () => {
                 .then(({ output, pid }) => {
                     // Update the UI with the results from the executed command
                     setOutput(output);
-                    console.log(pid);
                     setPid(pid);
                 })
                 .catch((error) => {
                     // Display any errors encountered during command execution
                     setOutput(error.message);
                     // Deactivate loading state
-                    setLoading(false);
                 });
-
-            setLoading(false);
         }
     };
 
@@ -274,8 +267,8 @@ const JohnTheRipper = () => {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, fileType: selectedFileTypeOption }))}>
+                {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label={"Filepath"} required {...form.getInputProps("filePath")} />
                     <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
                     <NativeSelect
