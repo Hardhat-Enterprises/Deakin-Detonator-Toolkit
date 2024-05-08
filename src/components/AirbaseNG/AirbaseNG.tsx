@@ -1,42 +1,46 @@
 import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; //v2
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
- * TODO:
- * 1. Refine the user interface for better usability and integrate a mechanism for file selection from the local machine.
- * 2. Introduce an 'Advanced Mode' for users familiar with the nuances of the tool.
- * 3. Gradually expand input options in 'Advanced Mode' with the eventual aim of encompassing all functionalities of `airbase-ng`.
- * 4. Enhance the output display to ensure optimal readability, especially for extensive outputs.
- * 5. Unblock the loading screen during the up time of the Airbase ng and provide real time data update
+ * Represents the form values for the AirbaseNG component.
  */
-
-const title = "Create Fake Access Point with Airbase-ng";
-const description_userguide =
-    "Airbase-ng is a tool to create fake access points.\n\n" +
-    "Step 1: Type in the name of your fake host.\n" +
-    "Step 2: Select your desired channel.\n" +
-    "Step 3: Specify the WLAN interface to be used.\n" +
-    "Step 4: Click 'Start AP' to begin the process.\n" +
-    "Step 5: View the Output block below to see the results.\n\n";
-
 interface FormValuesType {
     FakeHost: string;
     Channel: string;
     Wlan: string;
 }
 
+/**
+ * The AirbaseNG component.
+ * @returns The AirbaseNG component.
+ */
 const AirbaseNG = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+
+    const title = "Create Fake Access Point with Airbase-ng";
+    const description_userguide =
+        "Airbase-ng is a tool to create fake access points.\n\n" +
+        "Step 1: Type in the name of your fake host.\n" +
+        "Step 2: Select your desired channel.\n" +
+        "Step 3: Specify the WLAN interface to be used.\n" +
+        "Step 4: Click 'Start AP' to begin the process.\n" +
+        "Step 5: View the Output block below to see the results.\n\n";
 
     const form = useForm({
         initialValues: {
