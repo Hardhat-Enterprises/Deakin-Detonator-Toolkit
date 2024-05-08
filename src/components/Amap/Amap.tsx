@@ -124,7 +124,7 @@ const AMAP = () => {
         const args = [values.target, "-bqv", values.port, values.options];
 
         // Execute the amap command via helper method and handle its output or potential errors
-        CommandHelper.runCommandWithPkexec("amap", args, handleProcessData, handleProcessTermination)
+        CommandHelper.runCommandGetPidAndOutput("amap", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 // Update the UI with the results from the executed command
                 setOutput(output);
