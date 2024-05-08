@@ -55,7 +55,11 @@ const TShark = () => {
         },
     });
 
-    //handleProcessData for the CommandHelper.runCommandGetPidAndOutput
+   /**
+     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data received to the existing output.
+     * @param {string} data - The data received from the child process.
+     */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
