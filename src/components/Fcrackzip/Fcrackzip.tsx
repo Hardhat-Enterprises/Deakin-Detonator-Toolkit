@@ -11,17 +11,17 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 // Component title
 const title = "Fcrackzip";
 // Description of the component
-const description_guide ="Fcrackzip is a tool for cracking password of a protected zip file.";
+const description_guide = "Fcrackzip is a tool for cracking password of a protected zip file.";
 // Additional props for the RenderComponent
-const steps = 
-    "Step 1: Input path of the zip file.\n"+
-    "Step 2: Select an Attack Mode (Dictionary or Brute Force)\n"+
-    "Step 3: You can save output by checking 'Save Output to File'\n"+
+const steps =
+    "Step 1: Input path of the zip file.\n" +
+    "Step 2: Select an Attack Mode (Dictionary or Brute Force)\n" +
+    "Step 3: You can save output by checking 'Save Output to File'\n" +
     "Step 4: Click START CRACKING!";
 // Link to the tutorial
-const tutorial = ""; 
+const tutorial = "";
 // Link to the source code
-const sourceLink = ""; 
+const sourceLink = "";
 
 // Define the form values interface
 interface FormValuesType {
@@ -193,9 +193,8 @@ const Fcrackzip = () => {
             )}
 
             <form onSubmit={form.onSubmit(onSubmit)}>
-               
                 <Stack>
-                    {LoadingOverlayAndCancelButton(loading,pid)}
+                    {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput
                         label={"Zip file"}
                         placeholder="Specify the zip file."
