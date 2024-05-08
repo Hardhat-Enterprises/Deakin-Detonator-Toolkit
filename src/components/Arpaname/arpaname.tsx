@@ -96,32 +96,31 @@ const ArpanameTool = () => {
         return ipv4Pattern.test(ip) || ipv6Pattern.test(ip);
     };
 
-/**
- * Async function to handle form submission and execute the arpaname command.
- * @param {FormValuesType} values - The form values containing the IP address.
- */
- const onSubmit = async (values: FormValuesType) => {
-    if (!validateIPAddress(values.ipAddress)) {
-        return;
-    }
+    /**
+     * Async function to handle form submission and execute the arpaname command.
+     * @param {FormValuesType} values - The form values containing the IP address.
+     */
+    const onSubmit = async (values: FormValuesType) => {
+        if (!validateIPAddress(values.ipAddress)) {
+            return;
+        }
 
-    // Activate loading state to indicate ongoing process
-    setLoading(true);
+        // Activate loading state to indicate ongoing process
+        setLoading(true);
 
-    const argsIP = [values.ipAddress];
+        const argsIP = [values.ipAddress];
 
-    // Execute arpaname command for the target
-    const result_target = await CommandHelper.runCommandWithPkexec(
-        "arpaname",
-        argsIP,
-        handleProcessData, // Pass handleProcessData as callback for handling process data
-        handleProcessTermination
-    );
-    setPidTarget(result_target.pid);
+        // Execute arpaname command for the target
+        const result_target = await CommandHelper.runCommandWithPkexec(
+            "arpaname",
+            argsIP,
+            handleProcessData, // Pass handleProcessData as callback for handling process data
+            handleProcessTermination
+        );
+        setPidTarget(result_target.pid);
 
-    setLoading(false);
-};
-
+        setLoading(false);
+    };
 
     /**
      * Callback function to clear the output state.
@@ -132,10 +131,7 @@ const ArpanameTool = () => {
     }, [setOutput]);
 
     return (
-        <RenderComponent
-            title={title}
-            description={description} steps={""} tutorial={""} sourceLink={""}
-        >
+        <RenderComponent title={title} description={description} steps={""} tutorial={""} sourceLink={""}>
             {!loadingModal && (
                 <InstallationModal
                     isOpen={opened}
