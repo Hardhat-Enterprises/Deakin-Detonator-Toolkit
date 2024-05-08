@@ -65,7 +65,9 @@ import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import TShark from "./TShark/TShark";
+import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
+import Arpscan from "./ArpScan/ArpScan";
 
 export interface RouteProperties {
     name: string;
@@ -275,6 +277,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "ArpScan",
+        path: "/tools/arpscan",
+        element: <Arpscan />,
+        description: "Scan the local network for ARP entries.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
         name: "ARP Spoofing",
         path: "/tools/ARPSpoofing",
         element: <ARPSpoofing />,
@@ -386,6 +395,13 @@ export const ROUTES: RouteProperties[] = [
         element: <FTPconnect />,
         description: "FTPconnect tool",
         category: "Miscellaneous",
+    },
+    {
+        name: "Gitleaks",
+        path: "/tools/gitleaks",
+        element: <Gitleaks />,
+        description: "Detect hardcoded secrets in git repositories.",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "GoBuster",
