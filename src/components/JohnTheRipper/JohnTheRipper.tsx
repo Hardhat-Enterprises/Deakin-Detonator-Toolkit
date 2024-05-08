@@ -6,6 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const modeRequiringWordList = ["dictionary"];
 const modeRequiringIncrementOrder = ["incremental"];
@@ -87,6 +88,7 @@ const JohnTheRipper = () => {
             // Clear the child process pid reference
             setPid("");
             // Cancel the Loading Overlay
+
             setLoading(false);
         },
         [handleProcessData]
@@ -114,13 +116,20 @@ const JohnTheRipper = () => {
                 ? args.push(`-incremental:${values.incrementorder}`)
                 : args.push(`--single`);
             try {
-                const result = await CommandHelper.runCommand(`john`, args);
-                setOutput(output + "\n" + result);
+                const result = await CommandHelper.runCommandGetPidAndOutput(
+                    `john`,
+                    args,
+                    handleProcessData,
+                    handleProcessTermination
+                );
+                setPid(result.pid);
+                setOutput(result.output);
+                // setOutput(output + "\n" + result);
             } catch (e: any) {
-                setOutput(e);
+                setOutput(e.Message);
             }
 
-            setLoading(false);
+            // setLoading(false);
         } else {
             const argsExtract = [values.filePath];
             const argsCrack = [`/tmp/hash.txt`];
@@ -143,13 +152,20 @@ const JohnTheRipper = () => {
                 : argsCrack.push(`--single`);
 
             try {
-                const result = await CommandHelper.runCommand(`john`, argsCrack);
-                setOutput(output + "\n" + result);
+                const result = await CommandHelper.runCommandGetPidAndOutput(
+                    `john`,
+                    argsCrack,
+                    handleProcessData,
+                    handleProcessTermination
+                );
+                // setOutput(output + "\n" + result);
+                setPid(result.pid);
+                setOutput(result.output);
             } catch (e: any) {
                 setOutput(e);
             }
 
-            setLoading(false);
+            // setLoading(false);
         }
     };
 
@@ -159,7 +175,7 @@ const JohnTheRipper = () => {
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, fileType: selectedFileTypeOption }))}>
-            <LoadingOverlay visible={loading} />
+            {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, descritpion_userguide)}
                 <TextInput label={"Filepath"} required {...form.getInputProps("filePath")} />
