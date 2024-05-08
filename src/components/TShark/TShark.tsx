@@ -31,7 +31,7 @@ const TShark = () => {
     // The following component constants are used for rendering the TShark user guide.
     const title = "TShark";
     const description =
-        "TShark is a tool used to capture network traffic and write it to a capture file. The captured traffic can be view directly by opening the file, otherwise the Reader option can be used to output the file contents to the output box."; // Description of the component.
+        "TShark is a tool used to capture network traffic and write it to a capture file. The captured traffic can be viewed directly by opening the file, otherwise the Reader option can be used to output the file contents to the output box."; // Description of the component.
     const steps =
         "Step 1: Select Sniffer mode.\n" +
         "Step 2: Specify the interface to capture traffic from such as eth0.\n" +
