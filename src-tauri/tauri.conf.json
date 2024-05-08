@@ -48,6 +48,11 @@
                         "args": true
                     },
                     {
+                        "name": "gitleaks",
+                        "cmd": "gitleaks",
+                        "args": true
+                    },
+                    {
                         "name": "hashcat",
                         "cmd": "hashcat",
                         "args": true
