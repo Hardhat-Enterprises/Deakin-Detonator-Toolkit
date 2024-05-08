@@ -21,7 +21,7 @@ interface FormValuesType {
 const tsharkOptions = ["Sniffer", "Reader"];
 
 const TShark = () => {
-    var [output, setOutput] = useState("");
+    const [output, setOutput] = useState("");
     const [selectedTSharkOption, setSelectedTSharkOption] = useState("");
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving of output
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
