@@ -35,7 +35,7 @@ const rtsort = () => {
         "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables."; // Description of the component.
     const steps =
         "Step 1: Specify the filepath to the rainbow table file that you wish to sort (e.g ~/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt).\n" +
-        "Step 2: Click 'Start RTSort'.\n" +
+        "Step 2: Click 'Start Sort'.\n" +
         "Step 3: View the output block to view the results of the tools execution.\n";
 
     const sourceLink = "https://gitlab.com/kalilinux/packages/rainbowcrack"; // Link to the source code (or Kali Tools).
