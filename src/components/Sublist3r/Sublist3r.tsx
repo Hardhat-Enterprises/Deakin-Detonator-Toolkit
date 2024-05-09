@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -30,11 +30,11 @@ const Sublist3r = () => {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(false); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [verboseMode, setVerboseMode] = useState(false); // State variable for verbose mode
 
     // Component Constants
     const title = "Sublist3r";
-    const description =
-        "Sublist3r is a subdomain enumeration tool that gathers subdomains for a given domain.";
+    const description = "Sublist3r is a subdomain enumeration tool that gathers subdomains for a given domain.";
     const steps =
         "Step 1: Provide the target domain to enumerate subdomains.\n" +
         "Step 2: Start the enumeration process to gather subdomains.\n" +
@@ -104,7 +104,6 @@ const Sublist3r = () => {
                 setLoadingModal(false); // Also set loading to false in case of error
             });
     }, []);
-    
 
     /**
      * Handles form submission for the Sublist3r component.
@@ -116,9 +115,17 @@ const Sublist3r = () => {
 
         // Construct arguments for the Sublist3r command based on form input
         const args = ["-d", values.targetDomain];
+        if (verboseMode) {
+            args.push("-v"); // Add verbose mode option if enabled
+        }
 
         // Execute the Sublist3r command via helper method and handle its output or potential errors
-        CommandHelper.runCommandWithPkexec("sublist3r", [...args, "--no-color"], handleProcessData, handleProcessTermination)
+        CommandHelper.runCommandWithPkexec(
+            "sublist3r",
+            [...args, "--no-color"],
+            handleProcessData,
+            handleProcessTermination
+        )
             .then(() => {
                 // Deactivate loading state
                 setLoading(false);
@@ -169,6 +176,11 @@ const Sublist3r = () => {
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label="Target Domain" required {...form.getInputProps("targetDomain")} />
+                    <Checkbox
+                        label="Verbose Mode"
+                        checked={verboseMode}
+                        onChange={(event) => setVerboseMode(event.currentTarget.checked)}
+                    />
                     <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
