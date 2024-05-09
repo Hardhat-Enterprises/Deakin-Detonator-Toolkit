@@ -291,6 +291,11 @@
                         "name": "nslookup",
                         "cmd": "nslookup",
                         "args": true
+                    },
+                    {
+                        "name": "whatweb",
+                        "cmd": "whatweb",
+                        "args": true
                     }
                 ]
             },
