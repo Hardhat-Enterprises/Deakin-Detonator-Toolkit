@@ -34,7 +34,10 @@ const Urlsnarf = () => {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
 
+    // Component constants.
     const listeners = ["Interface", "Packet capture file"]; // List of listener settings.
+    const isListenerInterface = selectedListenerInput === "Interface"; // Check if the selected listener input is an interface.
+    const isListenerFile = selectedListenerInput === "Packet capture file"; // Check if the selected listener input is a file.
     const title = "Urlsnarf"; // Title of the component.
     const description =
         "Urlsnarf outputs all requested URLs sniffed from HTTP traffic in Common Log Format, used by almost all web servers."; // Description of the component.
@@ -164,9 +167,6 @@ const Urlsnarf = () => {
         setHasSaved(false);
         setAllowSave(false);
     }, [setOutput]);
-
-    const isListenerInterface = selectedListenerInput === "Interface"; // Check if the selected listener input is an interface.
-    const isListenerFile = selectedListenerInput === "Packet capture file"; // Check if the selected listener input is a file.
 
     return (
         <RenderComponent
