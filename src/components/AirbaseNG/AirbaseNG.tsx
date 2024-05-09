@@ -5,7 +5,10 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import {
+    LoadingOverlayAndCancelButton,
+    LoadingOverlayAndCancelButtonPkexec,
+} from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
@@ -136,6 +139,7 @@ const AirbaseNG = () => {
         values.macAddress ? args.push(`-a`, values.macAddress) : undefined;
         values.interface ? args.push(`-i`, values.interface) : undefined;
         values.filePath ? args.push(`-F`, values.filePath) : undefined;
+        values.customConfig ? args.push(values.customConfig) : undefined;
 
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("airbase-ng", args, handleProcessData, handleProcessTermination)
@@ -151,12 +155,6 @@ const AirbaseNG = () => {
                 // Deactivate loading state
                 setLoading(false);
             });
-    };
-
-    const close = async () => {
-        const args = [`-2`, pid];
-        await CommandHelper.runCommandWithPkexec("kill", args, handleProcessData, handleProcessTermination);
-        setLoading(false);
     };
 
     /**
@@ -184,10 +182,36 @@ const AirbaseNG = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={advanceMode}
+                        onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
+                    />
+                    <Switch
+                        size="md"
+                        label="Custom Configuration"
+                        checked={customMode}
+                        onChange={(e) => setCustomMode(e.currentTarget.checked)}
+                    />
                     <TextInput label={"Name of your fake host"} required {...form.getInputProps("fakeHost")} />
                     <TextInput label={"Channel of choice"} required {...form.getInputProps("channel")} />
                     <TextInput label={"Your WLAN interface"} required {...form.getInputProps("wlan")} />
+                    {advanceMode && (
+                        <>
+                            <TextInput label={"Set AP MAC address"} {...form.getInputProps("MACAddress")} />
+                            <TextInput
+                                label={"Capture packets from this interface"}
+                                {...form.getInputProps("interface")}
+                            />
+                            <TextInput
+                                label={"Save as Pcap File (Please Supply FilePath)"}
+                                {...form.getInputProps("filePath")}
+                            />
+                        </>
+                    )}
+                    {customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
                     {SaveOutputToTextFile(output)}
                     <Button type={"submit"}>Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
