@@ -13,8 +13,6 @@ interface FormValuesType {
     versusMode: string;
 }
 
-const listeners = ["Interface", "Packet capture file"];
-
 const Urlsnarf = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
@@ -23,6 +21,7 @@ const Urlsnarf = () => {
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
 
+    const listeners = ["Interface", "Packet capture file"];
     const title = "Urlsnarf";
     const description =
         "Urlsnarf outputs all requested URLs sniffed from HTTP traffic in Common Log Format, used by almost all web servers.";
