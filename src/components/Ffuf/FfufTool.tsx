@@ -8,7 +8,7 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 // Component constants.
-const title = "Fuzz Faster U Fool (ffuf)"; // Contains the title of the component.
+const title = "ffuf"; // Contains the title of the component.
 
 // Contains the description of the component.
 const description_userguide =
