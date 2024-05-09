@@ -6,9 +6,8 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-const title = "Rainbow Table Sort (rtsort)";
-const description_userguide =
-    "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables.";
+
+
 
 /**
  * Represents the form values for the RTsort component.
@@ -22,6 +21,15 @@ const rtsort = () => {
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); //  State variable to store the process ID of the command execution.
+
+    // Component Constants.
+    const title = "RTSort"; // Title of the component.
+    const description_userguide =
+        "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables."; // Description of the component.
+
+    const sourceLink = ""; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ""; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
     let form = useForm({
