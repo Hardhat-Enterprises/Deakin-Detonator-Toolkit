@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
@@ -22,6 +23,8 @@ const rtsort = () => {
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); //  State variable to store the process ID of the command execution.
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
@@ -104,6 +107,9 @@ const rtsort = () => {
 
             // Cancel the Loading Overlay
             setLoading(false);
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
@@ -118,6 +124,8 @@ const rtsort = () => {
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
         // Construct arguments for the RTsort command based on form input
         const args = [values.path];
         const filteredArgs = args.filter((arg) => arg !== ""); // Variable to store non empty string as argument
@@ -135,6 +143,7 @@ const rtsort = () => {
             // Update the UI with the results from the executed command
             setPid(result.pid);
             setOutput(result.output);
+            
         } catch (e: any) {
             setOutput(e);
         }
@@ -144,7 +153,14 @@ const rtsort = () => {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
+        setAllowSave(false);
+        setHasSaved(false);
     }, [setOutput]);
+
+    const handleSaveComplete = useCallback(() => {
+        setHasSaved(true);
+        setAllowSave(false);
+    }, []);
 
     // placeholder="/home/user/rainbowcrack/tables/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt"
     return (
@@ -175,6 +191,8 @@ const rtsort = () => {
                     />
                     <br></br>
                     <Button type={"submit"}>Start Sort</Button>
+                    
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
