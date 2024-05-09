@@ -25,7 +25,7 @@ const description_userguide =
     "       E.g. wordlist.txt\n\n" +
     "Step 3: Optionally enter extensions to be added to words. Comma separated." +
     "\n         E.g. .html,.php,.txt" +
-    "\n\nStep 4: Click Scan to commence the ffuf operation.\n\n" +
+    "\n\nStep 4: Click Scan to commence the ffuf operation.\n" +
     "Step 5: View the Output block below to view the results of the Scan.";
 
 /**
