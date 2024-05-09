@@ -11,7 +11,10 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
  * Represents the form values for the Ffuf component.
  */
 
-const title = "Fuzz Faster U Fool (ffuf)";
+// Component constants.
+const title = "Fuzz Faster U Fool (ffuf)"; // Contains the title of the component.
+
+// Contains the description of the component.
 const description_userguide =
     "ffuf is a web directory and resource discovery tool. It takes a wordlist " +
     "and uses a brute force fuzzing technique against a target URL to attempt to discover valid files " +
