@@ -169,6 +169,9 @@ const FfufTool = () => {
         }
     };
 
+    /**
+     * Clears the output state.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
