@@ -7,6 +7,10 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
+/**
+ * Represents the form values for the Ffuf component.
+ */
+
 const title = "Fuzz Faster U Fool (ffuf)";
 const description_userguide =
     "ffuf is a web directory and resource discovery tool. It takes a wordlist " +
