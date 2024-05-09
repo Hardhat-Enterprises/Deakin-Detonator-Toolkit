@@ -146,31 +146,31 @@ const Urlsnarf = () => {
         args.push(`-v`, `${values.versusMode}`);
 
         if (selectedListenerInput === "Interface") {
-            try {
-                const result = await CommandHelper.runCommandWithPkexec(
-                    "urlsnarf",
-                    args,
-                    handleProcessData,
-                    handleProcessTermination
-                );
-                setPid(result.pid);
-                setOutput(result.output);
-            } catch (e: any) {
-                setOutput(e.message);
-            }
+            setLoading(false); // TODO - Have loading state only be true while inputting password
+            CommandHelper.runCommandWithPkexec("urlsnarf", args, handleProcessData, handleProcessTermination)
+                .then(({ output, pid }) => {
+                    // Update the UI with the results from the executed command
+                    setOutput(output);
+                    setPid(pid);
+                })
+                .catch((error) => {
+                    // Display any errors encountered during command execution
+                    setOutput(error.message);
+                    // Deactivate loading state
+                });
         } else if (selectedListenerInput === "Packet capture file") {
-            try {
-                const result = await CommandHelper.runCommandGetPidAndOutput(
-                    "urlsnarf",
-                    args,
-                    handleProcessData,
-                    handleProcessTermination
-                );
-                setPid(result.pid);
-                setOutput(result.output);
-            } catch (e: any) {
-                setOutput(e.message);
-            }
+            CommandHelper.runCommandGetPidAndOutput("urlsnarf", args, handleProcessData, handleProcessTermination)
+                .then(({ output, pid }) => {
+                    // Update the UI with the results from the executed command
+                    setOutput(output);
+                    setPid(pid);
+                })
+                .catch((error) => {
+                    // Display any errors encountered during command execution
+                    setOutput(error.message);
+                    // Deactivate loading state
+                    setLoading(false);
+                });
         }
     };
 
