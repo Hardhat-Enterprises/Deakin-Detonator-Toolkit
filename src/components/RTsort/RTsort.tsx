@@ -4,7 +4,6 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { UserGuide } from "../UserGuide/UserGuide";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -31,9 +30,7 @@ const rtsort = () => {
 
     // Component Constants.
     const title = "Rainbow Table Sort"; // Title of the component.
-    const descriptionUserGuide =
-        "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables."; // Description of the component.
-
+    
     const description =
         "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables."; // Description of the component.
     const steps =
@@ -182,7 +179,6 @@ const rtsort = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-                    {UserGuide(title, descriptionUserGuide)}
                     <TextInput
                         label={"Path"}
                         required
