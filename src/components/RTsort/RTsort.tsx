@@ -6,9 +6,6 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-
-
-
 /**
  * Represents the form values for the RTsort component.
  */
@@ -24,12 +21,12 @@ const rtsort = () => {
 
     // Component Constants.
     const title = "RTSort"; // Title of the component.
-    const description_userguide =
+    const descriptionUserGuide =
         "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables."; // Description of the component.
 
-    const sourceLink = ""; // Link to the source code (or Kali Tools).
+    const sourceLink = "https://gitlab.com/kalilinux/packages/rainbowcrack"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ""; // Contains the dependencies required by the component.
+    const dependencies = ["rainbowcrack"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
     let form = useForm({
@@ -124,7 +121,7 @@ const rtsort = () => {
         <form onSubmit={form.onSubmit(onSubmit)}>
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
-                {UserGuide(title, description_userguide)}
+                {UserGuide(title, descriptionUserGuide)}
                 <TextInput
                     label={"Path"}
                     required
