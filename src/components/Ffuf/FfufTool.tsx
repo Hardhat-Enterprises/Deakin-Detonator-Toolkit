@@ -39,6 +39,10 @@ interface FormValuesType {
     filterLines: string;
 }
 
+/**
+ * The Ffuftool component.
+ * @returns The Ffuftool component.
+ */
 const FfufTool = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
