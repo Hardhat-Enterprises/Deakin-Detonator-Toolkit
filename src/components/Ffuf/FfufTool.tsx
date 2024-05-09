@@ -107,6 +107,13 @@ const FfufTool = () => {
         setAllowSave(false);
     };
 
+    /**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the ffuf tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the wordlist, url, output, filterSize, extensions, filterWords and filterLines interface.
+     */
     const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
