@@ -10,6 +10,9 @@ const title = "Rainbow Table Sort (rtsort)";
 const description_userguide =
     "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables.";
 
+/**
+ * Represents the form values for the RTsort component.
+ */
 interface FormValuesType {
     path: string;
 }
@@ -70,12 +73,14 @@ const rtsort = () => {
      * @param {FormValuesType} values - The form value, containing path.
      */
     const onSubmit = async (values: FormValuesType) => {
+        // Activate loading state to indicate ongoing process
         setLoading(true);
+        // Construct arguments for the RTsort command based on form input
         const args = [values.path];
         const filteredArgs = args.filter((arg) => arg !== ""); // Variable to store non empty string as argument
 
         // Please note this command should not be cancelled as this will cause the rainbow table to be corrupted
-
+        // Execute the aircrack-ng command via helper method and handle its output or potential errors
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "rtsort",
@@ -89,7 +94,9 @@ const rtsort = () => {
             setOutput(e);
         }
     };
-
+    /**
+     * Clears the output state.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
     }, [setOutput]);
