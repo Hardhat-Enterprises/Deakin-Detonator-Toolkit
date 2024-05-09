@@ -7,10 +7,6 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-/**
- * Represents the form values for the Ffuf component.
- */
-
 // Component constants.
 const title = "Fuzz Faster U Fool (ffuf)"; // Contains the title of the component.
 
@@ -32,6 +28,9 @@ const description_userguide =
     "\n\nStep 4: Click Scan to commence the ffuf operation.\n\n" +
     "Step 5: View the Output block below to view the results of the Scan.";
 
+/**
+ * Represents the form values for the Ffuf component.
+ */
 interface FormValuesType {
     wordList: string;
     url: string;
