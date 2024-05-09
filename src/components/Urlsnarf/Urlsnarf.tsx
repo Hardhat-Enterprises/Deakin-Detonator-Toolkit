@@ -176,6 +176,14 @@ const Urlsnarf = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
             <form
                 onSubmit={form.onSubmit((values) =>
                     onSubmit({
