@@ -44,14 +44,15 @@ interface FormValuesType {
  * @returns The Ffuftool component.
  */
 const FfufTool = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
+    // Component State Variables
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [checkedStopWhen, setCheckedStopWhen] = useState(false);
     const [checkedVerboseOutput, setCheckedVerboseOutput] = useState(false);
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
 
     let form = useForm({
         initialValues: {
