@@ -30,13 +30,13 @@ const description_userguide =
     "Step 5: View the Output block below to view the results of the Scan.";
 
 interface FormValuesType {
-    wordlist: string;
+    wordList: string;
     url: string;
     output: string;
-    filtersize: string;
+    filterSize: string;
     extensions: string;
-    filterwords: string;
-    filterlines: string;
+    filterWords: string;
+    filterLines: string;
 }
 
 const FfufTool = () => {
@@ -51,13 +51,13 @@ const FfufTool = () => {
 
     let form = useForm({
         initialValues: {
-            wordlist: "",
+            wordList: "",
             url: "",
             output: "",
-            filtersize: "",
+            filterSize: "",
             extensions: "",
-            filterwords: "",
-            filterlines: "",
+            filterWords: "",
+            filterLines: "",
         },
     });
 
@@ -108,8 +108,8 @@ const FfufTool = () => {
 
         const args = [`-u`, `${values.url}/FUZZ`];
 
-        if (values.wordlist) {
-            args.push(`-w`, `/usr/share/ddt/ffuf_wordlists/${values.wordlist}`);
+        if (values.wordList) {
+            args.push(`-w`, `/usr/share/ddt/ffuf_wordlists/${values.wordList}`);
         } else args.push(`-w`, `/usr/share/ddt/ffuf_wordlists/default_SECLIST_wordlist.txt`);
 
         if (values.extensions) {
@@ -120,16 +120,16 @@ const FfufTool = () => {
             args.push(`-o`, `${values.output}`);
         }
 
-        if (values.filtersize) {
-            args.push(`-fs`, `${values.filtersize}`);
+        if (values.filterSize) {
+            args.push(`-fs`, `${values.filterSize}`);
         }
 
-        if (values.filterwords) {
-            args.push(`-fw`, `${values.filterwords}`);
+        if (values.filterWords) {
+            args.push(`-fw`, `${values.filterWords}`);
         }
 
-        if (values.filterlines) {
-            args.push(`-fl`, `${values.filterlines}`);
+        if (values.filterLines) {
+            args.push(`-fl`, `${values.filterLines}`);
         }
 
         if (checkedStopWhen) {
