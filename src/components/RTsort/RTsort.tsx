@@ -19,10 +19,11 @@ interface FormValuesType {
 
 // Funtion for implementing RTSort as GUI component
 const rtsort = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); //  State variable to store the process ID of the command execution.
 
+    // Form hook to handle form input.
     let form = useForm({
         initialValues: {
             path: "./",
@@ -35,7 +36,7 @@ const rtsort = () => {
      *  @param {string} data - The data received from the child process.
      * */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
     /**
@@ -48,10 +49,17 @@ const rtsort = () => {
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+
+            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+
+            // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+
+                
+            // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
@@ -62,7 +70,7 @@ const rtsort = () => {
             // Cancel the Loading Overlay
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData] // Dependency on the handleProcessData callback
     );
 
     /**
@@ -82,12 +90,14 @@ const rtsort = () => {
         // Please note this command should not be cancelled as this will cause the rainbow table to be corrupted
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         try {
+            // Execute the artsort command via helper method and handle its output or potential errors
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "rtsort",
                 filteredArgs,
                 handleProcessData,
                 handleProcessTermination
             );
+            // Update the UI with the results from the executed command
             setPid(result.pid);
             setOutput(result.output);
         } catch (e: any) {
