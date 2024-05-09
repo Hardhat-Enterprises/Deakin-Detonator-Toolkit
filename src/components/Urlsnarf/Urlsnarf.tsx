@@ -145,17 +145,32 @@ const Urlsnarf = () => {
         }
         args.push(`-v`, `${values.versusMode}`);
 
-        try {
-            const result = await CommandHelper.runCommandGetPidAndOutput(
-                "urlsnarf",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
-            setPid(result.pid);
-            setOutput(result.output);
-        } catch (e: any) {
-            setOutput(e.message);
+        if (selectedListenerInput === "Interface") {
+            try {
+                const result = await CommandHelper.runCommandWithPkexec(
+                    "urlsnarf",
+                    args,
+                    handleProcessData,
+                    handleProcessTermination
+                );
+                setPid(result.pid);
+                setOutput(result.output);
+            } catch (e: any) {
+                setOutput(e.message);
+            }
+        } else if (selectedListenerInput === "Packet capture file") {
+            try {
+                const result = await CommandHelper.runCommandGetPidAndOutput(
+                    "urlsnarf",
+                    args,
+                    handleProcessData,
+                    handleProcessTermination
+                );
+                setPid(result.pid);
+                setOutput(result.output);
+            } catch (e: any) {
+                setOutput(e.message);
+            }
         }
     };
 
