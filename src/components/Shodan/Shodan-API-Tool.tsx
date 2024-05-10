@@ -107,7 +107,10 @@ export function ShodanAPITool() {
 
   
 
-    // Actions taken after saving the output
+    /**
+     * handleSaveComplete: Callback to handle the completion of the file saving process.
+     * It updates the state by indicating that the file has been saved and deactivates the save button.
+     */
     const handleSaveComplete = () => {
         // Indicating that the file has saved which is passed
         // back into SaveOutputToTextFile to inform the user
