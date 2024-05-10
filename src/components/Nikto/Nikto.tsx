@@ -124,7 +124,7 @@ const Nikto = () => {
         }
 
         // Execute the Nikto command via helper method and handle its output or potential errors
-        CommandHelper.runCommandWithPkexec("nikto", args, handleProcessData, handleProcessTermination)
+        CommandHelper.runCommandGetPidAndOutput("nikto", args, handleProcessData, handleProcessTermination)
             .then(() => {
                 // Deactivate loading state
                 setLoading(false);
