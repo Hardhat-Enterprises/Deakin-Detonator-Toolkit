@@ -10,7 +10,9 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
-// Define the form values with their types
+/**
+ * Represents the form values for the Goldeneye component.
+ */
 interface FormValuesType {
     input: string;
     outputDir: string;
@@ -24,36 +26,41 @@ interface FormValuesType {
     quickMode: boolean;
 }
 
+/**
+ * The Foremost component.
+ * @returns The Foremost component.
+ */
 const Foremost = () => {
-    // State hooks for loading, output, and advanced mode switch
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [checkedVerbose, setCheckedVerbose] = useState(false);
-    const [checkedQuiet, setCheckedQuiet] = useState(false);
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [pid, setPid] = useState("");
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
-    const [opened, setOpened] = useState(!isCommandAvailable);
-    const [loadingModal, setLoadingModal] = useState(true);
-    const [allowSave, setAllowSave] = useState(false); 
-    const [hasSaved, setHasSaved] = useState(false); 
+    //Component State Variables.
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [checkedVerbose, setCheckedVerbose] = useState(false); //State variable to indicate if verbose mode is enabled
+    const [checkedQuiet, setCheckedQuiet] = useState(false); //State variable to indicate if quiet mode is enabled
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false); //State variable to indicate if advanced mode is enabled
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable that indicates if the modal is opened.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable to indicate loading state of the modal.
+    const [allowSave, setAllowSave] = useState(false); // State variable to indicate if saving is allowed
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved
 
-    const title = "Foremost"; 
+    // Component Constants.
+    const title = "Foremost"; // Title of the component.
     const description =
-        "Foremost is a forensic program to recover lost files based on their headers, footers, and internal data structures.";
+        "Foremost is a forensic program to recover lost files based on their headers, footers, and internal data structures.";// Description of the component.
     const steps =
         "Step 1: Enter a valid file path to the subject file.\n" +
         "Step 2: Enter a valid file path to the output results.\n"
         "Step 3: Enter any additional options for the scan.\n" +
         "Step 4: Enter any additional parameters for the scan.\n" +
-        "Step 5: Click Run Foremost to commence GoldenEye's operation.\n" +
-        "Step 6: View the Output block below to view the results of the tool's execution."
-    const sourceLink = "https://www.kali.org/tools/foremost/";
-    const tutorial = ""; 
-    const dependencies = ["foremost"]; 
+        "Step 5: Click Run Foremost to commence Foremost's operation.\n" +
+        "Step 6: View the Output block below to view the results of the tool's execution."//Steps to run the component
+    const sourceLink = "https://www.kali.org/tools/foremost/";// Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["foremost"]; // Contains the dependencies required by the component.
 
 
-    // Create a form using Mantine's useForm hook
+    // Form hook to handle form input.
     let form = useForm({
         initialValues: {
             input: "",
@@ -69,11 +76,13 @@ const Foremost = () => {
         },
     });
 
+    // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable);
-                setOpened(!isAvailable);
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
                 setLoadingModal(false); // Set loading to false after the check is done
             })
             .catch((error) => {
@@ -82,106 +91,127 @@ const Foremost = () => {
             });
     }, []);
 
-    // Uses the callback function of runCommandGetPidAndOutput to handle and save data
-    // generated by the executing process into the output state variable.
+    /**
+     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data received to the existing output.
+     * @param {string} data - The data received from the child process.
+     */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
-    // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
-    // the termination of that process, resetting state variables, handling the output data,
-    // and informing the user.
+
+    /**
+     * handleProcessTermination: Callback to handle the termination of the child process.
+     * Once the process termination is handled, it clears the process PID reference and
+     * deactivates the loading overlay.
+     * @param {object} param - An object containing information about the process termination.
+     * @param {number} param.code - The exit code of the terminated process.
+     * @param {number} param.signal - The signal code indicating how the process was terminated.
+     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+
+                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            // Clear the child process pid reference
+
+            // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
-            // Cancel the Loading Overlay
+
+            // Cancel the loading overlay. The process has completed.
             setLoading(false);
 
+            // Allow Saving as the output is finalised
             setAllowSave(true);
             setHasSaved(false);
         },
         [handleProcessData]
     );
 
+    /**
+     * handleSaveComplete: handle state changes when saves are completed
+     * Once the output is saved, prevent duplicate saves
+     */
     const handleSaveComplete = () => {
         //Disallow saving once the output is saved
         setHasSaved(true);
         setAllowSave(false);
     };
 
-    // Handle form submission
+    /**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the goldeneye tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the url, userAgent, worker, sockets, method, sslCheck
+     */
     const onSubmit = async (values: FormValuesType) => {
-        setLoading(true);
-        // Initialize the command arguments with the input and output options
-        const args = [`-i`, `${values.input}`, `-o`, `${values.outputDir}`];
 
-        // Add optional flags based on user selections
+        // Activate loading state to indicate ongoing process
+        setLoading(true);
+
+        // Construct arguments for the aircrack-ng command based on form input
+        const args = [`-i`, `${values.input}`, `-o`, `${values.outputDir}`];
         if (values.config) {
             args.push(`-c`, `${values.config}`);
         }
-
-        //specify file type
         if (values.types) {
             args.push(`-t`, `${values.types}`);
         }
-
-        //Advanced Mode
         if (checkedAdvanced) {
-            //Run the command in quiet mode
             if (checkedQuiet) {
                 args.push(`-Q`);
             }
-
-            //Run the command in verbose mode
             if (checkedVerbose) {
                 args.push(`-v`);
             }
-
-            //Enable indirect block detection
             if (values.indirectBlockDetection) {
                 args.push(`-d`);
             }
-
-            //Write all headers option
             if (values.allHeaders) {
                 args.push(`-a`);
             }
-
-            //Only write audit files
             if (values.auditFileOnly) {
                 args.push(`-w`);
             }
-            //Enable Quick Mode
             if (values.quickMode) {
                 args.push(`-q`);
             }
         }
 
         try {
-            // Execute the Foremost command and update the output state
+            // Execute the Foremost command via helper method and handle its output or potential errors
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "foremost",
                 args,
                 handleProcessData,
                 handleProcessTermination
             );
-            setOutput(result.output);
+
+            // Update the UI with the results from the executed command
             setPid(result.pid);
+            setOutput(result.output);
+            console.log(pid);
         } catch (e: any) {
-            // In case of an error, update the output state with the error message
+            // Display any errors encountered during command execution
             setOutput(e.message);
+            // Deactivate loading state
+            setLoading(false);
         }
     };
 
-    // Clear the output state
+    /**
+     * Clears the output state.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
 
@@ -189,7 +219,6 @@ const Foremost = () => {
         setAllowSave(false);
     }, [setOutput]);
 
-    // Render the GUI
     return (
         <RenderComponent
             title={title}
