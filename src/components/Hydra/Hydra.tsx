@@ -1,10 +1,9 @@
-import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Grid } from "@mantine/core";
+import { Button, NativeSelect, NumberInput, Stack, TextInput, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile, SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
