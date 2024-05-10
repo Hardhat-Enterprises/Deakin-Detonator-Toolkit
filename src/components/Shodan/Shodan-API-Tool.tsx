@@ -152,10 +152,12 @@ export function ShodanAPITool() {
         }
     };
 
+    /**
+     * clearOutput: Callback function to clear the console output.
+     * It resets the state variable holding the output, thereby clearing the display.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
-
-        // reset save state variables to defaults
         setHasSaved(false);
         setAllowSave(false);
     }, [setOutput]);
