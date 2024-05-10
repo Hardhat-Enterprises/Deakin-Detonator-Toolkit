@@ -163,6 +163,24 @@ export function ShodanAPITool() {
     }, [setOutput]);
 
     return (
+
+        <<>
+        <RenderComponent
+          title={title}
+          description={description}
+          steps={steps}
+          tutorial={tutorial}
+          sourceLink={sourceLink}
+
+     >     {!loadingModal && (
+             <InstallationModal
+              isOpen={opened}
+              setOpened={setOpened}
+              feature_description={description}
+              dependencies={dependencies}
+         ></InstallationModal>
+    )}
+    
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
             {loading && (
