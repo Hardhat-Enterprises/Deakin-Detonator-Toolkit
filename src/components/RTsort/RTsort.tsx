@@ -9,7 +9,6 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
-
 /**
  * Represents the form values for the RTsort component.
  */
@@ -18,21 +17,21 @@ interface FormValuesType {
 }
 
 // Funtion for implementing RTSort as GUI component
-const rtsort = () => {
+const RTSort = () => {
+    // Component state variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); //  State variable to store the process ID of the command execution.
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+    const [allowSave, setAllowSave] = useState(false); //   State variable to allow saving the output to a file.
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
 
     // Component Constants.
     const title = "Rainbow Table Sort"; // Title of the component.
-    
-    const description =
-        "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables."; // Description of the component.
+
+    const description = "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables."; // Description of the component.
     const steps =
         "Step 1: Specify the filepath to the rainbow table file that you wish to sort (e.g ~/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt).\n" +
         "Step 2: Click 'Start Sort'.\n" +
@@ -64,7 +63,6 @@ const rtsort = () => {
             });
     }, []);
 
-
     /** *
      * handleProcessData: Callback to handle and append new data from the child process to the output.
      *  It updates the state by appending the new data received to the existing output.
@@ -84,17 +82,15 @@ const rtsort = () => {
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-
             // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
 
-            // If the process was terminated manually, display a termination message.
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
 
-                
-            // If the process was terminated with an error, display the exit and signal codes.
+                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
@@ -140,7 +136,6 @@ const rtsort = () => {
             // Update the UI with the results from the executed command
             setPid(result.pid);
             setOutput(result.output);
-            
         } catch (e: any) {
             setOutput(e);
         }
@@ -187,8 +182,8 @@ const rtsort = () => {
                     />
                     <br></br>
                     <Button type={"submit"}>Start Sort</Button>
-                    
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
@@ -196,4 +191,4 @@ const rtsort = () => {
     );
 };
 
-export default rtsort;
+export default RTSort;
