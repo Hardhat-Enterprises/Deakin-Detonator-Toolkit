@@ -18,7 +18,7 @@ interface FormValues {
     filepath: string;
 }
 
-export function Metagoofil() {
+function Metagoofil() {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
