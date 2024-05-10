@@ -147,7 +147,7 @@ const GoldenEye = () => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
-        // Construct arguments for the aircrack-ng command based on form input
+        // Construct arguments for the goldeneye command based on form input
         const args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/Goldeneye/goldeneye.py`, `${values.url}`];
         values.userAgent ? args.push(`-u`, `${values.userAgent}`) : undefined;
         values.worker ? args.push(`-w`, `${values.worker}`) : undefined;
@@ -156,7 +156,7 @@ const GoldenEye = () => {
         selectedSslCheck === "No" ? args.push(`-n`) : undefined;
 
         try {
-            // Execute the aircrack-ng command via helper method and handle its output or potential errors
+            // Execute the goldeneye command via helper method and handle its output or potential errors
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "python3",
                 args,
