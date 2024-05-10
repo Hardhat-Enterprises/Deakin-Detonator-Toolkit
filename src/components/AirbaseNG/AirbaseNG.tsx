@@ -15,9 +15,8 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     fakeHost: string;
     channel: string;
-    replayInterface: string;
     macAddress: string;
-    interface: string;
+    replayInterface: string;
     filePath: string;
     customConfig: string;
 }
@@ -57,7 +56,6 @@ const AirbaseNG = () => {
             channel: "",
             replayInterface: "",
             macAddress: "",
-            interface: "",
             filePath: "",
             customConfig: "",
         },
@@ -134,7 +132,6 @@ const AirbaseNG = () => {
         const args = ["-e", values.fakeHost, "-c", values.channel, values.replayInterface];
 
         values.macAddress ? args.push(`-a`, values.macAddress) : undefined;
-        values.interface ? args.push(`-i`, values.interface) : undefined;
         values.filePath ? args.push(`-F`, values.filePath) : undefined;
         values.customConfig ? args.push(values.customConfig) : undefined;
 
@@ -194,14 +191,10 @@ const AirbaseNG = () => {
                     />
                     <TextInput label={"Name of your fake host"} required {...form.getInputProps("fakeHost")} />
                     <TextInput label={"Channel of choice"} required {...form.getInputProps("channel")} />
-                    <TextInput label={"Your WLAN interface"} required {...form.getInputProps("wlan")} />
+                    <TextInput label={"Your WLAN interface"} required {...form.getInputProps("replayInterface")} />
                     {advanceMode && (
                         <>
                             <TextInput label={"Set AP MAC address"} {...form.getInputProps("MACAddress")} />
-                            <TextInput
-                                label={"Capture packets from this interface"}
-                                {...form.getInputProps("interface")}
-                            />
                             <TextInput
                                 label={"Save as Pcap File (Please Supply FilePath)"}
                                 {...form.getInputProps("filePath")}
