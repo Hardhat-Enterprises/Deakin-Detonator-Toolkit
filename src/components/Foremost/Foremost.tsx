@@ -1,10 +1,9 @@
-import { Button, LoadingOverlay, Stack, TextInput, Title, Checkbox, Switch, Slider } from "@mantine/core";
+import { Button, Stack, TextInput, Checkbox, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile, SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -47,18 +46,17 @@ const Foremost = () => {
     // Component Constants.
     const title = "Foremost"; // Title of the component.
     const description =
-        "Foremost is a forensic program to recover lost files based on their headers, footers, and internal data structures.";// Description of the component.
+        "Foremost is a forensic program to recover lost files based on their headers, footers, and internal data structures."; // Description of the component.
     const steps =
         "Step 1: Enter a valid file path to the subject file.\n" +
-        "Step 2: Enter a valid file path to the output results.\n"
-        "Step 3: Enter any additional options for the scan.\n" +
+        "Step 2: Enter a valid file path to the output results.\n";
+    "Step 3: Enter any additional options for the scan.\n" +
         "Step 4: Enter any additional parameters for the scan.\n" +
         "Step 5: Click Run Foremost to commence Foremost's operation.\n" +
-        "Step 6: View the Output block below to view the results of the tool's execution."//Steps to run the component
-    const sourceLink = "https://www.kali.org/tools/foremost/";// Link to the source code (or Kali Tools).
+        "Step 6: View the Output block below to view the results of the tool's execution."; //Steps to run the component
+    const sourceLink = "https://www.kali.org/tools/foremost/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["foremost"]; // Contains the dependencies required by the component.
-
 
     // Form hook to handle form input.
     let form = useForm({
@@ -99,7 +97,6 @@ const Foremost = () => {
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
-
 
     /**
      * handleProcessTermination: Callback to handle the termination of the child process.
@@ -155,7 +152,6 @@ const Foremost = () => {
      * @param {FormValuesType} values - The form values, containing the url, userAgent, worker, sockets, method, sslCheck
      */
     const onSubmit = async (values: FormValuesType) => {
-
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
@@ -322,7 +318,7 @@ const Foremost = () => {
                     {/* Submit Button */}
                     <Button type={"submit"}>Run Foremost</Button>
                     {/* Saving the output to a text file if requested */}
-                    {SaveOutputToTextFile_v2(output,allowSave,hasSaved,handleSaveComplete)}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     {/* Console Output */}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
