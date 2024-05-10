@@ -40,6 +40,7 @@ export function ShodanAPITool() {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
 
+    // Form Hook to handle form input.
     let form = useForm({
         initialValues: {
             hostIP: "",
