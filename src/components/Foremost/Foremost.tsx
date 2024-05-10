@@ -8,14 +8,7 @@ import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
-
-const title = "Foremost Tool";
-const description_userguide =
-    "Foremost is a console program to recover files based on their headers, footers, and internal data structures. " +
-    "This process is commonly referred to as data carving. Foremost can work on image files, such as those generated " +
-    "by dd, Safeback, Encase, etc, or directly on a drive. The headers and footers can be specified by a configuration " +
-    "file or you can use command line switches to specify built-in file types. These built-in types look at the data " +
-    "structures of a given file format allowing for a more reliable and faster recovery.";
+import { RenderComponent } from "../UserGuide/UserGuide";
 
 // Define the form values with their types
 interface FormValuesType {
@@ -31,7 +24,7 @@ interface FormValuesType {
     quickMode: boolean;
 }
 
-const ForemostTool = () => {
+const Foremost = () => {
     // State hooks for loading, output, and advanced mode switch
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
@@ -43,7 +36,19 @@ const ForemostTool = () => {
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
 
-    const dependencies = ["foremost"];
+    const title = "Foremost"; 
+    const description =
+        "Foremost is a forensic program to recover lost files based on their headers, footers, and internal data structures.";
+    const steps =
+        "Step 1: Enter a valid file path to the subject file.\n" +
+        "Step 2: Enter a valid file path to the output results.\n"
+        "Step 3: Enter any additional options for the scan.\n" +
+        "Step 4: Enter any additional parameters for the scan.\n" +
+        "Step 5: Click Run Foremost to commence GoldenEye's operation.\n" +
+        "Step 6: View the Output block below to view the results of the tool's execution."
+    const sourceLink = "https://www.kali.org/tools/foremost/";
+    const tutorial = ""; 
+    const dependencies = ["foremost"]; 
 
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
@@ -171,19 +176,24 @@ const ForemostTool = () => {
 
     // Render the GUI
     return (
-        <>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
             {!loadingModal && (
                 <InstallationModal
                     isOpen={opened}
                     setOpened={setOpened}
-                    feature_description={description_userguide}
+                    feature_description={description}
                     dependencies={dependencies}
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack spacing="lg">
-                    {UserGuide(title, description_userguide)}
                     {/* Advanced Mode Switch */}
                     <Switch
                         label="Advanced Mode"
@@ -273,8 +283,8 @@ const ForemostTool = () => {
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
-        </>
+        </RenderComponent>
     );
 };
 
-export default ForemostTool;
+export default Foremost;
