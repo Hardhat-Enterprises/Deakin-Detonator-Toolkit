@@ -9,7 +9,7 @@ import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
-interface FormValues {
+interface FormValuesType {
     url: string;
     lowBound: number;
     upBound: number;
@@ -128,7 +128,7 @@ const WPScan = () => {
         [handleProcessData]
     );
 
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
         const args = [`--url`, values.url];
