@@ -117,7 +117,14 @@ export function ShodanAPITool() {
         setHasSaved(true);
         setAllowSave(false);
     };
-
+    
+    /**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the Shodan API tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the filepath, hash, crack mode, and other options.
+     */
     const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
