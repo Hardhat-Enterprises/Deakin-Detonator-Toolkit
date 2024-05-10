@@ -22,7 +22,7 @@ interface FormValuesType {
     serviceArgs: string;
     nsr: string;
     config: string;
-    optionalconfig: string;
+    optionalConfig: string;
 }
 
 /**
@@ -91,7 +91,7 @@ const Hydra = () => {
         "HTTPS-Get-Form",
         "HTTPS-Post-Form",
         "Telnet",
-    ];// Contain list of service types that require configuration
+    ]; // Contain list of service types that require configuration
     const isLoginSingle = selectedLoginInput === "Single Login"; //Set isLoginSingle to true when single login is selected
     const isLoginFile = selectedLoginInput === "File"; //Set isLoginFile to true when file is selected
     const isPasswordSingle = selectedPasswordInput === "Single Password"; //Set isPasswordSignle to true when single password is selected
@@ -111,7 +111,7 @@ const Hydra = () => {
             serviceArgs: "",
             nsr: "nsr",
             config: "",
-            optionalconfig: "",
+            optionalConfig: "",
         },
     });
 
@@ -220,10 +220,9 @@ const Hydra = () => {
         } else {
             args.push(`${values.service.toLowerCase()}://${values.serviceArgs}`);
         }
-        if (values.optionalconfig.length != 0) {
-            args.push(`${values.optionalconfig}`);
+        if (values.optionalConfig.length != 0) {
+            args.push(`${values.optionalConfig}`);
         }
-
 
         try {
             // Execute the Hydra command via helper method and handle its output or potential errors
@@ -395,7 +394,7 @@ const Hydra = () => {
                         </Grid.Col>
                         <Grid.Col span={12}>
                             <TextInput
-                                {...form.getInputProps("optionalconfig")}
+                                {...form.getInputProps("optionalConfig")}
                                 label={"Optional Configuration"}
                                 placeholder={"Please input your optional parameters"}
                             />
