@@ -9,20 +9,6 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 
 const title = "URLSnarf";
 const description_userguide =
-    // "Urlsnarf is a network traffic sniffing tool that works to output all URL's that are requested from HTTP " +
-    // "traffic in the from of CLF (Common Log Format) that is very commonly used within web servers. The tool " +
-    // "in the DDT provides two listener settings being through an interface or packet capture file.\n\nInformation " +
-    // "on the tool can be found at: https://linux.die.net/man/8/urlsnarf\n\n" +
-    // "Using the tool:\n" +
-    // "Step 1: Select the Listener settings.\n" +
-    // "       Eg: Interface\n\n" +
-    // "Step 2: Input the Interface.\n" +
-    // "       Eg: eth0\n\n" +
-    // "Step 3: Enter any Exclusion details within the sniff.\n" +
-    // "       Eg: POST (every packet besides POST will be shown)\n\n" +
-    // "Step 4: Click Sniff to commence Urlsnarf's operation.\n\n" +
-    // "Step 5: View the Output block below to view the results of the tools execution.";
-
     "Urlsnarf is a network traffic sniffing tool that works to output all URLs that are requested from HTTP " +
     "traffic in the form of CLF (Common Log Format), which is very commonly used within web servers. The tool " +
     "in the DDT provides two listener settings: either through an interface or a packet capture file.\n\nInformation " +
