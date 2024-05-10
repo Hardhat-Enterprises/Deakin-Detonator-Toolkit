@@ -10,7 +10,7 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
-interface FormValues {
+interface FormValuesType {
     webname: string;
     searchmax: string;
     filelimit: string;
@@ -101,7 +101,7 @@ function Metagoofil() {
         [handleProcessData] // Dependency on the handleProcessData callback
     );
 
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
         const args = [`-d`, `${values.webname}`, `-t`, `${values.filetype}`];
