@@ -5,7 +5,7 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile, SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
@@ -37,6 +37,9 @@ const WPScan = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [loadingModal, setLoadingModal] = useState(true);
     const [opened, setOpened] = useState(!isCommandAvailable);
+    const [allowSave, setAllowSave] = useState(false); 
+    const [hasSaved, setHasSaved] = useState(false);
+
 
     const title = "WPScan";
     const description = "WPScan scans remote WordPress installations to find security issues";
@@ -124,9 +127,22 @@ const WPScan = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
+
+    /**
+     * handleSaveComplete: handle state changes when saves are completed
+     * Once the output is saved, prevent duplicate saves
+     */
+    const handleSaveComplete = () => {
+        //Disallow saving once the output is saved
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
@@ -323,7 +339,7 @@ const WPScan = () => {
                     {checkedCustom && <TextInput label={"Custom Configuration"} {...form.getInputProps("custom")} />}
 
                     <Button type={"submit"}>Scan</Button>
-                    {SaveOutputToTextFile(output)}
+                    {SaveOutputToTextFile_v2(output,allowSave,hasSaved,handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
