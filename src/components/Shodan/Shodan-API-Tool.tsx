@@ -54,7 +54,7 @@ export function ShodanAPITool() {
     const sourceLink = "https://developer.shodan.io/api"; // Link to the source code.
     const tutorial = "";  // Link to the official documentation/tutorial.
     const dependencies = ["python3"] // Contains the dependencies required by the component.
-    
+
     // Form Hook to handle form input.
     let form = useForm({
         initialValues: {
@@ -179,7 +179,7 @@ export function ShodanAPITool() {
 
     return (
 
-        <<>
+        <>
         <RenderComponent
           title={title}
           description={description}
@@ -196,23 +196,22 @@ export function ShodanAPITool() {
          ></InstallationModal>
     )}
 
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            <LoadingOverlay visible={loading} />
-            {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
-            )}
-            <Stack>
-                {UserGuide(title, description_userguide)}
+       
+         <form onSubmit={form.onSubmit(onSubmit)}>
+             <Stack>
+                {LoadingOverlayAndCancelButton(loading, pid)}
                 <TextInput label={"Valid API Key"} required {...form.getInputProps("shodanKey")} />
                 <TextInput label={"Host IP"} required {...form.getInputProps("hostIP")} />
                 <Button type={"submit"}>Scan</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
+     </RenderComponent>
+
+    </>
+
+    );
+};
     );
 }
