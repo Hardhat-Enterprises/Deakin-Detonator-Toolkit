@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile, SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -26,6 +26,8 @@ function Metagoofil() {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [loadingModal, setLoadingModal] = useState(true);
     const [opened, setOpened] = useState(!isCommandAvailable);
+    const [allowSave, setAllowSave] = useState(false); 
+    const [hasSaved, setHasSaved] = useState(false); 
 
     const title = "metagoofil";
     const description =
@@ -96,9 +98,19 @@ function Metagoofil() {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
+
+    const handleSaveComplete = () => {
+        //Disallow saving once the output is saved
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
@@ -130,6 +142,10 @@ function Metagoofil() {
 
     const clearOutput = useCallback(() => {
         setOutput("");
+
+
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
 
     return (
@@ -184,7 +200,7 @@ function Metagoofil() {
                     )}
 
                     <Button type={"submit"}>Scan</Button>
-                    {SaveOutputToTextFile(output)}
+                    {SaveOutputToTextFile_v2(output,allowSave,hasSaved,handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
