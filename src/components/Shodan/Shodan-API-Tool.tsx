@@ -105,13 +105,7 @@ export function ShodanAPITool() {
         [handleProcessData]
     );
 
-    // Sends a SIGTERM signal to gracefully terminate the process
-    const handleCancel = () => {
-        if (pid !== null) {
-            const args = [`-15`, pid];
-            CommandHelper.runCommand("kill", args);
-        }
-    };
+  
 
     // Actions taken after saving the output
     const handleSaveComplete = () => {
