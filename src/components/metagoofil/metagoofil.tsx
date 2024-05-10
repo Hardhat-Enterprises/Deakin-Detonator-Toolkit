@@ -1,6 +1,6 @@
 import { Button, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
@@ -8,6 +8,7 @@ import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
 interface FormValues {
     webname: string;
@@ -27,10 +28,9 @@ export function Metagoofil() {
     const [loadingModal, setLoadingModal] = useState(true);
     const [opened, setOpened] = useState(!isCommandAvailable);
 
-    
-    const title = "metagoofil"; 
+    const title = "metagoofil";
     const description =
-        "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company."; 
+        "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company.";
     const steps =
         "Step 1: Enter a website URL for the tool to search.\n" +
         "Step 2: Enter the desired number of results.\n" +
@@ -38,9 +38,9 @@ export function Metagoofil() {
         "Step 4: Enter the file type name to be extracted.\n" +
         "Step 5: Click scan to commence the Metagoofil operation.\n" +
         "Step 6: View the Output block below to view the results of the tool's execution.";
-    const sourceLink = "https://www.kali.org/tools/metagoofil/"; 
-    const tutorial = ""; 
-    const dependencies = ["metagoofil"]; 
+    const sourceLink = "https://www.kali.org/tools/metagoofil/";
+    const tutorial = "";
+    const dependencies = ["metagoofil"];
 
     let form = useForm({
         initialValues: {
@@ -51,6 +51,21 @@ export function Metagoofil() {
             filepath: "",
         },
     });
+
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
