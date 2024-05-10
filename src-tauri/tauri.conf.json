@@ -53,6 +53,11 @@
                         "args": true
                     },
                     {
+                        "name": "gitleaks",
+                        "cmd": "gitleaks",
+                        "args": true
+                    },
+                    {
                         "name": "hashcat",
                         "cmd": "hashcat",
                         "args": true
@@ -110,6 +115,11 @@
                     {
                         "name": "arpspoof",
                         "cmd": "arpspoof",
+                        "args": true
+                    },
+                    {
+                        "name": "arp-scan",
+                        "cmd": "arp-scan",
                         "args": true
                     },
                     {
