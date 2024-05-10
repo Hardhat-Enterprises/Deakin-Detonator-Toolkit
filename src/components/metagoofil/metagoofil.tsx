@@ -138,7 +138,7 @@ function Metagoofil() {
      * It sets up and triggers the goldeneye tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
      *
-     * @param {FormValuesType} values - The form values, containing the url, userAgent, worker, sockets, method, sslCheck
+     * @param {FormValuesType} values - The form values, containing the webName, searchMax, fileLimit, fileType, filePath.
      */
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
