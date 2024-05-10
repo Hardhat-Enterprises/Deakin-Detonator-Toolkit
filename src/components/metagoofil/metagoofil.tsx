@@ -6,24 +6,8 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-
-const title = "Metagoofil";
-const description_userguide =
-    "Metagoofil is a tool used to gather information through the extraction of metadata from publicly available documents " +
-    "from a target company. The tool is capable of performing a Google search on a target to allow for all documents to be " +
-    "identified and downloaded to the local disk. This tool withholds the potential to extract from documents of the following " +
-    "file types: pdf, doc, xls, ppt, docx, pptx, xlsx. \n\nOptions for the tool can be found at: https://www.kali.org/tools/metagoofil/\n\n" +
-    "Using the tool:\n" +
-    "Step 1: Enter a website URL for the tool to search.\n" +
-    "       Eg: kali.org\n\n" +
-    "Step 2: Enter the desired number of results.\n" +
-    "       Eg: 100\n\n" +
-    "Step 3: Enter the limit for the number of files to be downloaded\n" +
-    "       Eg: 25\n\n" +
-    "Step 4: Enter the file type name to be extracted.\n" +
-    "       Eg: pdf\n\n" +
-    "Step 5: Click scan to commence the Metagoofil operation.\n\n" +
-    "Step 6: View the Output block below to view the results of the tool's execution.";
+import { RenderComponent } from "../UserGuide/UserGuide";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 interface FormValues {
     webname: string;
@@ -39,6 +23,24 @@ export function Metagoofil() {
     const [pid, setPid] = useState("");
     const [customconfig, setCustomconfig] = useState(false);
     const [downloadconfig, setDownloadConfig] = useState(false);
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+
+    
+    const title = "metagoofil"; 
+    const description =
+        "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company."; 
+    const steps =
+        "Step 1: Enter a website URL for the tool to search.\n" +
+        "Step 2: Enter the desired number of results.\n" +
+        "Step 3: Enter the limit for the number of files to be downloaded\n" +
+        "Step 4: Enter the file type name to be extracted.\n" +
+        "Step 5: Click scan to commence the Metagoofil operation.\n" +
+        "Step 6: View the Output block below to view the results of the tool's execution.";
+    const sourceLink = "https://www.kali.org/tools/metagoofil/"; 
+    const tutorial = ""; 
+    const dependencies = ["metagoofil"]; 
 
     let form = useForm({
         initialValues: {
@@ -117,47 +119,62 @@ export function Metagoofil() {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <Switch
-                    size="md"
-                    label="Manual Configuration"
-                    checked={customconfig}
-                    onChange={(e) => setCustomconfig(e.currentTarget.checked)}
-                />
-                <Switch
-                    size="md"
-                    label="Download Files"
-                    checked={downloadconfig}
-                    onChange={(e) => setDownloadConfig(e.currentTarget.checked)}
-                />
-                <TextInput label={"Enter the website for search"} required {...form.getInputProps("webname")} />
-                <TextInput label={"Enter your file type"} required {...form.getInputProps("filetype")} />
-                {customconfig && (
-                    <>
-                        <TextInput
-                            label={"Enter number of results (default 100)"}
-                            {...form.getInputProps("searchmax")}
-                        />
-                    </>
-                )}
-                {downloadconfig && (
-                    <>
-                        <TextInput
-                            label={"Enter the value for Download file limit"}
-                            {...form.getInputProps("filelimit")}
-                        />
-                        <TextInput label={"Enter file path"} {...form.getInputProps("filepath")} />
-                    </>
-                )}
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                <Stack>
+                    <Switch
+                        size="md"
+                        label="Manual Configuration"
+                        checked={customconfig}
+                        onChange={(e) => setCustomconfig(e.currentTarget.checked)}
+                    />
+                    <Switch
+                        size="md"
+                        label="Download Files"
+                        checked={downloadconfig}
+                        onChange={(e) => setDownloadConfig(e.currentTarget.checked)}
+                    />
+                    <TextInput label={"Enter the website for search"} required {...form.getInputProps("webname")} />
+                    <TextInput label={"Enter your file type"} required {...form.getInputProps("filetype")} />
+                    {customconfig && (
+                        <>
+                            <TextInput
+                                label={"Enter number of results (default 100)"}
+                                {...form.getInputProps("searchmax")}
+                            />
+                        </>
+                    )}
+                    {downloadconfig && (
+                        <>
+                            <TextInput
+                                label={"Enter the value for Download file limit"}
+                                {...form.getInputProps("filelimit")}
+                            />
+                            <TextInput label={"Enter file path"} {...form.getInputProps("filepath")} />
+                        </>
+                    )}
 
-                <Button type={"submit"}>Scan</Button>
-                {SaveOutputToTextFile(output)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+                    <Button type={"submit"}>Scan</Button>
+                    {SaveOutputToTextFile(output)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 }
 export default Metagoofil;
