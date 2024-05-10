@@ -53,6 +53,7 @@ export function ShodanAPITool() {
     "Step 6: Optional: to save scan results enter filename and click on the save output to file button";
     const sourceLink = "https://developer.shodan.io/api"; // Link to the source code.
     const tutorial = "";  // Link to the official documentation/tutorial.
+    const dependencies = ["python3"] // Contains the dependencies required by the component.
     
     // Form Hook to handle form input.
     let form = useForm({
