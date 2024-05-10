@@ -9,24 +9,6 @@ import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
-const enumerationtypes = [
-    "Vulnerable plugins",
-    "All Plugins",
-    "Popular Plugins",
-    "Vulnerable themes",
-    "All themes",
-    "Popular themes",
-    "Timthumbs",
-    "Config Backups",
-    "Db exports",
-    "UID range",
-    "MID range",
-    "Custom",
-];
-const enumerationRequiringRange = ["UID range", "MID range"];
-const detectionModes = ["mixed", "passive", "aggressive"];
-const outputFormats = ["cli-no-colour", "cli-no-color", "json", "cli"];
-
 interface FormValues {
     url: string;
     lowBound: number;
@@ -67,6 +49,26 @@ const WPScan = () => {
     const sourceLink = "https://www.kali.org/tools/wpscan/";
     const tutorial = "";
     const dependencies = ["wpscan"];
+    const enumerationtypes = [
+        "Vulnerable plugins",
+        "All Plugins",
+        "Popular Plugins",
+        "Vulnerable themes",
+        "All themes",
+        "Popular themes",
+        "Timthumbs",
+        "Config Backups",
+        "Db exports",
+        "UID range",
+        "MID range",
+        "Custom",
+    ];
+    const enumerationRequiringRange = ["UID range", "MID range"];
+    const detectionModes = ["mixed", "passive", "aggressive"];
+    const outputFormats = ["cli-no-colour", "cli-no-color", "json", "cli"];
+    
+
+
 
     let form = useForm({
         initialValues: {
