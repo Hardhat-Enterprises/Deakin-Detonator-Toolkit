@@ -1,10 +1,10 @@
 import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect} from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile, SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
@@ -33,6 +33,8 @@ const Hydra = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [loadingModal, setLoadingModal] = useState(true); // State variable that indicates if the modal is opened.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable to indicate loading state of the modal.
+    const [allowSave, setAllowSave] = useState(false); // State variable to indicate if saving is allowed
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved
 
     // Component Constants.
     const title = "Hydra"; // Title of the component.
@@ -83,7 +85,13 @@ const Hydra = () => {
         "HTTPS-Post-Form",
         "Telnet",
     ];
-
+    const isLoginSingle = selectedLoginInput === "Single Login";
+    const isLoginFile = selectedLoginInput === "File";
+    const isPasswordSingle = selectedPasswordInput === "Single Password";
+    const isPasswordFile = selectedPasswordInput === "File";
+    const isPasswordSet = selectedPasswordInput === "Character Set";
+    const isPasswordBasic = selectedPasswordInput === "Basic";
+    const isService = selectedService;
 
     let form = useForm({
         initialValues: {
@@ -120,31 +128,51 @@ const Hydra = () => {
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
     }, []);
-    // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
-    // the termination of that process, resetting state variables, handling the output data,
-    // and informing the user.
+
+    /**
+     * handleProcessTermination: Callback to handle the termination of the child process.
+     * Once the process termination is handled, it clears the process PID reference and
+     * deactivates the loading overlay.
+     * @param {object} param - An object containing information about the process termination.
+     * @param {number} param.code - The exit code of the terminated process.
+     * @param {number} param.signal - The signal code indicating how the process was terminated.
+     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+
+                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            // Clear the child process pid reference
+
+            // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
-            // Cancel the Loading Overlay
+
+            // Cancel the loading overlay. The process has completed.
             setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
-    // Sends a SIGTERM signal to gracefully terminate the process
-    const handleCancel = () => {
-        if (pid !== null) {
-            const args = [`-15`, pid];
-            CommandHelper.runCommand("kill", args);
-        }
+
+    /**
+     * handleSaveComplete: handle state changes when saves are completed
+     * Once the output is saved, prevent duplicate saves
+     */
+    const handleSaveComplete = () => {
+        //Disallow saving once the output is saved
+        setHasSaved(true);
+        setAllowSave(false);
     };
 
     const onSubmit = async (values: FormValuesType) => {
@@ -193,17 +221,16 @@ const Hydra = () => {
         }
     };
 
+    /**
+     * Clears the output state.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
-    }, [setOutput]);
 
-    const isLoginSingle = selectedLoginInput === "Single Login";
-    const isLoginFile = selectedLoginInput === "File";
-    const isPasswordSingle = selectedPasswordInput === "Single Password";
-    const isPasswordFile = selectedPasswordInput === "File";
-    const isPasswordSet = selectedPasswordInput === "Character Set";
-    const isPasswordBasic = selectedPasswordInput === "Basic";
-    const isService = selectedService;
+        //Disallow saving when output is cleared
+        setHasSaved(false);
+        setAllowSave(false);
+    }, [setOutput]);
 
     return (
         <RenderComponent
@@ -231,15 +258,6 @@ const Hydra = () => {
                     })
                 )}
             >
-                <LoadingOverlay visible={loading} />
-                {loading && (
-                    <div>
-                        <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                            Cancel
-                        </Button>
-                    </div>
-                )}
-
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Grid>
@@ -363,7 +381,7 @@ const Hydra = () => {
                     <Button type={"submit"} color="cyan">
                         Crack
                     </Button>
-                    {SaveOutputToTextFile(output)}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
