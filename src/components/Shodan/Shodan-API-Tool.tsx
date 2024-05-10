@@ -21,7 +21,7 @@ const description_userguide =
     "Step 3: Click Scan to commence the Shodan API operation.\n\n" +
     "Step 4: View the Output block below to view the results of the tool's execution.";
 
-interface FormValues {
+interface FormValuesType {
     hostIP: string;
     shodanKey: string;
 }
@@ -86,7 +86,7 @@ export function ShodanAPITool() {
         setAllowSave(false);
     };
 
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
 
