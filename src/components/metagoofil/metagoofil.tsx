@@ -13,11 +13,11 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
  * Represents the form values for the Metagoofil component.
  */
 interface FormValuesType {
-    webname: string;
-    searchmax: string;
-    filelimit: string;
-    filetype: string;
-    filepath: string;
+    webName: string;
+    searchMax: string;
+    fileLimit: string;
+    fileType: string;
+    filePath: string;
 }
 
 /**
@@ -29,8 +29,8 @@ function Metagoofil() {
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [customconfig, setCustomconfig] = useState(false); //State variable to indicate if custom configuration is enabled
-    const [downloadconfig, setDownloadConfig] = useState(false); //State variable to indicate if download configuration is enabled
+    const [customConfig, setCustomConfig] = useState(false); //State variable to indicate if custom configuration is enabled
+    const [downloadConfig, setDownloadConfig] = useState(false); //State variable to indicate if download configuration is enabled
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [loadingModal, setLoadingModal] = useState(true); // State variable that indicates if the modal is opened.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable to indicate loading state of the modal.
@@ -55,11 +55,11 @@ function Metagoofil() {
     // Form hook to handle form input.
     let form = useForm({
         initialValues: {
-            webname: "",
-            searchmax: "",
-            filelimit: "",
-            filetype: "",
-            filepath: "",
+            webName: "",
+            searchMax: "",
+            fileLimit: "",
+            fileType: "",
+            filePath: "",
         },
     });
 
@@ -145,10 +145,10 @@ function Metagoofil() {
         setLoading(true);
 
         // Construct arguments for the Metagoofil command based on form input
-        const args = [`-d`, `${values.webname}`, `-t`, `${values.filetype}`];
-        values.searchmax ? args.push(`-l`, `${values.searchmax}`) : undefined;
-        values.filelimit ? args.push(`-n`, `${values.filelimit}`) : undefined;
-        values.filepath ? args.push(`-o`, `${values.filepath}`, `-w`) : undefined;
+        const args = [`-d`, `${values.webName}`, `-t`, `${values.fileType}`];
+        values.searchMax ? args.push(`-l`, `${values.searchMax}`) : undefined;
+        values.fileLimit ? args.push(`-n`, `${values.fileLimit}`) : undefined;
+        values.filePath ? args.push(`-o`, `${values.filePath}`, `-w`) : undefined;
 
         try {
             // Execute the Metagoofil command via helper method and handle its output or potential errors
@@ -204,32 +204,32 @@ function Metagoofil() {
                     <Switch
                         size="md"
                         label="Manual Configuration"
-                        checked={customconfig}
-                        onChange={(e) => setCustomconfig(e.currentTarget.checked)}
+                        checked={customConfig}
+                        onChange={(e) => setCustomConfig(e.currentTarget.checked)}
                     />
                     <Switch
                         size="md"
                         label="Download Files"
-                        checked={downloadconfig}
+                        checked={downloadConfig}
                         onChange={(e) => setDownloadConfig(e.currentTarget.checked)}
                     />
-                    <TextInput label={"Enter the website for search"} required {...form.getInputProps("webname")} />
-                    <TextInput label={"Enter your file type"} required {...form.getInputProps("filetype")} />
-                    {customconfig && (
+                    <TextInput label={"Enter the website for search"} required {...form.getInputProps("webName")} />
+                    <TextInput label={"Enter your file type"} required {...form.getInputProps("fileType")} />
+                    {customConfig && (
                         <>
                             <TextInput
                                 label={"Enter number of results (default 100)"}
-                                {...form.getInputProps("searchmax")}
+                                {...form.getInputProps("searchMax")}
                             />
                         </>
                     )}
-                    {downloadconfig && (
+                    {downloadConfig && (
                         <>
                             <TextInput
                                 label={"Enter the value for Download file limit"}
-                                {...form.getInputProps("filelimit")}
+                                {...form.getInputProps("fileLimit")}
                             />
-                            <TextInput label={"Enter file path"} {...form.getInputProps("filepath")} />
+                            <TextInput label={"Enter file path"} {...form.getInputProps("filePath")} />
                         </>
                     )}
 
