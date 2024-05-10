@@ -5,10 +5,13 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-import { SaveOutputToTextFile, SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
+/**
+ * Represents the form values for the wpscan component.
+ */
 interface FormValuesType {
     url: string;
     lowBound: number;
@@ -23,35 +26,39 @@ interface FormValuesType {
     custom: string;
 }
 
+/**
+ * The WPScan component.
+ * @returns The WPScan component.
+ */
 const WPScan = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [checkedCustom, setCheckedCustom] = useState(false);
-    const [selectedEnumerationType, setselectedEnumerationType] = useState("");
-    const [selectedDetectionMode, setSelectedDetectionMode] = useState("");
-    const [selectedOutputFormat, setSelectedOutputFormat] = useState("");
-    const [verboseChecked, setVerboseChecked] = useState(false);
-    const [stealthyChecked, setStealthyChecked] = useState(false);
-    const [pid, setPid] = useState("");
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
-    const [loadingModal, setLoadingModal] = useState(true);
-    const [opened, setOpened] = useState(!isCommandAvailable);
-    const [allowSave, setAllowSave] = useState(false); 
-    const [hasSaved, setHasSaved] = useState(false);
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false); // State variable to check if advanced mode is enabled.
+    const [checkedCustom, setCheckedCustom] = useState(false); // State variable to check if custom mode is enabled.
+    const [selectedEnumerationType, setselectedEnumerationType] = useState(""); // State variable to store selected enumeration type
+    const [selectedDetectionMode, setSelectedDetectionMode] = useState(""); // State variable to store selected detection mode.
+    const [selectedOutputFormat, setSelectedOutputFormat] = useState(""); // State variable to store selected output format.
+    const [verboseChecked, setVerboseChecked] = useState(false); // State variable to check if verbose mode is enabled.
+    const [stealthyChecked, setStealthyChecked] = useState(false); // State variable to check if verbose mode is enabled.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable that indicates if the modal is opened.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable to indicate loading state of the modal.
+    const [allowSave, setAllowSave] = useState(false); // State variable to indicate if saving is allowed
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved
 
-
-    const title = "WPScan";
-    const description = "WPScan scans remote WordPress installations to find security issues";
+    // Component Constants.
+    const title = "WPScan"; // Title of the component.
+    const description = "WPScan scans remote WordPress installations to find security issues"; // Description of the component.
     const steps =
         "Step 1: Enter a WordPress URL.\n" +
         "Step 2: Enter any additional options for the scan.\n" +
         "Step 3: Enter any additional parameters for the scan.\n" +
         "Step 4: Click Scan to commence WPScan's operation.\n" +
-        "Step 5: View the Output block below to view the results of the tool's execution.\n";
-    const sourceLink = "https://www.kali.org/tools/wpscan/";
-    const tutorial = "";
-    const dependencies = ["wpscan"];
+        "Step 5: View the Output block below to view the results of the tool's execution.\n"; //Steps to run the component
+    const sourceLink = "https://www.kali.org/tools/wpscan/"; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["wpscan"]; // Contains the dependencies required by the component.
     const enumerationtypes = [
         "Vulnerable plugins",
         "All Plugins",
@@ -65,14 +72,12 @@ const WPScan = () => {
         "UID range",
         "MID range",
         "Custom",
-    ];
-    const enumerationRequiringRange = ["UID range", "MID range"];
-    const detectionModes = ["mixed", "passive", "aggressive"];
-    const outputFormats = ["cli-no-colour", "cli-no-color", "json", "cli"];
-    
+    ]; // Contains types of enumeration available.
+    const enumerationRequiringRange = ["UID range", "MID range"]; // Contains the enumeration types that requires specification of ranges.
+    const detectionModes = ["mixed", "passive", "aggressive"]; // Contains detection modes available.
+    const outputFormats = ["cli-no-colour", "cli-no-color", "json", "cli"]; // Contains the output formats available.
 
-
-
+    // Form hook to handle form input.
     let form = useForm({
         initialValues: {
             url: "",
@@ -105,29 +110,45 @@ const WPScan = () => {
             });
     }, []);
 
-    // Uses the callback function of runCommandGetPidAndOutput to handle and save data
-    // generated by the executing process into the output state variable.
+    /**
+     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data received to the existing output.
+     * @param {string} data - The data received from the child process.
+     */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
-    // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
-    // the termination of that process, resetting state variables, handling the output data,
-    // and informing the user.
+    /**
+     * handleProcessTermination: Callback to handle the termination of the child process.
+     * Once the process termination is handled, it clears the process PID reference and
+     * deactivates the loading overlay.
+     * @param {object} param - An object containing information about the process termination.
+     * @param {number} param.code - The exit code of the terminated process.
+     * @param {number} param.signal - The signal code indicating how the process was terminated.
+     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+
+                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            // Clear the child process pid reference
+
+            // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
-            // Cancel the Loading Overlay
+
+            // Cancel the loading overlay. The process has completed.
             setLoading(false);
 
+            // Allow Saving as the output is finalised
             setAllowSave(true);
             setHasSaved(false);
         },
@@ -144,12 +165,19 @@ const WPScan = () => {
         setAllowSave(false);
     };
 
+    /**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the wpscan tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the url, userAgent, worker, sockets, method, sslCheck
+     */
     const onSubmit = async (values: FormValuesType) => {
+        // Activate loading state to indicate ongoing process
         setLoading(true);
 
+        // Construct arguments for the wpscan command based on form input
         const args = [`--url`, values.url];
-
-        //Insantiate enumeration arguments
         if (selectedEnumerationType != "" && checkedAdvanced) {
             selectedEnumerationType === "Vulnerable plugins" ? args.push(`-e`, `vp`) : undefined;
             selectedEnumerationType === "All Plugins" ? args.push(`-e`, `ap`) : undefined;
@@ -199,21 +227,34 @@ const WPScan = () => {
         }
 
         try {
+            // Execute the wpscan command via helper method and handle its output or potential errors
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "wpscan",
                 args,
                 handleProcessData,
                 handleProcessTermination
             );
+
+            // Update the UI with the results from the executed command
             setPid(result.pid);
             setOutput(result.output);
         } catch (e: any) {
+            // Display any errors encountered during command execution
             setOutput(e.message);
+            // Deactivate loading state
+            setLoading(false);
         }
     };
 
+    /**
+     * Clears the output state.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
+
+        //Disallow saving when output is cleared
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
 
     return (
@@ -339,7 +380,7 @@ const WPScan = () => {
                     {checkedCustom && <TextInput label={"Custom Configuration"} {...form.getInputProps("custom")} />}
 
                     <Button type={"submit"}>Scan</Button>
-                    {SaveOutputToTextFile_v2(output,allowSave,hasSaved,handleSaveComplete)}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
