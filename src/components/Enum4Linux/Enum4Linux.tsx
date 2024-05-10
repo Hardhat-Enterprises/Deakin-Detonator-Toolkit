@@ -9,20 +9,17 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 
 const title = "Enum4Linux";
 const description_userguide =
-    "Enum4linux is a tool used for the enumeration of information from Windows and Samba operating systems. " +
+    "Enum4linux is a tool used for enumerating information from Windows and Samba operating systems. " +
     "It is particularly useful for identifying the remote OS of a system and providing a list of the users " +
     "and group memberships found within the system.\n\nOptions for the tool can be found at: " +
     "https://www.kali.org/tools/enum4linux/\n\n" +
     "Using Enum4Linux:\n" +
-    "Step 1: Enter a Target IP address.\n" +
-    "       Eg: 192.168.1.1\n\n" +
-    "Step 2: Enter an Option for the Enumeration.\n" +
-    "       Eg: U (get userlist)\n\n" +
-    "Step 3: Enter any Parameters.\n" +
-    "       Eg: example.txt\n\n" +
-    "Step 4: Enter any Additional Options/Parameters.\n\n" +
+    "Step 1: Enter a target IP address. Eg: 192.168.1.1\n\n" +
+    "Step 2: Enter an option for the enumeration. Eg: U (get userlist)\n\n" +
+    "Step 3: Enter any parameters. Eg: example.txt\n\n" +
+    "Step 4: Enter any additional options/parameters.\n\n" +
     "Step 5: Click Scan to commence Enum4Linux's operation.\n\n" +
-    "Step 6: View the Output block below to view the results of the tools execution.";
+    "Step 6: View the output block below to view the results of the tools execution.";
 
 interface FormValues {
     ipAddress: string;

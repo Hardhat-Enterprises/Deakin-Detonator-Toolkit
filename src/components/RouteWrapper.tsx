@@ -64,6 +64,10 @@ import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
+import AMAP from "./Amap/Amap";
+import Gitleaks from "./Gitleaks/Gitleaks";
+import WhatWeb from "./WhatWeb/WhatWeb";
+import Arpscan from "./ArpScan/ArpScan";
 
 export interface RouteProperties {
     name: string;
@@ -266,11 +270,25 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Amap",
+        path: "/tools/Amap",
+        element: <AMAP />,
+        description: "AMAP is a network scanning tool used to identify open ports and services on targeted hosts.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
         name: "Arjun",
         path: "/tools/Arjuntool",
         element: <Arjuntool />,
         description: "Arjun can find query parameters for URL endpoints.",
         category: "Web Application Testing",
+    },
+    {
+        name: "ArpScan",
+        path: "/tools/arpscan",
+        element: <Arpscan />,
+        description: "Scan the local network for ARP entries.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "ARP Spoofing",
@@ -384,6 +402,13 @@ export const ROUTES: RouteProperties[] = [
         element: <FTPconnect />,
         description: "FTPconnect tool",
         category: "Miscellaneous",
+    },
+    {
+        name: "Gitleaks",
+        path: "/tools/gitleaks",
+        element: <Gitleaks />,
+        description: "Detect hardcoded secrets in git repositories.",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "GoBuster",
@@ -548,6 +573,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Urlsnarf />,
         description: "HTTP Sniffer",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "WhatWeb",
+        path: "/tools/WhatWeb",
+        element: <WhatWeb />,
+        description: "WhatWeb scans websites and recognises web technologies.",
+        category: "Web Application Testing",
     },
     {
         name: "WPScan",

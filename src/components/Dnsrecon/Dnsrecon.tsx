@@ -7,16 +7,15 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-const title = "Dnsrecon";
+const title = "DNSRecon";
 const description_userguide =
-    "Dnsrecon is a Python script that has an extensive list of functionalities. This tool is primarily used for " +
-    "DNS enumeration and scanning, where for example, it may enumerate DNS records, SRV records, and hosts and " +
-    "domains using google.\n\nFurther usages for the tool can be found at: https://www.kali.org/tools/dnsrecon/\n\n" +
-    "Using Dnsrecon:\n" +
-    "Step 1: Enter a Target Domain URL.\n" +
-    "       Eg: https://www.deakin.edu.au\n\n" +
-    "Step 2: Click Scan to commence Dnsrecon's operation.\n\n" +
-    "Step 3: View the Output block below to view the results of the tools execution.";
+    "DNSRecon is a python script that has an extensive list of functions. This tool is primarily used for " +
+    "DNS enumeration and scanning, for example, it may enumerate DNS records, SRV records, and hosts and " +
+    "domains using Google.\n\nFurther uses for the tool can be found at: https://www.kali.org/tools/dnsrecon/\n\n" +
+    "Using DNSRecon:\n" +
+    "Step 1: Enter a target domain URL, for example, https://www.deakin.edu.au\n\n" +
+    "Step 2: Click scan to commence DNSRecon's operation.\n\n" +
+    "Step 3: View the output block below to view the results of the tool's execution.";
 
 interface FormValues {
     url: string;

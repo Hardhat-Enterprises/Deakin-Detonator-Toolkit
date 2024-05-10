@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Title, Checkbox, Switch } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Title, Checkbox, Switch, Slider } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -35,6 +35,8 @@ const ForemostTool = () => {
     // State hooks for loading, output, and advanced mode switch
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
+    const [checkedVerbose, setCheckedVerbose] = useState(false);
+    const [checkedQuiet, setCheckedQuiet] = useState(false);
     const [checkedAdvanced, setCheckedAdvanced] = useState(false);
     const [pid, setPid] = useState("");
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
@@ -109,31 +111,38 @@ const ForemostTool = () => {
             args.push(`-c`, `${values.config}`);
         }
 
-        if (values.quiet) {
-            args.push(`-Q`);
-        }
-
-        if (values.verbose) {
-            args.push(`-v`);
-        }
-
+        //specify file type
         if (values.types) {
             args.push(`-t`, `${values.types}`);
         }
 
+        //Advanced Mode
         if (checkedAdvanced) {
+            //Run the command in quiet mode
+            if (checkedQuiet) {
+                args.push(`-Q`);
+            }
+
+            //Run the command in verbose mode
+            if (checkedVerbose) {
+                args.push(`-v`);
+            }
+
+            //Enable indirect block detection
             if (values.indirectBlockDetection) {
                 args.push(`-d`);
             }
 
+            //Write all headers option
             if (values.allHeaders) {
                 args.push(`-a`);
             }
 
+            //Only write audit files
             if (values.auditFileOnly) {
                 args.push(`-w`);
             }
-
+            //Enable Quick Mode
             if (values.quickMode) {
                 args.push(`-q`);
             }
@@ -201,22 +210,25 @@ const ForemostTool = () => {
                         placeholder={"Specify types (comma-separated) e.g., jpg,doc. if blank will retrieve all."}
                         {...form.getInputProps("types")}
                     />
-                    <Stack spacing="lg">
-                        {/* Quiet Mode */}
-                        <Checkbox
-                            label={"Quiet Mode - enables quiet mode. Suppress output messages."}
-                            {...form.getInputProps("quiet" as keyof FormValuesType)}
-                        />
-                        {/* Verbose Mode */}
-                        <Checkbox
-                            label={"Verbose Mode - enables verbose mode. Logs all messages to screen."}
-                            {...form.getInputProps("verbose" as keyof FormValuesType)}
-                        />
-                    </Stack>
+                    <Stack spacing="lg"></Stack>
 
                     {/* Advanced Options */}
                     {checkedAdvanced && (
                         <Stack spacing="lg">
+                            {!checkedVerbose && (
+                                <Switch
+                                    label="Quiet Mode"
+                                    checked={checkedQuiet}
+                                    onChange={(e) => setCheckedQuiet(e.currentTarget.checked)}
+                                />
+                            )}
+                            {!checkedQuiet && (
+                                <Switch
+                                    label="Verbose Mode"
+                                    checked={checkedVerbose}
+                                    onChange={(e) => setCheckedVerbose(e.currentTarget.checked)}
+                                />
+                            )}
                             {/* Configuration File */}
                             <TextInput
                                 label={"Configuration File"}
