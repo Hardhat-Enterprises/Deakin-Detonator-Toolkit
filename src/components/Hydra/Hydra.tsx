@@ -1,32 +1,14 @@
 import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect} from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
-
-const title = "Hydra";
-const description =
-    "Hydra is a login cracking tool that supports several protocols within " +
-    "its attacks. The tool can be applied for cracking singular passwords, " +
-    "files, and character sets. These brute-force attacks can be applied to " +
-    "SMTP, SSH, NFS,and several other protocols.\n\n" +
-    "How to use Hydra:\n\n" +
-    "Step 1: Select the Login settings\n" +
-    "       E.g. Single Login\n\n" +
-    "Step 2: Specify the Username for the Login\n" +
-    "       E.g. kali\n\n" +
-    "Step 3: Select the Password setting\n" +
-    "       E.g. Single Password\n\n" +
-    "Step 4: Input password for the Login\n" +
-    "       E.g. root\n\n" +
-    "Step 5: Select the number of Threads and Service Type\n" +
-    "       E.g. 6, SSH\n\n" +
-    "Step 6: Enter an IP address and Port number.\n" +
-    "       E.g. 192.168.1.1:22\n\n" +
-    "Step 7: Click Crack to commence Hydra's operation.\n\n" +
-    "Step 8: View the Output block below to view the results";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { RenderComponent } from "../UserGuide/UserGuide";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 interface FormValuesType {
     loginInputType: string;
@@ -41,43 +23,6 @@ interface FormValuesType {
     optionalconfig: string;
 }
 
-const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic", "No Password"];
-const loginInputTypes = ["Single Login", "File", "No Username"];
-const serviceType = [
-    "FTP",
-    "FTPS",
-    "HTTP-Get",
-    "HTTP-Get-Form",
-    "HTTP-Head",
-    "HTTP-Post-Form",
-    "HTTPS-Get",
-    "HTTPS-Get-Form",
-    "HTTPS-Head",
-    "HTTPS-Post-Form",
-    "RDP",
-    "RSH",
-    "SMB",
-    "SMTP",
-    "SNMP",
-    "SOCKS5",
-    "SSH",
-    "Telnet",
-];
-
-const serviceTypeRequiringConfig = [
-    "HTTP-Head",
-    "HTTP-Get",
-    "HTTP-Get-Form",
-    "HTTP-Post-Form",
-    "HTTP-Head",
-    "HTTPS-Get",
-    "HTTPS-Get-Form",
-    "HTTPS-Post-Form",
-    "Telnet",
-];
-
-const serviceTypeOptionalConfig = [];
-
 const Hydra = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
@@ -85,6 +30,60 @@ const Hydra = () => {
     const [selectedLoginInput, setSelectedLoginInput] = useState("");
     const [selectedService, setSelectedService] = useState("");
     const [pid, setPid] = useState("");
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable that indicates if the modal is opened.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable to indicate loading state of the modal.
+
+    // Component Constants.
+    const title = "Hydra"; // Title of the component.
+    const description =
+        "Hydra is a parallelized login cracker which supports numerous protocols to attack. It is very fast and flexible, and new modules are easy to add."; // Description of the component.
+    const steps =
+        "Step 1: Select the Login settings\n" +
+        "Step 2: Specify the Username for the Login\n" +
+        "Step 3: Select the Password setting\n" +
+        "Step 4: Input password for the Login\n" +
+        "Step 5: Select the number of Threads and Service Type\n" +
+        "Step 6: Enter an IP address and Port number.\n" +
+        "Step 7: Click Crack to commence Hydra's operation.\n" +
+        "Step 8: View the Output block below to view the results"; //Steps to run the component
+    const sourceLink = "https://www.kali.org/tools/hydra/"; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["hydra"]; // Contains the dependencies required by the component.
+    const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic", "No Password"];
+    const loginInputTypes = ["Single Login", "File", "No Username"];
+    const serviceType = [
+        "FTP",
+        "FTPS",
+        "HTTP-Get",
+        "HTTP-Get-Form",
+        "HTTP-Head",
+        "HTTP-Post-Form",
+        "HTTPS-Get",
+        "HTTPS-Get-Form",
+        "HTTPS-Head",
+        "HTTPS-Post-Form",
+        "RDP",
+        "RSH",
+        "SMB",
+        "SMTP",
+        "SNMP",
+        "SOCKS5",
+        "SSH",
+        "Telnet",
+    ];
+    const serviceTypeRequiringConfig = [
+        "HTTP-Head",
+        "HTTP-Get",
+        "HTTP-Get-Form",
+        "HTTP-Post-Form",
+        "HTTP-Head",
+        "HTTPS-Get",
+        "HTTPS-Get-Form",
+        "HTTPS-Post-Form",
+        "Telnet",
+    ];
+
 
     let form = useForm({
         initialValues: {
@@ -100,6 +99,21 @@ const Hydra = () => {
             optionalconfig: "",
         },
     });
+
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
 
     // Uses the callback function of runCommandGetPidAndOutput to handle and save data
     // generated by the executing process into the output state variable.
@@ -192,143 +206,168 @@ const Hydra = () => {
     const isService = selectedService;
 
     return (
-        <form
-            onSubmit={form.onSubmit((values) =>
-                onSubmit({
-                    ...values,
-                    passwordInputType: selectedPasswordInput,
-                    loginInputType: selectedLoginInput,
-                    service: selectedService,
-                })
-            )}
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
         >
-            <LoadingOverlay visible={loading} />
-            {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
             )}
+            <form
+                onSubmit={form.onSubmit((values) =>
+                    onSubmit({
+                        ...values,
+                        passwordInputType: selectedPasswordInput,
+                        loginInputType: selectedLoginInput,
+                        service: selectedService,
+                    })
+                )}
+            >
+                <LoadingOverlay visible={loading} />
+                {loading && (
+                    <div>
+                        <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
+                            Cancel
+                        </Button>
+                    </div>
+                )}
 
-            <Stack>
-                {UserGuide(title, description)}
-                <Grid>
-                    <Grid.Col span={12}>
-                        <NativeSelect
-                            value={selectedLoginInput}
-                            onChange={(e) => setSelectedLoginInput(e.target.value)}
-                            label={"Login settings"}
-                            data={loginInputTypes}
-                            required
-                            placeholder={"Select a setting"}
-                        />
-                    </Grid.Col>
-                    <Grid.Col span={12}>
-                        {isLoginSingle && (
-                            <TextInput
-                                {...form.getInputProps("loginArgs")}
-                                label={"Specify username"}
-                                placeholder={"eg: kali"}
+                <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Grid>
+                        <Grid.Col span={12}>
+                            <NativeSelect
+                                value={selectedLoginInput}
+                                onChange={(e) => setSelectedLoginInput(e.target.value)}
+                                label={"Login settings"}
+                                data={loginInputTypes}
+                                required
+                                placeholder={"Select a setting"}
+                            />
+                        </Grid.Col>
+                        <Grid.Col span={12}>
+                            {isLoginSingle && (
+                                <TextInput
+                                    {...form.getInputProps("loginArgs")}
+                                    label={"Specify username"}
+                                    placeholder={"eg: kali"}
+                                    required
+                                />
+                            )}
+                            {isLoginFile && (
+                                <TextInput
+                                    {...form.getInputProps("loginArgs")}
+                                    label={"File path"}
+                                    placeholder={"eg: /home/kali/Desktop/logins.txt"}
+                                    required
+                                />
+                            )}
+                        </Grid.Col>
+                    </Grid>
+                    <Grid>
+                        <Grid.Col span={12}>
+                            <NativeSelect
+                                value={selectedPasswordInput}
+                                onChange={(e) => setSelectedPasswordInput(e.target.value)}
+                                label={"Password settings"}
+                                data={passwordInputTypes}
+                                placeholder={"Select a setting"}
                                 required
                             />
-                        )}
-                        {isLoginFile && (
-                            <TextInput
-                                {...form.getInputProps("loginArgs")}
-                                label={"File path"}
-                                placeholder={"eg: /home/kali/Desktop/logins.txt"}
+                        </Grid.Col>
+                        <Grid.Col span={12}>
+                            {isPasswordSingle && (
+                                <TextInput
+                                    {...form.getInputProps("passwordArgs")}
+                                    label={"Password"}
+                                    placeholder={"eg: root"}
+                                    required
+                                />
+                            )}
+                            {isPasswordFile && (
+                                <TextInput
+                                    {...form.getInputProps("passwordArgs")}
+                                    label={"File path"}
+                                    placeholder={"eg: /home/kali/Desktop/pwd.txt"}
+                                    required
+                                />
+                            )}
+                            {isPasswordSet && (
+                                <TextInput
+                                    {...form.getInputProps("passwordArgs")}
+                                    label={"Character Set"}
+                                    placeholder={"eg: 1:5:Aa1"}
+                                    required
+                                />
+                            )}
+                            {isPasswordBasic && (
+                                <TextInput label={"Null, username, reverse username"} disabled placeholder={"nsr"} />
+                            )}
+                        </Grid.Col>
+                    </Grid>
+                    <Grid>
+                        <Grid.Col span={6}>
+                            <NumberInput
+                                label={"Threads"}
+                                {...form.getInputProps("threads")}
+                                defaultValue={6}
                                 required
                             />
-                        )}
-                    </Grid.Col>
-                </Grid>
-                <Grid>
-                    <Grid.Col span={12}>
-                        <NativeSelect
-                            value={selectedPasswordInput}
-                            onChange={(e) => setSelectedPasswordInput(e.target.value)}
-                            label={"Password settings"}
-                            data={passwordInputTypes}
-                            placeholder={"Select a setting"}
-                            required
-                        />
-                    </Grid.Col>
-                    <Grid.Col span={12}>
-                        {isPasswordSingle && (
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <NativeSelect
+                                value={selectedService}
+                                onChange={(e) => setSelectedService(e.target.value)}
+                                label={"Service Type"}
+                                data={serviceType}
+                                required
+                                placeholder={"Select a service"}
+                            />
+                        </Grid.Col>
+                        <Grid.Col span={12}>
+                            {serviceTypeRequiringConfig.includes(selectedService) && (
+                                <>
+                                    <TextInput
+                                        label={"Custom Configuration"}
+                                        required
+                                        {...form.getInputProps("config")}
+                                    />
+                                </>
+                            )}
+                        </Grid.Col>
+                        <Grid.Col span={12}>
                             <TextInput
-                                {...form.getInputProps("passwordArgs")}
-                                label={"Password"}
-                                placeholder={"eg: root"}
+                                {...form.getInputProps("serviceArgs")}
+                                label={"IP address"}
+                                placeholder={"eg: 192.168.1.1"}
                                 required
                             />
-                        )}
-                        {isPasswordFile && (
+                        </Grid.Col>
+                        <Grid.Col span={12}>
                             <TextInput
-                                {...form.getInputProps("passwordArgs")}
-                                label={"File path"}
-                                placeholder={"eg: /home/kali/Desktop/pwd.txt"}
-                                required
+                                {...form.getInputProps("optionalconfig")}
+                                label={"Optional Configuration"}
+                                placeholder={"Please input your optional parameters"}
                             />
-                        )}
-                        {isPasswordSet && (
-                            <TextInput
-                                {...form.getInputProps("passwordArgs")}
-                                label={"Character Set"}
-                                placeholder={"eg: 1:5:Aa1"}
-                                required
-                            />
-                        )}
-                        {isPasswordBasic && (
-                            <TextInput label={"Null, username, reverse username"} disabled placeholder={"nsr"} />
-                        )}
-                    </Grid.Col>
-                </Grid>
-                <Grid>
-                    <Grid.Col span={6}>
-                        <NumberInput label={"Threads"} {...form.getInputProps("threads")} defaultValue={6} required />
-                    </Grid.Col>
-                    <Grid.Col span={6}>
-                        <NativeSelect
-                            value={selectedService}
-                            onChange={(e) => setSelectedService(e.target.value)}
-                            label={"Service Type"}
-                            data={serviceType}
-                            required
-                            placeholder={"Select a service"}
-                        />
-                    </Grid.Col>
-                    <Grid.Col span={12}>
-                        {serviceTypeRequiringConfig.includes(selectedService) && (
-                            <>
-                                <TextInput label={"Custom Configuration"} required {...form.getInputProps("config")} />
-                            </>
-                        )}
-                    </Grid.Col>
-                    <Grid.Col span={12}>
-                        <TextInput
-                            {...form.getInputProps("serviceArgs")}
-                            label={"IP address"}
-                            placeholder={"eg: 192.168.1.1"}
-                            required
-                        />
-                    </Grid.Col>
-                    <Grid.Col span={12}>
-                        <TextInput
-                            {...form.getInputProps("optionalconfig")}
-                            label={"Optional Configuration"}
-                            placeholder={"Please input your optional parameters"}
-                        />
-                    </Grid.Col>
-                </Grid>
+                        </Grid.Col>
+                    </Grid>
 
-                <Button type={"submit"} color="cyan">
-                    Crack
-                </Button>
-                {SaveOutputToTextFile(output)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+                    <Button type={"submit"} color="cyan">
+                        Crack
+                    </Button>
+                    {SaveOutputToTextFile(output)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 
