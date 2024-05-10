@@ -40,6 +40,20 @@ export function ShodanAPITool() {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
 
+    // Component Constants.
+    const title = "Shodan API Tool"; // Title of the component.
+    const description = "The Shodan API is a powerful tool that allows external network scans to be performed with use of a valid API key"; // Description of the component.
+    const steps = 
+    "How to use Shodan API:\n" +
+    "Step 1: Install shodkey.py to /usr/share/ddt by running install_exploits.sh script or manually transfer shodkey.py to /usr/share/ddt/\n"+
+    "Step 2: Enter a Valid API Key\n" +
+    "Step 3: Enter a Host IP: E.g. 127.0.0.1\n" +
+    "Step 4: Click Scan button to commence the Shodan API operation. Or click Cancel Scan to terminate scan\n" +
+    "Step 5: View the Output block below to view the results of the tool's execution.\n" +
+    "Step 6: Optional: to save scan results enter filename and click on the save output to file button";
+    const sourceLink = "https://developer.shodan.io/api"; // Link to the source code.
+    const tutorial = "";  // Link to the official documentation/tutorial.
+    
     // Form Hook to handle form input.
     let form = useForm({
         initialValues: {
@@ -180,7 +194,7 @@ export function ShodanAPITool() {
               dependencies={dependencies}
          ></InstallationModal>
     )}
-    
+
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             <LoadingOverlay visible={loading} />
             {loading && (
