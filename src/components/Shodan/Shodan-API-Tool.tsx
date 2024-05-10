@@ -26,6 +26,10 @@ interface FormValuesType {
     shodanKey: string;
 }
 
+/**
+ * The Shodan API Tool component.
+ * @returns The Shodan component.
+ */
 export function ShodanAPITool() {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
