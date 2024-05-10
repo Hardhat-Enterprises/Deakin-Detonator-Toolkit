@@ -38,7 +38,7 @@ function Metagoofil() {
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved
 
     // Component Constants.
-    const title = "metagoofil"; // Title of the component.
+    const title = "Metagoofil"; // Title of the component.
     const description =
         "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company."; // Description of the component.
     const steps =
