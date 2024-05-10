@@ -146,7 +146,7 @@ const Foremost = () => {
 
     /**
      * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the goldeneye tool with the given parameters.
+     * It sets up and triggers the Foremost tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
      *
      * @param {FormValuesType} values - The form values, containing the url, userAgent, worker, sockets, method, sslCheck
@@ -155,7 +155,7 @@ const Foremost = () => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
-        // Construct arguments for the aircrack-ng command based on form input
+        // Construct arguments for the Foremost command based on form input
         const args = [`-i`, `${values.input}`, `-o`, `${values.outputDir}`];
         if (values.config) {
             args.push(`-c`, `${values.config}`);
