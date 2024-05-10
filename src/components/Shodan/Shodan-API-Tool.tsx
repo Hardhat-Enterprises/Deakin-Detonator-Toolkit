@@ -3,23 +3,12 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { URenderComponent } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-mport { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
-const title = "Shodan API Tool";
-const description_userguide =
-    "The Shodan API is a powerful tool that allows external network scans to be performed with " +
-    "use of a valid API key. This key is obtained through account creation within Shodan; see the " +
-    "below link to create an account:\n\nShodan Account Creation: " +
-    "https://developer.shodan.io/api/requirements\n\nHow to use Shodan API:\n\n" +
-    "Step 1: Enter a Valid API Key - Note; See above for account creation to " +
-    "receive API Key.\n       E.g. PLACEHOLDER\n\nStep 2: Enter a Host IP.\n       " +
-    "E.g. 127.0.0.1\n\n" +
-    "Step 3: Click Scan to commence the Shodan API operation.\n\n" +
-    "Step 4: View the Output block below to view the results of the tool's execution.";
 
 interface FormValuesType {
     hostIP: string;
