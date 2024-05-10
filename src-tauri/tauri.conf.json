@@ -33,6 +33,11 @@
                         "args": true
                     },
                     {
+                        "name": "amap",
+                        "cmd": "amap",
+                        "args": true
+                    },
+                    {
                         "name": "snmp-check",
                         "cmd": "snmp-check",
                         "args": true

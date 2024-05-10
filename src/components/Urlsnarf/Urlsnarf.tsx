@@ -7,13 +7,13 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-const title = "Urlsnarf";
+const title = "URLSnarf";
 const description_userguide =
-    "Urlsnarf is a network traffic sniffing tool that works to output all URL's that are requested from HTTP " +
-    "traffic in the from of CLF (Common Log Format) that is very commonly used within web servers. The tool " +
-    "in the DDT provides two listener settings being through an interface or packet capture file.\n\nInformation " +
+    "Urlsnarf is a network traffic sniffing tool that works to output all URLs that are requested from HTTP " +
+    "traffic in the form of CLF (Common Log Format), which is very commonly used within web servers. The tool " +
+    "in the DDT provides two listener settings: either through an interface or a packet capture file.\n\nInformation " +
     "on the tool can be found at: https://linux.die.net/man/8/urlsnarf\n\n" +
-    "Using the tool:\n" +
+    "Using the tool:\n\n" +
     "Step 1: Select the Listener settings.\n" +
     "       Eg: Interface\n\n" +
     "Step 2: Input the Interface.\n" +
@@ -21,7 +21,7 @@ const description_userguide =
     "Step 3: Enter any Exclusion details within the sniff.\n" +
     "       Eg: POST (every packet besides POST will be shown)\n\n" +
     "Step 4: Click Sniff to commence Urlsnarf's operation.\n\n" +
-    "Step 5: View the Output block below to view the results of the tools execution.";
+    "Step 5: View the Output block below to view the results of the tool's execution.";
 
 interface FormValuesType {
     listenerInputType: string;
@@ -137,7 +137,7 @@ const Urlsnarf = () => {
                 <NativeSelect
                     value={selectedListenerInput}
                     onChange={(e) => setSelectedListenerInput(e.target.value)}
-                    label={"listener settings"}
+                    label={"Listener Settings"}
                     data={listeners}
                     required
                     placeholder={"Interface or PCAP file"}
@@ -160,8 +160,8 @@ const Urlsnarf = () => {
                 )}
                 <TextInput
                     {...form.getInputProps("versusMode")}
-                    label={"Exclusion details"}
-                    placeholder={"eg: POST ; show every packet that excludes POST"}
+                    label={"Exclusion Details"}
+                    placeholder={"eg: POST; Show every packets that excludes POST"}
                 />
                 <Button type={"submit"} color="cyan">
                     Sniff
