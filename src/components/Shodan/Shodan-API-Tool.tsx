@@ -77,7 +77,7 @@ export function ShodanAPITool() {
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output.
     }, []);
 
      /**
@@ -97,12 +97,12 @@ export function ShodanAPITool() {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            // Clear the child process pid reference
+            // Clear the child process pid reference.
             setPid("");
-            // Cancel the Loading Overlay
+            // Cancel the Loading Overlay.
             setLoading(false);
 
-            // Allow Saving as the output is finalised
+            // Allow Saving as the output is finalised.
             setAllowSave(true);
             setHasSaved(false);
         },
@@ -117,7 +117,7 @@ export function ShodanAPITool() {
      */
     const handleSaveComplete = () => {
         // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
+        // back into SaveOutputToTextFile to inform the user.
         setHasSaved(true);
         setAllowSave(false);
     };
