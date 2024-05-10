@@ -126,24 +126,28 @@ export function ShodanAPITool() {
      * @param {FormValuesType} values - The form values, containing the filepath, hash, crack mode, and other options.
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Disallow saving until the tool's execution is complete
+        // Disallow saving until the tool's execution is complete.
         setAllowSave(false);
 
-        // Enable the loading overlay while the tool executes
+        // Enable the loading overlay while the tool executes.
         setLoading(true);
 
-        const args = ["/usr/share/ddt/shodkey.py", "-i", values.hostIP, "-k", values.shodanKey];
+            const args = ["/usr/share/ddt/shodkey.py", "-i", values.hostIP, "-k", values.shodanKey];
 
         try {
+            // Execute the Shodan command via helper method and handle its output or potential errors.
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "python3",
                 args,
                 handleProcessData,
                 handleProcessTermination
             );
+            //Update command with the result.
             setPid(result.pid);
             setOutput(result.output);
+
         } catch (e: any) {
+            //Display output error messages.
             setOutput(e.message);
         }
     };
