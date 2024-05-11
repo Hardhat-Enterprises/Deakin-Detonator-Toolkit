@@ -94,8 +94,8 @@ export function DirbTool() {
         setLoading(true);
 
         const args = [values.url];
-        if (values.wordlistPath) {
-            args.push(values.wordlistPath); // Add wordlist path if provided
+        if (values.wordListPath) {
+            args.push(values.wordListPath); // Add wordlist path if provided
         }
         if (silentMode) {
             args.push("-S"); // Include silent mode flag
