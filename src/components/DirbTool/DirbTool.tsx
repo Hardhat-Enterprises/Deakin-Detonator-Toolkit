@@ -12,7 +12,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
  */    
 interface FormValuesType {
     url: string;
-    wordlistPath?: string; // Made wordlistPath optional
+    wordListPath?: string; // Made wordlistPath optional
     caseInsensitive: boolean;
     printLocation: boolean;
     ignoreHttpCode: number;
