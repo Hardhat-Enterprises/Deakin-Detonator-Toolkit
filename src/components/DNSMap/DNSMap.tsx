@@ -6,7 +6,8 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-import { l } from "vitest/dist/index-60e2a8e1";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
  * Represents the form values for the DNSMap component.
@@ -32,9 +33,12 @@ const DNSMap = () => {
     const [Pid, setPid] = useState(""); //State variable that represents the process ID of the DNS mapping process
     const [allowSave, setAllowSave] = useState(false); //State variable that represents whether saving the output is allowed
     const [hasSaved, setHasSaved] = useState(false); //State variable that represents whether the output has been saved
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
 
     //Components Constant Variables
-    const title = "DNS Mapping for Subdomains (DNSMap)";
+    const title = "Dnsmap";
     const description_userguide =
         "DNSMap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
         "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall services and smtp. " +
@@ -49,7 +53,7 @@ const DNSMap = () => {
         "Switch to Advanced Mode for further options.";
     const sourceLink = "https://www.kali.org/tools/dnsmap/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["DNSMap"]; // Contains the dependencies required by the component.
+    const dependencies = ["dnsmap"]; // Contains the dependencies required by the component.
 
     //Form Hook to handle input
     let form = useForm({
@@ -155,6 +159,14 @@ const DNSMap = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
+            {!loadingModal && (
+                <InstallationModal
+                isOpen={opened}
+                setOpened={setOpened}
+                feature_description={description_userguide}
+                dependencies={dependencies}
+                ></InstallationModal>
+            )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 {LoadingOverlayAndCancelButton(loading, Pid)}
                 <Stack>
