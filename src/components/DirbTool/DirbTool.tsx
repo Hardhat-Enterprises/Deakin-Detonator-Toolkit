@@ -16,6 +16,9 @@ const description_userguide =
     "a wordlist\n       E.g. home/wordlist/wordlist.txt\n\nStep 3: Click Scan to commence " +
     "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
 
+/**
+ *  Represents the form values for the DirbTool Component
+ */    
 interface FormValues {
     url: string;
     wordlistPath?: string; // Made wordlistPath optional
