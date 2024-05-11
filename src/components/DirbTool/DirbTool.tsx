@@ -19,7 +19,7 @@ const description_userguide =
 /**
  *  Represents the form values for the DirbTool Component
  */    
-interface FormValues {
+interface FormValuesType {
     url: string;
     wordlistPath?: string; // Made wordlistPath optional
     caseInsensitive: boolean;
@@ -84,7 +84,7 @@ export function DirbTool() {
         setAllowSave(false);
     };
 
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
 
