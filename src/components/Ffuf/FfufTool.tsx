@@ -9,27 +9,6 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
-// Component constants.
-const title = "ffuf"; // Contains the title of the component.
-
-// Contains the description of the component.
-const description_userguide =
-    "ffuf is a web directory and resource discovery tool. It takes a wordlist " +
-    "and uses a brute force fuzzing technique against a target URL to attempt to discover valid files " +
-    "and directories. This can reveal vulnerabilities in web applications as well generally data-mine " +
-    "and map out the target. ffuf can even be used to brute force credentials used in web authentication.\n\n" +
-    "For further information on ffuf: https://github.com/ffuf/ffufS\n\n" +
-    "Wordlist directory: /usr/share/ddt/ffuf_wordlists/\n\n" +
-    "Basic ffuf brute force discovery:\n\n" +
-    "Step 1: Enter a URL to be fuzzed\n" +
-    "       E.g. http://www.example.com/FUZZ\n\n" +
-    "Step 2: Optionally enter a wordlist other than the default\n" +
-    "       E.g. wordlist.txt\n\n" +
-    "Step 3: Optionally enter extensions to be added to words. Comma separated." +
-    "\n         E.g. .html,.php,.txt" +
-    "\n\nStep 4: Click Scan to commence the ffuf operation.\n" +
-    "Step 5: View the Output block below to view the results of the Scan.";
-
 /**
  * Represents the form values for the Ffuf component.
  */
@@ -57,6 +36,27 @@ const FfufTool = () => {
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+
+    // Component constants.
+    const title = "ffuf"; // Contains the title of the component.
+
+    // Contains the description of the component.
+    const description_userguide =
+        "ffuf is a web directory and resource discovery tool. It takes a wordlist " +
+        "and uses a brute force fuzzing technique against a target URL to attempt to discover valid files " +
+        "and directories. This can reveal vulnerabilities in web applications as well generally data-mine " +
+        "and map out the target. ffuf can even be used to brute force credentials used in web authentication.\n\n" +
+        "For further information on ffuf: https://github.com/ffuf/ffufS\n\n" +
+        "Wordlist directory: /usr/share/ddt/ffuf_wordlists/\n\n" +
+        "Basic ffuf brute force discovery:\n\n" +
+        "Step 1: Enter a URL to be fuzzed\n" +
+        "       E.g. http://www.example.com/FUZZ\n\n" +
+        "Step 2: Optionally enter a wordlist other than the default\n" +
+        "       E.g. wordlist.txt\n\n" +
+        "Step 3: Optionally enter extensions to be added to words. Comma separated." +
+        "\n         E.g. .html,.php,.txt" +
+        "\n\nStep 4: Click Scan to commence the ffuf operation.\n" +
+        "Step 5: View the Output block below to view the results of the Scan.";
 
     // Form Hook to handle form input.
     let form = useForm({
