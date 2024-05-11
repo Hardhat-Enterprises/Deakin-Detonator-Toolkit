@@ -7,15 +7,6 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-const title = "Dirb";
-const description_userguide =
-    "Dirb is a Web Content Scanner that acts to seek out any existing or hidden Web Objects. " +
-    "This is a dictionary-based attack that takes place upon a web server and will analyse the " +
-    "results within this process.\n\nHow to use Dirb:\n\nStep 1: Enter a valid URL.\n" +
-    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter a file directory pathway to access " +
-    "a wordlist\n       E.g. home/wordlist/wordlist.txt\n\nStep 3: Click Scan to commence " +
-    "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
-
 /**
  *  Represents the form values for the DirbTool Component
  */    
@@ -26,6 +17,17 @@ interface FormValuesType {
     printLocation: boolean;
     ignoreHttpCode: number;
 }
+
+const title = "Dirb";
+const description_userguide =
+    "Dirb is a Web Content Scanner that acts to seek out any existing or hidden Web Objects. " +
+    "This is a dictionary-based attack that takes place upon a web server and will analyse the " +
+    "results within this process.\n\nHow to use Dirb:\n\nStep 1: Enter a valid URL.\n" +
+    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter a file directory pathway to access " +
+    "a wordlist\n       E.g. home/wordlist/wordlist.txt\n\nStep 3: Click Scan to commence " +
+    "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
+
+
 
 export function DirbTool() {
     const [loading, setLoading] = useState(false);
