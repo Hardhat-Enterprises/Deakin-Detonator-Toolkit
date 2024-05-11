@@ -44,7 +44,7 @@ const FfufTool = () => {
     const title = "ffuf"; // Contains the title of the component.
 
     // Contains the description of the component.
-    const description_userguide =
+    const description =
         "ffuf is a web directory and resource discovery tool. It takes a wordlist " +
         "and uses a brute force fuzzing technique against a target URL to attempt to discover valid files " +
         "and directories. This can reveal vulnerabilities in web applications as well generally data-mine " +
@@ -60,6 +60,7 @@ const FfufTool = () => {
         "\n         E.g. .html,.php,.txt" +
         "\n\nStep 4: Click Scan to commence the ffuf operation.\n" +
         "Step 5: View the Output block below to view the results of the Scan.";
+    const steps = ""; // Left blank due to steps being included in description
     const sourceLink = ""; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["aircrack-ng"]; // Contains the dependencies required by the component.
@@ -202,73 +203,92 @@ const FfufTool = () => {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit({ ...values }))}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <Switch
-                    size="md"
-                    label="Advanced Mode"
-                    checked={checkedAdvanced}
-                    onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
-                />
-                <TextInput
-                    label={"Target URL"}
-                    placeholder={"https://www.example.com"}
-                    required
-                    {...form.getInputProps("url")}
-                />
-                <TextInput
-                    label={"Wordlist: default is directory-list-2.3-medium.txt by SecLists"}
-                    placeholder={"wordlist.txt"}
-                    {...form.getInputProps("wordlist")}
-                />
-                <TextInput label={"Extensions"} placeholder={".html,.txt,.php"} {...form.getInputProps("extensions")} />
-                {checkedAdvanced && (
-                    <>
-                        <TextInput label={"Optional Output File"} {...form.getInputProps("output")} />
-
-                        <TextInput
-                            label={"Filter HTTP response size. Comma separated list of sizes and ranges"}
-                            {...form.getInputProps("filtersize")}
-                        />
-
-                        <TextInput
-                            label={
-                                "Filter by amount of words in response. Comma separated list of word counts and ranges"
-                            }
-                            {...form.getInputProps("filterwords")}
-                        />
-
-                        <TextInput
-                            label={
-                                "Filter by amount of lines in response. Comma separated list of line counts and ranges"
-                            }
-                            {...form.getInputProps("filterlines")}
-                        />
-                    </>
-                )}
-                <Group grow>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            <form onSubmit={form.onSubmit((values) => onSubmit({ ...values }))}>
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                <Stack>
                     <Switch
                         size="md"
-                        label="Stop when > 95% of responses return 403 Forbidden"
-                        checked={checkedStopWhen}
-                        onChange={(e) => setCheckedStopWhen(e.currentTarget.checked)}
+                        label="Advanced Mode"
+                        checked={checkedAdvanced}
+                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                     />
-                    <Switch
-                        size="md"
-                        label="Verbose Output"
-                        checked={checkedVerboseOutput}
-                        onChange={(e) => setCheckedVerboseOutput(e.currentTarget.checked)}
+                    <TextInput
+                        label={"Target URL"}
+                        placeholder={"https://www.example.com"}
+                        required
+                        {...form.getInputProps("url")}
                     />
-                </Group>
-                <Button type={"submit"} style={{ fontSize: "24px", paddingTop: "8px" }}>
-                    Scan
-                </Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+                    <TextInput
+                        label={"Wordlist: default is directory-list-2.3-medium.txt by SecLists"}
+                        placeholder={"wordlist.txt"}
+                        {...form.getInputProps("wordlist")}
+                    />
+                    <TextInput
+                        label={"Extensions"}
+                        placeholder={".html,.txt,.php"}
+                        {...form.getInputProps("extensions")}
+                    />
+                    {checkedAdvanced && (
+                        <>
+                            <TextInput label={"Optional Output File"} {...form.getInputProps("output")} />
+
+                            <TextInput
+                                label={"Filter HTTP response size. Comma separated list of sizes and ranges"}
+                                {...form.getInputProps("filtersize")}
+                            />
+
+                            <TextInput
+                                label={
+                                    "Filter by amount of words in response. Comma separated list of word counts and ranges"
+                                }
+                                {...form.getInputProps("filterwords")}
+                            />
+
+                            <TextInput
+                                label={
+                                    "Filter by amount of lines in response. Comma separated list of line counts and ranges"
+                                }
+                                {...form.getInputProps("filterlines")}
+                            />
+                        </>
+                    )}
+                    <Group grow>
+                        <Switch
+                            size="md"
+                            label="Stop when > 95% of responses return 403 Forbidden"
+                            checked={checkedStopWhen}
+                            onChange={(e) => setCheckedStopWhen(e.currentTarget.checked)}
+                        />
+                        <Switch
+                            size="md"
+                            label="Verbose Output"
+                            checked={checkedVerboseOutput}
+                            onChange={(e) => setCheckedVerboseOutput(e.currentTarget.checked)}
+                        />
+                    </Group>
+                    <Button type={"submit"} style={{ fontSize: "24px", paddingTop: "8px" }}>
+                        Scan
+                    </Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 
