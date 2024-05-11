@@ -36,6 +36,9 @@ const FfufTool = () => {
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
 
     // Component constants.
     const title = "ffuf"; // Contains the title of the component.
@@ -57,6 +60,9 @@ const FfufTool = () => {
         "\n         E.g. .html,.php,.txt" +
         "\n\nStep 4: Click Scan to commence the ffuf operation.\n" +
         "Step 5: View the Output block below to view the results of the Scan.";
+    const sourceLink = ""; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["aircrack-ng"]; // Contains the dependencies required by the component.
 
     // Form Hook to handle form input.
     let form = useForm({
