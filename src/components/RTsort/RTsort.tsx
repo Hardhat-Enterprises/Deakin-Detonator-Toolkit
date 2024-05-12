@@ -16,7 +16,7 @@ interface FormValuesType {
     path: string;
 }
 
-// Funtion for implementing RTSort as GUI component
+// Function for implementing RTSort as GUI component
 const RTSort = () => {
     // Component state variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
