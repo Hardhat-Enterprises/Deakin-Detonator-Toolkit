@@ -19,7 +19,7 @@ interface FormValuesType {
 }
 
 const title = "Dirb"; //Title of the component.
-const description_userguide = //Description of the component. 
+const description_userGuide = //Description of the component. 
     "Dirb is a Web Content Scanner that acts to seek out any existing or hidden Web Objects. " +
     "This is a dictionary-based attack that takes place upon a web server and will analyse the " +
     "results within this process.\n\nHow to use Dirb:\n\nStep 1: Enter a valid URL.\n" +
@@ -144,7 +144,7 @@ export function DirbTool() {
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
-                {UserGuide(title, description_userguide)}
+                {UserGuide(title, description_userGuide)}
                 <Switch
                     size="md"
                     label="Advanced Mode"
