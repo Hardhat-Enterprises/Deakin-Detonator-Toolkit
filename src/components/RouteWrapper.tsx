@@ -562,6 +562,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
+        name: "Sublist3r",
+        path: "/tools/Sublist3r",
+        element: <Sublist3r />,
+        description: "Sublist3r looks up sub domains of websites.",
+        category: "Web Application Testing",
+    },
+    {
         name: "The Harvester",
         path: "/tools/theharvester",
         element: <TheHarvester />,
@@ -596,13 +603,6 @@ export const ROUTES: RouteProperties[] = [
         element: <WPScan />,
         description:
             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
-        category: "Web Application Testing",
-    },
-    {
-        name: "Sublist3r",
-        path: "/tools/Sublist3r",
-        element: <Sublist3r />,
-        description: "Sublist3r looks up sub domains of websites.",
         category: "Web Application Testing",
     },
 ];

@@ -28,7 +28,7 @@ const Sublist3r = () => {
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [loadingModal, setLoadingModal] = useState(false); // State variable to indicate loading state of the modal.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [verboseMode, setVerboseMode] = useState(false); // State variable for verbose mode
 
@@ -40,7 +40,7 @@ const Sublist3r = () => {
         "Step 2: Start the enumeration process to gather subdomains.\n" +
         "Step 3: Review the enumerated subdomains for further analysis.\n";
     const sourceLink = "https://github.com/aboul3la/Sublist3r"; // Link to the source code
-    const tutorial = "https://github.com/aboul3la/Sublist3r/wiki"; // Link to the official documentation/tutorial
+    const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["sublist3r"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input
@@ -49,6 +49,20 @@ const Sublist3r = () => {
             targetDomain: "",
         },
     });
+
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -91,20 +105,6 @@ const Sublist3r = () => {
         [handleProcessData] // Dependency on the handleProcessData callback
     );
 
-    useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
-        checkAllCommandsAvailability(dependencies)
-            .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-                setLoadingModal(false); // Set loading to false after the check is done
-            })
-            .catch((error) => {
-                console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
-            });
-    }, []);
-
     /**
      * Handles form submission for the Sublist3r component.
      * @param {FormValuesType} values - The form values containing the target domain.
@@ -120,7 +120,7 @@ const Sublist3r = () => {
         }
 
         // Execute the Sublist3r command via helper method and handle its output or potential errors
-        CommandHelper.runCommandWithPkexec(
+        CommandHelper.runCommandGetPidAndOutput(
             "sublist3r",
             [...args, "--no-color"],
             handleProcessData,
