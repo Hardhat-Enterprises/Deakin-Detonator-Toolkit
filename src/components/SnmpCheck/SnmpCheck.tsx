@@ -21,15 +21,15 @@ interface FormValuesType {
 // Component Constants.
 const title = "SnmpCheck"; // Title of the tool.
 const description = // Description of the tool.
-    "The SNMP Check tool enables you to perform SNMP (Simple Network Management Protocol) checks on a specific IP " +
+    "The SnmpCheck tool enables you to perform Snmp (Simple Network Management Protocol) checks on a specific IP " +
     "address or hostname and port.";
 const steps =
-    "Step 1: Enter the IP address or hostname of the target device\n" +
+    "Step 1: Enter the IP address or hostname of the target device.\n" +
     "Step 2: (Optional) Specify a target port number (default port: 161).\n" +
-    "Step 3: Click the 'Scan' button to initiate the SNMP check.\n";
+    "Step 3: Click the 'Scan' button to initiate the SnmpCheck.\n";
 const sourceLink = "https://www.kali.org/tools/snmpcheck/"; // Link to the source code.
 const tutorial = ""; // Link to the official documentation/tutorial.
-const dependencies = ["snmpcheck"]; // Contains the dependencies required by the component.
+const dependencies = ["snmp-check"]; // Contains the dependencies required by the component.
 
 /**
  * The SnmpCheck component.
