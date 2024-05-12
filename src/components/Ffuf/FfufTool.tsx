@@ -63,7 +63,7 @@ const FfufTool = () => {
     const steps = ""; // Left blank due to steps being included in description
     const sourceLink = ""; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["aircrack-ng"]; // Contains the dependencies required by the component.
+    const dependencies = ["ffuf"]; // Contains the dependencies required by the component.
 
     // Form Hook to handle form input.
     let form = useForm({
