@@ -38,7 +38,7 @@ const RTSort = () => {
 
     const sourceLink = "https://gitlab.com/kalilinux/packages/rainbowcrack"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["rainbowcrack"]; // Contains the dependencies required by the component.
+    const dependencies = ["rcrack"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
     let form = useForm({
