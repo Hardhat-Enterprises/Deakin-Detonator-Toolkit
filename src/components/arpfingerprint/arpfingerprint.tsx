@@ -33,11 +33,10 @@ function ARPFingerprinting() {
     // Component Constants.
     const title = "ARP fingerprint Tool"; // Title of the component.
     const description =
-    "ARP fingerprinting is a network reconnaissance technique used to detect the operating systems and devices in a network."; // Description of the component.
-    const steps =
-    "Step 1: Enter the IP address of the target device.\n" 
-    "Step 2: Click Scan to start ARP fingerprinting.\n" 
-    "Step 3: View the Output block below to see the fingerprinting results.";
+        "ARP fingerprinting is a network reconnaissance technique used to detect the operating systems and devices in a network."; // Description of the component.
+    const steps = "Step 1: Enter the IP address of the target device.\n";
+    ("Step 2: Click Scan to start ARP fingerprinting.\n");
+    ("Step 3: View the Output block below to see the fingerprinting results.");
     const sourceLink = ""; // Link to the source code or Kali Tools page.
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["arp-scan"]; // Dependencies required for the ARPfingerprint tool.
@@ -117,7 +116,7 @@ function ARPFingerprinting() {
 
     /**
      * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the ARPScan tool with the given parameters.
+     * It sets up and triggers the ARPfingerprint tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
      *@param {FormValuesType} values - The form values, containing target IP.     */
     const onSubmit = async (values: FormValuesType) => {
@@ -127,12 +126,16 @@ function ARPFingerprinting() {
         // Disable saving the output to a file while the process is running.
         setAllowSave(false);
 
-        // Construct the arguments for the ARPScan command.
-        const args = [`--localnet`, `-I`, values.interface];
-
+        // Construct the arguments for the ARPfingerprint command.
+        const args = [`-l`, values.interface];
         try {
-            // Execute the ARPScan command using the CommandHelper utility with pkexec.
-            await CommandHelper.runCommandWithPkexec("arp-scan", args, handleProcessData, handleProcessTermination);
+            // Execute the ARPfingerprint command using the CommandHelper utility with pkexec.
+            await CommandHelper.runCommandWithPkexec(
+                "arp-fingerprint",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
         } catch (error: any) {
             // If an error occurs during command execution, display the error message.
             setOutput(`Error: ${error.message}`);
@@ -178,14 +181,13 @@ function ARPFingerprinting() {
                     {/* Render the loading overlay and cancel button */}
                     {LoadingOverlayAndCancelButton(loading, "")}
                     <Stack>
-                    <TextInput label="Target IP Address" required {...form.getInputProps("targetIP")} />      
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        <TextInput label="Target IP Address" required {...form.getInputProps("targetIP")} />
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
 
                         <Button type={"submit"} disabled={loading}>
                             Start {title}
                         </Button>
-                        {/* Render the save output to file component */}
-                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
                         {/* Render the console wrapper component */}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                     </Stack>
