@@ -316,6 +316,11 @@
                         "name": "whatweb",
                         "cmd": "whatweb",
                         "args": true
+                    },
+                    {
+                        "name": "tshark",
+                        "cmd": "tshark",
+                        "args": true
                     }
                 ]
             },
