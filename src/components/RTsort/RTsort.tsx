@@ -30,7 +30,6 @@ const RTSort = () => {
 
     // Component Constants.
     const title = "Rainbow Table Sort"; // Title of the component.
-
     const description = "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables."; // Description of the component.
     const steps =
         "Step 1: Specify the filepath to the rainbow table file that you wish to sort (e.g ~/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt).\n" +
