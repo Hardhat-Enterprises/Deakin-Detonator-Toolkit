@@ -18,7 +18,7 @@ const description_userguide =
 
 interface FormValues {
     url: string;
-    wordlistPath: string;
+    wordlistPath?: string; // Made wordlistPath optional
     caseInsensitive: boolean;
     printLocation: boolean;
     ignoreHttpCode: number;
@@ -31,11 +31,12 @@ export function DirbTool() {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [silentMode, setSilentMode] = useState(false); // Track silent mode state
 
     let form = useForm({
         initialValues: {
             url: "",
-            wordlistPath: "",
+            wordlistPath: "", // Set initial value to an empty string
             caseInsensitive: false,
             printLocation: false,
             ignoreHttpCode: 0,
@@ -87,24 +88,30 @@ export function DirbTool() {
         // Enable the Loading Overlay
         setLoading(true);
 
-        const args = [values.url, values.wordlistPath];
-
-        args.push("-S");
-
-        if (values.caseInsensitive) {
-            args.push(`-S ${values.caseInsensitive}`);
+        const args = [values.url];
+        if (values.wordlistPath) {
+            args.push(values.wordlistPath); // Add wordlist path if provided
+        }
+        if (silentMode) {
+            args.push("-S"); // Include silent mode flag
         }
 
-        if (values.printLocation) {
-            args.push(`-s ${values.printLocation}`);
-        }
-
-        if (values.ignoreHttpCode) {
-            args.push(`-t ${values.ignoreHttpCode}`);
-        }
-
+        // Only add advanced mode parameters if checkedAdvanced is true
         if (checkedAdvanced) {
-            args.push("-v");
+            if (values.caseInsensitive) {
+                // Add the -i flag to make the search case-insensitive
+                args.push("-i");
+            }
+
+            if (values.printLocation) {
+                // Add the -l flag to print the location of the match
+                args.push("-l");
+            }
+
+            if (values.ignoreHttpCode) {
+                // Add the -N flag followed by the HTTP response code to ignore
+                args.push("-N", values.ignoreHttpCode.toString());
+            }
         }
 
         // Execute Dirb
@@ -136,8 +143,14 @@ export function DirbTool() {
                     checked={checkedAdvanced}
                     onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                 />
+                <Switch
+                    size="md"
+                    label="Slient Mode"
+                    checked={silentMode}
+                    onChange={(e) => setSilentMode(e.currentTarget.checked)}
+                />
                 <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                <TextInput label={"Path to wordlist"} required {...form.getInputProps("wordlistPath")} />
+                <TextInput label={"Path to wordlist"} {...form.getInputProps("wordlistPath")} />
                 {checkedAdvanced && (
                     <>
                         <Checkbox label={"Use case-insensitive search"} {...form.getInputProps("caseInsensitive")} />
@@ -152,11 +165,7 @@ export function DirbTool() {
                         />
                     </>
                 )}
-                {checkedAdvanced ? (
-                    <Button type={"submit"}>Scan (Verbose)</Button>
-                ) : (
-                    <Button type={"submit"}>Scan (Simple)</Button>
-                )}
+                <Button type={"submit"}>{checkedAdvanced ? "Scan (Advanced)" : "Scan"}</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
