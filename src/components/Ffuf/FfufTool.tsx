@@ -281,9 +281,7 @@ const FfufTool = () => {
                             onChange={(e) => setCheckedVerboseOutput(e.currentTarget.checked)}
                         />
                     </Group>
-                    <Button type={"submit"} style={{ fontSize: "24px", paddingTop: "8px" }}>
-                        Scan
-                    </Button>
+                    <Button type={"submit"}>Scan</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
