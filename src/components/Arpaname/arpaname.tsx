@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Button, Modal, Stack, TextInput } from "@mantine/core";
+import { useState, useEffect, useCallback } from "react";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -7,6 +7,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { CommandHelper } from "../../utils/CommandHelper";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 /**
  * Represents the form values for the Arpaname component.
@@ -21,17 +22,24 @@ interface FormValuesType {
  */
 const ArpanameTool = () => {
     const title = "Arpaname";
-    const description =
-        "Arpaname translates IP addresses (IPv4 and IPv6) to their corresponding IN-ADDR.ARPA or IP6.ARPA names.";
-    const userguide = "";
+    const description = "Perform reverse DNS lookups for IP addresses.";
     const [loading, setLoading] = useState(false); // State variable to track if the process is currently loading
     const [output, setOutput] = useState(""); // State variable to store the output of the process
     const [pidTarget, setPidTarget] = useState(""); // State variable to store the PID of the target process.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [errorMessage, setErrorMessage] = useState<string>(""); // State variable to store the error message
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
 
     // Component Constants.
+    const steps =
+        "Step 1: Type in the target IP address\n" +
+        "Step 2: Click lookup to run arpaname.\n" +
+        "Step 5: View the output block to see the results. ";
+    const sourceLink = ""; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["bind9"];
 
     useEffect(() => {
@@ -81,9 +89,20 @@ const ArpanameTool = () => {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
             setLoading(false);
+            // Allow the user to save the output to a file.
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
+
+    // Actions taken after saving the output
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
     /**
      * Validates if the given input string is a valid IPv4 or IPv6 address.
@@ -102,16 +121,20 @@ const ArpanameTool = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         if (!validateIPAddress(values.ipAddress)) {
+            setErrorMessage("Please enter a valid IP address.");
             return;
         }
-
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+        // Reset the error message state when validation succeeds
+        setErrorMessage("");
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
         const argsIP = [values.ipAddress];
 
         // Execute arpaname command for the target
-        const result_target = await CommandHelper.runCommandWithPkexec(
+        const result_target = await CommandHelper.runCommandGetPidAndOutput(
             "arpaname",
             argsIP,
             handleProcessData, // Pass handleProcessData as callback for handling process data
@@ -128,6 +151,8 @@ const ArpanameTool = () => {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
 
     return (
@@ -144,7 +169,10 @@ const ArpanameTool = () => {
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pidTarget)}
                     <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")}></TextInput>
+                    {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
+                    {/* Render error message if present */}
                     <Button type={"submit"}>Lookup</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>

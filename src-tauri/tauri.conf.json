@@ -23,6 +23,11 @@
                         "args": true
                     },
                     {
+                        "name": "which",
+                        "cmd": "which",
+                        "args": true
+                    },
+                    {
                         "name": "pkexec",
                         "cmd": "pkexec",
                         "args": true
