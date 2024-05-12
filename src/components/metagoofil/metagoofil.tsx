@@ -40,7 +40,7 @@ function Metagoofil() {
     // Component Constants.
     const title = "Metagoofil"; // Title of the component.
     const description =
-        "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company."; // Description of the component.
+        "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) that belong to a target company."; // Description of the component.
     const steps =
         "Step 1: Enter a website URL for the tool to search.\n" +
         "Step 2: Enter the desired number of results.\n" +
