@@ -161,10 +161,10 @@ const DNSMap = () => {
         >
             {!loadingModal && (
                 <InstallationModal
-                isOpen={opened}
-                setOpened={setOpened}
-                feature_description={description_userguide}
-                dependencies={dependencies}
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description_userguide}
+                    dependencies={dependencies}
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
