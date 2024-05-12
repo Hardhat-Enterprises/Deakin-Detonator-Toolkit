@@ -1,11 +1,11 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, Switch, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
@@ -15,7 +15,10 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     fakeHost: string;
     channel: string;
-    wlan: string;
+    macAddress: string;
+    replayInterface: string;
+    filePath: string;
+    customConfig: string;
 }
 
 /**
@@ -30,6 +33,8 @@ const AirbaseNG = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [advanceMode, setAdvanceMode] = useState(false);
+    const [customMode, setCustomMode] = useState(false);
 
     // Component Constants.
     const title = "Airbase-ng"; // Title of the component.
@@ -49,7 +54,10 @@ const AirbaseNG = () => {
         initialValues: {
             fakeHost: "",
             channel: "",
-            wlan: "",
+            replayInterface: "",
+            macAddress: "",
+            filePath: "",
+            customConfig: "",
         },
     });
 
@@ -121,7 +129,11 @@ const AirbaseNG = () => {
         setLoading(true);
 
         // Construct arguments for the aircrack-ng command based on form input
-        const args = ["-e", values.fakeHost, "-c", values.channel, values.wlan];
+        const args = ["-e", values.fakeHost, "-c", values.channel, values.replayInterface];
+
+        values.macAddress ? args.push(`-a`, values.macAddress) : undefined;
+        values.filePath ? args.push(`-F`, values.filePath) : undefined;
+        values.customConfig ? args.push(values.customConfig) : undefined;
 
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("airbase-ng", args, handleProcessData, handleProcessTermination)
@@ -164,10 +176,32 @@ const AirbaseNG = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={advanceMode}
+                        onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
+                    />
+                    <Switch
+                        size="md"
+                        label="Custom Configuration"
+                        checked={customMode}
+                        onChange={(e) => setCustomMode(e.currentTarget.checked)}
+                    />
                     <TextInput label={"Name of your fake host"} required {...form.getInputProps("fakeHost")} />
                     <TextInput label={"Channel of choice"} required {...form.getInputProps("channel")} />
-                    <TextInput label={"Your WLAN interface"} required {...form.getInputProps("wlan")} />
+                    <TextInput label={"Your WLAN interface"} required {...form.getInputProps("replayInterface")} />
+                    {advanceMode && (
+                        <>
+                            <TextInput label={"Set AP MAC address"} {...form.getInputProps("MACAddress")} />
+                            <TextInput
+                                label={"Save as Pcap File (Please Supply FilePath)"}
+                                {...form.getInputProps("filePath")}
+                            />
+                        </>
+                    )}
+                    {customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
                     {SaveOutputToTextFile(output)}
                     <Button type={"submit"}>Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
