@@ -276,7 +276,7 @@ const WPScan = () => {
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
                     <TextInput
-                        label={"URL of target wordpress site"}
+                        label={"URL of target WordPress site"}
                         placeholder={"Example: http://www.wordpress.com/sample"}
                         required
                         {...form.getInputProps("url")}
