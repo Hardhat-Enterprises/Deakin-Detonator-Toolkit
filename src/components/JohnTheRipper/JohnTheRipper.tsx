@@ -11,7 +11,7 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
- * Represents the form values for the AirbaseNG component.
+ * Represents the form values for the JohnTheRipper component.
  */
 interface FormValuesType {
     filePath: string;
