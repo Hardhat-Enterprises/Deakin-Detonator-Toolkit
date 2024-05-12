@@ -122,7 +122,7 @@ const TShark = () => {
                 let command = `tshark -i ${values.interface} -w ${values.filePath}${duration}${filter}${count}`;
 
                 CommandHelper.runCommandGetPidAndOutput(
-                    "bash", // The command is executed through bash to facilitate correct command syntax (TSharl does not require bash to run)
+                    "bash", // The command is executed through bash to facilitate correct command syntax (TShark does not require bash to run)
                     ["-c", command],
                     handleProcessData,
                     handleProcessTermination
