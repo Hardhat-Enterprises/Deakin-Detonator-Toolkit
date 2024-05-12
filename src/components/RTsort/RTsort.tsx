@@ -179,9 +179,7 @@ const RTSort = () => {
                         placeholder="/home/user/rainbowcrack/tables/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt"
                         {...form.getInputProps("path")}
                     />
-                    <br></br>
                     <Button type={"submit"}>Start Sort</Button>
-
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
