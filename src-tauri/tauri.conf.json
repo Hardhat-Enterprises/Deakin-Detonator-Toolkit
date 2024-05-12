@@ -33,6 +33,11 @@
                         "args": true
                     },
                     {
+                        "name": "amap",
+                        "cmd": "amap",
+                        "args": true
+                    },
+                    {
                         "name": "snmp-check",
                         "cmd": "snmp-check",
                         "args": true
@@ -48,6 +53,11 @@
                         "args": true
                     },
                     {
+                        "name": "gitleaks",
+                        "cmd": "gitleaks",
+                        "args": true
+                    },
+                    {
                         "name": "hashcat",
                         "cmd": "hashcat",
                         "args": true
@@ -55,6 +65,11 @@
                     {
                         "name": "bash",
                         "cmd": "bash",
+                        "args": true
+                    },
+                    {
+                        "name": "bully",
+                        "cmd": "bully",
                         "args": true
                     },
                     {
@@ -105,6 +120,11 @@
                     {
                         "name": "arpspoof",
                         "cmd": "arpspoof",
+                        "args": true
+                    },
+                    {
+                        "name": "arp-scan",
+                        "cmd": "arp-scan",
                         "args": true
                     },
                     {
@@ -290,6 +310,11 @@
                     {
                         "name": "nslookup",
                         "cmd": "nslookup",
+                        "args": true
+                    },
+                    {
+                        "name": "whatweb",
+                        "cmd": "whatweb",
                         "args": true
                     }
                 ]
