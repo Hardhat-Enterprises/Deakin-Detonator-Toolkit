@@ -68,6 +68,11 @@
                         "args": true
                     },
                     {
+                        "name": "bully",
+                        "cmd": "bully",
+                        "args": true
+                    },
+                    {
                         "name": "john",
                         "cmd": "john",
                         "args": true

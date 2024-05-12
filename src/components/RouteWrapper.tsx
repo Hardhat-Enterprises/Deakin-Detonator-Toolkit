@@ -65,6 +65,7 @@ import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import Nikto from "./Nikto/Nikto";
+import Bully from "./Bully/Bully";
 import AMAP from "./Amap/Amap";
 import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
@@ -305,6 +306,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "BED is a program which is designed to check daemons for potential buffer overflows, format strings",
         category: "Information Gathering and Analysis",
+    },
+    {
+        name: "Bully",
+        path: "/tools/bully",
+        element: <Bully />,
+        description: "Brute-force WPS PIN authentication",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Cewl",
