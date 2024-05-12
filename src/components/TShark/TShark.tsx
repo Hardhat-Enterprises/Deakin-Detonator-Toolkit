@@ -38,7 +38,7 @@ const TShark = () => {
         "Step 3: Specify the output file path (should end with a pcap file).\n" +
         "Step 4: Input the amount of seconds that TShark should capture traffic for (optional).\n" +
         "Step 5: Input a packet count to determine the total number of packets to scan before stopping (optional).\n" +
-        "Step 6: Input a traffic filter to filter for specific traffic such as TCP (Optional).\n" +
+        "Step 6: Input a traffic filter to filter for specific traffic such as TCP (optional).\n" +
         "Step 7: Click start TShark to sniff traffic.\n" +
         "Step 8: Switch to Reader mode.\n" +
         "Step 9: Provide the file path for the capture file and click start TShark.";
