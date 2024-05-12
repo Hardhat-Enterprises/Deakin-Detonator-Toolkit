@@ -108,7 +108,7 @@ export function ShodanAPITool() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData],
+        [handleProcessData]
     );
 
     /**
@@ -144,7 +144,7 @@ export function ShodanAPITool() {
                 "python3",
                 args,
                 handleProcessData,
-                handleProcessTermination,
+                handleProcessTermination
             );
             //Update command with the result.
             setPid(result.pid);
@@ -166,34 +166,31 @@ export function ShodanAPITool() {
     }, [setOutput]);
 
     return (
-        <>
-            <RenderComponent
-                title={title}
-                description={description}
-                steps={steps}
-                tutorial={tutorial}
-                sourceLink={sourceLink}
-            >
-                {" "}
-                {!loadingModal && (
-                    <InstallationModal
-                        isOpen={opened}
-                        setOpened={setOpened}
-                        feature_description={description}
-                        dependencies={dependencies}
-                    ></InstallationModal>
-                )}
-                <form onSubmit={form.onSubmit(onSubmit)}>
-                    <Stack>
-                        {LoadingOverlayAndCancelButton(loading, pid)}
-                        <TextInput label={"Valid API Key"} required {...form.getInputProps("shodanKey")} />
-                        <TextInput label={"Host IP"} required {...form.getInputProps("hostIP")} />
-                        <Button type={"submit"}>Scan</Button>
-                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                    </Stack>
-                </form>
-            </RenderComponent>
-        </>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            <form onSubmit={form.onSubmit(onSubmit)}>
+                <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <TextInput label={"Valid API Key"} required {...form.getInputProps("shodanKey")} />
+                    <TextInput label={"Host IP"} required {...form.getInputProps("hostIP")} />
+                    <Button type={"submit"}>Scan</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 }
