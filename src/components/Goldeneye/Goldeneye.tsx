@@ -25,7 +25,7 @@ interface FormValuesType {
  * The Goldeneye component.
  * @returns The Goldeneye component.
  */
-const GoldenEye = () => {
+const Goldeneye = () => {
     //Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
@@ -41,12 +41,12 @@ const GoldenEye = () => {
     // Component Constants.
     const title = "Goldeneye"; // Title of the component.
     const description =
-        "GoldenEye is a HTTP DoS Test Tool. This tool can be used to test if a site is susceptible to Deny of Service (DoS) attacks. Is possible to open several parallel connections against a URL to check if the web server can be compromised"; // Description of the component.
+        "Goldeneye is a HTTP DoS Test Tool. This tool can be used to test if a site is susceptible to Denial of Service (DoS) attacks. Is possible to open several parallel connections against a URL to check if the web server can be compromised"; // Description of the component.
     const steps =
         "Step 1: Enter a valid URL of the target.\n" +
         "Step 2: Enter any additional options for the scan.\n" +
         "Step 3: Enter any additional parameters for the scan.\n" +
-        "Step 4: Click Scan to commence GoldenEye's operation.\n" +
+        "Step 4: Click Launch DoS Attack to commence GoldenEye's operation.\n" +
         "Step 5: View the Output block below to view the results of the tool's execution.";
     const sourceLink = "https://www.kali.org/tools/goldeneye/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
@@ -207,14 +207,14 @@ const GoldenEye = () => {
                 <Stack>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <TextInput
-                        label={"Url of the target"}
+                        label={"URL of the target"}
                         placeholder={"Example: https://www.google.com"}
                         required
                         {...form.getInputProps("url")}
                     />
                     <TextInput
                         label={"List of user agents"}
-                        placeholder={"Please enter filepath for the list of useragent"}
+                        placeholder={"Please enter filepath for the list of user agents"}
                         {...form.getInputProps("userAgent")}
                     />
                     <TextInput
@@ -243,7 +243,7 @@ const GoldenEye = () => {
                         placeholder={"ssl Check"}
                         description={"Do you want to verify the ssl certificate"}
                     />
-                    <Button type={"submit"}>Launch Dos Attack</Button>
+                    <Button type={"submit"}>Launch DoS Attack</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
@@ -252,4 +252,4 @@ const GoldenEye = () => {
     );
 };
 
-export default GoldenEye;
+export default Goldeneye;
