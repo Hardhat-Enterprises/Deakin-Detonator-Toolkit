@@ -64,6 +64,8 @@ import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
+import Bully from "./Bully/Bully";
+import AMAP from "./Amap/Amap";
 import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
 import Arpscan from "./ArpScan/ArpScan";
@@ -269,6 +271,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Amap",
+        path: "/tools/Amap",
+        element: <AMAP />,
+        description: "AMAP is a network scanning tool used to identify open ports and services on targeted hosts.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
         name: "Arjun",
         path: "/tools/Arjuntool",
         element: <Arjuntool />,
@@ -296,6 +305,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "BED is a program which is designed to check daemons for potential buffer overflows, format strings",
         category: "Information Gathering and Analysis",
+    },
+    {
+        name: "Bully",
+        path: "/tools/bully",
+        element: <Bully />,
+        description: "Brute-force WPS PIN authentication",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Cewl",
