@@ -3,26 +3,15 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
-const title = "Network port scanner (NMAP)";
-const description_userguide =
-    "Nmap is a network scanning tool that allows a user to discover everything connected to " +
-    "a network and receive a wide variety of information about what is connected. The tool utilises several " +
-    "scanning techniques that include but are not limited toUDP, TCP connect(), TCP SYN (half-open)and FTP. " +
-    "Nmap offers several advanced features including an Operating System (OS) detection and Firewall status " +
-    "check and provides a number of scan types.\n\nNmap Reference Guide: https://nmap.org/book/man.html\n\n" +
-    "How to use Nmap:\n\n" +
-    "Step 1: Enter an IP or Hostname.\n" +
-    "       E.g. 127.0.0.1\n\n" +
-    "Step 2: Enter a Port number.\n       E.g. 5173\n\nStep 3: Pick a scan speed - Note; " +
-    "Higher sppeds require a faster host network.\nT0 - Paranoid / T1 - Sneaky / T2 - Polite / T3 - Normal / " +
-    " T4 - Aggressive /\nT5 - Insane\n       Eg: T2\n\nStep 4: Select the type of scan to perform.\n        " +
-    "Eg: Operating System\n\nStep 5: Click Scan to commence the Nmap operation.\n\n" +
-    "Step 6: View the Output block below to view the results of the Scan.";
-
+/**
+ * Represents the form values for the NMAP component.
+ */
 interface FormValuesType {
     ip: string;
     port: string;
@@ -33,9 +22,38 @@ interface FormValuesType {
     verbose: boolean;
     ipv6: boolean;
 }
+/**
+ * The Nmap component.
+ * @returns The Nmap component.
+ */
 
+//constant
+const title = "NmapTool";
+
+//description of the tool
+const description_userguide =
+    "Nmap is a network scanning tool that allows a user to discover everything connected to " +
+    "a network and receive a wide variety of information about what is connected. The tool utilises several " +
+    "scanning techniques that include but are not limited toUDP, TCP connect(), TCP SYN (half-open)and FTP. " +
+    "Nmap offers several advanced features including an Operating System (OS) detection and Firewall status " +
+    "check and provides a number of scan types.\n\nNmap";
+const steps =
+    "How to use Nmap:\n\n" +
+    "Step 1: Enter an IP or Hostname.\n" +
+    "       E.g. 127.0.0.1\n\n" +
+    "Step 2: Enter a Port number.\n       E.g. 5173\n\nStep 3: Pick a scan speed - Note; " +
+    "Higher sppeds require a faster host network.\nT0 - Paranoid / T1 - Sneaky / T2 - Polite / T3 - Normal / " +
+    " T4 - Aggressive /\nT5 - Insane\n       Eg: T2\n\nStep 4: Select the type of scan to perform.\n        " +
+    "Eg: Operating System\n\nStep 5: Click Scan to commence the Nmap operation.\n\n" +
+    "Step 6: View the Output block below to view the results of the Scan.";
+const sourceLink = "https://nmap.org/book/man.html";
+const tutorial = "";
+const dependencies = ["nmap"];
+
+//scan speeds
 const speeds = ["T0", "T1", "T2", "T3", "T4", "T5"];
 
+//scan options
 const scanOptions = [
     "Default",
     "Operating System",
@@ -47,17 +65,22 @@ const scanOptions = [
     "Top ports",
 ];
 
+//state variables
 const NmapTool = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [selectedScanOption, setSelectedScanOption] = useState("");
-    const [selectedSpeedOption, setSelectedSpeedOption] = useState("");
-    const [verbose, setVerbose] = useState(false);
-    const [pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+    const [loading, setLoading] = useState(false); //loading state
+    const [output, setOutput] = useState(""); //output state
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false); // Advanced mode checkbox state
+    const [selectedScanOption, setSelectedScanOption] = useState(""); // Selected scan option state
+    const [selectedSpeedOption, setSelectedSpeedOption] = useState(""); // Selected scan speed option state
+    const [verbose, setVerbose] = useState(false); // Verbose mode checkbox state
+    const [pid, setPid] = useState(""); // Process ID state
+    const [allowSave, setAllowSave] = useState(false); // Save permission state
+    const [hasSaved, setHasSaved] = useState(false); // Saved state
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
 
+    //Form Hook to handle input
     let form = useForm({
         initialValues: {
             ip: "",
@@ -181,57 +204,76 @@ const NmapTool = () => {
     const isTopPortScan = selectedScanOption === "Top ports";
 
     return (
-        <form
-            onSubmit={form.onSubmit((values) =>
-                onSubmit({ ...values, scanOption: selectedScanOption, speed: selectedSpeedOption })
-            )}
+        <RenderComponent
+            title={title}
+            description={description_userguide}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
         >
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <Switch
-                    size="md"
-                    label="Advanced Mode"
-                    checked={checkedAdvanced}
-                    onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
-                />
-                <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
-                {checkedAdvanced && (
-                    <>
-                        <TextInput
-                            label={"Exclusions to range"}
-                            placeholder={"Form of xxx.xxx.xxx.xxx"}
-                            {...form.getInputProps("exclusion")}
-                        />
-                        <Checkbox label={"Verbose"} {...form.getInputProps("verbose" as keyof FormValuesType)} />
-                        <Checkbox label={"IPv6"} {...form.getInputProps("ipv6" as keyof FormValuesType)} />
-                    </>
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description_userguide}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            <form
+                onSubmit={form.onSubmit((values) =>
+                    onSubmit({ ...values, scanOption: selectedScanOption, speed: selectedSpeedOption })
                 )}
-                {!isTopPortScan && <TextInput label={"Port"} {...form.getInputProps("port")} />}
-                {isTopPortScan && <NumberInput label={"Number of top ports"} {...form.getInputProps("numTopPorts")} />}
-                <NativeSelect
-                    value={selectedSpeedOption}
-                    onChange={(e) => setSelectedSpeedOption(e.target.value)}
-                    title={"Scan speed"}
-                    data={speeds}
-                    required
-                    placeholder={"Pick a scan speed"}
-                    description={"Speed of the scan, refer: https://nmap.org/book/performance-timing-templates.html"}
-                />
-                <NativeSelect
-                    value={selectedScanOption}
-                    onChange={(e) => setSelectedScanOption(e.target.value)}
-                    title={"Scan option"}
-                    data={scanOptions}
-                    required
-                    placeholder={"Pick a scan option"}
-                    description={"Type of scan to perform"}
-                />
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <Button type={"submit"}>Scan</Button>
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+            >
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                <Stack>
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={checkedAdvanced}
+                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                    />
+                    <TextInput label={"IP or Hostname"} required {...form.getInputProps("ip")} />
+                    {checkedAdvanced && (
+                        <>
+                            <TextInput
+                                label={"Exclusions to range"}
+                                placeholder={"Form of xxx.xxx.xxx.xxx"}
+                                {...form.getInputProps("exclusion")}
+                            />
+                            <Checkbox label={"Verbose"} {...form.getInputProps("verbose" as keyof FormValuesType)} />
+                            <Checkbox label={"IPv6"} {...form.getInputProps("ipv6" as keyof FormValuesType)} />
+                        </>
+                    )}
+                    {!isTopPortScan && <TextInput label={"Port"} {...form.getInputProps("port")} />}
+                    {isTopPortScan && (
+                        <NumberInput label={"Number of top ports"} {...form.getInputProps("numTopPorts")} />
+                    )}
+                    <NativeSelect
+                        value={selectedSpeedOption}
+                        onChange={(e) => setSelectedSpeedOption(e.target.value)}
+                        title={"Scan speed"}
+                        data={speeds}
+                        required
+                        placeholder={"Pick a scan speed"}
+                        description={
+                            "Speed of the scan, refer: https://nmap.org/book/performance-timing-templates.html"
+                        }
+                    />
+                    <NativeSelect
+                        value={selectedScanOption}
+                        onChange={(e) => setSelectedScanOption(e.target.value)}
+                        title={"Scan option"}
+                        data={scanOptions}
+                        required
+                        placeholder={"Pick a scan option"}
+                        description={"Type of scan to perform"}
+                    />
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <Button type={"submit"}>Scan</Button>
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 
