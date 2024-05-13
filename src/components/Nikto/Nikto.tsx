@@ -125,18 +125,18 @@ const Nikto = () => {
 
         // Execute the Nikto command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("nikto", args, handleProcessData, handleProcessTermination)
-        .then(({ output, pid }) => {
-            // Update the UI with the results from the executed command
-            setOutput(output);
-            console.log(pid);
-            setPid(pid);
-        })
-        .catch((error) => {
-            // Display any errors encountered during command execution
-            setOutput(error.message);
-            // Deactivate loading state
-            setLoading(false);
-        });
+            .then(({ output, pid }) => {
+                // Update the UI with the results from the executed command
+                setOutput(output);
+                console.log(pid);
+                setPid(pid);
+            })
+            .catch((error) => {
+                // Display any errors encountered during command execution
+                setOutput(error.message);
+                // Deactivate loading state
+                setLoading(false);
+            });
     };
 
     /**
