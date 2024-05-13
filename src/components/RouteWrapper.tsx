@@ -41,7 +41,7 @@ import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
 import Meow from "./WalkthroughPages/Meow";
 import { FTPconnect } from "./FTP/FTPconnect";
-import GoldenEye from "./GoldenEye/GoldenEye";
+import GoldenEye from "./Goldeneye/Goldeneye";
 import WPScan from "./WPScan/WPScan";
 import Eyewitness from "./eyewitness/eyewitness";
 import MrRobot from "./WalkthroughPages/MrRobot";
