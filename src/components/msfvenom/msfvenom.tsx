@@ -41,13 +41,13 @@ interface FormValuesType {
 
 // Payload Options Configuration
 const architectures = ["windows/x86", "windows/x64", "linux/x86", "Mac/x64", "Android ARM"];
-const payloadOptions = [ 
+const payloadOptions = [
     // Nested arrays of payload options
 
-    // Options for windows/x86 
+    // Options for windows/x86
     [
-        "windows/meterpreter/reverseTcp", 
-        "windows/shellReverseTcp", 
+        "windows/meterpreter/reverseTcp",
+        "windows/shellReverseTcp",
         "windows/exec",
         "windows/adduser",
         "windows/messageBox",
@@ -57,9 +57,9 @@ const payloadOptions = [
         "windows/speakPwned",
         "windows/upexec/bindTcp",
     ],
-    // Options for windows/x64 
+    // Options for windows/x64
     [
-        "windows/x64/meterpreter/reverseTcp", 
+        "windows/x64/meterpreter/reverseTcp",
         "windows/x64/shellReverseTcp",
         "windows/x64/exec",
         "windows/x64/addUser",
@@ -68,9 +68,9 @@ const payloadOptions = [
         "windows/x64/peinject/bindTcp",
         "windows/x64/shell/bindNamedPipe",
     ],
-    // Options for linux/x86 
+    // Options for linux/x86
     [
-        "linux/x86/meterpreter/reverseTcp", 
+        "linux/x86/meterpreter/reverseTcp",
         "linux/x86/shell_bindTcp",
         "linux/x86/exec",
         "linux/x86/shellFindTag",
@@ -80,9 +80,9 @@ const payloadOptions = [
         "linux/x86/shellFindPort",
         "linux/x86/meterpreter/reverseIpv6Tcp",
     ],
-    // Options for Mac/x64 
+    // Options for Mac/x64
     [
-        "osx/x64/meterpreter/reverseHttps", 
+        "osx/x64/meterpreter/reverseHttps",
         "osx/x64/shellBindTcp",
         "osx/x64/exec",
         "osx/x64/say",
@@ -90,9 +90,9 @@ const payloadOptions = [
         "osx/x64/dupandexecve/bindTcp",
         "osx/x64/meterpreter/reverseTcp",
     ],
-    // Options for Android ARM 
+    // Options for Android ARM
     [
-        "android/meterpreter/reverseHttps", 
+        "android/meterpreter/reverseHttps",
         "android/meterpreter/reverseTcp",
         "android/meterpreterReverseHttp",
         "android/meterpreterReverseHttps",
@@ -108,15 +108,30 @@ const payloadFormats = ["exe", "elf", "raw", "psh", "asp", "aspx", "jsp", "war",
 const payloadRequiredVariables = [
     // windows x86 required payload variables
     [
-        ["LHOST", "LPORT"], ["LHOST", "LPORT"], ["CMD"], ["USER", "PASS"], 
-        ["TEXT"], [], ["DLL"], ["LHOST", "LPORT"], [], ["PEXEC"],
+        ["LHOST", "LPORT"],
+        ["LHOST", "LPORT"],
+        ["CMD"],
+        ["USER", "PASS"],
+        ["TEXT"],
+        [],
+        ["DLL"],
+        ["LHOST", "LPORT"],
+        [],
+        ["PEXEC"],
     ],
     //windows x64 required payload variables
     [["LHOST", "LPORT"], ["LHOST", "LPORT"], ["CMD"], ["USER", "PASS"], ["TEXT"], ["DLL"], ["PE"], []],
     //linux x86 required payload variables
     [
-        ["LHOST", "LPORT"], ["LPORT"], ["CMD"], ["LHOST", "LPORT"], ["USER", "PASS"], ["FILE", "MODE"],
-        ["PATH"], [], ["LHOST", "LPORT"],
+        ["LHOST", "LPORT"],
+        ["LPORT"],
+        ["CMD"],
+        ["LHOST", "LPORT"],
+        ["USER", "PASS"],
+        ["FILE", "MODE"],
+        ["PATH"],
+        [],
+        ["LHOST", "LPORT"],
     ],
     //MAC x64 required payload variables
     [["LHOST", "LPORT"], ["LPORT"], ["CMD"], ["TEXT"], [], [], [], ["LHOST", "LPORT"]],
@@ -153,14 +168,14 @@ const PayloadGenerator = () => {
     // Component Constants and Descriptions
     const title = "Payload Generator (msfvenom)"; // Component description
     const description =
-    // Description of the component 
-    "Msfvenom is a payload generator and encoder that comes with the Metasploit Framework. " +
-    "It allows you to create various types of payloads for exploitation. " +
-    "Select the architecture, payload, and other options, then click Generate to create the payload.";
-    const steps = 
-    "Step 1: Select an architecture, for example- windows/x64 and then select payload, for example- windows/x64/shellReverseTcp\n" +
-    "Step 2: Select LHOST, LPORT and format of the payload\n" +
-    "Step 3: Enter a desigred path where you want to save the file";
+        // Description of the component
+        "Msfvenom is a payload generator and encoder that comes with the Metasploit Framework. " +
+        "It allows you to create various types of payloads for exploitation. " +
+        "Select the architecture, payload, and other options, then click Generate to create the payload.";
+    const steps =
+        "Step 1: Select an architecture, for example- windows/x64 and then select payload, for example- windows/x64/shellReverseTcp\n" +
+        "Step 2: Select LHOST, LPORT and format of the payload\n" +
+        "Step 3: Enter a desigred path where you want to save the file";
     const sourceLink = "https://www.kali.org/tools/metasploit-framework/#msfvenom"; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["msfvenom"]; // Contains the dependencies required by the component
@@ -168,11 +183,11 @@ const PayloadGenerator = () => {
     // Form Management
     const form = useForm<FormValuesType>({
         // Initial form values
-        initialValues: { 
-            lhost: "", 
-            lport: "", 
-            rhost: "", 
-            user: "", 
+        initialValues: {
+            lhost: "",
+            lport: "",
+            rhost: "",
+            user: "",
             pass: "",
             text: "",
             url: "",
@@ -181,13 +196,12 @@ const PayloadGenerator = () => {
             path: "",
             pe: "",
             pexec: "",
-            outputPath: "", 
+            outputPath: "",
             file: "",
             mode: "",
             custom: "",
         },
     });
-
 
     // Check the availability of all commands in the dependencies array.
     useEffect(() => {
@@ -204,8 +218,7 @@ const PayloadGenerator = () => {
             });
     }, []);
 
-
-    /** Uses the callback function of runCommandGetPidAndOutput to handle and save data 
+    /** Uses the callback function of runCommandGetPidAndOutput to handle and save data
      *  generated by the executing process into the output state variable. */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
@@ -301,7 +314,7 @@ const PayloadGenerator = () => {
             }
 
             if (form.values.path) {
-                args.push(`PATH=${form.values.path}`); // Enter the path to the file 
+                args.push(`PATH=${form.values.path}`); // Enter the path to the file
             }
 
             if (form.values.pexec) {
@@ -480,10 +493,18 @@ const PayloadGenerator = () => {
                                 />
                             )}
                             {requiredVariables.includes("DLL") && (
-                                <TextInput label="DLL" placeholder="Enter DLL local path" {...form.getInputProps("dll")} />
+                                <TextInput
+                                    label="DLL"
+                                    placeholder="Enter DLL local path"
+                                    {...form.getInputProps("dll")}
+                                />
                             )}
                             {requiredVariables.includes("PATH") && (
-                                <TextInput label="PATH" placeholder="Enter path to file" {...form.getInputProps("path")} />
+                                <TextInput
+                                    label="PATH"
+                                    placeholder="Enter path to file"
+                                    {...form.getInputProps("path")}
+                                />
                             )}
                             {requiredVariables.includes("PE") && (
                                 <TextInput
