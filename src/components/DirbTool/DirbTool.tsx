@@ -28,8 +28,12 @@ const description_userGuide = //Description of the component.
     "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
 
 
-
+/**
+ * The DirbTool component.
+ * @returns The DirbTool component.
+ */
 export function DirbTool() {
+    //Component State Variables.
     const [loading, setLoading] = useState(false); //State variable to indicate loading state.
     const [output, setOutput] = useState(""); //State variable to store the output.
     const [checkedAdvanced, setCheckedAdvanced] = useState(false); //State variable to verify Advanced setup. 
