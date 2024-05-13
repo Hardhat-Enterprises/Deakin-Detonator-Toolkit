@@ -69,6 +69,7 @@ import Bully from "./Bully/Bully";
 import AMAP from "./Amap/Amap";
 import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
+import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 
 export interface RouteProperties {
@@ -560,6 +561,13 @@ export const ROUTES: RouteProperties[] = [
         element: <SnmpCheck />,
         description: "Detects network devices using SNMP protocol",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Sublist3r",
+        path: "/tools/Sublist3r",
+        element: <Sublist3r />,
+        description: "Sublist3r looks up sub domains of websites.",
+        category: "Web Application Testing",
     },
     {
         name: "The Harvester",
