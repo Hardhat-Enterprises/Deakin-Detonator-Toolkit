@@ -41,7 +41,7 @@ import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
 import Meow from "./WalkthroughPages/Meow";
 import { FTPconnect } from "./FTP/FTPconnect";
-import GoldenEye from "./GoldenEye/GoldenEye";
+import GoldenEye from "./Goldeneye/Goldeneye";
 import WPScan from "./WPScan/WPScan";
 import Eyewitness from "./eyewitness/eyewitness";
 import MrRobot from "./WalkthroughPages/MrRobot";
@@ -64,6 +64,13 @@ import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
+import TShark from "./TShark/TShark";
+import Bully from "./Bully/Bully";
+import AMAP from "./Amap/Amap";
+import Gitleaks from "./Gitleaks/Gitleaks";
+import WhatWeb from "./WhatWeb/WhatWeb";
+import Sublist3r from "./Sublist3r/Sublist3r";
+import Arpscan from "./ArpScan/ArpScan";
 
 export interface RouteProperties {
     name: string;
@@ -266,11 +273,25 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Amap",
+        path: "/tools/Amap",
+        element: <AMAP />,
+        description: "AMAP is a network scanning tool used to identify open ports and services on targeted hosts.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
         name: "Arjun",
         path: "/tools/Arjuntool",
         element: <Arjuntool />,
         description: "Arjun can find query parameters for URL endpoints.",
         category: "Web Application Testing",
+    },
+    {
+        name: "ArpScan",
+        path: "/tools/arpscan",
+        element: <Arpscan />,
+        description: "Scan the local network for ARP entries.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "ARP Spoofing",
@@ -286,6 +307,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "BED is a program which is designed to check daemons for potential buffer overflows, format strings",
         category: "Information Gathering and Analysis",
+    },
+    {
+        name: "Bully",
+        path: "/tools/bully",
+        element: <Bully />,
+        description: "Brute-force WPS PIN authentication",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Cewl",
@@ -384,6 +412,13 @@ export const ROUTES: RouteProperties[] = [
         element: <FTPconnect />,
         description: "FTPconnect tool",
         category: "Miscellaneous",
+    },
+    {
+        name: "Gitleaks",
+        path: "/tools/gitleaks",
+        element: <Gitleaks />,
+        description: "Detect hardcoded secrets in git repositories.",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "GoBuster",
@@ -528,6 +563,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
+        name: "Sublist3r",
+        path: "/tools/Sublist3r",
+        element: <Sublist3r />,
+        description: "Sublist3r looks up sub domains of websites.",
+        category: "Web Application Testing",
+    },
+    {
         name: "The Harvester",
         path: "/tools/theharvester",
         element: <TheHarvester />,
@@ -543,11 +585,25 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
+        name: "TShark",
+        path: "/tools/TShark",
+        element: <TShark />,
+        description: "Captures data packets' information and displays in different formats.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
         name: "Urlsnarf",
         path: "/tools/Urlsnarf",
         element: <Urlsnarf />,
         description: "HTTP Sniffer",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "WhatWeb",
+        path: "/tools/WhatWeb",
+        element: <WhatWeb />,
+        description: "WhatWeb scans websites and recognises web technologies.",
+        category: "Web Application Testing",
     },
     {
         name: "WPScan",
