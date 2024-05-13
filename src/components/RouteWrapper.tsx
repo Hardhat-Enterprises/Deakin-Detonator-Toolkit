@@ -65,10 +65,12 @@ import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import Nikto from "./Nikto/Nikto";
+import TShark from "./TShark/TShark";
 import Bully from "./Bully/Bully";
 import AMAP from "./Amap/Amap";
 import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
+import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 
 export interface RouteProperties {
@@ -569,6 +571,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
+        name: "Sublist3r",
+        path: "/tools/Sublist3r",
+        element: <Sublist3r />,
+        description: "Sublist3r looks up sub domains of websites.",
+        category: "Web Application Testing",
+    },
+    {
         name: "The Harvester",
         path: "/tools/theharvester",
         element: <TheHarvester />,
@@ -581,6 +590,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Traceroute />,
         description:
             "The traceroute utility displays the route used by IP packets on their way to a specified network (or Internet) host.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "TShark",
+        path: "/tools/TShark",
+        element: <TShark />,
+        description: "Captures data packets' information and displays in different formats.",
         category: "Network Scanning and Enumeration",
     },
     {
