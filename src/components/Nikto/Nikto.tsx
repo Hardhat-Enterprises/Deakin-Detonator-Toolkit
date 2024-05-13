@@ -42,7 +42,7 @@ const Nikto = () => {
         "Step 2: Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
         "Step 3: Review the scan output to identify any security issues.\n";
     const sourceLink = "https://github.com/sullo/nikto"; // Link to the source code
-    const tutorial = "https://github.com/sullo/nikto/wiki"; // Link to the official documentation/tutorial
+    const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["nikto"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input
@@ -125,16 +125,18 @@ const Nikto = () => {
 
         // Execute the Nikto command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("nikto", args, handleProcessData, handleProcessTermination)
-            .then(() => {
-                // Deactivate loading state
-                setLoading(false);
-            })
-            .catch((error) => {
-                // Display any errors encountered during command execution
-                setOutput(`Error: ${error.message}`);
-                // Deactivate loading state
-                setLoading(false);
-            });
+        .then(({ output, pid }) => {
+            // Update the UI with the results from the executed command
+            setOutput(output);
+            console.log(pid);
+            setPid(pid);
+        })
+        .catch((error) => {
+            // Display any errors encountered during command execution
+            setOutput(error.message);
+            // Deactivate loading state
+            setLoading(false);
+        });
     };
 
     /**
