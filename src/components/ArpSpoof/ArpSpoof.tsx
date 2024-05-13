@@ -1,8 +1,8 @@
-import { Button, Stack, TextInput, Alert } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState, useEffect, useCallback } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent, UserGuide } from "../UserGuide/UserGuide";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
@@ -20,8 +20,8 @@ const description_userguide =
     "This will cause the traffic meant for the legitimate device to be sent to the attacker instead.\n" +
     "The attacker can then inspect the traffic before forwarding it to the actual default gateway.\n" +
     "The attacker can also modify the traffic before forwarding it. \n" +
-    "ARP spoofing can be used to intercept data frames, modify traffic, or stop the traffic altogether.\n\n" +
-    "How to use ARPSpoofing:\n\n" +
+    "ARP spoofing can be used to intercept data frames, modify traffic, or stop the traffic altogether.\n" +
+    "How to use ARPSpoofing:\n" +
     "Step 1: Enter the IP address of the 1st target. Eg: 192.168.1.1\n" +
     "Step 2: Enter the IP address of the 2nd target. Eg: 192.168.1.2\n" +
     "Step 3: Click spoof to commence the ARP spoofing operation.\n" +
@@ -49,6 +49,8 @@ const ARPSpoofing = () => {
 
     // Component Constants.
     const dependencies = ["dsniff"]; // Contains the dependencies required for the component.
+    const SourceLink = "https://github.com/tecknicaltom/dsniff/blob/master/arpspoof.c"; // contains link to the source code (arpspoof)
+    const Tutorial = "";
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
@@ -66,7 +68,7 @@ const ARPSpoofing = () => {
     }, []);
 
     // Form Hook to handle form input.
-    let form = useForm({
+    const form = useForm({
         initialValues: {
             ipGateway: "",
             ipTarget: "",
@@ -115,7 +117,7 @@ const ARPSpoofing = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     // Actions taken after saving the output
@@ -152,7 +154,7 @@ const ARPSpoofing = () => {
             "arpspoof",
             argsGateway,
             handleProcessData,
-            handleProcessTermination
+            handleProcessTermination,
         );
         setPidGateway(result_gateway.pid);
 
@@ -161,7 +163,7 @@ const ARPSpoofing = () => {
             "arpspoof",
             argsTarget,
             handleProcessData,
-            handleProcessTermination
+            handleProcessTermination,
         );
         setPidTarget(result_target.pid);
 
@@ -169,28 +171,30 @@ const ARPSpoofing = () => {
     };
 
     return (
-        <>
-            {!loadingModal && (
-                <InstallationModal
-                    isOpen={opened}
-                    setOpened={setOpened}
-                    feature_description={description_userguide}
-                    dependencies={dependencies}
-                ></InstallationModal>
-            )}
-            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                {LoadingOverlayAndCancelButton(loading, pidGateway)}
-                {LoadingOverlayAndCancelButton(loading, pidTarget)}
-                <Stack>
-                    {UserGuide(title, description_userguide)}
-                    <TextInput label={"Target one IP address"} required {...form.getInputProps("ip1")} />
-                    <TextInput label={"Target two IP address"} required {...form.getInputProps("ip2")} />
-                    <Button type={"submit"}>Spoof</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </Stack>
-            </form>
-        </>
+        <RenderComponent title={title} description={description_userguide} tutorial={Tutorial} sourceLink={SourceLink}>
+            <>
+                {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description_userguide}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+                )}
+                <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                    {LoadingOverlayAndCancelButton(loading, pidGateway)}
+                    {LoadingOverlayAndCancelButton(loading, pidTarget)}
+                    <Stack>
+                        {UserGuide(title, description_userguide)}
+                        <TextInput label={"Target one IP address"} required {...form.getInputProps("ip1")} />
+                        <TextInput label={"Target two IP address"} required {...form.getInputProps("ip2")} />
+                        <Button type={"submit"}>Spoof</Button>
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    </Stack>
+                </form>
+            </>
+        </RenderComponent>
     );
 };
 
