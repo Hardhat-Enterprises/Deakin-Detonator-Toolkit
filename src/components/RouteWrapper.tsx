@@ -64,6 +64,7 @@ import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
+import TShark from "./TShark/TShark";
 import Bully from "./Bully/Bully";
 import AMAP from "./Amap/Amap";
 import Gitleaks from "./Gitleaks/Gitleaks";
@@ -581,6 +582,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Traceroute />,
         description:
             "The traceroute utility displays the route used by IP packets on their way to a specified network (or Internet) host.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "TShark",
+        path: "/tools/TShark",
+        element: <TShark />,
+        description: "Captures data packets' information and displays in different formats.",
         category: "Network Scanning and Enumeration",
     },
     {
