@@ -38,7 +38,7 @@ const Fcrackzip = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-    
+
     // Define the attack methods
     const methods = ["Dictionary", "BruteForce"];
 
@@ -89,7 +89,7 @@ const Fcrackzip = () => {
                 setLoadingModal(false); // Also set loading to false in case of error
             });
     }, []);
-    
+
     /**
      * Callback function to handle process data.
      * @param {string} data - The data received from the child process.
@@ -118,7 +118,7 @@ const Fcrackzip = () => {
         },
         [handleProcessData]
     );
-    
+
     // Actions taken after saving the output
     const handleSaveComplete = () => {
         // Indicating that the file has saved which is passed
@@ -167,15 +167,15 @@ const Fcrackzip = () => {
                 handleProcessTermination
             );
 
-            setPid(result.pid);          
+            setPid(result.pid);
 
-           // Set output without checking for cracked password match
+            // Set output without checking for cracked password match
             setOutput(result.output);
-            } catch (e: any) {
+        } catch (e: any) {
             setOutput(e.message);
-            } finally {
+        } finally {
             setLoading(false);
-            }
+        }
     };
 
     /**
@@ -281,7 +281,7 @@ const Fcrackzip = () => {
                     )}
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type={"submit"}>Start Cracking!</Button>
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />                    
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
         </RenderComponent>
