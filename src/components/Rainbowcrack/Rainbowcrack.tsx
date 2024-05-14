@@ -4,7 +4,7 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile_v2 }from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -127,7 +127,7 @@ const RainbowCrack = () => {
     const handleSaveComplete = () => {
         // This function could handle any actions needed after saving the output
         setHasSaved(true);
-      };
+    };
     return (
         <RenderComponent
             title={title}
@@ -146,7 +146,7 @@ const RainbowCrack = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                {LoadingOverlayAndCancelButton(loading, pid)}
+                    {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label="Hash Value" required {...form.getInputProps("hashValue")} />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit">Crack</Button>
