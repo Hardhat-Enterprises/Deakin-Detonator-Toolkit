@@ -4,7 +4,7 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 }from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -28,19 +28,21 @@ const RainbowCrack = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [allowSave, setAllowSave] = useState(false); // State variable to enable/disable saving
+    const [hasSaved, setHasSaved] = useState(false); // State variable to track whether output has been saved
 
     // Component Constants
-    const title = "Rainbowcrack"; // Title of the component.
+    const title = "RainbowCrack"; // Title of the component.
     const description =
         "RainbowCrack is a computer program which utilises rainbow tables to be used in password cracking."; // Description of the component.
     const steps =
-        "How to use Rainbowcrack \n" +
-        "Step 1:Enter a hash value. (E.g. 5d41402abc4b2a76b9719d911017c592) \n" +
-        "Step 2:Simply tap on the button crack to crack the hash key. \n" +
+        "How to use RainbowCrack \n" +
+        "Step 1: Enter a hash value. (E.g. 5d41402abc4b2a76b9719d911017c592) \n" +
+        "Step 2: Simply tap on the crack button to crack the hash key. \n" +
         "The user can even save the output to a file by assigning a file-name under 'save output to file' option."; // Steps to use the component.
     const sourceLink = ""; // Link to the source code (or RainbowCrack documentation).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["rainbowcrack"]; // Dependencies required by the component.
+    const dependencies = ["rcrack"]; // Dependencies required by the component.
 
     // Form hook to handle form input.
     const form = useForm({
@@ -103,7 +105,7 @@ const RainbowCrack = () => {
         const args = [values.hashValue];
 
         // Execute the rainbowcrack command via helper method
-        CommandHelper.runCommandWithPkexec("rainbowcrack", args, handleProcessData, handleProcessTermination)
+        CommandHelper.runCommandGetPidAndOutput("rcrack", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 setOutput(output);
                 console.log(pid);
@@ -122,6 +124,10 @@ const RainbowCrack = () => {
         setOutput("");
     }, [setOutput]);
 
+    const handleSaveComplete = () => {
+        // This function could handle any actions needed after saving the output
+        setHasSaved(true);
+      };
     return (
         <RenderComponent
             title={title}
@@ -140,10 +146,10 @@ const RainbowCrack = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput label={"Hash Value"} required {...form.getInputProps("hashValue")} />
-                    {SaveOutputToTextFile(output)}
-                    <Button type={"submit"}>Crack</Button>
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                    <TextInput label="Hash Value" required {...form.getInputProps("hashValue")} />
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <Button type="submit">Crack</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
