@@ -29,6 +29,7 @@ function ARPFingerprinting() {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
 
     // Component Constants.
     const title = "ARP fingerprint Tool"; // Title of the component.
@@ -179,9 +180,9 @@ function ARPFingerprinting() {
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
                     {/* Render the loading overlay and cancel button */}
-                    {LoadingOverlayAndCancelButton(loading, "")}
+                    {LoadingOverlayAndCancelButton(loading, pid)}
                     <Stack>
-                        <TextInput label="Target IP Address" required {...form.getInputProps("targetIP")} />
+                        <TextInput label="Target IP address" required {...form.getInputProps("targetIP")} />
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
 
                         <Button type={"submit"} disabled={loading}>
