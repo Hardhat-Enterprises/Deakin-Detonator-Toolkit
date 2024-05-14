@@ -4,24 +4,10 @@ import { useEffect, useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-
-// Component title
-const title = "Fcrackzip";
-// Description of the component
-const description_guide = "Fcrackzip is a tool for cracking password of a protected zip file.";
-// Additional props for the RenderComponent
-const steps =
-    "Step 1: Input path of the zip file.\n" +
-    "Step 2: Select an Attack Mode (Dictionary or Brute Force)\n" +
-    "Step 3: You can save output by checking 'Save Output to File'\n" +
-    "Step 4: Click START CRACKING!";
-// Link to the tutorial
-const tutorial = "";
-// Link to the source code
-const sourceLink = "";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 // Define the form values interface
 interface FormValuesType {
@@ -32,9 +18,6 @@ interface FormValuesType {
     charSet: string;
 }
 
-// Define the attack methods
-const methods = ["Dictionary", "BruteForce"];
-
 /**
  * Fcrackzip component for cracking password-protected zip files.
  * @returns {JSX.Element} The Fcrackzip component.
@@ -43,6 +26,8 @@ const Fcrackzip = () => {
     // Component state variables
     const [loading, setLoading] = useState(false); // Indicates loading state
     const [output, setOutput] = useState(""); // Stores the output of command execution
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [attackMethod, setAttackmethod] = useState(""); // Stores the selected attack method
     const [checkedUnzip, setCheckedUnzip] = useState(true); // Indicates if unzip option is checked
     const [pid, setPid] = useState(""); // Stores the process ID
@@ -50,7 +35,27 @@ const Fcrackzip = () => {
     const [useCharsetLowercase, setCharsetLowercase] = useState(false); // Indicates if lowercase character set is selected
     const [useCharsetNumeric, setCharsetNumeric] = useState(false); // Indicates if numeric character set is selected
     const [checkedVerbose, setCheckedVerbose] = useState(false); // Indicates if verbose mode is checked
-    const [dependencyAvailable, setDependencyAvailable] = useState(false); // Indicates if dependency is available
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    
+    // Define the attack methods
+    const methods = ["Dictionary", "BruteForce"];
+
+    // Component title
+    const title = "Fcrackzip";
+    // Description of the component
+    const description_guide = "Fcrackzip is a tool for cracking the password of a protected zip file.";
+    // Additional props for the RenderComponent
+    const steps =
+        "Step 1: Input path of the zip file.\n" +
+        "Step 2: Select an Attack Mode (Dictionary or Brute Force)\n" +
+        "Step 3: You can save output by checking 'Save Output to File'\n" +
+        "Step 4: Click start cracking!";
+    // Link to the tutorial
+    const tutorial = "";
+    // Link to the source code
+    const sourceLink = "";
 
     // Determine if attack method is Dictionary
     const isDictionary = attackMethod === "Dictionary";
@@ -70,17 +75,21 @@ const Fcrackzip = () => {
         },
     });
 
-    // Check for dependency availability when the component mounts
+    // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
-        checkDependencyAvailability();
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
     }, []);
-
-    // Function to check dependency availability
-    const checkDependencyAvailability = async () => {
-        const isAvailable = await checkAllCommandsAvailability(dependencies);
-        setDependencyAvailable(isAvailable);
-    };
-
+    
     /**
      * Callback function to handle process data.
      * @param {string} data - The data received from the child process.
@@ -109,6 +118,14 @@ const Fcrackzip = () => {
         },
         [handleProcessData]
     );
+    
+    // Actions taken after saving the output
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
     /**
      * Function to handle form submission.
@@ -150,25 +167,15 @@ const Fcrackzip = () => {
                 handleProcessTermination
             );
 
-            setPid(result.pid);
+            setPid(result.pid);          
 
-            const crackedPasswordRegex = /PASSWORD FOUND\! : (.+)/;
-            const crackedPasswordMatch = result.output.match(crackedPasswordRegex);
-
-            if (crackedPasswordMatch) {
-                const crackedPassword = crackedPasswordMatch[1];
-                setOutput(result.output + `\nCracked Password: ${crackedPassword}`);
-                if (checkedUnzip) {
-                    SaveOutputToTextFile(crackedPassword);
-                }
-            } else {
-                setOutput(result.output);
-            }
-        } catch (e: any) {
+           // Set output without checking for cracked password match
+            setOutput(result.output);
+            } catch (e: any) {
             setOutput(e.message);
-        } finally {
+            } finally {
             setLoading(false);
-        }
+            }
     };
 
     /**
@@ -186,12 +193,14 @@ const Fcrackzip = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
-            {!dependencyAvailable && (
-                <div>
-                    <p>Dependency not available. Please install it.</p>
-                </div>
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description_guide}
+                    dependencies={dependencies}
+                ></InstallationModal>
             )}
-
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
@@ -270,10 +279,9 @@ const Fcrackzip = () => {
                             />
                         </>
                     )}
-                    {SaveOutputToTextFile(output)}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type={"submit"}>Start Cracking!</Button>
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                    <Button onClick={clearOutput}>Clear Output</Button>
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />                    
                 </Stack>
             </form>
         </RenderComponent>
