@@ -1,63 +1,55 @@
-import { Button, Stack, Switch, TextInput } from "@mantine/core";
+import { useState, useEffect, useCallback } from "react";
+import { Button, Checkbox, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
- * Represents the form values for the AirbaseNG component.
+ * Represents the form values for the Nikto component.
  */
 interface FormValuesType {
-    fakeHost: string;
-    channel: string;
-    macAddress: string;
-    replayInterface: string;
-    filePath: string;
-    customConfig: string;
+    targetURL: string;
+    sslScan: boolean;
 }
 
 /**
- * The AirbaseNG component.
- * @returns The AirbaseNG component.
+ * The Nikto component.
+ * @returns The Nikto component.
  */
-const AirbaseNG = () => {
-    // Component State Variables.
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
-    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+const Nikto = () => {
+    // Component state variables
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving of output
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
+    const [sslScan, setSslScan] = useState(false); // State variable for SSL scanning
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-    const [advanceMode, setAdvanceMode] = useState(false);
-    const [customMode, setCustomMode] = useState(false);
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
 
-    // Component Constants.
-    const title = "Airbase-ng"; // Title of the component.
-    const description = "Airbase-ng is a tool to create fake access points."; // Description of the component.
+    // Component Constants
+    const title = "Nikto";
+    const description =
+        "Nikto is a powerful web server scanner that can perform comprehensive tests against web servers for multiple items.";
     const steps =
-        "Step 1: Type in the name of your fake host.\n" +
-        "Step 2: Select your desired channel.\n" +
-        "Step 3: Specify the WLAN interface to be used.\n" +
-        "Step 4: Click 'Start AP' to begin the process.\n" +
-        "Step 5: View the output block to see the results. ";
-    const sourceLink = ""; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["aircrack-ng"]; // Contains the dependencies required by the component.
+        "Step 1: Provide the target URL or IP address to scan.\n" +
+        "Step 2: Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
+        "Step 3: Review the scan output to identify any security issues.\n";
+    const sourceLink = "https://github.com/sullo/nikto"; // Link to the source code
+    const tutorial = ""; // Link to the official documentation/tutorial
+    const dependencies = ["nikto"]; // Contains the dependencies required by the component.
 
-    // Form hook to handle form input.
-    const form = useForm({
+    // Form hook to handle form input
+    let form = useForm({
         initialValues: {
-            fakeHost: "",
-            channel: "",
-            replayInterface: "",
-            macAddress: "",
-            filePath: "",
-            customConfig: "",
+            targetURL: "",
+            sslScan: false,
         },
     });
 
@@ -118,25 +110,21 @@ const AirbaseNG = () => {
     );
 
     /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the airbase-ng tool with the given parameters.
-     * Once the command is executed, the results or errors are displayed in the output.
-     *
-     * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
+     * Handles form submission for the Nikto component.
+     * @param {FormValuesType} values - The form values containing the target URL and SSL scan option.
      */
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
-        // Construct arguments for the aircrack-ng command based on form input
-        const args = ["-e", values.fakeHost, "-c", values.channel, values.replayInterface];
+        // Construct arguments for the Nikto command based on form input
+        const args = ["-h", values.targetURL];
+        if (values.sslScan) {
+            args.push("-ssl"); // Add -ssl option for SSL scanning
+        }
 
-        values.macAddress ? args.push(`-a`, values.macAddress) : undefined;
-        values.filePath ? args.push(`-F`, values.filePath) : undefined;
-        values.customConfig ? args.push(values.customConfig) : undefined;
-
-        // Execute the aircrack-ng command via helper method and handle its output or potential errors
-        CommandHelper.runCommandWithPkexec("airbase-ng", args, handleProcessData, handleProcessTermination)
+        // Execute the Nikto command via helper method and handle its output or potential errors
+        CommandHelper.runCommandGetPidAndOutput("nikto", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 // Update the UI with the results from the executed command
                 setOutput(output);
@@ -152,12 +140,23 @@ const AirbaseNG = () => {
     };
 
     /**
-     * Clears the output state.
+     * Handles the completion of output saving by updating state variables.
      */
-    const clearOutput = useCallback(() => {
-        setOutput("");
-    }, [setOutput]);
+    const handleSaveComplete = () => {
+        setHasSaved(true); // Set hasSaved state to true
+        setAllowSave(false); // Disallow further output saving
+    };
 
+    /**
+     * Clears the command output and resets state variables related to output saving.
+     */
+    const clearOutput = () => {
+        setOutput(""); // Clear the command output
+        setHasSaved(false); // Reset hasSaved state
+        setAllowSave(false); // Disallow further output saving
+    };
+
+    // Render component
     return (
         <RenderComponent
             title={title}
@@ -172,38 +171,19 @@ const AirbaseNG = () => {
                     setOpened={setOpened}
                     feature_description={description}
                     dependencies={dependencies}
-                ></InstallationModal>
+                />
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-                    <Switch
-                        size="md"
-                        label="Advanced Mode"
-                        checked={advanceMode}
-                        onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <TextInput label="Target URL" required {...form.getInputProps("targetURL")} />
+                    <Checkbox
+                        label="SSL Scan"
+                        checked={sslScan}
+                        onChange={(event) => setSslScan(event.currentTarget.checked)}
                     />
-                    <Switch
-                        size="md"
-                        label="Custom Configuration"
-                        checked={customMode}
-                        onChange={(e) => setCustomMode(e.currentTarget.checked)}
-                    />
-                    <TextInput label={"Name of your fake host"} required {...form.getInputProps("fakeHost")} />
-                    <TextInput label={"Channel of choice"} required {...form.getInputProps("channel")} />
-                    <TextInput label={"Your WLAN interface"} required {...form.getInputProps("replayInterface")} />
-                    {advanceMode && (
-                        <>
-                            <TextInput label={"Set AP MAC address"} {...form.getInputProps("MACAddress")} />
-                            <TextInput
-                                label={"Save as Pcap File (Please Supply FilePath)"}
-                                {...form.getInputProps("filePath")}
-                            />
-                        </>
-                    )}
-                    {customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
-                    {SaveOutputToTextFile(output)}
                     <Button type={"submit"}>Start {title}</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
@@ -211,4 +191,4 @@ const AirbaseNG = () => {
     );
 };
 
-export default AirbaseNG;
+export default Nikto;

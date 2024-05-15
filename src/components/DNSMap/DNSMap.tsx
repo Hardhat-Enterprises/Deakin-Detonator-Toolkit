@@ -1,27 +1,17 @@
 import { Button, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-import { l } from "vitest/dist/index-60e2a8e1";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
-const title = "DNS Mapping for Subdomains (DNSMap)";
-const description_userguide =
-    "DNSMap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
-    "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall services and smtp. " +
-    "So it will be possible to search for smtp.example.com inside example.com automatically.\n\nInformation on the tool " +
-    "can be found at: https://www.kali.org/tools/dnsmap/\n\n" +
-    "Step 1: Enter a valid domain to be mapped.\n" +
-    "       Eg: google.com\n\n" +
-    "Step 2: Enter a delay between requests. Default is 10 (milliseconds). Can be left blank.\n" +
-    "       Eg: 10\n\n" +
-    "Step 3: Click 'Start Mapping' to commence the DNSMap tool's operation.\n\n" +
-    "Step 4: View the Output block below to view the results of the tool's execution.\n\n" +
-    "Switch to Advanced Mode for further options.";
-
+/**
+ * Represents the form values for the DNSMap component.
+ */
 interface FormValuesType {
     domain: string;
     delay: number;
@@ -30,14 +20,42 @@ interface FormValuesType {
     ipsToIgnore: string;
 }
 
-const DNSMap = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [Pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+/**
+ * The DNSMap component.
+ * @returns The DNSMap component.
+ */
 
+const DNSMap = () => {
+    //Componenets state Variable
+    const [loading, setLoading] = useState(false); // State variable that represents loading state of the component
+    const [output, setOutput] = useState(""); // State variable that represents the output text from the DNS mapping process
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false); //State variable that represents the state of advanced mode switch
+    const [Pid, setPid] = useState(""); //State variable that represents the process ID of the DNS mapping process
+    const [allowSave, setAllowSave] = useState(false); //State variable that represents whether saving the output is allowed
+    const [hasSaved, setHasSaved] = useState(false); //State variable that represents whether the output has been saved
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+
+    //Components Constant Variables
+    const title = "Dnsmap";
+    const description_userguide =
+        "DNSMap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
+        "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall services and smtp. " +
+        "So it will be possible to search for smtp.example.com inside example.com automatically.\n\n";
+    const steps =
+        "Step 1: Enter a valid domain to be mapped.\n" +
+        "       Eg: google.com\n\n" +
+        "Step 2: Enter a delay between requests. Default is 10 (milliseconds). Can be left blank.\n" +
+        "       Eg: 10\n\n" +
+        "Step 3: Click 'Start Mapping' to commence the DNSMap tool's operation.\n\n" +
+        "Step 4: View the Output block below to view the results of the tool's execution.\n\n" +
+        "Switch to Advanced Mode for further options.";
+    const sourceLink = "https://www.kali.org/tools/dnsmap/"; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["dnsmap"]; // Contains the dependencies required by the component.
+
+    //Form Hook to handle input
     let form = useForm({
         initialValues: {
             domain: "",
@@ -47,6 +65,20 @@ const DNSMap = () => {
             ipsToIgnore: "",
         },
     });
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -134,41 +166,59 @@ const DNSMap = () => {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit(onSubmit)}>
-            {LoadingOverlayAndCancelButton(loading, Pid)}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <Switch
-                    size="md"
-                    label="Advanced Mode"
-                    checked={checkedAdvanced}
-                    onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
-                />
-                <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
+        <RenderComponent
+            title={title}
+            description={description_userguide}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description_userguide}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            <form onSubmit={form.onSubmit(onSubmit)}>
+                {LoadingOverlayAndCancelButton(loading, Pid)}
+                <Stack>
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={checkedAdvanced}
+                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                    />
+                    <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
 
-                <TextInput
-                    label={"Random delay between requests (default 10)(milliseconds)"}
-                    type="number"
-                    {...form.getInputProps("delay")}
-                />
-                {checkedAdvanced && (
-                    <>
-                        <TextInput label={"Path to external wordlist file"} {...form.getInputProps("wordlistPath")} />
-                        <TextInput
-                            label={"CSV results file name (optional)"}
-                            {...form.getInputProps("csvResultsFile")}
-                        />
-                        <TextInput
-                            label={"IP addresses to ignore (comma-separated, up to 5 IPs)"}
-                            {...form.getInputProps("ipsToIgnore")}
-                        />
-                    </>
-                )}
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <Button type={"submit"}>Start Mapping</Button>
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+                    <TextInput
+                        label={"Random delay between requests (default 10)(milliseconds)"}
+                        type="number"
+                        {...form.getInputProps("delay")}
+                    />
+                    {checkedAdvanced && (
+                        <>
+                            <TextInput
+                                label={"Path to external wordlist file"}
+                                {...form.getInputProps("wordlistPath")}
+                            />
+                            <TextInput
+                                label={"CSV results file name (optional)"}
+                                {...form.getInputProps("csvResultsFile")}
+                            />
+                            <TextInput
+                                label={"IP addresses to ignore (comma-separated, up to 5 IPs)"}
+                                {...form.getInputProps("ipsToIgnore")}
+                            />
+                        </>
+                    )}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <Button type={"submit"}>Start Mapping</Button>
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 

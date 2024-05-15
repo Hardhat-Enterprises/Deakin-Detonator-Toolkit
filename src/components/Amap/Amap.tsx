@@ -4,69 +4,73 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
- * Represents the form values for the RainbowCrack component.
+ * Represents the form values for the AMAP component.
  */
 interface FormValuesType {
-    hashValue: string;
+    target: string;
+    port: string;
+    options: string;
 }
 
 /**
- * The RainbowCrack component.
- * @returns The RainbowCrack component.
+ * The AMAP component.
+ * @returns The AMAP component.
  */
-const RainbowCrack = () => {
-    // Component State Variables
+const AMAP = () => {
+    // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-    const [allowSave, setAllowSave] = useState(false); // State variable to enable/disable saving
-    const [hasSaved, setHasSaved] = useState(false); // State variable to track whether output has been saved
 
-    // Component Constants
-    const title = "RainbowCrack"; // Title of the component.
-    const description =
-        "RainbowCrack is a computer program which utilises rainbow tables to be used in password cracking."; // Description of the component.
+    // Component Constants.
+    const title = "AMAP"; // Title of the component.
+    const description = "AMAP is a tool for application protocol detection and service fingerprinting."; // Description of the component.
     const steps =
-        "How to use RainbowCrack \n" +
-        "Step 1: Enter a hash value. (E.g. 5d41402abc4b2a76b9719d911017c592) \n" +
-        "Step 2: Simply tap on the crack button to crack the hash key. \n" +
-        "The user can even save the output to a file by assigning a file-name under 'save output to file' option."; // Steps to use the component.
-    const sourceLink = ""; // Link to the source code (or RainbowCrack documentation).
+        "Step 1: Enter the target host to scan.\n" +
+        "Step 2: Specify the port(s) to scan.\n" +
+        "Step 3: (Optional) Enter additional options.\n" +
+        "Step 4: Click 'Start Scan' to begin the process.\n" +
+        "Step 5: View the output block to see the results. ";
+    const sourceLink = ""; // Link to the source code (or AMAP documentation).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["rainbowcrack"]; // Dependencies required by the component.
+    const dependencies = ["amap"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
     const form = useForm({
         initialValues: {
-            hashValue: "",
+            target: "",
+            port: "",
+            options: "",
         },
     });
 
-    // Check if the command is available and set state variables accordingly.
+    // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable);
-                setOpened(!isAvailable);
-                setLoadingModal(false);
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false);
+                setLoadingModal(false); // Also set loading to false in case of error
             });
     }, []);
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data received to the existing output.
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
@@ -75,44 +79,62 @@ const RainbowCrack = () => {
 
     /**
      * handleProcessTermination: Callback to handle the termination of the child process.
+     * Once the process termination is handled, it clears the process PID reference and
+     * deactivates the loading overlay.
      * @param {object} param - An object containing information about the process termination.
      * @param {number} param.code - The exit code of the terminated process.
      * @param {number} param.signal - The signal code indicating how the process was terminated.
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+
+                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
+
+            // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
+
+            // Cancel the loading overlay. The process has completed.
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData] // Dependency on the handleProcessData callback
     );
 
     /**
      * onSubmit: Asynchronous handler for the form submission event.
-     * @param {FormValuesType} values - The form values.
+     * It sets up and triggers the amap tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the target host, port(s), and additional options.
      */
     const onSubmit = async (values: FormValuesType) => {
+        // Activate loading state to indicate ongoing process
         setLoading(true);
 
-        // Construct arguments for rainbowcrack command based on form input
-        const args = [values.hashValue];
+        // Construct arguments for the amap command based on form input
+        const args = [values.target, "-bqv", values.port, values.options];
 
-        // Execute the rainbowcrack command via helper method
-        CommandHelper.runCommandGetPidAndOutput("rcrack", args, handleProcessData, handleProcessTermination)
+        // Execute the amap command via helper method and handle its output or potential errors
+        CommandHelper.runCommandGetPidAndOutput("amap", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
+                // Update the UI with the results from the executed command
                 setOutput(output);
                 console.log(pid);
                 setPid(pid);
             })
             .catch((error) => {
+                // Display any errors encountered during command execution
                 setOutput(error.message);
+                // Deactivate loading state
                 setLoading(false);
             });
     };
@@ -124,10 +146,6 @@ const RainbowCrack = () => {
         setOutput("");
     }, [setOutput]);
 
-    const handleSaveComplete = () => {
-        // This function could handle any actions needed after saving the output
-        setHasSaved(true);
-    };
     return (
         <RenderComponent
             title={title}
@@ -142,14 +160,16 @@ const RainbowCrack = () => {
                     setOpened={setOpened}
                     feature_description={description}
                     dependencies={dependencies}
-                />
+                ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput label="Hash Value" required {...form.getInputProps("hashValue")} />
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type="submit">Crack</Button>
+                    <TextInput label={"Target Host"} required {...form.getInputProps("target")} />
+                    <TextInput label={"Port(s)"} required {...form.getInputProps("port")} />
+                    <TextInput label={"Additional Options"} {...form.getInputProps("options")} />
+                    {SaveOutputToTextFile(output)}
+                    <Button type={"submit"}>Start Scan</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
@@ -157,4 +177,4 @@ const RainbowCrack = () => {
     );
 };
 
-export default RainbowCrack;
+export default AMAP;
