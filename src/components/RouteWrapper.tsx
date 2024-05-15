@@ -64,6 +64,7 @@ import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
+import Nikto from "./Nikto/Nikto";
 import TShark from "./TShark/TShark";
 import Bully from "./Bully/Bully";
 import AMAP from "./Amap/Amap";
@@ -483,6 +484,13 @@ export const ROUTES: RouteProperties[] = [
         element: <NetcatTool />,
         description: "Netcat",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Nikto",
+        path: "/tools/Nikto",
+        element: <Nikto />,
+        description: "Web server scanner",
+        category: "Web Application Testing",
     },
     {
         name: "Nmap",

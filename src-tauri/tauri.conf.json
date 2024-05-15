@@ -318,6 +318,11 @@
                         "args": true
                     },
                     {
+                        "name": "nikto",
+                        "cmd": "nikto",
+                        "args": true
+                    },
+                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
                         "args": true
