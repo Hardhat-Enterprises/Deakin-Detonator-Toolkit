@@ -48,6 +48,7 @@ import Eyewitness from "./eyewitness/eyewitness";
 import MrRobot from "./WalkthroughPages/MrRobot";
 import Parsero from "./parsero/parsero";
 import Arjuntool from "./Arjuntool/Arjuntool";
+import ARPFingerprint from "./arpfingerprint/arpfingerprint";
 import ForemostTool from "./Foremost/Foremost";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
@@ -294,6 +295,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Arjuntool />,
         description: "Arjun can find query parameters for URL endpoints.",
         category: "Web Application Testing",
+    },
+    {
+        name: "ARP Fingerprint",
+        path: "/tools/ARPFingerprint",
+        element: <ARPFingerprint />,
+        description: "ARP Fingerprint tool to gather information about devices on the network.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "ArpScan",
@@ -630,7 +638,6 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
 ];
-
 export function getTools() {
     return ROUTES.filter((route) => route.path.startsWith("/tools/"));
 }

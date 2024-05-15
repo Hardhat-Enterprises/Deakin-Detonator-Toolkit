@@ -83,6 +83,11 @@
                         "args": true
                     },
                     {
+                        "name": "arp-fingerprint ",
+                        "cmd": "arp-fingerprint ",
+                        "args": true
+                    },
+                    {
                         "name": "rar2john",
                         "cmd": "rar2john",
                         "args": true
