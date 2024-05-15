@@ -156,7 +156,7 @@ const ArpanameTool = () => {
     }, [setOutput]);
 
     return (
-        <RenderComponent title={title} description={description} steps={""} tutorial={""} sourceLink={""}>
+        <RenderComponent title={title} description={description} steps={steps} tutorial={tutorial} sourceLink={sourceLink}>
             {!loadingModal && (
                 <InstallationModal
                     isOpen={opened}
