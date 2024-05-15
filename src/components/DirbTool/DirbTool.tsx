@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
@@ -19,13 +19,15 @@ interface FormValuesType {
 }
 
 const title = "Dirb"; //Title of the component.
-const description_userGuide = //Description of the component. 
-    "Dirb is a Web Content Scanner. It looks for existing (and/or hidden) Web Objects. " +
-    "This is a dictionary-based attack that takes place upon a web server and will analyse the " +
-    "results within this process.\n\nHow to use Dirb:\n\nStep 1: Enter a valid URL.\n" +
-    "       E.g. https://www.deakin.edu.au\n\nStep 2: Enter a file directory pathway to access " +
-    "a wordlist\n       E.g. home/wordlist/wordlist.txt\n\nStep 3: Click Scan to commence " +
-    "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
+const description = "Dirb is a Web Content Scanner. It looks for existing (and/or hidden) Web Objects. " +  // Description of the component.
+                    "This is a dictionary-based attack that takes place upon a web server and will analyse the "; 
+
+const steps =   "Step 1: Enter a valid URL.\n" +
+                "E.g. https://www.deakin.edu.au\n\nStep 2: Enter a file directory pathway to access " +
+                "a wordlist\nE.g. home/wordlist/wordlist.txt\n\nStep 3: Click Scan to commence " +
+                "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
+const sourceLink = ""; // Link to the source code (or Kali Tools).
+const tutorial = ""; // Link to the official documentation/tutorial.
 
     
 /**
@@ -145,10 +147,16 @@ export function DirbTool() {
     }, [setOutput]);
 
     return (
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}>
+
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
-                {UserGuide(title, description_userGuide)}
                 <Switch
                     size="md"
                     label="Advanced Mode"
@@ -182,5 +190,6 @@ export function DirbTool() {
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
+        </RenderComponent>
     );
 }
