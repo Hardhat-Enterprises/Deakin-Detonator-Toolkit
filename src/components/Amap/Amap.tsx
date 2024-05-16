@@ -1,65 +1,55 @@
-import { Button, Stack, Switch, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; //v2
-import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
- * Represents the form values for the AirbaseNG component.
+ * Represents the form values for the AMAP component.
  */
 interface FormValuesType {
-    fakeHost: string;
-    channel: string;
-    macAddress: string;
-    replayInterface: string;
-    filePath: string;
-    customConfig: string;
+    target: string;
+    port: string;
+    options: string;
 }
 
 /**
- * The AirbaseNG component.
- * @returns The AirbaseNG component.
+ * The AMAP component.
+ * @returns The AMAP component.
  */
-const AirbaseNG = () => {
+const AMAP = () => {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-    const [advanceMode, setAdvanceMode] = useState(false);
-    const [customMode, setCustomMode] = useState(false);
 
     // Component Constants.
-    const title = "Airbase-ng"; // Title of the component.
-    const description = "Airbase-ng is a tool to create fake access points."; // Description of the component.
+    const title = "AMAP"; // Title of the component.
+    const description = "AMAP is a tool for application protocol detection and service fingerprinting."; // Description of the component.
     const steps =
-        "Step 1: Type in the name of your fake host.\n" +
-        "Step 2: Select your desired channel.\n" +
-        "Step 3: Specify the WLAN interface to be used.\n" +
-        "Step 4: Click 'Start AP' to begin the process.\n" +
+        "Step 1: Enter the target host to scan.\n" +
+        "Step 2: Specify the port(s) to scan.\n" +
+        "Step 3: (Optional) Enter additional options.\n" +
+        "Step 4: Click 'Start Scan' to begin the process.\n" +
         "Step 5: View the output block to see the results. ";
-    const sourceLink = ""; // Link to the source code (or Kali Tools).
+    const sourceLink = ""; // Link to the source code (or AMAP documentation).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["aircrack-ng"]; // Contains the dependencies required by the component.
+    const dependencies = ["amap"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
     const form = useForm({
         initialValues: {
-            fakeHost: "",
-            channel: "",
-            replayInterface: "",
-            macAddress: "",
-            filePath: "",
-            customConfig: "",
+            target: "",
+            port: "",
+            options: "",
         },
     });
 
@@ -115,41 +105,29 @@ const AirbaseNG = () => {
 
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
-
-            // Allow Saving as the output is finalised
-            setAllowSave(true);
-            setHasSaved(false);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
 
     /**
      * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the airbase-ng tool with the given parameters.
+     * It sets up and triggers the amap tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
      *
-     * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
+     * @param {FormValuesType} values - The form values, containing the target host, port(s), and additional options.
      */
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
+        // Construct arguments for the amap command based on form input
+        const args = [values.target, "-bqv", values.port, values.options];
 
-        // Construct arguments for the aircrack-ng command based on form input
-        const args = ["-e", values.fakeHost, "-c", values.channel, values.replayInterface];
-
-        values.macAddress ? args.push(`-a`, values.macAddress) : undefined;
-        values.filePath ? args.push(`-F`, values.filePath) : undefined;
-        values.customConfig ? args.push(values.customConfig) : undefined;
-
-        // Execute the aircrack-ng command via helper method and handle its output or potential errors
-        CommandHelper.runCommandWithPkexec("airbase-ng", args, handleProcessData, handleProcessTermination)
+        // Execute the amap command via helper method and handle its output or potential errors
+        CommandHelper.runCommandGetPidAndOutput("amap", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 // Update the UI with the results from the executed command
                 setOutput(output);
-                setAllowSave(true);
                 console.log(pid);
                 setPid(pid);
             })
@@ -158,7 +136,6 @@ const AirbaseNG = () => {
                 setOutput(error.message);
                 // Deactivate loading state
                 setLoading(false);
-                setAllowSave(true);
             });
     };
 
@@ -167,16 +144,7 @@ const AirbaseNG = () => {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
     }, [setOutput]);
-
-    const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
-        setHasSaved(true);
-        setAllowSave(false);
-    };
 
     return (
         <RenderComponent
@@ -196,34 +164,12 @@ const AirbaseNG = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-                    <Switch
-                        size="md"
-                        label="Advanced Mode"
-                        checked={advanceMode}
-                        onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
-                    />
-                    <Switch
-                        size="md"
-                        label="Custom Configuration"
-                        checked={customMode}
-                        onChange={(e) => setCustomMode(e.currentTarget.checked)}
-                    />
-                    <TextInput label={"Name of your fake host"} required {...form.getInputProps("fakeHost")} />
-                    <TextInput label={"Channel of choice"} required {...form.getInputProps("channel")} />
-                    <TextInput label={"Your WLAN interface"} required {...form.getInputProps("replayInterface")} />
-                    {advanceMode && (
-                        <>
-                            <TextInput label={"Set AP MAC address"} {...form.getInputProps("MACAddress")} />
-                            <TextInput
-                                label={"Save as Pcap File (Please Supply FilePath)"}
-                                {...form.getInputProps("filePath")}
-                            />
-                        </>
-                    )}
-                    {customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type={"submit"}>Start {title}</Button>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <TextInput label={"Target Host"} required {...form.getInputProps("target")} />
+                    <TextInput label={"Port(s)"} required {...form.getInputProps("port")} />
+                    <TextInput label={"Additional Options"} {...form.getInputProps("options")} />
+                    {SaveOutputToTextFile(output)}
+                    <Button type={"submit"}>Start Scan</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
@@ -231,4 +177,4 @@ const AirbaseNG = () => {
     );
 };
 
-export default AirbaseNG;
+export default AMAP;

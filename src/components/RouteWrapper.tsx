@@ -4,6 +4,7 @@ import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
+import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
 import { DirbTool } from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
@@ -41,12 +42,13 @@ import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
 import Meow from "./WalkthroughPages/Meow";
 import { FTPconnect } from "./FTP/FTPconnect";
-import GoldenEye from "./GoldenEye/GoldenEye";
+import GoldenEye from "./Goldeneye/Goldeneye";
 import WPScan from "./WPScan/WPScan";
 import Eyewitness from "./eyewitness/eyewitness";
 import MrRobot from "./WalkthroughPages/MrRobot";
 import Parsero from "./parsero/parsero";
 import Arjuntool from "./Arjuntool/Arjuntool";
+import ARPFingerprint from "./arpfingerprint/arpfingerprint";
 import ForemostTool from "./Foremost/Foremost";
 import Busqueda from "./WalkthroughPages/Busqueda";
 import TheHarvester from "./theharvester/theharvester";
@@ -64,7 +66,14 @@ import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
+import Nikto from "./Nikto/Nikto";
+import TShark from "./TShark/TShark";
+import Bully from "./Bully/Bully";
+import AMAP from "./Amap/Amap";
+import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
+import Sublist3r from "./Sublist3r/Sublist3r";
+import Arpscan from "./ArpScan/ArpScan";
 
 export interface RouteProperties {
     name: string;
@@ -136,6 +145,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2021-44228",
         element: <CVE202144228 />,
         description: "Vulnerability in the Apache Log4j 2 Java library allowing RCE",
+        category: "",
+    },
+    {
+        name: "CVE-2022-36804",
+        path: "/attack-vectors/cve-2022-36804",
+        element: <CVE202236804 />,
+        description: "Pre-Auth RCE in Atlassian Bitbucket Server Vulnerability",
         category: "",
     },
     {
@@ -267,11 +283,32 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Amap",
+        path: "/tools/Amap",
+        element: <AMAP />,
+        description: "AMAP is a network scanning tool used to identify open ports and services on targeted hosts.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
         name: "Arjun",
         path: "/tools/Arjuntool",
         element: <Arjuntool />,
         description: "Arjun can find query parameters for URL endpoints.",
         category: "Web Application Testing",
+    },
+    {
+        name: "ARP Fingerprint",
+        path: "/tools/ARPFingerprint",
+        element: <ARPFingerprint />,
+        description: "ARP Fingerprint tool to gather information about devices on the network.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "ArpScan",
+        path: "/tools/arpscan",
+        element: <Arpscan />,
+        description: "Scan the local network for ARP entries.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "ARP Spoofing",
@@ -287,6 +324,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "BED is a program which is designed to check daemons for potential buffer overflows, format strings",
         category: "Information Gathering and Analysis",
+    },
+    {
+        name: "Bully",
+        path: "/tools/bully",
+        element: <Bully />,
+        description: "Brute-force WPS PIN authentication",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Cewl",
@@ -387,6 +431,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Miscellaneous",
     },
     {
+        name: "Gitleaks",
+        path: "/tools/gitleaks",
+        element: <Gitleaks />,
+        description: "Detect hardcoded secrets in git repositories.",
+        category: "Information Gathering and Analysis",
+    },
+    {
         name: "GoBuster",
         path: "/tools/GoBusterTool",
         element: <GoBusterTool />,
@@ -449,6 +500,13 @@ export const ROUTES: RouteProperties[] = [
         element: <NetcatTool />,
         description: "Netcat",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Nikto",
+        path: "/tools/Nikto",
+        element: <Nikto />,
+        description: "Web server scanner",
+        category: "Web Application Testing",
     },
     {
         name: "Nmap",
@@ -529,6 +587,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
+        name: "Sublist3r",
+        path: "/tools/Sublist3r",
+        element: <Sublist3r />,
+        description: "Sublist3r looks up sub domains of websites.",
+        category: "Web Application Testing",
+    },
+    {
         name: "The Harvester",
         path: "/tools/theharvester",
         element: <TheHarvester />,
@@ -541,6 +606,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Traceroute />,
         description:
             "The traceroute utility displays the route used by IP packets on their way to a specified network (or Internet) host.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "TShark",
+        path: "/tools/TShark",
+        element: <TShark />,
+        description: "Captures data packets' information and displays in different formats.",
         category: "Network Scanning and Enumeration",
     },
     {
@@ -566,7 +638,6 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
 ];
-
 export function getTools() {
     return ROUTES.filter((route) => route.path.startsWith("/tools/"));
 }
