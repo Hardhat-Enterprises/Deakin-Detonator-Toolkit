@@ -45,7 +45,7 @@ const Urlsnarf = () => {
         "Step 1: Select the Listener settings.\n" +
         "Step 2: Input the Interface.\n" +
         "Step 3: Enter any Exclusion details within the sniff.\n" +
-        "Step 4: Click Sniff to start Urlsnarf.\n" +
+        "Step 4: Click the start Urlsnarf button.\n" +
         "Step 5: View the Output block to see the results.";
     const sourceLink = "https://linux.die.net/man/8/urlsnarf"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
