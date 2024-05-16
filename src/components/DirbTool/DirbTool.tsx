@@ -10,7 +10,7 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
 /**
  *  Represents the form values for the DirbTool Component.
- */    
+ */
 interface FormValuesType {
     url: string;
     wordListPath?: string; // Made wordlistPath optional.
@@ -20,17 +20,18 @@ interface FormValuesType {
 }
 //Component Constants
 const title = "Dirb"; //Title of the component.
-const description = "Dirb is a Web Content Scanner. It looks for existing (and/or hidden) Web Objects. " +  // Description of the component.
-                    "This is a dictionary-based attack that takes place upon a web server and will analyse the "; 
-const steps =   "Step 1: Enter a valid URL.\n" +
-                "E.g. https://www.deakin.edu.au\n\nStep 2: Enter a file directory pathway to access " +
-                "a wordlist\nE.g. home/wordlist/wordlist.txt\n\nStep 3: Click Scan to commence " +
-                "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
+const description =
+    "Dirb is a Web Content Scanner. It looks for existing (and/or hidden) Web Objects. " + // Description of the component.
+    "This is a dictionary-based attack that takes place upon a web server and will analyse the ";
+const steps =
+    "Step 1: Enter a valid URL.\n" +
+    "E.g. https://www.deakin.edu.au\n\nStep 2: Enter a file directory pathway to access " +
+    "a wordlist\nE.g. home/wordlist/wordlist.txt\n\nStep 3: Click Scan to commence " +
+    "the Dirb operation.\n\nStep 4: View the Output block below to view the results of the tool's execution.";
 const sourceLink = ""; // Link to the source code (or Kali Tools).
 const tutorial = ""; // Link to the official documentation/tutorial.
 const dependencies = ["dirb"]; // Contains the dependencies required by the component.
 
-    
 /**
  * The DirbTool component.
  * @returns The DirbTool component.
@@ -39,7 +40,7 @@ const DirbTool = () => {
     //Component State Variables.
     const [loading, setLoading] = useState(false); //State variable to indicate loading state.
     const [output, setOutput] = useState(""); //State variable to store the output.
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false); //State variable to verify Advanced setup. 
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false); //State variable to verify Advanced setup.
     const [pid, setPid] = useState(""); //State variable to store the process of the ID for command execution.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
@@ -49,7 +50,7 @@ const DirbTool = () => {
     const [hasSaved, setHasSaved] = useState(false); //State variable to verify data saved.
     const [silentMode, setSilentMode] = useState(false); // Track silent mode state.
 
-// Form hook to handle form input.
+    // Form hook to handle form input.
     const form = useForm({
         initialValues: {
             url: "",
@@ -65,14 +66,14 @@ const DirbTool = () => {
         // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-            setIsCommandAvailable(isAvailable); // Set the command availability state
-            setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-            setLoadingModal(false); // Set loading to false after the check is done
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
             })
-        .catch((error) => {
-            console.error("An error occurred:", error);
-            setLoadingModal(false); // Also set loading to false in case of error
-        });
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
     }, []);
 
     /**
@@ -98,7 +99,7 @@ const DirbTool = () => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
 
-                // If the process was terminated manually, display a termination message.                
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
 
@@ -106,7 +107,7 @@ const DirbTool = () => {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            
+
             // Clear the child process pid reference.
             setPid("");
 
@@ -134,7 +135,7 @@ const DirbTool = () => {
      * Once the command is executed, the results or errors are displayed in the output.
      *
      * @param {FormValuesType} values - The form values, containing the url, string , etc.
-     */    
+     */
     const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete.
         setAllowSave(false);
@@ -183,7 +184,7 @@ const DirbTool = () => {
 
     /**
      * Clears the output state.
-     */    
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
@@ -196,47 +197,49 @@ const DirbTool = () => {
             description={description}
             steps={steps}
             tutorial={tutorial}
-            sourceLink={sourceLink}>
-
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>
-                <Switch
-                    size="md"
-                    label="Advanced Mode"
-                    checked={checkedAdvanced}
-                    onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
-                />
-                <Switch
-                    size="md"
-                    label="Slient Mode"
-                    checked={silentMode}
-                    onChange={(e) => setSilentMode(e.currentTarget.checked)}
-                />
-                <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                <TextInput label={"Path to wordlist"} {...form.getInputProps("wordlistPath")} />
-                {checkedAdvanced && (
-                    <>
-                        <Checkbox label={"Use case-insensitive search"} {...form.getInputProps("caseInsensitive")} />
-                        <Checkbox
-                            label={"Print 'Location' header when found"}
-                            {...form.getInputProps("printLocation")}
-                        />
-                        <TextInput
-                            label={"Ignore responses with this HTTP code"}
-                            type="number"
-                            {...form.getInputProps("ignoreHttpCode")}
-                        />
-                    </>
-                )}
-                <Button type={"submit"}>{checkedAdvanced ? "Scan (Advanced)" : "Scan"}</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+            sourceLink={sourceLink}
+        >
+            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                <Stack>
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={checkedAdvanced}
+                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                    />
+                    <Switch
+                        size="md"
+                        label="Slient Mode"
+                        checked={silentMode}
+                        onChange={(e) => setSilentMode(e.currentTarget.checked)}
+                    />
+                    <TextInput label={"URL"} required {...form.getInputProps("url")} />
+                    <TextInput label={"Path to wordlist"} {...form.getInputProps("wordlistPath")} />
+                    {checkedAdvanced && (
+                        <>
+                            <Checkbox
+                                label={"Use case-insensitive search"}
+                                {...form.getInputProps("caseInsensitive")}
+                            />
+                            <Checkbox
+                                label={"Print 'Location' header when found"}
+                                {...form.getInputProps("printLocation")}
+                            />
+                            <TextInput
+                                label={"Ignore responses with this HTTP code"}
+                                type="number"
+                                {...form.getInputProps("ignoreHttpCode")}
+                            />
+                        </>
+                    )}
+                    <Button type={"submit"}>{checkedAdvanced ? "Scan (Advanced)" : "Scan"}</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
         </RenderComponent>
     );
-}
-
+};
 
 export default DirbTool;
