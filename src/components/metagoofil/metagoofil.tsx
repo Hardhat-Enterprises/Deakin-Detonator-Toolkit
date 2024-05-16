@@ -177,7 +177,7 @@ function Metagoofil() {
         setAllowSave(false);
     }, [setOutput]);
 
-     /**
+    /**
      * handleSaveComplete: handle state changes when saves are completed
      * Once the output is saved, prevent duplicate saves
      */
