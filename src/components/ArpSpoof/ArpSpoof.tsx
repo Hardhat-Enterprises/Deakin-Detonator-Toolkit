@@ -22,12 +22,12 @@ const description_userguide =
     "The attacker can also modify the traffic before forwarding it. \n" +
     "ARP spoofing can be used to intercept data frames, modify traffic, or stop the traffic altogether.\n";
 
-
-    const steps =     "How to use ARPSpoofing:\n" +
+const steps =
+    "How to use ARPSpoofing:\n" +
     "Step 1: Enter the IP address of the 1st target. Eg: 192.168.1.1\n" +
     "Step 2: Enter the IP address of the 2nd target. Eg: 192.168.1.2\n" +
     "Step 3: Click spoof to commence the ARP spoofing operation.\n" +
-    "Step 4: View the output block below to view the results.";;
+    "Step 4: View the output block below to view the results.";
 
 /**
  * Represents the form values for the ARPSpoof component.
@@ -173,7 +173,13 @@ const ARPSpoofing = () => {
     };
 
     return (
-        <RenderComponent title={title} description={description_userguide} steps={steps} tutorial={Tutorial} sourceLink={SourceLink}>
+        <RenderComponent
+            title={title}
+            description={description_userguide}
+            steps={steps}
+            tutorial={Tutorial}
+            sourceLink={SourceLink}
+        >
             <>
                 {!loadingModal && (
                     <InstallationModal
