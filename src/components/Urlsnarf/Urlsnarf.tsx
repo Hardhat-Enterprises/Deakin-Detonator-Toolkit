@@ -238,9 +238,7 @@ const Urlsnarf = () => {
                         label={"Exclusion details"}
                         placeholder={"eg: POST ; show every packet that excludes POST"}
                     />
-                    <Button type={"submit"}>
-                        Start {title}
-                    </Button>
+                    <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
