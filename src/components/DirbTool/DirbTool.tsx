@@ -288,3 +288,19 @@ function Dirb() {
             setAllowSave(true);
         }
     };
+
+    /**
+     * clearOutput: Callback function to clear the console output.
+     * It resets the state variable holding the output, thereby clearing the display.
+     */
+    const clearOutput = useCallback(() => {
+        setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
+    }, []);
+
+    // Function to handle the next step in the Stepper.
+    const nextStep = () => setActive((current) => (current < 2 ? current + 1 : current));
+
+    // Function to handle the previous step in the Stepper.
+    const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
