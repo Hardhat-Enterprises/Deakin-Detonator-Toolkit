@@ -304,3 +304,238 @@ function Dirb() {
 
     // Function to handle the previous step in the Stepper.
     const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+
+    return (
+        <>
+            {/* Render the component with its title, description, steps, and tutorial */}
+            <RenderComponent
+                title={title}
+                description={description}
+                steps={steps}
+                tutorial={tutorial}
+                sourceLink={sourceLink}
+            >
+                {/* Render the installation modal if commands are not available */}
+                {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+                )}
+                <form onSubmit={form.onSubmit(onSubmit)}>
+                    {/* Render the loading overlay and cancel button */}
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Stack>
+                        {/* Render the Stepper component with steps */}
+                        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
+                            {/* Step 1: Target */}
+                            <Stepper.Step label="Target">
+                                <TextInput label="URL" required {...form.getInputProps("url")} />
+                            </Stepper.Step>
+                            {/* Step 2: Parameters */}
+                            <Stepper.Step label="Parameters">
+                                <TextInput label="Wordlist Path" {...form.getInputProps("wordlistPath")} />
+                                <Select
+                                    label="Wordlist Size"
+                                    data={[
+                                        { value: "default", label: "Default" },
+                                        { value: "short", label: "Short" },
+                                        { value: "long", label: "Long" },
+                                        { value: "big", label: "Big" },
+                                    ]}
+                                    {...form.getInputProps("wordlistSize")}
+                                />
+
+                                <Grid mt={20}>
+                                    <Grid.Col span={3}>
+                                        <Button
+                                            onClick={() => setBasicOpened(!basicOpened)}
+                                            variant="outline"
+                                            fullWidth
+                                        >
+                                            {basicOpened ? "Hide Basic Options" : "Show Basic Options"}
+                                        </Button>
+                                    </Grid.Col>
+                                    <Grid.Col span={3}>
+                                        <Button
+                                            onClick={() => setAdvancedOpened(!advancedOpened)}
+                                            variant="outline"
+                                            fullWidth
+                                        >
+                                            {advancedOpened ? "Hide Advanced Options" : "Show Advanced Options"}
+                                        </Button>
+                                    </Grid.Col>
+                                    <Grid.Col span={3}>
+                                        <Button
+                                            onClick={() => setAuthOpened(!authOpened)}
+                                            variant="outline"
+                                            fullWidth
+                                        >
+                                            {authOpened ? "Hide Authentication Options" : "Show Authentication Options"}
+                                        </Button>
+                                    </Grid.Col>
+                                    <Grid.Col span={3}>
+                                        <Button
+                                            onClick={() => setAdditionalOpened(!additionalOpened)}
+                                            variant="outline"
+                                            fullWidth
+                                        >
+                                            {additionalOpened ? "Hide Additional Options" : "Show Additional Options"}
+                                        </Button>
+                                    </Grid.Col>
+                                </Grid>
+
+                                {/* Render Basic Options */}
+                                {basicOpened && (
+                                    <Stack mt={10}>
+                                        <Switch
+                                            label="Case Insensitive"
+                                            mt={20}
+                                            {...form.getInputProps("caseInsensitive", {
+                                                type: "checkbox",
+                                            })}
+                                        />
+                                        <Switch
+                                            label="Print Location"
+                                            mt={20}
+                                            {...form.getInputProps("printLocation", {
+                                                type: "checkbox",
+                                            })}
+                                        />
+                                        <NumberInput
+                                            label="Ignore HTTP Code"
+                                            min={0}
+                                            {...form.getInputProps("ignoreHttpCode")}
+                                        />
+                                        <TextInput
+                                            label="Output File"
+                                            {...form.getInputProps("outputFile")}
+                                        />
+                                    </Stack>
+                                )}
+
+                                {/* Render Advanced Options */}
+                                {advancedOpened && (
+                                    <Stack mt={10}>
+                                        <Switch
+                                            label="Non-Recursive"
+                                            mt={20}
+                                            {...form.getInputProps("nonRecursive", {
+                                                type: "checkbox",
+                                            })}
+                                        />
+                                        <Switch
+                                            label="Silent Mode"
+                                            mt={20}
+                                            {...form.getInputProps("silentMode", {
+                                                type: "checkbox",
+                                            })}
+                                        />
+                                        <TextInput
+                                            label="User Agent"
+                                            {...form.getInputProps("userAgent")}
+                                        />
+                                        <Switch
+                                            label="Squash Sequences"
+                                            mt={20}
+                                            {...form.getInputProps("squashSequences", {
+                                                type: "checkbox",
+                                            })}
+                                        />
+                                    </Stack>
+                                )}
+
+                                {/* Render Authentication Options */}
+                                {authOpened && (
+                                    <Stack mt={10}>
+                                        <TextInput label="Cookie" {...form.getInputProps("cookie")} />
+                                        <TextInput
+                                            label="Certificate Path"
+                                            {...form.getInputProps("certificatePath")}
+                                        />
+                                        <TextInput
+                                            label="Custom Header"
+                                            {...form.getInputProps("customHeader")}
+                                        />
+                                        <TextInput
+                                            label="Proxy"
+                                            {...form.getInputProps("proxy")}
+                                        />
+                                        <TextInput
+                                            label="Proxy Authentication"
+                                            {...form.getInputProps("proxyAuth")}
+                                        />
+                                        <Switch
+                                            label="Interactive Recursion"
+                                            mt={20}
+                                            {...form.getInputProps("interactiveRecursion", {
+                                                type: "checkbox",
+                                            })}
+                                        />
+                                        <TextInput
+                                            label="Username"
+                                            {...form.getInputProps("username")}
+                                        />
+                                        <TextInput
+                                            label="Password"
+                                            {...form.getInputProps("password")}
+                                        />
+                                    </Stack>
+                                )}
+
+                                {/* Render Additional Options */}
+                                {additionalOpened && (
+                                    <Stack mt={10}>
+                                        <Switch
+                                            label="Show Non-Existent Pages"
+                                            mt={20}
+                                            {...form.getInputProps("showNonExistent", {
+                                                type: "checkbox",
+                                            })}
+                                        />
+                                        <Switch
+                                            label="Stop on Warning"
+                                            mt={20}
+                                            {...form.getInputProps("stopOnWarning", {
+                                                type: "checkbox",
+                                            })}
+                                        />
+                                        <TextInput
+                                            label="Extensions File"
+                                            {...form.getInputProps("extensionsFile")}
+                                        />
+                                        <TextInput
+                                            label="Extensions"
+                                            {...form.getInputProps("extensions")}
+                                        />
+                                        <NumberInput
+                                            label="Delay (ms)"
+                                            min={0}
+                                            {...form.getInputProps("delay")}
+                                        />
+                                    </Stack>
+                                )}
+                            </Stepper.Step>
+                            {/* Step 3: Run */}
+                            <Stepper.Step label="Run">
+                                <Stack align="center" mt={20}>
+                                    <Button type="submit" disabled={loading} style={{ alignSelf: "center" }}>
+                                        Run Dirb
+                                    </Button>
+                                </Stack>
+                            </Stepper.Step>
+                        </Stepper>
+                        {/* Render the SaveOutputToTextFile component */}
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        {/* Render the ConsoleWrapper component */}
+                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    </Stack>
+                </form>
+            </RenderComponent>
+        </>
+    );
+}
+
+export default Dirb;
