@@ -106,7 +106,58 @@ function Dirb() {
         },
     });
 
-    // ... (rest of the code)
-}
+    // Check the availability of commands in the dependencies array
+    useEffect(() => {
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable);
+                setOpened(!isAvailable);
+                setLoadingModal(false);
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false);
+            });
+    }, []);
 
-export default Dirb;
+    /**
+     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data received to the existing output.
+     * @param {string} data - The data received from the child process.
+     */
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data);
+    }, []);
+
+    /**
+     * handleProcessTermination: Callback to handle the termination of the child process.
+     * Once the process termination is handled, it deactivates the loading overlay.
+     * @param {object} param - An object containing information about the process termination.
+     * @param {number} param.code - The exit code of the terminated process.
+     * @param {number} param.signal - The signal code indicating how the process was terminated.
+     */
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            }
+
+            setLoading(false);
+            setAllowSave(true);
+            setHasSaved(false);
+        },
+        [handleProcessData]
+    );
+
+    /**
+     * handSaveComplete: Recognises that the output file has been saved.
+     * Passes the saved status back to SaveOutputToTextFile_v2
+     */
+    const handleSaveComplete = () => {
+        setHasSaved(true);
+        setAllowSave(false);
+    };
