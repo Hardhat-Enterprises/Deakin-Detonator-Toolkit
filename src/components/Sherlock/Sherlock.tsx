@@ -38,7 +38,7 @@ const Sherlock = () => {
         "Using Sherlock:\n\n" +
         "*Note: For multiple usernames, add a space in between. E.g. 'Greg John Billy'*\n\n" +
         "Step 1: Input the username(s) you wish to search for in the Username field.\n" +
-        "       Eg: socialperson38\n\n" + 
+        "       Eg: socialperson38\n\n" +
         "Step 2: Click Start Searching to commence Sherlock's operation.\n\n" +
         "Step 3: View the Output block below to view the results of the tool's execution.";
     const sourceLink = "https://www.kali.org/tools/sherlock/";
