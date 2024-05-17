@@ -161,3 +161,130 @@ function Dirb() {
         setHasSaved(true);
         setAllowSave(false);
     };
+
+    /**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the Dirb tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     */
+    const onSubmit = async () => {
+        setLoading(true);
+        setAllowSave(false);
+
+        const args = [form.values.url];
+
+        // Handle wordlist path based on selected wordlist size
+        if (form.values.wordlistPath) {
+            args.push(form.values.wordlistPath);
+        } else {
+            switch (form.values.wordlistSize) {
+                case "short":
+                    args.push("/usr/share/dirb/wordlists/small.txt");
+                    break;
+                case "long":
+                    args.push("/usr/share/dirb/wordlists/big.txt");
+                    break;
+                case "big":
+                    args.push("/usr/share/dirb/wordlists/biggest.txt");
+                    break;
+                default:
+                    // Use the default wordlist
+                    break;
+            }
+        }
+
+        if (form.values.caseInsensitive) {
+            args.push("-i");
+        }
+
+        if (form.values.printLocation) {
+            args.push("-l");
+        }
+
+        if (form.values.ignoreHttpCode > 0) {
+            args.push("-N", form.values.ignoreHttpCode.toString());
+        }
+
+        if (form.values.outputFile) {
+            args.push("-o", form.values.outputFile);
+        }
+
+        if (form.values.nonRecursive) {
+            args.push("-r");
+        }
+
+        if (form.values.silentMode) {
+            args.push("-S");
+        }
+
+        if (form.values.userAgent !== null) {
+            args.push("-a", form.values.userAgent);
+        }
+
+        if (form.values.squashSequences) {
+            args.push("-b");
+        }
+
+        if (form.values.cookie) {
+            args.push("-c", form.values.cookie);
+        }
+
+        if (form.values.certificatePath) {
+            args.push("-E", form.values.certificatePath);
+        }
+
+        if (form.values.customHeader) {
+            args.push("-H", form.values.customHeader);
+        }
+
+        if (form.values.proxy !== null) {
+            args.push("-p", form.values.proxy);
+        }
+
+        if (form.values.proxyAuth) {
+            args.push("-P", form.values.proxyAuth);
+        }
+
+        if (form.values.interactiveRecursion) {
+            args.push("-R");
+        }
+
+        if (form.values.username && form.values.password) {
+            args.push("-u", `${form.values.username}:${form.values.password}`);
+        }
+
+        if (form.values.showNonExistent) {
+            args.push("-v");
+        }
+
+        if (form.values.stopOnWarning) {
+            args.push("-w");
+        }
+
+        if (form.values.extensionsFile) {
+            args.push("-x", form.values.extensionsFile);
+        }
+
+        if (form.values.extensions) {
+            args.push("-X", form.values.extensions);
+        }
+
+        if (form.values.delay > 0) {
+            args.push("-z", form.values.delay.toString());
+        }
+
+        try {
+            const { pid, output } = await CommandHelper.runCommandGetPidAndOutput(
+                "dirb",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+            setPid(pid);
+            setOutput(output);
+        } catch (error: any) {
+            setOutput(`Error: ${error.message}`);
+            setLoading(false);
+            setAllowSave(true);
+        }
+    };
