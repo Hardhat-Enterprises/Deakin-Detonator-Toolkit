@@ -368,11 +368,7 @@ function Dirb() {
                                         </Button>
                                     </Grid.Col>
                                     <Grid.Col span={3}>
-                                        <Button
-                                            onClick={() => setAuthOpened(!authOpened)}
-                                            variant="outline"
-                                            fullWidth
-                                        >
+                                        <Button onClick={() => setAuthOpened(!authOpened)} variant="outline" fullWidth>
                                             {authOpened ? "Hide Authentication Options" : "Show Authentication Options"}
                                         </Button>
                                     </Grid.Col>
@@ -409,10 +405,7 @@ function Dirb() {
                                             min={0}
                                             {...form.getInputProps("ignoreHttpCode")}
                                         />
-                                        <TextInput
-                                            label="Output File"
-                                            {...form.getInputProps("outputFile")}
-                                        />
+                                        <TextInput label="Output File" {...form.getInputProps("outputFile")} />
                                     </Stack>
                                 )}
 
@@ -433,10 +426,7 @@ function Dirb() {
                                                 type: "checkbox",
                                             })}
                                         />
-                                        <TextInput
-                                            label="User Agent"
-                                            {...form.getInputProps("userAgent")}
-                                        />
+                                        <TextInput label="User Agent" {...form.getInputProps("userAgent")} />
                                         <Switch
                                             label="Squash Sequences"
                                             mt={20}
@@ -455,18 +445,9 @@ function Dirb() {
                                             label="Certificate Path"
                                             {...form.getInputProps("certificatePath")}
                                         />
-                                        <TextInput
-                                            label="Custom Header"
-                                            {...form.getInputProps("customHeader")}
-                                        />
-                                        <TextInput
-                                            label="Proxy"
-                                            {...form.getInputProps("proxy")}
-                                        />
-                                        <TextInput
-                                            label="Proxy Authentication"
-                                            {...form.getInputProps("proxyAuth")}
-                                        />
+                                        <TextInput label="Custom Header" {...form.getInputProps("customHeader")} />
+                                        <TextInput label="Proxy" {...form.getInputProps("proxy")} />
+                                        <TextInput label="Proxy Authentication" {...form.getInputProps("proxyAuth")} />
                                         <Switch
                                             label="Interactive Recursion"
                                             mt={20}
@@ -474,14 +455,8 @@ function Dirb() {
                                                 type: "checkbox",
                                             })}
                                         />
-                                        <TextInput
-                                            label="Username"
-                                            {...form.getInputProps("username")}
-                                        />
-                                        <TextInput
-                                            label="Password"
-                                            {...form.getInputProps("password")}
-                                        />
+                                        <TextInput label="Username" {...form.getInputProps("username")} />
+                                        <TextInput label="Password" {...form.getInputProps("password")} />
                                     </Stack>
                                 )}
 
@@ -502,19 +477,9 @@ function Dirb() {
                                                 type: "checkbox",
                                             })}
                                         />
-                                        <TextInput
-                                            label="Extensions File"
-                                            {...form.getInputProps("extensionsFile")}
-                                        />
-                                        <TextInput
-                                            label="Extensions"
-                                            {...form.getInputProps("extensions")}
-                                        />
-                                        <NumberInput
-                                            label="Delay (ms)"
-                                            min={0}
-                                            {...form.getInputProps("delay")}
-                                        />
+                                        <TextInput label="Extensions File" {...form.getInputProps("extensionsFile")} />
+                                        <TextInput label="Extensions" {...form.getInputProps("extensions")} />
+                                        <NumberInput label="Delay (ms)" min={0} {...form.getInputProps("delay")} />
                                     </Stack>
                                 )}
                             </Stepper.Step>
