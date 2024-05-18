@@ -203,7 +203,15 @@ const TheHarvester = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
-        <form onSubmit={form.onSubmit(onSubmit)}>
+        {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            <form onSubmit={form.onSubmit(onSubmit)}>
             <Stack>
             {LoadingOverlayAndCancelButton(loading, pid)}
             <LoadingOverlay visible={loading} />
