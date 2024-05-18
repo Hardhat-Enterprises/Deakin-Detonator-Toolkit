@@ -212,14 +212,14 @@ const TheHarvester = () => {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
-            <Stack>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <LoadingOverlay visible={loading} />
-            {loading && (
-                <div>
+                <Stack>
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                <LoadingOverlay visible={loading} />
+                {loading && (
+                    <div>
                     <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
                         Cancel
-                    </Button>
+                        </Button>
                 </div>
             )}
                     <Switch
