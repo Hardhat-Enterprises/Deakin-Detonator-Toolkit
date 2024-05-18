@@ -146,7 +146,7 @@ const TheHarvester = () => {
      * It sets up and triggers the airbase-ng tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
      *
-     * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
+     * @param {FormValuesType} values - The form values, containing the domain, result limit, etc.
      */
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
