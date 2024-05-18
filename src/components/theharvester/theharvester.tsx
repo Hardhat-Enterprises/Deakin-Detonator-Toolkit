@@ -196,7 +196,16 @@ const TheHarvester = () => {
     }, [setOutput]);
 
     return (
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
         <form onSubmit={form.onSubmit(onSubmit)}>
+            <Stack>
+            {LoadingOverlayAndCancelButton(loading, pid)}
             <LoadingOverlay visible={loading} />
             {loading && (
                 <div>
@@ -205,14 +214,6 @@ const TheHarvester = () => {
                     </Button>
                 </div>
             )}
-            <Stack>
-                <RenderComponent
-                    title={title}
-                    description={description}
-                    steps={steps}
-                    tutorial={tutorial}
-                    sourceLink={sourceLink}
-                >
                     <Switch
                         size="md"
                         label="Advanced Mode"
@@ -295,9 +296,9 @@ const TheHarvester = () => {
                     <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </RenderComponent>
-            </Stack>
-        </form>
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 export default TheHarvester;
