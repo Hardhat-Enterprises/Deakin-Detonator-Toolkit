@@ -56,7 +56,7 @@ const TheHarvester = () => {
         "Switch to Advanced Mode for further options.";
     const sourceLink = "https://gitlab.com/kalilinux/packages/theharvester"; // Link to the source code.
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["TheHarvester"]; // Contains the dependencies required by the component.
+    const dependencies = ["theHarvester"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
     let form = useForm({
