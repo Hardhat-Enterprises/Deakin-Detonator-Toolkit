@@ -51,7 +51,7 @@ const TheHarvester = () => {
         "       Eg: 500\n" +
         "Step 3: Select a source to search form. The list contains compatible search engines.\n" +
         "       Eg: baidu\n" +
-        "Step 4: Click Start Harvesting to commence tool's operation.\n" +
+        "Step 4: Click Start The Harvester to commence the tool's operation.\n" +
         "Step 5: View the Output block below to view the results of the tool's execution.\n" +
         "Switch to Advanced Mode for further options.";
     const sourceLink = "https://gitlab.com/kalilinux/packages/theharvester"; // Link to the source code.
