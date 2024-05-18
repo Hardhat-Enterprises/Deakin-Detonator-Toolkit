@@ -14,13 +14,13 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
  */
 interface FormValuesType {
     domain: string;
-    resultlimit: number;
+    resultLimit: number;
     source: string;
     startresult: number;
     useshodan: boolean;
     dnslookup: boolean;
     dnsbrute: boolean;
-    virtualhost: boolean;
+    virtualHost: boolean;
     takeover: boolean;
 }
 
@@ -62,13 +62,13 @@ const TheHarvester = () => {
     let form = useForm({
         initialValues: {
             domain: "",
-            resultlimit: 500,
+            resultLimit: 500,
             source: "",
             startresult: 0,
             useshodan: false,
             dnslookup: false,
             dnsbrute: false,
-            virtualhost: false,
+            virtualHost: false,
             takeover: false,
         },
     });
@@ -140,7 +140,7 @@ const TheHarvester = () => {
         setLoading(true);
 
         // Construct arguments for the Harvester based on form input and if choice variables are utilised
-        const args = ["-d", `${values.domain}`, "-l", `${values.resultlimit}`, "-b", `${values.source}`];
+        const args = ["-d", `${values.domain}`, "-l", `${values.resultLimit}`, "-b", `${values.source}`];
         if (values.startresult) {
             args.push(`-S ${values.startresult}`);
         }
@@ -153,7 +153,7 @@ const TheHarvester = () => {
         if (values.dnsbrute === true) {
             args.push(`-c`);
         }
-        if (values.virtualhost === true) {
+        if (values.virtualHost === true) {
             args.push(`-v`);
         }
         if (values.takeover === true) {
