@@ -3,7 +3,6 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
@@ -11,15 +10,15 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
- * Represents the form values for the DNSMap component.
+ * Represents the form values for the Parsero component.
  */
-interface FormValues {
+interface FormValuesType {
     url: string;
 }
 
 /**
- * The Dnsrecon component.
- * @returns The Dnsrecon component.
+ * The Parsero component.
+ * @returns The Parsero component.
  */
 const Parsero = () => {
     // State variables
@@ -39,7 +38,7 @@ const Parsero = () => {
         "Parsero is a free script written in Python which reads the Robots.txt file of a web server and looks at the Disallow entries." +
         "The Disallow entries tell the search engines what directories or files hosted on a web server must not be indexed. ";
     const steps =
-        "Step 1: Enter an URL. (E.g. www.google.com)\n" + "Step 2: Click Start Parsero\n" + "Step 3: View Results";
+        "Step 1: Enter a URL. (E.g. www.google.com)\n" + "Step 2: Click Start Parsero\n" + "Step 3: View Results";
     const sourceLink = "https://www.kali.org/tools/parsero/"; // Link to the source code.
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["parsero"]; // Contains the dependencies required by the component.
@@ -72,6 +71,7 @@ const Parsero = () => {
      */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+        setAllowSave(true);
     }, []);
 
     /**
@@ -112,7 +112,7 @@ const Parsero = () => {
      * Once the command is executed, the results or errors are displayed in the output.
      * @param {FormValuesType} values - The form values, containing the URL.
      */
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FormValuesType) => {
         setAllowSave(false); // Disallow saving until the tool's execution is complete.
         setLoading(true); // Set the loading state to true to indicate that the process is starting.
 
@@ -162,12 +162,11 @@ const Parsero = () => {
                 {/* Render the loading overlay and cancel button */}
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-                    {UserGuide(title, description)}
-                    <TextInput label={"url"} required {...form.getInputProps("url")} />
-                    <Button type={"submit"}>Start parsero</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}{" "}
+                    <TextInput label={"URL"} required {...form.getInputProps("url")} />
+                    <Button type={"submit"}>Start {title}</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     {/* Render the save output to file component */}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />{" "}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                     {/* Render the console wrapper component */}
                 </Stack>
             </form>
