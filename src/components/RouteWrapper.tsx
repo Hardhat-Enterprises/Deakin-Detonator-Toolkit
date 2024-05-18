@@ -66,6 +66,7 @@ import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
 import NSLookup from "./NSLookupTool/NSLookupTool";
+import ArpanameTool from "./Arpaname/arpaname";
 import Nikto from "./Nikto/Nikto";
 import TShark from "./TShark/TShark";
 import Bully from "./Bully/Bully";
@@ -294,6 +295,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Arjuntool",
         element: <Arjuntool />,
         description: "Arjun can find query parameters for URL endpoints.",
+        category: "Web Application Testing",
+    },
+    {
+        name: "Arpaname",
+        path: "/tools/Arpaname",
+        element: <ArpanameTool />,
+        description: "Perform reverse DNS lookups for IP addresses.",
         category: "Web Application Testing",
     },
     {

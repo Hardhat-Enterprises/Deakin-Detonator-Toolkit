@@ -18,13 +18,18 @@
                 "sidecar": true,
                 "scope": [
                     {
-                        "name": "pkexec",
-                        "cmd": "pkexec",
+                        "name": "arpaname",
+                        "cmd": "arpaname",
                         "args": true
                     },
                     {
                         "name": "which",
                         "cmd": "which",
+                        "args": true
+                    },
+                    {
+                        "name": "pkexec",
+                        "cmd": "pkexec",
                         "args": true
                     },
                     {
