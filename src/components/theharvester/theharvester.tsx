@@ -279,7 +279,7 @@ const TheHarvester = () => {
                         </>
                     )}
                     <br></br>
-                    <Button type={"submit"}>Start Harvesting</Button>
+                    <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </RenderComponent>
