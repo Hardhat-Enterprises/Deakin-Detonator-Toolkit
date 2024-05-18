@@ -4,8 +4,10 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { IconAlertCircle } from "@tabler/icons";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+
 interface FormValues {
     ip: string;
     port: string;
@@ -35,6 +37,8 @@ const Gyoithon = () => {
     const Ml = ["Naive Bayes", "Deep Neural Network"];
     const isDNN = selectedMLOption == "Deep Neural Network";
     const [pid, setPid] = useState(""); // Maintain the state of the process id.
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
     let form = useForm({
         initialValues: {
@@ -118,6 +122,7 @@ const Gyoithon = () => {
         const output = await CommandHelper.runCommand("python3", args);
         setOutput(output);
         setLoading(false);
+        setAllowSave(true);
     };
 
     const Import = async (values: FormValues) => {
@@ -156,6 +161,7 @@ const Gyoithon = () => {
         // setOutput(output + "Report generated successfully!");
         // setLoading(false);
         setValue("export");
+        setAllowSave(true);
     };
 
     const ShowReport = async () => {
@@ -192,7 +198,16 @@ const Gyoithon = () => {
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
+
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
     return (
         <p>
@@ -326,6 +341,7 @@ const Gyoithon = () => {
                         </Accordion.Panel>
                     </Accordion.Item>
                 </Accordion>
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </p>

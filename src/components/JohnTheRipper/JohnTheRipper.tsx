@@ -137,6 +137,10 @@ const JohnTheRipper = () => {
 
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
@@ -153,17 +157,6 @@ const JohnTheRipper = () => {
     };
 
     /**
-     * handleSaveComplete: Callback to handle the completion of the file saving process.
-     * It updates the state by indicating that the file has been saved and deactivates the save button.
-     */
-    const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
-        setHasSaved(true);
-        setAllowSave(false);
-    };
-
-    /**
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the JohnTheRipper tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
@@ -173,6 +166,9 @@ const JohnTheRipper = () => {
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process.
         setLoading(true);
+
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
 
         // If hash is stored in a text file
         if (values.fileType === "raw") {
@@ -239,6 +235,10 @@ const JohnTheRipper = () => {
                     // Display any errors encountered during command execution
                     setOutput(error.message);
                     // Deactivate loading state
+
+                    // Activate setAllowSave
+                    setLoading(false);
+                    setAllowSave(true);
                 });
         }
     };
@@ -248,7 +248,20 @@ const JohnTheRipper = () => {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, [setOutput]);
+
+    /**
+     * handleSaveComplete: Callback to handle the completion of the file saving process.
+     * It updates the state by indicating that the file has been saved and deactivates the save button.
+     */
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
     return (
         <RenderComponent

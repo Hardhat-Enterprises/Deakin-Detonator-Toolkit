@@ -135,16 +135,6 @@ const Foremost = () => {
     );
 
     /**
-     * handleSaveComplete: handle state changes when saves are completed
-     * Once the output is saved, prevent duplicate saves
-     */
-    const handleSaveComplete = () => {
-        //Disallow saving once the output is saved
-        setHasSaved(true);
-        setAllowSave(false);
-    };
-
-    /**
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the Foremost tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
@@ -154,6 +144,9 @@ const Foremost = () => {
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
+
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
 
         // Construct arguments for the Foremost command based on form input
         const args = [`-i`, `${values.input}`, `-o`, `${values.outputDir}`];
@@ -202,6 +195,7 @@ const Foremost = () => {
             setOutput(e.message);
             // Deactivate loading state
             setLoading(false);
+            setAllowSave(true);
         }
     };
 
@@ -215,6 +209,18 @@ const Foremost = () => {
         setAllowSave(false);
     }, [setOutput]);
 
+    /**
+     * handleSaveComplete: handle state changes when saves are completed
+     * Once the output is saved, prevent duplicate saves
+     */
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
+
+    // Render the GUI
     return (
         <RenderComponent
             title={title}

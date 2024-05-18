@@ -74,6 +74,7 @@ const SnmpCheck = () => {
      */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+        if (!allowSave) setAllowSave(true);
     }, []);
 
     /**
@@ -100,6 +101,7 @@ const SnmpCheck = () => {
             setPid("");
             // Cancel the Loading Overlay. The process has completed.
             setLoading(false);
+            setAllowSave(true);
         },
         [handleProcessData]
     );
@@ -110,6 +112,8 @@ const SnmpCheck = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true); // Activate loading state to indicate ongoing process
+        setAllowSave(false);
+        setHasSaved(false);
 
         const args = [values.ip, "-p", `${values.port}`];
 
@@ -137,6 +141,8 @@ const SnmpCheck = () => {
     const clearOutput = useCallback(() => {
         // Memoized function to clear the output.
         setOutput("");
+        setAllowSave(false);
+        setHasSaved(false);
     }, [setOutput]);
 
     const handleSaveComplete = useCallback(() => {

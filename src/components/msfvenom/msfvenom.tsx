@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "Payload Generator (msfvenom)";
 const description_userguide =
@@ -135,6 +135,8 @@ const payloadRequiredVariables = [
 const PayloadGenerator = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
     const [isCustomMode, setIsCustomMode] = useState(false);
     const [selectedArchitecture, setSelectedArchitecture] = useState("");
     const [selectedPayload, setSelectedPayload] = useState("");
@@ -196,8 +198,14 @@ const PayloadGenerator = () => {
         }
     };
 
+    const handleSaveComplete = useCallback(() => {
+        setHasSaved(true);
+        setAllowSave(false);
+    }, []);
+
     const onSubmit = async () => {
         setLoading(true);
+        setAllowSave(true);
         const args = [];
 
         if (isCustomMode) {
@@ -280,9 +288,11 @@ const PayloadGenerator = () => {
         }
     };
 
-    const clearOutput = () => {
+    const clearOutput = useCallback(() => {
         setOutput("");
-    };
+        setAllowSave(false);
+        setHasSaved(false);
+    }, []);
 
     const architectureIndex = architectures.indexOf(selectedArchitecture);
 
@@ -446,6 +456,7 @@ const PayloadGenerator = () => {
                 />
 
                 <Button type="submit">Generate</Button>
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

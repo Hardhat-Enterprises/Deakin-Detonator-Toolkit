@@ -116,6 +116,7 @@ const WPScan = () => {
      */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+        if (!allowSave) setAllowSave(true);
     }, []);
 
     /**

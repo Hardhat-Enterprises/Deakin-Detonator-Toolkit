@@ -85,6 +85,7 @@ function Metagoofil() {
      */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+        if (!allowSave) setAllowSave(true);
     }, []);
 
     /**
@@ -124,16 +125,6 @@ function Metagoofil() {
     );
 
     /**
-     * handleSaveComplete: handle state changes when saves are completed
-     * Once the output is saved, prevent duplicate saves
-     */
-    const handleSaveComplete = () => {
-        //Disallow saving once the output is saved
-        setHasSaved(true);
-        setAllowSave(false);
-    };
-
-    /**
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the goldeneye tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
@@ -143,6 +134,10 @@ function Metagoofil() {
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
+
+        // Disable Output Save
+        setAllowSave(false);
+        setHasSaved(false);
 
         // Construct arguments for the Metagoofil command based on form input
         const args = [`-d`, `${values.webName}`, `-t`, `${values.fileType}`];
@@ -181,6 +176,16 @@ function Metagoofil() {
         setHasSaved(false);
         setAllowSave(false);
     }, [setOutput]);
+
+    /**
+     * handleSaveComplete: handle state changes when saves are completed
+     * Once the output is saved, prevent duplicate saves
+     */
+    const handleSaveComplete = useCallback(() => {
+        //Disallow saving once the output is saved
+        setHasSaved(true);
+        setAllowSave(false);
+    }, []);
 
     return (
         <RenderComponent

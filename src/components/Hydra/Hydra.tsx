@@ -196,6 +196,9 @@ const Hydra = () => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+
         // Construct arguments for the  Hydra command based on form input
         const args = [];
         if (selectedLoginInput === "Single Login") {
@@ -241,6 +244,7 @@ const Hydra = () => {
             setOutput(e.message);
             // Deactivate loading state
             setLoading(false);
+            setAllowSave(true);
         }
     };
 

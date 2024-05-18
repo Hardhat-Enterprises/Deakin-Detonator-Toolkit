@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
@@ -39,6 +39,8 @@ const NetcatTool = () => {
     const [selectedScanOption, setSelectedNetcatOption] = useState("");
     const [pid, setPid] = useState("");
     const [loading, setLoading] = useState(false);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
     const [checkedVerboseMode, setCheckedVerboseMode] = useState(false);
 
     let form = useForm({
@@ -210,11 +212,19 @@ const NetcatTool = () => {
 
                 break;
         }
+        setAllowSave(true);
     };
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setAllowSave(false);
+        setHasSaved(false);
     }, [setOutput]);
+
+    const handleSaveComplete = useCallback(() => {
+        setHasSaved(true);
+        setAllowSave(false);
+    }, []);
 
     //<ConsoleWrapper output={output} clearOutputCallback={clearOutput} /> prints the terminal on the tool
     return (
@@ -273,7 +283,7 @@ const NetcatTool = () => {
                     </>
                 )}
                 <Button type={"submit"}>start netcat</Button>
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>

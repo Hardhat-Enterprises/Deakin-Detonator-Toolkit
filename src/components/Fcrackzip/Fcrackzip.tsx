@@ -115,17 +115,13 @@ const Fcrackzip = () => {
             }
             setPid("");
             setLoading(false);
+
+            // Allow Saving as the output is finalised
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
-
-    // Actions taken after saving the output
-    const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
-        setHasSaved(true);
-        setAllowSave(false);
-    };
 
     /**
      * Function to handle form submission.
@@ -133,6 +129,10 @@ const Fcrackzip = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+
         const args = [];
 
         if (attackMethod === "Dictionary") {
@@ -176,6 +176,7 @@ const Fcrackzip = () => {
         } finally {
             setLoading(false);
         }
+        setAllowSave(true);
     };
 
     /**
@@ -183,7 +184,20 @@ const Fcrackzip = () => {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
     }, []);
+
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
+
+    // the disable charset logic is commented out
+    // Please remove it if the future implementation does not need to use it
+    // for now the logic stay as commented
 
     return (
         <RenderComponent

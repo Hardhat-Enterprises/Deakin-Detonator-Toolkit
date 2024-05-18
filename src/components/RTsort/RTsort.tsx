@@ -136,8 +136,12 @@ const RTSort = () => {
             // Update the UI with the results from the executed command
             setPid(result.pid);
             setOutput(result.output);
+            // Enable setAllowSave to generate output file
+            setAllowSave(true);
         } catch (e: any) {
             setOutput(e);
+            // Disallow save after the output
+            setAllowSave(false);
         }
     };
     /**
