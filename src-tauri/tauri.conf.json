@@ -88,6 +88,11 @@
                         "args": true
                     },
                     {
+                        "name": "arp-fingerprint ",
+                        "cmd": "arp-fingerprint ",
+                        "args": true
+                    },
+                    {
                         "name": "rar2john",
                         "cmd": "rar2john",
                         "args": true
@@ -320,6 +325,21 @@
                     {
                         "name": "whatweb",
                         "cmd": "whatweb",
+                        "args": true
+                    },
+                    {
+                        "name": "nikto",
+                        "cmd": "nikto",
+                        "args": true
+                    },
+                    {
+                        "name": "sublist3r",
+                        "cmd": "sublist3r",
+                        "args": true
+                    },
+                    {
+                        "name": "tshark",
+                        "cmd": "tshark",
                         "args": true
                     }
                 ]
