@@ -95,6 +95,7 @@ const TheHarvester = () => {
      */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+        if (!allowSave) setAllowSave(true);
     }, []);
 
     /**
@@ -123,6 +124,7 @@ const TheHarvester = () => {
             setPid("");
             // Cancel the Loading Overlay
             setLoading(false);
+            setAllowSave(true);
         },
         [handleProcessData]
     );
@@ -193,120 +195,125 @@ const TheHarvester = () => {
     // Clears the output state utilising the callback function to revert the output to an empty string
     const clearOutput = useCallback(() => {
         setOutput("");
+        setAllowSave(false);
+        setHasSaved(false);
     }, [setOutput]);
 
     return (
-        <RenderComponent
-            title={title}
-            description={description}
-            steps={steps}
-            tutorial={tutorial}
-            sourceLink={sourceLink}
-        >
-        {!loadingModal && (
-                <InstallationModal
-                    isOpen={opened}
-                    setOpened={setOpened}
-                    feature_description={description}
-                    dependencies={dependencies}
-                ></InstallationModal>
-            )}
-            <form onSubmit={form.onSubmit(onSubmit)}>
-                <Stack>
-                {LoadingOverlayAndCancelButton(loading, pid)}
-                <LoadingOverlay visible={loading} />
-                {loading && (
-                    <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                        </Button>
-                </div>
-            )}
-                    <Switch
-                        size="md"
-                        label="Advanced Mode"
-                        checked={checkedAdvanced}
-                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
-                    />
-                    <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
-                    <TextInput
-                        label={"Limit of results searched/shown (default 500)"}
-                        type="number"
-                        {...form.getInputProps("resultlimit")}
-                    />
-                    <label>Source</label>
-                    <select {...form.getInputProps("source")}>
-                        <option value="baidu">Baidu</option>
-                        <option value="bing">Bing</option>
-                        <option value="censys">Censys</option>
-                        <option value="certspotter">Certspotter</option>
-                        <option value="crtsh">Crtsh</option>
-                        <option value="dnsdumpster">DNSdumpster</option>
-                        <option value="duckduckgo">DuckDuckGo</option>
-                        <option value="exalead">Exalead</option>
-                        <option value="google">Google</option>
-                        <option value="hackertarget">Hackertarget</option>
-                        <option value="hunter">Hunter</option>
-                        <option value="intelx">Intelx</option>
-                        <option value="linkedin">Linkedin</option>
-                        <option value="linkedin_links">Linkedin Links</option>
-                        <option value="netcraft">Netcraft</option>
-                        <option value="otx">Otx</option>
-                        <option value="securityTrails">SecurityTrails</option>
-                        <option value="shodan">Shodan</option>
-                        <option value="spyse">Spyse</option>
-                        <option value="sublist3r">Sublist3r</option>
-                        <option value="threatcrowd">Threatcrowd</option>
-                        <option value="threatminer">Threatminer</option>
-                        <option value="trello">Trello</option>
-                        <option value="twitter">Twitter</option>
-                        <option value="vhost">Vhost</option>
-                        <option value="virustotal">Virustotal</option>
-                        <option value="yahoo">Yahoo</option>
-                    </select>
-                    {checkedAdvanced && (
-                        <>
-                            <TextInput
-                                label={"Start with result number X. (default 0)"}
-                                type="number"
-                                {...form.getInputProps("startresult")}
-                            />
-                            <Checkbox
-                                label={"Use Shodan to query discovered hosts."}
-                                type="checkbox"
-                                {...form.getInputProps("useshodan")}
-                            />
-                            <Checkbox
-                                label={"DNS Lookup (Enable DNS server lookup)"}
-                                type="checkbox"
-                                {...form.getInputProps("dnslookup")}
-                            />
-                            <Checkbox
-                                label={"DNS Brute (Perform a DNS brute force on the domain.)"}
-                                type="checkbox"
-                                {...form.getInputProps("dnsbrute")}
-                            />
-                            <Checkbox
-                                label={
-                                    "Virtual Host (Verify host name via DNS resolution and search for virtual hosts.)"
-                                }
-                                type="checkbox"
-                                {...form.getInputProps("virtualhost")}
-                            />
-                            <Checkbox
-                                label={"Takeover (Check for takeovers.)"}
-                                type="checkbox"
-                                {...form.getInputProps("takeover")}
-                            />
-                        </>
-                    )}
-                    <br></br>
-                    <Button type={"submit"}>Start {title}</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </Stack>
-            </form>
-        </RenderComponent>
+        <>
+            {" "}
+            <RenderComponent
+                title={title}
+                description={description}
+                steps={steps}
+                tutorial={tutorial}
+                sourceLink={sourceLink}
+            >
+                {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+                )}
+                <form onSubmit={form.onSubmit(onSubmit)}>
+                    <Stack>
+                        {LoadingOverlayAndCancelButton(loading, pid)}
+                        <LoadingOverlay visible={loading} />
+                        {loading && (
+                            <div>
+                                <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
+                                    Cancel
+                                </Button>
+                            </div>
+                        )}
+                        <Switch
+                            size="md"
+                            label="Advanced Mode"
+                            checked={checkedAdvanced}
+                            onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                        />
+                        <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
+                        <TextInput
+                            label={"Limit of results searched/shown (default 500)"}
+                            type="number"
+                            {...form.getInputProps("resultlimit")}
+                        />
+                        <label>Source</label>
+                        <select {...form.getInputProps("source")}>
+                            <option value="baidu">Baidu</option>
+                            <option value="bing">Bing</option>
+                            <option value="censys">Censys</option>
+                            <option value="certspotter">Certspotter</option>
+                            <option value="crtsh">Crtsh</option>
+                            <option value="dnsdumpster">DNSdumpster</option>
+                            <option value="duckduckgo">DuckDuckGo</option>
+                            <option value="exalead">Exalead</option>
+                            <option value="google">Google</option>
+                            <option value="hackertarget">Hackertarget</option>
+                            <option value="hunter">Hunter</option>
+                            <option value="intelx">Intelx</option>
+                            <option value="linkedin">Linkedin</option>
+                            <option value="linkedin_links">Linkedin Links</option>
+                            <option value="netcraft">Netcraft</option>
+                            <option value="otx">Otx</option>
+                            <option value="securityTrails">SecurityTrails</option>
+                            <option value="shodan">Shodan</option>
+                            <option value="spyse">Spyse</option>
+                            <option value="sublist3r">Sublist3r</option>
+                            <option value="threatcrowd">Threatcrowd</option>
+                            <option value="threatminer">Threatminer</option>
+                            <option value="trello">Trello</option>
+                            <option value="twitter">Twitter</option>
+                            <option value="vhost">Vhost</option>
+                            <option value="virustotal">Virustotal</option>
+                            <option value="yahoo">Yahoo</option>
+                        </select>
+                        {checkedAdvanced && (
+                            <>
+                                <TextInput
+                                    label={"Start with result number X. (default 0)"}
+                                    type="number"
+                                    {...form.getInputProps("startresult")}
+                                />
+                                <Checkbox
+                                    label={"Use Shodan to query discovered hosts."}
+                                    type="checkbox"
+                                    {...form.getInputProps("useshodan")}
+                                />
+                                <Checkbox
+                                    label={"DNS Lookup (Enable DNS server lookup)"}
+                                    type="checkbox"
+                                    {...form.getInputProps("dnslookup")}
+                                />
+                                <Checkbox
+                                    label={"DNS Brute (Perform a DNS brute force on the domain.)"}
+                                    type="checkbox"
+                                    {...form.getInputProps("dnsbrute")}
+                                />
+                                <Checkbox
+                                    label={
+                                        "Virtual Host (Verify host name via DNS resolution and search for virtual hosts.)"
+                                    }
+                                    type="checkbox"
+                                    {...form.getInputProps("virtualhost")}
+                                />
+                                <Checkbox
+                                    label={"Takeover (Check for takeovers.)"}
+                                    type="checkbox"
+                                    {...form.getInputProps("takeover")}
+                                />
+                            </>
+                        )}
+                        <br></br>
+                        <Button type={"submit"}>Start {title}</Button>
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    </Stack>
+                </form>
+            </RenderComponent>{" "}
+        </>
     );
 };
 export default TheHarvester;

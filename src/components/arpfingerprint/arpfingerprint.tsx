@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -10,42 +10,42 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
- * Represents the form values for the Dnsrecon component.
+ * Represents the form values for the ARPfingerprint component.
  */
 interface FormValuesType {
-    url: string;
+    interface: string;
 }
 
 /**
- * The Dnsrecon component.
- * @returns The Dnsrecon component.
+ * The ARPfingerprint component.
+ * @returns The ARPfingerprint component.
  */
-function Dnsrecon() {
+function ARPFingerprinting() {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
 
     // Component Constants.
-    const title = "DNSRecon"; // Title of the component.
-    const description = "DNSRecon is a tool for DNS enumeration and scanning."; // Description of the component.
-    const steps =
-        "Step 1: Enter a target domain URL, for example, https://www.deakin.edu.au\n" +
-        "Step 2: Click start DNSRecon to commence DNSRecon's operation.\n" +
-        "Step 3: View the output block below to view the results of the tool's execution.\n";
-    const sourceLink = "https://www.kali.org/tools/dnsrecon/"; // Link to the source code or Kali Tools page.
+    const title = "ARP fingerprint Tool"; // Title of the component.
+    const description =
+        "ARP fingerprinting is a network reconnaissance technique used to detect the operating systems and devices in a network."; // Description of the component.
+    const steps = "Step 1: Enter the IP address of the target device.\n";
+    ("Step 2: Click Scan to start ARP fingerprinting.\n");
+    ("Step 3: View the Output block below to see the fingerprinting results.");
+    const sourceLink = ""; // Link to the source code or Kali Tools page.
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["dnsrecon"]; // Dependencies required for the Dnsrecon tool.
+    const dependencies = ["arp-scan"]; // Dependencies required for the ARPfingerprint tool.
 
     // Form hook to handle form input.
     const form = useForm<FormValuesType>({
         initialValues: {
-            url: "",
+            interface: "",
         },
     });
 
@@ -85,19 +85,16 @@ function Dnsrecon() {
         ({ code, signal }: { code: number; signal: number }) => {
             // If the process was successful, display a success message.
             if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
+                handleProcessData("\nARP fingerprinting completed successfully.");
 
                 // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
-                handleProcessData("\nProcess was manually terminated.");
+                handleProcessData("\nARP fingerprinting was manually terminated.");
 
                 // If the process was terminated with an error, display the exit and signal codes.
             } else {
-                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+                handleProcessData(`\nARP fingerprinting terminated with exit code: ${code} and signal code: ${signal}`);
             }
-
-            // Clear the child process pid reference. There is no longer a valid process running.
-            setPid("");
 
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
@@ -120,10 +117,9 @@ function Dnsrecon() {
 
     /**
      * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the Dnsrecon tool with the given parameters.
+     * It sets up and triggers the ARPfingerprint tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
-     * @param {FormValuesType} values - The form values, containing the URL.
-     */
+     *@param {FormValuesType} values - The form values, containing target IP.     */
     const onSubmit = async (values: FormValuesType) => {
         // Set the loading state to true to indicate that the process is starting.
         setLoading(true);
@@ -131,22 +127,16 @@ function Dnsrecon() {
         // Disable saving the output to a file while the process is running.
         setAllowSave(false);
 
-        // Construct the arguments for the Dnsrecon command.
-        const args = ["-d", values.url];
-
+        // Construct the arguments for the ARPfingerprint command.
+        const args = [`-l`, values.interface];
         try {
-            // Execute the Dnsrecon command using the CommandHelper utility.
-            // Pass the command name, arguments, and callback functions for handling process data and termination.
-            const { pid, output } = await CommandHelper.runCommandGetPidAndOutput(
-                "dnsrecon",
+            // Execute the ARPfingerprint command using the CommandHelper utility with pkexec.
+            await CommandHelper.runCommandWithPkexec(
+                "arp-fingerprint",
                 args,
                 handleProcessData,
                 handleProcessTermination
             );
-
-            // Update the state with the process ID and initial output.
-            setPid(pid);
-            setOutput(output);
         } catch (error: any) {
             // If an error occurs during command execution, display the error message.
             setOutput(`Error: ${error.message}`);
@@ -192,10 +182,13 @@ function Dnsrecon() {
                     {/* Render the loading overlay and cancel button */}
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Stack>
-                        <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                        <Button type={"submit"}>Start {title}</Button>
-                        {/* Render the save output to file component */}
+                        <TextInput label="Target IP address" required {...form.getInputProps("targetIP")} />
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
+                        <Button type={"submit"} disabled={loading}>
+                            Start {title}
+                        </Button>
+
                         {/* Render the console wrapper component */}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                     </Stack>
@@ -205,4 +198,4 @@ function Dnsrecon() {
     );
 }
 
-export default Dnsrecon;
+export default ARPFingerprinting;
