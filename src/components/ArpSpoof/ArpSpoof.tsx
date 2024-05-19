@@ -2,7 +2,7 @@ import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState, useEffect, useCallback } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
-import { RenderComponent, UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
@@ -10,7 +10,7 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
 // Component Constants
-const title = "ARPSpoof";
+const title = "ARPSpoof"; // Contains the description of the component.
 
 // Contains the description of the component.
 const description_userguide =
@@ -51,8 +51,8 @@ const ARPSpoofing = () => {
 
     // Component Constants.
     const dependencies = ["dsniff"]; // Contains the dependencies required for the component.
-    const SourceLink = "https://github.com/tecknicaltom/dsniff/blob/master/arpspoof.c"; // contains link to the source code (arpspoof)
-    const Tutorial = "";
+    const sourceLink = "https://github.com/tecknicaltom/dsniff/blob/master/arpspoof.c"; // contains link to the source code (arpspoof)
+    const tutorial = "";
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
@@ -177,8 +177,8 @@ const ARPSpoofing = () => {
             title={title}
             description={description_userguide}
             steps={steps}
-            tutorial={Tutorial}
-            sourceLink={SourceLink}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
         >
             <>
                 {!loadingModal && (
@@ -190,16 +190,11 @@ const ARPSpoofing = () => {
                     ></InstallationModal>
                 )}
                 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                    {LoadingOverlayAndCancelButton(loading, pidGateway)}
-                    {LoadingOverlayAndCancelButton(loading, pidTarget)}
-                    <Stack>
-                        {UserGuide(title, description_userguide)}
-                        <TextInput label={"Target one IP address"} required {...form.getInputProps("ip1")} />
-                        <TextInput label={"Target two IP address"} required {...form.getInputProps("ip2")} />
-                        <Button type={"submit"}>Spoof</Button>
-                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                    </Stack>
+                    <TextInput label={"Target one IP address"} required {...form.getInputProps("ip1")} />
+                    <TextInput label={"Target two IP address"} required {...form.getInputProps("ip2")} />
+                    <Button type={"submit"}>Start Spoof</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </form>
             </>
         </RenderComponent>
