@@ -147,7 +147,7 @@ To install the Deakin Detonator Toolkit on Kali, you can follow either the new o
 13. Run the application (dev mode):
 
     ```bash
-    $ yarn run tauri dev
+    yarn run tauri dev
     ```
 
 # 📷 Screenshot
