@@ -11,11 +11,8 @@ echo libc6 libraries/restart-without-asking boolean true | sudo debconf-set-sele
 # Update package list
 sudo apt-get update -y
 
-# Clone the Deakin Detonator Toolkit repository
-git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
-
-# Change to the toolkit directory
-cd Deakin-Detonator-Toolkit
+# Clone the Deakin Detonator Toolkit repository and change directory to the directory
+git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit && cd Deakin-Detonator-Toolkit
 
 # Install Rust
 curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
