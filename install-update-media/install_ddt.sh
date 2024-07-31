@@ -35,9 +35,6 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Update package list
-sudo apt-get update -y
-
 # Install Yarn globally
 sudo npm install -g yarn
 
