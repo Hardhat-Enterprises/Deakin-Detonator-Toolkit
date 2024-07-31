@@ -32,9 +32,10 @@ function Arjuntool() {
     // Component constants.
     const title = "Arjun";
     const dependencies = ["arjun"]; // Contains the dependencies required for the component.
+    const description = "Arjun finds query parameters for URL endpoints using a default dictionary of 25,890 parameter names."
 
 // Contains the description of the component.
-const description_userguide =
+const description_userguide = 
     "Arjun is a command-line tool specifically designed to look for hidden HTTP parameters. " +
     "Arjun will try to discover parameters and give you a new set of endpoints to test on. " +
     "It is a multi-threaded application and can handle rate limits. It supports GET,POST,XML and JSON methods.\n\n" +
