@@ -36,7 +36,7 @@ function Arjuntool() {
     const steps = 
         "Step 1: Enter a valid URL, e.g. https://www.deakin.edu.au.\n" +
         "Step 2: Enter an optional JSON output filename. E.g. arjunoutput.\n" +
-        "Step 3: Click the scan option to commence scanning.\n" +
+        "Step 3: Click the scan button to commence scanning.\n" +
         "Step 4: View the output block below to see the results.";
     const sourceLink = "https://github.com/s0md3v/Arjun"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
