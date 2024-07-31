@@ -34,7 +34,7 @@ function Arjuntool() {
     const dependencies = ["arjun"]; // Contains the dependencies required for the component.
     const description = "Arjun finds query parameters for URL endpoints using a default dictionary of 25,890 parameter names." // Contains the description of the component.
     const steps = 
-        "Step 1: "Enter a valid URL. E.g. https://www.deakin.edu.au\n" +
+        "Step 1: Enter a valid URL. E.g. https://www.deakin.edu.au\n" +
         "Step 2: Enter an optional JSON output filename. E.g. arjunoutput.\n" +
         "Step 3: Click the scan option to commence scanning.\n" +
         "Step 4: View the output block below to see the results.";
