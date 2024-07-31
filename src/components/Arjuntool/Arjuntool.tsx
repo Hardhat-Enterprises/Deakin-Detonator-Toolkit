@@ -114,6 +114,14 @@ function Arjuntool() {
         setAllowSave(false);
     };
 
+     /**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the Arjun tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the URL, output file name and stability value.
+     */
+
     const onSubmit = async (values: FormValues) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
