@@ -183,7 +183,7 @@ function Arjuntool() {
                 <InstallationModal
                     isOpen={opened}
                     setOpened={setOpened}
-                    feature_description={description_userguide}
+                    feature_description={description}
                     dependencies={dependencies}
                 ></InstallationModal>
             )}
