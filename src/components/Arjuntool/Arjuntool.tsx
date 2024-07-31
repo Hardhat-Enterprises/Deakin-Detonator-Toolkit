@@ -38,6 +38,7 @@ function Arjuntool() {
         "Step 2: Enter an optional JSON output filename. E.g. arjunoutput.\n" +
         "Step 3: Click the scan option to commence scanning.\n" +
         "Step 4: View the output block below to see the results.";
+    const sourceLink = "https://github.com/s0md3v/Arjun";
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
@@ -170,7 +171,14 @@ function Arjuntool() {
 
     return (
         <>
-            {!loadingModal && (
+        <RenderComponent
+                title={title}
+                description={description}
+                steps={steps}
+                tutorial={tutorial}
+                sourceLink={sourceLink}
+            >
+         {!loadingModal && (
                 <InstallationModal
                     isOpen={opened}
                     setOpened={setOpened}
@@ -189,6 +197,7 @@ function Arjuntool() {
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
+             </RenderComponent>
         </>
     );
 }
