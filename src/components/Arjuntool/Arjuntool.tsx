@@ -190,7 +190,6 @@ function Arjuntool() {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-                    {UserGuide(title, description_userguide)}
                     <TextInput label={"URL"} required {...form.getInputProps("url")} />
                     <Switch size="md" label="Stability mode" {...form.getInputProps("stability" as keyof FormValues)} />
                     <Button type={"submit"}>Scan</Button>
