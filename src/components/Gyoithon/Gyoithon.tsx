@@ -8,6 +8,9 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
+/**
+ * Represents the form values for the Gyoithon component.
+ */
 interface FormValues {
     ip: string;
     port: string;
