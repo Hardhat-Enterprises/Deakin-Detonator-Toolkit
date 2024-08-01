@@ -33,6 +33,7 @@ const description_userguide = // Contains the description of the component.
     sourceLink + 
     "\n\nUsing the tool:\nPlease follow the steps listed within the tool.";
 const tutorial = ""; // Contains the link to the official documentation/tutorial.
+const dependencies = ["Gyoithon"]; // Contains the dependencies required by the component.
 
 /**
  * The Gyoithon component.
