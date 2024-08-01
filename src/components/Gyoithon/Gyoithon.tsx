@@ -30,6 +30,10 @@ const description_userguide =
     "Naive Bayes and Deep Neural Network to allow for HTTP/HTTPS port detection. \n\nFurther information on the tool can be found at: " +
     "https://github.com/gyoisamurai/GyoiThon \n\nUsing the tool:\nPlease follow the steps listed within the tool.";
 
+/**
+ * The Gyoithon component.
+ * @returns The Gyoithon component.
+ */
 const Gyoithon = () => {
     const [value, setValue] = useState<string | null>("install");
     const [loading, setLoading] = useState(false);
