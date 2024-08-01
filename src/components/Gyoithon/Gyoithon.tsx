@@ -21,8 +21,9 @@ interface FormValuesType {
     export_path: string;
 }
 
-const title = "Gyoithon";
-const description_userguide =
+// Component Constants
+const title = "Gyoithon"; // Contains the title of the component.
+const description_userguide = // Contains the description of the component.
     "Gyoithon is a tool primarily used for gathering intelligence for a Web Server. The tool allows for remote access to " +
     "be inflicted against a targeted web server to allow for products to be identified that are being operated on the server. " +
     "This may include CMS, web server software, programming language and framework. Gyoithon is further capable of automatically " +
