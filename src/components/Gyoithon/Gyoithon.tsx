@@ -70,10 +70,13 @@ const Gyoithon = () => {
     // and informing the user.
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was terminated successfully, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+                // If the process was terminated due to a signal, display the signal code.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+                // If the process was terminated with an error, display the exit code and signal code.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
@@ -87,6 +90,7 @@ const Gyoithon = () => {
         [handleProcessData]
     );
 
+    // Returns a text file explaining tool requirements to the Gyoithon directory on the host device.
     const Install = async () => {
         setLoading(true);
         const args = [`install`, `-r`, `/usr/share/ddt/GyoiThon/requirements.txt`];
@@ -96,6 +100,7 @@ const Gyoithon = () => {
         setValue("configure");
     };
 
+    // Returns a text file with the target address to the Gyoithon directory on the host device.
     const ShowTarget = async () => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/host.txt`];
@@ -104,6 +109,7 @@ const Gyoithon = () => {
         setLoading(false);
     };
 
+    // Locates and clears the generated target address text file at the Gyoithon directory on the host device.
     const ClearTarget = async () => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/configure.py`, `-clear`, `/usr/share/ddt/GyoiThon/host.txt`];
@@ -112,12 +118,15 @@ const Gyoithon = () => {
         setLoading(false);
     };
 
+    // Initiates the run process of the tool.
     const NextRun = async () => {
         setValue("run");
     };
 
+    // Configures the run process with the values allocated to each option.
     const Configure = async (values: FormValuesType) => {
         setLoading(true);
+        // Specifies arg value locations and types.
         const args = [
             `/usr/share/ddt/GyoiThon/configure.py`,
             `-add`,
@@ -126,26 +135,31 @@ const Gyoithon = () => {
             values.ip,
             values.port,
         ];
+        // Displays the output results and state.
         const output = await CommandHelper.runCommand("python3", args);
         setOutput(output);
         setLoading(false);
         setAllowSave(true);
     };
 
+    // Returns an output from a preexisting and selected text file.
     const Import = async (values: FormValuesType) => {
         setLoading(true);
+        // Specifies arg value locations and type.
         const args = [
             `/usr/share/ddt/GyoiThon/configure.py`,
             `-import`,
             `/usr/share/ddt/GyoiThon/host.txt`,
             values.import_file,
         ];
+        // Displays the output results and state.
         const output = await CommandHelper.runCommand("python3", args);
         setOutput(output);
         setLoading(false);
         setValue("run");
     };
 
+    // Returns an output by performing a grid search function on a specified document.
     const GridSearch = async () => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/modules/Deep_Neural_Network.py`, `-grid`];
@@ -154,6 +168,7 @@ const Gyoithon = () => {
         setLoading(false);
     };
 
+    // Performs the run process of the Gyoithon tool against input values.
     const Run = async (values: FormValuesType) => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/gyoithon.py`, `-m`];
@@ -163,6 +178,7 @@ const Gyoithon = () => {
             handleProcessData,
             handleProcessTermination
         );
+        // Returns output and state of the run process
         setPid(result.pid);
         setOutput(result.output + "Report generated successfully!");
         // setOutput(output + "Report generated successfully!");
@@ -171,6 +187,7 @@ const Gyoithon = () => {
         setAllowSave(true);
     };
 
+    // Returns an output document from the run process of the tool.
     const ShowReport = async () => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/report`];
@@ -179,6 +196,7 @@ const Gyoithon = () => {
         setLoading(false);
     };
 
+    // Deletes an output document from the run process of the tool by following directory.
     const ClearReport = async () => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/report`, `-type`, `f`, `-delete`];
@@ -187,6 +205,7 @@ const Gyoithon = () => {
         setLoading(false);
     };
 
+    // Returns a preview of the data from the output document and displays.
     const Preview = async (values: FormValuesType) => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/report/` + values.select_file];
@@ -195,6 +214,7 @@ const Gyoithon = () => {
         setLoading(false);
     };
 
+    // Selects an output document from directory and exports to a new path
     const Export = async (values: FormValuesType) => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/report/` + values.select_file, values.export_path];
@@ -203,6 +223,10 @@ const Gyoithon = () => {
         setLoading(false);
     };
 
+    /**
+     * clearOutput: Callback function to clear the console output.
+     * It resets the state variable holding the output, thereby clearing the display.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
