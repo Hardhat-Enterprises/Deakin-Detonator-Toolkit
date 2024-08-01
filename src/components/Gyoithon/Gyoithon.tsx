@@ -23,13 +23,16 @@ interface FormValuesType {
 
 // Component Constants
 const title = "Gyoithon"; // Contains the title of the component.
+const sourceLink = "https://github.com/gyoisamurai/GyoiThon"; // Link to the source code (or Kali Tools).
 const description_userguide = // Contains the description of the component.
     "Gyoithon is a tool primarily used for gathering intelligence for a Web Server. The tool allows for remote access to " +
     "be inflicted against a targeted web server to allow for products to be identified that are being operated on the server. " +
     "This may include CMS, web server software, programming language and framework. Gyoithon is further capable of automatically " +
     "executing exploitation modules designed to target these identified products. \n\nThe current version of this tool utilises " +
     "Naive Bayes and Deep Neural Network to allow for HTTP/HTTPS port detection. \n\nFurther information on the tool can be found at: " +
-    "https://github.com/gyoisamurai/GyoiThon \n\nUsing the tool:\nPlease follow the steps listed within the tool.";
+    sourceLink + 
+    "\n\nUsing the tool:\nPlease follow the steps listed within the tool.";
+
 
 /**
  * The Gyoithon component.
