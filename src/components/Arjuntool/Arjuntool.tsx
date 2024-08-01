@@ -32,13 +32,14 @@ function Arjuntool() {
     // Component constants.
     const title = "Arjun";
     const dependencies = ["arjun"]; // Contains the dependencies required for the component.
-    const description = "Arjun finds query parameters for URL endpoints using a default dictionary of 25,890 parameter names." // Contains the description of the component.
-    const steps = 
+    const description =
+        "Arjun finds query parameters for URL endpoints using a default dictionary of 25,890 parameter names."; // Contains the description of the component.
+    const steps =
         "Step 1: Enter a valid URL, e.g. https://www.deakin.edu.au.\n" +
         "Step 2: Switch on stability mode if you need stability over speed.\n" +
         "Step 3: Click the scan button to commence scanning.\n" +
-        "Step 4: View the output block below to see the results."; +
-        "Step 5: Enter an optional JSON output filename, e.g. arjunoutput.json.\n" 
+        "Step 4: View the output block below to see the results.";
+    +"Step 5: Enter an optional JSON output filename, e.g. arjunoutput.json.\n";
     const sourceLink = "https://github.com/s0md3v/Arjun"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
 
@@ -117,7 +118,7 @@ function Arjuntool() {
         setAllowSave(false);
     };
 
-     /**
+    /**
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the Arjun tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
@@ -173,32 +174,36 @@ function Arjuntool() {
 
     return (
         <>
-        <RenderComponent
+            <RenderComponent
                 title={title}
                 description={description}
                 steps={steps}
                 tutorial={tutorial}
                 sourceLink={sourceLink}
             >
-         {!loadingModal && (
-                <InstallationModal
-                    isOpen={opened}
-                    setOpened={setOpened}
-                    feature_description={description}
-                    dependencies={dependencies}
-                ></InstallationModal>
-            )}
-            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                {LoadingOverlayAndCancelButton(loading, pid)}
-                <Stack>
-                    <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                    <Switch size="md" label="Stability mode" {...form.getInputProps("stability" as keyof FormValues)} />
-                    <Button type={"submit"}>Scan</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </Stack>
-            </form>
-             </RenderComponent>
+                {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+                )}
+                <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Stack>
+                        <TextInput label={"URL"} required {...form.getInputProps("url")} />
+                        <Switch
+                            size="md"
+                            label="Stability mode"
+                            {...form.getInputProps("stability" as keyof FormValues)}
+                        />
+                        <Button type={"submit"}>Scan</Button>
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    </Stack>
+                </form>
+            </RenderComponent>
         </>
     );
 }
