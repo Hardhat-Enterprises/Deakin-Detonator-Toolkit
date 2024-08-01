@@ -35,17 +35,17 @@ const description_userguide =
  * @returns The Gyoithon component.
  */
 const Gyoithon = () => {
-    const [value, setValue] = useState<string | null>("install");
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [selectedProtocolOption, setSelectedProtocolOption] = useState("");
-    const protocolType = ["HTTPS", "HTTP"];
-    const [selectedMLOption, setSelectedMLOption] = useState("");
-    const Ml = ["Naive Bayes", "Deep Neural Network"];
-    const isDNN = selectedMLOption == "Deep Neural Network";
-    const [pid, setPid] = useState(""); // Maintain the state of the process id.
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+    const [value, setValue] = useState<string | null>("install"); // State variable to store the value of the command execution.
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [selectedProtocolOption, setSelectedProtocolOption] = useState(""); // State variable to indicate selected protocol option.
+    const protocolType = ["HTTPS", "HTTP"]; // Protocol types supported by Gyoithon.
+    const [selectedMLOption, setSelectedMLOption] = useState(""); // State variable to indicate selected ML option.
+    const Ml = ["Naive Bayes", "Deep Neural Network"]; // State variable to indicate ML options.
+    const isDNN = selectedMLOption == "Deep Neural Network"; // State variable to indicate selected ML option.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
 
     let form = useForm({
         initialValues: {
