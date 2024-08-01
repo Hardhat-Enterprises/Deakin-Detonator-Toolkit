@@ -21,7 +21,7 @@ interface FormValuesType {
     export_path: string;
 }
 
-const title = "AI-based pen-testing tool (Gyoithon)";
+const title = "Gyoithon";
 const description_userguide =
     "Gyoithon is a tool primarily used for gathering intelligence for a Web Server. The tool allows for remote access to " +
     "be inflicted against a targeted web server to allow for products to be identified that are being operated on the server. " +
