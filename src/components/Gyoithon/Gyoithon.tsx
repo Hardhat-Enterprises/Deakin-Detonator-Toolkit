@@ -11,7 +11,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 /**
  * Represents the form values for the Gyoithon component.
  */
-interface FormValues {
+interface FormValuesType {
     ip: string;
     port: string;
     protocol: string;
@@ -112,7 +112,7 @@ const Gyoithon = () => {
         setValue("run");
     };
 
-    const Configure = async (values: FormValues) => {
+    const Configure = async (values: FormValuesType) => {
         setLoading(true);
         const args = [
             `/usr/share/ddt/GyoiThon/configure.py`,
@@ -128,7 +128,7 @@ const Gyoithon = () => {
         setAllowSave(true);
     };
 
-    const Import = async (values: FormValues) => {
+    const Import = async (values: FormValuesType) => {
         setLoading(true);
         const args = [
             `/usr/share/ddt/GyoiThon/configure.py`,
@@ -150,7 +150,7 @@ const Gyoithon = () => {
         setLoading(false);
     };
 
-    const Run = async (values: FormValues) => {
+    const Run = async (values: FormValuesType) => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/gyoithon.py`, `-m`];
         const result = await CommandHelper.runCommandGetPidAndOutput(
@@ -183,7 +183,7 @@ const Gyoithon = () => {
         setLoading(false);
     };
 
-    const Preview = async (values: FormValues) => {
+    const Preview = async (values: FormValuesType) => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/report/` + values.select_file];
         const output = await CommandHelper.runCommand("cat", args);
@@ -191,7 +191,7 @@ const Gyoithon = () => {
         setLoading(false);
     };
 
-    const Export = async (values: FormValues) => {
+    const Export = async (values: FormValuesType) => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/report/` + values.select_file, values.export_path];
         const output = await CommandHelper.runCommand("cp", args);
