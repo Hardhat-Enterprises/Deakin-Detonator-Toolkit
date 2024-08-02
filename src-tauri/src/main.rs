@@ -4,7 +4,7 @@
 )]
 
 mod file_handler;
-use file_handler::{save_file};
+use file_handler::save_file;
 
 fn main() {
   tauri::Builder::default()
