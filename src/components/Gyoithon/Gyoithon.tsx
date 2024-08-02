@@ -52,6 +52,7 @@ const Gyoithon = () => {
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
 
+    // Form hook to handle form input.
     let form = useForm({
         initialValues: {
             ip: "",
