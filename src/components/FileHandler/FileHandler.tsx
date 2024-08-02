@@ -9,5 +9,5 @@ export function generateFileName(fileName: string): string {
 }
 
 export function generateFilePath(componentName: string): string {
-    return "/usr/share/ddt/file_handler/" + componentName;
+    return "/tmp/ddt/" + componentName;
 }
