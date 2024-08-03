@@ -8,15 +8,18 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 
 const title = "Find offset";
 const description_userguide =
-    "This attack vector acts to find the offset to the instruction pointer in a buffer overflow vulnerable binary.\n\n" +
-    "Further information can be found at: https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=buffer+overflow\n\n" +
-    "Using Find offset:\n" +
-    "Step 1: Input a file directory pathway to the binary.\n" +
-    "       Eg: home/binary\n\n" +
-    "Step 2: Enter the number of chars to send.\n" +
+    "A buffer overflow is where a program writes data to a buffer beyond the buffer's allocated memory, overwriting adjacent memory locations.\n" +
+    "This attack vector utilizes the pwntools CTF framework (https://docs.pwntools.com/en/stable/) to find the offset to the instruction pointer in a ELF file that has a buffer overflow vulnerability. The file must be an ELF file (with an ELF magic number) and have a buffer overflow vulnerability for the exploit to work.\n" +
+    "Further information about known buffer overflow exploits can be found at: https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=buffer+overflow\n" +
+    "If successful, the offset value is outputted. Any data written beyond this value would cause the buffer to overwrite the instruction pointer register.\n\n" +
+    "Steps:\n" +
+    "Step 1: Input a file directory pathway to the binary. The input file MUST be a ELF file AND have an ELF magic number for the exploit to work.\n" +
+    "       Eg: /home/kali/Desktop/test-file\n\n" +
+    "Step 2: Enter the number of characters to send.\n" +
     "       Eg: 200\n\n" +
-    "Step 3: Click Find offset to commence the tools operation.\n\n" +
-    "Step 4: View the Output block below to view the results of the attack vectors execution.";
+    "Step 3: Click the 'Find offset' button to commence the tool's operation.\n\n" +
+    "Step 4: View the output window to see if the exploit was successful and to view the offset value.\n\n" +
+    "Note: Visit the Deakin Detonator Kit walkthroughs tab for a detailed guide on the definitions, explanations, dependencies, FAQs, and troubleshooting assistance for this attack vector.";
 
 interface FormValues {
     pathToBinary: string;
