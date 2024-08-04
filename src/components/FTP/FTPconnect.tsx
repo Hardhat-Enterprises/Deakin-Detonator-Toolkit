@@ -1,19 +1,11 @@
-import { Button, LoadingOverlay, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-
-const title = "FTP Tool";
-const description_userguide =
-    "A quick guide on how to use the FTP on Deakin-Detonator-Toolkit:\n" +
-    "- Type in FTP server's IP address on the box\n" +
-    "- If it prompts you with a login, type your login details\n" +
-    "- If it does not, type in user and then type in your login details\n" +
-    "- Type lcd to change the current directory to the default directory. \n Example: /home/kali\n" +
-    "- Enjoy using ftp with DDT tools :)";
+import { RenderComponent } from "../UserGuide/UserGuide";
 
 // Values user will input into form
 interface FormValuesType {
@@ -21,11 +13,22 @@ interface FormValuesType {
 }
 
 export function FTPconnect() {
+    // Component State Variables
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+
+    // Component Constants.
+    const title = "FTP Tool";
+    const description_userguide = // Contains the description of the component.
+        "A quick guide on how to use the FTP on Deakin-Detonator-Toolkit:\n" +
+        "- Type in FTP server's IP address on the box\n" +
+        "- If it prompts you with a login, type your login details\n" +
+        "- If it does not, type in user and then type in your login details\n" +
+        "- Type lcd to change the current directory to the default directory. \n Example: /home/kali\n" +
+        "- Enjoy using ftp with DDT tools :)";
 
     let form = useForm({
         initialValues: {
