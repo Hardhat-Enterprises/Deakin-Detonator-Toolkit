@@ -24,6 +24,7 @@ interface FormValuesType {
     usernames: string;
     stealthy: boolean;
     custom: string;
+    apiToken: string;
 }
 
 /**
@@ -91,6 +92,7 @@ const WPScan = () => {
             passwords: "",
             usernames: "",
             custom: "",
+            apiToken: "", 
         },
     });
 
@@ -221,6 +223,9 @@ const WPScan = () => {
         if (values.output) {
             args.push(`-o`, `${values.output}`);
         }
+        if (values.apiToken) {
+            args.push(`--api-token`, `${values.apiToken}`);
+        }
 
         if (checkedCustom) {
             args.push(`${values.custom}`);
@@ -301,6 +306,11 @@ const WPScan = () => {
                                 label="Verbose"
                                 checked={verboseChecked}
                                 onChange={(e) => setVerboseChecked(e.currentTarget.checked)}
+                            />
+                            <TextInput
+                                label={"API Token"}
+                                placeholder={"Enter your WPScan API token"}
+                                {...form.getInputProps("apiToken")}
                             />
                             <NativeSelect
                                 value={selectedEnumerationType}
