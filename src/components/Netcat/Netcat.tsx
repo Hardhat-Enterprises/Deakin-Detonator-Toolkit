@@ -115,7 +115,7 @@ const netcatOptions = ["Listen", "Connect", "Port Scan", "Send File", "Receive F
 
     /**
      * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the airbase-ng tool with the given parameters.
+     * It sets up and triggers the netcat tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
      *
      * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
