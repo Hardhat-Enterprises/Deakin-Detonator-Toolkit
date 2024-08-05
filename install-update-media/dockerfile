@@ -1,3 +1,9 @@
+###Instructions###
+
+# Build: docker build -t deakin-detonator-toolkit .
+# Run: sudo docker run -it -p 5173:5173 deakin-detonator-toolkit /bin/bash
+# Use: Open your browser and go to http://localhost:5173
+
 # Use Kali Linux as the base image
 FROM kalilinux/kali-rolling:latest
 
@@ -48,9 +54,8 @@ RUN npm install -g yarn
 # Install Yarn dependencies
 RUN yarn install
 
-# Expose port 8080 and 5173
-EXPOSE 8080
+# Expose port 5173
 EXPOSE 5173
 
-# Start Xvfb and then the Tauri development environment
-CMD ["xvfb-run", "--server-args=-screen 0 1024x768x24", "yarn", "run", "tauri", "dev"]
+# Start Tauri development environment
+CMD ["yarn", "run", "tauri", "dev"]
