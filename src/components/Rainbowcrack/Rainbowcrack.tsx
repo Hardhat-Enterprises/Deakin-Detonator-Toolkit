@@ -117,10 +117,7 @@ const RainbowCrack = () => {
             const dataUploadPath = filePath + "/" + fileNames[0];
             args.push("-l", dataUploadPath);
         }
-      
-        console.log(args);
-        const args = [values.hashValue];
-      
+
         // Execute the rainbowcrack command via helper method
         CommandHelper.runCommandGetPidAndOutput("rcrack", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
@@ -185,12 +182,6 @@ const RainbowCrack = () => {
                     />
                     <Button type="submit">Crack</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-            <form onSubmit={form.onSubmit(onSubmit)}>
-                <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput label="Hash Value" required {...form.getInputProps("hashValue")} />
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type="submit">Crack</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
