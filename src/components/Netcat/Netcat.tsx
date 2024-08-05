@@ -3,8 +3,9 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "Netcat Tool";
 const description_userguide =
@@ -30,12 +31,16 @@ interface FormValuesType {
 }
 
 //Netcat Options
-const netcatOptions = ["Port Scan", "Send File", "Receive File", "Website Port scan"];
+const netcatOptions = ["Listen", "Connect", "Port Scan", "Send File", "Receive File", "Website Port Scan"];
 
 //Tool name must be capital or jsx will cry out errors :P
 const NetcatTool = () => {
     var [output, setOutput] = useState("");
     const [selectedScanOption, setSelectedNetcatOption] = useState("");
+    const [pid, setPid] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
     const [checkedVerboseMode, setCheckedVerboseMode] = useState(false);
 
     let form = useForm({
@@ -48,16 +53,95 @@ const NetcatTool = () => {
         },
     });
 
+    //handleProcessData for the CommandHelper.runCommandGetPidAndOutput
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+    }, []);
+
+    //handleProcessTermination for the CommandHelper.runCommandGetPidAndOutput
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was successful, display a success message.
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+
+                // If the process was terminated manually, display a termination message.
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+
+                // If the process was terminated with an error, display the exit and signal codes.
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            }
+
+            // Clear the child process pid reference. There is no longer a valid process running.
+            setPid("");
+
+            // Cancel the loading overlay. The process has completed.
+            setLoading(false);
+        },
+        [handleProcessData] // Dependency on the handleProcessData callback
+    );
+
     const onSubmit = async (values: FormValuesType) => {
         //Starts off with the IP address after netcat
         //Ex: nc <ip address>
-        let args = [``];
+        let args = [];
 
         //If verbose mode is checked, v flag is added to args
+        //These two lines are used for different command structures so typos don't occur in the presence or absence of verbose mode
+        //A task for future students could be to reduce it to one line of code that works across all commands without creating syntax errors
         const verboseFlag = checkedVerboseMode ? "v" : "";
+        const verboseFlagWithSpaceAndDash = checkedVerboseMode ? " -v" : "";
 
         //Switch case
         switch (values.netcatOptions) {
+            case "Listen": //Sets up nc listener, nc syntax: nc -lvp <port number>
+                args = [`-l${verboseFlag}p`];
+                args.push(values.portNumber);
+
+                CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
+                    .then(({ output, pid }) => {
+                        // Update the UI with the results from the executed command
+                        setOutput(output);
+                        console.log(pid);
+                        setPid(pid);
+                    })
+                    .catch((error) => {
+                        // Display any errors encountered during command execution
+                        setOutput(error.message);
+                        // Deactivate loading state
+                        setLoading(false);
+                    });
+
+                break;
+
+            case "Connect": //Connects to an nc listener, nc syntax: nc -v <ip address> <port number>
+                let command = `nc${verboseFlagWithSpaceAndDash} ${values.ipAddress} ${values.portNumber}`;
+
+                //Using a "command" variable and executing it through bash makes it easier to avoid syntax errors associated with
+                //verbose mode selection and using the args[] structure (syntax error is an extra space when verbose is unchecked).
+                CommandHelper.runCommandGetPidAndOutput(
+                    "bash",
+                    ["-c", command],
+                    handleProcessData,
+                    handleProcessTermination
+                )
+                    .then(({ output, pid }) => {
+                        // Update the UI with the results from the executed command
+                        setOutput(output);
+                        console.log(pid);
+                        setPid(pid);
+                    })
+                    .catch((error) => {
+                        // Display any errors encountered during command execution
+                        setOutput(error.message);
+                        // Deactivate loading state
+                        setLoading(false);
+                    });
+
+                break;
+
             case "Port Scan": //nc syntax: nc -zv <ip address/hostname> <port range>
                 //addition of -n will not perform any dns or name lookups.
 
@@ -94,7 +178,7 @@ const NetcatTool = () => {
             case "Send File": //Sends file from attacker to victim, syntax: nc -v -w <timeout seconds> <IP address> <port number> < <file path>
                 //File to send can be located anywhere, as long as file path is correctly specified
                 try {
-                    let command = `nc -${verboseFlag} -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
+                    let command = `nc${verboseFlagWithSpaceAndDash} -w 10 ${values.ipAddress} ${values.portNumber} < ${values.filePath}`;
                     let output = await CommandHelper.runCommand("bash", ["-c", command]); //when using '<', command needs to be run via bash shell to recognise that '<' is an input direction
                     setOutput(output);
                 } catch (e: any) {
@@ -128,16 +212,25 @@ const NetcatTool = () => {
 
                 break;
         }
+        setAllowSave(true);
     };
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setAllowSave(false);
+        setHasSaved(false);
     }, [setOutput]);
+
+    const handleSaveComplete = useCallback(() => {
+        setHasSaved(true);
+        setAllowSave(false);
+    }, []);
 
     //<ConsoleWrapper output={output} clearOutputCallback={clearOutput} /> prints the terminal on the tool
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
             <Stack>
+                {LoadingOverlayAndCancelButton(loading, pid)}
                 {UserGuide(title, description_userguide)}
                 <Checkbox
                     label={"Verbose Mode"}
@@ -153,33 +246,44 @@ const NetcatTool = () => {
                     placeholder={"Pick a scan option"}
                     description={"Type of scan to perform"}
                 />
+                {selectedScanOption === "Listen" && (
+                    <>
+                        <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
+                    </>
+                )}
+                {selectedScanOption === "Connect" && (
+                    <>
+                        <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
+                        <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
+                    </>
+                )}
                 {selectedScanOption === "Port Scan" && (
                     <>
-                        <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
+                        <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
                         <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
                     </>
                 )}
                 {selectedScanOption === "Send File" && (
                     <>
-                        <TextInput label={"IP address"} {...form.getInputProps("ipAddress")} />
-                        <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
-                        <TextInput label={"File path"} {...form.getInputProps("filePath")} />
+                        <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
+                        <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
+                        <TextInput label={"File path"} required {...form.getInputProps("filePath")} />
                     </>
                 )}
                 {selectedScanOption === "Receive File" && (
                     <>
-                        <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
-                        <TextInput label={"File path"} {...form.getInputProps("filePath")} />
+                        <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
+                        <TextInput label={"File path"} required {...form.getInputProps("filePath")} />
                     </>
                 )}
                 {selectedScanOption === "Website Port Scan" && (
                     <>
                         <TextInput label={"Port number/Port range"} required {...form.getInputProps("portNumber")} />
-                        <TextInput label={"Domain name"} {...form.getInputProps("websiteUrl")} />
+                        <TextInput label={"Domain name"} required {...form.getInputProps("websiteUrl")} />
                     </>
                 )}
                 <Button type={"submit"}>start netcat</Button>
-                {SaveOutputToTextFile(output)}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
