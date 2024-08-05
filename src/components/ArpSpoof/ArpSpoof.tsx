@@ -1,31 +1,12 @@
-import { Button, Stack, TextInput, Alert } from "@mantine/core";
+import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState, useEffect, useCallback } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
-
-// Component Constants
-const title = "ARPSpoof";
-
-// Contains the description of the component.
-const description_userguide =
-    "ARP (Address Resolution Protocol) spoofing is a Man-in-the-Middle (MitM) style attack.\n" +
-    "This attack involves a malicious actor sending false ARP messages over a local area network.\n" +
-    "This will link the attacker's MAC address with the IP address of a legitimate device or the default gateway.\n" +
-    "This will cause the traffic meant for the legitimate device to be sent to the attacker instead.\n" +
-    "The attacker can then inspect the traffic before forwarding it to the actual default gateway.\n" +
-    "The attacker can also modify the traffic before forwarding it. \n" +
-    "ARP spoofing can be used to intercept data frames, modify traffic, or stop the traffic altogether.\n\n" +
-    "How to use ARPSpoofing:\n\n" +
-    "Step 1: Enter the IP address of the 1st target. Eg: 192.168.1.1\n" +
-    "Step 2: Enter the IP address of the 2nd target. Eg: 192.168.1.2\n" +
-    "Step 3: Click spoof to commence the ARP spoofing operation.\n" +
-    "Step 4: View the output block below to view the results.";
 
 /**
  * Represents the form values for the ARPSpoof component.
@@ -47,8 +28,30 @@ const ARPSpoofing = () => {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
 
+    // Component Constants
+    const title = "ARPSpoof"; // Contains the description of the component.
+
+    // Contains the description of the component.
+    const description_userguide =
+        "ARP (Address Resolution Protocol) spoofing is a Man-in-the-Middle (MitM) style attack.\n" +
+        "This attack involves a malicious actor sending false ARP messages over a local area network.\n" +
+        "This will link the attacker's MAC address with the IP address of a legitimate device or the default gateway.\n" +
+        "This will cause the traffic meant for the legitimate device to be sent to the attacker instead.\n" +
+        "The attacker can then inspect the traffic before forwarding it to the actual default gateway.\n" +
+        "The attacker can also modify the traffic before forwarding it. \n" +
+        "ARP spoofing can be used to intercept data frames, modify traffic, or stop the traffic altogether.\n";
+    // Contains the steps of the componant.
+    const steps =
+        "How to use ARPSpoofing:\n" +
+        "Step 1: Enter the IP address of the 1st target. Eg: 192.168.1.1\n" +
+        "Step 2: Enter the IP address of the 2nd target. Eg: 192.168.1.2\n" +
+        "Step 3: Click spoof to commence the ARP spoofing operation.\n" +
+        "Step 4: View the output block below to view the results.";
+
     // Component Constants.
     const dependencies = ["dsniff"]; // Contains the dependencies required for the component.
+    const sourceLink = "https://github.com/tecknicaltom/dsniff/blob/master/arpspoof.c"; // contains link to the source code (arpspoof)
+    const tutorial = "";
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
@@ -66,7 +69,7 @@ const ARPSpoofing = () => {
     }, []);
 
     // Form Hook to handle form input.
-    let form = useForm({
+    const form = useForm({
         initialValues: {
             ipGateway: "",
             ipTarget: "",
@@ -169,28 +172,31 @@ const ARPSpoofing = () => {
     };
 
     return (
-        <>
-            {!loadingModal && (
-                <InstallationModal
-                    isOpen={opened}
-                    setOpened={setOpened}
-                    feature_description={description_userguide}
-                    dependencies={dependencies}
-                ></InstallationModal>
-            )}
-            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                {LoadingOverlayAndCancelButton(loading, pidGateway)}
-                {LoadingOverlayAndCancelButton(loading, pidTarget)}
-                <Stack>
-                    {UserGuide(title, description_userguide)}
+        <RenderComponent
+            title={title}
+            description={description_userguide}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            <>
+                {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description_userguide}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+                )}
+                <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                     <TextInput label={"Target one IP address"} required {...form.getInputProps("ip1")} />
                     <TextInput label={"Target two IP address"} required {...form.getInputProps("ip2")} />
-                    <Button type={"submit"}>Spoof</Button>
+                    <Button type={"submit"}>Start Spoof</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </Stack>
-            </form>
-        </>
+                </form>
+            </>
+        </RenderComponent>
     );
 };
 
