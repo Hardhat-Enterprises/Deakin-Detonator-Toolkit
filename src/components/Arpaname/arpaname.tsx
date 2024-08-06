@@ -17,12 +17,14 @@ interface FormValuesType {
 }
 
 /**
- * The Arpaname component.
- * @returns The Arpaname component.
+ * ArpanameTool component for performing reverse DNS lookups on IP addresses.
+ * This component provides a user interface for entering an IP address and 
+ * displaying the results of the arpaname command.
+ * @returns JSX.Element The rendered ArpanameTool component
  */
 const ArpanameTool = () => {
-    const title = "Arpaname";
-    const description = "Perform reverse DNS lookups for IP addresses.";
+    const title = "Arpaname"; // Title of the tool displayed in the UI
+    const description = "Perform reverse DNS lookups for IP addresses."; // Brief description of the tool's functionality
     const [loading, setLoading] = useState(false); // State variable to track if the process is currently loading
     const [output, setOutput] = useState(""); // State variable to store the output of the process
     const [pidTarget, setPidTarget] = useState(""); // State variable to store the PID of the target process.
@@ -37,11 +39,12 @@ const ArpanameTool = () => {
     const steps =
         "Step 1: Type in the target IP address\n" +
         "Step 2: Click lookup to run arpaname.\n" +
-        "Step 5: View the output block to see the results. ";
+        "Step 3: View the output block to see the results. ";
     const sourceLink = ""; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["bind9"];
 
+    // Check for command availability on component mount
     useEffect(() => {
         // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
@@ -52,7 +55,7 @@ const ArpanameTool = () => {
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false);
+                setLoadingModal(false); // Ensure loading state is reset even if an error occurs
             });
     }, []);
 
@@ -88,20 +91,23 @@ const ArpanameTool = () => {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            setLoading(false);
+            setLoading(false); // Indicate that the process is no longer running
             // Allow the user to save the output to a file.
-            setAllowSave(true);
-            setHasSaved(false);
+            setAllowSave(true); // Enable the save option now that the process has completed
+            setHasSaved(false); // Reset the saved state for the new output
         },
         [handleProcessData]
     );
-
-    // Actions taken after saving the output
+    
+    /**
+    * Handles the completion of the save operation.
+    * Updates state to reflect that the output has been saved and disables further saving.
+    */
     const handleSaveComplete = () => {
         // Indicating that the file has saved which is passed
         // back into SaveOutputToTextFile to inform the user
-        setHasSaved(true);
-        setAllowSave(false);
+        setHasSaved(true); // Update state to indicate the output has been saved
+        setAllowSave(false); // Disable the save option after successful save
     };
 
     /**
@@ -121,7 +127,7 @@ const ArpanameTool = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         if (!validateIPAddress(values.ipAddress)) {
-            setErrorMessage("Please enter a valid IP address.");
+            setErrorMessage("Please enter a valid IP address."); // Set error message for invalid IP
             return;
         }
         // Disallow saving until the tool's execution is complete
@@ -131,7 +137,7 @@ const ArpanameTool = () => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
-        const argsIP = [values.ipAddress];
+        const argsIP = [values.ipAddress]; // Prepare arguments for the arpaname command
 
         // Execute arpaname command for the target
         const result_target = await CommandHelper.runCommandGetPidAndOutput(
@@ -140,9 +146,9 @@ const ArpanameTool = () => {
             handleProcessData, // Pass handleProcessData as callback for handling process data
             handleProcessTermination
         );
-        setPidTarget(result_target.pid);
+        setPidTarget(result_target.pid); // Store the process ID for potential termination
 
-        setLoading(false);
+        setLoading(false); // Hide loading indicator after command completion
     };
 
     /**
@@ -150,9 +156,9 @@ const ArpanameTool = () => {
      * This function is memoized using the `useCallback` hook to prevent unnecessary re-renders.
      */
     const clearOutput = useCallback(() => {
-        setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
+        setOutput(""); // Clear the command output text
+        setHasSaved(false); // Reset the saved state as there's no output to save
+        setAllowSave(false); // Disable the save option as there's no output to save
     }, [setOutput]);
 
     return (
