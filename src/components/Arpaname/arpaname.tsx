@@ -18,7 +18,7 @@ interface FormValuesType {
 
 /**
  * ArpanameTool component for performing reverse DNS lookups on IP addresses.
- * This component provides a user interface for entering an IP address and 
+ * This component provides a user interface for entering an IP address and
  * displaying the results of the arpaname command.
  * @returns JSX.Element The rendered ArpanameTool component
  */
@@ -98,11 +98,11 @@ const ArpanameTool = () => {
         },
         [handleProcessData]
     );
-    
+
     /**
-    * Handles the completion of the save operation.
-    * Updates state to reflect that the output has been saved and disables further saving.
-    */
+     * Handles the completion of the save operation.
+     * Updates state to reflect that the output has been saved and disables further saving.
+     */
     const handleSaveComplete = () => {
         // Indicating that the file has saved which is passed
         // back into SaveOutputToTextFile to inform the user
