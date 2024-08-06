@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { IconAlertCircle } from "@tabler/icons";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
@@ -34,6 +35,7 @@ const description_userguide = // Contains the description of the component.
     "Naive Bayes and Deep Neural Network to allow for HTTP/HTTPS port detection. \n\nFurther information on the tool can be found at: " +
     sourceLink + 
     "\n\nUsing the tool:\nPlease follow the steps listed within the tool.";
+const steps = ""; // Contains the steps of the component.
 const tutorial = ""; // Contains the link to the official documentation/tutorial.
 const dependencies = ["Gyoithon"]; // Contains the dependencies required by the component.
 
@@ -267,6 +269,13 @@ const Gyoithon = () => {
     };
 
     return (
+        <RenderComponent
+            title={title}
+            description={description_userguide}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
         <p>
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
@@ -402,6 +411,7 @@ const Gyoithon = () => {
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </p>
+        </RenderComponent>
     );
 };
 
