@@ -16,7 +16,7 @@ interface FormValuesType {
     maxLength?: string;
     url: string;
     authType?: string;
-    userName: string;
+    username: string;
     password: string;
     wordList: string;
 
@@ -60,7 +60,7 @@ const Cewl = () => {
             minLength: "",
             maxLength: "",
             url: "",
-            userName: "",
+            username: "",
             password: "",
             wordList: "",
         },
@@ -131,16 +131,16 @@ const Cewl = () => {
         }
         if (authType === "Basic") {
             args.push("--auth_type", "basic");
-            if (values.userName) {
-                args.push("--auth_user", `${values.userName}`);
+            if (values.username) {
+                args.push("--auth_user", `${values.username}`);
             }
             if (values.password) {
                 args.push("--auth_pass", `${values.password}`);
             }
         } else if (authType === "Digest") {
             args.push("--auth_type", "digest");
-            if (values.userName) {
-                args.push("--auth_user", `${values.userName}`);
+            if (values.username) {
+                args.push("--auth_user", `${values.username}`);
             }
             if (values.password) {
                 args.push("--auth_pass", `${values.password}`);
@@ -238,10 +238,10 @@ const Cewl = () => {
                             <>
                                 <div style={{ display: "flex", alignItems: "center" }}>
                                     <TextInput
-                                        label={"UserName"}
+                                        label={"Username"}
                                         required
                                         style={{ flex: 1 }}
-                                        {...form.getInputProps("userName")}
+                                        {...form.getInputProps("username")}
                                     />
                                     <span style={{ margin: "0 10px" }}></span>
                                     <TextInput
@@ -255,7 +255,7 @@ const Cewl = () => {
                         )}
                         {isDigestAuth && (
                             <>
-                                <TextInput label={"UserName"} required {...form.getInputProps("userName")} />
+                                <TextInput label={"Username"} required {...form.getInputProps("username")} />
                                 <TextInput label={"Password"} required {...form.getInputProps("password")} />
                             </>
                         )}
