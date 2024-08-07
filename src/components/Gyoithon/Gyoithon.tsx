@@ -33,7 +33,7 @@ const description_userguide = // Contains the description of the component.
     "This may include CMS, web server software, programming language and framework. Gyoithon is further capable of automatically " +
     "executing exploitation modules designed to target these identified products. \n\nThe current version of this tool utilises " +
     "Naive Bayes and Deep Neural Network to allow for HTTP/HTTPS port detection. \n\nFurther information on the tool can be found at: " +
-    sourceLink + 
+    sourceLink +
     "\n\nUsing the tool:\nPlease follow the steps listed within the tool.";
 const steps = ""; // Contains the steps of the component.
 const tutorial = ""; // Contains the link to the official documentation/tutorial.
@@ -276,141 +276,149 @@ const Gyoithon = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
-        <p>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <Alert
-                    icon={<IconAlertCircle size={16} />}
-                    radius="md"
-                    children={"Please go through all the steps below."}
-                ></Alert>
-                <Accordion variant="contained" value={value} onChange={setValue}>
-                    <Accordion.Item value="install">
-                        <Accordion.Control>Step 1: Install Dependencies</Accordion.Control>
-                        <Accordion.Panel>
-                            <Group style={{ textAlign: "center", marginLeft: "auto", marginRight: "auto" }}>
-                                <Text>Currently this tool can only detect HTTP/HTTPS protocol:</Text>
-                                <Button variant="light" onClick={Install}>
-                                    Install The Dependencies
-                                </Button>
-                            </Group>
-                        </Accordion.Panel>
-                    </Accordion.Item>
-                    <Accordion.Item value="configure">
-                        <Accordion.Control>Step 2: Configure Targets</Accordion.Control>
-                        <Accordion.Panel>
-                            <Text align={"center"}>Add different ports in the same IP address once</Text>
-                            <Group grow style={{ marginTop: 10 }}>
-                                <Button onClick={ShowTarget} variant="outline">
-                                    Show Current Targets
-                                </Button>
-                                <Button onClick={ClearTarget} variant="outline">
-                                    Clear Targets
-                                </Button>
-                                <Button onClick={NextRun} variant="outline">
-                                    Next Step
-                                </Button>
-                            </Group>
-                            <form onSubmit={form.onSubmit((values) => Configure(values))}>
-                                <Group grow style={{ marginTop: 10 }}>
-                                    <TextInput label={"Target IP address"} required {...form.getInputProps("ip")} />
-                                    <TextInput label={"Target Port"} required {...form.getInputProps("port")} />
-                                    <NativeSelect
-                                        value={selectedProtocolOption}
-                                        onChange={(e) => setSelectedProtocolOption(e.target.value)}
-                                        label={"Protocol Type"}
-                                        data={protocolType}
-                                        required
-                                        placeholder={"HTTP/ HTTPS"}
-                                        {...form.getInputProps("protocol")}
-                                    />
-                                    <Button style={{ marginTop: 20 }} type={"submit"}>
-                                        ADD
-                                    </Button>
-                                </Group>
-                            </form>
-                            <form onSubmit={form.onSubmit((values) => Import(values))}>
-                                <Group grow>
-                                    <TextInput label={"Import File"} required {...form.getInputProps("import_file")} />
-                                    <Button style={{ marginTop: 20 }} type={"submit"}>
-                                        IMPORT THIS FILE
-                                    </Button>
-                                </Group>
-                            </form>
-                        </Accordion.Panel>
-                    </Accordion.Item>
-                    <form onSubmit={form.onSubmit((values) => Run({ ...values, Ml: selectedMLOption }))}>
-                        <Accordion.Item value="run">
-                            <Accordion.Control>Step 3: Run The Tool</Accordion.Control>
+            <p>
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                <Stack>
+                    {UserGuide(title, description_userguide)}
+                    <Alert
+                        icon={<IconAlertCircle size={16} />}
+                        radius="md"
+                        children={"Please go through all the steps below."}
+                    ></Alert>
+                    <Accordion variant="contained" value={value} onChange={setValue}>
+                        <Accordion.Item value="install">
+                            <Accordion.Control>Step 1: Install Dependencies</Accordion.Control>
                             <Accordion.Panel>
-                                <Text align={"center"}>
-                                    * Each target will takes about 5 min * Grid Search only works on DNN now
-                                </Text>
-                                <Group grow>
-                                    <NativeSelect
-                                        value={selectedMLOption}
-                                        onChange={(e) => setSelectedMLOption(e.target.value)}
-                                        label={"ML model Type"}
-                                        data={Ml}
-                                        required
-                                        placeholder={"Naive Bayes/ Deep Neural Network"}
-                                    />
-                                    {isDNN && (
-                                        <Button onClick={GridSearch} style={{ marginTop: 20 }}>
-                                            Grid Search
-                                        </Button>
-                                    )}
-                                    <Button style={{ marginTop: 20 }} type={"submit"}>
-                                        RUN
+                                <Group style={{ textAlign: "center", marginLeft: "auto", marginRight: "auto" }}>
+                                    <Text>Currently this tool can only detect HTTP/HTTPS protocol:</Text>
+                                    <Button variant="light" onClick={Install}>
+                                        Install The Dependencies
                                     </Button>
                                 </Group>
                             </Accordion.Panel>
                         </Accordion.Item>
-                    </form>
-                    <Accordion.Item value="export">
-                        <Accordion.Control>Step 4: View Reports</Accordion.Control>
-                        <Accordion.Panel>
-                            <Group grow>
-                                <Button onClick={ShowReport} variant="outline">
-                                    Show All Reports
-                                </Button>
-                                <Button onClick={ClearReport} variant="outline">
-                                    Clear All Reports
-                                </Button>
-                            </Group>
-                            <form onSubmit={form.onSubmit((values) => Preview(values))}>
+                        <Accordion.Item value="configure">
+                            <Accordion.Control>Step 2: Configure Targets</Accordion.Control>
+                            <Accordion.Panel>
+                                <Text align={"center"}>Add different ports in the same IP address once</Text>
                                 <Group grow style={{ marginTop: 10 }}>
-                                    <TextInput
-                                        label={"Target Report"}
-                                        required
-                                        {...form.getInputProps("select_file")}
-                                    />
-                                    <Button style={{ marginTop: 20 }} type={"submit"}>
-                                        PREVIEW
+                                    <Button onClick={ShowTarget} variant="outline">
+                                        Show Current Targets
+                                    </Button>
+                                    <Button onClick={ClearTarget} variant="outline">
+                                        Clear Targets
+                                    </Button>
+                                    <Button onClick={NextRun} variant="outline">
+                                        Next Step
                                     </Button>
                                 </Group>
-                            </form>
-                            <form onSubmit={form.onSubmit((values) => Export(values))}>
-                                <Group grow style={{ marginTop: 10 }}>
-                                    <TextInput
-                                        label={"Target Report"}
-                                        required
-                                        {...form.getInputProps("select_file")}
-                                    />
-                                    <TextInput label={"Export Path"} required {...form.getInputProps("export_path")} />
-                                    <Button style={{ marginTop: 20 }} type={"submit"}>
-                                        EXPORT
+                                <form onSubmit={form.onSubmit((values) => Configure(values))}>
+                                    <Group grow style={{ marginTop: 10 }}>
+                                        <TextInput label={"Target IP address"} required {...form.getInputProps("ip")} />
+                                        <TextInput label={"Target Port"} required {...form.getInputProps("port")} />
+                                        <NativeSelect
+                                            value={selectedProtocolOption}
+                                            onChange={(e) => setSelectedProtocolOption(e.target.value)}
+                                            label={"Protocol Type"}
+                                            data={protocolType}
+                                            required
+                                            placeholder={"HTTP/ HTTPS"}
+                                            {...form.getInputProps("protocol")}
+                                        />
+                                        <Button style={{ marginTop: 20 }} type={"submit"}>
+                                            ADD
+                                        </Button>
+                                    </Group>
+                                </form>
+                                <form onSubmit={form.onSubmit((values) => Import(values))}>
+                                    <Group grow>
+                                        <TextInput
+                                            label={"Import File"}
+                                            required
+                                            {...form.getInputProps("import_file")}
+                                        />
+                                        <Button style={{ marginTop: 20 }} type={"submit"}>
+                                            IMPORT THIS FILE
+                                        </Button>
+                                    </Group>
+                                </form>
+                            </Accordion.Panel>
+                        </Accordion.Item>
+                        <form onSubmit={form.onSubmit((values) => Run({ ...values, Ml: selectedMLOption }))}>
+                            <Accordion.Item value="run">
+                                <Accordion.Control>Step 3: Run The Tool</Accordion.Control>
+                                <Accordion.Panel>
+                                    <Text align={"center"}>
+                                        * Each target will takes about 5 min * Grid Search only works on DNN now
+                                    </Text>
+                                    <Group grow>
+                                        <NativeSelect
+                                            value={selectedMLOption}
+                                            onChange={(e) => setSelectedMLOption(e.target.value)}
+                                            label={"ML model Type"}
+                                            data={Ml}
+                                            required
+                                            placeholder={"Naive Bayes/ Deep Neural Network"}
+                                        />
+                                        {isDNN && (
+                                            <Button onClick={GridSearch} style={{ marginTop: 20 }}>
+                                                Grid Search
+                                            </Button>
+                                        )}
+                                        <Button style={{ marginTop: 20 }} type={"submit"}>
+                                            RUN
+                                        </Button>
+                                    </Group>
+                                </Accordion.Panel>
+                            </Accordion.Item>
+                        </form>
+                        <Accordion.Item value="export">
+                            <Accordion.Control>Step 4: View Reports</Accordion.Control>
+                            <Accordion.Panel>
+                                <Group grow>
+                                    <Button onClick={ShowReport} variant="outline">
+                                        Show All Reports
+                                    </Button>
+                                    <Button onClick={ClearReport} variant="outline">
+                                        Clear All Reports
                                     </Button>
                                 </Group>
-                            </form>
-                        </Accordion.Panel>
-                    </Accordion.Item>
-                </Accordion>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </p>
+                                <form onSubmit={form.onSubmit((values) => Preview(values))}>
+                                    <Group grow style={{ marginTop: 10 }}>
+                                        <TextInput
+                                            label={"Target Report"}
+                                            required
+                                            {...form.getInputProps("select_file")}
+                                        />
+                                        <Button style={{ marginTop: 20 }} type={"submit"}>
+                                            PREVIEW
+                                        </Button>
+                                    </Group>
+                                </form>
+                                <form onSubmit={form.onSubmit((values) => Export(values))}>
+                                    <Group grow style={{ marginTop: 10 }}>
+                                        <TextInput
+                                            label={"Target Report"}
+                                            required
+                                            {...form.getInputProps("select_file")}
+                                        />
+                                        <TextInput
+                                            label={"Export Path"}
+                                            required
+                                            {...form.getInputProps("export_path")}
+                                        />
+                                        <Button style={{ marginTop: 20 }} type={"submit"}>
+                                            EXPORT
+                                        </Button>
+                                    </Group>
+                                </form>
+                            </Accordion.Panel>
+                        </Accordion.Item>
+                    </Accordion>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </p>
         </RenderComponent>
     );
 };
