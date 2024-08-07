@@ -3,7 +3,6 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
@@ -28,7 +27,7 @@ interface FormValuesType {
  * @returns The Cewl component.
  */
 const Cewl = () => {
-    // Component State Variables.   
+    // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); //  State variable to store the process ID of the command execution.
@@ -46,14 +45,14 @@ const Cewl = () => {
 
     // Component Constants.
     const methods = ["No authentication", "Basic", "Digest"]; // Variable to store authentication methods.
-    const title = "Cewl";// Title of the component.
+    const title = "Cewl"; // Title of the component.
     const description =
         "The tool Cewl, renown for being a custom word list generator, is a ruby app which spiders given URLs to " +
         "a specified depth to return a list of words that are able to be used within password crackers including " +
         " JohnTheRipper (which can be found within the DDT). This tool is particularly useful for security testing and " +
         "forensic investigation.\nOptions for the tool can be found at:  https://www.kali.org/tools/cewl/#:~:text=CeWL" +
-        "%20(Custom%20Word%20List%20generator,\nCeWL%20can%20follow%20external%20links.";// Description of the component.
-    const steps= 
+        "%20(Custom%20Word%20List%20generator,\nCeWL%20can%20follow%20external%20links."; // Description of the component.
+    const steps =
         "Step 1: Enter the maximum depth to spider to. Eg: 2\n" +
         "Step 2: Enter a minimum word length. Eg: 3\n" +
         "Step 3: Enter a target URL. Eg: google.com\n" +
@@ -75,6 +74,7 @@ const Cewl = () => {
             wordList: "",
         },
     });
+
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
         // Check if the command is available and set the state variables accordingly.
@@ -133,6 +133,7 @@ const Cewl = () => {
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
+
     // Sends a SIGTERM signal to gracefully terminate the process
     const handleCancel = () => {
         if (pid !== null) {
@@ -148,8 +149,8 @@ const Cewl = () => {
         setHasSaved(true);
         setAllowSave(false);
     };
-    
-     /**
+
+    /**
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the cewl tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
@@ -220,6 +221,7 @@ const Cewl = () => {
             setAllowSave(false);
         }
     };
+
     /**
      * Clears the output state.
      */
@@ -228,9 +230,9 @@ const Cewl = () => {
         setHasSaved(false);
         setAllowSave(false);
     }, [setOutput]);
-
     const isBasicAuth = authType === "Basic";
     const isDigestAuth = authType === "Digest";
+    
     return (
         <RenderComponent
             title={title}
@@ -258,7 +260,6 @@ const Cewl = () => {
                     </div>
                 )}
                 <Stack>
-                    
                     <Switch
                         size="md"
                         label="Advanced Mode"
