@@ -47,20 +47,17 @@ const Cewl = () => {
     const methods = ["No authentication", "Basic", "Digest"]; // Variable to store authentication methods.
     const title = "Cewl";// Title of the component.
     const description =
-        "The tool Cewl, renown for being a Custom Word List Generator, is a ruby app which spiders given URLs to " +
+        "The tool Cewl, renown for being a custom word list generator, is a ruby app which spiders given URLs to " +
         "a specified depth to return a list of words that are able to be used within password crackers including " +
         " JohnTheRipper (which can be found within the DDT). This tool is particularly useful for security testing and " +
         "forensic investigation.\nOptions for the tool can be found at:  https://www.kali.org/tools/cewl/#:~:text=CeWL" +
         "%20(Custom%20Word%20List%20generator,\nCeWL%20can%20follow%20external%20links.";// Description of the component.
     const steps= 
-        "Step 1: Enter the Maximum depth to spider to.\n" +
-        "       Eg: 2\n" +
-        "Step 2: Enter a Minimum word length.\n" +
-        "       Eg: 3\n" +
-        "Step 3: Enter a Target URL.\n" +
-        "       Eg: google.com\n" +
-        "Step 4: Click Scan to commence Cewl's operation.\n" +
-        "Step 5: View the Output block below to view the results of the tools execution.";
+        "Step 1: Enter the maximum depth to spider to. Eg: 2\n" +
+        "Step 2: Enter a minimum word length. Eg: 3\n" +
+        "Step 3: Enter a target URL. Eg: google.com\n" +
+        "Step 4: Click 'Scan' to commence Cewl's operation.\n" +
+        "Step 5: View the output block below to view the results of the tools execution.";
     const sourceLink = "https://salsa.debian.org/pkg-security-team/cewl"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["ruby"]; // Contains the dependencies required by the component.
