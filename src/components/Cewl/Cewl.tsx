@@ -1,11 +1,12 @@
 import { Button, LoadingOverlay, Stack, TextInput, Checkbox, Switch, NativeSelect } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
 //import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
 /**
  * Represents the form values for the Cewl component.
@@ -74,6 +75,21 @@ const Cewl = () => {
             wordList: "",
         },
     });
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
+
     /** *
      * handleProcessData: Callback to handle and append new data from the child process to the output.
      *  It updates the state by appending the new data received to the existing output.
