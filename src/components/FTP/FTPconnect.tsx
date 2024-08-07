@@ -23,8 +23,8 @@ export function FTPconnect() {
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
 
     // Component Constants.
-    const title = "FTP";
-    const description = ""; // Contains the description of the component.
+    const title = "FTP"; // Title of the component.
+    const description = ""; // Description of the component.
     const steps =
         "Step 1: Type in FTP server's IP address.\n" +
         "Step 2: If prompted with a login, type login details, if not type in 'user' and then type in login details.\n" +
