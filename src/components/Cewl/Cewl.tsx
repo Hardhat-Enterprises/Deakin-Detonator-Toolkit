@@ -21,41 +21,49 @@ interface FormValuesType {
     wordList: string;
 }
 
-// Component Constants.
-const title = "Cewl";// Title of the component.
-const description =
-    "The tool Cewl, renown for being a Custom Word List Generator, is a ruby app which spiders given URLs to " +
-    "a specified depth to return a list of words that are able to be used within password crackers including " +
-    " JohnTheRipper (which can be found within the DDT). This tool is particularly useful for security testing and " +
-    "forensic investigation.\n\nOptions for the tool can be found at:  https://www.kali.org/tools/cewl/#:~:text=CeWL" +
-    "%20(Custom%20Word%20List%20generator,\nCeWL%20can%20follow%20external%20links.";// Description of the component.
-const steps= 
-    "Step 1: Enter the Maximum depth to spider to.\n" +
-    "       Eg: 2\n" +
-    "Step 2: Enter a Minimum word length.\n" +
-    "       Eg: 3\n" +
-    "Step 3: Enter a Target URL.\n" +
-    "       Eg: google.com\n" +
-    "Step 4: Click Scan to commence Cewl's operation.\n" +
-    "Step 5: View the Output block below to view the results of the tools execution.";
-const methods = ["No authentication", "Basic", "Digest"];
-
 /**
  * The Cewl component.
  * @returns The Cewl component.
  */
 const Cewl = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [pid, setPid] = useState("");
-    const [checkedNumber, setCheckedNumber] = useState(false);
-    const [checkedCount, setCheckedCount] = useState(false);
-    const [checkedEmail, setCheckedEmail] = useState(false);
-    const [checkedLowercase, setCheckedLowercase] = useState(false);
-    const [authType, setAuthType] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+    // Component State Variables.
+    
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [pid, setPid] = useState(""); //  State variable to store the process ID of the command execution.
+    const [allowSave, setAllowSave] = useState(false); //   State variable to allow saving the output to a file.
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [authType, setAuthType] = useState(""); // State variable that indicates authentication.
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false); // State variable to toggle advanced mode.
+    const [checkedNumber, setCheckedNumber] = useState(false); // State variable to include words with numbers.
+    const [checkedCount, setCheckedCount] = useState(false); // State variable to show the count for each word found.
+    const [checkedEmail, setCheckedEmail] = useState(false); // State variable to include and show email addresses.
+    const [checkedLowercase, setCheckedLowercase] = useState(false); // State variable to show only lowercase words.
+
+    // Component Constants.
+    const methods = ["No authentication", "Basic", "Digest"]; // Variable to store authentication methods.
+    const title = "Cewl";// Title of the component.
+    const description =
+        "The tool Cewl, renown for being a Custom Word List Generator, is a ruby app which spiders given URLs to " +
+        "a specified depth to return a list of words that are able to be used within password crackers including " +
+        " JohnTheRipper (which can be found within the DDT). This tool is particularly useful for security testing and " +
+        "forensic investigation.\nOptions for the tool can be found at:  https://www.kali.org/tools/cewl/#:~:text=CeWL" +
+        "%20(Custom%20Word%20List%20generator,\nCeWL%20can%20follow%20external%20links.";// Description of the component.
+    const steps= 
+        "Step 1: Enter the Maximum depth to spider to.\n" +
+        "       Eg: 2\n" +
+        "Step 2: Enter a Minimum word length.\n" +
+        "       Eg: 3\n" +
+        "Step 3: Enter a Target URL.\n" +
+        "       Eg: google.com\n" +
+        "Step 4: Click Scan to commence Cewl's operation.\n" +
+        "Step 5: View the Output block below to view the results of the tools execution.";
+    const sourceLink = "https://salsa.debian.org/pkg-security-team/cewl"; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["ruby"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
     let form = useForm({
