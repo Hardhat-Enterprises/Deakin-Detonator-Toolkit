@@ -7,9 +7,11 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
-// Values user will input into form
+/**
+ * Represents the form values for the FTPConnect component.
+ */
 interface FormValuesType {
-    IPaddress: string;
+    ipAddress: string;
 }
 
 export function FTPconnect() {
@@ -32,7 +34,7 @@ export function FTPconnect() {
 
     let form = useForm({
         initialValues: {
-            IPaddress: "",
+            ipAddress: "",
         },
     });
 
@@ -79,7 +81,7 @@ export function FTPconnect() {
 
         let args = ["/usr/share/ddt/Bash-Scripts/FTPterminal.sh"];
 
-        args.push(`${values.IPaddress}`);
+        args.push(`${values.ipAddress}`);
 
         // Execute FTPconnect
         CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
@@ -104,7 +106,7 @@ export function FTPconnect() {
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
                 {UserGuide(title, description_userguide)}
-                <TextInput label={"IP address"} required {...form.getInputProps("IPaddress")} />
+                <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
                 <Button type={"submit"}>Start FTP</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
