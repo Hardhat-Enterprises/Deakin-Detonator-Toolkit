@@ -31,6 +31,8 @@ export function FTPconnect() {
         "- If it does not, type in user and then type in your login details\n" +
         "- Type lcd to change the current directory to the default directory. \n Example: /home/kali\n" +
         "- Enjoy using ftp with DDT tools :)";
+    const sourceLink = "https://www.kali.org/tools/tnftp/"; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
 
     let form = useForm({
         initialValues: {
