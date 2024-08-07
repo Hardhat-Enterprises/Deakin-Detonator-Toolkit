@@ -42,7 +42,7 @@ function Whois() {
         "Step 3: Review the scan output to identify any security issues.\n";
     const sourceLink = "https://github.com/weppos/whois"; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
-    const dependencies = ["whois"]; // Contains the dependencies required by the component.   
+    const dependencies = ["whois"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input
     let form = useForm({
@@ -182,4 +182,3 @@ function Whois() {
     );
 }
 export default Whois;
-
