@@ -202,6 +202,7 @@ const Cewl = () => {
         if (values.wordList) {
             args.push("-w", `${values.wordList}`);
         }
+
         // Execute the cewl command via helper method and handle its output or potential errors
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
