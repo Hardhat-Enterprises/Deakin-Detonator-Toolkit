@@ -4,7 +4,23 @@ import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
+//import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+
+/**
+ * Represents the form values for the Cewl component.
+ */
+interface FormValuesType {
+    depth: string;
+    minLength?: string;
+    maxLength?: string;
+    url: string;
+    authType?: string;
+    username: string;
+    password: string;
+    wordlist: string;
+
+}
 const title = "Cewl";
 const description_userguide =
     "The tool Cewl, renown for being a Custom Word List Generator, is a ruby app which spiders given URLs to " +
@@ -21,16 +37,7 @@ const description_userguide =
     "       Eg: google.com\n\n" +
     "Step 4: Click Scan to commence Cewl's operation.\n\n" +
     "Step 5: View the Output block below to view the results of the tools execution.";
-interface FormValuesType {
-    depth: string;
-    minLength?: string;
-    maxLength?: string;
-    url: string;
-    authType?: string;
-    username: string;
-    password: string;
-    wordlist: string;
-}
+
 const methods = ["No authentication", "Basic", "Digest"];
 const Cewl = () => {
     const [loading, setLoading] = useState(false);
