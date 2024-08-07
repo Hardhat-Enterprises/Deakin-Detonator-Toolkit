@@ -24,13 +24,14 @@ export function FTPconnect() {
 
     // Component Constants.
     const title = "FTP"; // Title of the component.
-    const description = ""; // Description of the component.
+    const description = "FTP tool"; // Description of the component.
     const steps =
         "Step 1: Type in FTP server's IP address.\n" +
         "Step 2: If prompted with a login, type login details, if not type in 'user' and then type in login details.\n" +
         "Step 3: Type lcd to change the current directory to the default directory.";
     const sourceLink = "https://www.kali.org/tools/tnftp/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["FTPconnect"]; // Constains the dependencies required for the component.
 
     let form = useForm({
         initialValues: {
