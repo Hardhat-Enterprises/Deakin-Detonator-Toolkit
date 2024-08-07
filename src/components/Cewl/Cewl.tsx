@@ -16,11 +16,12 @@ interface FormValuesType {
     maxLength?: string;
     url: string;
     authType?: string;
-    username: string;
+    userName: string;
     password: string;
-    wordlist: string;
+    wordList: string;
 
 }
+// Component Constants.
 const title = "Cewl";
 const description_userguide =
     "The tool Cewl, renown for being a Custom Word List Generator, is a ruby app which spiders given URLs to " +
@@ -39,6 +40,7 @@ const description_userguide =
     "Step 5: View the Output block below to view the results of the tools execution.";
 
 const methods = ["No authentication", "Basic", "Digest"];
+
 const Cewl = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
@@ -58,9 +60,9 @@ const Cewl = () => {
             minLength: "",
             maxLength: "",
             url: "",
-            username: "",
+            userName: "",
             password: "",
-            wordlist: "",
+            wordList: "",
         },
     });
     const handleProcessData = useCallback((data: string) => {
@@ -129,23 +131,23 @@ const Cewl = () => {
         }
         if (authType === "Basic") {
             args.push("--auth_type", "basic");
-            if (values.username) {
-                args.push("--auth_user", `${values.username}`);
+            if (values.userName) {
+                args.push("--auth_user", `${values.userName}`);
             }
             if (values.password) {
                 args.push("--auth_pass", `${values.password}`);
             }
         } else if (authType === "Digest") {
             args.push("--auth_type", "digest");
-            if (values.username) {
-                args.push("--auth_user", `${values.username}`);
+            if (values.userName) {
+                args.push("--auth_user", `${values.userName}`);
             }
             if (values.password) {
                 args.push("--auth_pass", `${values.password}`);
             }
         }
-        if (values.wordlist) {
-            args.push("-w", `${values.wordlist}`);
+        if (values.wordList) {
+            args.push("-w", `${values.wordList}`);
         }
 
         try {
@@ -194,9 +196,9 @@ const Cewl = () => {
                     {...form.getInputProps("url")}
                 />
                 <TextInput
-                    label={"Save wordlist"}
-                    placeholder={"/home/kali/Desktop/Wordlist.txt"}
-                    {...form.getInputProps("wordlist")}
+                    label={"Save wordList"}
+                    placeholder={"/home/kali/Desktop/WordList.txt"}
+                    {...form.getInputProps("wordList")}
                 />
                 {checkedAdvanced && (
                     <>
@@ -236,10 +238,10 @@ const Cewl = () => {
                             <>
                                 <div style={{ display: "flex", alignItems: "center" }}>
                                     <TextInput
-                                        label={"Username"}
+                                        label={"UserName"}
                                         required
                                         style={{ flex: 1 }}
-                                        {...form.getInputProps("username")}
+                                        {...form.getInputProps("userName")}
                                     />
                                     <span style={{ margin: "0 10px" }}></span>
                                     <TextInput
@@ -253,7 +255,7 @@ const Cewl = () => {
                         )}
                         {isDigestAuth && (
                             <>
-                                <TextInput label={"Username"} required {...form.getInputProps("username")} />
+                                <TextInput label={"UserName"} required {...form.getInputProps("userName")} />
                                 <TextInput label={"Password"} required {...form.getInputProps("password")} />
                             </>
                         )}
