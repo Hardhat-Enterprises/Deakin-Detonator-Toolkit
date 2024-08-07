@@ -4,9 +4,10 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { UserGuide } from "../UserGuide/UserGuide";
-//import { RenderComponent } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
  * Represents the form values for the Cewl component.
@@ -232,120 +233,137 @@ const Cewl = () => {
     const isBasicAuth = authType === "Basic";
     const isDigestAuth = authType === "Digest";
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            <LoadingOverlay visible={loading} />
-            {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
             )}
-            <Stack>
-                {UserGuide(title, description)}
-                <Switch
-                    size="md"
-                    label="Advanced Mode"
-                    checked={checkedAdvanced}
-                    onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
-                />
-                <TextInput
-                    label={"Target URL"}
-                    placeholder={"https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit"}
-                    required
-                    {...form.getInputProps("url")}
-                />
-                <TextInput
-                    label={"Save wordList"}
-                    placeholder={"/home/kali/Desktop/WordList.txt"}
-                    {...form.getInputProps("wordList")}
-                />
-                {checkedAdvanced && (
-                    <>
-                        <TextInput
-                            label={"Max depth"}
-                            type="number"
-                            placeholder={"Deafult is set to 2"}
-                            {...form.getInputProps("depth")}
-                        />
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                            <TextInput
-                                label={"Min Length"}
-                                placeholder={"0"}
-                                type="number"
-                                style={{ flex: 1 }}
-                                {...form.getInputProps("minLength")}
-                            />
-                            <span style={{ margin: "0 10px" }}></span>
-                            <TextInput
-                                label={"Max Length"}
-                                placeholder={"0"}
-                                type="number"
-                                style={{ flex: 1 }}
-                                {...form.getInputProps("maxLength")}
-                            />
-                        </div>
-                        {setAuthType && (
-                            <NativeSelect
-                                value={authType}
-                                onChange={(e) => setAuthType(e.target.value)}
-                                label={"Authentication Type"}
-                                data={methods}
-                                placeholder={"Select authentication type"}
-                            />
-                        )}
-                        {isBasicAuth && (
-                            <>
-                                <div style={{ display: "flex", alignItems: "center" }}>
-                                    <TextInput
-                                        label={"Username"}
-                                        required
-                                        style={{ flex: 1 }}
-                                        {...form.getInputProps("username")}
-                                    />
-                                    <span style={{ margin: "0 10px" }}></span>
-                                    <TextInput
-                                        label={"Password"}
-                                        required
-                                        style={{ flex: 1 }}
-                                        {...form.getInputProps("password")}
-                                    />
-                                </div>
-                            </>
-                        )}
-                        {isDigestAuth && (
-                            <>
-                                <TextInput label={"Username"} required {...form.getInputProps("username")} />
-                                <TextInput label={"Password"} required {...form.getInputProps("password")} />
-                            </>
-                        )}
-                        <Checkbox
-                            label={"Include words with numbers"}
-                            checked={checkedNumber}
-                            onChange={(e) => setCheckedNumber(e.currentTarget.checked)}
-                        />
-                        <Checkbox
-                            label={"Show only lowercase words"}
-                            checked={checkedLowercase}
-                            onChange={(e) => setCheckedLowercase(e.currentTarget.checked)}
-                        />
-                        <Checkbox
-                            label={"Show the count for earch word found"}
-                            checked={checkedCount}
-                            onChange={(e) => setCheckedCount(e.currentTarget.checked)}
-                        />
-                        <Checkbox
-                            label={"Include and show email addresses"}
-                            checked={checkedEmail}
-                            onChange={(e) => setCheckedEmail(e.currentTarget.checked)}
-                        />
-                    </>
+
+            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                <LoadingOverlay visible={loading} />
+                {loading && (
+                    <div>
+                        <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
+                            Cancel
+                        </Button>
+                    </div>
                 )}
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <Button type={"submit"}>Scan</Button>
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+                <Stack>
+                    {UserGuide(title, description)}
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={checkedAdvanced}
+                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                    />
+                    <TextInput
+                        label={"Target URL"}
+                        placeholder={"https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit"}
+                        required
+                        {...form.getInputProps("url")}
+                    />
+                    <TextInput
+                        label={"Save wordList"}
+                        placeholder={"/home/kali/Desktop/WordList.txt"}
+                        {...form.getInputProps("wordList")}
+                    />
+                    {checkedAdvanced && (
+                        <>
+                            <TextInput
+                                label={"Max depth"}
+                                type="number"
+                                placeholder={"Deafult is set to 2"}
+                                {...form.getInputProps("depth")}
+                            />
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <TextInput
+                                    label={"Min Length"}
+                                    placeholder={"0"}
+                                    type="number"
+                                    style={{ flex: 1 }}
+                                    {...form.getInputProps("minLength")}
+                                />
+                                <span style={{ margin: "0 10px" }}></span>
+                                <TextInput
+                                    label={"Max Length"}
+                                    placeholder={"0"}
+                                    type="number"
+                                    style={{ flex: 1 }}
+                                    {...form.getInputProps("maxLength")}
+                                />
+                            </div>
+                            {setAuthType && (
+                                <NativeSelect
+                                    value={authType}
+                                    onChange={(e) => setAuthType(e.target.value)}
+                                    label={"Authentication Type"}
+                                    data={methods}
+                                    placeholder={"Select authentication type"}
+                                />
+                            )}
+                            {isBasicAuth && (
+                                <>
+                                    <div style={{ display: "flex", alignItems: "center" }}>
+                                        <TextInput
+                                            label={"Username"}
+                                            required
+                                            style={{ flex: 1 }}
+                                            {...form.getInputProps("username")}
+                                        />
+                                        <span style={{ margin: "0 10px" }}></span>
+                                        <TextInput
+                                            label={"Password"}
+                                            required
+                                            style={{ flex: 1 }}
+                                            {...form.getInputProps("password")}
+                                        />
+                                    </div>
+                                </>
+                            )}
+                            {isDigestAuth && (
+                                <>
+                                    <TextInput label={"Username"} required {...form.getInputProps("username")} />
+                                    <TextInput label={"Password"} required {...form.getInputProps("password")} />
+                                </>
+                            )}
+                            <Checkbox
+                                label={"Include words with numbers"}
+                                checked={checkedNumber}
+                                onChange={(e) => setCheckedNumber(e.currentTarget.checked)}
+                            />
+                            <Checkbox
+                                label={"Show only lowercase words"}
+                                checked={checkedLowercase}
+                                onChange={(e) => setCheckedLowercase(e.currentTarget.checked)}
+                            />
+                            <Checkbox
+                                label={"Show the count for earch word found"}
+                                checked={checkedCount}
+                                onChange={(e) => setCheckedCount(e.currentTarget.checked)}
+                            />
+                            <Checkbox
+                                label={"Include and show email addresses"}
+                                checked={checkedEmail}
+                                onChange={(e) => setCheckedEmail(e.currentTarget.checked)}
+                            />
+                        </>
+                    )}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <Button type={"submit"}>Scan</Button>
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 export default Cewl;
