@@ -23,14 +23,12 @@ export function FTPconnect() {
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
 
     // Component Constants.
-    const title = "FTP Tool";
-    const description_userguide = // Contains the description of the component.
-        "A quick guide on how to use the FTP on Deakin-Detonator-Toolkit:\n" +
-        "- Type in FTP server's IP address on the box\n" +
-        "- If it prompts you with a login, type your login details\n" +
-        "- If it does not, type in user and then type in your login details\n" +
-        "- Type lcd to change the current directory to the default directory. \n Example: /home/kali\n" +
-        "- Enjoy using ftp with DDT tools :)";
+    const title = "FTP";
+    const description = ""; // Contains the description of the component.
+    const steps =
+        "Step 1: Type in FTP server's IP address.\n" +
+        "Step 2: If prompted with a login, type login details, if not type in 'user' and then type in login details.\n" +
+        "Step 3: Type lcd to change the current directory to the default directory.";
     const sourceLink = "https://www.kali.org/tools/tnftp/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
 
