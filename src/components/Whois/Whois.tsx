@@ -152,6 +152,34 @@ function Whois() {
         setAllowSave(false); // Disallow further output saving
     };
 
+    // Render component
+    return (
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                />
+            )}
+            <form onSubmit={form.onSubmit(onSubmit)}>
+                <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <TextInput label="Target URL" required {...form.getInputProps("targetURL")} />
+                    <Button type={"submit"}>Start {title}</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
+    );
 }
 export default Whois;
 
