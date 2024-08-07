@@ -44,6 +44,29 @@ function Whois() {
     const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["whois"]; // Contains the dependencies required by the component.   
 
+    // Form hook to handle form input
+    let form = useForm({
+        initialValues: {
+            targetURL: "",
+            sslScan: false,
+        },
+    });
+
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
+    
 }
 export default Whois;
 
