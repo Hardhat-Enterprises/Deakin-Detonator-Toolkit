@@ -108,6 +108,50 @@ function Whois() {
         [handleProcessData] // Dependency on the handleProcessData callback
     );
 
+    /**
+     * Handles form submission for the Whois component.
+     * @param {FormValuesType} values - The form values containing the target URL option.
+     */
+    const onSubmit = async (values: FormValuesType) => {
+        // Activate loading state to indicate ongoing process
+        setLoading(true);
+
+        // Construct arguments for the Whois command based on form input
+        const args = [values.targetURL];
+
+        // Execute the Nikto command via helper method and handle its output or potential errors
+        CommandHelper.runCommandGetPidAndOutput("whois", args, handleProcessData, handleProcessTermination)
+            .then(({ output, pid }) => {
+                // Update the UI with the results from the executed command
+                setOutput(output);
+                console.log(pid);
+                setPid(pid);
+            })
+            .catch((error) => {
+                // Display any errors encountered during command execution
+                setOutput(error.message);
+                // Deactivate loading state
+                setLoading(false);
+            });
+    };
+
+    /**
+     * Handles the completion of output saving by updating state variables.
+     */
+    const handleSaveComplete = () => {
+        setHasSaved(true); // Set hasSaved state to true
+        setAllowSave(false); // Disallow further output saving
+    };
+
+    /**
+     * Clears the command output and resets state variables related to output saving.
+     */
+    const clearOutput = () => {
+        setOutput(""); // Clear the command output
+        setHasSaved(false); // Reset hasSaved state
+        setAllowSave(false); // Disallow further output saving
+    };
+
 }
 export default Whois;
 
