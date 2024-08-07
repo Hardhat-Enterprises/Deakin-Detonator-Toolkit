@@ -125,7 +125,6 @@ export function FTPconnect() {
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
-                {UserGuide(title, description_userguide)}
                 <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
                 <Button type={"submit"}>Start FTP</Button>
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
