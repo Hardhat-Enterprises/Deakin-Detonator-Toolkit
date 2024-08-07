@@ -232,7 +232,7 @@ const Cewl = () => {
     }, [setOutput]);
     const isBasicAuth = authType === "Basic";
     const isDigestAuth = authType === "Digest";
-    
+
     return (
         <RenderComponent
             title={title}
