@@ -231,6 +231,7 @@ const Cewl = () => {
         setHasSaved(false);
         setAllowSave(false);
     }, [setOutput]);
+
     const isBasicAuth = authType === "Basic";
     const isDigestAuth = authType === "Digest";
 
