@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
+
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
@@ -28,8 +28,7 @@ interface FormValuesType {
  * @returns The Cewl component.
  */
 const Cewl = () => {
-    // Component State Variables.
-    
+    // Component State Variables.   
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); //  State variable to store the process ID of the command execution.
@@ -259,7 +258,7 @@ const Cewl = () => {
                     </div>
                 )}
                 <Stack>
-                    {UserGuide(title, description)}
+                    
                     <Switch
                         size="md"
                         label="Advanced Mode"
