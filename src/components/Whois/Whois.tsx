@@ -9,6 +9,13 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
+/**
+ * Represents the form values for the Whois component.
+ */
+interface FormValuesType {
+    targetURL: string;
+}
+
 function Whois() {
     return null
 }
