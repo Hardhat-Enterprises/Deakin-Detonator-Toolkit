@@ -21,6 +21,7 @@ jobs:
                   node-version: "16"
                   cache: "npm"
             - run: npm install --global yarn
+            - run: yarn policies set-version
             - run: yarn install --frozen-lockfile
             - run: yarn run style
             - run: yarn run build
