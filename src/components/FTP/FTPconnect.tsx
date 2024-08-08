@@ -15,6 +15,10 @@ interface FormValuesType {
     ipAddress: string;
 }
 
+/**
+ * The FTPconnect component.
+ * @returns The FTPconnect component.
+ */
 function FTPconnect() {
     // Component State Variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
