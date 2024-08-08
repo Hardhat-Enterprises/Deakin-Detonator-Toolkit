@@ -14,7 +14,7 @@ interface FormValuesType {
     ipAddress: string;
 }
 
-export function FTPconnect() {
+function FTPconnect() {
     // Component State Variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
@@ -133,3 +133,5 @@ export function FTPconnect() {
         </form>
     );
 }
+
+export default FTPconnect;
