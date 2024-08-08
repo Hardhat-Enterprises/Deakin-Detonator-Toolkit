@@ -105,29 +105,36 @@ function FTPconnect() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData] // Dependency on the handleProcessData callback.
     );
 
-    // Actions taken after saving the output
+    // Actions taken after saving the output.
     const handleSaveComplete = () => {
         // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
+        // back into SaveOutputToTextFile to inform the user.
         setHasSaved(true);
         setAllowSave(false);
     };
 
+    /**
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the FTPconnect tool with the given parameter.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form value containing the IP address of the FTP server.
+     */
     const onSubmit = async (values: FormValuesType) => {
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
-
-        // Enable the Loading Overlay
+        // Activate loading state to indicate ongoing process.
         setLoading(true);
 
-        let args = ["/usr/share/ddt/Bash-Scripts/FTPterminal.sh"];
+        // Disallow saving until the tool's execution is complete.
+        setAllowSave(false);
+
+        const args = ["/usr/share/ddt/Bash-Scripts/FTPterminal.sh"];
 
         args.push(`${values.ipAddress}`);
 
-        // Execute FTPconnect
+        // Execute the bash command via helper method and handle its output or potential errors.
         CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 setPid(pid);
