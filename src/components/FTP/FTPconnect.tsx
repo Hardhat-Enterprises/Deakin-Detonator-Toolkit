@@ -7,6 +7,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+
 /**
  * Represents the form values for the FTPConnect component.
  */
@@ -115,6 +116,10 @@ function FTPconnect() {
             });
     };
 
+    /**
+     * clearOutput: Callback function to clear the console output.
+     * It resets the state variable holding the output, thereby clearing the display.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
