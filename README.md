@@ -29,9 +29,9 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 🖥️ System requirements
 
-- 4GB RAM
-- 2 CPU cores
-- Recmmended Kali 2024.1 or later
+-   4GB RAM
+-   2 CPU cores
+-   Recmmended Kali 2024.1 or later
 
 # 🔧 Setup
 
