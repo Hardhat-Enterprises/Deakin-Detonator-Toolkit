@@ -54,13 +54,13 @@ function FTPconnect() {
         // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-                setLoadingModal(false); // Set loading to false after the check is done
+                setIsCommandAvailable(isAvailable); // Set the command availability state.
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available.
+                setLoadingModal(false); // Set loading to false after the check is done.
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+                setLoadingModal(false); // Also set loading to false in case of error.
             });
     }, []);
 
@@ -102,7 +102,7 @@ function FTPconnect() {
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
 
-            // Allow Saving as the output is finalised
+            // Allow Saving as the output is finalised.
             setAllowSave(true);
             setHasSaved(false);
         },
