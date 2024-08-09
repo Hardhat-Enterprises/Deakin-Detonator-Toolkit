@@ -58,7 +58,7 @@ const WPScan = () => {
         "Step 4: Click Scan to commence WPScan's operation.\n" +
         "Step 5: View the Output block below to view the results of the tool's execution.\n" + //Steps to run the component
         "\n" +
-        "API Token: For the API Token field, head to the WPScan website and make a free account.\n" + 
+        "API Token: For the API Token field, head to the WPScan website and make a free account.\n" +
         "           Once logged in, you can visit the API Token section and copy it into the tool.\n";
     const sourceLink = "https://www.kali.org/tools/wpscan/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
@@ -95,7 +95,7 @@ const WPScan = () => {
             passwords: "",
             usernames: "",
             custom: "",
-            apiToken: "", 
+            apiToken: "",
         },
     });
 
