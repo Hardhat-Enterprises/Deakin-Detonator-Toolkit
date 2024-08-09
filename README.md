@@ -27,16 +27,22 @@ For the exploit scripts, it is important to ensure they are executable entirely 
 
 The `.deb` that Tauri builds will automatically do this for us for actual toolkit installation.
 
+# 🖥️ System requirements
+
+- 4GB RAM
+- 2 CPU cores
+- Recmmended Kali 2024.1 or later
+
 # 🔧 Setup
 
-To install the Deakin Detonator Toolkit on Kali, you can follow either the new or old methods. The new method is a one&#8209;step process that utilises a Python script. If that doesn't work, the old method will take you through the steps manually.
+To install the Deakin Detonator Toolkit on Kali, you can follow either the new or old methods. The new method is a one&#8209;step process that utilises a bash script. If that doesn't work, the old method will take you through the steps manually.
 
-## New method
+## Run the application (dependency install and run)
 
-1. Run the following command:
+1. Run the following command, this will install dependent packages, patching and and start the application:
 
     ```
-    curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/install_ddt.sh -o install_ddt.sh && chmod +x install-ddt.sh && ./install_ddt.sh
+    curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/setup_ddt.sh -o install_ddt.sh && chmod +x setup_ddt.sh && ./setup_ddt.sh
     ```
 
 ## Old method

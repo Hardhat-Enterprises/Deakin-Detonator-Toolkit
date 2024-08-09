@@ -41,5 +41,5 @@ sudo npm install -g yarn
 # Install Yarn dependencies
 yarn install
 
-# Run Tauri development environment
-yarn run tauri dev
+# Modify start script permissions and start application
+chmod +x install-update-media/start-ddt.sh && ./install-update-media/start-ddt.sh
