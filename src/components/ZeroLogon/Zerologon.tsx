@@ -185,4 +185,3 @@ const ZeroLogon = () => {
     );
 };
 
-export default ZeroLogon;
