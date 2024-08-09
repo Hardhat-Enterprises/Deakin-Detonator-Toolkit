@@ -7,6 +7,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
  * Represents the form values for the FTPConnect component.
@@ -157,15 +158,31 @@ function FTPconnect() {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>
-                <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
-                <Button type={"submit"}>Start FTP</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                <Stack>
+                    <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
+                    <Button type={"submit"}>Start FTP</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 }
 
