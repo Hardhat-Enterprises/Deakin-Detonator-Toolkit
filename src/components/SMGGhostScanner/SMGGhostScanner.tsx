@@ -20,7 +20,7 @@ const description_userguide =
     "Step 2: Click scan to commence SMG-Ghost Scanners operation.\n\n" +
     "Step 3: View the Output block below to view the results of the tools execution.";
 
-interface FormValues {
+interface FormValuesType {
     ip: string;
 }
 /**
@@ -92,9 +92,9 @@ const SMGGhostScanner = () => {
      * Asynchronous handler for the form submission event.
      * It sets up and triggers the SMG-Ghost Scanner tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
-     * @param {FormValues} values - The form values, containing the target IP address.
+     * @param {FormValuesType} values - The form values, containing the target IP address.
      */
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
         // Start the Loading Overlay
