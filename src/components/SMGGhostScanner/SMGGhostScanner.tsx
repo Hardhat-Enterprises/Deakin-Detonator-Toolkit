@@ -19,7 +19,9 @@ const description_userguide =
     "       Eg: 192.168.1.1 \n\n" +
     "Step 2: Click scan to commence SMG-Ghost Scanners operation.\n\n" +
     "Step 3: View the Output block below to view the results of the tools execution.";
-
+/**
+ * Interface representing the form values used in the SMGGhostScanner component.
+ */
 interface FormValuesType {
     ip: string;
 }
