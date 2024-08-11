@@ -9,7 +9,7 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 const title = "SMG-Ghost Scanner";
-const description_userguide =
+const descriptionUserGuide =
     "SMG-Ghost Scanner is a tool used to scan a target to see if they are vulnerable to the attack vector " +
     "CVE2020-0796. This vulnerability fell within Microsoft's SMB 3.1.1 protocol stack implementation where " +
     "due to the failure of handling particular requests and response messages, an attacker could perform " +
@@ -30,18 +30,21 @@ interface FormValuesType {
  * @returns The SMGGhostScanner component.
  */
 const SMGGhostScanner = () => {
+    // Component State Variables
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
     const [pid, setPid] = useState("");
 
+    // Form Management
     let form = useForm({
         initialValues: {
             ip: "",
         },
     });
 
+    // Process Handlers
     /**
      * Callback to handle and append new data from the child process to the output.
      * It updates the state by appending the new data received to the existing output.
@@ -133,7 +136,7 @@ const SMGGhostScanner = () => {
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
-                {UserGuide(title, description_userguide)}
+                {UserGuide(title, descriptionUserGuide)}
                 <Alert
                     icon={<IconAlertCircle size={16} />}
                     radius="md"
