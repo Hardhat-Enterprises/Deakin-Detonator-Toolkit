@@ -7,50 +7,51 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-const title = "NsLookup";
-const description_userguide =
-    "The nslookup command is a tool used to query Domain Name System (DNS) servers and retrieve information about a specific domain or IP address." +
+/**
+ * Title and Description of the tool
+ */
+const title = "NSLookup";
+const description_Userguide =
+    "The NSLookup command is a tool used to query Domain Name System (DNS) servers and retrieve information about a specific domain or IP address." +
     "This command is an essential tool for network administrators and system engineers as it can be used to troubleshoot DNS issues and gather information about DNS configurations." +
     "How to use NSLookUp.\n\n" +
     "Step 1: Enter an IP or Web URL.\n" +
-    "       E.g. 127.0.0.1\n\n" +
+    " E.g. 127.0.0.1\n\n" +
     "Step 2: View the Output block below to view the results of the Scan.";
 
-interface FormValues {
-    ipaddress: string;
+// Form Value Interface
+interface FormValuesType {
+    ipAddress: string; // Ip Address that needs to be looked up
 }
 
 export function NSLookup() {
-    const [loading, setLoading] = useState(false);
-    const [pid, setPid] = useState("");
-    const [output, setOutput] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+    // State the Variables
 
-    let form = useForm({
+    const [loading, setLoading] = useState(false); // Indication of running the process
+    const [pid, setPid] = useState(""); // Process ID
+    const [output, setOutput] = useState(""); // Output
+    const [allowSave, setAllowSave] = useState(false); // Looking whether the process can be saved
+    const [hasSaved, setHasSaved] = useState(false); // Indication of saved process
+
+    // Form management by using Mantine
+    const form = useForm({
         initialValues: {
-            ipaddress: "",
+            ipAddress: "", // Initial Value of IP address
         },
     });
 
-    /**
-     * handleProcessData: Callback to handle and append new data from the child process to the output.
-     * It updates the state by appending the new data received to the existing output.
-     *
-     * @param {string} data - The data received from the child process.
-     */
-    const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
-    }, []);
+    // Handling the processed data output
+    // @param {string} data - Data output from the process
 
-    /**
-     * handleProcessTermination: Callback to handle the termination of the child process.
-     * Once the process termination is handled, it clears the process PID reference and
-     * deactivates the loading overlay.
-     * @param {object} param0 - An object containing information about the process termination.
-     * @param {number} param0.code - The exit code of the terminated process.
-     * @param {number} param0.signal - The signal code indicating how the process was terminated.
-     */
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data);
+    }, []); // Handles the termination and provides the apporpritate message
+
+    // Process Termination
+    //@param {Object} param - Object containing the termination code and signal
+    //@param {number} param.code - Termination code of the process
+    //@param {number} param.signal - Signal code of the process
+
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
@@ -60,69 +61,61 @@ export function NSLookup() {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            // Clear the child process pid reference
-            setPid("");
-            // Cancel the Loading Overlay
-            setLoading(false);
-
-            // Allow Saving as the output is finalised
-            setAllowSave(true);
-            setHasSaved(false);
+            setPid(""); // Reset the Process ID
+            setLoading(false); // Stop loading
+            setAllowSave(true); // Allows the saving of output
+            setHasSaved(false); // Reset save status
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData]
     );
-    /**
-     * onSubmit: Handler function that is triggered when the form is submitted.
-     * It prepares the arguments and initiates the execution of the `bed` command.
-     * Upon successful execution, it updates the state with the process PID and output.
-     * If an error occurs during the command execution, it updates the output with the error message.
-     * @param {FormValues} values - An object containing the form input values.
-     */
 
-    // Actions taken after saving the output
+    // Updating the state of Saving the output
+
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
-        setHasSaved(true);
-        setAllowSave(false);
+        setHasSaved(true); // Mark output as saved
+        setAllowSave(false); // Disabling the Save option
     };
 
-    const onSubmit = (values: FormValues) => {
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
+    // Handling the submitted form
 
-        setLoading(true);
-        const args = ["-s", values.ipaddress];
-        CommandHelper.runCommandGetPidAndOutput("nslookup", args, handleProcessData, handleProcessTermination)
+    const onSubmit = (values: FormValuesType) => {
+        const ipAddress = values.ipAddress.trim(); // Removing the extra white space
+        if (!ipAddress) {
+            setOutput("Error: No IP address or hostname provided."); // Error Message
+            return;
+        }
+
+        setAllowSave(false); // Disabling the save option before start
+        setLoading(true); // Show loading indication
+
+        CommandHelper.runCommandGetPidAndOutput("nslookup", [ipAddress], handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
-                setPid(pid);
-                setOutput(output);
+                setPid(pid); // Setting the Process ID
+                setOutput(output); // Setting the command output
             })
             .catch((error) => {
-                setLoading(false);
-                setOutput(`Error: ${error.message}`);
+                setLoading(false); //Stop Loading
+                setOutput(`Error: ${error.message}`); // Display the error message
             });
     };
 
-    /**
-     * clearOutput: A callback function to clear the current output displayed in the UI.
-     * This function resets the output state to an empty string.
-     */
+    // Clearing the output
+
     const clearOutput = useCallback(() => {
-        setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
-    }, [setOutput]); // Dependency on the setOutput function.
+        setOutput(""); // Clears output
+        setHasSaved(false); // Reset save status
+        setAllowSave(false); // Disable saving
+    }, [setOutput]);
 
     return (
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
-                {UserGuide(title, description_userguide)}
+                {UserGuide(title, description_Userguide)}
                 <TextInput
                     label={"Please enter the IP Address for nslookup"}
                     required
-                    {...form.getInputProps("ipaddress")}
+                    {...form.getInputProps("ipAddress")}
                 />
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Scan</Button>
