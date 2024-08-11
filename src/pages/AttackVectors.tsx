@@ -22,7 +22,7 @@ export function AttackVectors() {
                 <thead>
                     <tr>
                         <th>Attack Vector name</th>
-                        <th>Atack description</th>
+                        <th>Attack description</th>
                         <th>Controls</th>
                     </tr>
                 </thead>
