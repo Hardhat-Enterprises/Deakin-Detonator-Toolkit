@@ -22,6 +22,7 @@ const description_Userguide =
 // Form Value Interface
 interface FormValuesType {
     ipAddress: string; // Ip Address that needs to be looked up
+    tutorial: string; //Tutorial Text
 }
 
 export function NSLookup() {
@@ -37,6 +38,7 @@ export function NSLookup() {
     const form = useForm({
         initialValues: {
             ipAddress: "", // Initial Value of IP address
+            tutorial: "", // Initial Value of Tutorial
         },
     });
 
@@ -48,6 +50,7 @@ export function NSLookup() {
     }, []); // Handles the termination and provides the apporpritate message
 
     // Process Termination
+    //Once the process termination is handled, it clears the process PID reference and deactivates the loading overlay.
     //@param {Object} param - Object containing the termination code and signal
     //@param {number} param.code - Termination code of the process
     //@param {number} param.signal - Signal code of the process
@@ -113,10 +116,13 @@ export function NSLookup() {
             <Stack>
                 {UserGuide(title, description_Userguide)}
                 <TextInput
-                    label={"Please enter the IP Address for nslookup"}
+                    label={"Please enter the IP Address for NSLookup"}
                     required
                     {...form.getInputProps("ipAddress")}
                 />
+
+                <TextInput label={"Tutorial"} {...form.getInputProps("tutorial")} />
+
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <Button type={"submit"}>Scan</Button>
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
