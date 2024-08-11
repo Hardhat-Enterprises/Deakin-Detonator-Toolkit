@@ -11,12 +11,13 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 
 const title = "Arjun";
 const dependencies = ["arjun"]; // Contains the dependencies required for the component
-const description = "Arjun is a command-line tool for discovering hidden HTTP parameters. It supports multiple methods and handles rate limits efficiently.";
+const description =
+    "Arjun is a command-line tool for discovering hidden HTTP parameters. It supports multiple methods and handles rate limits efficiently.";
 const steps = [
     "Step 1: Enter a valid URL. E.g. https://www.deakin.edu.au.",
     "Step 2: Enter an optional JSON output filename. E.g. arjunoutput.",
     "Step 3: Click the scan button to commence scanning.",
-    "Step 4: View the output block below to see the results."
+    "Step 4: View the output block below to see the results.",
 ];
 const sourceLink = "https://github.com/s0md3v/Arjun"; // Link to the source code repository
 const tutorial = "https://www.geeksforgeeks.org/arjun-hidden-http-parameter-discovery-suite-in-kali-linux/"; // Link to the tutorial
@@ -86,10 +87,10 @@ function Arjuntool() {
             // If the process was terminated successfully, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-            // If the process was terminated due to a signal, display the signal code.
+                // If the process was terminated due to a signal, display the signal code.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-            // If the process was terminated with an error, display the exit code and signal code.
+                // If the process was terminated with an error, display the exit code and signal code.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
@@ -186,9 +187,7 @@ function Arjuntool() {
                         sourceLink={sourceLink}
                     >
                         {/* Children content or an empty fragment can go here */}
-                        <>
-                            {/* Additional configuration or instructions can be placed here */}
-                        </>
+                        <>{/* Additional configuration or instructions can be placed here */}</>
                     </RenderComponent>
                     <TextInput label={"URL"} required {...form.getInputProps("url")} />
                     <Switch size="md" label="Stability mode" {...form.getInputProps("stability" as keyof FormValues)} />

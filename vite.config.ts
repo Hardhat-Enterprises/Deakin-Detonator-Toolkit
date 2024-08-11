@@ -24,9 +24,9 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks(id) {
-                    if (id.includes('node_modules')) {
+                    if (id.includes("node_modules")) {
                         // Creates a separate chunk for all node_modules
-                        return 'vendor';
+                        return "vendor";
                     }
                 },
             },
