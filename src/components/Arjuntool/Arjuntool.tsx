@@ -12,7 +12,7 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 const title = "Arjun";
 const dependencies = ["arjun"]; // Contains the dependencies required for the component
 const description =
-    "Arjun is a command-line tool for discovering hidden HTTP parameters. It supports multiple methods and handles rate limits efficiently.";
+    "Arjun is  command-line tool for discovering hidden HTTP parameters. It supports multiple methods and handles rate limits efficiently.";
 const steps = [
     "Step 1: Enter a valid URL. E.g. https://www.deakin.edu.au.",
     "Step 2: Enter an optional JSON output filename. E.g. arjunoutput.",
