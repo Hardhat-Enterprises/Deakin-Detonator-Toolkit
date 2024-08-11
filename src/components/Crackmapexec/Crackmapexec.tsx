@@ -78,7 +78,7 @@ const Crackmapexec = () => {
     // Section: Form Initialization
 
     /** Initializes the form with default values for each input field. */
-    const form = useForm({
+    let form = useForm({
         initialValues: {
             ip: "",
             username: "",
@@ -134,8 +134,8 @@ const Crackmapexec = () => {
      * Actions to be taken after the output has been successfully saved to a file.
      */
     const handleSaveComplete = () => {
-        setHasBeenSaved(true); // Indicate that the file has been saved
-        setIsSaveAllowed(false); // Disable the save option until new output is available
+        setHasBeenSaved(true); // Indicating that the file has been saved
+        setIsSaveAllowed(false); // Disabling the save option until new output is available
     };
 
     /**
@@ -218,4 +218,5 @@ const Crackmapexec = () => {
     );
 };
 
+// Default export of the component function
 export default Crackmapexec;
