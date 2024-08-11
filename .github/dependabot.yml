@@ -5,12 +5,12 @@
 
 version: 2
 updates:
-  - package-ecosystem: "yarn" # See documentation for possible values
+  - package-ecosystem: "yarn"
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-      
-- package-ecosystem: "cargo" # For Rust packages
-    directory: "/src-tauri" # Root directory or specify subdirectory if Cargo.toml is not in root
+
+  - package-ecosystem: "cargo" # For Rust packages
+    directory: "/src-tauri" # Location of Cargo.toml if not in root
     schedule:
       interval: "daily"
