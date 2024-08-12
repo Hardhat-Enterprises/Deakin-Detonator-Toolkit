@@ -5,6 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper"; // Import command hel
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper"; // Import console wrapper component
 import { UserGuide } from "../UserGuide/UserGuide"; // Import user guide component
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; // Import save output component
+
 /**
  * Interface representing the form values for SearchSploit.
  * @interface
@@ -68,9 +69,10 @@ const SearchSploit = () => {
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            const message = code === 0 
-                ? "\nProcess completed successfully." 
-                : `\nProcess terminated with exit code: ${code} and signal code: ${signal}`;
+            const message =
+                code === 0
+                    ? "\nProcess completed successfully."
+                    : `\nProcess terminated with exit code: ${code} and signal code: ${signal}`;
             handleProcessData(message); // Update output with termination message
             setPid(""); // Clear the process ID
             setLoading(false); // Stop loading
@@ -108,14 +110,14 @@ const SearchSploit = () => {
             ...getOutputTypeArgs(values.outputType),
             ...getNonSearchArgs(values.nonSearch),
             values.searchTerm,
-            values.ebdId // Use camelCase for variable name
+            values.ebdId, // Use camelCase for variable name
         ];
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "searchsploit", 
-                args, 
-                handleProcessData, 
+                "searchsploit",
+                args,
+                handleProcessData,
                 handleProcessTermination
             );
             setPid(result.pid); // Set process ID
@@ -216,33 +218,31 @@ const SearchSploit = () => {
                     {...form.getInputProps("ebdId")} // Use camelCase for variable name
                 />
                 <Button type={"submit"}>Scan</Button>
-
                 <Accordion>
                     <Accordion.Item value="item-1">
                         <Accordion.Control>Help:</Accordion.Control>
                         <Accordion.Panel>
                             <List>
                                 <Text weight={700}>Search Options:</Text>
-                                {SEARCH_OPTIONS.map(option => (
+                                {SEARCH_OPTIONS.map((option) => (
                                     <List.Item key={option}>{option}</List.Item>
                                 ))}
                             </List>
                             <List>
                                 <Text weight={700}>Output:</Text>
-                                {OUTPUT_TYPES.map(type => (
+                                {OUTPUT_TYPES.map((type) => (
                                     <List.Item key={type}>{type}</List.Item>
                                 ))}
                             </List>
                             <List>
                                 <Text weight={700}>Non-Searching:</Text>
-                                {NON_SEARCH_OPTIONS.map(option => (
+                                {NON_SEARCH_OPTIONS.map((option) => (
                                     <List.Item key={option}>{option}</List.Item>
                                 ))}
                             </List>
                         </Accordion.Panel>
                     </Accordion.Item>
                 </Accordion>
-
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
