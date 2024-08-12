@@ -1,259 +1,249 @@
-import { Button, LoadingOverlay, NativeSelect, Stack, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
-import { CommandHelper } from "../../utils/CommandHelper";
-import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { Text } from "@mantine/core";
-import { List } from "@mantine/core";
-import { Accordion } from "@mantine/core";
-import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { Button, LoadingOverlay, NativeSelect, Stack, TextInput, Text, List, Accordion } from "@mantine/core"; // Import necessary Mantine components
+import { useForm } from "@mantine/form"; // Import Mantine form hook
+import { useCallback, useState } from "react"; // Import React hooks
+import { CommandHelper } from "../../utils/CommandHelper"; // Import command helper utility
+import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper"; // Import console wrapper component
+import { UserGuide } from "../UserGuide/UserGuide"; // Import user guide component
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; // Import save output component
 
-const title = "SearchSploit";
-const description_userguide =
-    "SearchSploit is a command-line tool used for searching through Exploit-DB that allows an offline " +
-    "copy of the exploited database to be withheld. This tool is useful for conducting security assessments " +
-    "on segregated networks and provides several search options within its operation.\n\nInformation on the " +
-    "tool can be found at: https://www.exploit-db.com/documentation/Offsec-SearchSploit.pdf\n\n" +
-    "Using SearchSploit:\n" +
-    "Step 1: Enter a Search Term followed by selecting a Search Option.\n" +
-    "       Eg: data, Exact\n\n" +
-    "Step 2: Select an Output type.\n" +
-    "       Eg: json\n\n" +
-    "Step 3: Select a Non-Searching option.\n" +
-    "       Eg: Mirror\n\n" +
-    "Step 4: Enter an Exploit Database ID.\n" +
-    "       Eg: PLACEHOLDER (required when using the 'Path' output or Non-Search options)\n\n" +
-    "Step 5: Click Scan to commence SearchSploit's operation.\n\n" +
-    "Step 6: View the Output block below to view the results of the tools execution.";
-
-interface FormValuesType {
-    searchTerm: string;
-    searchOption: string;
-    out_put: string;
-    non_search: string;
-    ebd_id: string;
+/**
+ * Interface representing the form values for SearchSploit.
+ * @interface
+ */
+interface FormValues {
+    searchTerm: string; // The term to search for in the exploit database
+    searchOption: string; // The type of search to perform
+    outputType: string; // The type of output to display
+    nonSearch: string; // Non-searching options
+    ebdId: string; // Exploit Database ID
 }
 
-const searchOption = ["Case", "Exact", "Strict", "Title"];
+// Define constant values used in the component
+const TITLE = "SearchSploit"; // Tool name
+const DESCRIPTION = "SearchSploit is a command-line tool used for searching through Exploit-DB."; // Tool description
+const STEPS = `Step 1: Enter a Search Term followed by selecting a Search Option.
+Step 2: Select an Output type.
+Step 3: Select a Non-Searching option.
+Step 4: Enter an Exploit Database ID.
+Step 5: Click Scan to commence SearchSploit's operation.
+Step 6: View the Output block below to view the results of the tool's execution.`;
 
-const out_put = ["json", "Overflow", "Path", "Verbose", "www"];
+const SOURCE_LINK = "https://www.exploit-db.com/documentation/Offsec-SearchSploit.pdf"; // Source documentation link
+const TUTORIAL = ""; // Tutorial placeholder
+const SEARCH_OPTIONS = ["Case", "Exact", "Strict", "Title"]; // Search options for the tool
+const OUTPUT_TYPES = ["json", "Overflow", "Path", "Verbose", "www"]; // Output types for the tool
+const NON_SEARCH_OPTIONS = ["Mirror", "Examine"]; // Non-searching options for the tool
 
-const non_search = ["Mirror", "Examine"];
-
+/**
+ * SearchSploit component that allows users to interact with the SearchSploit tool.
+ * @returns {JSX.Element}
+ */
 const SearchSploit = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [selectedSearchOption, setSelectedSearchOption] = useState("");
-    const [selectedout_putOption, setSelectedOut_putOption] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-    const [selectedNonSearchOption, setSelectedNonSearchOption] = useState("");
-    const [pid, setPid] = useState("");
+    const [loading, setLoading] = useState(false); // Loading state for the component
+    const [output, setOutput] = useState(""); // Output data from the command
+    const [allowSave, setAllowSave] = useState(false); // State to control saving output
+    const [hasSaved, setHasSaved] = useState(false); // State to track if output has been saved
+    const [pid, setPid] = useState(""); // Process ID of the running command
 
-    let form = useForm({
+    const form = useForm<FormValues>({
         initialValues: {
             searchTerm: "",
             searchOption: "",
-            ebd_id: "",
+            outputType: "",
+            nonSearch: "",
+            ebdId: "", // Use camelCase for variable name
         },
     });
 
-    // Uses the callback function of runCommandGetPidAndOutput to handle and save data
-    // generated by the executing process into the output state variable.
+    /**
+     * Handles the process data received from the command.
+     * @param {string} data - The data received from the command process.
+     */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to output
     }, []);
-    // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
-    // the termination of that process, resetting state variables, handling the output data,
-    // and informing the user.
+
+    /**
+     * Handles the termination of the process.
+     * @param {{ code: number; signal: number }} terminationInfo - Information about the termination.
+     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 15) {
-                handleProcessData("\nProcess was manually terminated.");
-            } else {
-                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
-            }
-            // Clear the child process pid reference
-            setPid("");
-            // Cancel the Loading Overlay
-            setLoading(false);
-            setAllowSave(true);
-            setHasSaved(false);
+            const message = code === 0 
+                ? "\nProcess completed successfully." 
+                : `\nProcess terminated with exit code: ${code} and signal code: ${signal}`;
+            handleProcessData(message); // Update output with termination message
+            setPid(""); // Clear the process ID
+            setLoading(false); // Stop loading
+            setAllowSave(true); // Allow saving output
+            setHasSaved(false); // Reset saved state
         },
         [handleProcessData]
     );
-    // Sends a SIGTERM signal to gracefully terminate the process
+
+    /**
+     * Cancels the running command process.
+     */
     const handleCancel = () => {
-        if (pid !== null) {
-            const args = [`-15`, pid];
-            CommandHelper.runCommand("kill", args);
+        if (pid) {
+            CommandHelper.runCommand("kill", ["-15", pid]); // Send SIGTERM signal to process
         }
     };
+
+    /**
+     * Handles the completion of the save action.
+     */
     const handleSaveComplete = useCallback(() => {
-        setHasSaved(true);
-        setAllowSave(false);
+        setHasSaved(true); // Mark output as saved
+        setAllowSave(false); // Disable saving state
     }, []);
 
-    const onSubmit = async (values: FormValuesType) => {
-        setLoading(true);
-        const args = [""];
-
-        if (values.searchOption === "Case") {
-            args.push("-c");
-        } else if (values.searchOption === "Exact") {
-            args.push("-e");
-        } else if (values.searchOption === "Strict") {
-            args.push("-s");
-        } else if (values.searchOption === "Title") {
-            args.push("-t");
-        }
-
-        if (values.out_put === "json") {
-            args.push("-j");
-        } else if (values.out_put === "Overflow") {
-            args.push("-o");
-        } else if (values.out_put === "Path") {
-            args.push("-p");
-        } else if (values.out_put === "Verbose") {
-            args.push("-v");
-        } else if (values.out_put === "www") {
-            args.push("-w");
-        }
-
-        if (values.non_search === "Mirror") {
-            args.push("-m");
-        } else if (values.non_search === "Examine") {
-            args.push("-x");
-        }
-
-        args.push(values.searchTerm);
-
-        args.push(values.ebd_id);
+    /**
+     * Submits the form and runs the SearchSploit command.
+     * @param {FormValues} values - The values from the form.
+     */
+    const onSubmit = async (values: FormValues) => {
+        setLoading(true); // Set loading state to true
+        const args = [
+            ...getSearchOptionArgs(values.searchOption),
+            ...getOutputTypeArgs(values.outputType),
+            ...getNonSearchArgs(values.nonSearch),
+            values.searchTerm,
+            values.ebdId // Use camelCase for variable name
+        ];
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "searchsploit",
-                args,
-                handleProcessData,
+                "searchsploit", 
+                args, 
+                handleProcessData, 
                 handleProcessTermination
             );
-            setPid(result.pid);
-            setOutput(result.output);
-        } catch (e: any) {
-            setOutput(e.message);
+            setPid(result.pid); // Set process ID
+            setOutput(result.output); // Set output data
+        } catch (e) {
+            setOutput(e.message); // Set output to error message
+        } finally {
+            setLoading(false); // Set loading state to false
         }
-
-        setLoading(false);
     };
 
+    /**
+     * Gets the arguments for the search option.
+     * @param {string} searchOption - The selected search option.
+     * @returns {string[]} - An array of command line arguments for the search option.
+     */
+    const getSearchOptionArgs = (searchOption: string): string[] => {
+        const optionMap: Record<string, string> = {
+            Case: "-c",
+            Exact: "-e",
+            Strict: "-s",
+            Title: "-t",
+        };
+        return [optionMap[searchOption]].filter(Boolean); // Return mapped value if exists
+    };
+
+    /**
+     * Gets the arguments for the output type.
+     * @param {string} outputType - The selected output type.
+     * @returns {string[]} - An array of command line arguments for the output type.
+     */
+    const getOutputTypeArgs = (outputType: string): string[] => {
+        const typeMap: Record<string, string> = {
+            json: "-j",
+            Overflow: "-o",
+            Path: "-p",
+            Verbose: "-v",
+            www: "-w",
+        };
+        return [typeMap[outputType]].filter(Boolean); // Return mapped value if exists
+    };
+
+    /**
+     * Gets the arguments for the non-searching options.
+     * @param {string} nonSearch - The selected non-searching option.
+     * @returns {string[]} - An array of command line arguments for the non-searching option.
+     */
+    const getNonSearchArgs = (nonSearch: string): string[] => {
+        const nonSearchMap: Record<string, string> = {
+            Mirror: "-m",
+            Examine: "-x",
+        };
+        return [nonSearchMap[nonSearch]].filter(Boolean); // Return mapped value if exists
+    };
+
+    /**
+     * Clears the output displayed in the console.
+     */
     const clearOutput = useCallback(() => {
-        setOutput("");
-        setAllowSave(false);
-        setHasSaved(false);
-    }, [setOutput]);
+        setOutput(""); // Clear the output state
+        setAllowSave(false); // Disable saving state
+        setHasSaved(false); // Reset saved state
+    }, []);
 
     return (
-        <form
-            onSubmit={form.onSubmit((values) =>
-                onSubmit({
-                    ...values,
-                    searchOption: selectedSearchOption,
-                    out_put: selectedout_putOption,
-                    non_search: selectedNonSearchOption,
-                })
-            )}
-        >
+        <form onSubmit={form.onSubmit(onSubmit)}>
             <LoadingOverlay visible={loading} />
             {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
+                <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
+                    Cancel
+                </Button>
             )}
 
             <Stack>
-                {UserGuide(title, description_userguide)}
+                {UserGuide(TITLE, DESCRIPTION)} {/* Render user guide */}
                 <TextInput label={"Search Term"} {...form.getInputProps("searchTerm")} />
                 <NativeSelect
-                    value={selectedSearchOption}
-                    onChange={(e) => setSelectedSearchOption(e.target.value)}
-                    label={"Search option"}
-                    data={searchOption}
+                    {...form.getInputProps("searchOption")}
+                    label={"Search Option"}
+                    data={SEARCH_OPTIONS}
                     placeholder={"Pick a Search option"}
-                    description={"Type of Search to perform"}
                 />
                 <NativeSelect
-                    value={selectedout_putOption}
-                    onChange={(e) => setSelectedOut_putOption(e.target.value)}
+                    {...form.getInputProps("outputType")}
                     label={"Output"}
-                    data={out_put}
+                    data={OUTPUT_TYPES}
                     placeholder={"Select an Output"}
-                    description={"Type of output to display"}
                 />
                 <NativeSelect
-                    value={selectedNonSearchOption}
-                    onChange={(e) => setSelectedNonSearchOption(e.target.value)}
+                    {...form.getInputProps("nonSearch")}
                     label={"Non-Searching"}
-                    data={non_search}
+                    data={NON_SEARCH_OPTIONS}
                     placeholder={"Select an option"}
-                    description={
-                        "Mirror (aka copies) an exploit to the current working directory, Examine (aka opens) the exploit using $PAGER"
-                    }
                 />
-
                 <TextInput
                     label={"EBD-ID"}
-                    description="Exploit Database ID: Required when using the 'Path' output, or when using Non-Search options."
-                    {...form.getInputProps("ebd_id")}
+                    description="Exploit Database ID: Required when using the 'Path' output or Non-Search options."
+                    {...form.getInputProps("ebdId")} // Use camelCase for variable name
                 />
-
                 <Button type={"submit"}>Scan</Button>
+
                 <Accordion>
                     <Accordion.Item value="item-1">
                         <Accordion.Control>Help:</Accordion.Control>
                         <Accordion.Panel>
                             <List>
-                                <Text weight={700}>Search Term:</Text>
-                                <List.Item>Case | Perform a case-sensitive search (Default is inSEnsITiVe).</List.Item>
-                                <List.Item>
-                                    Exact | Perform an EXACT & order match on exploit title (Default is an AND match on
-                                    each term).
-                                </List.Item>
-                                <List.Item>
-                                    Strict | Perform a strict search, so input values must exist, disabling fuzzy search
-                                    for version range.
-                                </List.Item>
-                                <List.Item>
-                                    Title | Search JUST the exploit title (Default is title AND the file's path).
-                                </List.Item>
+                                <Text weight={700}>Search Options:</Text>
+                                {SEARCH_OPTIONS.map(option => (
+                                    <List.Item key={option}>{option}</List.Item>
+                                ))}
                             </List>
-                            <br></br>
                             <List>
                                 <Text weight={700}>Output:</Text>
-                                <List.Item>json | Show result in JSON format.</List.Item>
-                                <List.Item>Overflow | Exploit titles are allowed to overflow their columns.</List.Item>
-                                <List.Item>
-                                    Path | Show the full path to an exploit (and also copies the path to the clipboard
-                                    if possible).
-                                </List.Item>
-                                <List.Item>Verbose | Display more information in output.</List.Item>
-                                <List.Item>www | Show URLs to Exploit-DB.com rather than the local path.</List.Item>
+                                {OUTPUT_TYPES.map(type => (
+                                    <List.Item key={type}>{type}</List.Item>
+                                ))}
                             </List>
-                            <br></br>
                             <List>
                                 <Text weight={700}>Non-Searching:</Text>
-                                <List.Item>
-                                    Mirror | Mirror (aka copies) an exploit to the current working directory.
-                                </List.Item>
-                                <List.Item>Examine | Examine (aka opens) the exploit using $PAGER.</List.Item>
+                                {NON_SEARCH_OPTIONS.map(option => (
+                                    <List.Item key={option}>{option}</List.Item>
+                                ))}
                             </List>
                         </Accordion.Panel>
                     </Accordion.Item>
                 </Accordion>
+
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
@@ -261,4 +251,5 @@ const SearchSploit = () => {
     );
 };
 
+// Export the component as default
 export default SearchSploit;
