@@ -5,7 +5,6 @@ import { CommandHelper } from "../../utils/CommandHelper"; // Import command hel
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper"; // Import console wrapper component
 import { UserGuide } from "../UserGuide/UserGuide"; // Import user guide component
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; // Import save output component
-
 /**
  * Interface representing the form values for SearchSploit.
  * @interface
