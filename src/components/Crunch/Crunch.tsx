@@ -10,24 +10,6 @@ import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/O
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
-const title = "Crunch Password Generator";
-const description_userguide =
-    "Crunch is a wordlist generator where you can specify a standard character set or a custom one based on the " +
-    "needs of your project. Crunch can create a wordlist based on criteria you specify. The wordlist can be " +
-    "used for various purposes such as dictionary attacks or password cracking.\n\nYou can find more information " +
-    "about the tool, including usage instructions and examples, in its official documentation: https://tools.kali." +
-    "org/password-attacks/crunch\n\n" +
-    "Using Crunch:\n" +
-    "Step 1: Enter a Minimum password length.\n" +
-    "       Eg: 8\n\n" +
-    "Step 2: Enter a Maximum password length.\n" +
-    "       Eg: 8\n\n" +
-    "Step 3: Enter a Character set for the password generation.\n" +
-    "       Eg: abcdefghijklmnopqrstuvwxyz123456789\n\n" +
-    "Step 4: (Optional) Enter the directory for an Output file.\n\n" +
-    "Step 5: Click Generate Password List to commence Crunch's operation.\n\n" +
-    "Step 6: View the Output block below to view the results of the tools execution.";
-
 /**
  * Represents the form values for the Crunch component.
  */
@@ -137,16 +119,6 @@ const Crunch = () => {
     );
 
     /**
-     * Handles actions taken after saving the output, such as updating the save status.
-     */
-    const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
-        setHasSaved(true);
-        setAllowSave(false);
-    };
-
-    /**
      * Handles form submission, setting the loading state and running the Crunch command.
      * @param {FormValuesType} values - The values submitted through the form.
      */
@@ -187,40 +159,64 @@ const Crunch = () => {
         setAllowSave(false);
     }, [setOutput]);
 
-    return (
-        //define user interface of the tool
-        <form onSubmit={form.onSubmit(onSubmit)}>
-            {/* {LoadingOverlayAndCancelButtonPkexec(loading, pid)} */}
-            {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+    /**
+     * Handles actions taken after saving the output, such as updating the save status.
+     */
+    const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
+        setHasSaved(true);
+        setAllowSave(false);
+    };
 
-            <LoadingOverlay visible={loading} />
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <TextInput
-                    label={"Minimum password length"}
-                    type="number"
-                    min={1}
-                    required
-                    {...form.getInputProps("minLength")}
-                />
-                <TextInput
-                    label={"Maximum password length"}
-                    type="number"
-                    min={1}
-                    required
-                    {...form.getInputProps("maxLength")}
-                />
-                <TextInput
-                    label={"Character set (e.g. abcdefghijklmnopqrstuvwxyz0123456789)"}
-                    required
-                    {...form.getInputProps("charset")}
-                />
-                <TextInput label={"Output file (optional)"} {...form.getInputProps("outputFile")} />
-                <Button type={"submit"}>Generate Password List</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+    return (
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+            <form onSubmit={form.onSubmit(onSubmit)}>
+                <LoadingOverlay visible={loading} />
+                <Stack>
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    <LoadingOverlay visible={loading} />
+                    {/* {UserGuide(title, description_userguide)} */}
+                    <TextInput
+                        label={"Minimum password length"}
+                        type="number"
+                        min={1}
+                        required
+                        {...form.getInputProps("minLength")}
+                    />
+                    <TextInput
+                        label={"Maximum password length"}
+                        type="number"
+                        min={1}
+                        required
+                        {...form.getInputProps("maxLength")}
+                    />
+                    <TextInput
+                        label={"Character set (e.g. abcdefghijklmnopqrstuvwxyz0123456789)"}
+                        required
+                        {...form.getInputProps("charset")}
+                    />
+                    <TextInput label={"Output file (optional)"} {...form.getInputProps("outputFile")} />
+                    <Button type={"submit"}>Generate Password List</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 
