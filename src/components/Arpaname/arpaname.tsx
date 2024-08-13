@@ -38,7 +38,7 @@ const ArpanameTool = () => {
     // Component Constants.
     const steps =
         "Step 1: Type in the target IP address\n" +
-        "Step 2: Click lookup to run arpaname.\n" +
+        "Step 2: Click lookup to run Arpaname.\n" +
         "Step 3: View the output block to see the results. ";
     const sourceLink = ""; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
