@@ -27,7 +27,7 @@ const description_userguide =
  */
 interface FormValuesType {
     capFile: string;
-    wordlist: string;
+    wordList: string;
     BSSID: string;
     ESSID: string;
     keyFile: string;
@@ -84,7 +84,7 @@ const AircrackNG = () => {
     const form = useForm({
         initialValues: {
             capFile: "",
-            wordlist: "",
+            wordList: "",
             BSSID: "",
             ESSID: "",
             keyFile: "",
@@ -152,7 +152,7 @@ const AircrackNG = () => {
      * It sets up and triggers the aircrack-ng tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
      *
-     * @param {FormValuesType} values - The form values, containing the CAP file path and wordlist path.
+     * @param {FormValuesType} values - The form values, containing the CAP file path and wordList path.
      */
     const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
@@ -164,7 +164,7 @@ const AircrackNG = () => {
         // Construct arguments for the aircrack-ng command based on form input
         const args = [values.capFile];
 
-        values.wordlist ? args.push(`-w`, values.wordlist) : undefined;
+        values.wordList ? args.push(`-w`, values.wordList) : undefined;
         values.BSSID ? args.push(`-b`, values.BSSID) : undefined;
         values.ESSID ? args.push(`-e`, values.ESSID) : undefined;
         values.keyFile ? args.push(`-l`, values.keyFile) : undefined;
@@ -223,7 +223,7 @@ const AircrackNG = () => {
                 <Stack>
                     {UserGuide(title, description_userguide)}
                     <TextInput label={"CAP File Path"} required {...form.getInputProps("capFile")} />
-                    <TextInput label={"Path to worldlist"} {...form.getInputProps("wordlist")} />
+                    <TextInput label={"Path to worldlist"} {...form.getInputProps("wordList")} />
                     <Switch
                         size="md"
                         label="Advanced Mode"
