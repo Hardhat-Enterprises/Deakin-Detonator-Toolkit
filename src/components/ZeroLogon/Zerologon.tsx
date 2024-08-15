@@ -184,3 +184,5 @@ const ZeroLogon = () => {
         </RenderComponent>
     );
 };
+
+export { ZeroLogon };
