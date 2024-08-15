@@ -20,8 +20,8 @@ jobs:
               with:
                   node-version: "16"
                   cache: "npm"
-            - run: npm install --global yarn@4.4.0
             - run: yarn -v
+            - run: npm install --global yarn
             - run: yarn install --frozen-lockfile
             - run: yarn run style
             - run: yarn run build
