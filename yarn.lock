@@ -1292,7 +1292,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^10":
+"@types/uuid@npm:^10.0.0":
   version: 10.0.0
   resolution: "@types/uuid@npm:10.0.0"
   checksum: 10c0/9a1404bf287164481cb9b97f6bb638f78f955be57c40c6513b7655160beb29df6f84c915aaf4089a1559c216557dc4d2f79b48d978742d3ae10b937420ddac60
@@ -1855,7 +1855,7 @@ __metadata:
     "@testing-library/react": "npm:^13.4.0"
     "@types/react": "npm:^18.0.19"
     "@types/react-dom": "npm:^18.0.6"
-    "@types/uuid": "npm:^10"
+    "@types/uuid": "npm:^10.0.0"
     "@vitejs/plugin-react": "npm:^2.1.0"
     husky: "npm:^8.0.1"
     jsdom: "npm:^20.0.0"
