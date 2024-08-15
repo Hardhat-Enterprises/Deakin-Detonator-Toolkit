@@ -43,7 +43,7 @@
         "@testing-library/react": "^13.4.0",
         "@types/react": "^18.0.19",
         "@types/react-dom": "^18.0.6",
-        "@types/uuid": "^9",
+        "@types/uuid": "^10",
         "@vitejs/plugin-react": "^2.1.0",
         "husky": "^8.0.1",
         "jsdom": "^20.0.0",
