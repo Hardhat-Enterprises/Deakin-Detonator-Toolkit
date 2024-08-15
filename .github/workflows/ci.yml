@@ -20,6 +20,7 @@ jobs:
               with:
                   node-version: "16"
                   cache: "npm"
+            - run: yarn -v
             - run: npm install --global yarn
             - run: yarn install --frozen-lockfile
             - run: yarn run style
