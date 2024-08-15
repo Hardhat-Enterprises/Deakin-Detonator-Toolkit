@@ -3,24 +3,11 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
-
-// Component Constants
-const title = "Aircrack-ng"; // Contains the title of the component.
-
-// Contains the description of the component.
-const description_userguide =
-    "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphrases using captured network traffic.\n\n" +
-    "How to use Aircrack-ng:\n\n" +
-    "Step 1: Type in the name of your packet capture file including the extension .cap. E.g. 'example.cap'.\n" +
-    "Step 2: Type in the name of your password file including the extension. E.g 'password.txt'.\n" +
-    "Step 3: Click 'Start Cracking' to begin the process.\n" +
-    "Step 4: View the output block below to see the results.\n" +
-    "Optionally you may select additional advanced options.";
 
 /**
  * Represents the form values for the Aircrack-ng component.
@@ -38,6 +25,20 @@ interface FormValuesType {
     customConfig: string;
 }
 
+// Component Constants
+const title = "Aircrack-ng"; // Contains the title of the component.
+const description = "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphrases using captured network traffic.";
+const steps =
+    "How to use Aircrack-ng:\n\n" +
+    "Step 1: Type in the name of your packet capture file including the extension .cap. E.g. 'example.cap'.\n" +
+    "Step 2: Type in the name of your password file including the extension. E.g 'password.txt'.\n" +
+    "Step 3: Click 'Start Cracking' to begin the process.\n" +
+    "Step 4: View the output block below to see the results.\n" +
+    "Optionally you may select additional advanced options.";
+const sourceLink = "https://www.kali.org/tools/aircrack-ng/"; //link to the source component.
+const tutorial = "";
+const dependencies = "Aircrack-NG"; //contains the dependancies required for the component.
+
 const AircrackNG = () => {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
@@ -48,6 +49,8 @@ const AircrackNG = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
+    const [advanceMode, setAdvanceMode] = useState(false);
+    const [customMode, setCustomMode] = useState(false);
 
     // AirCrack-ng specific state variables.
     const [selectedtype, setSelectedType] = useState(""); // State variable to store the selected security type.
@@ -208,76 +211,55 @@ const AircrackNG = () => {
     }, [setOutput]);
 
     return (
-        <>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
             {!loadingModal && (
                 <InstallationModal
                     isOpen={opened}
                     setOpened={setOpened}
-                    feature_description={description_userguide}
+                    feature_description={description}
                     dependencies={dependencies}
                 ></InstallationModal>
             )}
-
             <form onSubmit={form.onSubmit(onSubmit)}>
-                {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-                    {UserGuide(title, description_userguide)}
-                    <TextInput label={"CAP File Path"} required {...form.getInputProps("capFile")} />
-                    <TextInput label={"Path to worldlist"} {...form.getInputProps("wordList")} />
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <Switch
                         size="md"
                         label="Advanced Mode"
-                        checked={AdvancedMode}
-                        onChange={(e) => setAdvancedMode(e.currentTarget.checked)}
+                        checked={advanceMode}
+                        onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
                     />
                     <Switch
                         size="md"
                         label="Custom Configuration"
-                        checked={CustomConfig}
-                        onChange={(e) => setCustomConfig(e.currentTarget.checked)}
+                        checked={customMode}
+                        onChange={(e) => setCustomMode(e.currentTarget.checked)}
                     />
-                    {AdvancedMode && (
+                    <TextInput label={"Name of your fake host"} required {...form.getInputProps("fakeHost")} />
+                    <TextInput label={"Channel of choice"} required {...form.getInputProps("channel")} />
+                    <TextInput label={"Your WLAN interface"} required {...form.getInputProps("replayInterface")} />
+                    {advanceMode && (
                         <>
-                            <TextInput label={"Access Point's MAC (BSSID)"} {...form.getInputProps("BSSID")} />
-                            <TextInput label={"Network Identifier (ESSID)"} {...form.getInputProps("ESSID")} />
-                            <TextInput label={"Key Output File"} {...form.getInputProps("keyFile")} />
-                            <NativeSelect
-                                value={selectedtype}
-                                onChange={(e) => setSelectedType(e.target.value)}
-                                title={"Security Type"}
-                                data={types}
-                                placeholder={"Security Type"}
-                                description={"Please select the security type."}
+                            <TextInput label={"Set AP MAC address"} {...form.getInputProps("MACAddress")} />
+                            <TextInput
+                                label={"Save as Pcap File (Please Supply FilePath)"}
+                                {...form.getInputProps("filePath")}
                             />
-                            {typesRequiringAdvancedWEPConfig.includes(selectedtype) && (
-                                <>
-                                    <NativeSelect
-                                        value={selectedcharacter}
-                                        onChange={(e) => setSelectedCharacter(e.target.value)}
-                                        title={"Characters"}
-                                        data={characters}
-                                        placeholder={"Characters"}
-                                        description={"Please select the WiFi character types (if known)"}
-                                    />
-                                    <TextInput label={"MAC Address"} {...form.getInputProps("MACAddress")} />
-                                </>
-                            )}
-                            {typesRequiringAdvancedWPAConfig.includes(selectedtype) && (
-                                <>
-                                    <TextInput label={"PMKID"} {...form.getInputProps("PMKID")} />
-                                </>
-                            )}
                         </>
                     )}
-                    {CustomConfig && (
-                        <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />
-                    )}
+                    {customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type={"submit"}>Start Cracking</Button>
+                    <Button type={"submit"}>Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
-        </>
+        </RenderComponent>
     );
 };
 
