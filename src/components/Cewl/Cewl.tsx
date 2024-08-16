@@ -56,7 +56,9 @@ const Cewl = () => {
         "Step 1: Enter the maximum depth to spider to. Eg: 2\n" +
         "Step 2: Enter a minimum word length. Eg: 3\n" +
         "Step 3: Enter a target URL. Eg: google.com\n" +
-        "Step 4: Click 'Scan' to commence Cewl's operation.\n" +
+        "Step 4: Click Start " +
+        title +
+        " to commence Cewl's operation.\n" +
         "Step 5: View the output block below to view the results of the tool's execution.";
     const sourceLink = "https://salsa.debian.org/pkg-security-team/cewl"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
