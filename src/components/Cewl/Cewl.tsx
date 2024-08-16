@@ -333,7 +333,7 @@ const Cewl = () => {
                                 onChange={(e) => setCheckedLowercase(e.currentTarget.checked)}
                             />
                             <Checkbox
-                                label={"Show the count for earch word found"}
+                                label={"Show the count for each word found"}
                                 checked={checkedCount}
                                 onChange={(e) => setCheckedCount(e.currentTarget.checked)}
                             />
