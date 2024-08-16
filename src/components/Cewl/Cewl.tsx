@@ -135,14 +135,6 @@ const Cewl = () => {
         [handleProcessData] // Dependency on the handleProcessData callback
     );
 
-    // Sends a SIGTERM signal to gracefully terminate the process
-    const handleCancel = () => {
-        if (pid !== null) {
-            const args = [`-15`, pid];
-            CommandHelper.runCommand("kill", args);
-        }
-    };
-
     // Actions taken after saving the output
     const handleSaveComplete = () => {
         // Indicating that the file has saved which is passed
