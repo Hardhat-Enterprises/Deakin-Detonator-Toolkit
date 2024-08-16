@@ -266,7 +266,7 @@ const Cewl = () => {
                     {checkedAdvanced && (
                         <>
                             <TextInput
-                                label={"Max depth"}
+                                label={"Max Depth"}
                                 type="number"
                                 placeholder={"Deafult is set to 2"}
                                 {...form.getInputProps("depth")}
