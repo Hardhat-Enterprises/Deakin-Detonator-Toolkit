@@ -7,6 +7,7 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
  * Represents the form values for the Cewl component.
@@ -253,14 +254,7 @@ const Cewl = () => {
             )}
 
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                <LoadingOverlay visible={loading} />
-                {loading && (
-                    <div>
-                        <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                            Cancel
-                        </Button>
-                    </div>
-                )}
+                {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
                     <Switch
                         size="md"
