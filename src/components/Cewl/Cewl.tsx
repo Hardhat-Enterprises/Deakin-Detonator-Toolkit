@@ -50,7 +50,7 @@ const Cewl = () => {
     const description =
         "The tool Cewl, renown for being a custom word list generator, is a ruby app which spiders given URLs to " +
         "a specified depth to return a list of words that are able to be used within password crackers including " +
-        " JohnTheRipper (which can be found within the DDT). This tool is particularly useful for security testing and " +
+        " JohnTheRipper (which can be found within DDT). This tool is particularly useful for security testing and " +
         "forensic investigation.\nOptions for the tool can be found at:  https://www.kali.org/tools/cewl/#:~:text=CeWL" +
         "%20(Custom%20Word%20List%20generator,\nCeWL%20can%20follow%20external%20links."; // Description of the component.
     const steps =
