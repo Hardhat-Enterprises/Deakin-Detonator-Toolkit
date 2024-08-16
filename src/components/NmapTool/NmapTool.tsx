@@ -113,7 +113,7 @@ const NmapTool = () => {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
             // Clear the child process pid reference
-            setPid("");
+            setPid(" ");
             // Cancel the Loading Overlay
             setLoading(false);
 
@@ -156,7 +156,7 @@ const NmapTool = () => {
             all option but will need to look into necessary iputs
         */
         if (values.scanOption === "Default") {
-            args.push("");
+            //args.push("");
         } else if (values.scanOption === "Operating System") {
             args.push("-O");
         } else if (values.scanOption === "Firewall Status") {
@@ -179,7 +179,7 @@ const NmapTool = () => {
         args.push(...values.ip.split(" "));
 
         if (values.exclusion) {
-            args.push(`-exclude ${values.exclusion.split(" ")}`);
+            args.push(`--exclude ${values.exclusion.split(" ")}`);
         }
 
         // Execute nmap
@@ -195,7 +195,7 @@ const NmapTool = () => {
     };
 
     const clearOutput = useCallback(() => {
-        setOutput("");
+        setOutput(" ");
         setHasSaved(false);
         setAllowSave(false);
     }, [setOutput]);
