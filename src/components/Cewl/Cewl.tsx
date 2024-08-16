@@ -60,7 +60,7 @@ const Cewl = () => {
         "Step 5: View the output block below to view the results of the tool's execution.";
     const sourceLink = "https://salsa.debian.org/pkg-security-team/cewl"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["ruby"]; // Contains the dependencies required by the component.
+    const dependencies = ["ruby", "cewl"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
     let form = useForm({
