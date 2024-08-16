@@ -346,7 +346,7 @@ const Cewl = () => {
                         </>
                     )}
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type={"submit"}>Scan</Button>
+                    <Button type={"submit"}>Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
