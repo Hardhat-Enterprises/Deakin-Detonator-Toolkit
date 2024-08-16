@@ -80,13 +80,13 @@ const Cewl = () => {
         // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-                setLoadingModal(false); // Set loading to false after the check is done
+                setIsCommandAvailable(isAvailable); // Set the command availability state.
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available.
+                setLoadingModal(false); // Set loading to false after the check is done.
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+                setLoadingModal(false); // Also set loading to false in case of error.
             });
     }, []);
 
@@ -122,22 +122,22 @@ const Cewl = () => {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
 
-            // Clear the child process pid reference
+            // Clear the child process pid reference.
             setPid("");
 
-            // Cancel the Loading Overlay
+            // Cancel the Loading Overlay.
             setLoading(false);
-            // Allow Saving as the output is finalised
+            // Allow Saving as the output is finalised.
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData] // Dependency on the handleProcessData callback.
     );
 
-    // Actions taken after saving the output
+    // Actions taken after saving the output.
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
+        // Indicating that the file has saved which is passed.
+        // back into SaveOutputToTextFile to inform the user.
         setHasSaved(true);
         setAllowSave(false);
     };
@@ -150,13 +150,13 @@ const Cewl = () => {
      * @param {FormValuesType} values - The form values, containing the depth, minLength, maxLength, url, authType, username, password and wordList.
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Activate loading state to indicate ongoing process
+        // Activate loading state to indicate ongoing process.
         setLoading(true);
 
-        // Disallow saving until the tool's execution is complete
+        // Disallow saving until the tool's execution is complete.
         setAllowSave(false);
 
-        // Construct arguments for the cewl command based on form input
+        // Construct arguments for the cewl command based on form input.
         const args = [];
         if (values.depth) {
             args.push("-d", `${values.depth}`);
@@ -195,7 +195,7 @@ const Cewl = () => {
             args.push("-w", `${values.wordList}`);
         }
 
-        // Execute the cewl command via helper method and handle its output or potential errors
+        // Execute the cewl command via helper method and handle its output or potential errors.
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "cewl",
@@ -203,14 +203,14 @@ const Cewl = () => {
                 handleProcessData,
                 handleProcessTermination
             );
-            // Update the UI with the results from the executed command
+            // Update the UI with the results from the executed command.
             setPid(result.pid);
             setOutput(result.output);
-            // Enable setAllowSave to generate output file
+            // Enable setAllowSave to generate output file.
             setAllowSave(true);
         } catch (e: any) {
             setOutput(e.message);
-            // Disallow save after the output
+            // Disallow save after the output.
             setAllowSave(false);
         }
     };
