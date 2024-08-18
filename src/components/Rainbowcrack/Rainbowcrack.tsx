@@ -34,7 +34,7 @@ const RainbowCrack = () => {
     // Component Constants
     const title = "RainbowCrack"; // Title of the component.
     const description =
-        "RainbowCrack is a computer program which utilises rainbow tables to be used in password cracking."; // Description of the component.
+        "RainbowCrack is a computer program which utilises rainbow tables to be used in password cracking. "; // Description of the component.
     const steps =
         "How to use RainbowCrack \n" +
         "Step 1: Enter a hash value. (E.g. 5d41402abc4b2a76b9719d911017c592) \n" +
