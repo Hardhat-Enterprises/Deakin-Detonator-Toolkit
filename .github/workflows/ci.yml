@@ -1,27 +1,70 @@
+# GitHub Actions Workflow for CI/CD Pipeline
+# This workflow is triggered on pushes and pull requests to the 'main' and 'dev' branches.
+
 name: CI
 
 on:
     push:
-        branches: [main, dev]
+        branches: [main, dev] # Triggers the workflow on PUSHES to 'main' and 'dev'
     pull_request:
-        branches: [main, dev]
+        branches: [main, dev] # Triggers the workflow on PULL REQUESTS targeting 'main' and 'dev'
 
 jobs:
-    build:
+    # Dependency setup job
+    dependencies:
+        # Specify the environment the job should run in
         runs-on: ubuntu-latest
-        permissions:
-            checks: write
-            pull-requests: write
-            contents: read
 
+        # Strategy to run jobs in parallel with different Node.js versions
+        strategy:
+            matrix:
+                node-version: [16] # Tests against Node.js versions 16, may be expanded for further compatability Example: version 16 and 18 code: 'node-version: [16, 18]'
+
+        # Define the steps to execute within the 'build' job
         steps:
+            # Checkout the latest code from the repository
             - uses: actions/checkout@v3
+
+            # Set up the Node.js environment with the specified version
             - uses: actions/setup-node@v3
               with:
-                  node-version: "16"
-                  cache: "npm"
+                  node-version: ${{ matrix.node-version }} # Use the current matrix version of Node.js
+
+            # Cache Node.js modules to speed up subsequent runs
+            - name: Cache Node.js modules
+              uses: actions/cache@v3
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }} # Cache key based on OS and package-lock.json hash
+                  restore-keys: |
+                      ${{ runner.os }}-node- # Restore cache with a partial match if the exact key isn't found
+
+            # Install Yarn globally to manage dependencies
             - run: npm install --global yarn
+
+            # Install project dependencies using Yarn and ensure they match the lockfile
             - run: yarn install --frozen-lockfile
+
+    # Style check job (linting)
+    style:
+        runs-on: ubuntu-latest
+        needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
+        steps:
+            # Run the style check
             - run: yarn run style
-            - run: yarn run build
+
+    # Job to run test(s)
+    test:
+        runs-on: ubuntu-latest
+        needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
+        steps:
+            # Run the test suite
             - run: yarn run test
+
+    # Application build job
+    build:
+        runs-on: ubuntu-latest
+        needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
+        steps:
+            # Build the project
+            - run: yarn run build
