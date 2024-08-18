@@ -51,6 +51,7 @@ jobs:
         needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
         steps:
             - uses: actions/checkout@v3
+            - run: yarn install --frozen-lockfile
             # Run the style check
             - run: yarn run style
 
@@ -70,5 +71,6 @@ jobs:
         needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
         steps:
             - uses: actions/checkout@v3
+            - run: yarn install --frozen-lockfile
             # Build the project
             - run: yarn run build
