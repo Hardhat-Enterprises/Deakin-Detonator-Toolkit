@@ -40,7 +40,7 @@ function FTPconnect() {
         "Step 3: Type lcd to change the current directory to the default directory.";
     const sourceLink = "https://www.kali.org/tools/tnftp/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["FTPconnect"]; // Constains the dependencies required for the component.
+    const dependencies = [""]; // Constains the dependencies required for the component.
 
     // Form hook to handle form input.
     const form = useForm({
