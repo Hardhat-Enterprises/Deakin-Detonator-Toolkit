@@ -642,7 +642,7 @@ export const ROUTES: RouteProperties[] = [
         name: "Whois",
         path: "/tools/Whois",
         element: <Whois />,
-        description: "Whois querys databases that store an Internet resource's registered users or assignees.",
+        description: "Whois queries databases that store an internet resource's registered users or assignees.",
         category: "Web Application Testing",
     },
     {

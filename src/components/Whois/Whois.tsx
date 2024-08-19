@@ -26,7 +26,6 @@ function Whois() {
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving of output
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
-    const [sslScan, setSslScan] = useState(false); // State variable for SSL scanning
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
@@ -35,7 +34,7 @@ function Whois() {
     // Component Constants
     const title = "Whois";
     const description =
-        "Whois is a query and response protocol that is used for querying databases that store an Internet resource's registered users or assignees.";
+        "Whois is a query and response protocol that is used for querying databases that store an internet resource's registered users or assignees.";
     const steps =
         "Step 1: Provide the target URL or IP address to scan.\n" +
         "Step 2: Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
@@ -48,7 +47,6 @@ function Whois() {
     let form = useForm({
         initialValues: {
             targetURL: "",
-            sslScan: false,
         },
     });
 
@@ -124,7 +122,6 @@ function Whois() {
             .then(({ output, pid }) => {
                 // Update the UI with the results from the executed command
                 setOutput(output);
-                console.log(pid);
                 setPid(pid);
             })
             .catch((error) => {
