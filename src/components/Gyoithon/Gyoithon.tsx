@@ -6,7 +6,6 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { IconAlertCircle } from "@tabler/icons";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -279,7 +278,6 @@ const Gyoithon = () => {
             <p>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-                    {UserGuide(title, description_userguide)}
                     <Alert
                         icon={<IconAlertCircle size={16} />}
                         radius="md"
