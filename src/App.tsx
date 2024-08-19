@@ -55,7 +55,9 @@ export default function App() {
                             <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
                                 <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 120, lg: 120 }}>
                                     <Group style={{ justifyContent: "center" }}>
-                                        <Button onClick={handleGoBack} color="red">Go Back</Button>
+                                        <Button onClick={handleGoBack} color="red">
+                                            Go Back
+                                        </Button>
                                     </Group>
                                 </Aside>
                             </MediaQuery>
