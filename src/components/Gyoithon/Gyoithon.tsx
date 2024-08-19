@@ -275,6 +275,14 @@ const Gyoithon = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
+             {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+            )}
             <p>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
