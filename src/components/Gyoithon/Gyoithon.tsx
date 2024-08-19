@@ -26,7 +26,7 @@ interface FormValuesType {
 // Component Constants
 const title = "Gyoithon"; // Contains the title of the component.
 const sourceLink = "https://github.com/gyoisamurai/GyoiThon"; // Contains the link to the source code.
-const description_userguide = // Contains the description of the component.
+const description = // Contains the description of the component.
     "Gyoithon is a tool primarily used for gathering intelligence for a Web Server. The tool allows for remote access to " +
     "be inflicted against a targeted web server to allow for products to be identified that are being operated on the server. " +
     "This may include CMS, web server software, programming language and framework. Gyoithon is further capable of automatically " +
@@ -270,7 +270,7 @@ const Gyoithon = () => {
     return (
         <RenderComponent
             title={title}
-            description={description_userguide}
+            description={description}
             steps={steps}
             tutorial={tutorial}
             sourceLink={sourceLink}
