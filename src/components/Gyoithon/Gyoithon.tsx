@@ -18,9 +18,9 @@ interface FormValuesType {
     port: string;
     protocol: string;
     Ml: string;
-    select_file: string;
-    import_file: string;
-    export_path: string;
+    selectFile: string;
+    importFile: string;
+    exportPath: string;
 }
 
 // Component Constants
@@ -65,9 +65,9 @@ const Gyoithon = () => {
             port: "",
             protocol: "",
             Ml: "",
-            select_file: "",
-            import_file: "",
-            export_path: "",
+            selectFile: "",
+            importFile: "",
+            exportPath: "",
         },
     });
 
@@ -177,7 +177,7 @@ const Gyoithon = () => {
             `/usr/share/ddt/GyoiThon/configure.py`,
             `-import`,
             `/usr/share/ddt/GyoiThon/host.txt`,
-            values.import_file,
+            values.importFile,
         ];
         // Displays the output results and state.
         const output = await CommandHelper.runCommand("python3", args);
@@ -235,7 +235,7 @@ const Gyoithon = () => {
     // Returns a preview of the data from the output document and displays.
     const Preview = async (values: FormValuesType) => {
         setLoading(true);
-        const args = [`/usr/share/ddt/GyoiThon/report/` + values.select_file];
+        const args = [`/usr/share/ddt/GyoiThon/report/` + values.selectFile];
         const output = await CommandHelper.runCommand("cat", args);
         setOutput(output);
         setLoading(false);
@@ -244,7 +244,7 @@ const Gyoithon = () => {
     // Selects an output document from directory and exports to a new path
     const Export = async (values: FormValuesType) => {
         setLoading(true);
-        const args = [`/usr/share/ddt/GyoiThon/report/` + values.select_file, values.export_path];
+        const args = [`/usr/share/ddt/GyoiThon/report/` + values.selectFile, values.exportPath];
         const output = await CommandHelper.runCommand("cp", args);
         setOutput(output + "Report exported successfully!");
         setLoading(false);
