@@ -78,6 +78,13 @@ const SMGGhostScanner = () => {
     };
 
     const onSubmit = async (values: FormValues) => {
+        
+        // Validate IP address to command injection prevention
+        if (!/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(values.ip)) {
+        setOutput("Invalid IP address format.");
+        setLoading(false);
+        return;
+        }
 
         
         // Disallow saving until the tool's execution is complete
