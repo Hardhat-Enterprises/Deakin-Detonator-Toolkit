@@ -328,6 +328,11 @@
                         "args": true
                     },
                     {
+                        "name": "whois",
+                        "cmd": "whois",
+                        "args": true
+                    },
+                    {
                         "name": "nikto",
                         "cmd": "nikto",
                         "args": true
