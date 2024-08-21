@@ -43,6 +43,11 @@
                         "args": true
                     },
                     {
+                        "name": "amass",
+                        "cmd": "amass",
+                        "args": true
+                    },
+                    {
                         "name": "snmp-check",
                         "cmd": "snmp-check",
                         "args": true
