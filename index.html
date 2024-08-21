@@ -5,8 +5,26 @@
         <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Deakin Detonator Toolkit</title>
+        <style>
+            /* Optional: Center the logo on the page */
+            #logo-container {
+                text-align: center;
+                margin-top: 60px;
+                margin-left: 200px;
+            }
+            #logo-container img {
+                width: 500px;
+                height: auto;
+            }
+        </style>
     </head>
     <body>
+        <!-- Logo Container -->
+        <div id="logo-container">
+            <img src="logo.png" alt="Deakin Detonator Toolkit Logo" />
+        </div>
+
+        <!-- Main Application -->
         <div id="root"></div>
         <script type="module" src="/src/main.tsx"></script>
     </body>
