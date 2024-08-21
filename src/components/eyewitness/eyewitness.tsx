@@ -18,6 +18,13 @@ const description_userguide =
     "\n\nStep 4: Press the scan button. ";
 
 interface FormValues {
+    /**
+     * Represents the form values for the EyeWitness component.
+     *
+     * @property {string} filepath - The path to the file containing URLs to be processed by EyeWitness.
+     * @property {string} directory - The directory path where screenshots will be saved.
+     * @property {string} timeout - The maximum number of seconds for EyeWitness to try and screenshot a webpage.
+     */
     filepath: string;
     directory: string;
     timeout: string;
