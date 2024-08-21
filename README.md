@@ -42,7 +42,7 @@ To install the Deakin Detonator Toolkit on Kali, you can follow either the new o
 1. Run the following command, this will install dependent packages, patching and and start the application:
 
     ```
-    curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/setup_ddt.sh -o install_ddt.sh && chmod +x setup_ddt.sh && ./setup_ddt.sh
+    curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/setup_ddt.sh -o setup_ddt.sh && chmod +x setup_ddt.sh && ./setup_ddt.sh
     ```
 
 ## Old method
