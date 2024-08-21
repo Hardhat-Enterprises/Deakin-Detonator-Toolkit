@@ -12,7 +12,7 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 /**
  * Represents the form values for the Arjun component.
  */
-interface FormValues {
+interface FormValuesType {
     url: string;
     outputFileName: string;
     stability: boolean;
@@ -126,7 +126,7 @@ function Arjuntool() {
      * @param {FormValuesType} values - The form values, containing the URL, output file name and stability value.
      */
 
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
 
@@ -196,7 +196,7 @@ function Arjuntool() {
                         <Switch
                             size="md"
                             label="Stability mode"
-                            {...form.getInputProps("stability" as keyof FormValues)}
+                            {...form.getInputProps("stability" as keyof FormValuesType)}
                         />
                         <Button type={"submit"}>Scan</Button>
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
