@@ -76,6 +76,7 @@ import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
+import Amass from "./Amass/Amass";
 
 export interface RouteProperties {
     name: string;
@@ -290,6 +291,13 @@ export const ROUTES: RouteProperties[] = [
         element: <AMAP />,
         description: "AMAP is a network scanning tool used to identify open ports and services on targeted hosts.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Amass",
+        path: "/tools/Amass",
+        element: <Amass />,
+        description: "Amass is a tool for in-depth DNS enumeration and network mapping",
+        category: "Information Gathering and Reconnaissance",
     },
     {
         name: "Arjun",
