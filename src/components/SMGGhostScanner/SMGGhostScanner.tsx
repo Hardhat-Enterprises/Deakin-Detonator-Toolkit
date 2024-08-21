@@ -1,24 +1,26 @@
 import { Button, Stack, TextInput, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { IconAlertCircle } from "@tabler/icons";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { RenderComponent } from "../UserGuide/UserGuide";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 const title = "SMG-Ghost Scanner"; // Title of the component.
-const descriptionUserGuide =
-    "SMG-Ghost Scanner is a tool used to scan a target to see if they are vulnerable to the attack vector " +
-    "CVE2020-0796. This vulnerability fell within Microsoft's SMB 3.1.1 protocol stack implementation where " +
-    "due to the failure of handling particular requests and response messages, an attacker could perform " +
-    "remote code execution to act as the systems user.\n\n" +
-    "Using SMG-Ghost Scanner:\n" +
+const description =
+    "SMG-Ghost Scanner is a tool used to scan a target for vulnerability to the CVE2020-0796 attack vector."; // Description of the component.
+const steps =
     "Step 1: Enter a Target IP address.\n" +
-    "       Eg: 192.168.1.1 \n\n" +
-    "Step 2: Click scan to commence SMG-Ghost Scanners operation.\n\n" +
-    "Step 3: View the Output block below to view the results of the tools execution."; // Description of the component.
+    "Step 2: Click scan to commence SMG-Ghost Scanners operation.\n" +
+    "Step 3: View the Output block below to view the results of the tools execution."; // Steps for viewing the component
+const sourceLink = ""; // Link to the source code or documentation.
+const tutorial = ""; // Link to the official documentation/tutorial.
+const dependencies = ["smgghostscanner"]; // Contains the dependencies required by the component.
 /**
  * Interface representing the form values used in the SMGGhostScanner component.
  */
@@ -36,13 +38,31 @@ const SMGGhostScanner = () => {
     const [allowSave, setAllowSave] = useState(false); //   State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
 
-    // Form Management
+    // form hook to handle form input
     let form = useForm({
         initialValues: {
             ip: "",
         },
     });
+
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
 
     // Process Handlers
     /**
@@ -133,23 +153,40 @@ const SMGGhostScanner = () => {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            <Stack>
-                {UserGuide(title, descriptionUserGuide)}
-                <Alert
-                    icon={<IconAlertCircle size={16} />}
-                    radius="md"
-                    children={
-                        "Please turn off the firewall on target system, otherwise the detect packet might be dropped. "
-                    }
-                ></Alert>
-                <TextInput label={"Target IP address"} required {...form.getInputProps("ip")} />
-                <Button type={"submit"}>Scan</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
+
+            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    {UserGuide(title, description)}
+                    <Alert
+                        icon={<IconAlertCircle size={16} />}
+                        radius="md"
+                        children={
+                            "Please turn off the firewall on target system, otherwise the detect packet might be dropped. "
+                        }
+                    ></Alert>
+                    <TextInput label={"Target IP address"} required {...form.getInputProps("ip")} />
+                    <Button type={"submit"}>Scan</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 
