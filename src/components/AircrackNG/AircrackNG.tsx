@@ -23,6 +23,10 @@ interface FormValuesType {
     MACAddress: string;
     PMKID: string;
     customConfig: string;
+    fakeHost: string;
+    // New channel: string;
+    // New replayInterface: string;
+    // New
 }
 
 // Component Constants
@@ -96,6 +100,10 @@ const AircrackNG = () => {
             MACAddress: "",
             PMKID: "",
             customConfig: "",
+            fakeHost: "",
+            //New channel: "",
+            //New replayInterface: "",
+            //New
         },
     });
 
