@@ -1,4 +1,4 @@
- import { Stack, Table, Title, NativeSelect } from "@mantine/core";
+import { Stack, Table, Title, NativeSelect } from "@mantine/core";
 import { useState } from "react";
 import { getTools } from "../components/RouteWrapper";
 import ToolItem from "../components/ToolItem/ToolItem";
