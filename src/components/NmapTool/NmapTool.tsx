@@ -48,10 +48,12 @@ function Nmap() {
 
     // Declare constants for the component
     const title = "Nmap";
-    const description = "Nmap is a powerful network scanning and discovery tool used to explore networks, detect open ports, identify services, and gather information about target systems.";
-    const steps = "Step 1: Enter the target IP or hostname.\n" +
-                  "Step 2: Configure scan options.\n" +
-                  "Step 3: Run the Nmap scan and review results.";
+    const description =
+        "Nmap is a powerful network scanning and discovery tool used to explore networks, detect open ports, identify services, and gather information about target systems.";
+    const steps =
+        "Step 1: Enter the target IP or hostname.\n" +
+        "Step 2: Configure scan options.\n" +
+        "Step 3: Run the Nmap scan and review results.";
     const sourceLink = "https://nmap.org/book/man.html";
     const tutorial = "";
     const dependencies = ["nmap"];
@@ -142,12 +144,12 @@ function Nmap() {
         if (values.ports) args.push(`-p ${values.ports}`);
         args.push(`-${values.scanType}`);
         args.push(`-${values.timing}`);
-        if (values.osDetection) args.push('-O');
-        if (values.versionDetection) args.push('-sV');
+        if (values.osDetection) args.push("-O");
+        if (values.versionDetection) args.push("-sV");
         if (values.scriptScan) args.push(`--script=${values.scriptScan}`);
-        if (values.aggressive) args.push('-A');
-        if (values.verbose) args.push('-v');
-        if (values.noPortScan) args.push('-sn');
+        if (values.aggressive) args.push("-A");
+        if (values.verbose) args.push("-v");
+        if (values.noPortScan) args.push("-sn");
 
         args.push(values.target);
 
@@ -216,12 +218,20 @@ function Nmap() {
                             <Stepper.Step label="Scan Options">
                                 <Grid>
                                     <Grid.Col span={6}>
-                                        <Button onClick={() => setBasicOpened(!basicOpened)} variant="outline" fullWidth>
+                                        <Button
+                                            onClick={() => setBasicOpened(!basicOpened)}
+                                            variant="outline"
+                                            fullWidth
+                                        >
                                             {basicOpened ? "Hide Basic Options" : "Show Basic Options"}
                                         </Button>
                                     </Grid.Col>
                                     <Grid.Col span={6}>
-                                        <Button onClick={() => setAdvancedOpened(!advancedOpened)} variant="outline" fullWidth>
+                                        <Button
+                                            onClick={() => setAdvancedOpened(!advancedOpened)}
+                                            variant="outline"
+                                            fullWidth
+                                        >
                                             {advancedOpened ? "Hide Advanced Options" : "Show Advanced Options"}
                                         </Button>
                                     </Grid.Col>
@@ -230,7 +240,11 @@ function Nmap() {
                                 {/* Render Basic Options */}
                                 {basicOpened && (
                                     <Stack mt={10}>
-                                        <TextInput label="Ports" placeholder="e.g., 80,443,8080 or 1-1000" {...form.getInputProps("ports")} />
+                                        <TextInput
+                                            label="Ports"
+                                            placeholder="e.g., 80,443,8080 or 1-1000"
+                                            {...form.getInputProps("ports")}
+                                        />
                                         <Select
                                             label="Scan Type"
                                             data={[
@@ -258,12 +272,31 @@ function Nmap() {
                                 {/* Render Advanced Options */}
                                 {advancedOpened && (
                                     <Stack mt={10}>
-                                        <Switch label="OS Detection" {...form.getInputProps("osDetection", { type: "checkbox" })} />
-                                        <Switch label="Version Detection" {...form.getInputProps("versionDetection", { type: "checkbox" })} />
-                                        <TextInput label="Script Scan" placeholder="e.g., default,safe,vuln" {...form.getInputProps("scriptScan")} />
-                                        <Switch label="Aggressive Scan" {...form.getInputProps("aggressive", { type: "checkbox" })} />
-                                        <Switch label="Verbose Output" {...form.getInputProps("verbose", { type: "checkbox" })} />
-                                        <Switch label="No Port Scan (Host Discovery)" {...form.getInputProps("noPortScan", { type: "checkbox" })} />
+                                        <Switch
+                                            label="OS Detection"
+                                            {...form.getInputProps("osDetection", { type: "checkbox" })}
+                                        />
+                                        <Switch
+                                            label="Version Detection"
+                                            {...form.getInputProps("versionDetection", { type: "checkbox" })}
+                                        />
+                                        <TextInput
+                                            label="Script Scan"
+                                            placeholder="e.g., default,safe,vuln"
+                                            {...form.getInputProps("scriptScan")}
+                                        />
+                                        <Switch
+                                            label="Aggressive Scan"
+                                            {...form.getInputProps("aggressive", { type: "checkbox" })}
+                                        />
+                                        <Switch
+                                            label="Verbose Output"
+                                            {...form.getInputProps("verbose", { type: "checkbox" })}
+                                        />
+                                        <Switch
+                                            label="No Port Scan (Host Discovery)"
+                                            {...form.getInputProps("noPortScan", { type: "checkbox" })}
+                                        />
                                     </Stack>
                                 )}
                             </Stepper.Step>
