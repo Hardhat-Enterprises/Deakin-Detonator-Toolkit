@@ -8,7 +8,7 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-const title = "SMG-Ghost Scanner";
+const title = "SMG-Ghost Scanner"; // Title of the component.
 const descriptionUserGuide =
     "SMG-Ghost Scanner is a tool used to scan a target to see if they are vulnerable to the attack vector " +
     "CVE2020-0796. This vulnerability fell within Microsoft's SMB 3.1.1 protocol stack implementation where " +
@@ -18,7 +18,7 @@ const descriptionUserGuide =
     "Step 1: Enter a Target IP address.\n" +
     "       Eg: 192.168.1.1 \n\n" +
     "Step 2: Click scan to commence SMG-Ghost Scanners operation.\n\n" +
-    "Step 3: View the Output block below to view the results of the tools execution.";
+    "Step 3: View the Output block below to view the results of the tools execution."; // Description of the component.
 /**
  * Interface representing the form values used in the SMGGhostScanner component.
  */
@@ -31,11 +31,11 @@ interface FormValuesType {
  */
 const SMGGhostScanner = () => {
     // Component State Variables
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-    const [pid, setPid] = useState("");
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [allowSave, setAllowSave] = useState(false); //   State variable to allow saving the output to a file.
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
 
     // Form Management
     let form = useForm({
