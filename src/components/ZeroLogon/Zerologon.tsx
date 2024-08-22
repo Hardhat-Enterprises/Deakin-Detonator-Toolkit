@@ -42,7 +42,7 @@ const ZeroLogon = () => {
         "session key.\n\nFurther information can be found at: https://www.crowdstrike.com/blog/cve-2020-1472-zerologon-" +
         "security-advisory/\n\n" +
         "Using ZeroLogon:\n\n" +
-        "Step 1: Enter a domain Controller name.\n" +
+        "Step 1: Enter a domain controller name.\n" +
         "       Eg: TEST-AD\n\n" +
         "Step 2: Enter a target IP address.\n" +
         "       Eg: 192.168.1.1\n\n" +
