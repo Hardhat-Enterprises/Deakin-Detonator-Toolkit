@@ -38,6 +38,11 @@
                         "args": true
                     },
                     {
+                        "name": "arp-fingerprint",
+                        "cmd": "arp-fingerprint",
+                        "args": true
+                    },
+                    {
                         "name": "arp-scan",
                         "cmd": "arp-scan",
                         "args": true
@@ -48,18 +53,13 @@
                         "args": true
                     },
                     {
-                        "name": "arp-fingerprint ",
-                        "cmd": "arp-fingerprint ",
+                        "name": "bash",
+                        "cmd": "bash",
                         "args": true
                     },
                     {
                         "name": "bed",
                         "cmd": "bed",
-                        "args": true
-                    },
-                    {
-                        "name": "bash",
-                        "cmd": "bash",
                         "args": true
                     },
                     {
@@ -93,6 +93,11 @@
                         "args": true
                     },
                     {
+                        "name": "dmitry",
+                        "cmd": "dmitry",
+                        "args": true
+                    },
+                    {
                         "name": "dnsenum",
                         "cmd": "dnsenum",
                         "args": true
@@ -105,11 +110,6 @@
                     {
                         "name": "dnsrecon",
                         "cmd": "dnsrecon",
-                        "args": true
-                    },
-                    {
-                        "name": "dmitry",
-                        "cmd": "dmitry",
                         "args": true
                     },
                     {
@@ -133,13 +133,13 @@
                         "args": true
                     },
                     {
-                        "name": "gobuster",
-                        "cmd": "gobuster",
+                        "name": "gitleaks",
+                        "cmd": "gitleaks",
                         "args": true
                     },
                     {
-                        "name": "gitleaks",
-                        "cmd": "gitleaks",
+                        "name": "gobuster",
+                        "cmd": "gobuster",
                         "args": true
                     },
                     {
@@ -228,13 +228,13 @@
                         "args": true
                     },
                     {
-                        "name": "rcrack",
-                        "cmd": "rcrack",
+                        "name": "rar2john",
+                        "cmd": "rar2john",
                         "args": true
                     },
                     {
-                        "name": "rar2john",
-                        "cmd": "rar2john",
+                        "name": "rcrack",
+                        "cmd": "rcrack",
                         "args": true
                     },
                     {
@@ -263,13 +263,13 @@
                         "args": true
                     },
                     {
-                        "name": "tshark",
-                        "cmd": "tshark",
+                        "name": "traceroute",
+                        "cmd": "sudo traceroute",
                         "args": true
                     },
                     {
-                        "name": "traceroute",
-                        "cmd": "sudo traceroute",
+                        "name": "tshark",
+                        "cmd": "tshark",
                         "args": true
                     },
                     {
@@ -316,7 +316,11 @@
             "category": "DeveloperTool",
             "copyright": "",
             "deb": {
-                "depends": ["openjdk-11-jdk", "python3-impacket", "dsniff"],
+                "depends": [
+                    "openjdk-11-jdk",
+                    "python3-impacket",
+                    "dsniff"
+                ],
                 "files": {
                     "/usr/share/ddt": "exploits/",
                     "/usr/share/doc/ddt/README.md": "../README.md"
