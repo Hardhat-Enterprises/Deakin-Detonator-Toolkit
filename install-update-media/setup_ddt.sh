@@ -35,6 +35,12 @@ sudo apt-get install -y \
 	nodejs \
 	npm
 
+# Verify Node.js and npm installation
+if ! command -v node &>/dev/null || ! command -v npm &>/dev/null; then
+	echo "Node.js or npm installation failed. Exiting..."
+	exit 1
+fi
+
 # Check for installation errors
 if [ $? -ne 0 ]; then
 	echo "Error installing packages"
