@@ -114,10 +114,11 @@ const netcatOptions = ["Listen", "Connect", "Port Scan", "Send File", "Receive F
     );
 
     /**
-     * Handles the submission of the form and executes the appropriate netcat command based on the selected options.
-     * 
-     * @param {FormValuesType} values - The values from the form submission.
-     * @returns {Promise<void>} - A promise that resolves when the command execution is complete.
+     * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the netcat tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
      */
     const onSubmit = async (values: FormValuesType) => {
         //Starts off with the IP address after netcat
@@ -251,9 +252,8 @@ const netcatOptions = ["Listen", "Connect", "Port Scan", "Send File", "Receive F
         setAllowSave(true);
     };
 
-     /**
-     * clearOutput: Callback function to clear the console output.
-     * It resets the state variable holding the output, thereby clearing the display.
+    /**
+     * Clears the output state.
      */
     const clearOutput = useCallback(() => {
         setOutput("");
@@ -261,9 +261,6 @@ const netcatOptions = ["Listen", "Connect", "Port Scan", "Send File", "Receive F
         setHasSaved(false);
     }, [setOutput]);
     
-    /**
-     * Callback function to handle the completion of a save operation.
-     */
     const handleSaveComplete = useCallback(() => {
         // Indicating that the file has saved which is passed
         // back into SaveOutputToTextFile to inform the user
