@@ -7,6 +7,7 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
+// Constants and Static Values
 const title = "EyeWitness";
 const description_userguide =
     "EyeWitness takes screenshots of websites, provides information about the server header, and identifies default credentials (if known). It presents this information in a HTML report. " +
@@ -17,6 +18,7 @@ const description_userguide =
     "\n\nStep3: Add a number in the third field for the maximum number of seconds for EyeWitness to try and screenshot a webpage, e.g. 20. " +
     "\n\nStep 4: Press the scan button. ";
 
+// Interface Definitions
 interface FormValues {
     /**
      * Represents the form values for the EyeWitness component.
@@ -31,6 +33,7 @@ interface FormValues {
 }
 
 export function Eyewitness() {
+    // State Variables
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
@@ -106,18 +109,13 @@ export function Eyewitness() {
     const onSubmit = async (values: FormValues) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
-
         // Enable the Loading Overlay
         setLoading(true);
 
         const args = [`-f`, `${values.filepath}`];
-
         args.push(`--web`);
-
         args.push(`-d`, `${values.directory}`);
-
         args.push(`--timeout`, `${values.timeout}`);
-
         args.push(`--no-prompt`);
 
         CommandHelper.runCommandGetPidAndOutput("eyewitness", args, handleProcessData, handleProcessTermination)
