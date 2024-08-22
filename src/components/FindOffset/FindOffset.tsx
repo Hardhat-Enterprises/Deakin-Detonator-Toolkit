@@ -21,6 +21,7 @@ const steps =
     "Step 3: Click the 'Find offset' button to commence the tool's operation.\n\n" +
     "Step 4: View the output window to see if the exploit was successful and to view the offset value.\n\n";
 const tutorial = " "; //input tutorial here once completed
+const sourceLink = ""; //sourceLink not available, as tool is a mix from PWNtools repurposed for DDT.
 
 interface FormValues {
     pathToBinary: string;
@@ -74,6 +75,7 @@ const FindOffset = () => {
                 description={description}
                 steps={steps}
                 tutorial={tutorial} //needs to be implemented once the tutorial is completed
+                sourceLink={sourceLink}
             >
                 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                     <LoadingOverlay visible={loading} />
