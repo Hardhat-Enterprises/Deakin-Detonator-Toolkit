@@ -50,6 +50,12 @@ fi
 # Install Yarn globally
 sudo npm install -g yarn
 
+# Verify Yarn installation
+if ! command -v yarn &>/dev/null; then
+	echo "Yarn installation failed. Exiting..."
+	exit 1
+fi
+
 # Install Yarn dependencies
 yarn install
 
