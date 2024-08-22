@@ -333,6 +333,11 @@
                         "args": true
                     },
                     {
+                        "name": "sqlmap",
+                        "cmd": "sqlmap",
+                        "args": true
+                    },
+                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
                         "args": true
