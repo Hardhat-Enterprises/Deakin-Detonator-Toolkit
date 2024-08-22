@@ -111,7 +111,7 @@ function Gitleaks() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
@@ -179,7 +179,7 @@ function Gitleaks() {
                 "gitleaks",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             // Update the state with the process ID and initial output.

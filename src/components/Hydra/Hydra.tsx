@@ -172,7 +172,7 @@ const Hydra = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -233,7 +233,7 @@ const Hydra = () => {
                 "hydra",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             // Update the UI with the results from the executed command
             setPid(result.pid);
@@ -282,7 +282,7 @@ const Hydra = () => {
                         passwordInputType: selectedPasswordInput,
                         loginInputType: selectedLoginInput,
                         service: selectedService,
-                    })
+                    }),
                 )}
             >
                 <Stack>

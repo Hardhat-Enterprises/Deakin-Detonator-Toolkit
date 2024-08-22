@@ -69,7 +69,7 @@ export function NSLookup() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
     /**
      * onSubmit: Handler function that is triggered when the form is submitted.

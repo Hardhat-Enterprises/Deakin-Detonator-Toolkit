@@ -74,7 +74,7 @@ export function ZeroLogon() {
             // Cancel the Loading Overlay
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     const onSubmit = async (values: FormValues) => {
@@ -85,7 +85,7 @@ export function ZeroLogon() {
             "python3",
             args,
             handleProcessData,
-            handleProcessTermination
+            handleProcessTermination,
         );
 
         setPid(result.pid);

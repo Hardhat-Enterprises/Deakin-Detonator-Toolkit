@@ -41,7 +41,7 @@ export function WalkthroughsPage() {
         <Stack align={"center"}>
             {UserGuide(
                 "Walkthrough Videos",
-                "How to add a Walkthrough Video \nStep 1: Use the add button to create a video page \nStep 2: Register it in the RouteWrapper"
+                "How to add a Walkthrough Video \nStep 1: Use the add button to create a video page \nStep 2: Register it in the RouteWrapper",
             )}
             <Table horizontalSpacing="xl" verticalSpacing="md" fontSize="md">
                 <thead>

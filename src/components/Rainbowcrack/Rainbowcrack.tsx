@@ -91,7 +91,7 @@ const RainbowCrack = () => {
             setPid("");
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**

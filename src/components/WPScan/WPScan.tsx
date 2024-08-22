@@ -157,7 +157,7 @@ const WPScan = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -240,7 +240,7 @@ const WPScan = () => {
                 "wpscan",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             // Update the UI with the results from the executed command

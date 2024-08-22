@@ -121,7 +121,7 @@ function Metagoofil() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -151,7 +151,7 @@ function Metagoofil() {
                 "metagoofil",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             // Update the UI with the results from the executed command

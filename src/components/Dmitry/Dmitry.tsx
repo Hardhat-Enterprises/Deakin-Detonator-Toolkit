@@ -84,7 +84,7 @@ const dmitry = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // Actions taken after saving the output
@@ -151,7 +151,7 @@ const dmitry = () => {
                 "dmitry",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);

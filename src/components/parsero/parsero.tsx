@@ -93,7 +93,7 @@ const Parsero = () => {
             // Cancel the Loading Overlay.
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**

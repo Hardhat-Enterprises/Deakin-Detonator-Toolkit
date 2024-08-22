@@ -84,7 +84,7 @@ const DnsenumTool = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
     // Sends a SIGTERM signal to gracefully terminate the process
     const handleCancel = () => {
@@ -126,7 +126,7 @@ const DnsenumTool = () => {
                 "dnsenum",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);

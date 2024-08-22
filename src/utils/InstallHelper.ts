@@ -9,7 +9,7 @@ import { CommandHelper } from "./CommandHelper";
  */
 const installDependency = async (
     dependency: string,
-    setOutput: React.Dispatch<React.SetStateAction<string>>
+    setOutput: React.Dispatch<React.SetStateAction<string>>,
 ): Promise<boolean> => {
     /**
      * Handles the processed data from a process.
@@ -36,7 +36,7 @@ const installDependency = async (
                 "apt-get",
                 ["install", dependency],
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             // Check if the dependency is available after installation
@@ -59,7 +59,7 @@ const installDependency = async (
  */
 export const installDependencies = async (
     dependencies: string[],
-    setOutput: React.Dispatch<React.SetStateAction<string>>
+    setOutput: React.Dispatch<React.SetStateAction<string>>,
 ): Promise<boolean[]> => {
     const results: boolean[] = [];
     for (const dependency of dependencies) {

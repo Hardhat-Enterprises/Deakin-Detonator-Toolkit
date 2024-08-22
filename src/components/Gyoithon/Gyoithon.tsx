@@ -114,7 +114,7 @@ const Gyoithon = () => {
             // Cancel the Loading Overlay
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // Returns a text file explaining tool requirements to the Gyoithon directory on the host device.
@@ -203,7 +203,7 @@ const Gyoithon = () => {
             "python3",
             args,
             handleProcessData,
-            handleProcessTermination
+            handleProcessTermination,
         );
         // Returns output and state of the run process
         setPid(result.pid);

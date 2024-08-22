@@ -103,7 +103,7 @@ function WhatWeb() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
     /**
      * handSaveComplete: Recognises that the output file has been saved.

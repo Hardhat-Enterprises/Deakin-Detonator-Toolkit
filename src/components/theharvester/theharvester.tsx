@@ -126,7 +126,7 @@ const TheHarvester = () => {
             setLoading(false);
             setAllowSave(true);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
     // Sends a SIGTERM signal to gracefully terminate the process
     const handleCancel = () => {
@@ -181,7 +181,7 @@ const TheHarvester = () => {
                 "theHarvester",
                 filteredArgs,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setOutput(result.output);
         } catch (e: any) {

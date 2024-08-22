@@ -62,7 +62,7 @@ const SMGGhostScanner = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // Actions taken after saving the output
@@ -86,7 +86,7 @@ const SMGGhostScanner = () => {
                 "python3",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);

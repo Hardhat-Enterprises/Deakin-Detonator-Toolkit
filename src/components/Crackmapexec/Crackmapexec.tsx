@@ -73,7 +73,7 @@ const Crackmapexec = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // Sends a SIGTERM signal to gracefully terminate the process
@@ -112,7 +112,7 @@ const Crackmapexec = () => {
                 "crackmapexec",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);

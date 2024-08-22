@@ -80,7 +80,7 @@ const Crunch = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // Actions taken after saving the output
@@ -110,7 +110,7 @@ const Crunch = () => {
                 "crunch",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);
