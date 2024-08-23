@@ -1,0 +1,1 @@
+TODO: Construct a guide that introduces new team members to the project
