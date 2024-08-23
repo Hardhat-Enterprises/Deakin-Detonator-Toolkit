@@ -122,7 +122,7 @@ const SearchSploit = () => {
             );
             setPid(result.pid); // Set process ID
             setOutput(result.output); // Set output data
-        } catch (e: any) {  // Type the error as 'any'
+        } catch (e) {
             setOutput(e.message); // Set output to error message
         } finally {
             setLoading(false); // Set loading state to false
@@ -219,28 +219,36 @@ const SearchSploit = () => {
                 />
                 <Button type={"submit"}>Scan</Button>
                 <Accordion>
-                    <Accordion.Item value={"steps"}>
-                        <Accordion.Control>Steps</Accordion.Control>
+                    <Accordion.Item value="item-1">
+                        <Accordion.Control>Help:</Accordion.Control>
                         <Accordion.Panel>
-                            <Text>{STEPS}</Text>
+                            <List>
+                                <Text weight={700}>Search Options:</Text>
+                                {SEARCH_OPTIONS.map((option) => (
+                                    <List.Item key={option}>{option}</List.Item>
+                                ))}
+                            </List>
+                            <List>
+                                <Text weight={700}>Output:</Text>
+                                {OUTPUT_TYPES.map((type) => (
+                                    <List.Item key={type}>{type}</List.Item>
+                                ))}
+                            </List>
+                            <List>
+                                <Text weight={700}>Non-Searching:</Text>
+                                {NON_SEARCH_OPTIONS.map((option) => (
+                                    <List.Item key={option}>{option}</List.Item>
+                                ))}
+                            </List>
                         </Accordion.Panel>
                     </Accordion.Item>
                 </Accordion>
-                {output && (
-                    <ConsoleWrapper
-                        output={output}
-                        clearOutput={clearOutput}
-                        allowSave={allowSave}
-                        hasSaved={hasSaved}
-                        handleSaveComplete
-
-={handleSaveComplete}
-                    />
-                )}
-                {SaveOutputToTextFile_v2(allowSave, output, handleSaveComplete)} {/* Save output */}
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
     );
 };
 
+// Export the component as default
 export default SearchSploit;
