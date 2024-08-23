@@ -7,7 +7,18 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-// Constants and Static Values
+/**
+ * Represents the form values for the EyeWitness component.
+ */
+interface FormValues {
+    filepath: string;
+    directory: string;
+    timeout: string;
+}
+
+/**
+ * The Eyewitness component.
+ */
 const title = "EyeWitness";
 const description_userguide =
     "EyeWitness takes screenshots of websites, provides information about the server header, and identifies default credentials (if known). It presents this information in a HTML report. " +
@@ -17,20 +28,6 @@ const description_userguide =
     "\n\nStep 2: Add the file path for where you want the output saved in the second field." +
     "\n\nStep 3: Add a number in the third field for the maximum number of seconds for EyeWitness to try and screenshot a webpage, e.g. 20. " +
     "\n\nStep 4: Press the scan button. ";
-
-// Interface Definitions
-interface FormValues {
-    /**
-     * Represents the form values for the EyeWitness component.
-     *
-     * @property {string} filepath - The path to the file containing URLs to be processed by EyeWitness.
-     * @property {string} directory - The directory path where screenshots will be saved.
-     * @property {string} timeout - The maximum number of seconds for EyeWitness to try and screenshot a webpage.
-     */
-    filepath: string;
-    directory: string;
-    timeout: string;
-}
 
 export function Eyewitness() {
     // State Variables
@@ -58,6 +55,7 @@ export function Eyewitness() {
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
     }, []);
+
     // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
     // the termination of that process, resetting state variables, handling the output data,
     // and informing the user.
@@ -97,6 +95,7 @@ export function Eyewitness() {
         setHasSaved(true);
         setAllowSave(false);
     };
+
     /**
      * Handles form submission, executes the EyeWitness tool, and updates the state.
      *
@@ -124,6 +123,7 @@ export function Eyewitness() {
                 setOutput(`Error: ${error.message}`); // Set the error message
             });
     };
+
     /**
      * Clears the output data and resets the save state.
      */
