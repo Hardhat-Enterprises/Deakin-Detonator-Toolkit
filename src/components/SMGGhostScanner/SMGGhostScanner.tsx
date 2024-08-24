@@ -4,7 +4,6 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { IconAlertCircle } from "@tabler/icons";
-import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
@@ -172,7 +171,6 @@ const SMGGhostScanner = () => {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    {UserGuide(title, description)}
                     <Alert
                         icon={<IconAlertCircle size={16} />}
                         radius="md"
