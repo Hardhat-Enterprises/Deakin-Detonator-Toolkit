@@ -80,7 +80,7 @@ function Eyewitness() {
             setAllowSave(true); // Allow Saving as the output is finalised
             setHasSaved(false); // Reset save status
         },
-        [handleProcessData],
+        [handleProcessData]
     );
 
     // Actions taken after saving the output
@@ -119,7 +119,7 @@ function Eyewitness() {
             })
             .catch((error) => {
                 setLoading(false); // Cancel the Loading Overlay
-                setOutput(`Error: ${error.message}`); 
+                setOutput(`Error: ${error.message}`);
             });
     };
 
