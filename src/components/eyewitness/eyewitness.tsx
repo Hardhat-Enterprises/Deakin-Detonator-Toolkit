@@ -3,7 +3,6 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
@@ -137,7 +136,8 @@ function Eyewitness() {
         <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
             {LoadingOverlayAndCancelButton(loading, pid)}
             <Stack>
-                {UserGuide(title, description_userguide)}
+                <Title>{title}</Title>
+                <p>{description}</p>
                 <TextInput
                     label={"Enter the file name or path containing URLs:"}
                     placeholder={"Example: /home/kali/Desktop/filename"}
