@@ -262,7 +262,7 @@ export const ROUTES: RouteProperties[] = [
             "A walkthrough on Topology Hack the Box challenge which requires knowledge of network protocols, routing, and security configurations",
         category: "",
     },
-    //TOOLS BELOW THIS COMMENT - PLEASE ADDE NEW TOOLS IN ALPHABETICAL ORDER
+    //TOOLS BELOW THIS COMMENT - PLEASE ADD NEW TOOLS IN ALPHABETICAL ORDER
     {
         name: "Airbase NG",
         path: "/tools/AirbaseNG",
@@ -327,7 +327,7 @@ export const ROUTES: RouteProperties[] = [
         category: "Attack Tools",
     },
     {
-        name: "bed",
+        name: "BED",
         path: "/tools/bed",
         element: <BEDTool />,
         description:
@@ -391,10 +391,10 @@ export const ROUTES: RouteProperties[] = [
         category: "Information Gathering and Analysis",
     },
     {
-        name: "Dnsrecon",
+        name: "DNSRecon",
         path: "/tools/Dnsrecon",
         element: <Dnsrecon />,
-        description: "Dnsrecon is a python script that is used to find different hosts",
+        description: "DNSRecon is a python script that is used to find different hosts",
         category: "Information Gathering and Analysis",
     },
     {
@@ -415,11 +415,11 @@ export const ROUTES: RouteProperties[] = [
         name: "Fcrackzip",
         path: "/tools/Fcrackzip",
         element: <Fcrackzip />,
-        description: "A tool for cracking password of a protected zip file",
+        description: "A tool for cracking the password of a protected zip file",
         category: "Password Cracking and Authentication Testing",
     },
     {
-        name: "Ffuf",
+        name: "FFuf",
         path: "/tools/Ffuf",
         element: <FfufTool />,
         description: "FFuf is a brute force web fuzzer for directory and resource discovery",
@@ -535,7 +535,7 @@ export const ROUTES: RouteProperties[] = [
         name: "Parsero",
         path: "/tools/parsero",
         element: <Parsero />,
-        description: "Python Script that reads Robots.txt of w webserver to view Disallow entries",
+        description: "Python Script that reads Robots.txt of a webserver to view Disallow entries",
         category: "Web Application Testing",
     },
     {
@@ -558,7 +558,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/SearchSploit",
         element: <SearchSploit />,
         description: "SearchSploit Utility. Allow you to search through exploits, shellcodes and papers.",
-        category: "Vulnerabilityy Assessment and Exploitation",
+        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Sherlock",
