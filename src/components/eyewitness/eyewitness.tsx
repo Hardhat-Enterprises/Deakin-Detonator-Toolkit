@@ -20,7 +20,7 @@ interface FormValues {
  * The Eyewitness component.
  */
 const title = "EyeWitness";
-const description_userguide =
+const description =
     "EyeWitness takes screenshots of websites, provides information about the server header, and identifies default credentials (if known). It presents this information in a HTML report. " +
     "\n\nEyeWitness's information page: https://www.kali.org/tools/eyewitness/#eyewitness" +
     "\n\nHow to use EyeWitness:" +
