@@ -76,6 +76,7 @@ import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
+import Unicornscan from "./Unicornscan/Unicornscan";
 
 export interface RouteProperties {
     name: string;
@@ -625,6 +626,14 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
+        name: "Unicornscan",
+        path: "/tools/Unicornscan",
+        element: <Unicornscan />,
+        description:
+            "Unicornscan is essential for scanning servers and hosts to see what available ports are being utilized for network communications.",
+        category: "Network Scanning",
+    },
+    {
         name: "Urlsnarf",
         path: "/tools/Urlsnarf",
         element: <Urlsnarf />,
@@ -652,7 +661,7 @@ export const ROUTES: RouteProperties[] = [
         description:
             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
         category: "Web Application Testing",
-    },
+    }
 ];
 export function getTools() {
     return ROUTES.filter((route) => route.path.startsWith("/tools/"));
