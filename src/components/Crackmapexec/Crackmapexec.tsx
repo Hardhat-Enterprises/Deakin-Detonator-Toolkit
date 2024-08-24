@@ -1,170 +1,240 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
-import { CommandHelper } from "../../utils/CommandHelper";
-import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-
-const title = "Crackmapexec Tool";
-const description_userguide =
-    "The Crackmapexec tool withholds a package which is a swiss army knife used for penetration testing Windows or " +
-    "Active Directory environments. The tool is capable of enumerating information from logged on users, perform psexec " +
-    "styled attacks through SMB spidering, auto-injecting Shellcode into memory through Powershell, and dumping NTDS.nit. " +
-    "Any used or dumped credentials will be stored to a database.\n\nFurther information can be found at: https://www. " +
-    "kali.org/tools/crackmapexec/\n\n" +
-    "Using Crackmapexec:\n" +
-    "Step 1: Enter a Target IP address.\n" +
-    "       Eg: 192.168.0.1\n\n" +
-    "Step 2: Enter a Username.\n" +
-    "       Eg: admin\n\n" +
-    "Step 3: Enter a Password.\n" +
-    "       Eg: admin\n\n" +
-    "Step 4: Click Start Searching to commence Crackmapexec's operation.\n\n" +
-    "Step 5: View the Output block below to see the results of the tool's execution.";
-
-interface FormValues {
+import {
+    Button,
+    LoadingOverlay,
+    Stack,
+    TextInput,
+    Switch,
+  } from "@mantine/core";
+  import { useForm } from "@mantine/form";
+  import { useCallback, useState } from "react";
+  import { CommandHelper } from "../../utils/CommandHelper";
+  import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+  import { UserGuide } from "../UserGuide/UserGuide";
+  import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+  
+  /**
+   * Interface representing the values in the Crackmapexec form.
+   * 
+   * @property {string} ip - The target IP address.
+   * @property {string} username - The username for authentication.
+   * @property {string} password - The password for authentication.
+   * @property {number} timeout - The time (in seconds) to wait for a response. Default is 60.
+   */
+  interface FormValuesType {
     ip: string;
     username: string;
     password: string;
     timeout: number;
-}
-
-const Crackmapexec = () => {
-    const [loading, setLoading] = useState(false);
+  }
+  
+  // Section: Constants
+  
+  /** Tool name as per its source documentation. */
+  const title = "Crackmapexec";
+  
+  /** 
+   * Description text used in the user guide of the component.
+   * The Crackmapexec tool helps in penetration testing for Windows/Active Directory environments.
+   * 
+   * Steps:
+   * 1. Enter the target IP address.
+   * 2. Enter the username.
+   * 3. Enter the password.
+   * 4. Click "Start Searching" to execute the Crackmapexec tool.
+   * 5. Review the output results in the Output block.
+   * 
+   * Further information can be found at: https://www.kali.org/tools/crackmapexec/
+   */
+  const descriptionUserGuide =
+    "Crackmapexec is a post-exploitation tool that helps in penetration testing for Windows/Active Directory environments. " +
+    "It is capable of enumerating users, shares, and computers, executing commands, and dumping credentials from NTDS.dit. " +
+    "It automates various tasks to aid in testing the security of a network.\n\n" +
+    "Steps:\n" +
+    "1. Enter the target IP address.\n" +
+    "2. Enter the username.\n" +
+    "3. Enter the password.\n" +
+    "4. Click 'Start Searching' to execute the Crackmapexec tool.\n" +
+    "5. Review the output results in the Output block.\n\n" +
+    "Further information can be found at: https://www.kali.org/tools/crackmapexec/";
+  
+  /** Tutorial section left intentionally empty. */
+  const tutorial = "";
+  
+  /**
+   * Crackmapexec component used to run penetration testing on Windows/Active Directory environments.
+   * Users can input credentials and execute the command via the form.
+   */
+  const Crackmapexec = () => {
+    // Section: State Variables
+  
+    /** State to manage the loading overlay visibility. */
+    const [isLoading, setIsLoading] = useState(false);
+  
+    /** State to store the output of the command execution. */
     const [output, setOutput] = useState("");
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-
+  
+    /** State to track whether the advanced mode switch is checked. */
+    const [isAdvancedChecked, setIsAdvancedChecked] = useState(false);
+  
+    /** State to store the process ID of the running command. */
+    const [processId, setProcessId] = useState("");
+  
+    /** State to manage whether the output can be saved to a file. */
+    const [isSaveAllowed, setIsSaveAllowed] = useState(false);
+  
+    /** State to track if the output has already been saved. */
+    const [hasBeenSaved, setHasBeenSaved] = useState(false);
+  
+    // Section: Form Initialization
+  
+    /** Initializes the form with default values for each input field. */
     let form = useForm({
-        initialValues: {
-            ip: "",
-            username: "",
-            password: "",
-            timeout: 60,
-        },
+      initialValues: {
+        ip: "",
+        username: "",
+        password: "",
+        timeout: 60,
+      },
     });
-
-    // Uses the callback function of runCommandGetPidAndOutput to handle and save data
-    // generated by the executing process into the output state variable.
+  
+    /**
+     * Handles the process data by appending the new data to the existing output.
+     * 
+     * @param {string} data - The data output from the process.
+     */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+      setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
-
-    // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
-    // the termination of that process, resetting state variables, handling the output data,
-    // and informing the user.
+  
+    /**
+     * Handles the termination of the process, updating the output and state accordingly.
+     * 
+     * @param {Object} param - The object containing the process termination details.
+     * @param {number} param.code - The exit code of the process.
+     * @param {number} param.signal - The signal that terminated the process.
+     */
     const handleProcessTermination = useCallback(
-        ({ code, signal }: { code: number; signal: number }) => {
-            if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 15) {
-                handleProcessData("\nProcess was manually terminated.");
-            } else {
-                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
-            }
-            // Clear the child process pid reference
-            setPid("");
-            // Cancel the Loading Overlay
-            setLoading(false);
-            // Allow Saving as the output is finalised
-            setAllowSave(true);
-            setHasSaved(false);
-        },
-        [handleProcessData]
+      ({ code, signal }: { code: number; signal: number }) => {
+        if (code === 0) {
+          handleProcessData("\nProcess completed successfully.");
+        } else if (signal === 15) {
+          handleProcessData("\nProcess was manually terminated.");
+        } else {
+          handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+        }
+        setProcessId(""); // Clear the child process pid reference
+        setIsLoading(false); // Cancel the Loading Overlay
+        setIsSaveAllowed(true); // Allow Saving as the output is finalised
+        setHasBeenSaved(false); // Reset save status
+      },
+      [handleProcessData]
     );
-
-    // Sends a SIGTERM signal to gracefully terminate the process
+  
+    /**
+     * Sends a SIGTERM signal to gracefully terminate the running process.
+     */
     const handleCancel = () => {
-        if (pid !== null) {
-            const args = [`-15`, pid];
-            CommandHelper.runCommand("kill", args);
-        }
+      if (processId !== null) {
+        const args = [`-15`, processId];
+        CommandHelper.runCommand("kill", args);
+      }
     };
-
-    // Actions taken after saving the output
+  
+    /**
+     * Actions to be taken after the output has been successfully saved to a file.
+     */
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
-        setHasSaved(true);
-        setAllowSave(false);
+      setHasBeenSaved(true); // Indicating that the file has been saved
+      setIsSaveAllowed(false); // Disabling the save option until new output is available
     };
-
-    const onSubmit = async (values: FormValues) => {
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
-
-        setLoading(true);
-        const args = [];
-
-        // No need to check for value since it is mandatory to provide in the portal
-        args.push("--timeout");
-        args.push(`${values.timeout}`);
-        args.push("smb");
-        args.push(`${values.ip}`);
-        args.push("-u", values.username);
-        args.push("-p", values.password);
-
-        try {
-            const result = await CommandHelper.runCommandGetPidAndOutput(
-                "crackmapexec",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
-            setPid(result.pid);
-            setOutput(result.output);
-        } catch (e: any) {
-            setOutput(e.message);
-        }
+  
+    /**
+     * Submits the form data, executing the Crackmapexec command with the provided values.
+     * 
+     * @param {FormValuesType} values - The form values entered by the user.
+     */
+    const onSubmit = async (values: FormValuesType) => {
+      setIsSaveAllowed(false); // Disallow saving until the tool's execution is complete
+      setIsLoading(true); // Display the loading overlay
+      const args = [];
+  
+      args.push("--timeout");
+      args.push(`${values.timeout}`);
+      args.push("smb");
+      args.push(`${values.ip}`);
+      args.push("-u", values.username);
+      args.push("-p", values.password);
+  
+      try {
+        const result = await CommandHelper.runCommandGetPidAndOutput(
+          "crackmapexec",
+          args,
+          handleProcessData,
+          handleProcessTermination
+        );
+        setProcessId(result.pid); // Store the process ID of the running command
+        setOutput(result.output); // Display the initial output of the command
+      } catch (e: any) {
+        setOutput(e.message); // Display error message in case of failure
+      }
     };
-
+  
+    /**
+     * Clears the output console and resets save-related state variables.
+     */
     const clearOutput = useCallback(() => {
-        setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
+      setOutput(""); // Clear the output
+      setHasBeenSaved(false); // Reset save status
+      setIsSaveAllowed(false); // Disable save option
     }, [setOutput]);
-
+  
     return (
-        <form onSubmit={form.onSubmit(onSubmit)}>
-            <LoadingOverlay visible={loading} />
-            {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
-            )}
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <Switch
-                    size="md"
-                    label="Advanced Mode"
-                    checked={checkedAdvanced}
-                    onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
-                />
-
-                <TextInput label={"IP"} required {...form.getInputProps("ip")} />
-                <TextInput label={"Username"} required {...form.getInputProps("username")} />
-                <TextInput label={"Password"} required {...form.getInputProps("password")} />
-                {checkedAdvanced && (
-                    <>
-                        <TextInput
-                            label={"Timeout"}
-                            placeholder={"Time (in seconds) to wait for response to requests. Default is 60"}
-                            required
-                            {...form.getInputProps("timeout")}
-                        />
-                    </>
-                )}
-                <Button type={"submit"}>Start Searching!</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+      <form onSubmit={form.onSubmit(onSubmit)}>
+        <LoadingOverlay visible={isLoading} />
+        {isLoading && (
+          <div>
+            <Button
+              variant="outline"
+              color="red"
+              style={{ zIndex: 1001 }}
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+          </div>
+        )}
+        <Stack>
+          {UserGuide(title, descriptionUserGuide)}
+          <Switch
+            size="md"
+            label="Advanced Mode"
+            checked={isAdvancedChecked}
+            onChange={(e) => setIsAdvancedChecked(e.currentTarget.checked)}
+          />
+  
+          <TextInput label={"IP"} required {...form.getInputProps("ip")} />
+          <TextInput label={"Username"} required {...form.getInputProps("username")} />
+          <TextInput label={"Password"} required {...form.getInputProps("password")} />
+          {isAdvancedChecked && (
+            <>
+              <TextInput
+                label={"Timeout"}
+                placeholder={
+                  "Time (in seconds) to wait for response to requests. Default is 60"
+                }
+                required
+                {...form.getInputProps("timeout")}
+              />
+            </>
+          )}
+          <Button type={"submit"}>Start Searching!</Button>
+          {SaveOutputToTextFile_v2(output, isSaveAllowed, hasBeenSaved, handleSaveComplete)}
+          <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+        </Stack>
+      </form>
     );
-};
-
-export default Crackmapexec;
+  };
+  
+  // Default export of the component
+  export default Crackmapexec;
+  
