@@ -157,6 +157,8 @@
                         "cmd": "msfvenom",
                         "args": true
                     },
+
+                    
                     {
                         "name": "dmitry",
                         "cmd": "dmitry",

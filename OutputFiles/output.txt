@@ -1,0 +1,14 @@
+$ nmap -T4 --script=smb-enum-sessions.nse -p 22 127.0.0.1
+
+
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-08-09 15:09 EDT
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.000067s latency).
+
+PORT   STATE  SERVICE
+22/tcp closed ssh
+
+Nmap done: 1 IP address (1 host up) scanned in 0.47 seconds
+
+Process completed successfully.

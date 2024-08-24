@@ -11,6 +11,9 @@ export default defineConfig({
     server: {
         strictPort: true,
     },
+    ssr: {
+        noExternal: [/\.css$/, /^vuetify/],
+    },
     envPrefix: ["VITE_", "TAURI_"],
     test: {
         globals: true,
