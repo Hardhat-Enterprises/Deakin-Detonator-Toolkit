@@ -11,7 +11,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
  * Represents the form values for the EyeWitness component.
  */
 interface FormValues {
-    filepath: string;
+    filePath: string;
     directory: string;
     timeout: string;
 }
