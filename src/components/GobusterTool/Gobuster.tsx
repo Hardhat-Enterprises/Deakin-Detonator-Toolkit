@@ -23,13 +23,29 @@ interface FormValuesType {
  * @returns The GoBuster component.
  */
 const GoBusterTool = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+    //Component State Variables.
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving of output
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
 
-    let form = useForm({
+
+    // Component Constants.
+    const title = "Airbase-ng"; // Title of the component.
+    const description = "Airbase-ng is a tool to create fake access points."; // Description of the component.
+    const steps =
+        "Step 1: Type in the name of your fake host.\n" +
+        "Step 2: Select your desired channel.\n" +
+        "Step 3: Specify the WLAN interface to be used.\n" +
+        "Step 4: Click 'Start AP' to begin the process.\n" +
+        "Step 5: View the output block to see the results. ";
+    const sourceLink = ""; // Link to the source code (or Kali Tools).
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["aircrack-ng"]; // Contains the dependencies required by the component.
+
+
+    const form = useForm({
         initialValues: {
             url: "",
             wordlist: "",
