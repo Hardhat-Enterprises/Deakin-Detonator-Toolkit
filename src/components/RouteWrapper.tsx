@@ -76,6 +76,7 @@ import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
+import Masscan from "./Masscan/Masscan";
 
 export interface RouteProperties {
     name: string;
@@ -653,6 +654,15 @@ export const ROUTES: RouteProperties[] = [
             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
         category: "Web Application Testing",
     },
+    {
+        name: "Masscan",
+        path: "/tools/Masscan",
+        element: <Masscan />,
+        description:
+            "Masscan is a quick and effective port scanning tool used for network reconnaissance.",
+        category: "Network Scanning and Enumeration",
+    },
+
 ];
 export function getTools() {
     return ROUTES.filter((route) => route.path.startsWith("/tools/"));
