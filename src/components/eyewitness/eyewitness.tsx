@@ -119,7 +119,7 @@ function Eyewitness() {
             })
             .catch((error) => {
                 setLoading(false); // Cancel the Loading Overlay
-                setOutput(`Error: ${error.message}`); // Set the error message
+                setOutput(`Error: ${error.message}`); 
             });
     };
 
