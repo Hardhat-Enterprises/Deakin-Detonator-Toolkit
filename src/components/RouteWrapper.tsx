@@ -75,7 +75,7 @@ import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
-import sqlmap from "./sqlmap/sqlmap";
+import SQLmap from "./SQLmap/SQLmap";
 
 export interface RouteProperties {
     name: string;
@@ -596,10 +596,10 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
-        name: "sqlmap",
+        name: "SQLmap",
         path: "/tools/sqlmap",
-        element: <sqlmap />,
-        description: "sqlmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.",
+        element: <SQLmap />,
+        description: "SQLmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.",
         category: "Web Application Testing",
     },
     {
