@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch, Checkbox } from "@mantine/core";
+import { Button, Stack, TextInput, Switch, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -26,17 +26,17 @@ interface FormValuesType {
  */
 const NbtscanTool = () => {
     // Component State Variables.
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [pid, setPid] = useState("");
+    const [loading, setLoading] = useState(false); // State variable to control the loading overlay
+    const [output, setOutput] = useState(""); // State variable to store the output from the nbtscan command
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false); // State variable to track if the advanced mode is enabled
+    const [pid, setPid] = useState(""); // State variable to store the process ID (PID) of the running command
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+    const [allowSave, setAllowSave] = useState(false); // State variable to control whether the output can be saved
+    const [hasSaved, setHasSaved] = useState(false); // State variable to track if the output has already been saved
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-    const [subnet, setSubnet] = useState("");
-    const [checkedPacketDump, setCheckedPacketDump] = useState(false);
+    const [subnet, setSubnet] = useState(""); // State variable to store the entered subnet value
+    const [checkedPacketDump, setCheckedPacketDump] = useState(false); // State variable to track whether the "Dump Packets Mode" is enabled or disabled
 
     // Component Constants
     const title = "Nbtscan"; // Title of the component.
