@@ -22,10 +22,9 @@ interface FormValues {
  */
 const title = "EyeWitness";
 const description =
-    "EyeWitness takes screenshots of websites, provides information about the server header, and identifies default credentials (if known). It presents this information in a HTML report. " +
-    "EyeWitness's information page: https://www.kali.org/tools/eyewitness/#eyewitness .";
-const steps = "How to use EyeWitness:";
-"Step 1: Create a plain text file on your local drive and add URLs to it. Each URL must be on its own line. Add the file path to the text file in the first field. \n\n" +
+    "EyeWitness takes screenshots of websites, provides information about the server header, and identifies default credentials (if known). It presents this information in a HTML report.";
+const steps =
+    "Step 1: Create a plain text file on your local drive and add URLs to it. Each URL must be on its own line. Add the file path to the text file in the first field. \n\n" +
     "Step 2: Add the file path for where you want the output saved in the second field.\n\n" +
     "Step 3: Add a number in the third field for the maximum number of seconds for EyeWitness to try and screenshot a webpage, e.g. 20. \n\n" +
     "Step 4: Press the scan button. ";
