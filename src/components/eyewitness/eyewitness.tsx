@@ -40,6 +40,9 @@ function Eyewitness() {
     const [pid, setPid] = useState(""); // Stores the PID of the running command process
     const [allowSave, setAllowSave] = useState(false); // Determines whether saving the output is allowed
     const [hasSaved, setHasSaved] = useState(false); // Indicates whether the output has been saved
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
 
     let form = useForm({
         initialValues: {
