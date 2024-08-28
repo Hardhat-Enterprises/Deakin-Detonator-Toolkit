@@ -15,6 +15,8 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 interface FormValuesType {
     targetIP: string;
     targetPort: string;
+    waitTime: string;
+    packetRate: string;
 }
 
 /**
@@ -49,6 +51,8 @@ const Masscan = () => {
         initialValues: {
             targetIP: "",
             targetPort: "",
+            waitTime: "",
+            packetRate: "",
         },
     });
 
@@ -117,7 +121,7 @@ const Masscan = () => {
 
         // Construct arguments for the Masscan command based on form input
         let args = [];
-        args = [values.targetIP, '-p', values.targetPort, ];
+        args = [values.targetIP, '-p', values.targetPort];
         
         if (verboseMode) {
             args.push("-v"); // Add verbose mode option if enabled
@@ -182,6 +186,8 @@ const Masscan = () => {
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label="IP Address/Range/Subnet" required {...form.getInputProps("targetIP")} />
                     <TextInput label="Port/Port Range" required {...form.getInputProps("targetPort")} />
+                    <TextInput label="Response Wait Timer" {...form.getInputProps("waitTime")} />
+                    <TextInput label="Packet Send Rate" {...form.getInputProps("packetRate")} />
                     <Checkbox
                         label="Verbose Mode"
                         checked={verboseMode}
