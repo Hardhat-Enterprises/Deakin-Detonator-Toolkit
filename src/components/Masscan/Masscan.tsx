@@ -140,6 +140,7 @@ const Masscan = () => {
                 // Deactivate loading state
                 setLoading(false);
             });
+            setAllowSave(true);
     };
 
     /**
