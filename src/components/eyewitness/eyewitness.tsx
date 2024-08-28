@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, Title } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -7,11 +7,12 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
  * Represents the form values for the EyeWitness component.
  */
-interface FormValues {
+interface FormValuesType {
     filePath: string;
     directory: string;
     timeout: string;
@@ -19,6 +20,7 @@ interface FormValues {
 
 /**
  * The Eyewitness component.
+ * @returns The Eyewitness component.
  */
 const title = "EyeWitness";
 const description =
@@ -30,7 +32,7 @@ const steps =
     "Step 4: Press the scan button. ";
 const sourceLink = "https://www.kali.org/tools/eyewitness/#eyewitness"; // Link to the source code or relevant documentation.
 const tutorial = ""; // Link to the official tutorial/documentation.
-const dependencies = ["python3"]; // Dependencies required by the component.
+const dependencies = ["Eyewitness"]; // Dependencies required by the component.
 
 function Eyewitness() {
     // State Variables
@@ -122,7 +124,7 @@ function Eyewitness() {
      * @param {FormValues} values - The form input values.
      * @returns {Promise<void>} - An asynchronous operation.
      */
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: FormValuesType) => {
         setAllowSave(false); // Disallow saving until the tool's execution is complete
 
         setLoading(true); // Enable the Loading Overlay
@@ -161,10 +163,17 @@ function Eyewitness() {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-                    <Title>{title}</Title>
                     <p>{description}</p>
                     <TextInput
                         label={"Enter the file name or path containing URLs:"}
@@ -183,7 +192,6 @@ function Eyewitness() {
                     <TextInput label={"Enter the timeout time"} required {...form.getInputProps("timeout")} />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type={"submit"}>Scan</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
