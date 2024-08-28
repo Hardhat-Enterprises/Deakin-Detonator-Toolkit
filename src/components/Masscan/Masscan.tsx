@@ -122,6 +122,16 @@ const Masscan = () => {
         // Construct arguments for the Masscan command based on form input
         let args = [];
         args = [values.targetIP, '-p', values.targetPort];
+
+        // Check if waitTime has a value and push it to args
+        if (values.waitTime) {
+            args.push("--wait", values.waitTime);
+        }  
+
+        // Check if packetRate has a value and push it to args
+        if (values.packetRate) {
+            args.push("--rate", values.packetRate);
+        }
         
         if (verboseMode) {
             args.push("-v"); // Add verbose mode option if enabled
