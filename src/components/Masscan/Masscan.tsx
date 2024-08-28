@@ -13,7 +13,8 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
  * Represents the form values for the Masscan component.
  */
 interface FormValuesType {
-    input1: string;
+    targetIP: string;
+    targetPort: string;
 }
 
 /**
@@ -46,7 +47,8 @@ const Masscan = () => {
     // Form hook to handle form input
     let form = useForm({
         initialValues: {
-            input1: "",
+            targetIP: "",
+            targetPort: "",
         },
     });
 
@@ -114,7 +116,9 @@ const Masscan = () => {
         setLoading(true);
 
         // Construct arguments for the Masscan command based on form input
-        const args = ["-p", values.input1];
+        let args = [];
+        args = [values.targetIP, '-p', values.targetPort, ];
+        
         if (verboseMode) {
             args.push("-v"); // Add verbose mode option if enabled
         }
@@ -175,7 +179,8 @@ const Masscan = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput label="input1" required {...form.getInputProps("input1")} />
+                    <TextInput label="IP Address/Range/Subnet" required {...form.getInputProps("targetIP")} />
+                    <TextInput label="Port/Port Range" required {...form.getInputProps("targetPort")} />
                     <Checkbox
                         label="Verbose Mode"
                         checked={verboseMode}
