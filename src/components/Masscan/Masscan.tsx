@@ -124,7 +124,7 @@ const Masscan = () => {
         }
 
         // Execute the Masscan command via helper method and handle its output or potential errors
-        CommandHelper.runCommandGetPidAndOutput(
+        CommandHelper.runCommandWithPkexec(
             "masscan",
             [...args, "--no-color"],
             handleProcessData,
