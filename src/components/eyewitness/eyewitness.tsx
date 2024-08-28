@@ -32,7 +32,7 @@ const steps =
     "Step 4: Press the scan button. ";
 const sourceLink = "https://www.kali.org/tools/eyewitness/#eyewitness"; // Link to the source code or relevant documentation.
 const tutorial = ""; // Link to the official tutorial/documentation.
-const dependencies = ["Eyewitness"]; // Dependencies required by the component.
+const dependencies = ["eyewitness"]; // Dependencies required by the component.
 
 function Eyewitness() {
     // State Variables
