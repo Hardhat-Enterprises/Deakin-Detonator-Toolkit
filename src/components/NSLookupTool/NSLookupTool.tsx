@@ -17,17 +17,15 @@ const title = "NSLookup";
 const description =
     "The NSLookup command is a tool used to query Domain Name System (DNS) servers and retrieve information about a specific domain or IP address. This command is an essential tool for network administrators and system engineers as it can be used to troubleshoot DNS issues and gather information about DNS configurations.";
 const steps =
-    "How to use NSLookUp.\n\n" +
+    "How to use NSLookup.\n\n" +
     "Step 1: Enter an IP or Web URL.\n" +
-    " E.g. 127.0.0.1\n\n" +
+    "E.g. 127.0.0.1\n\n" +
     "Step 2: View the Output block below to view the results of the Scan.";
-const tutorial = "";
-const sourceLink = "https://www.nslookup.io";
+const sourceLink = "https://www.nslookup.io"; //For Render Compomnet
 
 // Form Value Interface
 interface FormValuesType {
-    ipAddress: string; // Ip Address that needs to be looked up
-    tutorial: string; //Tutorial Text
+    ipAddress: string; // IP Address that needs to be looked up
 }
 
 function NSLookup() {
@@ -60,7 +58,6 @@ function NSLookup() {
     const form = useForm({
         initialValues: {
             ipAddress: "",
-            tutorial: "",
         },
     });
 
@@ -128,8 +125,8 @@ function NSLookup() {
                 title={title}
                 description={description}
                 steps={steps}
-                tutorial={tutorial}
-                sourceLink={sourceLink}
+                tutorial={""} // Empty string since we don't need the tutorial section
+                sourceLink={sourceLink} // This will output the link to NSLookup
                 children={""}
             />
 
@@ -149,8 +146,6 @@ function NSLookup() {
                         required
                         {...form.getInputProps("ipAddress")}
                     />
-
-                    <TextInput label={"Tutorial"} {...form.getInputProps("tutorial")} />
 
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type={"submit"}>Start {title}</Button>
