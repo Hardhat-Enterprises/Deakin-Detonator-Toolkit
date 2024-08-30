@@ -139,12 +139,12 @@ const Masscan = () => {
 
         // Check if excludedIP has a value and push it to args
         if (values.excludedIP) {
-            args.push("--exclude", values.excludedIP); // Add verbose mode option if enabled
+            args.push("--exclude", values.excludedIP);
         }
 
-        // Check if excludedIP has a value and push it to args
+        // Check if topPorts has a value and push it to args
         if (values.topPorts) {
-            args.push("--top-ports", values.topPorts); // Add verbose mode option if enabled
+            args.push("--top-ports", values.topPorts);
         }
         
         if (verboseMode) {
