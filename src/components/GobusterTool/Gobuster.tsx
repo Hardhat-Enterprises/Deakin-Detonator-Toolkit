@@ -8,10 +8,8 @@ import { UserGuide } from "../UserGuide/UserGuide";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
-
 const title = "GoBuster Directory and File Brute-Forcing Tool";
-const description_userguide =
-    "GoBuster is a tool used for directory and file brute-forcing on web servers.";
+const description_userguide = "GoBuster is a tool used for directory and file brute-forcing on web servers.";
 
 /**
  * Represents the form values for the AirbaseNG component.
@@ -35,7 +33,6 @@ const GoBusterTool = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-
 
     // Component Constants.
     const title = "GoBuster"; // Title of the component.
@@ -107,7 +104,7 @@ const GoBusterTool = () => {
         [handleProcessData]
     );
 
-     /**
+    /**
      * Handles form submission for the GoBuster component.
      * @param {FormValuesType} values
      */
@@ -132,7 +129,7 @@ const GoBusterTool = () => {
 
         setLoading(false);
     };
-    
+
     /**
     Actions taken after saving the outtpu
      */
@@ -156,23 +153,23 @@ const GoBusterTool = () => {
 
     return (
         <RenderComponent
-        title={title}
-        description={description}
-        steps={steps}
-        tutorial={tutorial}
-        sourceLink={sourceLink}
-    >
-        <form onSubmit={form.onSubmit(onSubmit)}>
-            <LoadingOverlay visible={loading} />
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <TextInput label={"Target URL"} required {...form.getInputProps("url")} />
-                <TextInput label={"Wordlist File"} required {...form.getInputProps("wordlist")} />
-                <Button type={"submit"}>Start Brute-Forcing</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            <form onSubmit={form.onSubmit(onSubmit)}>
+                <LoadingOverlay visible={loading} />
+                <Stack>
+                    {UserGuide(title, description_userguide)}
+                    <TextInput label={"Target URL"} required {...form.getInputProps("url")} />
+                    <TextInput label={"Wordlist File"} required {...form.getInputProps("wordlist")} />
+                    <Button type={"submit"}>Start Brute-Forcing</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
         </RenderComponent>
     );
 };
