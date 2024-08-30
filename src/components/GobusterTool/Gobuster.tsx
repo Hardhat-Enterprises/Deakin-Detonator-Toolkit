@@ -6,6 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { UserGuide } from "../UserGuide/UserGuide";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import { RenderComponent } from "../UserGuide/UserGuide";
 
 
 const title = "GoBuster Directory and File Brute-Forcing Tool";
@@ -108,6 +109,7 @@ const GoBusterTool = () => {
 
      /**
      * Handles form submission for the GoBuster component.
+     * @param {FormValuesType} values
      */
     const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
@@ -153,6 +155,13 @@ const GoBusterTool = () => {
     }, [setOutput]);
 
     return (
+        <RenderComponent
+        title={title}
+        description={description}
+        steps={steps}
+        tutorial={tutorial}
+        sourceLink={sourceLink}
+    >
         <form onSubmit={form.onSubmit(onSubmit)}>
             <LoadingOverlay visible={loading} />
             <Stack>
@@ -164,6 +173,7 @@ const GoBusterTool = () => {
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
+        </RenderComponent>
     );
 };
 
