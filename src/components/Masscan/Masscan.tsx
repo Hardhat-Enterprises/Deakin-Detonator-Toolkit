@@ -19,6 +19,7 @@ interface FormValuesType {
     packetRate: string;
     excludedIP: string;
     topPorts: string;
+    interface: string;
 }
 
 /**
@@ -58,6 +59,7 @@ const Masscan = () => {
             packetRate: "",
             excludedIP: "",
             topPorts: "",
+            interface: "",
         },
     });
 
@@ -147,6 +149,11 @@ const Masscan = () => {
         if (values.topPorts) {
             args.push("--top-ports", values.topPorts);
         }
+
+        // Check if interface has a value and push it to args
+        if (values.topPorts) {
+            args.push("--interface", values.interface);
+        }
         
         if (verboseMode) {
             args.push("-v"); // Add verbose mode option if enabled
@@ -223,6 +230,7 @@ const Masscan = () => {
                     <TextInput label="Response Wait Timer" {...form.getInputProps("waitTime")} />
                     <TextInput label="Packet Send Rate" {...form.getInputProps("packetRate")} />
                     <TextInput label="Exclude IP(s)" {...form.getInputProps("excludedIP")} />
+                    <TextInput label="Select Network Interface" {...form.getInputProps("interface")} />
                     <Checkbox
                         label="Verbose Mode"
                         checked={verboseMode}
