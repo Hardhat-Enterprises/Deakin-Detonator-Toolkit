@@ -32,19 +32,19 @@ const GoBusterTool = () => {
 
 
     // Component Constants.
-    const title = "Airbase-ng"; // Title of the component.
-    const description = "Airbase-ng is a tool to create fake access points."; // Description of the component.
+    const title = "GoBuster"; // Title of the component.
+    const description = "GoBuster is a tool for directory and file brute-forcing on web servers."; // Description of the component.
     const steps =
         "Step 1: Type in the name of your fake host.\n" +
         "Step 2: Select your desired channel.\n" +
         "Step 3: Specify the WLAN interface to be used.\n" +
         "Step 4: Click 'Start AP' to begin the process.\n" +
-        "Step 5: View the output block to see the results. ";
+        "Step 5: View the output block to see the results. "; // Steps to undertake to use the tool.
     const sourceLink = ""; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["aircrack-ng"]; // Contains the dependencies required by the component.
+    const dependencies = ["gobuster"]; // Contains the dependencies required by the component.
 
-
+    // Form hook to handle form input.
     const form = useForm({
         initialValues: {
             url: "",
