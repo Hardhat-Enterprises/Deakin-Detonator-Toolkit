@@ -36,6 +36,7 @@ const Masscan = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [verboseMode, setVerboseMode] = useState(false); // State variable for verbose mode
+    const [checkedTopPorts, setCheckedTopPorts] = useState(false); //State variable for scanning common ports.
 
     // Component Constants
     const title = "Masscan";
@@ -208,12 +209,17 @@ const Masscan = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Checkbox
+                        label={"Scan Common Ports Mode"}
+                        checked={checkedTopPorts}
+                        onChange={(e) => setCheckedTopPorts(e.currentTarget.checked)}
+                    />
                     <TextInput label="IP Address/Range/Subnet" required {...form.getInputProps("targetIP")} />
                     <TextInput label="Port/Port Range" required {...form.getInputProps("targetPort")} />
+                    <TextInput label="Scan Common Ports" required {...form.getInputProps("topPorts")} />
                     <TextInput label="Response Wait Timer" {...form.getInputProps("waitTime")} />
                     <TextInput label="Packet Send Rate" {...form.getInputProps("packetRate")} />
                     <TextInput label="Exclude IP(s)" {...form.getInputProps("excludedIP")} />
-                    <TextInput label="Scan Common Ports" {...form.getInputProps("topPorts")} />
                     <Checkbox
                         label="Verbose Mode"
                         checked={verboseMode}
