@@ -27,7 +27,7 @@ For the exploit scripts, it is important to ensure they are executable entirely 
     cd Deakin-Detonator-Toolkit
     ```
 
-2. Change script permissions executable:
+2. Change permissions to execute the script:
 
     ```bash
     chmod +x install-update-media/install_exploits.sh
