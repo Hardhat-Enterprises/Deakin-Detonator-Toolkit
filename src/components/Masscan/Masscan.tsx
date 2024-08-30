@@ -215,8 +215,11 @@ const Masscan = () => {
                         onChange={(e) => setCheckedTopPorts(e.currentTarget.checked)}
                     />
                     <TextInput label="IP Address/Range/Subnet" required {...form.getInputProps("targetIP")} />
-                    <TextInput label="Port/Port Range" required {...form.getInputProps("targetPort")} />
-                    <TextInput label="Scan Common Ports" required {...form.getInputProps("topPorts")} />
+                    {checkedTopPorts ? (
+                        <TextInput label="Scan Common Ports" required {...form.getInputProps("topPorts")} />
+                    ):(
+                        <TextInput label="Port/Port Range" required {...form.getInputProps("targetPort")} />
+                    )}
                     <TextInput label="Response Wait Timer" {...form.getInputProps("waitTime")} />
                     <TextInput label="Packet Send Rate" {...form.getInputProps("packetRate")} />
                     <TextInput label="Exclude IP(s)" {...form.getInputProps("excludedIP")} />
