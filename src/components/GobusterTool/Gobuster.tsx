@@ -41,7 +41,7 @@ const GoBusterTool = () => {
         "Step 4: Click 'Start AP' to begin the process.\n" +
         "Step 5: View the output block to see the results. "; // Steps to undertake to use the tool.
     const sourceLink = "https://www.kali.org/tools/gobuster/"; // Link to the source code (or Kali Tools).
-    const tutorial = "https://www.kali.org/tools/gobuster/"; // Link to the official documentation/tutorial.
+    const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["gobuster"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
