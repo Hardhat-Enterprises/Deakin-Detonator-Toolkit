@@ -157,7 +157,7 @@ const Unicornscan = () => {
             <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, scanType: selectedScanType }))}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput label="IP Address" required {...form.getInputProps("targetIP")} />
+                    <TextInput label="IP Address" required {...form.getInputProps("targetIP")} placeholder="e.g., 192.168.102" />
                     <NativeSelect
                         label="Scan Type"
                         value={selectedScanType}
@@ -168,26 +168,31 @@ const Unicornscan = () => {
                     />
                     <TextInput
                         label="Rate (Packets per second)"
+                        placeholder="e.g., 1000"
                         value={rate}
                         onChange={(e) => setRate(e.target.value)}
                     />
                     <TextInput
                         label="Source Port"
+                        placeholder="e.g., 53"
                         value={sourcePort}
                         onChange={(e) => setSourcePort(e.target.value)}
                     />
                     <TextInput
                         label="Source IP"
+                        placeholder="e.g., 192.168.1.100"
                         value={sourceIP}
                         onChange={(e) => setSourceIP(e.target.value)}
                     />
                     <TextInput
                         label="Interface"
+                        placeholder="e.g., eth0"
                         value={interfaceName}
                         onChange={(e) => setInterfaceName(e.target.value)}
                     />
                     <TextInput
                         label="Ports"
+                        placeholder="e.g., 1-1024"
                         value={ports}
                         onChange={(e) => setPorts(e.target.value)}
                     />
