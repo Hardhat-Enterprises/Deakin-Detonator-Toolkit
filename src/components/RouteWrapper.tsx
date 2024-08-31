@@ -483,6 +483,14 @@ export const ROUTES: RouteProperties[] = [
         category: "Password Cracking and Authentication Testing",
     },
     {
+        name: "Masscan",
+        path: "/tools/Masscan",
+        element: <Masscan />,
+        description:
+            "Masscan is a quick and effective port scanning tool used for network reconnaissance.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
         name: "Metagoofil",
         path: "/tools/metagoofil",
         element: <Metagoofil />,
@@ -653,14 +661,6 @@ export const ROUTES: RouteProperties[] = [
         description:
             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
         category: "Web Application Testing",
-    },
-    {
-        name: "Masscan",
-        path: "/tools/Masscan",
-        element: <Masscan />,
-        description:
-            "Masscan is a quick and effective port scanning tool used for network reconnaissance.",
-        category: "Network Scanning and Enumeration",
     },
 
 ];
