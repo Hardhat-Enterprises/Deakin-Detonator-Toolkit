@@ -219,16 +219,16 @@ const Masscan = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    <Checkbox
-                        label={"Scan Common Ports Mode"}
-                        checked={checkedTopPorts}
-                        onChange={(e) => setCheckedTopPorts(e.currentTarget.checked)}
-                    />
                     <TextInput
                         label="IP Address/Range/Subnet"
                         required
                         {...form.getInputProps("targetIP")}
                         placeholder="e.g. 192.168.1.0"
+                    />
+                    <Checkbox
+                        label={"Scan Common Ports Mode"}
+                        checked={checkedTopPorts}
+                        onChange={(e) => setCheckedTopPorts(e.currentTarget.checked)}
                     />
                     {checkedTopPorts ? (
                         <TextInput
