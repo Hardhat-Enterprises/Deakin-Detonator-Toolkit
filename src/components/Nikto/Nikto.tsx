@@ -26,7 +26,7 @@ interface FormValuesType {
     dbcheck: boolean;
     evasion: string;
     id: string;
-    Pause: number;
+    pause: number;
     useragent: string;
     vhost: string;
     Display: string;
