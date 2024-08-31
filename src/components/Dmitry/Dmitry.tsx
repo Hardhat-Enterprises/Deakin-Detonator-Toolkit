@@ -5,9 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
  * Represents the form values for the Dmitry component.
@@ -52,8 +50,8 @@ const dmitry = () => {
         "       Eg: 192.168.0.1\n\n" +
         "Step 2: Enter a delay between requests. Default is 2 (milliseconds). Can be left blank.\n" +
         "       Eg: 2\n\n" +
-        "Step 3: Click Start Scanning to commence DMitry's operation.\n\n" +
-        "Step 4: View the Output block below to view the results of the tool's execution.";
+        "Step 3: Click Start Scanning to commence Dmitry's operation.\n\n" +
+        "Step 4: View the Output block below to view the results of the tool's execution.\n";
     const sourceLink = "https://www.kali.org/tools/dmitry/\n"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["dmitry"]; // Contains the dependencies required by the component.
