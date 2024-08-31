@@ -37,6 +37,9 @@ const Unicornscan = () => {
     const [selectedScanType, setSelectedScanType] = useState("");
     const [rate, setRate] = useState("");
     const [sourcePort, setSourcePort] = useState("");
+    const [sourceIP, setSourceIP] = useState("");
+    const [interfaceName, setInterfaceName] = useState("");
+    const [ports, setPorts] = useState("");
 
     // Component Constants
     const title = "Unicornscan";
@@ -102,6 +105,9 @@ const Unicornscan = () => {
         // Include additional flags if they are set
         if (rate) args.push(`-r ${rate}`);
         if (sourcePort) args.push(`-e ${sourcePort}`);
+        if (sourceIP) args.push(`-g ${sourceIP}`);
+        if (interfaceName) args.push(`-i ${interfaceName}`);
+        if (ports) args.push(`-p ${ports}`);
         if (verboseMode) args.push("-v");
 
         CommandHelper.runCommandWithPkexec(
@@ -169,6 +175,21 @@ const Unicornscan = () => {
                         label="Source Port"
                         value={sourcePort}
                         onChange={(e) => setSourcePort(e.target.value)}
+                    />
+                    <TextInput
+                        label="Source IP"
+                        value={sourceIP}
+                        onChange={(e) => setSourceIP(e.target.value)}
+                    />
+                    <TextInput
+                        label="Interface"
+                        value={interfaceName}
+                        onChange={(e) => setInterfaceName(e.target.value)}
+                    />
+                    <TextInput
+                        label="Ports"
+                        value={ports}
+                        onChange={(e) => setPorts(e.target.value)}
                     />
                     <Checkbox
                         label="Verbose Mode"
