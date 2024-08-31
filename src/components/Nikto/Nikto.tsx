@@ -14,7 +14,6 @@ import { RenderComponent } from "../UserGuide/UserGuide";
  * Represents the form values for the Nikto component.
  */
 interface FormValuesType {
-    // Define the properties for the form values
     host: string;
     port: number;
     ssl: boolean;
@@ -27,7 +26,11 @@ interface FormValuesType {
     evasion: string;
     id: string;
     pause: number;
+<<<<<<< HEAD
     useragent: string;
+=======
+    userAgent: string;
+>>>>>>> 8482b06 (updated the code fixed all camelCase issues and style erros)
     vhost: string;
     display: string;
     timeout: number;
@@ -77,22 +80,22 @@ function Nikto() {
             host: "",
             port: 80,
             ssl: false,
-            nossl: false,
+            noSsl: false,
             output: "",
-            Format: "txt",
-            Tuning: "",
-            Plugins: "",
+            format: "txt",
+            tuning: "",
+            plugins: "",
             dbcheck: false,
             evasion: "",
             id: "",
-            Pause: 0,
-            useragent: "",
+            pause: 0,
+            userAgent: "",
             vhost: "",
-            Display: "",
+            display: "",
             timeout: 10,
-            maxtime: "",
-            nolookup: false,
-            followredirects: false,
+            maxTime: "",
+            noLookup: false,
+            followRedirects: false,
         },
     });
 
@@ -144,7 +147,7 @@ function Nikto() {
     );
 
     /**
-     * handSaveComplete: Recognises that the output file has been saved.
+     * handleSaveComplete: Recognizes that the output file has been saved.
      * Passes the saved status back to SaveOutputToTextFile_v2
      */
     const handleSaveComplete = () => {
@@ -171,7 +174,7 @@ function Nikto() {
             args.push("-ssl");
         }
 
-        if (form.values.nossl) {
+        if (form.values.noSsl) {
             args.push("-nossl");
         }
 
@@ -179,16 +182,16 @@ function Nikto() {
             args.push("-output", form.values.output);
         }
 
-        if (form.values.Format !== "txt") {
-            args.push("-Format", form.values.Format);
+        if (form.values.format !== "txt") {
+            args.push("-Format", form.values.format);
         }
 
-        if (form.values.Tuning) {
-            args.push("-Tuning", form.values.Tuning);
+        if (form.values.tuning) {
+            args.push("-Tuning", form.values.tuning);
         }
 
-        if (form.values.Plugins) {
-            args.push("-Plugins", form.values.Plugins);
+        if (form.values.plugins) {
+            args.push("-Plugins", form.values.plugins);
         }
 
         if (form.values.dbcheck) {
@@ -203,35 +206,35 @@ function Nikto() {
             args.push("-id", form.values.id);
         }
 
-        if (form.values.Pause > 0) {
-            args.push("-Pause", form.values.Pause.toString());
+        if (form.values.pause > 0) {
+            args.push("-Pause", form.values.pause.toString());
         }
 
-        if (form.values.useragent) {
-            args.push("-useragent", form.values.useragent);
+        if (form.values.userAgent) {
+            args.push("-useragent", form.values.userAgent);
         }
 
         if (form.values.vhost) {
             args.push("-vhost", form.values.vhost);
         }
 
-        if (form.values.Display) {
-            args.push("-Display", form.values.Display);
+        if (form.values.display) {
+            args.push("-Display", form.values.display);
         }
 
         if (form.values.timeout !== 10) {
             args.push("-timeout", form.values.timeout.toString());
         }
 
-        if (form.values.maxtime) {
-            args.push("-maxtime", form.values.maxtime);
+        if (form.values.maxTime) {
+            args.push("-maxtime", form.values.maxTime);
         }
 
-        if (form.values.nolookup) {
+        if (form.values.noLookup) {
             args.push("-nolookup");
         }
 
-        if (form.values.followredirects) {
+        if (form.values.followRedirects) {
             args.push("-followredirects");
         }
 
@@ -284,7 +287,7 @@ function Nikto() {
                         setOpened={setOpened}
                         feature_description={description}
                         dependencies={dependencies}
-                    ></InstallationModal>
+                    />
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
                     {/* Render the loading overlay and cancel button */}
@@ -338,7 +341,7 @@ function Nikto() {
                                 {basicOpened && (
                                     <Stack mt={10}>
                                         <Switch label="SSL" {...form.getInputProps("ssl", { type: "checkbox" })} />
-                                        <Switch label="No SSL" {...form.getInputProps("nossl", { type: "checkbox" })} />
+                                        <Switch label="No SSL" {...form.getInputProps("noSsl", { type: "checkbox" })} />
                                         <TextInput label="Output File" {...form.getInputProps("output")} />
                                         <Select
                                             label="Output Format"
@@ -348,7 +351,7 @@ function Nikto() {
                                                 { value: "json", label: "JSON" },
                                                 { value: "xml", label: "XML" },
                                             ]}
-                                            {...form.getInputProps("Format")}
+                                            {...form.getInputProps("format")}
                                         />
                                     </Stack>
                                 )}
@@ -356,14 +359,14 @@ function Nikto() {
                                 {/* Render Advanced Options */}
                                 {advancedOpened && (
                                     <Stack mt={10}>
-                                        <TextInput label="Tuning" {...form.getInputProps("Tuning")} />
-                                        <TextInput label="Plugins" {...form.getInputProps("Plugins")} />
+                                        <TextInput label="Tuning" {...form.getInputProps("tuning")} />
+                                        <TextInput label="Plugins" {...form.getInputProps("plugins")} />
                                         <Switch
                                             label="Database Check"
                                             {...form.getInputProps("dbcheck", { type: "checkbox" })}
                                         />
                                         <TextInput label="Evasion" {...form.getInputProps("evasion")} />
-                                        <NumberInput label="Pause (seconds)" {...form.getInputProps("Pause")} />
+                                        <NumberInput label="Pause (seconds)" {...form.getInputProps("pause")} />
                                     </Stack>
                                 )}
 
@@ -380,25 +383,24 @@ function Nikto() {
                                 {/* Render Additional Options */}
                                 {additionalOpened && (
                                     <Stack mt={10}>
-                                        <TextInput label="User Agent" {...form.getInputProps("useragent")} />
+                                        <TextInput label="User Agent" {...form.getInputProps("userAgent")} />
                                         <TextInput label="Virtual Host" {...form.getInputProps("vhost")} />
-                                        <TextInput label="Display Options" {...form.getInputProps("Display")} />
+                                        <TextInput label="Display Options" {...form.getInputProps("display")} />
                                         <NumberInput label="Timeout (seconds)" {...form.getInputProps("timeout")} />
-                                        <TextInput label="Max Time" {...form.getInputProps("maxtime")} />
+                                        <TextInput label="Max Time" {...form.getInputProps("maxTime")} />
                                         <Switch
                                             label="No DNS Lookup"
-                                            {...form.getInputProps("nolookup", { type: "checkbox" })}
+                                            {...form.getInputProps("noLookup", { type: "checkbox" })}
                                         />
                                         <Switch
                                             label="Follow Redirects"
-                                            {...form.getInputProps("followredirects", { type: "checkbox" })}
+                                            {...form.getInputProps("followRedirects", { type: "checkbox" })}
                                         />
                                     </Stack>
                                 )}
                             </Stepper.Step>
                             {/* Step 3: Run */}
                             <Stepper.Step label="Run">
-                                <Stack align="center" mt={20}></Stack>
                                 <Stack align="center" mt={20}>
                                     <Button type="submit" disabled={loading} style={{ alignSelf: "center" }}>
                                         Run Nikto
