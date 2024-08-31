@@ -41,11 +41,18 @@ const Masscan = () => {
 
     // Component Constants
     const title = "Masscan";
-    const description = "Masscan is a...";
+    const description = "Masscan is a network reconnaissance tool designed to scan large IP ranges for open ports and services faster than traditional scanners.";
     const steps =
-        "Step 1: \n" +
-        "Step 2: \n" +
-        "Step 3: \n";
+        "=== Required ===\n" +
+        "Step 1: Input a single IP address or an IP address range/subnet to scan.\n" +
+        "Step 2: Input a port or range of ports to scan. Alternativley check the common ports box and input n number of common ports to scan.\n" +
+        " \n" +
+        "=== Optional ===\n" +
+        "Step 3: Input a wait time to allow Masscan to wait after the last packet is sent to receive any delayed responses.\n" +
+        "Step 4: Input a packet rate to deterine how many packets are sent per second (Slower rates can help avoid detection).\n" +
+        "Step 5: Input a single IP address or an IP address range to exclude from the scan.\n" +
+        "Step 6: Input a network interface to send and recieve packets from during the scan.\n" +
+        "Step 7: Check the verbose checkbox to run the command in verbose mode.\n";
     const sourceLink = ""; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["masscan"]; // Contains the dependencies required by the component.
