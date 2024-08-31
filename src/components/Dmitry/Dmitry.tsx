@@ -1,11 +1,13 @@
-import { Button, Checkbox, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
+import { Button, Checkbox, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
  * Represents the form values for the Dmitry component.
@@ -55,6 +57,21 @@ const dmitry = () => {
     const sourceLink = "https://www.kali.org/tools/dmitry/\n"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["dmitry"]; // Contains the dependencies required by the component.
+
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
 
     //Handles the change event for the port scan checkbox.
     const handlePortscanChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -240,15 +257,8 @@ const dmitry = () => {
                     dependencies={dependencies}
                 ></InstallationModal>
             )}
-            <form onSubmit={form.onSubmit(onSubmit)}>
-                <LoadingOverlay visible={loading} />
-                {loading && (
-                    <div>
-                        <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                            Cancel
-                        </Button>
-                    </div>
-                )}
+            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
                     <Switch
                         size="md"
