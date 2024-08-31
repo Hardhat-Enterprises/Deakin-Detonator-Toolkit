@@ -228,16 +228,16 @@ const Masscan = () => {
                         checked={checkedTopPorts}
                         onChange={(e) => setCheckedTopPorts(e.currentTarget.checked)}
                     />
-                    <TextInput label="IP Address/Range/Subnet" required {...form.getInputProps("targetIP")} />
+                    <TextInput label="IP Address/Range/Subnet" required {...form.getInputProps("targetIP")} placeholder="e.g. 192.168.1.0" />
                     {checkedTopPorts ? (
-                        <TextInput label="Scan Common Ports" required {...form.getInputProps("topPorts")} />
+                        <TextInput label="Scan Common Ports" required {...form.getInputProps("topPorts")} placeholder="e.g. 100" />
                     ):(
-                        <TextInput label="Port/Port Range" required {...form.getInputProps("targetPort")} />
+                        <TextInput label="Port/Port Range" required {...form.getInputProps("targetPort")} placeholder="e.g. 80 or 80-100" />
                     )}
-                    <TextInput label="Response Wait Timer" {...form.getInputProps("waitTime")} />
-                    <TextInput label="Packet Send Rate" {...form.getInputProps("packetRate")} />
-                    <TextInput label="Exclude IP(s)" {...form.getInputProps("excludedIP")} />
-                    <TextInput label="Select Network Interface" {...form.getInputProps("interface")} />
+                    <TextInput label="Response Wait Timer" {...form.getInputProps("waitTime")} placeholder="e.g. 5" />
+                    <TextInput label="Packet Send Rate" {...form.getInputProps("packetRate")} placeholder="e.g. 1000" />
+                    <TextInput label="Exclude IP(s)" {...form.getInputProps("excludedIP")} placeholder="e.g. 192.168.1.4" />
+                    <TextInput label="Select Network Interface" {...form.getInputProps("interface")} placeholder="e.g. eth0" />
                     <Checkbox
                         label="Verbose Mode"
                         checked={verboseMode}
