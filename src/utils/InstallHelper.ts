@@ -29,6 +29,24 @@ const installDependency = async (
         }
     };
 
+    // Runs the `apt-get update` process to update package lists before installation
+    // Log beginning of apt-get update command
+    handleProcessData(`[DEBUG] Starting 'apt-get update' at: ${new Date().toISOString()}`);
+    await new Promise<void>((resolve, reject) => {
+        // Run the command to perform 'apt-get update' using pkexec
+        CommandHelper.runCommandWithPkexec(
+            "sh",
+            ["-c", `apt-get update | tee /dev/null`],
+            handleProcessData,
+            (terminationDetails) => {
+                handleProcessTermination(terminationDetails);
+                // Log end of apt-get update command
+                handleProcessData(`[DEBUG] 'apt-get update' completed at: ${new Date().toISOString()}`);
+                resolve(); 
+            }
+        );
+    });
+
     return new Promise(async (resolve, reject) => {
         try {
             // Run the command to install the dependency using pkexec
