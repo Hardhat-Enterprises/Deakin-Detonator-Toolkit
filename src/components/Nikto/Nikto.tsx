@@ -31,7 +31,7 @@ interface FormValuesType {
     vhost: string;
     Display: string;
     timeout: number;
-    maxtime: string;
+    maxTime: string;
     nolookup: boolean;
     followredirects: boolean;
 }
