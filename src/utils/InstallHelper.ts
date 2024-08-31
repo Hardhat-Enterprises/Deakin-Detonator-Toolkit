@@ -66,6 +66,18 @@ const installDependency = async (
         );
     });
 
+    // Verifies and returns if each dependency is installed
+    // Log beginning of dependencies availability
+    handleProcessData(`[DEBUG] Starting check for command availability at: ${new Date().toISOString()}`);
+    const results: boolean[] = [];
+    for (const dependency of dependencies) {
+        const isAvailable = await checkCommandAvailability(dependency);
+        results.push(isAvailable);
+    }
+    // Log end of dependencies availability
+    handleProcessData(`[DEBUG] Command availability check completed at: ${new Date().toISOString()}`);
+
+
     return new Promise(async (resolve, reject) => {
         try {
             // Run the command to install the dependency using pkexec
