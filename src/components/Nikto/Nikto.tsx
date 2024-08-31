@@ -29,7 +29,7 @@ interface FormValuesType {
     pause: number;
     useragent: string;
     vhost: string;
-    Display: string;
+    display: string;
     timeout: number;
     maxTime: string;
     nolookup: boolean;
