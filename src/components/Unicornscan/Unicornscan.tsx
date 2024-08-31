@@ -39,13 +39,13 @@ const Unicornscan = () => {
     // Component Constants
     const title = "Unicornscan";
     const description = "Unicornscan is a tool used to gather information about systems and services on a network.";
-    const steps = "Step 1: Provide the target URL or IP address to scan.\nStep 2: Start the scan to gather information about potential vulnerabilities and misconfigurations.\nStep 3: Review the scan output to identify any security issues.\n";
+    const steps = "Step 1: Provide the target URL or IP address to scan.\nStep 2: Select the scan type (TCP or UDP).\nStep 3: Start the scan to gather information about potential vulnerabilities and misconfigurations.\nStep 4: Review the scan output to identify any security issues.\n";
     const sourceLink = "https://github.com/dneufeld/unicornscan";
     const tutorial = "";
     const dependencies = ["unicornscan"];
 
     // Options for the dropdown menu
-    const scanTypes = ["TCP Scan (-mT)"]; 
+    const scanTypes = ["TCP Scan (-mT)", "UDP Scan (-mU)"];
 
     // Form hook to handle form input
     let form = useForm({
@@ -93,6 +93,8 @@ const Unicornscan = () => {
         // Add the selected scan type to the arguments
         if (selectedScanType === "TCP Scan (-mT)") {
             args.push("-mT");
+        } else if (selectedScanType === "UDP Scan (-mU)") {
+            args.push("-mU");
         }
 
         if (verboseMode) {
