@@ -8,11 +8,11 @@ sudo apt update
 sudo apt upgrade -y
 sudo reboot
 
-#Install/update agaraphics Drivers
+#Install/update graphics Drivers
 sudo apt install open-vm-tools-desktop -y
 sudo reboot
 
-#Verify Direct rendering
+#Verify Direct rendering infrastructure
 #Install Mesa utilities
 sudo apt install mesa-utils -y
 #Check direct rendering status 
@@ -32,7 +32,7 @@ echo 'export LIBGL_DRIVERS_PATH=/usr/lib/xorg/modules/dri' >> ~/.profile
 echo 'export LIBGL_DEBUG=verbose' >> ~/.profile
 source ~/.profile
 
-#Enable 3D Acceleration in VM settings
+#Enable 3D Acceleration in VM Display settings 
 #Check and verfy kernal modules are loaded
 #Review Log files
 less /var/log/Xorg.0.log
