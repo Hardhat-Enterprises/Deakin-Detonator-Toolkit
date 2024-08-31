@@ -232,7 +232,7 @@ const Masscan = () => {
                     />
                     {checkedTopPorts ? (
                         <TextInput
-                            label="Scan Common Ports"
+                            label="Number of Common Ports"
                             required
                             {...form.getInputProps("topPorts")}
                             placeholder="e.g. 100"
