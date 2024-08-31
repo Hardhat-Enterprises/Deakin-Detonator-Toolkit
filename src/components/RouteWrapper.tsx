@@ -486,8 +486,7 @@ export const ROUTES: RouteProperties[] = [
         name: "Masscan",
         path: "/tools/Masscan",
         element: <Masscan />,
-        description:
-            "Masscan is a quick and effective port scanning tool used for network reconnaissance.",
+        description: "Masscan is a quick and effective port scanning tool used for network reconnaissance.",
         category: "Network Scanning and Enumeration",
     },
     {
@@ -662,7 +661,6 @@ export const ROUTES: RouteProperties[] = [
             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
         category: "Web Application Testing",
     },
-
 ];
 export function getTools() {
     return ROUTES.filter((route) => route.path.startsWith("/tools/"));
