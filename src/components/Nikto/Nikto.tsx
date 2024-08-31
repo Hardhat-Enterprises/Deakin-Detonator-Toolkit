@@ -33,7 +33,7 @@ interface FormValuesType {
     timeout: number;
     maxTime: string;
     nolookup: boolean;
-    followredirects: boolean;
+    followRedirects: boolean;
 }
 
 /**
