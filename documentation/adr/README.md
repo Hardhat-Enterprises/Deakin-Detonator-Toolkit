@@ -1,4 +1,3 @@
-
 ## Architecture decision record (ADR) explained
 
 ### What?
@@ -17,8 +16,8 @@ An architecture decision record (ADR) is a document that captures an important a
 
 ### When?
 
-- Making major changes to the architecture
-- Making major changes to the operation of the application
+-   Making major changes to the architecture
+-   Making major changes to the operation of the application
 
 ### How?
 
@@ -34,23 +33,25 @@ An architecture decision record (ADR) is a document that captures an important a
 
 6. **Submit a Pull Request:** Follow the standard pull request (PR) process to submit your ADR document for review.
 
-7.  **Post-Review Actions:**
-   - If your ADR is accepted, update the status in the table to `ACCEPTED`.
-   - If your ADR is rejected, update the status to `REJECTED`.
+7. **Post-Review Actions:**
+
+-   If your ADR is accepted, update the status in the table to `ACCEPTED`.
+-   If your ADR is rejected, update the status to `REJECTED`.
 
 8. **Merge your Pull Request:** Once your ADR document has been merged, proceed to implement the changes outlined in the ADR.
-    
+
 ## ADR Register
-| ADR ID | Description  | Status|
-|--|--|--|
-|0000  | Example entry change |APPROVED |
-|0001  |  | |
-|0002  |  | |
-|0003  |  | |
-|0004  |  | |
-|0005  |  | |
-|0006  |  | |
-|0007  |  | |
-|0008  |  | |
-|0009  |  | |
-|0010  |  | |
+
+| ADR ID | Description          | Status   |
+| ------ | -------------------- | -------- |
+| 0000   | Example entry change | APPROVED |
+| 0001   |                      |          |
+| 0002   |                      |          |
+| 0003   |                      |          |
+| 0004   |                      |          |
+| 0005   |                      |          |
+| 0006   |                      |          |
+| 0007   |                      |          |
+| 0008   |                      |          |
+| 0009   |                      |          |
+| 0010   |                      |          |

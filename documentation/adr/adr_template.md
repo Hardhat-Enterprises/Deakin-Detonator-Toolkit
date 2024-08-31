@@ -6,9 +6,9 @@ Provide a clear and concise title for the architecture decision.
 
 What is the status of this decision?
 
-- Proposed
-- Accepted
-- Rejected
+-   Proposed
+-   Accepted
+-   Rejected
 
 ## Context
 
