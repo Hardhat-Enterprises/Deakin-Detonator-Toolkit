@@ -47,13 +47,13 @@ const Masscan = () => {
     const steps =
         "=== Required ===\n" +
         "Step 1: Input a single IP address or an IP address range/subnet to scan.\n" +
-        "Step 2: Input a port or range of ports to scan. Alternativley check the common ports box and input n number of common ports to scan.\n" +
+        "Step 2: Input a port or range of ports to scan. Alternatively check the common ports box and input n number of common ports to scan.\n" +
         " \n" +
         "=== Optional ===\n" +
         "Step 3: Input a wait time to allow Masscan to wait after the last packet is sent to receive any delayed responses.\n" +
         "Step 4: Input a packet rate to deterine how many packets are sent per second (Slower rates can help avoid detection).\n" +
         "Step 5: Input a single IP address or an IP address range to exclude from the scan.\n" +
-        "Step 6: Input a network interface to send and recieve packets from during the scan.\n" +
+        "Step 6: Input a network interface to send and receive packets from during the scan.\n" +
         "Step 7: Check the banner grabbing checkbox to attempt to identify services running on scanned ports.\n" +
         "Step 8: Check the verbose checkbox to run the command in verbose mode.\n";
     const sourceLink = ""; // Link to the source code
