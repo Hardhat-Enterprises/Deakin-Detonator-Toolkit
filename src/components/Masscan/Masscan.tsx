@@ -41,7 +41,8 @@ const Masscan = () => {
 
     // Component Constants
     const title = "Masscan";
-    const description = "Masscan is a network reconnaissance tool designed to scan large IP ranges for open ports and services faster than traditional scanners.";
+    const description =
+        "Masscan is a network reconnaissance tool designed to scan large IP ranges for open ports and services faster than traditional scanners.";
     const steps =
         "=== Required ===\n" +
         "Step 1: Input a single IP address or an IP address range/subnet to scan.\n" +
@@ -135,12 +136,12 @@ const Masscan = () => {
 
         // Construct arguments for the Masscan command based on form input
         let args = [];
-        args = [values.targetIP, '-p', values.targetPort];
+        args = [values.targetIP, "-p", values.targetPort];
 
         // Check if waitTime has a value and push it to args
         if (values.waitTime) {
             args.push("--wait", values.waitTime);
-        }  
+        }
 
         // Check if packetRate has a value and push it to args
         if (values.packetRate) {
@@ -161,18 +162,13 @@ const Masscan = () => {
         if (values.topPorts) {
             args.push("--interface", values.interface);
         }
-        
+
         if (verboseMode) {
             args.push("-v"); // Add verbose mode option if enabled
         }
 
         // Execute the Masscan command via helper method and handle its output or potential errors
-        CommandHelper.runCommandWithPkexec(
-            "masscan",
-            args,
-            handleProcessData,
-            handleProcessTermination
-        )
+        CommandHelper.runCommandWithPkexec("masscan", args, handleProcessData, handleProcessTermination)
             .then(() => {
                 // Deactivate loading state
                 setLoading(false);
@@ -183,7 +179,7 @@ const Masscan = () => {
                 // Deactivate loading state
                 setLoading(false);
             });
-            setAllowSave(true);
+        setAllowSave(true);
     };
 
     /**
@@ -228,16 +224,39 @@ const Masscan = () => {
                         checked={checkedTopPorts}
                         onChange={(e) => setCheckedTopPorts(e.currentTarget.checked)}
                     />
-                    <TextInput label="IP Address/Range/Subnet" required {...form.getInputProps("targetIP")} placeholder="e.g. 192.168.1.0" />
+                    <TextInput
+                        label="IP Address/Range/Subnet"
+                        required
+                        {...form.getInputProps("targetIP")}
+                        placeholder="e.g. 192.168.1.0"
+                    />
                     {checkedTopPorts ? (
-                        <TextInput label="Scan Common Ports" required {...form.getInputProps("topPorts")} placeholder="e.g. 100" />
-                    ):(
-                        <TextInput label="Port/Port Range" required {...form.getInputProps("targetPort")} placeholder="e.g. 80 or 80-100" />
+                        <TextInput
+                            label="Scan Common Ports"
+                            required
+                            {...form.getInputProps("topPorts")}
+                            placeholder="e.g. 100"
+                        />
+                    ) : (
+                        <TextInput
+                            label="Port/Port Range"
+                            required
+                            {...form.getInputProps("targetPort")}
+                            placeholder="e.g. 80 or 80-100"
+                        />
                     )}
                     <TextInput label="Response Wait Timer" {...form.getInputProps("waitTime")} placeholder="e.g. 5" />
                     <TextInput label="Packet Send Rate" {...form.getInputProps("packetRate")} placeholder="e.g. 1000" />
-                    <TextInput label="Exclude IP(s)" {...form.getInputProps("excludedIP")} placeholder="e.g. 192.168.1.4" />
-                    <TextInput label="Select Network Interface" {...form.getInputProps("interface")} placeholder="e.g. eth0" />
+                    <TextInput
+                        label="Exclude IP(s)"
+                        {...form.getInputProps("excludedIP")}
+                        placeholder="e.g. 192.168.1.4"
+                    />
+                    <TextInput
+                        label="Select Network Interface"
+                        {...form.getInputProps("interface")}
+                        placeholder="e.g. eth0"
+                    />
                     <Checkbox
                         label="Verbose Mode"
                         checked={verboseMode}
