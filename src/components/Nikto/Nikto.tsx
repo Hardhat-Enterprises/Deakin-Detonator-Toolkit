@@ -1,4 +1,3 @@
-// Import necessary hooks and components from React and other libraries
 import { useState, useCallback, useEffect } from "react";
 import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -26,11 +25,7 @@ interface FormValuesType {
     evasion: string;
     id: string;
     pause: number;
-<<<<<<< HEAD
-    useragent: string;
-=======
     userAgent: string;
->>>>>>> 8482b06 (updated the code fixed all camelCase issues and style erros)
     vhost: string;
     display: string;
     timeout: number;
