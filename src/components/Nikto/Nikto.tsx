@@ -22,7 +22,7 @@ interface FormValuesType {
     output: string;
     format: string;
     Tuning: string;
-    Plugins: string;
+    plugins: string;
     dbcheck: boolean;
     evasion: string;
     id: string;
