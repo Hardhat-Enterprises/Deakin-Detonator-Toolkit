@@ -35,11 +35,13 @@ const Unicornscan = () => {
 
     // New state for dropdown selection
     const [selectedScanType, setSelectedScanType] = useState("");
+    const [rate, setRate] = useState("");
+    const [sourcePort, setSourcePort] = useState("");
 
     // Component Constants
     const title = "Unicornscan";
     const description = "Unicornscan is a tool used to gather information about systems and services on a network.";
-    const steps = "Step 1: Provide the target URL or IP address to scan.\nStep 2: Select the scan type (TCP or UDP).\nStep 3: Start the scan to gather information about potential vulnerabilities and misconfigurations.\nStep 4: Review the scan output to identify any security issues.\n";
+    const steps = "Step 1: Provide the target URL or IP address to scan.\nStep 2: Select the scan type (TCP or UDP).\nStep 3: Configure additional scan options as needed.\nStep 4: Start the scan to gather information about potential vulnerabilities and misconfigurations.\nStep 5: Review the scan output to identify any security issues.\n";
     const sourceLink = "https://github.com/dneufeld/unicornscan";
     const tutorial = "";
     const dependencies = ["unicornscan"];
@@ -97,9 +99,10 @@ const Unicornscan = () => {
             args.push("-mU");
         }
 
-        if (verboseMode) {
-            args.push("-v");
-        }
+        // Include additional flags if they are set
+        if (rate) args.push(`-r ${rate}`);
+        if (sourcePort) args.push(`-e ${sourcePort}`);
+        if (verboseMode) args.push("-v");
 
         CommandHelper.runCommandWithPkexec(
             "unicornscan",
@@ -156,6 +159,16 @@ const Unicornscan = () => {
                         data={scanTypes}
                         placeholder="Choose a scan type"
                         description="Select the type of scan to perform"
+                    />
+                    <TextInput
+                        label="Rate (Packets per second)"
+                        value={rate}
+                        onChange={(e) => setRate(e.target.value)}
+                    />
+                    <TextInput
+                        label="Source Port"
+                        value={sourcePort}
+                        onChange={(e) => setSourcePort(e.target.value)}
                     />
                     <Checkbox
                         label="Verbose Mode"
