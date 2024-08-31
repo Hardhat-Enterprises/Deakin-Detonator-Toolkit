@@ -54,8 +54,8 @@ const Masscan = () => {
         "Step 4: Input a packet rate to deterine how many packets are sent per second (Slower rates can help avoid detection).\n" +
         "Step 5: Input a single IP address or an IP address range to exclude from the scan.\n" +
         "Step 6: Input a network interface to send and recieve packets from during the scan.\n" +
-        "Step 7: Check the banner grabbing checkbox to attempt to identify services running on scanned ports.\n";
-    ("Step 8: Check the verbose checkbox to run the command in verbose mode.\n");
+        "Step 7: Check the banner grabbing checkbox to attempt to identify services running on scanned ports.\n" +
+        "Step 8: Check the verbose checkbox to run the command in verbose mode.\n";
     const sourceLink = ""; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["masscan"]; // Contains the dependencies required by the component.
