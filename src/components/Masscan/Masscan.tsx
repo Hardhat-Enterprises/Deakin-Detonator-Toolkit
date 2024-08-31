@@ -38,6 +38,7 @@ const Masscan = () => {
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [verboseMode, setVerboseMode] = useState(false); // State variable for verbose mode
     const [checkedTopPorts, setCheckedTopPorts] = useState(false); //State variable for scanning common ports.
+    const [checkedBannerGrabbing, setCheckedBannerGrabbing] = useState(false); //State variable for banner grabbing.
 
     // Component Constants
     const title = "Masscan";
@@ -53,7 +54,8 @@ const Masscan = () => {
         "Step 4: Input a packet rate to deterine how many packets are sent per second (Slower rates can help avoid detection).\n" +
         "Step 5: Input a single IP address or an IP address range to exclude from the scan.\n" +
         "Step 6: Input a network interface to send and recieve packets from during the scan.\n" +
-        "Step 7: Check the verbose checkbox to run the command in verbose mode.\n";
+        "Step 7: Check the banner grabbing checkbox to attempt to identify services running on scanned ports.\n";
+    ("Step 8: Check the verbose checkbox to run the command in verbose mode.\n");
     const sourceLink = ""; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["masscan"]; // Contains the dependencies required by the component.
@@ -163,6 +165,10 @@ const Masscan = () => {
             args.push("--interface", values.interface);
         }
 
+        if (checkedBannerGrabbing) {
+            args.push("--banner"); // Add banner grabbing if option is enabled
+        }
+
         if (verboseMode) {
             args.push("-v"); // Add verbose mode option if enabled
         }
@@ -256,6 +262,11 @@ const Masscan = () => {
                         label="Select Network Interface"
                         {...form.getInputProps("interface")}
                         placeholder="e.g. eth0"
+                    />
+                    <Checkbox
+                        label="Banner Grabbing"
+                        checked={checkedBannerGrabbing}
+                        onChange={(event) => setCheckedBannerGrabbing(event.currentTarget.checked)}
                     />
                     <Checkbox
                         label="Verbose Mode"
