@@ -18,7 +18,7 @@ interface FormValuesType {
     host: string;
     port: number;
     ssl: boolean;
-    nossl: boolean;
+    noSsl: boolean;
     output: string;
     format: string;
     tuning: string;
