@@ -42,7 +42,7 @@ export const installDependencies = async (
                 handleProcessTermination(terminationDetails);
                 // Log end of apt-get update command
                 handleProcessData(`[DEBUG] 'apt-get update' completed at: ${new Date().toISOString()}`);
-                resolve(); 
+                resolve();
             }
         );
     });
@@ -55,7 +55,10 @@ export const installDependencies = async (
         // Run the command to install the dependencies using pkexec
         CommandHelper.runCommandWithPkexec(
             "sh",
-            ["-c", `DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y ${installCommand} -o Debug::pkgProblemResolver=true | tee /dev/null`],
+            [
+                "-c",
+                `DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y ${installCommand} -o Debug::pkgProblemResolver=true | tee /dev/null`,
+            ],
             handleProcessData,
             (terminationDetails) => {
                 handleProcessTermination(terminationDetails);
