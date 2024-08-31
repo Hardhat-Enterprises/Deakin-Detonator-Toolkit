@@ -20,7 +20,7 @@ interface FormValuesType {
     ssl: boolean;
     nossl: boolean;
     output: string;
-    Format: string;
+    format: string;
     Tuning: string;
     Plugins: string;
     dbcheck: boolean;
