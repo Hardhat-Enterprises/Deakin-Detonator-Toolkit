@@ -21,7 +21,7 @@ interface FormValuesType {
     nossl: boolean;
     output: string;
     format: string;
-    Tuning: string;
+    tuning: string;
     plugins: string;
     dbcheck: boolean;
     evasion: string;
