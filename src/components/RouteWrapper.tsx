@@ -661,7 +661,7 @@ export const ROUTES: RouteProperties[] = [
         description:
             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
         category: "Web Application Testing",
-    }
+    },
 ];
 export function getTools() {
     return ROUTES.filter((route) => route.path.startsWith("/tools/"));
