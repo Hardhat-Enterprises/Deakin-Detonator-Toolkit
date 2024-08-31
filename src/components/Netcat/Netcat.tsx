@@ -1,12 +1,13 @@
 import { Button, Checkbox, NativeSelect, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
 /**
  * Represents the form values for the Netcat component.
@@ -42,23 +43,37 @@ const NetcatTool = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     // Component Constants.
-    const title = "Netcat Tool"; // Title of the component.
+    const title = "Netcat"; // Title of the component.
     const description =
-        "Netcat is a powerful tool that is used to connect two machines together for communication and for other uses."; // Description of the component.
+        "A simple Unix utility which reads and writes data across network connections using TCP or UDP protocol."; // Description of the component.
     const steps =
-        "How to use this netcat tool:\n" +
-        "- If you want to listen for connections for chat or reverse shell choose the Interactive shell/Listen option and provide \n a port number.\n" +
-        "- If you want to scan for ports, provide an IP address and a port range\n" +
-        "- If you want to send a file, provide the destination IP address, Port number, and File name\n" +
-        "- If you want to receive a file, provide a port number and the File name.\n" +
-        "- If you want to port scan a domain, provide Domain name and a Port number. \n" +
-        "Note: You should only use website port scan to a domain that you own.\n" +
+        +"Step 1: If you want to listen for connections for chat or reverse shell choose the listen option and provide a port number.\n" +
+        "Step 2: If you want to scan for ports, provide an IP address and a port range\n" +
+        "Step 3: If you want to send a file, provide the destination IP address, port number, and File name\n" +
+        "Step 4: If you want to receive a file, provide a port number and the file name.\n" +
+        "Step 5: If you want to port scan a domain, provide Domain name and a port number. \n\n" +
+        "Note:   You should only use website port scan to a domain that you own.\n" +
         "Note 2: Using the sending/receiving file option might seem like it is not working, but it is working.\n" +
-        "You will need a second machine to see the file transfer\n" +
-        "For more information go to the reference page and click on netcat, alternatively Google is your friend.";
-    const sourceLink = "https://github.com/openbsd/src/blob/master/usr.bin/nc/netcat.c"; // Link to the source code
+        "Note 3: You will need two devices for file transfer to work — one for sending and the other need to be set up on the specified port to capture the incoming file.\n" +
+        "        Ensure both machines are properly configured and connected to the same network or through an accessible route (such as a VPN, or through valid public IP addresses) to complete the file transfer.\n";
+    const sourceLink = "https://www.kali.org/tools/netcat/"; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["netcat"]; // Contains the dependencies required by the component
+    const dependencies = ["netcat-traditional"]; // Contains the dependencies required by the component
+
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
 
     // Form hook to handle form input.
     let form = useForm({
@@ -349,7 +364,7 @@ const NetcatTool = () => {
                             <TextInput label={"Domain name"} required {...form.getInputProps("websiteUrl")} />
                         </>
                     )}
-                    <Button type={"submit"}>start netcat</Button>
+                    <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
