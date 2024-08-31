@@ -1,6 +1,7 @@
 #BUG-FIX-705-ERROR.
 #Review the " failed to create dri2" error message
 # Identify the envionment(Kali Linux  on vm with windows 10)
+#Each command should be run on the command line one by one for best results
 
 #update the os (kali linux):
 sudo apt update
