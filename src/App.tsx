@@ -56,9 +56,8 @@ export default function App() {
                                 <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 120, lg: 120 }}>
                                     <Group style={{ justifyContent: "center" }}>
                                         <Button onClick={handleGoBack} color="red">
-                                            Back
+                                            Go Back
                                         </Button>
-                                        <Button onClick={handleGoForward}>Forward</Button>
                                     </Group>
                                 </Aside>
                             </MediaQuery>
