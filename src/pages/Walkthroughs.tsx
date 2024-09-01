@@ -82,8 +82,12 @@ export function WalkthroughsPage() {
                 </thead>
                 <tbody>
                     {walkthroughs.map((walkthroughs) => {
-                        // Check if the selected category matches the tool's category
-                        if (!selectedCategory || selectedCategory === "All" || walkthroughs.category === selectedCategory) {
+                        // Check if the selected category matches the walkthrough's category
+                        if (
+                            !selectedCategory ||
+                            selectedCategory === "All" ||
+                            walkthroughs.category === selectedCategory
+                        ) {
                             return (
                                 <ToolItem
                                     title={walkthroughs.name}
