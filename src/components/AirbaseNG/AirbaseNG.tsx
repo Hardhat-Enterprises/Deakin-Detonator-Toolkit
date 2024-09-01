@@ -19,7 +19,7 @@ interface FormValuesType {
     macAddress: string;
     replayInterface: string;
     filePath: string;
-    verbosity: boolean;  // Advanced mode: Verbosity flag
+    verbosity: boolean; // Advanced mode: Verbosity flag
     disableBeacons: boolean; // Advanced mode: Disable beacons
     customConfig: string;
     customScript: string; // Custom mode: Custom script path
@@ -46,7 +46,8 @@ const AirbaseNG = () => {
     // Constants for the component's metadata.
     const title = "Airbase-ng";
     const description = "Airbase-ng is a tool to create fake access points.";
-    const steps = "Step 1: Type in the name of your fake host.\n" +
+    const steps =
+        "Step 1: Type in the name of your fake host.\n" +
         "Step 2: Select your desired channel.\n" +
         "Step 3: Specify the WLAN interface to be used.\n" +
         "Step 4: Click 'Start AP' to begin the process.\n" +
@@ -71,10 +72,10 @@ const AirbaseNG = () => {
 
         // Validation: Ensure essential fields are filled.
         validate: {
-            fakeHost: (value) => value ? null : "Fake host name is required.",
-            channel: (value) => value ? null : "Channel is required.",
-            replayInterface: (value) => value ? null : "WLAN interface is required.",
-        }
+            fakeHost: (value) => (value ? null : "Fake host name is required."),
+            channel: (value) => (value ? null : "Channel is required."),
+            replayInterface: (value) => (value ? null : "WLAN interface is required."),
+        },
     });
 
     // Effect to check command availability on component mount.
@@ -85,7 +86,8 @@ const AirbaseNG = () => {
                 setOpened(!isAvailable);
                 setLoadingModal(false);
             })
-            .catch((error: any) => {  // Fix the error type
+            .catch((error: any) => {
+                // Fix the error type
                 console.error("An error occurred:", error);
                 setLoadingModal(false);
             });
@@ -158,7 +160,8 @@ const AirbaseNG = () => {
             setOutput(output);
             setAllowSave(true);
             setPid(pid);
-        } catch (error: any) {  // Fix the error type
+        } catch (error: any) {
+            // Fix the error type
             setOutput(error.message || "An unknown error occurred.");
             setLoading(false);
             setAllowSave(true);
@@ -229,10 +232,16 @@ const AirbaseNG = () => {
                                 {...form.getInputProps("filePath")}
                             />
                             <Tooltip label="Enable verbose output">
-                                <Switch label="Verbose Output" {...form.getInputProps("verbosity", { type: 'checkbox' })} />
+                                <Switch
+                                    label="Verbose Output"
+                                    {...form.getInputProps("verbosity", { type: "checkbox" })}
+                                />
                             </Tooltip>
                             <Tooltip label="Disable sending beacons">
-                                <Switch label="Disable Beacons" {...form.getInputProps("disableBeacons", { type: 'checkbox' })} />
+                                <Switch
+                                    label="Disable Beacons"
+                                    {...form.getInputProps("disableBeacons", { type: "checkbox" })}
+                                />
                             </Tooltip>
                         </>
                     )}
@@ -241,9 +250,14 @@ const AirbaseNG = () => {
                     {customMode && (
                         <>
                             <TextInput label="Custom Configuration" {...form.getInputProps("customConfig")} />
-                            <TextInput label="Custom Script Path" placeholder="Path to custom script" {...form.getInputProps("customScript")} />
+                            <TextInput
+                                label="Custom Script Path"
+                                placeholder="Path to custom script"
+                                {...form.getInputProps("customScript")}
+                            />
                             <div>
-                                <strong>Command Preview:</strong> airbase-ng {form.values.fakeHost} {form.values.customConfig}
+                                <strong>Command Preview:</strong> airbase-ng {form.values.fakeHost}{" "}
+                                {form.values.customConfig}
                             </div>
                         </>
                     )}
