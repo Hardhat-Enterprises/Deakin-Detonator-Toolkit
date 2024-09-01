@@ -1,4 +1,4 @@
-import { Button, Stack, Table, Title, Dialog, TextInput, Text, AspectRatio, Group } from "@mantine/core";
+import { Button, Stack, Table, Title, Dialog, TextInput, Text, AspectRatio, Group, NativeSelect } from "@mantine/core";
 import { getWalkthroughs } from "../components/RouteWrapper";
 import ToolItem from "../components/ToolItem/ToolItem";
 import { IconVideoPlus } from "@tabler/icons";
@@ -7,6 +7,7 @@ import { useForm } from "@mantine/form";
 import { CommandHelper } from "../utils/CommandHelper";
 import { showNotification } from "@mantine/notifications";
 import { UserGuide } from "../components/UserGuide/UserGuide";
+import { useState } from "react";
 
 export function WalkthroughsPage() {
     interface FormValues {
@@ -37,17 +38,41 @@ export function WalkthroughsPage() {
         const result = await CommandHelper.runCommand("python3", args);
         console.log(result);
     };
+
+    const categories = [
+        "All",
+        "Information Gathering and Analysis",
+        "Miscellaneous",
+        "Network Scanning and Enumeration",
+        "Penetration Testing",
+        "Web Application Testing",
+    ];
+
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const walkthroughs = getWalkthroughs();
+
     return (
         <Stack align={"center"}>
             {UserGuide(
                 "Walkthrough Videos",
                 "How to add a Walkthrough Video \nStep 1: Use the add button to create a video page \nStep 2: Register it in the RouteWrapper"
             )}
+            <NativeSelect
+                value={selectedCategory}
+                onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                }}
+                title="Filter for a Category"
+                data={categories}
+                required
+                placeholder="Filter for a Category"
+            />
             <Table horizontalSpacing="xl" verticalSpacing="md" fontSize="md">
                 <thead>
                     <tr>
                         <th>Walkthrough name</th>
                         <th>Walkthrough description</th>
+                        <th>Category</th>
                         <th>
                             <Button onClick={toggle} leftIcon={<IconVideoPlus size={20} />}>
                                 Add Videos
@@ -55,7 +80,23 @@ export function WalkthroughsPage() {
                         </th>
                     </tr>
                 </thead>
-                <tbody>{rows}</tbody>
+                <tbody>
+                    {walkthroughs.map((walkthroughs) => {
+                        // Check if the selected category matches the tool's category
+                        if (!selectedCategory || selectedCategory === "All" || walkthroughs.category === selectedCategory) {
+                            return (
+                                <ToolItem
+                                    title={walkthroughs.name}
+                                    description={walkthroughs.description}
+                                    route={walkthroughs.path}
+                                    category={walkthroughs.category}
+                                    key={walkthroughs.name}
+                                />
+                            );
+                        }
+                        return null; // Skip rendering if the category doesn't match
+                    })}
+                </tbody>
             </Table>
             <Dialog
                 opened={opened}
