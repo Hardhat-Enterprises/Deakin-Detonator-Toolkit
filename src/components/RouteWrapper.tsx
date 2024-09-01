@@ -647,7 +647,7 @@ export const ROUTES: RouteProperties[] = [
         name: "TShark",
         path: "/tools/TShark",
         element: <TShark />,
-        description: "a command-line network analyzer that can capture, analyze, and troubleshoot network traffic.",
+        description: "A command-line network analyzer that can capture, analyze, and troubleshoot network traffic.",
         category: "Network Scanning and Enumeration",
     },
     {
