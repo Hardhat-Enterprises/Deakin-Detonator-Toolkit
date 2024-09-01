@@ -85,7 +85,7 @@ const AirbaseNG = () => {
                 setOpened(!isAvailable);
                 setLoadingModal(false);
             })
-            .catch((error) => {
+            .catch((error: Error) => {  // Cast error to Error type
                 console.error("An error occurred:", error);
                 setLoadingModal(false);
             });
@@ -159,7 +159,11 @@ const AirbaseNG = () => {
             setAllowSave(true);
             setPid(pid);
         } catch (error) {
-            setOutput(error.message);
+            if (error instanceof Error) {  // Ensure error is treated as an instance of Error
+                setOutput(error.message);
+            } else {
+                setOutput("An unknown error occurred.");
+            }
             setLoading(false);
             setAllowSave(true);
         }
@@ -233,8 +237,7 @@ const AirbaseNG = () => {
                             </Tooltip>
                             <Tooltip label="Disable sending beacons">
                                 <Switch label="Disable Beacons" {...form.getInputProps("disableBeacons", { type: 'checkbox' })} />
-                            </Tooltip>
-                        </>
+                            </>
                     )}
 
                     {/* Custom Mode Inputs */}
