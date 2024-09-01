@@ -9,7 +9,7 @@ const AboutPage = () => {
         <>
             <Stack align={"center"}>
                 <Title>About the Deakin Detonator Toolkit</Title>
-                <Text>In it's simplest definition, Deakin Detonator Toolkit is a penetration testing toolkit.</Text>
+                <Text>In its simplest definition, Deakin Detonator Toolkit is a penetration testing toolkit.</Text>
                 <Text>
                     Made by university students, DDT is our capstone project, completed over successive trimesters.
                 </Text>
