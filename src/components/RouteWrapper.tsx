@@ -76,6 +76,7 @@ import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
+import Masscan from "./Masscan/Masscan";
 
 export interface RouteProperties {
     name: string;
@@ -480,6 +481,13 @@ export const ROUTES: RouteProperties[] = [
         element: <JohnTheRipper />,
         description: "Utility for cracking passwords",
         category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "Masscan",
+        path: "/tools/Masscan",
+        element: <Masscan />,
+        description: "Masscan is a quick and effective port scanning tool used for network reconnaissance.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Metagoofil",
