@@ -92,7 +92,7 @@ export function NSLookup() {
         setAllowSave(false);
 
         setLoading(true);
-        const args = ["-s", values.ipaddress];
+        const args = [values.ipaddress];
         CommandHelper.runCommandGetPidAndOutput("nslookup", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 setPid(pid);
