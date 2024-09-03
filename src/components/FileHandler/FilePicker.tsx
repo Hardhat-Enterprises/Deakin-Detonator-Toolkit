@@ -110,7 +110,6 @@ export function FilePicker({
             {...fileInputProps}
             multiple={multiple}
             clearable={true}
-            placeholder={placeholderText}
             onChange={handleChange}
             withAsterisk={withAsterisk}
             label={labelText}
