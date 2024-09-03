@@ -10,27 +10,27 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
-const title = "SMG-Ghost Scanner"; // Title of the component.
+const title = "SMB-Ghost Scanner"; // Title of the component.
 const description =
-    "SMG-Ghost Scanner is a tool used to scan a target for vulnerability to the CVE2020-0796 attack vector."; // Description of the component.
+    "SMB-Ghost Scanner is a tool used to scan a target for vulnerability to the CVE2020-0796 attack vector."; // Description of the component.
 const steps =
     "Step 1: Enter a Target IP address.\n" +
-    "Step 2: Click scan to commence SMG-Ghost Scanners operation.\n" +
+    "Step 2: Click scan to commence SMB-Ghost Scanners operation.\n" +
     "Step 3: View the Output block below to view the results of the tools execution."; // Steps for viewing the component
 const sourceLink = ""; // Link to the source code or documentation.
 const tutorial = ""; // Link to the official documentation/tutorial.
-const dependencies = ["smgghostscanner"]; // Contains the dependencies required by the component.
+const dependencies = ["python3"]; // Contains the dependencies required by the component.
 /**
- * Interface representing the form values used in the SMGGhostScanner component.
+ * Interface representing the form values used in the SMBGhostScanner component.
  */
 interface FormValuesType {
     ip: string;
 }
 /**
- * The SMGGhostScanner component.
- * @returns The SMGGhostScanner component.
+ * The SMBGhostScanner component.
+ * @returns The SMBGhostScanner component.
  */
-const SMGGhostScanner = () => {
+const SMBGhostScanner = () => {
     // Component State Variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
@@ -114,7 +114,7 @@ const SMGGhostScanner = () => {
 
     /**
      * Asynchronous handler for the form submission event.
-     * It sets up and triggers the SMG-Ghost Scanner tool with the given parameters.
+     * It sets up and triggers the SMB-Ghost Scanner tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
      * @param {FormValuesType} values - The form values, containing the target IP address.
      */
@@ -124,7 +124,7 @@ const SMGGhostScanner = () => {
         // Start the Loading Overlay
         setLoading(true);
 
-        const args = [`/usr/share/ddt/SMGGhostScanner.py`, values.ip];
+        const args = [`/usr/share/ddt/SMBGhostScanner.py`, values.ip];
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
@@ -188,4 +188,4 @@ const SMGGhostScanner = () => {
     );
 };
 
-export default SMGGhostScanner;
+export default SMBGhostScanner;

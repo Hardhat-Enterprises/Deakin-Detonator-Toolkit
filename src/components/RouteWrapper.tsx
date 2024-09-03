@@ -18,7 +18,7 @@ import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
-import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
+import SMBGhostScanner from "./SMBGhostScanner/SMBGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
@@ -615,9 +615,9 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
-        name: "SMG-Ghost Scanner",
-        path: "/tools/SMGGhostScanner",
-        element: <SMGGhostScanner />,
+        name: "SMB-Ghost Scanner",
+        path: "/tools/SMBGhostScanner",
+        element: <SMBGhostScanner />,
         description: "A tool used to detect whether a target is vulnerable to the CVE-2020-0796 vulnerability in SMBv3",
         category: "Vulnerability Assessment and Exploitation",
     },
