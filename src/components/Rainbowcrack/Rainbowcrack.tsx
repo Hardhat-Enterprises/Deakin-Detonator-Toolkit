@@ -8,6 +8,8 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { FilePicker } from "../FileHandler/FilePicker";
+import { generateFilePath } from "../FileHandler/FileHandler";
 
 /**
  * Represents the form values for the RainbowCrack component.
@@ -30,6 +32,7 @@ const RainbowCrack = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [allowSave, setAllowSave] = useState(false); // State variable to enable/disable saving
     const [hasSaved, setHasSaved] = useState(false); // State variable to track whether output has been saved
+    const [fileNames, setFileNames] = useState<string[]>([]); // State variable to store the file names.
 
     // Component Constants
     const title = "RainbowCrack"; // Title of the component.
@@ -42,7 +45,7 @@ const RainbowCrack = () => {
         "The user can even save the output to a file by assigning a file-name under 'save output to file' option."; // Steps to use the component.
     const sourceLink = ""; // Link to the source code (or RainbowCrack documentation).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["rcrack"]; // Dependencies required by the component.
+    const dependencies = ["rainbowcrack"]; // Dependencies required by the component.
 
     // Form hook to handle form input.
     const form = useForm({
@@ -90,6 +93,8 @@ const RainbowCrack = () => {
             }
             setPid("");
             setLoading(false);
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
@@ -100,9 +105,18 @@ const RainbowCrack = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+        setAllowSave(false);
 
         // Construct arguments for rainbowcrack command based on form input
-        const args = [values.hashValue];
+        const args = ["."];
+
+        if (fileNames.length === 0) {
+            args.push("-h", values.hashValue);
+        } else {
+            const filePath = generateFilePath("Rainbowcrack");
+            const dataUploadPath = filePath + "/" + fileNames[0];
+            args.push("-l", dataUploadPath);
+        }
 
         // Execute the rainbowcrack command via helper method
         CommandHelper.runCommandGetPidAndOutput("rcrack", args, handleProcessData, handleProcessTermination)
@@ -144,12 +158,30 @@ const RainbowCrack = () => {
                     dependencies={dependencies}
                 />
             )}
-            <form onSubmit={form.onSubmit(onSubmit)}>
+            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput label="Hash Value" required {...form.getInputProps("hashValue")} />
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <TextInput
+                        label="Hash Value"
+                        required
+                        disabled={fileNames.length > 0}
+                        value={fileNames.length > 0 ? "" : form.values.hashValue}
+                        onChange={(event) => {
+                            if (fileNames.length === 0) {
+                                form.setFieldValue("hashValue", event.currentTarget.value);
+                            }
+                        }}
+                    />
+                    <FilePicker
+                        fileNames={fileNames}
+                        setFileNames={setFileNames}
+                        multiple={false}
+                        componentName="Rainbowcrack"
+                        labelText="Hash File"
+                        placeholderText="Click to select file(s)"
+                    />
                     <Button type="submit">Crack</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
