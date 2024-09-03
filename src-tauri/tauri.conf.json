@@ -213,6 +213,11 @@
                         "args": true
                     },
                     {
+                        "name": "cloudbrute",
+                        "cmd": "cloudbrute",
+                        "args": true
+                    },
+                    {
                         "name": "nc",
                         "cmd": "nc",
                         "args": true
