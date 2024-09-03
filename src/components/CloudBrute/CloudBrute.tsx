@@ -67,11 +67,7 @@ export function CloudBrute() {
     const onSubmit = (values: FormValues) => {
         setAllowSave(false);
         setLoading(true);
-        const args = [
-            "-d", values.domain,
-            "-k", values.keyword,
-            "-w", values.wordlist
-        ];
+        const args = ["-d", values.domain, "-k", values.keyword, "-w", values.wordlist];
         CommandHelper.runCommandGetPidAndOutput("cloudbrute", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 setPid(pid);
@@ -100,12 +96,7 @@ export function CloudBrute() {
                     placeholder="e.g., google.com"
                     {...form.getInputProps("domain")}
                 />
-                <TextInput
-                    label="Keyword"
-                    required
-                    placeholder="e.g., test"
-                    {...form.getInputProps("keyword")}
-                />
+                <TextInput label="Keyword" required placeholder="e.g., test" {...form.getInputProps("keyword")} />
                 <TextInput
                     label="Path to Wordlist"
                     required

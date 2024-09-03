@@ -352,7 +352,8 @@ export const ROUTES: RouteProperties[] = [
         name: "CloudBrute",
         path: "/tools/CloudBrute",
         element: <CloudBrute />,
-        description: "Cloudbrute is a tool for cloud enumeration and infrastructure discovery in various cloud providers",
+        description:
+            "Cloudbrute is a tool for cloud enumeration and infrastructure discovery in various cloud providers",
         category: "Cloud Security and Reconnaissance",
     },
     {
