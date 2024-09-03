@@ -29,6 +29,7 @@ import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import NbtscanTool from "./NbtscanTool/NbtscanTool";
 import Cewl from "./Cewl/Cewl";
+import CloudBrute from "./CloudBrute/CloudBrute";
 import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
@@ -346,6 +347,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Cewl />,
         description: "Custom word list generator",
         category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "CloudBrute",
+        path: "/tools/CloudBrute",
+        element: <CloudBrute />,
+        description: "Cloudbrute is a tool for cloud enumeration and infrastructure discovery in various cloud providers",
+        category: "Cloud Security and Reconnaissance",
     },
     {
         name: "Crackmapexec",
