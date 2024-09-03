@@ -19,7 +19,7 @@ const steps =
     "Step 3: View the Output block below to view the results of the tools execution."; // Steps for viewing the component
 const sourceLink = ""; // Link to the source code or documentation.
 const tutorial = ""; // Link to the official documentation/tutorial.
-const dependencies = [""]; // Contains the dependencies required by the component.
+const dependencies = ["python3"]; // Contains the dependencies required by the component.
 /**
  * Interface representing the form values used in the SMBGhostScanner component.
  */
