@@ -630,8 +630,8 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Unicornscan",
         element: <Unicornscan />,
         description:
-            "Unicornscan is essential for scanning servers and hosts to see what available ports are being utilized for network communications.",
-        category: "Network Scanning",
+            "Unicornscan is essential for scanning servers and hosts to see what available ports are being utilised for network communications.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Urlsnarf",

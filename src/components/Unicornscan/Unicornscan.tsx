@@ -130,14 +130,20 @@ const Unicornscan = () => {
         if (verboseMode) args.push("-v");
 
         CommandHelper.runCommandWithPkexec("unicornscan", [...args, "-I"], handleProcessData, handleProcessTermination)
-            .then(() => {
-                setLoading(false);
+            .then(({ output, pid }) => {
+                // Update the UI with the results from the executed command
+                setOutput(output);
+                setAllowSave(true);
+                console.log(pid);
+                setPid(pid);
             })
             .catch((error) => {
-                setOutput(`Error: ${error.message}`);
+                // Display any errors encountered during command execution
+                setOutput(error.message);
+                // Deactivate loading state
                 setLoading(false);
+                setAllowSave(true);
             });
-        setAllowSave(true);
     };
 
     /**
