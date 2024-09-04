@@ -77,7 +77,7 @@ import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
-import hping3 from "./Hping3/Hing3"; 
+import Hping3 from "./Hping3/Hping3"; 
 
 export interface RouteProperties {
     name: string;
@@ -485,6 +485,14 @@ export const ROUTES: RouteProperties[] = [
         name: "Hashcat",
         path: "/tools/hashcat",
         element: <Hashcat />,
+        description:
+            "A password recovery tool that uses brute-force, dictionary, and other attack methods to crack hashed passwords.",
+        category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "Hping3",
+        path: "/tools/hping3",
+        element: <Hping3 />,
         description:
             "A password recovery tool that uses brute-force, dictionary, and other attack methods to crack hashed passwords.",
         category: "Password Cracking and Authentication Testing",
