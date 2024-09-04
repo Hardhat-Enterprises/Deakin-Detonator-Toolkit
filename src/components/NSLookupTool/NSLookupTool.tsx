@@ -102,8 +102,8 @@ function NSLookup() {
         setLoading(true);
 
         CommandHelper.runCommandGetPidAndOutput("nslookup", [ipAddress], handleProcessData, handleProcessTermination)
+
             .then(({ pid, output }: { pid: string; output: string }) => {
-                setPid(pid);
                 setOutput(output);
             })
             .catch((error) => {
