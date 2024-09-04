@@ -77,6 +77,7 @@ import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
+import hping3 from "./Hping3/Hing3"; 
 
 export interface RouteProperties {
     name: string;
