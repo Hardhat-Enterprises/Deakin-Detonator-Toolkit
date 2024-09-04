@@ -153,6 +153,11 @@
                         "args": true
                     },
                     {
+                        "name": "hping3",
+                        "cmd": "hping3",
+                        "args": true
+                    },
+                    {
                         "name": "hydra",
                         "cmd": "hydra",
                         "args": true
