@@ -14,11 +14,11 @@ import InstallationModal from "../InstallationModal/InstallationModal";
  */
 interface FormValuesType {
     targetURL: string;
-    detectionLevel: string;  // Added detection level
-    riskLevel: string;       // Added risk level
-    banner: boolean;         // Added banner retrieval option
-    dbs: boolean;            // Added database enumeration option
-    passwords: boolean;      // Added password dump option
+    detectionLevel: string; // Added detection level
+    riskLevel: string; // Added risk level
+    banner: boolean; // Added banner retrieval option
+    dbs: boolean; // Added database enumeration option
+    passwords: boolean; // Added password dump option
 }
 
 /**
@@ -38,7 +38,8 @@ function SQLmap() {
 
     // Component Constants
     const title = "SQLmap";
-    const description = "SQLmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.";
+    const description =
+        "SQLmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.";
     const steps =
         "Step 1: Provide the target database URL or IP to analyse for vulnerabilities.\n" +
         "Step 2: Start the process.\n" +
@@ -51,11 +52,11 @@ function SQLmap() {
     let form = useForm({
         initialValues: {
             targetURL: "",
-            detectionLevel: "1",  // Default detection level
-            riskLevel: "1",       // Default risk level
-            banner: false,        // Default banner option
-            dbs: false,           // Default database enumeration option
-            passwords: false      // Default password hashes option
+            detectionLevel: "1", // Default detection level
+            riskLevel: "1", // Default risk level
+            banner: false, // Default banner option
+            dbs: false, // Default database enumeration option
+            passwords: false, // Default password hashes option
         },
     });
 
@@ -108,7 +109,7 @@ function SQLmap() {
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
         },
-        [handleProcessData]  // Dependency on the handleProcessData callback
+        [handleProcessData] // Dependency on the handleProcessData callback
     );
 
     /**
@@ -132,12 +133,7 @@ function SQLmap() {
             args.push("--passwords");
         }
 
-        CommandHelper.runCommandGetPidAndOutput(
-            "sqlmap",
-            [...args],
-            handleProcessData,
-            handleProcessTermination
-        )
+        CommandHelper.runCommandGetPidAndOutput("sqlmap", [...args], handleProcessData, handleProcessTermination)
             .then(() => {
                 // Deactivate loading state
                 setLoading(false);
@@ -187,7 +183,7 @@ function SQLmap() {
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label="Target database URL" required {...form.getInputProps("targetURL")} />
-                    
+
                     {/* Add detection level option */}
                     <Select
                         label="Detection Level"
@@ -215,9 +211,15 @@ function SQLmap() {
                     />
 
                     {/* Add checkboxes for optional features */}
-                    <Checkbox label="Retrieve Database Banner" {...form.getInputProps("banner", { type: "checkbox" })} />
+                    <Checkbox
+                        label="Retrieve Database Banner"
+                        {...form.getInputProps("banner", { type: "checkbox" })}
+                    />
                     <Checkbox label="List All Databases" {...form.getInputProps("dbs", { type: "checkbox" })} />
-                    <Checkbox label="Retrieve Password Hashes" {...form.getInputProps("passwords", { type: "checkbox" })} />
+                    <Checkbox
+                        label="Retrieve Password Hashes"
+                        {...form.getInputProps("passwords", { type: "checkbox" })}
+                    />
 
                     <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
