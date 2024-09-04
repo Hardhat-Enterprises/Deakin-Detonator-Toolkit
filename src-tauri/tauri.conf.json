@@ -183,6 +183,11 @@
                         "args": true
                     },
                     {
+                        "name": "masscan",
+                        "cmd": "masscan",
+                        "args": true
+                    },
+                    {
                         "name": "metagoofil",
                         "cmd": "metagoofil",
                         "args": true
