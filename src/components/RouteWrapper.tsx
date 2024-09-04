@@ -632,7 +632,7 @@ export const ROUTES: RouteProperties[] = [
     },
     {
         name: "SQLmap",
-        path: "/tools/sqlmap",
+        path: "/tools/SQLmap",
         element: <SQLmap />,
         description:
             "SQLmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.",
