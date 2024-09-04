@@ -14,7 +14,7 @@ import { RenderComponent } from "../UserGuide/UserGuide";
  */
 interface FormValuesType {
     ipAddress: string;
-    port: number;
+    port: string;
 }
 
 function hping3() {
