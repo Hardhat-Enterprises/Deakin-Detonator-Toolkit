@@ -17,7 +17,7 @@ interface FormValuesType {
     port: string;
 }
 
-function hping3() {
+function Hping3() {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
@@ -193,4 +193,4 @@ function hping3() {
     );
 }
 
-export default hping3;
+export default Hping3;
