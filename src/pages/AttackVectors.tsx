@@ -3,7 +3,12 @@ import { getAttackVectors } from "../components/RouteWrapper";
 import ToolItem from "../components/ToolItem/ToolItem";
 
 export function AttackVectors() {
-    const rows = getAttackVectors().map((tool) => {
+    const attackVectors = getAttackVectors();
+
+    // Sort the attack vectors alphabetically by name
+    const sortedAttackVectors = attackVectors.sort((a, b) => a.name.localeCompare(b.name));
+
+    const rows = sortedAttackVectors.map((tool) => {
         return (
             <ToolItem
                 title={tool.name}
@@ -22,7 +27,7 @@ export function AttackVectors() {
                 <thead>
                     <tr>
                         <th>Attack Vector name</th>
-                        <th>Atack description</th>
+                        <th>Attack description</th>
                         <th>Controls</th>
                     </tr>
                 </thead>

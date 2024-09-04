@@ -42,7 +42,7 @@ const ArpanameTool = () => {
         "Step 3: View the output block to see the results. ";
     const sourceLink = ""; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["bind9"];
+    const dependencies = ["arpaname"];
 
     // Check for command availability on component mount
     useEffect(() => {

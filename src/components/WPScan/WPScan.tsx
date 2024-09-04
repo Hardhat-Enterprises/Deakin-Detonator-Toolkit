@@ -24,6 +24,7 @@ interface FormValuesType {
     usernames: string;
     stealthy: boolean;
     custom: string;
+    apiToken: string;
 }
 
 /**
@@ -55,7 +56,10 @@ const WPScan = () => {
         "Step 2: Enter any additional options for the scan.\n" +
         "Step 3: Enter any additional parameters for the scan.\n" +
         "Step 4: Click Scan to commence WPScan's operation.\n" +
-        "Step 5: View the Output block below to view the results of the tool's execution.\n"; //Steps to run the component
+        "Step 5: View the Output block below to view the results of the tool's execution.\n" + //Steps to run the component
+        "\n" +
+        "API Token: For the API Token field, head to the WPScan website and make a free account.\n" +
+        "           Once logged in, you can visit the API Token section and copy it into the tool.\n";
     const sourceLink = "https://www.kali.org/tools/wpscan/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["wpscan"]; // Contains the dependencies required by the component.
@@ -91,6 +95,7 @@ const WPScan = () => {
             passwords: "",
             usernames: "",
             custom: "",
+            apiToken: "",
         },
     });
 
@@ -221,6 +226,9 @@ const WPScan = () => {
         if (values.output) {
             args.push(`-o`, `${values.output}`);
         }
+        if (values.apiToken) {
+            args.push(`--api-token`, `${values.apiToken}`);
+        }
 
         if (checkedCustom) {
             args.push(`${values.custom}`);
@@ -301,6 +309,11 @@ const WPScan = () => {
                                 label="Verbose"
                                 checked={verboseChecked}
                                 onChange={(e) => setVerboseChecked(e.currentTarget.checked)}
+                            />
+                            <TextInput
+                                label={"API Token"}
+                                placeholder={"Enter your WPScan API token"}
+                                {...form.getInputProps("apiToken")}
                             />
                             <NativeSelect
                                 value={selectedEnumerationType}
