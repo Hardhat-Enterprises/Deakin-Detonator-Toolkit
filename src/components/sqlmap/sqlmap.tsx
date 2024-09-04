@@ -109,7 +109,7 @@ function SQLmap() {
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
