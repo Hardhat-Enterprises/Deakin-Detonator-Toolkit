@@ -133,7 +133,7 @@ function Hping3() {
         const args = [values.ipAddress + " -S -p " + values.port + " --flood"];
 
         // Execute the hping3 command via helper method and handle its output or potential errors
-        CommandHelper.runCommandGetPidAndOutput("hping3", args, handleProcessData, handleProcessTermination)
+        CommandHelper.runCommandWithPkexec("hping3", args, handleProcessData, handleProcessTermination)
 
             .then(({ pid, output }) => {
                 // Update the output with the results of the command execution.
