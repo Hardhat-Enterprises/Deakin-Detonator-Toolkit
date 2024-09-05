@@ -33,7 +33,8 @@ const CloudBrute = () => {
 
     // Component Constants.
     const title = "CloudBrute"; // Title of the component.
-    const description = "CloudBrute is a tool for cloud enumeration and infrastructure discovery in various cloud providers."; // Description of the component.
+    const description =
+        "CloudBrute is a tool for cloud enumeration and infrastructure discovery in various cloud providers."; // Description of the component.
     const steps =
         "Step 1: Enter the target domain.\n" +
         "Step 2: Enter a keyword for URL generation.\n" +
