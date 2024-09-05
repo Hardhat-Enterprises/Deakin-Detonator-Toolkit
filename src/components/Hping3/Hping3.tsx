@@ -1,9 +1,9 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput, NumberInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -15,12 +15,20 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 interface FormValuesType {
     ipAddress: string;
     port: string;
+    netcatOptions: string;
+    portStart: string;
+    portEnd: string;
+    packetNumber: string;
 }
+
+//Netcat Options
+const netcatOptions = ["Scan a range of ports", "Send a TCP SYN request"];
 
 function Hping3() {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [selectedScanOption, setSelectedNetcatOption] = useState("");
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
@@ -36,7 +44,9 @@ function Hping3() {
     const steps =
         "Step 1: Enter the IP address of a test machine on your network.\n" +
         "Step 2: Enter a port number.\n" +
-        "Step 3: Click Start " + title +".\n" +
+        "Step 3: Click Start " +
+        title +
+        ".\n" +
         "Step 4: View the output block to see the results.";
     const sourceLink = "https://www.kali.org/tools/hping3/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
@@ -61,6 +71,10 @@ function Hping3() {
         initialValues: {
             ipAddress: "",
             port: "",
+            netcatOptions: "",
+            portStart: "",
+            portEnd: "",
+            packetNumber: "",
         },
     });
 
@@ -130,7 +144,7 @@ function Hping3() {
         setLoading(true);
 
         // Construct arguments for the aircrack-ng command based on form input
-        const args = [values.ipAddress + " -S -p " + values.port + " --flood"];
+        const args = [values.ipAddress + " -S -p " + values.port];
 
         // Execute the hping3 command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("hping3", args, handleProcessData, handleProcessTermination)
@@ -138,14 +152,15 @@ function Hping3() {
             .then(({ pid, output }) => {
                 // Update the output with the results of the command execution.
                 setOutput(output);
+                setAllowSave(true);
 
                 // Store the process ID of the executed command.
-                setPid(pid);               
+                setPid(pid);
             })
             .catch((error) => {
                 // Display any errors encountered during command execution.
                 setOutput(error.message);
-                console.log("An error has been caught");
+
                 // Deactivate loading state.
                 setLoading(false);
             });
@@ -179,11 +194,51 @@ function Hping3() {
                     ></InstallationModal>
                 )}
                 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <Stack>
-                        <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
-                        <TextInput label={"Port"} required {...form.getInputProps("port")} />
-                        <Button type={"submit"}>Start { title }</Button>
+                        <NativeSelect
+                            value={selectedScanOption}
+                            onChange={(e) => setSelectedNetcatOption(e.target.value)}
+                            title={"Netcat option"}
+                            data={netcatOptions}
+                            required
+                            placeholder={"Pick a tool option"}
+                            description={"Type of functionality to perform"}
+                        />
+                        {selectedScanOption === "Scan a range of ports" && (
+                            <>
+                                <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
+                                <NumberInput
+                                    label={"Start of range"}
+                                    required
+                                    {...form.getInputProps("portStart")}
+                                    stepHoldDelay={500}
+                                    stepHoldInterval={100}
+                                />
+                                <NumberInput
+                                    label={"End of range"}
+                                    required
+                                    {...form.getInputProps("portEnd")}
+                                    stepHoldDelay={500}
+                                    stepHoldInterval={100}
+                                />
+                            </>
+                        )}
+                        {selectedScanOption === "Send a TCP SYN request" && (
+                            <>
+                                <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
+                                <TextInput label={"Port number"} required {...form.getInputProps("portNumber")} />
+                                <NumberInput
+                                    label={"Number of packets to send"}
+                                    defaultValue={5}
+                                    required
+                                    {...form.getInputProps("packetNumber")}
+                                    stepHoldDelay={500}
+                                    stepHoldInterval={100}
+                                />
+                            </>
+                        )}
+                        <Button type={"submit"}>Start {title}</Button>
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                     </Stack>
