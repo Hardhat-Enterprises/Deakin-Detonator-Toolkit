@@ -130,7 +130,7 @@ function Hping3() {
         setLoading(true);
 
         // Construct arguments for the aircrack-ng command based on form input
-        const args = ["-S -p " + values.port + " " + values.ipAddress + " --flood"];
+        const args = [values.ipAddress + " -S -p " + values.port + " --flood"];
 
         // Execute the hping3 command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("hping3", args, handleProcessData, handleProcessTermination)
