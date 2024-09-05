@@ -41,7 +41,7 @@ import Pentesting from "./WalkthroughPages/Pentesting";
 import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
 import Meow from "./WalkthroughPages/Meow";
-import { FTPconnect } from "./FTP/FTPconnect";
+import FTPconnect from "./FTP/FTPconnect";
 import GoldenEye from "./Goldeneye/Goldeneye";
 import WPScan from "./WPScan/WPScan";
 import Eyewitness from "./eyewitness/eyewitness";
@@ -75,6 +75,7 @@ import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
+import Whois from "./Whois/Whois";
 
 export interface RouteProperties {
     name: string;
@@ -635,6 +636,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/WhatWeb",
         element: <WhatWeb />,
         description: "WhatWeb scans websites and recognises web technologies.",
+        category: "Web Application Testing",
+    },
+    {
+        name: "Whois",
+        path: "/tools/Whois",
+        element: <Whois />,
+        description: "Whois queries databases that store an internet resource's registered users or assignees.",
         category: "Web Application Testing",
     },
     {
