@@ -34,10 +34,10 @@ function Hping3() {
     const description =
         "hping3 is a network tool able to send custom ICMP/UDP/TCP packets and to display target replies like ping does with ICMP replies. Its use in Deakin Detonator Toolkit allows you to target an IP address with a SYN flood."; // Contains the description of the component.
     const steps =
-        "Step 1: Enter the IP address of a test machine on your network." +
+        "Step 1: Enter the IP address of a test machine on your network.\n" +
         "Step 2: Enter a port number.\n" +
-        "Step 3: Click Start " + title +"\n" +
-        "Step 3: View the output block below to see the results.";
+        "Step 3: Click Start " + title +".\n" +
+        "Step 4: View the output block to see the results.";
     const sourceLink = "https://www.kali.org/tools/hping3/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
 
@@ -183,7 +183,7 @@ function Hping3() {
                     <Stack>
                         <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
                         <TextInput label={"Port"} required {...form.getInputProps("port")} />
-                        <Button type={"submit"}>Scan</Button>
+                        <Button type={"submit"}>Start { title }</Button>
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                     </Stack>
