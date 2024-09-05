@@ -1,6 +1,6 @@
 import { Button, LoadingOverlay, Stack, TextInput, Switch, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -36,7 +36,7 @@ const DnsenumTool = () => {
     /**
      * Component Constants.
      */
-    const title = "DNS Enumeration Tool";
+    const title = "DNS Enumeration";
     const description =
         "DNSEnum is a command-line tool used for DNS record enumeration. " +
         "It is used to gather information about a specified domain, including subdomains and IP addresses. " +
@@ -171,6 +171,16 @@ const DnsenumTool = () => {
         setHasSaved(true);
         setAllowSave(false);
     };
+
+    // useEffect to clear output on component mount
+    useEffect(() => {
+        clearOutput();
+
+        // Cleanup function to run when the component unmounts
+        return () => {
+            clearOutput();
+        };
+    }, [clearOutput]);
 
     return (
         <RenderComponent
