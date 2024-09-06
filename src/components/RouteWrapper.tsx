@@ -76,7 +76,7 @@ import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
-import Masscan from "./Masscan/Masscan";
+import TestSSL from "./Testssl/Testssl";
 
 export interface RouteProperties {
     name: string;
@@ -504,13 +504,6 @@ export const ROUTES: RouteProperties[] = [
         category: "Password Cracking and Authentication Testing",
     },
     {
-        name: "Masscan",
-        path: "/tools/Masscan",
-        element: <Masscan />,
-        description: "Masscan is a quick and effective port scanning tool used for network reconnaissance.",
-        category: "Network Scanning and Enumeration",
-    },
-    {
         name: "Metagoofil",
         path: "/tools/metagoofil",
         element: <Metagoofil />,
@@ -644,6 +637,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used for gathering information from various public sources, such as search engines and social media, to find email addresses and domain details.",
         category: "Information Gathering and Analysis",
+    },
+    {
+        name: "Testssl.sh",
+        path: "/tools/Testssl",
+        element: <TestSSL />,
+        description:
+            "testssl.sh is a versatile command-line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Traceroute",

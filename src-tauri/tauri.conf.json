@@ -183,11 +183,6 @@
                         "args": true
                     },
                     {
-                        "name": "masscan",
-                        "cmd": "masscan",
-                        "args": true
-                    },
-                    {
                         "name": "metagoofil",
                         "cmd": "metagoofil",
                         "args": true
@@ -265,6 +260,11 @@
                     {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
+                        "args": true
+                    },
+                    {
+                        "name": "testssl",
+                        "cmd": "testssl",
                         "args": true
                     },
                     {
