@@ -45,7 +45,7 @@ const NbtscanTool = () => {
         "Using Nbtscan:\n" +
         "Step 1: Enter a Target Subnet to scan.\n" +
         "       Eg: 192.168.1.0/24\n\n" +
-        "Step 2: Click Scan Subnet to commence the Nbtscan tool's operation.\n\n" +
+        "Step 2: Click Start Nbtscan to commence the Nbtscan tool's operation.\n\n" +
         "Step 3: View the output block to see the results.\n\n" +
         "Switch to Advanced Mode for further options.";
     const sourceLink = "https://www.kali.org/tools/nbtscan/"; // Link to the source code (or Kali Tools).
