@@ -16,6 +16,8 @@ interface FormValuesType {
     target: string;
     port: string;
     options: string;
+    connectionTimeout: string;
+    responseTimeout: string;
 }
 
 /**
