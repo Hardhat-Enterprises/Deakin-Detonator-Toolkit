@@ -125,7 +125,14 @@ const AMAP = () => {
         setLoading(true);
 
         // Construct arguments for the amap command based on form input
-        const args = [values.target, "-bqv", values.port, values.options];
+        const args = [
+            values.target,
+            "-bqv",
+            values.port,
+            `-T ${values.connectionTimeout}`,
+            `-t ${values.responseTimeout}`,
+            values.options,
+        ];
 
         // Execute the amap command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("amap", args, handleProcessData, handleProcessTermination)
