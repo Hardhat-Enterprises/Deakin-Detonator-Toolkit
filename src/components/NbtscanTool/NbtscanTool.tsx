@@ -242,7 +242,7 @@ const NbtscanTool = () => {
                             />
                         </>
                     )}
-                    <Button type={"submit"}>Scan Subnet</Button>
+                    <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
