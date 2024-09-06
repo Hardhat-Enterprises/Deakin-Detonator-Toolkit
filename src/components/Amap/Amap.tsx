@@ -52,6 +52,8 @@ const AMAP = () => {
             target: "",
             port: "",
             options: "",
+            connectionTimeout: "10",
+            responseTimeout: "10",
         },
     });
 
