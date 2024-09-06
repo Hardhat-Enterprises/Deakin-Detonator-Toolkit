@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { Button, Stack, TextInput, Checkbox, Select } from "@mantine/core"; // Added Select
+import { Button, Stack, TextInput, Checkbox, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -14,11 +14,11 @@ import InstallationModal from "../InstallationModal/InstallationModal";
  */
 interface FormValuesType {
     targetURL: string;
-    detectionLevel: string; // Added detection level
-    riskLevel: string; // Added risk level
-    banner: boolean; // Added banner retrieval option
-    dbs: boolean; // Added database enumeration option
-    passwords: boolean; // Added password dump option
+    detectionLevel: string;
+    riskLevel: string;
+    banner: boolean;
+    dbs: boolean;
+    passwords: boolean;
 }
 
 /**
@@ -52,8 +52,8 @@ function SQLmap() {
     let form = useForm({
         initialValues: {
             targetURL: "",
-            detectionLevel: "1", // Default detection level
-            riskLevel: "1", // Default risk level
+            detectionLevel: "1", // Default detection level (low)
+            riskLevel: "1", // Default risk level (safe)
             banner: false, // Default banner option
             dbs: false, // Default database enumeration option
             passwords: false, // Default password hashes option
@@ -184,7 +184,7 @@ function SQLmap() {
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label="Target database URL" required {...form.getInputProps("targetURL")} />
 
-                    {/* Add detection level option */}
+                    {}
                     <Select
                         label="Detection Level"
                         placeholder="Choose detection level (1-5)"
@@ -198,7 +198,7 @@ function SQLmap() {
                         ]}
                     />
 
-                    {/* Add risk level option */}
+                    {}
                     <Select
                         label="Risk Level"
                         placeholder="Choose risk level (1-3)"
@@ -210,7 +210,7 @@ function SQLmap() {
                         ]}
                     />
 
-                    {/* Add checkboxes for optional features */}
+                    {}
                     <Checkbox
                         label="Retrieve Database Banner"
                         {...form.getInputProps("banner", { type: "checkbox" })}
