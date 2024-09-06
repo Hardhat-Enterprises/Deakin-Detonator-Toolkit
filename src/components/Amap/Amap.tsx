@@ -131,7 +131,6 @@ const AMAP = () => {
             values.port,
             `-T ${values.connectionTimeout}`,
             `-t ${values.responseTimeout}`,
-            values.options,
         ];
 
         // Execute the amap command via helper method and handle its output or potential errors
@@ -178,7 +177,16 @@ const AMAP = () => {
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label={"Target Host"} required {...form.getInputProps("target")} />
                     <TextInput label={"Port(s)"} required {...form.getInputProps("port")} />
-                    <TextInput label={"Additional Options"} {...form.getInputProps("options")} />
+                    <TextInput
+                        label={"Connection Timeout (seconds)"}
+                        required
+                        {...form.getInputProps("connectionTimeout")}
+                    />
+                    <TextInput
+                        label={"Response Timeout (seconds)"}
+                        required
+                        {...form.getInputProps("responseTimeout")}
+                    />
                     {SaveOutputToTextFile(output)}
                     <Button type={"submit"}>Start Scan</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
