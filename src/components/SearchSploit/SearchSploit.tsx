@@ -1,4 +1,12 @@
-import { Button, NativeSelect, Stack, TextInput, Text, List, Accordion } from "@mantine/core";
+import {
+  Button,
+  NativeSelect,
+  Stack,
+  TextInput,
+  Text,
+  List,
+  Accordion,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -19,14 +27,16 @@ interface FormValues {
 
 // Component Constants
 const title = "SearchSploit";
-const description = "SearchSploit is a command-line tool used for searching through Exploit-DB.";
+const description =
+  "SearchSploit is a command-line tool used for searching through Exploit-DB.";
 const steps = `Step 1: Enter a Search Term followed by selecting a Search Option.
 Step 2: Select an Output type.
 Step 3: Select a Non-Searching option.
 Step 4: Enter an Exploit Database ID.
 Step 5: Click Scan to commence SearchSploit's operation.
 Step 6: View the Output block below to view the results of the tool's execution.`;
-const sourceLink = "https://www.exploit-db.com/documentation/Offsec-SearchSploit.pdf";
+const sourceLink =
+  "https://www.exploit-db.com/documentation/Offsec-SearchSploit.pdf";
 const tutorial = "";
 const dependencies = ["searchsploit"];
 const searchOptions = ["Case", "Exact", "Strict", "Title"];
@@ -182,7 +192,12 @@ const SearchSploit = () => {
       />
       <form onSubmit={form.onSubmit(onSubmit)}>
         <Stack>
-          {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleCancel, handleProcessTermination)}
+          {LoadingOverlayAndCancelButtonPkexec(
+            loading,
+            pid,
+            handleCancel,
+            handleProcessTermination
+          )}
           <TextInput label={"Search Term"} {...form.getInputProps("searchTerm")} />
           <NativeSelect
             {...form.getInputProps("searchOption")}
@@ -233,7 +248,12 @@ const SearchSploit = () => {
               </Accordion.Panel>
             </Accordion.Item>
           </Accordion>
-          {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+          {SaveOutputToTextFile_v2(
+            output,
+            allowSave,
+            hasSaved,
+            handleSaveComplete
+          )}
           <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
         </Stack>
       </form>
@@ -242,4 +262,3 @@ const SearchSploit = () => {
 };
 
 export default SearchSploit;
-// updated code 2
