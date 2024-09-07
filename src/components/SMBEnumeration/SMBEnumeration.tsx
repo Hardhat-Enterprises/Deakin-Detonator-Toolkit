@@ -1,11 +1,11 @@
-import { Button, LoadingOverlay, NativeSelect, Stack, TextInput } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { UserGuide } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import InstallationModal from "../InstallationModal/InstallationModal"; // Added import
 
 const title = "SMB Enumeration"; // Title of the component.
 
@@ -21,11 +21,11 @@ const description_userguide =
     "Step 2: Enter a port number.\n" +
     "       E.g. 445\n\n" +
     "Step 3: Pick a scan speed. Note - higher speeds require a faster host network.\n" +
-    "T0 -Paranoid / T1 -Sneaky / T2 -Polite / T3 -Normal / T4 -Aggressive / T5 -Insane\n" +
+    "T0 - Paranoid / T1 - Sneaky / T2 - Polite / T3 - Normal / T4 - Aggressive / T5 - Insane\n" +
     "       E.g. T3\n\n" +
     "Step 4: Select an SMB enumeration script to run against the target.\n" +
-    "       E.g smb-flood.nse\n\n";
-"Step 5: Click scan to commence the SMB enumeration operation.\n\n" +
+    "       E.g smb-flood.nse\n\n" +
+    "Step 5: Click Start SMB Enumeration to commence the SMB enumeration operation.\n\n" +
     "Step 6: View the output block below to view the results of the scan.";
 
 // Represents the form values for the SMBEnumeration component.
@@ -78,13 +78,14 @@ const scripts = [
 ];
 
 const SMBEnumeration = () => {
-    const [loading, setLoading] = useState(false); // Represents the loading state of the component. (Film over the screen.)
+    const [loading, setLoading] = useState(false); // Represents the loading state of the component.
     const [output, setOutput] = useState(""); // Maintain the state (output) of the component.
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [selectedSpeedOption, setSelectedSpeedOption] = useState(""); // Maintain the state of the selected speed option.
-    const [selectedScriptOption, setSelectedScriptOption] = useState(""); // Maintain the state of the selected script option.
+    const [selectedSpeedOption, setSelectedSpeedOption] = useState("T3"); // Default value for scan speed
+    const [selectedScriptOption, setSelectedScriptOption] = useState("smb-enum-users"); // Default value for script
     const [pid, setPid] = useState(""); // Maintain the state of the process id.
+    const [opened, setOpened] = useState(false); // Modal state
 
     // useForm is a hook that provides a state object and a set of functions to handle form data.
     // The state object contains the current value of the form, and the set of functions contains
@@ -94,7 +95,7 @@ const SMBEnumeration = () => {
             ip: "",
             port: "",
             speed: "T3",
-            script: "smb-enum-users",
+            scripts: "smb-enum-users",
         },
     });
 
@@ -103,7 +104,7 @@ const SMBEnumeration = () => {
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
         if (!allowSave) setAllowSave(true);
-    }, []);
+    }, [allowSave]);
 
     // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
     // the termination of that process, resetting state variables, handling the output data,
@@ -138,7 +139,7 @@ const SMBEnumeration = () => {
         // Check if the values.speed is not empty. If it is empty set it to T3.
         // This is the default value for the speed of the scan.
         if (!values.speed) {
-            values.speed = "T3";
+            values.speed = "T3"; // Default value for scan speed
         }
 
         const args = [`-${values.speed}`, `--script=${values.scripts}`]; // Prepare the arguments for the console.
@@ -152,7 +153,6 @@ const SMBEnumeration = () => {
         args.push(values.ip);
 
         try {
-            //const output = await CommandHelper.runCommand("nmap", args);
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "nmap",
                 args,
@@ -162,7 +162,7 @@ const SMBEnumeration = () => {
             setPid(result.pid);
             setOutput(result.output);
         } catch (e: any) {
-            setOutput(e);
+            setOutput(e.message || "An error occurred.");
         }
     };
 
@@ -171,7 +171,7 @@ const SMBEnumeration = () => {
         setOutput("");
         setAllowSave(false);
         setHasSaved(false);
-    }, [setOutput]);
+    }, []);
 
     const handleSaveComplete = useCallback(() => {
         setHasSaved(true);
@@ -185,34 +185,48 @@ const SMBEnumeration = () => {
             )}
         >
             {LoadingOverlayAndCancelButton(loading, pid)}
+            {InstallationModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description_userguide}
+                    dependencies={[]} // Add dependencies if needed
+                />
+            )}
             <Stack>
-                {UserGuide(title, description_userguide)}
+                {/* Render the user guide description */}
                 <TextInput label={"Target IP or Hostname"} required {...form.getInputProps("ip")} />
                 <TextInput label={"Port"} required {...form.getInputProps("port")} placeholder={"Example: 445"} />
 
+                {/* Scan Speed dropdown */}
                 <NativeSelect
-                    label={"Scan Speed"}
+                    label={"Scan speed"}
                     value={selectedSpeedOption}
                     onChange={(e) => setSelectedSpeedOption(e.target.value)}
                     title={"Scan speed"}
                     data={speeds}
-                    placeholder={"Select a scan speed. Default set to T3"}
+                                        placeholder={"Select a scan speed. Default set to T3"}
                     description={"Speed of the scan, refer: https://nmap.org/book/performance-timing-templates.html"}
                 />
 
+                {/* SMB Script dropdown */}
                 <NativeSelect
-                    label={"SMB Script"}
+                    label={"SMB Enumeration Script"}
                     value={selectedScriptOption}
                     onChange={(e) => setSelectedScriptOption(e.target.value)}
                     title={"SMB Enumeration Script"}
                     data={scripts}
-                    required
                     placeholder={"Select an SMB Enumeration Script to run against the target"}
                     description={"NSE Scripts, refer: https://nmap.org/nsedoc/scripts/"}
                 />
 
+                {/* Submit button */}
                 <Button type={"submit"}>Scan</Button>
+
+                {/* Save Output to Text File component */}
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
+                {/* ConsoleWrapper to display the command output */}
                 <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
             </Stack>
         </form>
@@ -220,3 +234,4 @@ const SMBEnumeration = () => {
 };
 
 export default SMBEnumeration;
+
