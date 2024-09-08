@@ -195,7 +195,7 @@ const SMBEnumeration = () => {
             )}
             <Stack>
                 {/* Render the user guide description */}
-                <TextInput label={"Target IP or Hostname"} required {...form.getInputProps("ip")} />
+                <TextInput label={"Target IP or hostname"} required {...form.getInputProps("ip")} />
                 <TextInput label={"Port"} required {...form.getInputProps("port")} placeholder={"Example: 445"} />
 
                 {/* Scan Speed dropdown */}
