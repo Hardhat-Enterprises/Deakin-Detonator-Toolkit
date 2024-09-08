@@ -494,7 +494,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/hping3",
         element: <Hping3 />,
         description:
-            "Hping3 is network packet crafting and analysis tool. It is used for testing firewalls, network performance, port scanning, and network auditing.",
+            "Hping3 is a network packet crafting and analysis tool. It is used for testing firewalls, network performance, port scanning, and network auditing.",
         category: "Network Scanning and Enumeration",
     },
     {
