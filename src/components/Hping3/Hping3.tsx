@@ -242,7 +242,6 @@ const Hping3 = () => {
                             <NumberInput
                                 stepHoldDelay={500}
                                 stepHoldInterval={100}
-                                defaultValue={80}
                                 label={"Port"}
                                 required
                                 {...form.getInputProps("portNumber")}
@@ -250,7 +249,6 @@ const Hping3 = () => {
                             <NumberInput
                                 stepHoldDelay={500}
                                 stepHoldInterval={100}
-                                defaultValue={5}
                                 label={"Packet count"}
                                 required
                                 {...form.getInputProps("packetCount")}
