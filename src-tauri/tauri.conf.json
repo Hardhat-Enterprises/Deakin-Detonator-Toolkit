@@ -293,7 +293,7 @@
                         "args": true
                     },
                     {
-                        "name": "wpscancan",
+                        "name": "wpscan",
                         "cmd": "wpscan",
                         "args": true
                     },
