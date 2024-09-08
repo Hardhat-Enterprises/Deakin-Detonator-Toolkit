@@ -44,7 +44,7 @@ const Hping3 = () => {
     // Component Constants.
     const title = "hping3"; // Title of the component.
     const description =
-        "hping3 is network packet crafting and analysis tool. It is used for testing firewalls, network performance, port scanning, and network auditing."; // Description of the component.
+        "Hping3 is network packet crafting and analysis tool. It is used for testing firewalls, network performance, port scanning, and network auditing."; // Description of the component.
     const steps =
         "Firstly, choose if you want to scan a range of ports or send SYN packets to a specific port.\n\n" +
         "If you choose to scan a range of ports:\n\n" +
