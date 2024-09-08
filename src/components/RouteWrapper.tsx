@@ -78,6 +78,7 @@ import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
 import Hping3 from "./Hping3/Hping3";
+import SQLmap from "./SQLmap/SQLmap";
 
 export interface RouteProperties {
     name: string;
@@ -637,6 +638,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used to identify and assess vulnerabilities in devices that use the SNMP protocol by querying SNMP information.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "SQLmap",
+        path: "/tools/SQLmap",
+        element: <SQLmap />,
+        description:
+            "SQLmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.",
+        category: "Web Application Testing",
     },
     {
         name: "Sublist3r",
