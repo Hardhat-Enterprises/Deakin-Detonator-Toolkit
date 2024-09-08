@@ -5,9 +5,9 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-import InstallationModal from "../InstallationModal/InstallationModal"; // Added import
+import InstallationModal from "../InstallationModal/InstallationModal"; 
 
-const title = "SMB Enumeration"; // Title of the component.
+const title = "SMB Enumeration"; 
 
 // Description for the tooltip. Contents of this variable are displayed to the user when
 // hovering over the info option.
@@ -205,7 +205,7 @@ const SMBEnumeration = () => {
                     onChange={(e) => setSelectedSpeedOption(e.target.value)}
                     title={"Scan speed"}
                     data={speeds}
-                                        placeholder={"Select a scan speed. Default set to T3"}
+                    placeholder={"Select a scan speed. Default set to T3"}
                     description={"Speed of the scan, refer: https://nmap.org/book/performance-timing-templates.html"}
                 />
 
