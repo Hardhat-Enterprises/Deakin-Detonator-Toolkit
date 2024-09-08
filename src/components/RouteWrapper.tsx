@@ -77,7 +77,7 @@ import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
-import Hping3 from "./Hping3/Hping3"; 
+import Hping3 from "./Hping3/Hping3";
 
 export interface RouteProperties {
     name: string;
@@ -494,8 +494,8 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/hping3",
         element: <Hping3 />,
         description:
-            "A password recovery tool that uses brute-force, dictionary, and other attack methods to crack hashed passwords.",
-        category: "Password Cracking and Authentication Testing",
+            "Hping3 is network packet crafting and analysis tool. It is used for testing firewalls, network performance, port scanning, and network auditing.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Hydra",
