@@ -189,8 +189,8 @@ const ARPSpoofing = () => {
                     ></InstallationModal>
                 )}
                 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                    <TextInput label={"Target one IP address"} required {...form.getInputProps("ip1")} />
-                    <TextInput label={"Target two IP address"} required {...form.getInputProps("ip2")} />
+                    <TextInput label={"Target one IP address"} required {...form.getInputProps("ipGateway")} />
+                    <TextInput label={"Target two IP address"} required {...form.getInputProps("ipTarget")} />
                     <Button type={"submit"}>Start Spoof</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />

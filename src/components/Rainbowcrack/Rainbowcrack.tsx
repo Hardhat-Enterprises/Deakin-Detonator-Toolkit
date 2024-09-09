@@ -42,7 +42,7 @@ const RainbowCrack = () => {
         "The user can even save the output to a file by assigning a file-name under 'save output to file' option."; // Steps to use the component.
     const sourceLink = ""; // Link to the source code (or RainbowCrack documentation).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["rainbowcrack"]; // Dependencies required by the component.
+    const dependencies = ["rcrack"]; // Dependencies required by the component.
 
     // Form hook to handle form input.
     const form = useForm({

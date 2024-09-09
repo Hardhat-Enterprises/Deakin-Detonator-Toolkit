@@ -1,59 +1,52 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { useState, useEffect, useCallback } from "react";
+import { Button, Checkbox, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
- * Represents the form values for the AMAP component.
+ * Represents the form values for the Whois component.
  */
 interface FormValuesType {
-    target: string;
-    port: string;
-    options: string;
-    connectionTimeout: string;
-    responseTimeout: string;
+    targetURL: string;
 }
 
 /**
- * The AMAP component.
- * @returns The AMAP component.
+ * The Whois component.
+ * @returns The Whois component.
  */
-const AMAP = () => {
-    // Component State Variables.
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
-    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+function Whois() {
+    // Component state variables
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state
+    const [output, setOutput] = useState(""); // State variable to store the output of the command execution
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving of output
+    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
 
-    // Component Constants.
-    const title = "AMAP"; // Title of the component.
-    const description = "AMAP is a tool for application protocol detection and service fingerprinting."; // Description of the component.
+    // Component Constants
+    const title = "Whois";
+    const description =
+        "Whois is a query and response protocol that is used for querying databases that store an internet resource's registered users or assignees.";
     const steps =
-        "Step 1: Enter the target host to scan.\n" +
-        "Step 2: Specify the port(s) to scan.\n" +
-        "Step 3: (Optional) Enter additional options.\n" +
-        "Step 4: Click 'Start Scan' to begin the process.\n" +
-        "Step 5: View the output block to see the results. ";
-    const sourceLink = ""; // Link to the source code (or AMAP documentation).
-    const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["amap"]; // Contains the dependencies required by the component.
+        "Step 1: Provide the target URL or IP address to scan.\n" +
+        "Step 2: Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
+        "Step 3: Review the scan output to identify any security issues.\n";
+    const sourceLink = "https://github.com/weppos/whois"; // Link to the source code
+    const tutorial = ""; // Link to the official documentation/tutorial
+    const dependencies = ["whois"]; // Contains the dependencies required by the component.
 
-    // Form hook to handle form input.
-    const form = useForm({
+    // Form hook to handle form input
+    let form = useForm({
         initialValues: {
-            target: "",
-            port: "",
-            options: "",
-            connectionTimeout: "10",
-            responseTimeout: "10",
+            targetURL: "",
         },
     });
 
@@ -114,31 +107,21 @@ const AMAP = () => {
     );
 
     /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the amap tool with the given parameters.
-     * Once the command is executed, the results or errors are displayed in the output.
-     *
-     * @param {FormValuesType} values - The form values, containing the target host, port(s), and additional options.
+     * Handles form submission for the Whois component.
+     * @param {FormValuesType} values - The form values containing the target URL option.
      */
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
-        // Construct arguments for the amap command based on form input
-        const args = [
-            values.target,
-            "-bqv",
-            values.port,
-            `-T ${values.connectionTimeout}`,
-            `-t ${values.responseTimeout}`,
-        ];
+        // Construct arguments for the Whois command based on form input
+        const args = [values.targetURL];
 
-        // Execute the amap command via helper method and handle its output or potential errors
-        CommandHelper.runCommandGetPidAndOutput("amap", args, handleProcessData, handleProcessTermination)
+        // Execute the Nikto command via helper method and handle its output or potential errors
+        CommandHelper.runCommandGetPidAndOutput("whois", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 // Update the UI with the results from the executed command
                 setOutput(output);
-                console.log(pid);
                 setPid(pid);
             })
             .catch((error) => {
@@ -150,12 +133,23 @@ const AMAP = () => {
     };
 
     /**
-     * Clears the output state.
+     * Handles the completion of output saving by updating state variables.
      */
-    const clearOutput = useCallback(() => {
-        setOutput("");
-    }, [setOutput]);
+    const handleSaveComplete = () => {
+        setHasSaved(true); // Set hasSaved state to true
+        setAllowSave(false); // Disallow further output saving
+    };
 
+    /**
+     * Clears the command output and resets state variables related to output saving.
+     */
+    const clearOutput = () => {
+        setOutput(""); // Clear the command output
+        setHasSaved(false); // Reset hasSaved state
+        setAllowSave(false); // Disallow further output saving
+    };
+
+    // Render component
     return (
         <RenderComponent
             title={title}
@@ -170,30 +164,18 @@ const AMAP = () => {
                     setOpened={setOpened}
                     feature_description={description}
                     dependencies={dependencies}
-                ></InstallationModal>
+                />
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput label={"Target Host"} required {...form.getInputProps("target")} />
-                    <TextInput label={"Port(s)"} required {...form.getInputProps("port")} />
-                    <TextInput
-                        label={"Connection Timeout (seconds)"}
-                        required
-                        {...form.getInputProps("connectionTimeout")}
-                    />
-                    <TextInput
-                        label={"Response Timeout (seconds)"}
-                        required
-                        {...form.getInputProps("responseTimeout")}
-                    />
-                    {SaveOutputToTextFile(output)}
-                    <Button type={"submit"}>Start Scan</Button>
+                    <TextInput label="Target URL" required {...form.getInputProps("targetURL")} />
+                    <Button type={"submit"}>Start {title}</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
         </RenderComponent>
     );
-};
-
-export default AMAP;
+}
+export default Whois;

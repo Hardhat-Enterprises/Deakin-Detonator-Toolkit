@@ -21,22 +21,42 @@ For the exploit scripts, it is important to ensure they are executable entirely 
 
 `install_exploits.sh` is a helper script that will install all the exploit scripts in the `/usr/share/ddt/` directory. If you add new exploits, be sure to run this command again.
 
-```bash
-./install_exploits.sh
-```
+1. Change current directory to the toolkit:
+
+    ```bash
+    cd Deakin-Detonator-Toolkit
+    ```
+
+2. Change permissions to execute the script:
+
+    ```bash
+    chmod +x install-update-media/install_exploits.sh
+    ```
+
+3. Run the script:
+
+    ```bash
+    ./install-update-media/install_exploits.sh
+    ```
 
 The `.deb` that Tauri builds will automatically do this for us for actual toolkit installation.
 
+# 🖥️ System requirements
+
+-   4GB RAM
+-   2 CPU cores
+-   Recmmended Kali 2024.1 or later
+
 # 🔧 Setup
 
-To install the Deakin Detonator Toolkit on Kali, you can follow either the new or old methods. The new method is a one&#8209;step process that utilises a Python script. If that doesn't work, the old method will take you through the steps manually.
+To install the Deakin Detonator Toolkit on Kali, you can follow either the new or old methods. The new method is a one&#8209;step process that utilises a bash script. If that doesn't work, the old method will take you through the steps manually.
 
-## New method
+## Run the application (dependency install and run)
 
-1. Run the following command:
+1. Run the following command, this will install dependent packages, patching and and start the application:
 
     ```
-    curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/install-ddt.py -o install-ddt.py && python3 install-ddt.py
+    curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/setup_ddt.sh -o setup_ddt.sh && chmod +x setup_ddt.sh && ./setup_ddt.sh
     ```
 
 ## Old method
@@ -147,7 +167,7 @@ To install the Deakin Detonator Toolkit on Kali, you can follow either the new o
 13. Run the application (dev mode):
 
     ```bash
-    $ yarn run tauri dev
+    yarn run tauri dev
     ```
 
 # 📷 Screenshot

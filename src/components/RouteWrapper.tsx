@@ -18,7 +18,7 @@ import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
-import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
+import SMBGhostScanner from "./SMBGhostScanner/SMBGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
@@ -40,7 +40,7 @@ import Pentesting from "./WalkthroughPages/Pentesting";
 import Traceroute from "./Traceroute/Traceroute";
 import Crunch from "./Crunch/Crunch";
 import Meow from "./WalkthroughPages/Meow";
-import { FTPconnect } from "./FTP/FTPconnect";
+import FTPconnect from "./FTP/FTPconnect";
 import GoldenEye from "./Goldeneye/Goldeneye";
 import WPScan from "./WPScan/WPScan";
 import Eyewitness from "./eyewitness/eyewitness";
@@ -74,6 +74,9 @@ import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
+import Whois from "./Whois/Whois";
+import Masscan from "./Masscan/Masscan";
+import SQLmap from "./SQLmap/SQLmap";
 
 export interface RouteProperties {
     name: string;
@@ -260,344 +263,386 @@ export const ROUTES: RouteProperties[] = [
             "A walkthrough on Topology Hack the Box challenge which requires knowledge of network protocols, routing, and security configurations",
         category: "",
     },
-    //TOOLS BELOW THIS COMMENT - PLEASE ADDE NEW TOOLS IN ALPHABETICAL ORDER
+    //TOOLS BELOW THIS COMMENT - PLEASE ADD NEW TOOLS IN ALPHABETICAL ORDER
     {
         name: "Airbase NG",
         path: "/tools/AirbaseNG",
         element: <AirbaseNG />,
-        description: "Airbase-ng is a tool to create fake access points",
+        description:
+            "A network attack tool that can create a fake access point (AP) to capture and analyze traffic from devices that connect to it.",
         category: "Wireless Attacks and Rogue Access Point Creation",
     },
     {
         name: "Aircrack NG",
         path: "/tools/AircrackNG",
         element: <AircrackNG />,
-        description: "A tool for cracking WEP and WPA/WPA2 passphrases using captured network packets",
+        description:
+            "A wireless network auditing and cracking tool that can capture and analyze packets from Wi-Fi networks, crack WEP and WPA-PSK passwords, and identify vulnerabilities in wireless networks.",
         category: "Password Cracking and Authentication Testing",
     },
     {
         name: "AI-based pen-testing tool (Gyoithon)",
         path: "/tools/gyoithon",
         element: <Gyoithon />,
-        description: "A HTTP/HTTPS port detector based on Naive Bayes and Deep Nueral Network",
+        description:
+            "An AI-powered pen-testing tool that employs Naive Bayes and Deep Neural Network algorithms to detect HTTP/HTTPS ports",
         category: "Web Application Testing",
     },
     {
         name: "Amap",
         path: "/tools/Amap",
         element: <AMAP />,
-        description: "AMAP is a network scanning tool used to identify open ports and services on targeted hosts.",
+        description: "A network scanning tool used to identify open ports and services on targeted hosts.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "Arjun",
         path: "/tools/Arjuntool",
         element: <Arjuntool />,
-        description: "Arjun can find query parameters for URL endpoints.",
+        description:
+            "A tool that helps find hidden GET & POST parameters for URL endpoints by analyzing web traffic and identifying possible query parameters",
         category: "Web Application Testing",
     },
     {
         name: "Arpaname",
         path: "/tools/Arpaname",
         element: <ArpanameTool />,
-        description: "Perform reverse DNS lookups for IP addresses.",
+        description:
+            "A web application tool to perform reverse DNS lookups for IP addresses, mapping them back to associated domain names.",
         category: "Web Application Testing",
     },
     {
         name: "ARP Fingerprint",
         path: "/tools/ARPFingerprint",
         element: <ARPFingerprint />,
-        description: "ARP Fingerprint tool to gather information about devices on the network.",
+        description:
+            "A tool to analyse ARP (Address Resolution Protocol) traffic to identify the types of operating systems and network devices on a network.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "ArpScan",
         path: "/tools/arpscan",
         element: <Arpscan />,
-        description: "Scan the local network for ARP entries.",
+        description: "A tool that uses ARP requests to discover devices on a local network.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "ARP Spoofing",
         path: "/tools/ARPSpoofing",
         element: <ARPSpoofing />,
-        description: "ARP spoof tool to poison the MAC address between two targets.",
+        description:
+            "A tool used to poison the ARP cache by falsifying MAC address mappings between two targets, enabling interception or manipulation of network traffic.",
         category: "Attack Tools",
     },
     {
-        name: "bed",
+        name: "BED",
         path: "/tools/bed",
         element: <BEDTool />,
         description:
-            "BED is a program which is designed to check daemons for potential buffer overflows, format strings",
+            "A program designed to check network services (daemons) for potential vulnerabilities like buffer overflows and format string exploits.",
         category: "Information Gathering and Analysis",
     },
     {
         name: "Bully",
         path: "/tools/bully",
         element: <Bully />,
-        description: "Brute-force WPS PIN authentication",
+        description: " A tool used for brute-forcing WPS PINs to gain unauthorized access to wireless networks.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "Cewl",
         path: "/tools/Cewl",
         element: <Cewl />,
-        description: "Custom word list generator",
+        description: "A tool that generates custom word lists by crawling and analyzing web pages for useful words.",
         category: "Password Cracking and Authentication Testing",
     },
     {
         name: "Crunch",
         path: "/tools/Crunch",
         element: <Crunch />,
-        description: "Crunch is a wordlist generator where you can specify a standard character set or a custom one.",
+        description:
+            "A tool used to generate custom wordlists based on specified patterns, character sets, and lengths.",
         category: "Password Cracking and Authentication Testing",
     },
     {
         name: "Dirb",
         path: "/tools/Dirb",
         element: <DirbTool />,
-        description: "Dirb tool",
+        description: "A tool used for directory and file brute-forcing on web servers to discover hidden resources.",
         category: "Web Application Testing",
     },
     {
         name: "dmitry",
         path: "/tools/dmitry",
         element: <Dmitry />,
-        description: "Deepmagic Information Gathering Tool",
+        description:
+            "A tool for gathering information about a domain, including email addresses, subdomains, and IP addresses.",
         category: "Information Gathering and Analysis",
     },
     {
         name: "DNSenum",
         path: "/tools/dnsenum",
         element: <DnsenumTool />,
-        description: "DNS enumeration tool",
+        description:
+            "A tool used to gather information about a domain's DNS, including subdomains, IP addresses, and DNS records.",
         category: "Information Gathering and Analysis",
     },
     {
         name: "DNSMap",
         path: "/tools/dnsmap",
         element: <DNSMap />,
-        description: "DNS Mapping Tool",
+        description: "A tool that can visualize and analyze DNS records associated with a domain or IP address",
         category: "Information Gathering and Analysis",
     },
     {
-        name: "Dnsrecon",
+        name: "DNSRecon",
         path: "/tools/Dnsrecon",
         element: <Dnsrecon />,
-        description: "Dnsrecon is a python script that is used to find different hosts",
+
+        description:
+            "A Python script that systematically searches for different hosts associated with a given domain, using DNS queries to discover subdomains, IP addresses, and other relevant DNS records. ",
+
         category: "Information Gathering and Analysis",
     },
     {
         name: "Enum4Linux",
         path: "/tools/enum4linux",
         element: <Enum4Linux />,
-        description: "Windows and Samba information enumeration tool",
+        description:
+            "A tool used to gather information from Windows machines using the SMB protocol, including user accounts and share details.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "EyeWitness",
         path: "/tools/eyewitness",
         element: <Eyewitness />,
-        description: "EyeWitness scans listed URLs and provides a HTML report about them, including screenshots.",
+        description: "A tool used for capturing screenshots and gathering information from web servers",
         category: "Web Application Testing",
     },
     {
         name: "Fcrackzip",
         path: "/tools/Fcrackzip",
         element: <Fcrackzip />,
-        description: "A tool for cracking password of a protected zip file",
+        description: "A tool for cracking the password of a protected zip file",
         category: "Password Cracking and Authentication Testing",
     },
     {
-        name: "Ffuf",
+        name: "FFuf",
         path: "/tools/Ffuf",
         element: <FfufTool />,
-        description: "FFuf is a brute force web fuzzer for directory and resource discovery",
+        description:
+            "A web fuzzer used for discovering hidden files, directories and endpoints on web servers by brute-forcing URLs.",
         category: "Web Application Testing",
     },
     {
         name: "Foremost",
         path: "/tools/foremost",
         element: <ForemostTool />,
-        description: "File/Data recovery tool",
+        description:
+            "A tool used for file carving, which extracts specific types of files from disk images or data streams based on file headers and footers.",
         category: "File Analysis and Recovery",
     },
     {
         name: "FTPconnect",
         path: "/tools/FTPconnect",
         element: <FTPconnect />,
-        description: "FTPconnect tool",
+        description: "A tool used for connecting to and interacting with FTP servers",
         category: "Miscellaneous",
     },
     {
         name: "Gitleaks",
         path: "/tools/gitleaks",
         element: <Gitleaks />,
-        description: "Detect hardcoded secrets in git repositories.",
+        description: "A tool used to detect sensitive information and secrets that may be exposed in Git repositories.",
         category: "Information Gathering and Analysis",
     },
     {
         name: "GoBuster",
         path: "/tools/GoBusterTool",
         element: <GoBusterTool />,
-        description: "A tool used for directory and file brute-forcing on web servers.",
+        description:
+            "A web directory brute-forcing tool that can discover hidden directories and files on web servers.",
         category: "Web Application Testing",
     },
     {
         name: "GoldenEye",
         path: "/tools/GoldenEye",
         element: <GoldenEye />,
-        description: "HTTP DoS Test Tool",
+        description:
+            "A tool used for performing denial-of-service (DoS) attacks by simulating HTTP requests to overwhelm a web server.",
         category: "Attack Tools",
     },
     {
         name: "Hashcat",
         path: "/tools/hashcat",
         element: <Hashcat />,
-        description: "Hashcat hash restoring tool",
+        description:
+            "A password recovery tool that uses brute-force, dictionary, and other attack methods to crack hashed passwords.",
         category: "Password Cracking and Authentication Testing",
     },
     {
         name: "Hydra",
         path: "/tools/Hydra",
         element: <Hydra />,
-        description: "Login Cracker",
+        description:
+            "A tool used for brute-forcing login credentials across various protocols, such as HTTP, FTP, and SSH.",
         category: "Password Cracking and Authentication Testing",
     },
     {
         name: "JohnTheRipper",
         path: "/tools/JohnTheRipper",
         element: <JohnTheRipper />,
-        description: "Utility for cracking passwords",
+        description: "A password cracking tool that supports various algorithms and methods to crack hashed passwords.",
         category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "Masscan",
+        path: "/tools/Masscan",
+        element: <Masscan />,
+        description: "Masscan is a quick and effective port scanning tool used for network reconnaissance.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Metagoofil",
         path: "/tools/metagoofil",
         element: <Metagoofil />,
         description:
-            "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) belonging to a target company.",
+            "A tool used for extracting metadata from documents found on web servers to gather information about potential targets.",
         category: "File Analysis and Recovery",
     },
     {
         name: "msfvenom",
         path: "/tools/msfvenom",
         element: <PayloadGenerator />,
-        description: "Generates payload files for use in exploits",
+        description:
+            "A tool that can create payloads for various exploits and attack vectors, such as shellcode, Java applets, and executable files.",
         category: "Attack Tools",
     },
     {
         name: "Nbtscan",
         path: "/tools/nbtscan",
         element: <NbtscanTool />,
-        description: "Tool used for scanning NetBIOS information on a network",
+        description: "A tool used for scanning and identifying NetBIOS names and associated IP addresses on a network.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "Netcat",
         path: "/tools/Netcat",
         element: <NetcatTool />,
-        description: "Netcat",
+        description: "A that can create, read, and write network connections using TCP or UDP protocols.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "Nikto",
         path: "/tools/Nikto",
         element: <Nikto />,
-        description: "Web server scanner",
+        description:
+            "A web server scanner that detects vulnerabilities, misconfigurations, and potential security issues in web applications.",
         category: "Web Application Testing",
     },
     {
         name: "Nmap",
         path: "/tools/nmap",
         element: <NmapTool />,
-        description: "Network scanning tool",
+        description: "A network scanning tool used for discovering hosts, services, and vulnerabilities on a network.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "NSLookup",
         path: "/tools/nslookuptool",
         element: <NSLookup />,
-        description: "Network scanning tool",
+        description: "A command-line tool used for querying DNS to obtain domain name or IP address information.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "Parsero",
         path: "/tools/parsero",
         element: <Parsero />,
-        description: "Python Script that reads Robots.txt of w webserver to view Disallow entries",
+        description: "A Python script that reads a web server's robots.txt file to view and analyze Disallow entries.",
         category: "Web Application Testing",
     },
     {
         name: "RTsort",
         path: "/tools/RTsort",
         element: <RTsort />,
-        description: "RTSort is a subfuntion of the Rainbow Crack tool. This function sorts created rainbow tables.",
+        description: "A subfunction of the Rainbow Crack tool used for sorting and managing created rainbow tables.",
         category: "Password Cracking and Authentication Testing",
     },
     {
         name: "Rainbowcrack",
         path: "/tools/Rainbowcrack",
         element: <Rainbowcrack />,
-        description:
-            "RainbowCrack is a computer program which generates rainbow tables to be used in password cracking",
+        description: "A computer program which generates rainbow tables to be used in password cracking.",
         category: "Password cracking and Authentication testing",
     },
     {
         name: "SearchSploit",
         path: "/tools/SearchSploit",
         element: <SearchSploit />,
-        description: "SearchSploit Utility. Allow you to search through exploits, shellcodes and papers.",
+        description:
+            "A utility that allows users to search through a vast database of exploits, shellcodes, and security-related papers.",
         category: "Vulnerabilityy Assessment and Exploitation",
     },
     {
         name: "Sherlock",
         path: "/tools/Sherlock",
         element: <Sherlock />,
-        description: "Tool to find username across social network",
+        description: "A tool used to find and enumerate user accounts across various social media platforms.",
         category: "Information Gathering and Analysis",
     },
     {
         name: "Shodan API tool",
         path: "/tools/shodan-api-tool",
         element: <ShodanAPITool />,
-        description: "Network scan using Shodan API",
+        description:
+            "Shodan API allows for network scanning and querying of Shodan’s database to gather information about connected devices and their vulnerabilities.",
         category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "SMB Enumeration",
         path: "/tools/SMBEnumeration",
         element: <SMBEnumeration />,
-        description: "SMB Enumeration tool",
+        description:
+            "A tool used to gather information about network shares, users, and other details from Windows machines using the SMB protocol.",
         category: "Network Scanning and Enumeration",
     },
     {
-        name: "SMG-Ghost Scanner",
-        path: "/tools/SMGGhostScanner",
-        element: <SMGGhostScanner />,
-        description: "Scan whether the target is vulnerable to CVE2020-0796.",
+        name: "SMB-Ghost Scanner",
+        path: "/tools/SMBGhostScanner",
+        element: <SMBGhostScanner />,
+        description: "A tool used to detect whether a target is vulnerable to the CVE-2020-0796 vulnerability in SMBv3",
         category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "SnmpCheck",
         path: "/tools/snmpcheck",
         element: <SnmpCheck />,
-        description: "Detects network devices using SNMP protocol",
+        description:
+            "A tool used to identify and assess vulnerabilities in devices that use the SNMP protocol by querying SNMP information.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "SQLmap",
+        path: "/tools/SQLmap",
+        element: <SQLmap />,
+        description:
+            "SQLmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.",
+        category: "Web Application Testing",
     },
     {
         name: "Sublist3r",
         path: "/tools/Sublist3r",
         element: <Sublist3r />,
-        description: "Sublist3r looks up sub domains of websites.",
+        description:
+            "A tool that can efficiently discover subdomains associated with a given domain using various techniques, such as DNS queries, Google search, and passive DNS records,",
         category: "Web Application Testing",
     },
     {
         name: "The Harvester",
         path: "/tools/theharvester",
         element: <TheHarvester />,
-        description: "Harvest subdomain names, e-mail addresses, etc. from different public sources",
+        description:
+            "A tool used for gathering information from various public sources, such as search engines and social media, to find email addresses and domain details.",
         category: "Information Gathering and Analysis",
     },
     {
@@ -605,28 +650,37 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Traceroute",
         element: <Traceroute />,
         description:
-            "The traceroute utility displays the route used by IP packets on their way to a specified network (or Internet) host.",
+            "A network diagnostic tool that tracks the path packets take as they travel from a source to a destination.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "TShark",
         path: "/tools/TShark",
         element: <TShark />,
-        description: "Captures data packets' information and displays in different formats.",
+        description: "A command-line network analyzer that can capture, analyze, and troubleshoot network traffic.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "Urlsnarf",
         path: "/tools/Urlsnarf",
         element: <Urlsnarf />,
-        description: "HTTP Sniffer",
+        description: "A tool used for capturing and logging HTTP requests and URLs transmitted over a network.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "WhatWeb",
         path: "/tools/WhatWeb",
         element: <WhatWeb />,
-        description: "WhatWeb scans websites and recognises web technologies.",
+        description:
+            "A tool used to identify and analyze web technologies, such as web servers and frameworks, used by websites.",
+        category: "Web Application Testing",
+    },
+    {
+        name: "Whois",
+        path: "/tools/Whois",
+        element: <Whois />,
+        description:
+            "A tool used to query and retrieve information about domain registrations, including registrants and contact details.",
         category: "Web Application Testing",
     },
     {
@@ -634,7 +688,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/WPScan",
         element: <WPScan />,
         description:
-            "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues.",
+            "A tool used to scan WordPress websites for vulnerabilities, security issues, and exposed sensitive information.",
         category: "Web Application Testing",
     },
 ];
