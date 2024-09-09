@@ -33,7 +33,6 @@ import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
-import Crackmapexec from "./Crackmapexec/Crackmapexec";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
@@ -346,13 +345,6 @@ export const ROUTES: RouteProperties[] = [
         element: <Cewl />,
         description: "Custom word list generator",
         category: "Password Cracking and Authentication Testing",
-    },
-    {
-        name: "Crackmapexec",
-        path: "/tools/Crackmapexec",
-        element: <Crackmapexec />,
-        description: "Crackmapexec is a swiss army knife use for pentesting Active Directory or Windows  environments.",
-        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Crunch",
