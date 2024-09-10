@@ -64,7 +64,8 @@ const TestSSL = () => {
      * @returns {boolean} True if the input is a valid hostname, false otherwise.
      */
     const validateHostname = (hostname: string) => {
-        const hostnamePattern = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/;
+        const hostnamePattern =
+            /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/;
         return hostnamePattern.test(hostname);
     };
 
