@@ -77,6 +77,7 @@ import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
+import Sqlninja from "./Sqlninja/sqlninja";
 
 export interface RouteProperties {
     name: string;
@@ -628,6 +629,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used to identify and assess vulnerabilities in devices that use the SNMP protocol by querying SNMP information.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Sqlninja",
+        path: "/tools/sqlninja",
+        element: <Sqlninja />,
+        description:
+            "A tool used to exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end.",
+        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Sublist3r",

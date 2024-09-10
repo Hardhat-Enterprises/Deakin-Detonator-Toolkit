@@ -263,6 +263,11 @@
                         "args": true
                     },
                     {
+                        "name": "sqlninja",
+                        "cmd": "sqlninja",
+                        "args": true
+                    },
+                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
                         "args": true
