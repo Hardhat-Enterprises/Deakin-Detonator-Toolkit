@@ -263,9 +263,14 @@
                         "args": true
                     },
                     {
+                        "name": "sqlmap",
+                        "cmd": "sqlmap",
+                        "args": true
+                    },
+                    {
                         "name": "sqlninja",
                         "cmd": "sqlninja",
-                        "args": true
+                        "args: true",
                     },
                     {
                         "name": "sublist3r",
@@ -298,8 +303,8 @@
                         "args": true
                     },
                     {
-                        "name": "WPScan",
-                        "cmd": "WPScan",
+                        "name": "wpscan",
+                        "cmd": "wpscan",
                         "args": true
                     },
                     {

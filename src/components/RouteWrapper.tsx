@@ -18,7 +18,7 @@ import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
-import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
+import SMBGhostScanner from "./SMBGhostScanner/SMBGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
@@ -77,6 +77,7 @@ import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
+import SQLmap from "./SQLmap/SQLmap";
 import Sqlninja from "./Sqlninja/sqlninja";
 
 export interface RouteProperties {
@@ -616,9 +617,9 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
-        name: "SMG-Ghost Scanner",
-        path: "/tools/SMGGhostScanner",
-        element: <SMGGhostScanner />,
+        name: "SMB-Ghost Scanner",
+        path: "/tools/SMBGhostScanner",
+        element: <SMBGhostScanner />,
         description: "A tool used to detect whether a target is vulnerable to the CVE-2020-0796 vulnerability in SMBv3",
         category: "Vulnerability Assessment and Exploitation",
     },
@@ -629,6 +630,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used to identify and assess vulnerabilities in devices that use the SNMP protocol by querying SNMP information.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+              name: "SQLmap",
+        path: "/tools/SQLmap",
+        element: <SQLmap />,
+        description:
+            "SQLmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.",
+        category: "Web Application Testing",
     },
     {
         name: "Sqlninja",
