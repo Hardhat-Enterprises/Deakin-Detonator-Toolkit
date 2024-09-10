@@ -270,7 +270,7 @@
                     {
                         "name": "sqlninja",
                         "cmd": "sqlninja",
-                        "args: true",
+                        "args": true,
                     },
                     {
                         "name": "sublist3r",
