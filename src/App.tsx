@@ -13,7 +13,7 @@ import {
     Aside,
     Group,
 } from "@mantine/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navigation from "./components/NavBar/Navigation";
@@ -28,6 +28,8 @@ export default function App() {
     const toggleColorScheme = (value?: ColorScheme) => {
         const nextColorScheme = value || (colorScheme === "dark" ? "light" : "dark");
         setColorScheme(nextColorScheme);
+        document.body.className = nextColorScheme + "-mode"; // Update body class
+        console.log("Color scheme toggled to:", nextColorScheme); // Log the color scheme change
     };
 
     const toggleOpened = () => {
@@ -41,6 +43,10 @@ export default function App() {
     const handleGoForward = () => {
         window.history.forward();
     };
+
+    useEffect(() => {
+        document.body.className = colorScheme + "-mode"; // Initialize body class
+    }, [colorScheme]);
 
     return (
         <div className="App">
@@ -83,7 +89,7 @@ export default function App() {
                     >
                         <Routes>
                             {ROUTES.map((route) => (
-                                <Route {...route}></Route>
+                                <Route key={route.path} {...route}></Route>
                             ))}
                         </Routes>
                     </AppShell>
