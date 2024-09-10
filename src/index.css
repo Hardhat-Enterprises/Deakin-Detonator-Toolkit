@@ -4,6 +4,11 @@ body {
         "Droid Sans", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 code {
@@ -25,4 +30,19 @@ code {
     font-size: 30px;
     font-weight: 900;
     letter-spacing: -2;
+}
+
+#logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: auto;
+    transform: translate(12%, 5%); /* Move the logo 12% to the right and 5% down */
+}
+
+#logo-container img {
+    width: 75%; 
+    height: auto; 
+    margin-bottom: 10px;
 }
