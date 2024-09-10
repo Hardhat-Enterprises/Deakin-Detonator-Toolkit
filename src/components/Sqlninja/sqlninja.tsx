@@ -40,9 +40,10 @@ function Sqlninja() {
     const description =
         "Exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end."; // Description of the component.
     const steps =
-        "Step 1: Enter the file path for sqlninja configuration file.\n" +
-        "Step 2: Select which Attack mode to use.\n" +
-        "Step 3: Click on the Start button to initiate sqlninja.";
+        "Step 1: Select which Attack mode to use.\n" +
+        "Step 2: Enter the file path for sqlninja configuration file, if no file path is input default sqlninja.conf is used.\n" +
+        "Step 3: Select if you want verbose output.\n" +
+        "Step 4: Click on the Start button to initiate sqlninja.";
     const sourceLink = "https://www.kali.org/tools/sqlninja/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["sqlninja"]; // Constains the dependencies required for the component.
@@ -140,8 +141,14 @@ function Sqlninja() {
         setAllowSave(false);
 
         // Construct the argmentss for the sqlninja command based on form input.
-        const args = ["-f", `${values.filePath}`];
+        const args = [];
+        // Adds the argument for mode.
         selectedMode ? args.push(`-m`, selectedMode) : undefined;
+        // Adds the file argument if a filepath is input.
+        if (values.filePath) {
+            args.push("-f", values.filePath);
+        }
+        // Adds verbose output argument if switch is on.
         if (checkedVerbose) {
             args.push(`-v`);
         }
@@ -187,18 +194,7 @@ function Sqlninja() {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-                    <Switch
-                        label="Verbose Mode"
-                        checked={checkedVerbose}
-                        onChange={(e) => setCheckedVerbose(e.currentTarget.checked)}
-                    />
-                    <TextInput
-                        label={"Configuration File Path"}
-                        placeholder="Example: /home/kali/sqlninja.conf"
-                        {...form.getInputProps("filePath")}
-                        required
-                    />
-                    <NativeSelect
+                <NativeSelect
                         value={selectedMode}
                         onChange={(e) => setSelectedMode(e.target.value)}
                         title={"Attack Mode"}
@@ -206,6 +202,16 @@ function Sqlninja() {
                         placeholder={"Attack Mode"}
                         description={"Please select attack mode"}
                         required
+                    />
+                    <TextInput
+                        label={"Configuration File Path"}
+                        placeholder="default: sqlninja.conf"
+                        {...form.getInputProps("filePath")}
+                    />
+                    <Switch
+                        label="Verbose Mode"
+                        checked={checkedVerbose}
+                        onChange={(e) => setCheckedVerbose(e.currentTarget.checked)}
                     />
                     <Button type={"submit"}>Start</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
