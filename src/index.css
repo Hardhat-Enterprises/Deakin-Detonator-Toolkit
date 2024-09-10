@@ -38,11 +38,18 @@ code {
     align-items: center;
     width: 50%;
     height: auto;
-    transform: translate(12%, 5%); /* Move the logo 12% to the right and 5% down */
+    transform: translate(12%, 18%); /* Move the logo 12% to the right and 5% down */
 }
 
 #logo-container img {
-    width: 75%; 
-    height: auto; 
+    width: 75%;
+    height: auto;
     margin-bottom: 10px;
+}
+#logo-container a {
+    pointer-events: none;
+}
+
+#logo-container img {
+    pointer-events: none;
 }
