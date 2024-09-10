@@ -4,7 +4,10 @@
 # Identify the envionment(Kali Linux on vm with windows 10)
 
 #Each command should be run on the command line one by one for best results
-
+#ensure that you are in the DDT directroy
+yarn install
+#after installing enter the following 
+yarn run tauri dev
 #update the os (kali linux):
 sudo apt update
 sudo apt upgrade -y
