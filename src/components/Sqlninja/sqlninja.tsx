@@ -1,4 +1,4 @@
-import { Button, NativeSelect, Stack, TextInput } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -15,6 +15,7 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     filePath: string;
     mode: string;
+    verbose: boolean;
 }
 
 /**
@@ -32,6 +33,7 @@ function Sqlninja() {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [selectedMode, setSelectedMode] = useState(""); //State variable to store the mode selected
+    const [checkedVerbose, setCheckedVerbose] = useState(false); //State variable to indicate if verbose mode is enabled
 
     // Component Constants.
     const title = "Sqlninja"; // Title of the component.
@@ -51,6 +53,7 @@ function Sqlninja() {
         initialValues: {
             filePath: "",
             mode: "",
+            verbose: false,
         },
     });
 
@@ -139,6 +142,9 @@ function Sqlninja() {
         // Construct the argmentss for the sqlninja command based on form input.
         const args = ["-f", `${values.filePath}`];
         selectedMode ? args.push(`-m`, selectedMode) : undefined;
+        if (checkedVerbose) {
+            args.push(`-v`);
+        }
 
         // Execute the bash command via helper method and handle its output or potential errors.
         CommandHelper.runCommandGetPidAndOutput("sqlninja", args, handleProcessData, handleProcessTermination)
@@ -181,6 +187,11 @@ function Sqlninja() {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
+                    <Switch
+                        label="Verbose Mode"
+                        checked={checkedVerbose}
+                        onChange={(e) => setCheckedVerbose(e.currentTarget.checked)}
+                    />
                     <TextInput
                         label={"Configuration File Path"}
                         placeholder="Example: /home/kali/sqlninja.conf"
