@@ -27,25 +27,46 @@ interface FormValuesType {
 
 const TestSSL = () => {
     // State variables
-    const [loading, setLoading] = useState(false); // Controls loading state of the scan button
-    const [output, setOutput] = useState(""); // Stores the command output
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // Indicates if the testssl command is available
-    const [allowSave, setAllowSave] = useState(false); // Controls if saving output is allowed
-    const [hasSaved, setHasSaved] = useState(false); // Indicates if output has been saved
-    const [opened, setOpened] = useState(true); // Controls the visibility of the installation modal
-    const [loadingModal, setLoadingModal] = useState(true); // Controls loading state of the installation modal
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+    const [opened, setOpened] = useState(true);
+    const [loadingModal, setLoadingModal] = useState(true);
 
     // Constants
-    const title = "testssl"; // Title of the component
-    const description = "testssl is a tool that checks a server's SSL/TLS capabilities and vulnerabilities."; // Description of the tool
-    const steps = // Steps to use the tool
+    const title = "testssl";
+    const description = "testssl is a tool that checks a server's SSL/TLS capabilities and vulnerabilities.";
+    const steps =
         "Step 1: Enter the target website or IP address.\n" +
         "Step 2: Select the desired scan options.\n" +
         "Step 3: Click 'Start Scan' to begin the process.\n" +
         "Step 4: View the output to see the results of the SSL/TLS analysis.";
-    const sourceLink = "https://github.com/drwetter/testssl.sh"; // Link to the source code
-    const tutorial = ""; // Empty string as per requirement
-    const dependencies = ["testssl"]; // Required package for this component
+    const sourceLink = "https://github.com/drwetter/testssl.sh";
+    const tutorial = "";
+    const dependencies = ["testssl"];
+
+    /**
+     * Validates if the given input string is a valid IPv4 or IPv6 address.
+     * @param {string} ip - The IP address string to be validated.
+     * @returns {boolean} True if the input is a valid IP address, false otherwise.
+     */
+    const validateIPAddress = (ip: string) => {
+        const ipv4Pattern = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        const ipv6Pattern = /^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4}|:)$/;
+        return ipv4Pattern.test(ip) || ipv6Pattern.test(ip);
+    };
+
+    /**
+     * Validates if the given input string is a valid hostname.
+     * @param {string} hostname - The hostname string to be validated.
+     * @returns {boolean} True if the input is a valid hostname, false otherwise.
+     */
+    const validateHostname = (hostname: string) => {
+        const hostnamePattern = /^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/;
+        return hostnamePattern.test(hostname);
+    };
 
     /**
      * Initialize the form with default values and validation.
@@ -63,7 +84,13 @@ const TestSSL = () => {
             idsFriendly: false,
         },
         validate: {
-            target: (value) => (value.trim().length > 0 ? null : "Target is required"),
+            target: (value) => {
+                if (value.trim().length === 0) return "Target is required";
+                if (!validateIPAddress(value) && !validateHostname(value)) {
+                    return "Invalid IP address or hostname";
+                }
+                return null;
+            },
         },
     });
 
