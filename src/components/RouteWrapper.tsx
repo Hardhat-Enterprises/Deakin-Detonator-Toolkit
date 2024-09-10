@@ -632,7 +632,7 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
-              name: "SQLmap",
+        name: "SQLmap",
         path: "/tools/SQLmap",
         element: <SQLmap />,
         description:
