@@ -29,7 +29,8 @@ sudo apt install libgl1-mesa-dri -y
 
 #Configure Xorg
 sudo mv /etc/X11/xorg.conf /etc/X11/xorg.conf.backup
-sudo dpkg-reconfigure xserver-xorg #now reboot
+sudo dpkg-reconfigure xserver-xorg 
+#now reboot
 sudo reboot
 
 #Set/add envionment variables
