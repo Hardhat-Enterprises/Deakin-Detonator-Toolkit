@@ -194,7 +194,7 @@ function Sqlninja() {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-                <NativeSelect
+                    <NativeSelect
                         value={selectedMode}
                         onChange={(e) => setSelectedMode(e.target.value)}
                         title={"Attack Mode"}
