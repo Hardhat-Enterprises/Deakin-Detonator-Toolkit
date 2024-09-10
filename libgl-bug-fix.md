@@ -6,7 +6,7 @@
 #Each command should be run on the command line one by one for best results
 #ensure that you are in the DDT directroy
 yarn install
-#after installing enter the following 
+#after installing enter the following
 yarn run tauri dev
 #update the os (kali linux):
 sudo apt update
@@ -29,7 +29,7 @@ sudo apt install libgl1-mesa-dri -y
 
 #Configure Xorg
 sudo mv /etc/X11/xorg.conf /etc/X11/xorg.conf.backup
-sudo dpkg-reconfigure xserver-xorg 
+sudo dpkg-reconfigure xserver-xorg
 #now reboot
 sudo reboot
 
