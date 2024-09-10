@@ -37,7 +37,10 @@ function Sqlninja() {
     const title = "Sqlninja"; // Title of the component.
     const description =
         "Exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end."; // Description of the component.
-    const steps = "";
+    const steps =
+        "Step 1: Enter the file path for sqlninja configuration file.\n" +
+        "Step 2: Select which Attack mode to use.\n" +
+        "Step 3: Click on the Start button to initiate sqlninja.";
     const sourceLink = "https://www.kali.org/tools/sqlninja/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["sqlninja"]; // Constains the dependencies required for the component.
@@ -182,6 +185,7 @@ function Sqlninja() {
                         label={"Configuration File Path"}
                         placeholder="Example: /home/kali/sqlninja.conf"
                         {...form.getInputProps("filePath")}
+                        required
                     />
                     <NativeSelect
                         value={selectedMode}
