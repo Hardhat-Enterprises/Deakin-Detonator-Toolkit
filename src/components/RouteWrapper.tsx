@@ -585,8 +585,8 @@ export const ROUTES: RouteProperties[] = [
         description: "A computer program which generates rainbow tables to be used in password cracking.",
         category: "Password cracking and Authentication testing",
     },
-        {
-        name: "RTgen",
+    {
+        name: "Rtgen",
         path: "/tools/rtgen",
         element: <Rtgen />,
         description: "A tool for generating random network traffic to simulate various network conditions and loads.",
