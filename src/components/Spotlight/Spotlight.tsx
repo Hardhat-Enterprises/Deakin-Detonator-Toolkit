@@ -4,8 +4,21 @@ import { openSpotlight, SpotlightProvider } from "@mantine/spotlight";
 import { IconSearch } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
 import { RouteProperties, ROUTES } from "../RouteWrapper";
+import React, { useEffect, useRef } from "react";
 
 function SpotlightControl() {
+    /*
+    TODO This works fine, however it may be better if the input is unfocused
+    by blurring the ref onSpotlightClose in the Search component, but I could
+    not get this to work.
+    */
+    const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
+        if (e.currentTarget) {
+            e.currentTarget.blur();
+        }
+        openSpotlight();
+    };
+
     return (
         <Input
             variant="filled"
@@ -13,7 +26,7 @@ function SpotlightControl() {
             size="sm"
             icon={<IconSearch size={16} />}
             placeholder="Quick search here..."
-            onClick={() => openSpotlight()}
+            onClick={handleClick}
         />
     );
 }
