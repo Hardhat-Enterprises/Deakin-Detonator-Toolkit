@@ -9,7 +9,6 @@ import { CommandHelper } from "../../utils/CommandHelper";
  * @returns A Loading Overlay with cancel button in a Modal
  */
 export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
-    // Sends a SIGTERM signal to gracefully terminate the active process passed as an argument
     const handleCancel = () => {
         if (pid !== null) {
             const args = [`-15`, pid];
@@ -19,11 +18,20 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
 
     return (
         <>
-            {/* Display the overlay when 'loading' is true */}
-            <LoadingOverlay visible={loading} overlayBlur={2} />
+            {/* Adjust z-index and pointerEvents to ensure interaction with Modal */}
+            <LoadingOverlay visible={loading} overlayBlur={2} style={{ zIndex: 1000, pointerEvents: "none" }} />
 
             {loading && (
-                <Modal opened={loading} onClose={() => {}} title="Process Running" centered withCloseButton={false}>
+                <Modal
+                    opened={loading}
+                    onClose={() => {}}
+                    title="Process Running"
+                    centered
+                    withCloseButton={false}
+                    overlayOpacity={0.3}
+                    overlayBlur={2}
+                    zIndex={2000} // Ensures the modal is above the overlay
+                >
                     <p>The process is running. You can cancel it below:</p>
                     <Button variant="outline" color="red" onClick={handleCancel}>
                         Cancel Process
@@ -38,7 +46,7 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
  * Overlay to successfully terminate processes for tools using pkexec
  * @param loading - An object containing information about the process termination.
  * @param pid - The exit code of the terminated process.
- * @param onData- Callback function to handle data generated during the termination process.
+ * @param onData - Callback function to handle data generated during the termination process.
  * @param onTermination - Callback function to provide termination details.
  * @returns A Loading Overlay with cancel button in a Modal
  */
@@ -48,7 +56,6 @@ export function LoadingOverlayAndCancelButtonPkexec(
     onData: (data: string) => void,
     onTermination: ({ code, signal }: { code: number; signal: number }) => void
 ) {
-    // Sends a SIGINT signal to gracefully terminate the active process passed as an argument
     const handleCancel = () => {
         if (pid !== null) {
             const args = [`-2`, pid];
@@ -58,11 +65,20 @@ export function LoadingOverlayAndCancelButtonPkexec(
 
     return (
         <>
-            {/* Display the overlay when 'loading' is true */}
-            <LoadingOverlay visible={loading} overlayBlur={2} />
+            {/* Adjust z-index and pointerEvents to ensure interaction with Modal */}
+            <LoadingOverlay visible={loading} overlayBlur={2} style={{ zIndex: 1000, pointerEvents: "none" }} />
 
             {loading && (
-                <Modal opened={loading} onClose={() => {}} title="Process Running" centered withCloseButton={false}>
+                <Modal
+                    opened={loading}
+                    onClose={() => {}}
+                    title="Process Running"
+                    centered
+                    withCloseButton={false}
+                    overlayOpacity={0.3}
+                    overlayBlur={2}
+                    zIndex={2000} // Ensures the modal is above the overlay
+                >
                     <p>The process is running and requires elevated permissions to cancel.</p>
                     <Button variant="outline" color="red" onClick={handleCancel}>
                         Cancel Process
