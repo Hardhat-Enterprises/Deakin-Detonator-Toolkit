@@ -78,6 +78,11 @@
                         "args": true
                     },
                     {
+                        "name": "cloudbrute",
+                        "cmd": "cloudbrute",
+                        "args": true
+                    },
+                    {
                         "name": "cp",
                         "cmd": "cp",
                         "args": true
@@ -173,16 +178,6 @@
                         "args": true
                     },
                     {
-                        "name": "cloudbrute",
-                        "cmd": "cloudbrute",
-                        "args": true
-                    },
-                    {
-                        "name": "nc",
-                        "cmd": "nc",
-                        "args": true
-                    },
-                    {
                         "name": "kill",
                         "cmd": "kill",
                         "args": true
@@ -210,6 +205,11 @@
                     {
                         "name": "nbtscan",
                         "cmd": "nbtscan",
+                        "args": true
+                    },
+                    {
+                        "name": "nc",
+                        "cmd": "nc",
                         "args": true
                     },
                     {
