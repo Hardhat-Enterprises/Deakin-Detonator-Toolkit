@@ -258,6 +258,11 @@
                         "args": true
                     },
                     {
+                        "name": "slowhttptest",
+                        "cmd": "slowhttptest",
+                        "args": true
+                    }
+                    {
                         "name": "snmp-check",
                         "cmd": "snmp-check",
                         "args": true
