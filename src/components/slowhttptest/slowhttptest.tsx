@@ -10,7 +10,7 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
- * Represents the form values for the SlowHTTPTestGenerator component.
+ * Represents the form values for the Slowhttptest component.
  */
 interface FormValuesType {
     url: string;
@@ -25,10 +25,10 @@ interface FormValuesType {
 }
 
 /**
- * The SlowHTTPTestGenerator component.
- * @returns The SlowHTTPTestGenerator component.
+ * The Slowhttptest component.
+ * @returns The Slowhttptest component.
  */
-const SlowHTTPTestGenerator = () => {
+const Slowhttptest = () => {
     // State variables
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
@@ -40,9 +40,9 @@ const SlowHTTPTestGenerator = () => {
     const [loadingModal, setLoadingModal] = useState(true);
 
     // Component Constants
-    const title = "SlowHTTPTest Generator";
+    const title = "Slowhttptest Generator";
     const description =
-        "SlowHTTPTest is a tool used to simulate slow HTTP DoS attacks by sending partial HTTP requests, " +
+        "Slowhttptest is a tool used to simulate slow HTTP DoS attacks by sending partial HTTP requests, " +
         "which can consume server resources and exhaust the maximum concurrent connection pool. " +
         "Configure the parameters and click Generate to run the test.";
     const steps =
@@ -67,7 +67,7 @@ const SlowHTTPTestGenerator = () => {
         },
     });
 
-    // Check the availability of the SlowHTTPTest command.
+    // Check the availability of the Slowhttptest command.
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
@@ -250,4 +250,4 @@ const SlowHTTPTestGenerator = () => {
     );
 };
 
-export default SlowHTTPTestGenerator;
+export default Slowhttptest;
