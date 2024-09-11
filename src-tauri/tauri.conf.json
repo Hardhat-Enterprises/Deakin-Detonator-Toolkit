@@ -23,6 +23,11 @@
                         "args": true
                     },
                     {
+                        "name": "amass",
+                        "cmd": "amass",
+                        "args": true
+                    },
+                    {
                         "name": "which",
                         "cmd": "which",
                         "args": true
@@ -40,11 +45,6 @@
                     {
                         "name": "amap",
                         "cmd": "amap",
-                        "args": true
-                    },
-                    {
-                        "name": "amass",
-                        "cmd": "amass",
                         "args": true
                     },
                     {
