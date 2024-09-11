@@ -298,8 +298,8 @@
                         "args": true
                     },
                     {
-                        "name": "WPScan",
-                        "cmd": "WPScan",
+                        "name": "wpscan",
+                        "cmd": "wpscan",
                         "args": true
                     },
                     {
