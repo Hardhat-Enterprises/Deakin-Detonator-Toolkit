@@ -18,12 +18,18 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
 
     return (
         <>
-            {/* Overlay will now cover the entire screen */}
+            {/* Use custom styles to cover the entire viewport */}
             <LoadingOverlay
                 visible={loading}
                 overlayBlur={3}
-                style={{ zIndex: 1000 }}
-                fixed // Ensure the overlay covers the full screen
+                style={{
+                    zIndex: 1000,
+                    position: "fixed", // Make sure it's fixed to the viewport
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                }}
             />
 
             {loading && (
@@ -80,12 +86,18 @@ export function LoadingOverlayAndCancelButtonPkexec(
 
     return (
         <>
-            {/* Overlay will now cover the entire screen */}
+            {/* Use custom styles to cover the entire viewport */}
             <LoadingOverlay
                 visible={loading}
                 overlayBlur={3}
-                style={{ zIndex: 1000 }}
-                fixed // Ensure the overlay covers the full screen
+                style={{
+                    zIndex: 1000,
+                    position: "fixed", // Make sure it's fixed to the viewport
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                }}
             />
 
             {loading && (
