@@ -18,11 +18,7 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
 
     return (
         <>
-            <LoadingOverlay
-                visible={loading}
-                overlayBlur={3}
-                style={{ zIndex: 1000, position: "fixed" }} // Ensure the overlay covers the full screen
-            />
+            <LoadingOverlay visible={loading} overlayBlur={3} style={{ zIndex: 1000, position: "fixed" }} />
             {loading && (
                 <Modal
                     opened={loading}
@@ -32,8 +28,8 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
                     withCloseButton={false}
                     overlayOpacity={0.5}
                     overlayBlur={3}
-                    zIndex={2000} // Ensure the modal is above the overlay
-                    size="lg" // Increase the size of the modal
+                    zIndex={2000}
+                    size="lg"
                 >
                     <p style={{ fontSize: "18px", textAlign: "center" }}>
                         The process is running. You can cancel it below:
@@ -42,8 +38,8 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
                         variant="outline"
                         color="red"
                         onClick={handleCancel}
-                        size="xl" // Make the button larger
-                        fullWidth // Make the button take full width of modal
+                        size="xl"
+                        fullWidth
                         style={{ marginTop: "20px" }}
                     >
                         Cancel Process
@@ -89,11 +85,7 @@ export function LoadingOverlayAndCancelButtonPkexec(
     //Returns a loadingoverlay function to handle process termination for pkexec
     return (
         <>
-            <LoadingOverlay
-                visible={loading}
-                overlayBlur={3}
-                style={{ zIndex: 1000, position: "fixed" }} // Ensure the overlay covers the full screen
-            />
+            <LoadingOverlay visible={loading} overlayBlur={3} style={{ zIndex: 1000, position: "fixed" }} />
             {loading && (
                 <Modal
                     opened={loading}
@@ -103,8 +95,8 @@ export function LoadingOverlayAndCancelButtonPkexec(
                     withCloseButton={false}
                     overlayOpacity={0.5}
                     overlayBlur={3}
-                    zIndex={2000} // Ensure the modal is above the overlay
-                    size="lg" // Increase the size of the modal
+                    zIndex={2000}
+                    size="lg"
                 >
                     <p style={{ fontSize: "18px", textAlign: "center" }}>
                         The process is running.You can cancel it below:
@@ -113,8 +105,8 @@ export function LoadingOverlayAndCancelButtonPkexec(
                         variant="outline"
                         color="red"
                         onClick={handleCancel}
-                        size="xl" // Make the button larger
-                        fullWidth // Make the button take full width of modal
+                        size="xl"
+                        fullWidth
                         style={{ marginTop: "20px" }}
                     >
                         Cancel Process
