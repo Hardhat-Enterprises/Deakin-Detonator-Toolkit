@@ -18,8 +18,13 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
 
     return (
         <>
-            {/* Adjust z-index and pointerEvents to ensure interaction with Modal */}
-            <LoadingOverlay visible={loading} overlayBlur={2} style={{ zIndex: 1000, pointerEvents: "none" }} />
+            {/* Overlay will now cover the entire screen */}
+            <LoadingOverlay
+                visible={loading}
+                overlayBlur={3}
+                style={{ zIndex: 1000 }}
+                fixed // Ensure the overlay covers the full screen
+            />
 
             {loading && (
                 <Modal
@@ -28,12 +33,22 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
                     title="Process Running"
                     centered
                     withCloseButton={false}
-                    overlayOpacity={0.3}
-                    overlayBlur={2}
-                    zIndex={2000} // Ensures the modal is above the overlay
+                    overlayOpacity={0.5}
+                    overlayBlur={3}
+                    zIndex={2000} // Ensure the modal is above the overlay
+                    size="lg" // Increase the size of the modal
                 >
-                    <p>The process is running. You can cancel it below:</p>
-                    <Button variant="outline" color="red" onClick={handleCancel}>
+                    <p style={{ fontSize: "18px", textAlign: "center" }}>
+                        The process is running and requires elevated permissions to cancel.
+                    </p>
+                    <Button
+                        variant="outline"
+                        color="red"
+                        onClick={handleCancel}
+                        size="xl" // Make the button larger
+                        fullWidth // Make the button take full width of modal
+                        style={{ marginTop: "20px" }}
+                    >
                         Cancel Process
                     </Button>
                 </Modal>
@@ -65,8 +80,13 @@ export function LoadingOverlayAndCancelButtonPkexec(
 
     return (
         <>
-            {/* Adjust z-index and pointerEvents to ensure interaction with Modal */}
-            <LoadingOverlay visible={loading} overlayBlur={2} style={{ zIndex: 1000, pointerEvents: "none" }} />
+            {/* Overlay will now cover the entire screen */}
+            <LoadingOverlay
+                visible={loading}
+                overlayBlur={3}
+                style={{ zIndex: 1000 }}
+                fixed // Ensure the overlay covers the full screen
+            />
 
             {loading && (
                 <Modal
@@ -75,12 +95,22 @@ export function LoadingOverlayAndCancelButtonPkexec(
                     title="Process Running"
                     centered
                     withCloseButton={false}
-                    overlayOpacity={0.3}
-                    overlayBlur={2}
-                    zIndex={2000} // Ensures the modal is above the overlay
+                    overlayOpacity={0.5}
+                    overlayBlur={3}
+                    zIndex={2000} // Ensure the modal is above the overlay
+                    size="lg" // Increase the size of the modal
                 >
-                    <p>The process is running and requires elevated permissions to cancel.</p>
-                    <Button variant="outline" color="red" onClick={handleCancel}>
+                    <p style={{ fontSize: "18px", textAlign: "center" }}>
+                        The process is running and requires elevated permissions to cancel.
+                    </p>
+                    <Button
+                        variant="outline"
+                        color="red"
+                        onClick={handleCancel}
+                        size="xl" // Make the button larger
+                        fullWidth // Make the button take full width of modal
+                        style={{ marginTop: "20px" }}
+                    >
                         Cancel Process
                     </Button>
                 </Modal>
