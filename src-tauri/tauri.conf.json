@@ -1,387 +1,394 @@
 {
-    "$schema": "../node_modules/@tauri-apps/cli/schema.json",
-    "build": {
-        "beforeBuildCommand": "npm run build",
-        "beforeDevCommand": "npm run dev",
-        "devPath": "http://localhost:5173",
-        "distDir": "../dist"
-    },
-    "package": {
-        "productName": "Deakin-Detonator-Toolkit",
-        "version": "0.1.2"
-    },
-    "tauri": {
-        "allowlist": {
-            "shell": {
-                "open": true,
-                "execute": true,
-                "sidecar": true,
-                "scope": [
-                    {
-                        "name": "airbase-ng",
-                        "cmd": "airbase-ng",
-                        "args": true
-                    },
-                    {
-                        "name": "aircrack-ng",
-                        "cmd": "aircrack-ng",
-                        "args": true
-                    },
-                    {
-                        "name": "amap",
-                        "cmd": "amap",
-                        "args": true
-                    },
-                    {
-                        "name": "arjun",
-                        "cmd": "arjun",
-                        "args": true
-                    },
-                    {
-                        "name": "arp-fingerprint",
-                        "cmd": "arp-fingerprint",
-                        "args": true
-                    },
-                    {
-                        "name": "arp-scan",
-                        "cmd": "arp-scan",
-                        "args": true
-                    },
-                    {
-                        "name": "arpspoof",
-                        "cmd": "arpspoof",
-                        "args": true
-                    },
-                    {
-                        "name": "bash",
-                        "cmd": "bash",
-                        "args": true
-                    },
-                    {
-                        "name": "bed",
-                        "cmd": "bed",
-                        "args": true
-                    },
-                    {
-                        "name": "bully",
-                        "cmd": "bully",
-                        "args": true
-                    },
-                    {
-                        "name": "cat",
-                        "cmd": "cat",
-                        "args": true
-                    },
-                    {
-                        "name": "cewl",
-                        "cmd": "cewl",
-                        "args": true
-                    },
-                    {
-                        "name": "cp",
-                        "cmd": "cp",
-                        "args": true
-                    },
-                    {
-                        "name": "crackmapexec",
-                        "cmd": "crackmapexec",
-                        "args": true
-                    },
-                    {
-                        "name": "crunch",
-                        "cmd": "crunch",
-                        "args": true
-                    },
-                    {
-                        "name": "dmitry",
-                        "cmd": "dmitry",
-                        "args": true
-                    },
-                    {
-                        "name": "dnsenum",
-                        "cmd": "dnsenum",
-                        "args": true
-                    },
-                    {
-                        "name": "dnsmap",
-                        "cmd": "dnsmap",
-                        "args": true
-                    },
-                    {
-                        "name": "dnsrecon",
-                        "cmd": "dnsrecon",
-                        "args": true
-                    },
-                    {
-                        "name": "enum4linux",
-                        "cmd": "enum4linux",
-                        "args": true
-                    },
-                    {
-                        "name": "eyewitness",
-                        "cmd": "eyewitness",
-                        "args": true
-                    },
-                    {
-                        "name": "fcrackzip",
-                        "cmd": "fcrackzip",
-                        "args": true
-                    },
-                    {
-                        "name": "find",
-                        "cmd": "find",
-                        "args": true
-                    },
-                    {
-                        "name": "gitleaks",
-                        "cmd": "gitleaks",
-                        "args": true
-                    },
-                    {
-                        "name": "gobuster",
-                        "cmd": "gobuster",
-                        "args": true
-                    },
-                    {
-                        "name": "goldeneye",
-                        "cmd": "goldeneye",
-                        "args": true
-                    },
-                    {
-                        "name": "hashcat",
-                        "cmd": "hashcat",
-                        "args": true
-                    },
-                    {
-                        "name": "hydra",
-                        "cmd": "hydra",
-                        "args": true
-                    },
-                    {
-                        "name": "impacket-secretsdump",
-                        "cmd": "impacket-secretsdump",
-                        "args": true
-                    },
-                    {
-                        "name": "impacket-wmiexec",
-                        "cmd": "impacket-wmiexec",
-                        "args": true
-                    },
-                    {
-                        "name": "john",
-                        "cmd": "john",
-                        "args": true
-                    },
-                    {
-                        "name": "kill",
-                        "cmd": "kill",
-                        "args": true
-                    },
-                    {
-                        "name": "ls",
-                        "cmd": "ls",
-                        "args": true
-                    },
-                    {
-                        "name": "masscan",
-                        "cmd": "masscan",
-                        "args": true
-                    },
-                    {
-                        "name": "metagoofil",
-                        "cmd": "metagoofil",
-                        "args": true
-                    },
-                    {
-                        "name": "msfvenom",
-                        "cmd": "msfvenom",
-                        "args": true
-                    },
-                    {
-                        "name": "nbtscan",
-                        "cmd": "nbtscan",
-                        "args": true
-                    },
-                    {
-                        "name": "nikto",
-                        "cmd": "nikto",
-                        "args": true
-                    },
-                    {
-                        "name": "nslookup",
-                        "cmd": "nslookup",
-                        "args": true
-                    },
-                    {
-                        "name": "parsero",
-                        "cmd": "parsero",
-                        "args": true
-                    },
-                    {
-                        "name": "pip3",
-                        "cmd": "pip3",
-                        "args": true
-                    },
-                    {
-                        "name": "pkexec",
-                        "cmd": "pkexec",
-                        "args": true
-                    },
-                    {
-                        "name": "python3",
-                        "cmd": "python3",
-                        "args": true
-                    },
-                    {
-                        "name": "rar2john",
-                        "cmd": "rar2john",
-                        "args": true
-                    },
-                    {
-                        "name": "rcrack",
-                        "cmd": "rcrack",
-                        "args": true
-                    },
-                    {
-                        "name": "rtsort",
-                        "cmd": "rtsort",
-                        "args": true
-                    },
-                    {
-                        "name": "searchsploit",
-                        "cmd": "searchsploit",
-                        "args": true
-                    },
-                    {
-                        "name": "sherlock",
-                        "cmd": "sherlock",
-                        "args": true
-                    },
-                    {
-                        "name": "snmp-check",
-                        "cmd": "snmp-check",
-                        "args": true
-                    },
-                    {
-                        "name": "sqlmap",
-                        "cmd": "sqlmap",
-                        "args": true
-                    },
-                    {
-                        "name": "sublist3r",
-                        "cmd": "sublist3r",
-                        "args": true
-                    },
-                    {
-                        "name": "traceroute",
-                        "cmd": "sudo traceroute",
-                        "args": true
-                    },
-                    {
-                        "name": "tshark",
-                        "cmd": "tshark",
-                        "args": true
-                    },
-                    {
-                        "name": "urlsnarf",
-                        "cmd": "urlsnarf",
-                        "args": true
-                    },
-                    {
-                        "name": "whatweb",
-                        "cmd": "whatweb",
-                        "args": true
-                    },
-                    {
-                        "name": "whois",
-                        "cmd": "whois",
-                        "args": true
-                    },
-                    {
-                        "name": "wpscan",
-                        "cmd": "wpscan",
-                        "args": true
-                    },
-                    {
-                        "name": "zip2john",
-                        "cmd": "zip2john",
-                        "args": true
-                    }
-                ]
-            },
-            "fs": {
-                "all": true,
-                "scope": [
-                    "$TEMP/**",
-                    "$HOME/Deakin-Detonator-Toolkit/**",
-                    "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**"
-                ]
-            },
-            "path": {
-                "all": true
-            }
-        },
-        "bundle": {
-            "active": true,
-            "category": "DeveloperTool",
-            "copyright": "",
-            "deb": {
-                "depends": [
-                    "openjdk-11-jdk",
-                    "python3-impacket",
-                    "dsniff"
-                ],
-                "files": {
-                    "/usr/share/ddt": "exploits/",
-                    "/usr/share/doc/ddt/README.md": "../README.md"
-                }
-            },
-            "externalBin": [],
-            "icon": [
-                "icons/32x32.png",
-                "icons/128x128.png",
-                "icons/128x128@2x.png",
-                "icons/icon.icns",
-                "icons/icon.ico"
-            ],
-            "identifier": "com.deakin.ddt",
-            "longDescription": "Deakin Detonator Toolkit",
-            "macOS": {
-                "entitlements": null,
-                "exceptionDomain": "",
-                "frameworks": [],
-                "providerShortName": null,
-                "signingIdentity": null
-            },
-            "resources": [],
-            "shortDescription": "",
-            "targets": "all",
-            "windows": {
-                "certificateThumbprint": null,
-                "digestAlgorithm": "sha256",
-                "timestampUrl": ""
-            }
-        },
-        "security": {
-            "csp": null
-        },
-        "updater": {
-            "active": true,
-            "dialog": true,
-            "endpoints": [
-                "https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/releases/download/updater/update.json"
-            ],
-            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDcyNEQ4Njk4MjNDNkJGRTQKUldUa3Y4WWptSVpOY2dTZkY4dThjSlY0eXJpUS8zUUZhNnV0eTZ4TlpkeEd3cVRNMStyNm00d0oK"
-        },
-        "windows": [
-            {
-                "fullscreen": false,
-                "width": 800,
-                "height": 600,
-                "maximized": true,
-                "resizable": true,
-                "title": "Deakin Detonator Toolkit"
-            }
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devPath": "http://localhost:5173",
+    "distDir": "../dist"
+  },
+  "package": {
+    "productName": "Deakin-Detonator-Toolkit",
+    "version": "0.1.2"
+  },
+  "tauri": {
+    "allowlist": {
+      "shell": {
+        "open": true,
+        "execute": true,
+        "sidecar": true,
+        "scope": [
+          {
+            "name": "airbase-ng",
+            "cmd": "airbase-ng",
+            "args": true
+          },
+          {
+            "name": "aircrack-ng",
+            "cmd": "aircrack-ng",
+            "args": true
+          },
+          {
+            "name": "amap",
+            "cmd": "amap",
+            "args": true
+          },
+          {
+            "name": "arjun",
+            "cmd": "arjun",
+            "args": true
+          },
+          {
+            "name": "arp-fingerprint",
+            "cmd": "arp-fingerprint",
+            "args": true
+          },
+          {
+            "name": "arp-scan",
+            "cmd": "arp-scan",
+            "args": true
+          },
+          {
+            "name": "arpspoof",
+            "cmd": "arpspoof",
+            "args": true
+          },
+          {
+            "name": "bash",
+            "cmd": "bash",
+            "args": true
+          },
+          {
+            "name": "bed",
+            "cmd": "bed",
+            "args": true
+          },
+          {
+            "name": "bully",
+            "cmd": "bully",
+            "args": true
+          },
+          {
+            "name": "cat",
+            "cmd": "cat",
+            "args": true
+          },
+          {
+            "name": "cewl",
+            "cmd": "cewl",
+            "args": true
+          },
+          {
+            "name": "cp",
+            "cmd": "cp",
+            "args": true
+          },
+          {
+            "name": "crackmapexec",
+            "cmd": "crackmapexec",
+            "args": true
+          },
+          {
+            "name": "crunch",
+            "cmd": "crunch",
+            "args": true
+          },
+          {
+            "name": "dmitry",
+            "cmd": "dmitry",
+            "args": true
+          },
+          {
+            "name": "dnsenum",
+            "cmd": "dnsenum",
+            "args": true
+          },
+          {
+            "name": "dnsmap",
+            "cmd": "dnsmap",
+            "args": true
+          },
+          {
+            "name": "dnsrecon",
+            "cmd": "dnsrecon",
+            "args": true
+          },
+          {
+            "name": "enum4linux",
+            "cmd": "enum4linux",
+            "args": true
+          },
+          {
+            "name": "eyewitness",
+            "cmd": "eyewitness",
+            "args": true
+          },
+          {
+            "name": "fcrackzip",
+            "cmd": "fcrackzip",
+            "args": true
+          },
+          {
+            "name": "find",
+            "cmd": "find",
+            "args": true
+          },
+          {
+            "name": "gitleaks",
+            "cmd": "gitleaks",
+            "args": true
+          },
+          {
+            "name": "gobuster",
+            "cmd": "gobuster",
+            "args": true
+          },
+          {
+            "name": "goldeneye",
+            "cmd": "goldeneye",
+            "args": true
+          },
+          {
+            "name": "hashcat",
+            "cmd": "hashcat",
+            "args": true
+          },
+          {
+            "name": "hydra",
+            "cmd": "hydra",
+            "args": true
+          },
+          {
+            "name": "impacket-secretsdump",
+            "cmd": "impacket-secretsdump",
+            "args": true
+          },
+          {
+            "name": "impacket-wmiexec",
+            "cmd": "impacket-wmiexec",
+            "args": true
+          },
+          {
+            "name": "john",
+            "cmd": "john",
+            "args": true
+          },
+          {
+            "name": "kill",
+            "cmd": "kill",
+            "args": true
+          },
+          {
+            "name": "ls",
+            "cmd": "ls",
+            "args": true
+          },
+          {
+            "name": "masscan",
+            "cmd": "masscan",
+            "args": true
+          },
+          {
+            "name": "metagoofil",
+            "cmd": "metagoofil",
+            "args": true
+          },
+          {
+            "name": "msfvenom",
+            "cmd": "msfvenom",
+            "args": true
+          },
+          {
+            "name": "nbtscan",
+            "cmd": "nbtscan",
+            "args": true
+          },
+          {
+            "name": "nikto",
+            "cmd": "nikto",
+            "args": true
+          },
+          {
+            "name": "nslookup",
+            "cmd": "nslookup",
+            "args": true
+          },
+          {
+            "name": "parsero",
+            "cmd": "parsero",
+            "args": true
+          },
+          {
+            "name": "pip3",
+            "cmd": "pip3",
+            "args": true
+          },
+          {
+            "name": "pkexec",
+            "cmd": "pkexec",
+            "args": true
+          },
+          {
+            "name": "python3",
+            "cmd": "python3",
+            "args": true
+          },
+          {
+            "name": "rar2john",
+            "cmd": "rar2john",
+            "args": true
+          },
+          {
+            "name": "rcrack",
+            "cmd": "rcrack",
+            "args": true
+          },
+          {
+            "name": "rtsort",
+            "cmd": "rtsort",
+            "args": true
+          },
+          {
+            "name": "searchsploit",
+            "cmd": "searchsploit",
+            "args": true
+          },
+          {
+            "name": "sherlock",
+            "cmd": "sherlock",
+            "args": true
+          },
+          {
+            "name": "slowhttptest",
+            "cmd": "slowhttptest",
+            "args": true
+          },
+          {
+            "name": "snmp-check",
+            "cmd": "snmp-check",
+            "args": true
+          },
+          {
+            "name": "sublist3r",
+            "cmd": "sublist3r",
+            "args": true
+          },
+          {
+            "name": "traceroute",
+            "cmd": "sudo traceroute",
+            "args": true
+          },
+          {
+            "name": "tshark",
+            "cmd": "tshark",
+            "args": true
+          },
+          {
+            "name": "urlsnarf",
+            "cmd": "urlsnarf",
+            "args": true
+          },
+          {
+            "name": "whatweb",
+            "cmd": "whatweb",
+            "args": true
+          },
+          {
+            "name": "whois",
+            "cmd": "whois",
+            "args": true
+          },
+          {
+            "name": "WPScan",
+            "cmd": "WPScan",
+            "args": true
+          },
+          {
+            "name": "zip2john",
+            "cmd": "zip2john",
+            "args": true
+          },
+          {
+            "name": "rtgen",
+            "cmd": "rtgen",
+            "args": true
+          }
         ]
-    }
+      },
+      "fs": {
+        "all": true,
+        "scope": [
+          "$TEMP/**",
+          "$HOME/Deakin-Detonator-Toolkit/**",
+          "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**"
+        ]
+      },
+      "path": {
+        "all": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": [
+          "openjdk-11-jdk",
+          "python3-impacket",
+          "dsniff"
+        ],
+        "files": {
+          "/usr/share/ddt": "exploits/",
+          "/usr/share/doc/ddt/README.md": "../README.md"
+        }
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "com.deakin.ddt",
+      "longDescription": "Deakin Detonator Toolkit",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "Deakin Detonator Toolkit",
+      "targets": [
+        "deb",
+        "appimage"
+      ],
+      "windows": {
+        "digestAlgorithm": "sha256",
+        "certificateThumbprint": null,
+        "timestampUrl": "",
+        "wix": {
+          "language": "en-US"
+        }
+      }
+    },
+    "security": {
+      "csp": "default-src blob: data: filesystem: ws: http: https: 'unsafe-eval' 'unsafe-inline'"
+    },
+    "systemTray": {
+      "iconPath": "icons/128x128.png",
+      "menuOnLeftClick": false,
+      "title": "Deakin Detonator Toolkit"
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 728,
+        "resizable": true,
+        "title": "Deakin Detonator Toolkit",
+        "width": 1024
+      }
+    ]
+  }
 }
