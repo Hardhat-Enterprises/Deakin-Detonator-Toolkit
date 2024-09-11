@@ -37,7 +37,6 @@ const Rtgen = () => {
   // Component Constants
   const title = "Rtgen"; // Component title
   const description =
-    // Component description
     "Rtgen generates rainbow tables for password cracking. Use this tool to generate tables for various hash algorithms and character sets.";
   const steps =
     "Step 1: Select hash algorithm.\n" +
@@ -94,7 +93,9 @@ const Rtgen = () => {
       } else if (signal === 15) {
         handleProcessData("\nProcess was manually terminated."); // If the process was terminated manually, display a termination message.
       } else {
-        handleProcessData(`\nProcess terminated with exit code: ${code} and signal: ${signal}`); // If the process was terminated with an error, display the exit and signal codes.
+        handleProcessData(
+          `\nProcess terminated with exit code: ${code} and signal: ${signal}`
+        ); // If the process was terminated with an error, display the exit and signal codes.
       }
       setPid(""); // Clear the child process pid reference.
       setLoading(false); // Cancel the Loading Overlay.
@@ -168,10 +169,26 @@ const Rtgen = () => {
       <form onSubmit={form.onSubmit(onSubmit)}>
         {LoadingOverlayAndCancelButton(loading, pid)}
         <Stack>
-          <TextInput label="Hash Algorithm" required {...form.getInputProps("hashAlgorithm")} />
-          <TextInput label="Charset" required {...form.getInputProps("charset")} />
-          <TextInput label="Plaintext Length (e.g. 1-7)" required {...form.getInputProps("plaintextLength")} />
-          <TextInput label="Table File" required {...form.getInputProps("tableFile")} />
+          <TextInput
+            label="Hash Algorithm"
+            required
+            {...form.getInputProps("hashAlgorithm")}
+          />
+          <TextInput
+            label="Charset"
+            required
+            {...form.getInputProps("charset")}
+          />
+          <TextInput
+            label="Plaintext Length (e.g. 1-7)"
+            required
+            {...form.getInputProps("plaintextLength")}
+          />
+          <TextInput
+            label="Table File"
+            required
+            {...form.getInputProps("tableFile")}
+          />
           <Button type="submit">Generate</Button>
           {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
           <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
