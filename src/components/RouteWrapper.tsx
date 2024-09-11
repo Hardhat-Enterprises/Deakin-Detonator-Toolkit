@@ -65,6 +65,7 @@ import Topology from "./WalkthroughPages/Topology";
 import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
+import Rtgen from './pages/Rtgen';
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import ArpanameTool from "./Arpaname/arpaname";
 import Nikto from "./Nikto/Nikto";
