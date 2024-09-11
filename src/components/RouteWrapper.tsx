@@ -572,6 +572,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Rtgen",
+        path: "/tools/rtgen",
+        element: <Rtgen />,
+        description: "A tool for generating random network traffic to simulate various network conditions and loads.",
+        category: "Network Traffic Generation",
+    },
+    {
         name: "RTsort",
         path: "/tools/RTsort",
         element: <RTsort />,
@@ -585,13 +592,7 @@ export const ROUTES: RouteProperties[] = [
         description: "A computer program which generates rainbow tables to be used in password cracking.",
         category: "Password cracking and Authentication testing",
     },
-    {
-        name: "Rtgen",
-        path: "/tools/rtgen",
-        element: <Rtgen />,
-        description: "A tool for generating random network traffic to simulate various network conditions and loads.",
-        category: "Network Traffic Generation",
-    },
+
     {
         name: "SearchSploit",
         path: "/tools/SearchSploit",
