@@ -58,7 +58,6 @@ function Search() {
             searchPlaceholder="Search..."
             shortcut="mod + shift + 1"
             nothingFoundMessage="Nothing found..."
-            returnFocus={false}
         >
             <SpotlightControl />
         </SpotlightProvider>
