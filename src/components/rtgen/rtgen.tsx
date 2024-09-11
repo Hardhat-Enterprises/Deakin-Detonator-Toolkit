@@ -13,22 +13,28 @@ import InstallationModal from "../InstallationModal/InstallationModal";
  * Represents the form values for the rtgen component.
  */
 interface FormValuesType {
-    url: string;
-    options: string;
+    hashType: string;
+    charSet: string;
+    minLength: string;
+    maxLength: string;
+    numTables: string;
+    tableSize: string;
 }
 
 /**
- * The Rtgen component.
- * @returns The Rtgen component.
+ * The RtgenTool component.
+ * @returns The RtgenTool component.
  */
 const title = "Rtgen";
 const description =
-    "Rtgen is a tool used for generating and managing routes for network routing. It can help in simulating and analyzing routing configurations.";
+    "RtgenTool is a component for generating rainbow tables using the `rtgen` tool. Configure parameters to define the scope of the rainbow table generation.";
 const steps =
-    "Step 1: Enter the target URL in the first field.\n\n" +
-    "Step 2: Specify any additional options in the second field.\n\n" +
-    "Step 3: Press the generate button.";
-const sourceLink = "https://github.com/example/rtgen"; // Replace with the actual source link.
+    "Step 1: Select the hash type for the table.\n\n" +
+    "Step 2: Specify the character set to use for the passwords.\n\n" +
+    "Step 3: Enter the minimum and maximum length of passwords.\n\n" +
+    "Step 4: Define the number of tables and the size of each table.\n\n" +
+    "Step 5: Press the generate button.";
+const sourceLink = "https://github.com/your-repo/rtgen"; // Link to the source code or relevant documentation.
 const tutorial = ""; // Link to the official tutorial/documentation.
 const dependencies = ["rtgen"]; // Dependencies required by the component.
 
@@ -45,8 +51,12 @@ function Rtgen() {
 
     let form = useForm({
         initialValues: {
-            url: "",
-            options: "",
+            hashType: "",
+            charSet: "",
+            minLength: "",
+            maxLength: "",
+            numTables: "",
+            tableSize: "",
         },
     });
 
@@ -116,7 +126,7 @@ function Rtgen() {
     };
 
     /**
-     * Handles form submission, executes the Rtgen tool, and updates the state.
+     * Handles form submission, executes the RtgenTool, and updates the state.
      *
      * @param {FormValues} values - The form input values.
      * @returns {Promise<void>} - An asynchronous operation.
@@ -126,10 +136,14 @@ function Rtgen() {
 
         setLoading(true); // Enable the Loading Overlay
 
-        const args = [`--url`, `${values.url}`];
-        if (values.options) {
-            args.push(`--options`, `${values.options}`);
-        }
+        const args = [
+            values.hashType,
+            values.charSet,
+            values.minLength,
+            values.maxLength,
+            values.numTables,
+            values.tableSize
+        ];
 
         CommandHelper.runCommandGetPidAndOutput("rtgen", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
@@ -172,15 +186,40 @@ function Rtgen() {
                 <Stack>
                     <p>{description}</p>
                     <TextInput
-                        label={"Enter the target URL:"}
-                        placeholder={"Example: http://example.com"}
+                        label={"Hash Type:"}
+                        placeholder={"e.g., md5, sha1"}
                         required
-                        {...form.getInputProps("url")}
+                        {...form.getInputProps("hashType")}
                     />
                     <TextInput
-                        label={"Enter additional options (if any):"}
-                        placeholder={"Example: --option=value"}
-                        {...form.getInputProps("options")}
+                        label={"Character Set:"}
+                        placeholder={"e.g., loweralpha-numeric"}
+                        required
+                        {...form.getInputProps("charSet")}
+                    />
+                    <TextInput
+                        label={"Minimum Length:"}
+                        placeholder={"e.g., 1"}
+                        required
+                        {...form.getInputProps("minLength")}
+                    />
+                    <TextInput
+                        label={"Maximum Length:"}
+                        placeholder={"e.g., 8"}
+                        required
+                        {...form.getInputProps("maxLength")}
+                    />
+                    <TextInput
+                        label={"Number of Tables:"}
+                        placeholder={"e.g., 0"}
+                        required
+                        {...form.getInputProps("numTables")}
+                    />
+                    <TextInput
+                        label={"Table Size:"}
+                        placeholder={"e.g., 1000000"}
+                        required
+                        {...form.getInputProps("tableSize")}
                     />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type={"submit"}>Generate</Button>
