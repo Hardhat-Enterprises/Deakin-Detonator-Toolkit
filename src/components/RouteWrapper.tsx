@@ -78,7 +78,7 @@ import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
 import SQLmap from "./SQLmap/SQLmap";
-import Slowhttptest from "./slowhttptest/slowhttptest";
+import SlowHTTPTest from "./slowhttptest/slowhttptest";
 
 export interface RouteProperties {
     name: string;
@@ -609,9 +609,9 @@ export const ROUTES: RouteProperties[] = [
         category: "Vulnerability Assessment and Exploitation",
     },
     {
-        name: "slowhttptest", 
+        name: "SlowHTTPTest", // Update name to match the component
         path: "/tools/slowhttptest",
-        element: <Slowhttptest />, 
+        element: <SlowHTTPTest />, // Use the correct component name
         description: "Tool for testing how servers handle slow HTTP attacks",
         category: "Tools",
     },
