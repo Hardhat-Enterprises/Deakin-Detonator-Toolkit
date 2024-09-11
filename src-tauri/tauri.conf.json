@@ -251,7 +251,7 @@
             "name": "rtgen",
             "cmd": "rtgen",
             "args": true
-          }
+          },
           {
             "name": "searchsploit",
             "cmd": "searchsploit",
