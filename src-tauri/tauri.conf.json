@@ -312,7 +312,7 @@
             "name": "zip2john",
             "cmd": "zip2john",
             "args": true
-          },
+          }
 
         ]
       },
