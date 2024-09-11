@@ -1,5 +1,6 @@
 import { LoadingOverlay, Button, Modal } from "@mantine/core";
 import { CommandHelper } from "../../utils/CommandHelper";
+import { useState } from "react";
 
 /**
  * Overlay to successfully terminate processes for tools not requiring pkexec
