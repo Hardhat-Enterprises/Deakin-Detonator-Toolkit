@@ -48,6 +48,7 @@ import Eyewitness from "./eyewitness/eyewitness";
 import MrRobot from "./WalkthroughPages/MrRobot";
 import Parsero from "./parsero/parsero";
 import Arjuntool from "./Arjuntool/Arjuntool";
+import Amass from "./Amass/Amass";
 import ARPFingerprint from "./arpfingerprint/arpfingerprint";
 import ForemostTool from "./Foremost/Foremost";
 import Busqueda from "./WalkthroughPages/Busqueda";
@@ -76,7 +77,6 @@ import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
-import Amass from "./Amass/Amass";
 
 export interface RouteProperties {
     name: string;
