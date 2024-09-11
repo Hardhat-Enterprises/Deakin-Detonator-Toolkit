@@ -1,41 +1,32 @@
 import { LoadingOverlay, Button, Modal } from "@mantine/core";
-import { CommandHelper } from "../../utils/CommandHelper";
 import { useState } from "react";
+import { CommandHelper } from "../../utils/CommandHelper";
 
 /**
  * Overlay to successfully terminate processes for tools not requiring pkexec
  * @param loading - An object containing information about the process termination.
  * @param pid - The exit code of the terminated process.
- * @returns A Loading Overlay with cancel button
+ * @returns A Loading Overlay with cancel button in a Modal
  */
 export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
-    const [opened, setOpened] = useState(false); // State to control Modal visibility
-
     // Sends a SIGTERM signal to gracefully terminate the active process passed as an argument
     const handleCancel = () => {
         if (pid !== null) {
             const args = [`-15`, pid];
             CommandHelper.runCommand("kill", args);
-            setOpened(false);
         }
     };
 
     return (
         <>
-            <LoadingOverlay
-                visible={loading}
-                overlayBlur={3}
-                style={{ zIndex: 1000, position: "fixed" }} // Ensure the overlay covers the full screen
-            />
+            {/* Display the overlay when 'loading' is true */}
+            <LoadingOverlay visible={loading} overlayBlur={2} />
+
             {loading && (
-                <Modal
-                    opened={loading && opened}
-                    onClose={() => setOpened(false)}
-                    title="Cancel Process with Elevated Permissions"
-                >
-                    <p>Are you sure you want to cancel this process? It requires elevated permissions.</p>
+                <Modal opened={loading} onClose={() => {}} title="Process Running" centered withCloseButton={false}>
+                    <p>The process is running. You can cancel it below:</p>
                     <Button variant="outline" color="red" onClick={handleCancel}>
-                        Confirm Cancel
+                        Cancel Process
                     </Button>
                 </Modal>
             )}
@@ -49,8 +40,7 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
  * @param pid - The exit code of the terminated process.
  * @param onData- Callback function to handle data generated during the termination process.
  * @param onTermination - Callback function to provide termination details.
- * @throws If there is an error during cancel process or process ID fails to be acquired
- * @returns A Loading Overlay with cancel button
+ * @returns A Loading Overlay with cancel button in a Modal
  */
 export function LoadingOverlayAndCancelButtonPkexec(
     loading: boolean,
@@ -60,52 +50,21 @@ export function LoadingOverlayAndCancelButtonPkexec(
 ) {
     // Sends a SIGINT signal to gracefully terminate the active process passed as an argument
     const handleCancel = () => {
-        try {
-            //Run termination command if pid is found
-            if (pid !== null) {
-                const args = [`-2`, pid];
-                CommandHelper.runCommandWithPkexec("kill", args, onData, onTermination);
-            } else {
-                //Throws error if failed to get process ID for termination
-                throw new Error("Error: Failed to get process ID ");
-            }
-        } catch (e) {
-            //Throws an error if exception happens in the cancel process
-            throw e;
+        if (pid !== null) {
+            const args = [`-2`, pid];
+            CommandHelper.runCommandWithPkexec("kill", args, onData, onTermination);
         }
     };
 
-    //Returns a loadingoverlay function to handle process termination for pkexec
     return (
         <>
-            <LoadingOverlay
-                visible={loading}
-                overlayBlur={3}
-                style={{ zIndex: 1000, position: "fixed" }} // Ensure the overlay covers the full screen
-            />
+            {/* Display the overlay when 'loading' is true */}
+            <LoadingOverlay visible={loading} overlayBlur={2} />
+
             {loading && (
-                <Modal
-                    opened={loading}
-                    onClose={() => {}}
-                    title=""
-                    centered
-                    withCloseButton={false}
-                    overlayOpacity={0.5}
-                    overlayBlur={3}
-                    zIndex={2000} // Ensure the modal is above the overlay
-                    size="lg" // Increase the size of the modal
-                >
-                    <p style={{ fontSize: "18px", textAlign: "center" }}>
-                        The process is running.You can cancel it below:
-                    </p>
-                    <Button
-                        variant="outline"
-                        color="red"
-                        onClick={handleCancel}
-                        size="xl" // Make the button larger
-                        fullWidth // Make the button take full width of modal
-                        style={{ marginTop: "20px" }}
-                    >
+                <Modal opened={loading} onClose={() => {}} title="Process Running" centered withCloseButton={false}>
+                    <p>The process is running and requires elevated permissions to cancel.</p>
+                    <Button variant="outline" color="red" onClick={handleCancel}>
                         Cancel Process
                     </Button>
                 </Modal>
