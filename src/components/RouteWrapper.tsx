@@ -609,7 +609,7 @@ export const ROUTES: RouteProperties[] = [
         category: "Vulnerability Assessment and Exploitation",
     },
     {
-        name: "Slowhttptest", 
+        name: "slowhttptest", 
         path: "/tools/slowhttptest",
         element: <Slowhttptest />, 
         description: "Tool for testing how servers handle slow HTTP attacks",
