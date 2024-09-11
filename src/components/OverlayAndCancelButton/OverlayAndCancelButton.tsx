@@ -24,11 +24,31 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
                 style={{ zIndex: 1000, position: "fixed" }} // Ensure the overlay covers the full screen
             />
             {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
+                <Modal
+                    opened={loading}
+                    onClose={() => {}}
+                    title=""
+                    centered
+                    withCloseButton={false}
+                    overlayOpacity={0.5}
+                    overlayBlur={3}
+                    zIndex={2000} // Ensure the modal is above the overlay
+                    size="lg" // Increase the size of the modal
+                >
+                    <p style={{ fontSize: "18px", textAlign: "center" }}>
+                        The process is running. You can cancel it below:
+                    </p>
+                    <Button
+                        variant="outline"
+                        color="red"
+                        onClick={handleCancel}
+                        size="xl" // Make the button larger
+                        fullWidth // Make the button take full width of modal
+                        style={{ marginTop: "20px" }}
+                    >
+                        Cancel Process
                     </Button>
-                </div>
+                </Modal>
             )}
         </>
     );
@@ -75,11 +95,31 @@ export function LoadingOverlayAndCancelButtonPkexec(
                 style={{ zIndex: 1000, position: "fixed" }} // Ensure the overlay covers the full screen
             />
             {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
+                <Modal
+                    opened={loading}
+                    onClose={() => {}}
+                    title=""
+                    centered
+                    withCloseButton={false}
+                    overlayOpacity={0.5}
+                    overlayBlur={3}
+                    zIndex={2000} // Ensure the modal is above the overlay
+                    size="lg" // Increase the size of the modal
+                >
+                    <p style={{ fontSize: "18px", textAlign: "center" }}>
+                        The process is running.You can cancel it below:
+                    </p>
+                    <Button
+                        variant="outline"
+                        color="red"
+                        onClick={handleCancel}
+                        size="xl" // Make the button larger
+                        fullWidth // Make the button take full width of modal
+                        style={{ marginTop: "20px" }}
+                    >
+                        Cancel Process
                     </Button>
-                </div>
+                </Modal>
             )}
         </>
     );
