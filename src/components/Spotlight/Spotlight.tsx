@@ -13,10 +13,10 @@ function SpotlightControl() {
     not get this to work.
     */
     const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
+        openSpotlight();
         if (e.currentTarget) {
             e.currentTarget.blur();
         }
-        openSpotlight();
     };
 
     return (
@@ -58,6 +58,7 @@ function Search() {
             searchPlaceholder="Search..."
             shortcut="mod + shift + 1"
             nothingFoundMessage="Nothing found..."
+            returnFocus={false}
         >
             <SpotlightControl />
         </SpotlightProvider>
