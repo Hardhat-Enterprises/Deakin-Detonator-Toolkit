@@ -248,6 +248,11 @@
             "args": true
           },
           {
+            "name": "rtgen",
+            "cmd": "rtgen",
+            "args": true
+          }
+          {
             "name": "searchsploit",
             "cmd": "searchsploit",
             "args": true
@@ -307,11 +312,7 @@
             "cmd": "zip2john",
             "args": true
           },
-          {
-            "name": "rtgen",
-            "cmd": "rtgen",
-            "args": true
-          }
+
         ]
       },
       "fs": {
