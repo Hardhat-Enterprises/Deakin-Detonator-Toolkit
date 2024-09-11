@@ -250,4 +250,4 @@ const SlowHTTPTestGenerator = () => {
     );
 };
 
-export default SlowHTTPTestGenerator;
+export default Slowhttptest;
