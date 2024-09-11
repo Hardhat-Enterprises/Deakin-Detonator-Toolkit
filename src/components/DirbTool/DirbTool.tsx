@@ -1,6 +1,6 @@
 // Import necessary hooks and components from React and other libraries
 import { useState, useCallback, useEffect } from "react";
-import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid } from "@mantine/core";
+import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -332,7 +332,10 @@ function Dirb() {
                         <Stepper active={active} onStepClick={setActive} breakpoint="sm">
                             {/* Step 1: Target */}
                             <Stepper.Step label="Target">
-                                <TextInput label="URL" required {...form.getInputProps("url")} />
+                                <TextInput label="Target URL" required {...form.getInputProps("url")} />
+                                <Group position="right" mt="md">
+                                    <Button onClick={nextStep}>Next</Button>
+                                </Group>
                             </Stepper.Step>
                             {/* Step 2: Parameters */}
                             <Stepper.Step label="Parameters">
@@ -347,7 +350,6 @@ function Dirb() {
                                     ]}
                                     {...form.getInputProps("wordlistSize")}
                                 />
-
                                 <Grid mt={20}>
                                     <Grid.Col span={3}>
                                         <Button
@@ -380,6 +382,12 @@ function Dirb() {
                                         >
                                             {additionalOpened ? "Hide Additional Options" : "Show Additional Options"}
                                         </Button>
+                                        <Group position="right" mt="md">
+                                            <Button variant="default" onClick={prevStep}>
+                                                Previous
+                                            </Button>
+                                            <Button onClick={nextStep}>Next</Button>
+                                        </Group>
                                     </Grid.Col>
                                 </Grid>
 
@@ -490,6 +498,11 @@ function Dirb() {
                                         Run Dirb
                                     </Button>
                                 </Stack>
+                                <Group position="right" mt="md">
+                                    <Button variant="default" onClick={prevStep}>
+                                        Previous
+                                    </Button>
+                                </Group>
                             </Stepper.Step>
                         </Stepper>
                         {/* Render the SaveOutputToTextFile component */}
