@@ -33,18 +33,9 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
                     onClose={() => setOpened(false)}
                     title="Cancel Process with Elevated Permissions"
                 >
-                    <p style={{ fontSize: "18px", textAlign: "center" }}>
-                        The process is running. You can cancel it below:
-                    </p>
-                    <Button
-                        variant="outline"
-                        color="red"
-                        onClick={handleCancel}
-                        size="xl" // Make the button larger
-                        fullWidth // Make the button take full width of modal
-                        style={{ marginTop: "20px" }}
-                    >
-                        Cancel Process
+                    <p>Are you sure you want to cancel this process? It requires elevated permissions.</p>
+                    <Button variant="outline" color="red" onClick={handleCancel}>
+                        Confirm Cancel
                     </Button>
                 </Modal>
             )}
