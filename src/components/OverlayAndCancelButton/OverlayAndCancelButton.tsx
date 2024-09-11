@@ -1,4 +1,4 @@
-import { LoadingOverlay, Button } from "@mantine/core";
+import { LoadingOverlay, Button, Modal } from "@mantine/core";
 import { CommandHelper } from "../../utils/CommandHelper";
 
 /**
