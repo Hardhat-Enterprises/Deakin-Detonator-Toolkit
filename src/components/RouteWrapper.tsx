@@ -572,6 +572,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Rainbowcrack",
+        path: "/tools/Rainbowcrack",
+        element: <Rainbowcrack />,
+        description: "A computer program which generates rainbow tables to be used in password cracking.",
+        category: "Password cracking and Authentication testing",
+    },
+    {
         name: "Rtgen",
         path: "/tools/rtgen",
         element: <Rtgen />,
@@ -585,13 +592,7 @@ export const ROUTES: RouteProperties[] = [
         description: "A subfunction of the Rainbow Crack tool used for sorting and managing created rainbow tables.",
         category: "Password Cracking and Authentication Testing",
     },
-    {
-        name: "Rainbowcrack",
-        path: "/tools/Rainbowcrack",
-        element: <Rainbowcrack />,
-        description: "A computer program which generates rainbow tables to be used in password cracking.",
-        category: "Password cracking and Authentication testing",
-    },
+
 
     {
         name: "SearchSploit",
