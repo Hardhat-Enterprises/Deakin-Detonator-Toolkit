@@ -9,11 +9,14 @@ import { useState } from "react";
  * @returns A Loading Overlay with cancel button
  */
 export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
+    const [opened, setOpened] = useState(false); // State to control Modal visibility
+
     // Sends a SIGTERM signal to gracefully terminate the active process passed as an argument
     const handleCancel = () => {
         if (pid !== null) {
             const args = [`-15`, pid];
             CommandHelper.runCommand("kill", args);
+            setOpened(false);
         }
     };
 
