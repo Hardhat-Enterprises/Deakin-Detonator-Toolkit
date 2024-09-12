@@ -77,8 +77,7 @@ import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
-import Hping3 from "./Hping3/Hping3";
-import SQLmap from "./SQLmap/SQLmap";
+import Photon from "./Photon/photon";
 
 export interface RouteProperties {
     name: string;
@@ -177,93 +176,93 @@ export const ROUTES: RouteProperties[] = [
         name: "Busqueda",
         path: "/walkthroughs/Busqueda",
         element: <Busqueda />,
-        description: "A walkthrough on the Busqueda Hack The Box challenge",
-        category: "Miscellaneous",
+        description: "A walkthrough on Busqueda Hack the Box challenge",
+        category: "",
     },
     {
         name: "Fawn",
         path: "/walkthroughs/Fawn",
         element: <Fawn />,
-        description: "A walkthrough on the Fawn Hack The Box Challenge showcasing DDT nmap tool",
-        category: "Miscellaneous",
+        description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
+        category: "",
     },
     {
         name: "Keeper",
         path: "/walkthroughs/Keeper",
         element: <Keeper />,
         description:
-            "A walkthrough on the Keeper Hack The Box Challenge showcasing privilege escalation and web application security",
-        category: "Web Application Testing",
+            "A walkthrough on the Keeper HackTheBox Challenge showcasing privilege escalation and web application security",
+        category: "",
     },
     {
         name: "Monitorstwo",
         path: "/walkthroughs/Monitorstwo",
         element: <Monitorstwo />,
         description:
-            "A walkthrough on the Monitorstwo Hack The Box Challenge centered around network monitoring and intrusion detection systems",
-        category: "Network Scanning and Enumeration",
+            "A walkthrough on the Monitorstwo HackTheBox Challenge centered around network monitoring and intrusion detection systems",
+        category: "",
     },
     {
         name: "Meow",
         path: "/walkthroughs/Meow",
         element: <Meow />,
         description:
-            "A walkthrough on the Meow Hack The Box challenge involving basic enumeration and exploitation techniques to gain access to the target system.",
-        category: "Network Scanning and Enumeration",
+            "A walkthrough on the Meow HackTheBox challenge involving basic enumeration and exploitation techniques to gain access to the target system.",
+        category: "",
     },
     {
         name: "MrRobot",
         path: "/walkthroughs/MrRobot",
         element: <MrRobot />,
         description: "A walkthrough on the Mr Robot TryHackMe Capture the flag",
-        category: "Miscellaneous",
+        category: "",
     },
     {
         name: "Pentesting",
         path: "/walkthroughs/Pentesting",
         element: <Pentesting />,
         description: "A walkthrough on a Pentesting room with focus on brute force attack and privilege escalation",
-        category: "Penetration Testing",
+        category: "",
     },
     {
         name: "Persistence",
         path: "/walkthroughs/Persistence",
         element: <Persistence />,
         description:
-            "A walkthrough on the Hack The Box challenge: Persistence is Key with focus on forensics investigation on an FTP server",
-        category: "Information Gathering and Analysis",
+            "A walkthrough on HTB challenge: Persistence is Key with focus on forensics investigation on an FTP server",
+        category: "",
     },
     {
         name: "Pilgrimage",
         path: "/walkthroughs/Pilgrimage",
         element: <Pilgrimage />,
         description:
-            "A walkthrough on the Pilgrimage Hack The Box challenge focused on exploiting a web application vulnerability to gain access to the system",
-        category: "Web Application Testing",
+            "A walkthrough on the Pilgrimage Hack the Box challenge focused on exploiting a web application vulnerability to gain access to the system",
+        category: "",
     },
     {
         name: "Racecar",
         path: "/walkthroughs/Racecar",
         element: <Racecar />,
         description:
-            "A walkthrough on Racecar Hack The Box challenge utilizing cryptographic analysis and reverse engineering skills to decipher and exploit a custom encryption algorithm",
-        category: "Information Gathering and Analysis",
+            "A walkthrough on Racecar Hack the Box challenge utilizing cryptographic analysis and reverse engineering skills to decipher and exploit a custom encryption algorithm",
+        category: "",
     },
     {
         name: "Redeemer",
         path: "/walkthroughs/Redeemer",
         element: <Redeemer />,
         description:
-            "A walkthrough on the Redeemer Hack The Box challenge showcasing enumeration and post-exploitation tasks, testing your expertise in penetration testing",
-        category: "Network Scanning and Enumeration",
+            "A walkthrough on the Redeemer HackTheBox challenge showcasing enumeration and post-exploitation tasks, testing your expertise in penetration testing",
+        category: "",
     },
     {
         name: "Topology",
         path: "/walkthroughs/Topology",
         element: <Topology />,
         description:
-            "A walkthrough on Topology Hack The Box challenge which requires knowledge of network protocols, routing, and security configurations",
-        category: "Network Scanning and Enumeration",
+            "A walkthrough on Topology Hack the Box challenge which requires knowledge of network protocols, routing, and security configurations",
+        category: "",
     },
     //TOOLS BELOW THIS COMMENT - PLEASE ADD NEW TOOLS IN ALPHABETICAL ORDER
     {
@@ -491,14 +490,6 @@ export const ROUTES: RouteProperties[] = [
         category: "Password Cracking and Authentication Testing",
     },
     {
-        name: "Hping3",
-        path: "/tools/hping3",
-        element: <Hping3 />,
-        description:
-            "Hping3 is a network packet crafting and analysis tool. It is used for testing firewalls, network performance, port scanning, and network auditing.",
-        category: "Network Scanning and Enumeration",
-    },
-    {
         name: "Hydra",
         path: "/tools/Hydra",
         element: <Hydra />,
@@ -580,6 +571,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Photon",
+        path: "/tools/Photon",
+        element: <Photon />,
+        description: "Photon is a fast crawler designed for OSINT.",
+        category: "Information Gathering and Analysis",
+    },
+    {
         name: "RTsort",
         path: "/tools/RTsort",
         element: <RTsort />,
@@ -638,14 +636,6 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used to identify and assess vulnerabilities in devices that use the SNMP protocol by querying SNMP information.",
         category: "Network Scanning and Enumeration",
-    },
-    {
-        name: "SQLmap",
-        path: "/tools/SQLmap",
-        element: <SQLmap />,
-        description:
-            "SQLmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.",
-        category: "Web Application Testing",
     },
     {
         name: "Sublist3r",
