@@ -29,9 +29,9 @@ const ExifTool = () => {
     const title = "ExifTool";
     const description = "ExifTool is a platform-independent command-line application for reading, writing, and editing metadata in a wide variety of file types.";
     const steps = "";
+    const sourceLink = ""; // Link to the source code
+    const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["exiftool"]; // ExifTool dependency.
-
-
 
     let form = useForm<FormValuesType>({
         initialValues: {
@@ -106,5 +106,59 @@ const ExifTool = () => {
         setAllowSave(false);
     };
 
+    return (
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                />
+            )}
+            <form onSubmit={form.onSubmit(onSubmit)}>
+                <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <TextInput
+                        label="File Path"
+                        required
+                        {...form.getInputProps("filePath")}
+                        placeholder="e.g. /path/to/file.jpg"
+                    />
+                    <TextInput
+                        label="Metadata Tag"
+                        required
+                        {...form.getInputProps("tag")}
+                        placeholder="e.g. Author"
+                    />
+                    <TextInput
+                        label="Value (for writing)"
+                        {...form.getInputProps("value")}
+                        placeholder="e.g. John Doe"
+                    />
+                    <Checkbox
+                        label="Read Metadata"
+                        checked={form.values.actionType === "read"}
+                        onChange={() => form.setFieldValue("actionType", "read")}
+                    />
+                    <Checkbox
+                        label="Write Metadata"
+                        checked={form.values.actionType === "write"}
+                        onChange={() => form.setFieldValue("actionType", "write")}
+                    />
+                    <Button type={"submit"}>Run {title}</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
+    );
+};
 
-}
+export default ExifTool;
