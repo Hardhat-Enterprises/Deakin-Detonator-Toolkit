@@ -16,3 +16,17 @@ interface FormValuesType {
     actionType: string; // "read" or "write"
 }
 
+const ExifToolComponent = () => {
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const [pid, setPid] = useState("");
+    
+    const title = "ExifTool";
+    const description = "ExifTool is a platform-independent command-line application for reading, writing, and editing metadata in a wide variety of file types.";
+    const steps = "";
+    const dependencies = ["exiftool"]; // ExifTool dependency.
