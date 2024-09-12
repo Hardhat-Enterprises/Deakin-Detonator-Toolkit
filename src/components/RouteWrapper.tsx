@@ -358,17 +358,6 @@ export const ROUTES: RouteProperties[] = [
         category: "Password Cracking and Authentication Testing",
     },
     {
-<<<<<<< HEAD
-        name: "Crackmapexec",
-        path: "/tools/Crackmapexec",
-        element: <Crackmapexec />,
-        description:
-            "A post-exploitation tool used for automating the assessment and exploitation of large Active Directory networks.",
-        category: "Vulnerability Assessment and Exploitation",
-    },
-    {
-=======
->>>>>>> 5a46b73 (Remove Crackmapexec and update related references and dependencies)
         name: "Crunch",
         path: "/tools/Crunch",
         element: <Crunch />,
