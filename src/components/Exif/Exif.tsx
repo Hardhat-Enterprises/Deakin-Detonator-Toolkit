@@ -8,3 +8,11 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+
+interface FormValuesType {
+    filePath: string;
+    tag: string;
+    value: string;
+    actionType: string; // "read" or "write"
+}
+
