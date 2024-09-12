@@ -263,7 +263,7 @@ const TestSSL = () => {
                         </Grid.Col>
                     </Grid>
                     <MultiSelect
-                        label="Severity Level (--severity)"
+                        label="Severity level (--severity)"
                         data={[
                             { value: "LOW", label: "Low" },
                             { value: "MEDIUM", label: "Medium" },
