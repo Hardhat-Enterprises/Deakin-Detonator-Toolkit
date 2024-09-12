@@ -8,6 +8,7 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+
 /**
  * Interface representing the form values for the TestSSL component.
  * This interface defines the structure of the form data used to configure
@@ -32,8 +33,9 @@ const TestSSL = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [opened, setOpened] = useState(true);
     const [loadingModal, setLoadingModal] = useState(true);
+    const [pidTarget, setPidTarget] = useState("");
 
     // Constants
     const title = "testssl";
@@ -41,11 +43,11 @@ const TestSSL = () => {
     const steps =
         "Step 1: Enter the target website or IP address.\n" +
         "Step 2: Select the desired scan options.\n" +
-        "Step 3: Click 'Start " + title + "' to begin the process.\n" +
+        "Step 3: Click 'Start Scan' to begin the process.\n" +
         "Step 4: View the output to see the results of the SSL/TLS analysis.";
     const sourceLink = "https://github.com/drwetter/testssl.sh";
     const tutorial = "";
-    const dependencies = ["testssl.sh"];
+    const dependencies = ["testssl"];
 
     /**
      * Validates if the given input string is a valid IPv4 or IPv6 address.
@@ -133,18 +135,25 @@ const TestSSL = () => {
      */
     const handleProcessData = useCallback((data: string) => {
         const cleanedData = cleanOutput(data);
-        setOutput((prevOutput) => prevOutput + cleanedData);
+        setOutput((prevOutput) => {
+            // Split the new data into lines
+            const lines = cleanedData.split('\n');
+            // Append each line to the previous output, ensuring a newline between them
+            return prevOutput + lines.map(line => line.trim()).join('\n') + '\n';
+        });
     }, []);
 
     /**
      * Handle the process termination by updating the output and resetting states.
      * @param code - The exit code of the process.
      */
-    const handleProcessTermination = useCallback((code: number) => {
+    const handleProcessTermination = useCallback(({ code, signal }: { code: number; signal: number }) => {
         if (code === 0) {
             setOutput((prevOutput) => prevOutput + "\nScan completed successfully.");
+        } else if (signal === 15) {
+            setOutput((prevOutput) => prevOutput + "\nScan was manually terminated.");
         } else {
-            setOutput((prevOutput) => prevOutput + `\nScan terminated with exit code: ${code}`);
+            setOutput((prevOutput) => prevOutput + `\nScan terminated with exit code: ${code} and signal code: ${signal}`);
         }
         setLoading(false);
         setAllowSave(true);
@@ -179,13 +188,17 @@ const TestSSL = () => {
         args.push(values.target);
 
         try {
-            const result = await CommandHelper.runCommand("testssl", args);
-            handleProcessData(result);
-            handleProcessTermination(0);
+            const result = await CommandHelper.runCommandGetPidAndOutput(
+                "testssl",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+            setPidTarget(result.pid);
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
             handleProcessData(errorMessage);
-            handleProcessTermination(1);
+            handleProcessTermination({ code: 1, signal: 0 });        
         }
     };
 
@@ -226,8 +239,8 @@ const TestSSL = () => {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
-                {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pidTarget)}
                     <TextInput label="Target (hostname or IP)" required {...form.getInputProps("target")} />
                     <Grid>
                         <Grid.Col span={6}>
@@ -264,7 +277,7 @@ const TestSSL = () => {
                         </Grid.Col>
                     </Grid>
                     <MultiSelect
-                        label="Severity level (--severity)"
+                        label="Severity Level (--severity)"
                         data={[
                             { value: "LOW", label: "Low" },
                             { value: "MEDIUM", label: "Medium" },
@@ -276,7 +289,7 @@ const TestSSL = () => {
                     />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit" loading={loading}>
-                        Start {title}
+                        Start Scan
                     </Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
