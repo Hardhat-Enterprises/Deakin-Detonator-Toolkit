@@ -41,7 +41,7 @@ const TestSSL = () => {
     const steps =
         "Step 1: Enter the target website or IP address.\n" +
         "Step 2: Select the desired scan options.\n" +
-        "Step 3: Click 'Start Scan' to begin the process.\n" +
+        "Step 3: Click 'Start " + title + "' to begin the process.\n" +
         "Step 4: View the output to see the results of the SSL/TLS analysis.";
     const sourceLink = "https://github.com/drwetter/testssl.sh";
     const tutorial = "";
