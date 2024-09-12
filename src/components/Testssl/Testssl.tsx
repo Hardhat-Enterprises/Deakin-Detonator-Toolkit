@@ -275,7 +275,7 @@ const TestSSL = () => {
                     />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit" loading={loading}>
-                        Start Scan
+                        Start {title}
                     </Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
