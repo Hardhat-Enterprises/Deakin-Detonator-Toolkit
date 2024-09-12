@@ -22,6 +22,7 @@ import SMBGhostScanner from "./SMBGhostScanner/SMBGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
+import Exif from "./Exif/Exif";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import Metagoofil from "./metagoofil/metagoofil";
 import Dmitry from "./Dmitry/Dmitry";
@@ -427,6 +428,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Eyewitness />,
         description: "A tool used for capturing screenshots and gathering information from web servers",
         category: "Web Application Testing",
+    },
+    {
+        name: "Exif",
+        path: "/tools/Exif",
+        element: <Exif />,
+        description: "A tool used to extract metadata from different file types",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "Fcrackzip",

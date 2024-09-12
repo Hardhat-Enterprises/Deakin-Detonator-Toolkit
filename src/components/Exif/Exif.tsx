@@ -54,3 +54,22 @@ const ExifTool = () => {
                 setLoadingModal(false);
             });
     }, []);
+
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data);
+    }, []);
+
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+            } else if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            }
+            setPid("");
+            setLoading(false);
+        },
+        [handleProcessData]
+    );
