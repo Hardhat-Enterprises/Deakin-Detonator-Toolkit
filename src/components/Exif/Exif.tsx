@@ -16,7 +16,7 @@ interface FormValuesType {
     actionType: string; // "read" or "write"
 }
 
-const ExifToolComponent = () => {
+const ExifTool = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [allowSave, setAllowSave] = useState(false);
@@ -30,3 +30,27 @@ const ExifToolComponent = () => {
     const description = "ExifTool is a platform-independent command-line application for reading, writing, and editing metadata in a wide variety of file types.";
     const steps = "";
     const dependencies = ["exiftool"]; // ExifTool dependency.
+
+
+
+    let form = useForm<FormValuesType>({
+        initialValues: {
+            filePath: "",
+            tag: "",
+            value: "",
+            actionType: "read",
+        },
+    });
+
+    useEffect(() => {
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable);
+                setOpened(!isAvailable);
+                setLoadingModal(false);
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false);
+            });
+    }, []);
