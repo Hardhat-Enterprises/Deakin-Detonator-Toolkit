@@ -102,7 +102,7 @@ const Sublist3r = () => {
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
@@ -124,7 +124,7 @@ const Sublist3r = () => {
             "sublist3r",
             [...args, "--no-color"],
             handleProcessData,
-            handleProcessTermination
+            handleProcessTermination,
         )
             .then(() => {
                 // Deactivate loading state

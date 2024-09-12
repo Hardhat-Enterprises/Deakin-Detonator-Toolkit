@@ -188,7 +188,7 @@ const PayloadGenerator = () => {
             // Cancel the Loading Overlay
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
     // Sends a SIGTERM signal to gracefully terminate the process
     const handleCancel = () => {
@@ -279,7 +279,7 @@ const PayloadGenerator = () => {
                 "msfvenom",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);

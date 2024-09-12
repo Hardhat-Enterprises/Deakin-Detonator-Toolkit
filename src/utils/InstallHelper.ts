@@ -9,7 +9,7 @@ import { CommandHelper } from "./CommandHelper";
  */
 export const installDependencies = async (
     dependencies: string[],
-    setOutput: React.Dispatch<React.SetStateAction<string>>
+    setOutput: React.Dispatch<React.SetStateAction<string>>,
 ): Promise<boolean[]> => {
     /**
      * Handles the processed data from a process.
@@ -43,7 +43,7 @@ export const installDependencies = async (
                 // Log end of apt-get update command
                 handleProcessData(`[DEBUG] 'apt-get update' completed at: ${new Date().toISOString()}`);
                 resolve();
-            }
+            },
         );
     });
 
@@ -65,7 +65,7 @@ export const installDependencies = async (
                 // Log end of dependencies installation
                 handleProcessData(`[DEBUG] Installation of dependencies completed at: ${new Date().toISOString()}`);
                 resolve();
-            }
+            },
         );
     });
 

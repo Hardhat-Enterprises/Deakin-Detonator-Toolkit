@@ -83,7 +83,7 @@ const SearchSploit = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
     // Sends a SIGTERM signal to gracefully terminate the process
     const handleCancel = () => {
@@ -138,7 +138,7 @@ const SearchSploit = () => {
                 "searchsploit",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);
@@ -163,7 +163,7 @@ const SearchSploit = () => {
                     searchOption: selectedSearchOption,
                     out_put: selectedout_putOption,
                     non_search: selectedNonSearchOption,
-                })
+                }),
             )}
         >
             <LoadingOverlay visible={loading} />

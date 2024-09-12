@@ -96,7 +96,7 @@ const ArpanameTool = () => {
             setAllowSave(true); // Enable the save option now that the process has completed
             setHasSaved(false); // Reset the saved state for the new output
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -144,7 +144,7 @@ const ArpanameTool = () => {
             "arpaname",
             argsIP,
             handleProcessData, // Pass handleProcessData as callback for handling process data
-            handleProcessTermination
+            handleProcessTermination,
         );
         setPidTarget(result_target.pid); // Store the process ID for potential termination
 

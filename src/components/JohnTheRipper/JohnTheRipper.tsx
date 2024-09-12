@@ -142,7 +142,7 @@ const JohnTheRipper = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
@@ -178,14 +178,14 @@ const JohnTheRipper = () => {
             selectedModeOption === "dictionary"
                 ? args.push(`--wordlist=${values.wordList}`)
                 : selectedModeOption === "incremental"
-                ? args.push(`-incremental:${values.incrementOrder}`)
-                : args.push(`--single`);
+                  ? args.push(`-incremental:${values.incrementOrder}`)
+                  : args.push(`--single`);
 
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 `john`,
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             )
                 .then(({ output, pid }) => {
                     // Update the UI with the results from the executed command
@@ -217,14 +217,14 @@ const JohnTheRipper = () => {
             selectedModeOption === "dictionary"
                 ? argsCrack.push(`--wordlist=${values.wordList}`)
                 : selectedModeOption === "incremental"
-                ? argsCrack.push(`-incremental:${values.incrementOrder}`)
-                : argsCrack.push(`--single`);
+                  ? argsCrack.push(`-incremental:${values.incrementOrder}`)
+                  : argsCrack.push(`--single`);
 
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 `john`,
                 argsCrack,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             )
                 .then(({ output, pid }) => {
                     // Update the UI with the results from the executed command

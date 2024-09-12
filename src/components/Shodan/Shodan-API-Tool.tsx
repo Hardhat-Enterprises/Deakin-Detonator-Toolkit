@@ -108,7 +108,7 @@ export function ShodanAPITool() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -144,7 +144,7 @@ export function ShodanAPITool() {
                 "python3",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             //Update command with the result.
             setPid(result.pid);

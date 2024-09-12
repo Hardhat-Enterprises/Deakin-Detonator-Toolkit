@@ -80,7 +80,7 @@ const NetcatTool = () => {
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     const onSubmit = async (values: FormValuesType) => {
@@ -125,7 +125,7 @@ const NetcatTool = () => {
                     "bash",
                     ["-c", command],
                     handleProcessData,
-                    handleProcessTermination
+                    handleProcessTermination,
                 )
                     .then(({ output, pid }) => {
                         // Update the UI with the results from the executed command

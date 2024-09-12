@@ -93,7 +93,7 @@ const Hashcat = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
     // Sends a SIGTERM signal to gracefully terminate the process
     const handleCancel = () => {
@@ -131,7 +131,7 @@ const Hashcat = () => {
                 `--increment-min`,
                 `${values.minPwdLen}`,
                 `--increment-max`,
-                `${values.maxPwdLen}`
+                `${values.maxPwdLen}`,
             );
             if (values.maskCharsets) {
                 args.push(`${values.maskCharsets}`);
@@ -143,7 +143,7 @@ const Hashcat = () => {
                 `--increment-min`,
                 `${values.minPwdLen}`,
                 `--increment-max`,
-                `${values.maxPwdLen}`
+                `${values.maxPwdLen}`,
             );
             if (values.maskCharsets) {
                 args.push(`${values.maskCharsets}`);
@@ -158,7 +158,7 @@ const Hashcat = () => {
                 "hashcat",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);
@@ -188,7 +188,7 @@ const Hashcat = () => {
     return (
         <form
             onSubmit={form.onSubmit((values) =>
-                onSubmit({ ...values, attackMode: selectedModeOption, inputType: selectedInputOption })
+                onSubmit({ ...values, attackMode: selectedModeOption, inputType: selectedInputOption }),
             )}
         >
             <LoadingOverlay visible={loading} />

@@ -93,7 +93,7 @@ const TShark = () => {
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
     /**
      * onSubmit: Asynchronous handler for the form submission event.
@@ -125,7 +125,7 @@ const TShark = () => {
                     "bash", // The command is executed through bash to facilitate correct command syntax (TShark does not require bash to run)
                     ["-c", command],
                     handleProcessData,
-                    handleProcessTermination
+                    handleProcessTermination,
                 )
                     .then(({ output, pid }) => {
                         // Update the UI with the results from the executed command
