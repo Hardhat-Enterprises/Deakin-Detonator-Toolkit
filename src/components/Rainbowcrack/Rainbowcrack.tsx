@@ -56,7 +56,6 @@ const RainbowCrack = () => {
 
     const dependencies = ["rainbowcrack"]; // Dependencies required by the component.just check
 
-
     // Form hook to handle form input.
     const form = useForm({
         initialValues: {
