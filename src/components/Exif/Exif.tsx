@@ -73,3 +73,13 @@ const ExifTool = () => {
         },
         [handleProcessData]
     );
+
+    const onSubmit = async (values: FormValuesType) => {
+        setLoading(true);
+        let args = [values.filePath];
+
+        if (values.actionType === "read") {
+            args.push("-" + values.tag);
+        } else if (values.actionType === "write") {
+            args.push("-" + values.tag + "=" + values.value);
+        }
