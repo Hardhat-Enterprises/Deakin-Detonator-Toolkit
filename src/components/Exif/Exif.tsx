@@ -83,3 +83,14 @@ const ExifTool = () => {
         } else if (values.actionType === "write") {
             args.push("-" + values.tag + "=" + values.value);
         }
+    
+        CommandHelper.runCommandWithPkexec("exiftool", args, handleProcessData, handleProcessTermination)
+            .then(() => {
+                setLoading(false);
+            })
+            .catch((error) => {
+                setOutput(`Error: ${error.message}`);
+                setLoading(false);
+            });
+        setAllowSave(true);
+    };
