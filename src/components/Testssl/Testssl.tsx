@@ -226,6 +226,7 @@ const TestSSL = () => {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
+                {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
                     <TextInput label="Target (hostname or IP)" required {...form.getInputProps("target")} />
                     <Grid>
