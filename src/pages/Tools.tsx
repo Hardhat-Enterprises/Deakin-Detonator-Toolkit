@@ -5,14 +5,15 @@ import ToolItem from "../components/ToolItem/ToolItem";
 
 const ToolsPage = () => {
     const categories = [
-        "Network Scanning and Enumeration",
-        "Vulnerability Assessment and Exploitation",
-        "Password Cracking and Authentication Testing",
-        "Web Application Testing",
+        "All",
         "Attack Tools",
         "File Analysis and Recovery",
         "Information Gathering and Analysis",
         "Miscellaneous",
+        "Network Scanning and Enumeration",
+        "Password Cracking and Authentication Testing",
+        "Vulnerability Assessment and Exploitation",
+        "Web Application Testing",
     ];
 
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -43,7 +44,7 @@ const ToolsPage = () => {
                 <tbody>
                     {tools.map((tool) => {
                         // Check if the selected category matches the tool's category
-                        if (!selectedCategory || tool.category === selectedCategory) {
+                        if (!selectedCategory || selectedCategory === "All" || tool.category === selectedCategory) {
                             return (
                                 <ToolItem
                                     title={tool.name}
