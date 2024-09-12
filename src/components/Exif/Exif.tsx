@@ -94,3 +94,17 @@ const ExifTool = () => {
             });
         setAllowSave(true);
     };
+
+    const handleSaveComplete = () => {
+        setHasSaved(true);
+        setAllowSave(false);
+    };
+
+    const clearOutput = () => {
+        setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
+    };
+
+
+}
