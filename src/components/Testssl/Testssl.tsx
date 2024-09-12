@@ -33,7 +33,7 @@ const TestSSL = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [opened, setOpened] = useState(true);
+    const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
     const [pidTarget, setPidTarget] = useState("");
 
@@ -43,11 +43,11 @@ const TestSSL = () => {
     const steps =
         "Step 1: Enter the target website or IP address.\n" +
         "Step 2: Select the desired scan options.\n" +
-        "Step 3: Click 'Start Scan' to begin the process.\n" +
+        "Step 3: Click 'Start " + title + "' to begin the process.\n" +
         "Step 4: View the output to see the results of the SSL/TLS analysis.";
     const sourceLink = "https://github.com/drwetter/testssl.sh";
     const tutorial = "";
-    const dependencies = ["testssl"];
+    const dependencies = ["testssl.sh"];
 
     /**
      * Validates if the given input string is a valid IPv4 or IPv6 address.
@@ -277,7 +277,7 @@ const TestSSL = () => {
                         </Grid.Col>
                     </Grid>
                     <MultiSelect
-                        label="Severity Level (--severity)"
+                        label="Severity level (--severity)"
                         data={[
                             { value: "LOW", label: "Low" },
                             { value: "MEDIUM", label: "Medium" },
@@ -289,7 +289,7 @@ const TestSSL = () => {
                     />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit" loading={loading}>
-                        Start Scan
+                        Start {title}
                     </Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
