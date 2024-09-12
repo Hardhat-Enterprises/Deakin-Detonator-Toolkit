@@ -32,7 +32,7 @@ const TestSSL = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [opened, setOpened] = useState(true);
+    const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
 
     // Constants
