@@ -50,7 +50,7 @@ const ARPSpoofing = () => {
         "Step 4: View the output block below to view the results.";
 
     // Component Constants.
-    const dependencies = ["dsniff"]; // Contains the dependencies required for the component.
+    const dependencies = ["arpspoof"]; // Contains the dependencies required for the component.
     const sourceLink = "https://github.com/tecknicaltom/dsniff/blob/master/arpspoof.c"; // contains link to the source code (arpspoof)
     const tutorial = "";
 
