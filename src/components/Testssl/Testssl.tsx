@@ -45,7 +45,7 @@ const TestSSL = () => {
         "Step 4: View the output to see the results of the SSL/TLS analysis.";
     const sourceLink = "https://github.com/drwetter/testssl.sh";
     const tutorial = "";
-    const dependencies = ["testssl"];
+    const dependencies = ["testssl.sh"];
 
     /**
      * Validates if the given input string is a valid IPv4 or IPv6 address.
