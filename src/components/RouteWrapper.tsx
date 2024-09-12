@@ -643,7 +643,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Testssl",
         element: <TestSSL />,
         description:
-            "testssl.sh is a versatile command-line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
+            "testssl.sh is a versatile command line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
         category: "Network Scanning and Enumeration",
     },
     {
