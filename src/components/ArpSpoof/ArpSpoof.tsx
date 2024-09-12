@@ -1,4 +1,4 @@
-import { Button, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState, useEffect, useCallback } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
