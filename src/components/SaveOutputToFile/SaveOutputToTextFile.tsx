@@ -68,7 +68,7 @@ export function SaveOutputToTextFile_v2(
                         value={filename}
                         onChange={handleFilenameChange}
                     />
-                    <Button type={"button"} onClick={handleSave}>
+                    <Button type={"button"} onClick={handleSave} style={{ backgroundColor: "#1C5F4A", color: "white" }}>
                         Save Output To File
                     </Button>
                 </>
