@@ -278,6 +278,11 @@
                         "args": true
                     },
                     {
+                        "name": "testssl",
+                        "cmd": "testssl",
+                        "args": true
+                    },
+                    {
                         "name": "traceroute",
                         "cmd": "sudo traceroute",
                         "args": true

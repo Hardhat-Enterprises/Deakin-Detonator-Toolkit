@@ -77,6 +77,7 @@ import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
+import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
 
@@ -662,6 +663,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used for gathering information from various public sources, such as search engines and social media, to find email addresses and domain details.",
         category: "Information Gathering and Analysis",
+    },
+    {
+        name: "Testssl.sh",
+        path: "/tools/Testssl",
+        element: <TestSSL />,
+        description:
+            "testssl.sh is a versatile command line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Traceroute",
