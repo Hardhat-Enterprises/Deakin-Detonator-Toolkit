@@ -40,10 +40,11 @@ export function BEDTool() {
 
     // Component Constants.
     const title = "BEDTool"; // Title of the component.
-    const description = "BED (Bruteforce Exploit Detector) is a sophisticated tool designed to check network services for a range of security vulnerabilities including buffer overflows and format string weaknesses."; // Description of the component.
-    const steps = 
-        "1. Select a Service: Choose the service to test from the dropdown menu, for instance, \"HTTP\" to test a web server.\n" +
-        "2. Input Required Fields: Fill in the fields that appear based on the selected service. For example, choosing \"FTP\" will prompt for additional required fields, such as username and password.\n" +
+    const description =
+        "BED (Bruteforce Exploit Detector) is a sophisticated tool designed to check network services for a range of security vulnerabilities including buffer overflows and format string weaknesses."; // Description of the component.
+    const steps =
+        '1. Select a Service: Choose the service to test from the dropdown menu, for instance, "HTTP" to test a web server.\n' +
+        '2. Input Required Fields: Fill in the fields that appear based on the selected service. For example, choosing "FTP" will prompt for additional required fields, such as username and password.\n' +
         "3. Custom Configuration (Optional): Activate 'Custom Configuration' to enter a specific target IP address and port number. If this is not enabled, the tool will default to scanning the local machine.\n" +
         "4. Start Scan: Click the 'Scan' button to begin the evaluation.";
     const sourceLink = "https://www.kali.org/tools/bed/"; // Link to the source documentation.
