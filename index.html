@@ -22,12 +22,30 @@
         <!-- Logo Container -->
         <div id="logo-container">
             <a href="/about">
-                <img src="logo.png" alt="Deakin Detonator Toolkit Logo" />
+                <img id="logo" src="logo-light.png" alt="Deakin Detonator Toolkit Logo" />
             </a>
         </div>
 
         <!-- Main Application -->
         <div id="root"></div>
         <script type="module" src="/src/main.tsx"></script>
+
+        <script>
+            // Detect user's color scheme and set the logo accordingly
+            const logo = document.getElementById("logo");
+            const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+            if (prefersDarkScheme) {
+                logo.src = "logo-dark.png"; // Use dark mode logo
+            } else {
+                logo.src = "logo-light.png"; // Use light mode logo
+            }
+
+            // Listen for color scheme changes and update logo
+            window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+                const newColorScheme = e.matches ? "logo-dark.png" : "logo-light.png";
+                logo.src = newColorScheme;
+            });
+        </script>
     </body>
 </html>
