@@ -44,17 +44,17 @@ const dmitry = () => {
     // Component Constants.
     const title = "Deepmagic Information Gathering Tool"; // Title of the component.
     const description =
-        "DMitry is a UNIX/(GNU) Linux command line application written in C. DMitry will scan to try and find " +
+        "Dmitry is a UNIX/(GNU) Linux command line application written in C. Dmitry will scan to try and find " +
         "possible subdomains, email addresses and uptime information, and further perform tcp port scans, and " +
         "whois lookups."; // Description of the component.
     const steps =
         "Step 1: Enter a valid domain or IP address to be scanned.\n" +
         "       Eg: 192.168.0.1\n\n" +
-        "Step 2: Enter a delay between requests. Default is 2 (milliseconds). Can be left blank.\n" +
-        "       Eg: 2\n\n" +
         "Step 3: Click Start Scanning to commence Dmitry's operation.\n\n" +
-        "Step 4: View the Output block below to view the results of the tool's execution.\n";
-    const sourceLink = "https://www.kali.org/tools/dmitry/\n"; // Link to the source code (or Kali Tools).
+        "Step 4: View the Output block below to view the results of the tool's execution.\n" +
+        "Note: For more advanced options, enable the Advanced Mode switch to access additional features.\n" +
+        "Note 2: If you perform TCP port scanning, you can specify a delay between requests. Default is 2 (milliseconds).\n"; 
+    const sourceLink = "https://www.kali.org/tools/dmitry/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["dmitry"]; // Contains the dependencies required by the component.
 
@@ -286,7 +286,7 @@ const dmitry = () => {
                                 onChange={(e) => setCheckedNetcraft(e.currentTarget.checked)}
                             />
                             <Checkbox
-                                label={"Search for a possible subdomains."}
+                                label={"Search for possible subdomains."}
                                 checked={checkedSubdomains}
                                 onChange={(e) => setCheckedSubdomains(e.currentTarget.checked)}
                             />
@@ -324,7 +324,7 @@ const dmitry = () => {
                         </>
                     )}
 
-                    <Button type={"submit"}>Start Scanning</Button>
+                    <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
