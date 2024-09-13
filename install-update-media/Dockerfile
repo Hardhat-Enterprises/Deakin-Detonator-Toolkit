@@ -1,0 +1,63 @@
+# Use Kali Linux as the base image
+FROM rust:latest
+# FROM rust:slim
+
+# Set working directory
+WORKDIR /root
+
+# Add Debian security updates and main repository to sources.list
+RUN echo "deb http://security.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list && \
+    echo "deb http://ftp.au.debian.org/debian buster main" >> /etc/apt/sources.list
+
+# Preconfigure debconf to restart services during upgrades without asking
+RUN echo 'libc6 libraries/restart-without-asking boolean true' | debconf-set-selections
+
+# Update package list
+RUN apt-get update -y
+
+# Install dependencies including Xvfb and other X11 utilities for debugging
+RUN apt-get install -y \
+    git \
+    pkgconf \
+    libgtk-3-dev \
+    libcanberra-gtk3-module \
+    libcanberra-gtk-module \
+    libsoup2.4-dev \
+    webkit2gtk-4.0 \
+    nodejs \
+    npm \
+    xvfb \
+    x11-xserver-utils
+
+# Clone the Deakin Detonator Toolkit repository
+RUN git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
+
+# Change to the toolkit directory
+WORKDIR /root/Deakin-Detonator-Toolkit
+
+# Install Rust
+# RUN curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
+
+# Load Cargo environment variables
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+VOLUME /usr/bin
+
+# Update package list again
+# RUN apt-get update -y
+
+# Install Yarn globally
+RUN npm install -g yarn
+
+# Install Yarn dependencies
+RUN yarn install
+RUN yarn add @tauri-apps/cli --dev
+RUN yarn upgrade @tauri-apps/api @tauri-apps/cli
+RUN yarn add @tauri-apps/api
+
+# Expose port 8080 and 5173
+EXPOSE 8080
+EXPOSE 5173
+
+# Start Xvfb and then the Tauri development environment
+CMD ["xvfb-run", "--server-args=-screen 0 1024x768x24", "yarn", "run", "tauri", "dev"]
