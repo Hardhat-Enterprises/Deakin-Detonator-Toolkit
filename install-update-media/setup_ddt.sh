@@ -59,5 +59,8 @@ fi
 # Install Yarn dependencies
 yarn install
 
+# Move exploits to DDT directory
+chmod +x install-update-media/install_exploits.sh && ./install-update-media/install_exploits.sh
+
 # Modify start script permissions and start application
 chmod +x install-update-media/start-ddt.sh && ./install-update-media/start-ddt.sh

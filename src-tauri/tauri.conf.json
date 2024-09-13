@@ -153,6 +153,11 @@
                         "args": true
                     },
                     {
+                        "name": "hping3",
+                        "cmd": "hping3",
+                        "args": true
+                    },
+                    {
                         "name": "hydra",
                         "cmd": "hydra",
                         "args": true
@@ -263,6 +268,11 @@
                         "args": true
                     },
                     {
+                        "name": "sqlmap",
+                        "cmd": "sqlmap",
+                        "args": true
+                    },
+                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
                         "args": true
@@ -293,8 +303,8 @@
                         "args": true
                     },
                     {
-                        "name": "WPScan",
-                        "cmd": "WPScan",
+                        "name": "wpscan",
+                        "cmd": "wpscan",
                         "args": true
                     },
                     {

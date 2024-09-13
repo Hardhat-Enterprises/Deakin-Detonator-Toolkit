@@ -18,7 +18,7 @@ import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
-import SMGGhostScanner from "./SMGGhostScanner/SMGGhostScanner";
+import SMBGhostScanner from "./SMBGhostScanner/SMBGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
@@ -77,6 +77,8 @@ import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
+import Hping3 from "./Hping3/Hping3";
+import SQLmap from "./SQLmap/SQLmap";
 
 export interface RouteProperties {
     name: string;
@@ -175,93 +177,93 @@ export const ROUTES: RouteProperties[] = [
         name: "Busqueda",
         path: "/walkthroughs/Busqueda",
         element: <Busqueda />,
-        description: "A walkthrough on Busqueda Hack the Box challenge",
-        category: "",
+        description: "A walkthrough on the Busqueda Hack The Box challenge",
+        category: "Miscellaneous",
     },
     {
         name: "Fawn",
         path: "/walkthroughs/Fawn",
         element: <Fawn />,
-        description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
-        category: "",
+        description: "A walkthrough on the Fawn Hack The Box Challenge showcasing DDT nmap tool",
+        category: "Miscellaneous",
     },
     {
         name: "Keeper",
         path: "/walkthroughs/Keeper",
         element: <Keeper />,
         description:
-            "A walkthrough on the Keeper HackTheBox Challenge showcasing privilege escalation and web application security",
-        category: "",
+            "A walkthrough on the Keeper Hack The Box Challenge showcasing privilege escalation and web application security",
+        category: "Web Application Testing",
     },
     {
         name: "Monitorstwo",
         path: "/walkthroughs/Monitorstwo",
         element: <Monitorstwo />,
         description:
-            "A walkthrough on the Monitorstwo HackTheBox Challenge centered around network monitoring and intrusion detection systems",
-        category: "",
+            "A walkthrough on the Monitorstwo Hack The Box Challenge centered around network monitoring and intrusion detection systems",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Meow",
         path: "/walkthroughs/Meow",
         element: <Meow />,
         description:
-            "A walkthrough on the Meow HackTheBox challenge involving basic enumeration and exploitation techniques to gain access to the target system.",
-        category: "",
+            "A walkthrough on the Meow Hack The Box challenge involving basic enumeration and exploitation techniques to gain access to the target system.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "MrRobot",
         path: "/walkthroughs/MrRobot",
         element: <MrRobot />,
         description: "A walkthrough on the Mr Robot TryHackMe Capture the flag",
-        category: "",
+        category: "Miscellaneous",
     },
     {
         name: "Pentesting",
         path: "/walkthroughs/Pentesting",
         element: <Pentesting />,
         description: "A walkthrough on a Pentesting room with focus on brute force attack and privilege escalation",
-        category: "",
+        category: "Penetration Testing",
     },
     {
         name: "Persistence",
         path: "/walkthroughs/Persistence",
         element: <Persistence />,
         description:
-            "A walkthrough on HTB challenge: Persistence is Key with focus on forensics investigation on an FTP server",
-        category: "",
+            "A walkthrough on the Hack The Box challenge: Persistence is Key with focus on forensics investigation on an FTP server",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "Pilgrimage",
         path: "/walkthroughs/Pilgrimage",
         element: <Pilgrimage />,
         description:
-            "A walkthrough on the Pilgrimage Hack the Box challenge focused on exploiting a web application vulnerability to gain access to the system",
-        category: "",
+            "A walkthrough on the Pilgrimage Hack The Box challenge focused on exploiting a web application vulnerability to gain access to the system",
+        category: "Web Application Testing",
     },
     {
         name: "Racecar",
         path: "/walkthroughs/Racecar",
         element: <Racecar />,
         description:
-            "A walkthrough on Racecar Hack the Box challenge utilizing cryptographic analysis and reverse engineering skills to decipher and exploit a custom encryption algorithm",
-        category: "",
+            "A walkthrough on Racecar Hack The Box challenge utilizing cryptographic analysis and reverse engineering skills to decipher and exploit a custom encryption algorithm",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "Redeemer",
         path: "/walkthroughs/Redeemer",
         element: <Redeemer />,
         description:
-            "A walkthrough on the Redeemer HackTheBox challenge showcasing enumeration and post-exploitation tasks, testing your expertise in penetration testing",
-        category: "",
+            "A walkthrough on the Redeemer Hack The Box challenge showcasing enumeration and post-exploitation tasks, testing your expertise in penetration testing",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Topology",
         path: "/walkthroughs/Topology",
         element: <Topology />,
         description:
-            "A walkthrough on Topology Hack the Box challenge which requires knowledge of network protocols, routing, and security configurations",
-        category: "",
+            "A walkthrough on Topology Hack The Box challenge which requires knowledge of network protocols, routing, and security configurations",
+        category: "Network Scanning and Enumeration",
     },
     //TOOLS BELOW THIS COMMENT - PLEASE ADD NEW TOOLS IN ALPHABETICAL ORDER
     {
@@ -489,6 +491,14 @@ export const ROUTES: RouteProperties[] = [
         category: "Password Cracking and Authentication Testing",
     },
     {
+        name: "Hping3",
+        path: "/tools/hping3",
+        element: <Hping3 />,
+        description:
+            "Hping3 is a network packet crafting and analysis tool. It is used for testing firewalls, network performance, port scanning, and network auditing.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
         name: "Hydra",
         path: "/tools/Hydra",
         element: <Hydra />,
@@ -615,9 +625,9 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
-        name: "SMG-Ghost Scanner",
-        path: "/tools/SMGGhostScanner",
-        element: <SMGGhostScanner />,
+        name: "SMB-Ghost Scanner",
+        path: "/tools/SMBGhostScanner",
+        element: <SMBGhostScanner />,
         description: "A tool used to detect whether a target is vulnerable to the CVE-2020-0796 vulnerability in SMBv3",
         category: "Vulnerability Assessment and Exploitation",
     },
@@ -628,6 +638,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used to identify and assess vulnerabilities in devices that use the SNMP protocol by querying SNMP information.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "SQLmap",
+        path: "/tools/SQLmap",
+        element: <SQLmap />,
+        description:
+            "SQLmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.",
+        category: "Web Application Testing",
     },
     {
         name: "Sublist3r",
