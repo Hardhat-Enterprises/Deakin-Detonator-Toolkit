@@ -611,7 +611,7 @@ export const ROUTES: RouteProperties[] = [
     {
         name: "SlowHttpTest",
         path: "/tools/slowhttptest",
-        element: <SlowHttpTest />, // Add SlowHttpTest component
+        element: <SlowHttpTest />,
         description: "A tool for simulating slow HTTP attacks to test web server resilience.",
         category: "Web Application Testing",
     },
