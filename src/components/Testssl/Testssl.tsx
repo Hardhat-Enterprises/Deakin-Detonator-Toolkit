@@ -43,7 +43,9 @@ const TestSSL = () => {
     const steps =
         "Step 1: Enter the target website or IP address.\n" +
         "Step 2: Select the desired scan options.\n" +
-        "Step 3: Click 'Start " + title + "' to begin the process.\n" +
+        "Step 3: Click 'Start " +
+        title +
+        "' to begin the process.\n" +
         "Step 4: View the output to see the results of the SSL/TLS analysis.";
     const sourceLink = "https://github.com/drwetter/testssl.sh";
     const tutorial = "";
@@ -137,9 +139,9 @@ const TestSSL = () => {
         const cleanedData = cleanOutput(data);
         setOutput((prevOutput) => {
             // Split the new data into lines
-            const lines = cleanedData.split('\n');
+            const lines = cleanedData.split("\n");
             // Append each line to the previous output, ensuring a newline between them
-            return prevOutput + lines.map(line => line.trim()).join('\n') + '\n';
+            return prevOutput + lines.map((line) => line.trim()).join("\n") + "\n";
         });
     }, []);
 
@@ -153,7 +155,9 @@ const TestSSL = () => {
         } else if (signal === 15) {
             setOutput((prevOutput) => prevOutput + "\nScan was manually terminated.");
         } else {
-            setOutput((prevOutput) => prevOutput + `\nScan terminated with exit code: ${code} and signal code: ${signal}`);
+            setOutput(
+                (prevOutput) => prevOutput + `\nScan terminated with exit code: ${code} and signal code: ${signal}`
+            );
         }
         setLoading(false);
         setAllowSave(true);
@@ -198,7 +202,7 @@ const TestSSL = () => {
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
             handleProcessData(errorMessage);
-            handleProcessTermination({ code: 1, signal: 0 });        
+            handleProcessTermination({ code: 1, signal: 0 });
         }
     };
 
