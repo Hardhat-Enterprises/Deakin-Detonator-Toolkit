@@ -1,8 +1,12 @@
 import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { RenderComponent } from "../UserGuide/UserGuide";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; // Renaming the component for clarity
 
 interface FormValuesType {
@@ -18,23 +22,6 @@ interface FormValuesType {
     maxPwdLen: number;
 }
 
-const title = "Hashcat";
-const description_userguide = `
-    Hashcat is an advanced password recovery tool that provides brute-force attacks that are conducted with the hash values of passwords that are either guessed or applied by the tool. DDT currently supports 3 attack modes including Straight, Brute-force, and Hybrid Wordlist + Mask.
-
-    Step-by-Step Guide:
-    1. Pick an attack mode.
-    2. Input hash type and hash algorithm code.
-    3. Input the hash value.
-    4. Input the password file.
-    5. Add additional commands as needed.
-    6. Click Scan to commence.
-    7. View the output below.
-`;
-
-const inputTypeOptions = ["Hash Value", "File"];
-const attackModeOptions = ["Straight", "Brute-force", "Hybrid Wordlist + Mask"];
-
 const Hashcat = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
@@ -43,6 +30,28 @@ const Hashcat = () => {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
+
+    const title = "Hashcat";
+    const description =
+        "Hashcat is an advanced password recovery tool that provides brute-force attacks that are conducted with the hash values of passwords that are either guessed or applied by the tool. DDT currently supports 3 attack modes including Straight, Brute-force, and Hybrid Wordlist + Mask.";
+    const Steps =
+        "Step-by-Step Guide:" +
+        "Step 1: Pick an attack mode." +
+        "Step 2: Input hash type and hash algorithm code." +
+        "Step 3: Input the hash value." +
+        "Step 4: Input the password file." +
+        "Step 5: Add additional commands as needed." +
+        "Step 6: Click Scan to commence." +
+        "Step 7: View the output below.";
+    const sourceLink = "https://www.kali.org/tools/hashcat/"; // Link to the source code
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["hashcat"]; // Contains the dependencies required by the component
+
+    const inputTypeOptions = ["Hash Value", "File"];
+    const attackModeOptions = ["Straight", "Brute-force", "Hybrid Wordlist + Mask"];
 
     const form = useForm<FormValuesType>({
         initialValues: {
@@ -58,6 +67,21 @@ const Hashcat = () => {
             maxPwdLen: 1,
         },
     });
+
+    // Check if the command is available and set the state variables accordingly.
+    useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Also set loading to false in case of error
+            });
+    }, []);
 
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data);
@@ -81,8 +105,8 @@ const Hashcat = () => {
     );
 
     const handleCancel = () => {
-        if (pid) {
-            const args = ["-15", pid];
+        if (pid !== null) {
+            const args = [`-15`, pid];
             CommandHelper.runCommand("kill", args);
         }
     };
@@ -145,7 +169,7 @@ const Hashcat = () => {
         setOutput("");
         setHasSaved(false);
         setAllowSave(false);
-    }, []);
+    }, [setOutput]);
 
     const isPasswordFile = selectedModeOption === "Straight" || selectedModeOption === "Hybrid Wordlist + Mask";
     const isCharset = selectedModeOption === "Brute-force" || selectedModeOption === "Hybrid Wordlist + Mask";
@@ -195,6 +219,7 @@ const Hashcat = () => {
             </Grid>
 
             <Stack>
+                {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                 <NumberInput label="Hash Algorithm Code" {...form.getInputProps("hashAlgorithmCode")} required />
                 {!isFile && <TextInput label="Hash Value" {...form.getInputProps("hashValue")} required />}
                 {isFile && <TextInput label="Hash File Path" {...form.getInputProps("hashFilePath")} required />}
