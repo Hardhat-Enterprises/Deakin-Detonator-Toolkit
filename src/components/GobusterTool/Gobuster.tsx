@@ -37,12 +37,7 @@ const GoBusterTool = () => {
     // Component Constants.
     const title = "GoBuster"; // Title of the component.
     const description = "GoBuster is a tool for directory and file brute-forcing on web servers."; // Description of the component.
-    const steps =
-        "Step 1: Type in the name of your fake host.\n" +
-        "Step 2: Select your desired channel.\n" +
-        "Step 3: Specify the WLAN interface to be used.\n" +
-        "Step 4: Click 'Start AP' to begin the process.\n" +
-        "Step 5: View the output block to see the results. "; // Steps to undertake to use the tool.
+    const steps = "Step 1: Input Target Website URL.\n" + "Step 2: Input the path for Wordlist file.\n"; // Steps to undertake to use the tool.
     const sourceLink = "https://www.kali.org/tools/gobuster/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["gobuster"]; // Contains the dependencies required by the component.
