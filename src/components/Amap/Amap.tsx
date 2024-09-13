@@ -16,6 +16,8 @@ interface FormValuesType {
     target: string;
     port: string;
     options: string;
+    connectionTimeout: string;
+    responseTimeout: string;
 }
 
 /**
@@ -50,6 +52,8 @@ const AMAP = () => {
             target: "",
             port: "",
             options: "",
+            connectionTimeout: "10",
+            responseTimeout: "10",
         },
     });
 
@@ -121,7 +125,13 @@ const AMAP = () => {
         setLoading(true);
 
         // Construct arguments for the amap command based on form input
-        const args = [values.target, "-bqv", values.port, values.options];
+        const args = [
+            values.target,
+            "-bqv",
+            values.port,
+            `-T ${values.connectionTimeout}`,
+            `-t ${values.responseTimeout}`,
+        ];
 
         // Execute the amap command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("amap", args, handleProcessData, handleProcessTermination)
@@ -167,7 +177,16 @@ const AMAP = () => {
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label={"Target Host"} required {...form.getInputProps("target")} />
                     <TextInput label={"Port(s)"} required {...form.getInputProps("port")} />
-                    <TextInput label={"Additional Options"} {...form.getInputProps("options")} />
+                    <TextInput
+                        label={"Connection Timeout (seconds)"}
+                        required
+                        {...form.getInputProps("connectionTimeout")}
+                    />
+                    <TextInput
+                        label={"Response Timeout (seconds)"}
+                        required
+                        {...form.getInputProps("responseTimeout")}
+                    />
                     {SaveOutputToTextFile(output)}
                     <Button type={"submit"}>Start Scan</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
