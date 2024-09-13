@@ -47,18 +47,18 @@ const NetcatTool = () => {
     const description =
         "A simple Unix utility which reads and writes data across network connections using TCP or UDP protocol."; // Description of the component.
     const steps =
-        +"Step 1: If you want to listen for connections for chat or reverse shell choose the listen option and provide a port number.\n" +
+        "Step 1: If you want to listen for connections for chat or reverse shell choose the listen option and provide a port number.\n" +
         "Step 2: If you want to scan for ports, provide an IP address and a port range\n" +
-        "Step 3: If you want to send a file, provide the destination IP address, port number, and File name\n" +
+        "Step 3: If you want to send a file, provide the destination IP address, port number, and file name\n" +
         "Step 4: If you want to receive a file, provide a port number and the file name.\n" +
-        "Step 5: If you want to port scan a domain, provide Domain name and a port number. \n\n" +
+        "Step 5: If you want to port scan a domain, provide domain name and a port number. \n\n" +
         "Note:   You should only use website port scan to a domain that you own.\n" +
         "Note 2: Using the sending/receiving file option might seem like it is not working, but it is working.\n" +
-        "Note 3: You will need two devices for file transfer to work — one for sending and the other need to be set up on the specified port to capture the incoming file.\n" +
-        "        Ensure both machines are properly configured and connected to the same network or through an accessible route (such as a VPN, or through valid public IP addresses) to complete the file transfer.\n";
+        "Note 3: You will need two devices for file transfer to work — one for sending and the other needs to be set up on the specified port to capture the incoming file.\n" +
+        "Ensure both machines are properly configured and connected to the same network or through an accessible route (such as a VPN, or through valid public IP addresses) to complete the file transfer.\n";
     const sourceLink = "https://www.kali.org/tools/netcat/"; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["netcat-traditional"]; // Contains the dependencies required by the component
+    const dependencies = ["nc"]; // Contains the dependencies required by the component
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
