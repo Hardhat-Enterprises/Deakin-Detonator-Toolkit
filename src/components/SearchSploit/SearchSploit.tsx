@@ -1,4 +1,4 @@
-import { Button, NativeSelect, Stack, TextInput, Text, List, Accordion, Switch } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput, Text, List, Accordion } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -7,7 +7,6 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
-import { RenderComponent } from "../UserGuide/UserGuide";
 
 // Define form values type
 interface FormValues {
@@ -174,19 +173,15 @@ const SearchSploit = () => {
     }, []);
 
     return (
-        <RenderComponent
-            title={title}
-            description={description}
-            steps={steps}
-            tutorial={tutorial}
-            sourceLink={sourceLink}
-        >
-            <InstallationModal
-                isOpen={opened}
-                setOpened={setOpened}
-                feature_description={description}
-                dependencies={dependencies}
-            />
+        <>
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                />
+            )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleCancel, handleProcessTermination)}
@@ -244,7 +239,7 @@ const SearchSploit = () => {
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
-        </RenderComponent>
+        </>
     );
 };
 
