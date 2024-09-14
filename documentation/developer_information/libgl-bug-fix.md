@@ -2,7 +2,7 @@
 
 ## Review the " failed to create dri2" error message and Identify the envionment(Kali Linux on vm with windows 10).
 
-#Each command should be run on the command line one by one for best results.
+##### Each command should be run on the command line one by one for best results.
 
 #ensure that you are in the DDT directory
 yarn install
@@ -15,7 +15,8 @@ sudo apt update
 sudo apt upgrade -y
 sudo reboot
 
-#Install/update graphics Drivers
+##### Install/update graphics Drivers.
+
 sudo apt install open-vm-tools-desktop -y
 sudo reboot
 
