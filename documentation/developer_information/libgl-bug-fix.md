@@ -1,14 +1,16 @@
-#BUG-FIX-LIBGL-ERROR.
-#Review the " failed to create dri2" error message
+# BUG-FIX-LIBGL-ERROR.
 
-#Identify the envionment(Kali Linux on vm with windows 10)
+## Review the " failed to create dri2" error message and Identify the envionment(Kali Linux on vm with windows 10).
 
-#Each command should be run on the command line one by one for best results
-#ensure that you are in the DDT directroy
+#Each command should be run on the command line one by one for best results.
+
+#ensure that you are in the DDT directory
 yarn install
 #after installing enter the following
 yarn run tauri dev
-#update the os (kali linux):
+
+###### Update the os (kali linux):
+
 sudo apt update
 sudo apt upgrade -y
 sudo reboot
@@ -17,23 +19,29 @@ sudo reboot
 sudo apt install open-vm-tools-desktop -y
 sudo reboot
 
-#Verify Direct rendering infrastructure
+##### Verify Direct rendering infrastructure.
+
 #Install Mesa utilities
 sudo apt install mesa-utils -y
 #Check direct rendering status
-glxinfo | grep "direct rendering" #Yes message will pop-up
+glxinfo | grep "direct rendering"
+#Yes message will pop-up
 
-#Install Required graphics libraries
+###### Install Required graphics libraries
+
 sudo apt install xserver_xorg-video-all -y
 sudo apt install libgl1-mesa-dri -y
 
-#Configure Xorg
+##### Configure Xorg
+
 sudo mv /etc/X11/xorg.conf /etc/X11/xorg.conf.backup
 sudo dpkg-reconfigure xserver-xorg
+
 #now reboot
 sudo reboot
 
-#Set/add envionment variables
+##### Set/add envionment variables.
+
 echo 'export LIBGL_DRIVERS_PATH=/usr/lib/xorg/modules/dri' >> ~/.profile
 echo 'export LIBGL_DEBUG=verbose' >> ~/.profile
 source ~/.profile
@@ -43,7 +51,9 @@ source ~/.profile
 #Review Log files
 less /var/log/Xorg.0.log
 
-#Reinstall DDT toolkit
+###### Reinstall DDT toolkit
+
 sudo apt-get remove --purge DDT-toolkit
 sudo apt-get install DDT-toolkit
+
 #The error would be fixed by now.
