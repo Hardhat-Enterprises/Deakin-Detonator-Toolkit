@@ -58,7 +58,7 @@ export function BEDTool() {
     const pluginsRequiringUsername = ["SOCKS4"];
 
     // Form hook to handle form input.
-    let form = useForm<FormValuesType>({
+    const form = useForm<FormValuesType>({
         initialValues: {
             plugin: "",
             target: "",
