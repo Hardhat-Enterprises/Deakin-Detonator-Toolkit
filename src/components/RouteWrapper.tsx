@@ -84,7 +84,6 @@ import SlowHttpTest from "./slowhttptest/slowhttptest";
 import Unicornscan from "./Unicornscan/Unicornscan";
 import Sqlninja from "./Sqlninja/sqlninja";
 
-
 export interface RouteProperties {
     name: string;
     path: string;
