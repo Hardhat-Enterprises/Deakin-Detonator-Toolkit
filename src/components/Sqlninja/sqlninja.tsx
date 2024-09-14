@@ -192,7 +192,7 @@ function Sqlninja() {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                {LoadingOverlayAndCancelButton(loading, pid)}
+                {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                 <Stack>
                     <NativeSelect
                         value={selectedMode}
