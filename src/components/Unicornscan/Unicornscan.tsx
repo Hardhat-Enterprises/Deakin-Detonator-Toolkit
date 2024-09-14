@@ -31,7 +31,6 @@ const Unicornscan = () => {
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
     const [pid, setPid] = useState("");
-    const [verboseMode, setVerboseMode] = useState(false);
 
     // New state for dropdown selection
     const [selectedScanType, setSelectedScanType] = useState("");
@@ -127,9 +126,8 @@ const Unicornscan = () => {
         if (sourceIP) args.push(`-g ${sourceIP}`);
         if (interfaceName) args.push(`-i ${interfaceName}`);
         if (ports) args.push(`-p ${ports}`);
-        if (verboseMode) args.push("-v");
 
-        CommandHelper.runCommandWithPkexec("unicornscan", [...args, "-I"], handleProcessData, handleProcessTermination)
+        CommandHelper.runCommandWithPkexec("unicornscan", [...args, "-Iv"], handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 // Update the UI with the results from the executed command
                 setOutput(output);
@@ -226,11 +224,6 @@ const Unicornscan = () => {
                         placeholder="e.g., 1-1024"
                         value={ports}
                         onChange={(e) => setPorts(e.target.value)}
-                    />
-                    <Checkbox
-                        label="Verbose Mode"
-                        checked={verboseMode}
-                        onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
                     <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
