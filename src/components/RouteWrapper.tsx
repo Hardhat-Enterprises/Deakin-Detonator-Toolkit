@@ -81,7 +81,9 @@ import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
+import Unicornscan from "./Unicornscan/Unicornscan";
 import Sqlninja from "./Sqlninja/sqlninja";
+
 
 export interface RouteProperties {
     name: string;
@@ -702,6 +704,14 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/TShark",
         element: <TShark />,
         description: "A command-line network analyzer that can capture, analyze, and troubleshoot network traffic.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Unicornscan",
+        path: "/tools/Unicornscan",
+        element: <Unicornscan />,
+        description:
+            "Unicornscan is essential for scanning servers and hosts to see what available ports are being utilised for network communications.",
         category: "Network Scanning and Enumeration",
     },
     {

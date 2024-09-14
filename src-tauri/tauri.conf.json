@@ -303,6 +303,11 @@
                         "args": true
                     },
                     {
+                        "name": "unicornscan",
+                        "cmd": "unicornscan",
+                        "args": true
+                    },
+                    {
                         "name": "urlsnarf",
                         "cmd": "urlsnarf",
                         "args": true
