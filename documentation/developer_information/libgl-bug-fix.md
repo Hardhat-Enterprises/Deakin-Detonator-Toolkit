@@ -12,7 +12,7 @@ yarn install
 
 yarn run tauri dev
 
-###### Update the os (kali linux):
+##### Update the os (kali linux):
 
 sudo apt update
 
@@ -73,4 +73,4 @@ sudo apt-get remove --purge DDT-toolkit
 
 sudo apt-get install DDT-toolkit
 
-#The error would be fixed by now.
+######The error would be fixed by now.
