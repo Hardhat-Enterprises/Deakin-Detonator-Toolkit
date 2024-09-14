@@ -1,6 +1,6 @@
 // Import necessary hooks and components from React and other libraries
 import { useState, useCallback, useEffect } from "react";
-import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid } from "@mantine/core";
+import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -66,7 +66,8 @@ function Dirb() {
     // Declare constants for the component
     const title = "Dirb";
     const description =
-        "Dirb is a Web Content Scanner. It looks for existing (and/or hidden) Web Objects. It basically works by launching a dictionary-based attack against a web server and analyzing the response.";
+        "Dirb is a web content scanner that is designed to find existing ( and hidden) web objects" +
+        "It works by launching dictionary-based attacks on a web server, attempting to discover unprotected and sensitive directories and file that may be present";
     const steps =
         "Step 1: Enter the base URL.\n" +
         "Step 2: Select the desired parameters for the Dirb command, including the wordlist size.\n" +
@@ -332,7 +333,10 @@ function Dirb() {
                         <Stepper active={active} onStepClick={setActive} breakpoint="sm">
                             {/* Step 1: Target */}
                             <Stepper.Step label="Target">
-                                <TextInput label="URL" required {...form.getInputProps("url")} />
+                                <TextInput label="Target URL" required {...form.getInputProps("url")} />
+                                <Group position="right" mt="md">
+                                    <Button onClick={nextStep}>Next</Button>
+                                </Group>
                             </Stepper.Step>
                             {/* Step 2: Parameters */}
                             <Stepper.Step label="Parameters">
@@ -347,7 +351,6 @@ function Dirb() {
                                     ]}
                                     {...form.getInputProps("wordlistSize")}
                                 />
-
                                 <Grid mt={20}>
                                     <Grid.Col span={3}>
                                         <Button
@@ -380,6 +383,12 @@ function Dirb() {
                                         >
                                             {additionalOpened ? "Hide Additional Options" : "Show Additional Options"}
                                         </Button>
+                                        <Group position="right" mt="md">
+                                            <Button variant="default" onClick={prevStep}>
+                                                Previous
+                                            </Button>
+                                            <Button onClick={nextStep}>Next</Button>
+                                        </Group>
                                     </Grid.Col>
                                 </Grid>
 
@@ -490,6 +499,11 @@ function Dirb() {
                                         Run Dirb
                                     </Button>
                                 </Stack>
+                                <Group position="right" mt="md">
+                                    <Button variant="default" onClick={prevStep}>
+                                        Previous
+                                    </Button>
+                                </Group>
                             </Stepper.Step>
                         </Stepper>
                         {/* Render the SaveOutputToTextFile component */}
