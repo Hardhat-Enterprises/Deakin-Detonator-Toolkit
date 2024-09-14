@@ -38,7 +38,7 @@ glxinfo | grep "direct rendering"
 
 #Yes message will pop-up
 
-###### Install Required graphics libraries
+##### Install Required graphics libraries
 
 sudo apt install xserver_xorg-video-all -y
 
