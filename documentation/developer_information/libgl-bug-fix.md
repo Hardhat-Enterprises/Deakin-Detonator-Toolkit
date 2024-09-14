@@ -67,10 +67,10 @@ source ~/.profile
 
 less /var/log/Xorg.0.log
 
-###### Reinstall DDT toolkit
+##### Reinstall DDT toolkit
 
 sudo apt-get remove --purge DDT-toolkit
 
 sudo apt-get install DDT-toolkit
 
-######The error would be fixed by now.
+###### The error would be fixed by now.
