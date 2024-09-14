@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, Switch } from "@mantine/core";
+import { Button, Stack, Tooltip, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -8,7 +8,6 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
-import React from "react";
 
 /**
  * Represents the form values for the Enum4Linux component.
@@ -31,7 +30,7 @@ const Enum4Linux = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [opened, setOpened] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
     const [customMode, setCustomMode] = useState(false);
 
@@ -39,10 +38,13 @@ const Enum4Linux = () => {
     const title = "Enum4Linux";
     const description = "Enum4linux is a tool used for enumerating information from Windows and Samba systems.";
     const steps =
-        "Step 1: Enter the Ip address of the target.\n" +
-        "Step 2: Type in the option you want to do enumeration.\n" +
-        "Step 3: Enter any additional parameters you want to add.";
-    const sourceLink = ""; // Link to the source code (or Kali Tools).
+        "Step 1: Enter the IP address of the target.\n" +
+        "Step 2: Type in the option you want for enumeration. For example, -U for users, -S for shares.\n" +
+        "Step 3: Enter any additional parameters you want to add, like specific credentials.\n" +
+        "Step 4: Click the Start " +
+        title +
+        " button and view the output block to see the results. ";
+    const sourceLink = "https://www.kali.org/tools/enum4linux/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
 
     const form = useForm({
@@ -146,17 +148,71 @@ const Enum4Linux = () => {
                         checked={customMode}
                         onChange={(e) => setCustomMode(e.currentTarget.checked)}
                     />
-                    <TextInput label="IP Address of Target" required {...form.getInputProps("ipAddress")} />
-                    <TextInput label="Option" required {...form.getInputProps("argumentMain")} />
-                    <TextInput label="Parameters" {...form.getInputProps("paramMain")} />
+                    <Tooltip
+                        label="Enter the IP address of the target system you want to enumerate."
+                        position="right"
+                        withArrow
+                    >
+                        <TextInput
+                            label="IP Address of Target"
+                            required
+                            {...form.getInputProps("ipAddress")}
+                            placeholder="Example: 192.168.1.1"
+                        />
+                    </Tooltip>
+
+                    <Tooltip
+                        label="Choose the enumeration option, e.g., U for users, S for shares."
+                        position="right"
+                        withArrow
+                    >
+                        <TextInput
+                            label="Option"
+                            required
+                            {...form.getInputProps("argumentMain")}
+                            placeholder="Example: U"
+                        />
+                    </Tooltip>
+
+                    <Tooltip
+                        label="Parameter for the chosen option like username or password if required."
+                        position="right"
+                        withArrow
+                    >
+                        <TextInput
+                            label="Parameters"
+                            {...form.getInputProps("paramMain")}
+                            placeholder="Example: -u <username> "
+                        />
+                    </Tooltip>
                     {customMode && (
                         <>
-                            <TextInput label="Additional Options" {...form.getInputProps("argumentAlt")} />
-                            <TextInput label="Additional Parameters" {...form.getInputProps("paramAlt")} />
+                            <Tooltip
+                                label="Choose the additional option, e.g., U for users, S for shares."
+                                position="right"
+                                withArrow
+                            >
+                                <TextInput
+                                    label="Additional Options"
+                                    {...form.getInputProps("argumentAlt")}
+                                    placeholder="Example: S"
+                                />
+                            </Tooltip>
+                            <Tooltip
+                                label="Additional parameter for the chosen option like password if required."
+                                position="right"
+                                withArrow
+                            >
+                                <TextInput
+                                    label="Additional Parameters"
+                                    {...form.getInputProps("paramAlt")}
+                                    placeholder="Example: -p <password> "
+                                />
+                            </Tooltip>
                         </>
                     )}
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type="submit">Scan</Button>
+                    <Button type="submit">Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
