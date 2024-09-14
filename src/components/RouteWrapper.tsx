@@ -80,6 +80,7 @@ import Masscan from "./Masscan/Masscan";
 import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
+import SlowHttpTest from "./slowhttptest/slowhttptest";
 
 export interface RouteProperties {
     name: string;
@@ -616,6 +617,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "Shodan API allows for network scanning and querying of Shodan’s database to gather information about connected devices and their vulnerabilities.",
         category: "Vulnerability Assessment and Exploitation",
+    },
+    {
+        name: "SlowHttpTest",
+        path: "/tools/slowhttptest",
+        element: <SlowHttpTest />,
+        description: "A tool for simulating slow HTTP attacks to test web server resilience.",
+        category: "Web Application Testing",
     },
     {
         name: "SMB Enumeration",
