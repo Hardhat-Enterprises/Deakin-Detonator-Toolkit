@@ -213,7 +213,7 @@ function Sqlninja() {
                         checked={checkedVerbose}
                         onChange={(e) => setCheckedVerbose(e.currentTarget.checked)}
                     />
-                    <Button type={"submit"}>Start</Button>
+                    <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
