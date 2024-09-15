@@ -126,7 +126,7 @@ const Photon = () => {
         setLoading(true);
 
         // Create the arguments array for the command
-        const args = [`/home/kali/Desktop/tool/Deakin-Detonator-Toolkit/src-tauri/exploits/Photon/photon.py`];
+        const args = [`src-tauri/exploits/Photon/photon.py`];
         values.url ? args.push(`-u`, `${values.url}`) : undefined;
         values.outputDir ? args.push(`-o`, `${values.outputDir}`) : undefined;
         values.crawlDepth ? args.push(`-l`, `${values.crawlDepth}`) : undefined;
