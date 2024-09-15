@@ -5,32 +5,14 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { Command } from "@tauri-apps/api/shell";
 
-interface FormValuesType {
-    ip: string;
-    port: string;
-    speed: string;
-    scripts: string;
-}
-
-const SMBEnumeration = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-    const [selectedSpeedOption, setSelectedSpeedOption] = useState("T3");
-    const [selectedScriptOption, setSelectedScriptOption] = useState("smb-enum-users");
-    const [pid, setPid] = useState<string>("");
-    const [loadingModal, setLoadingModal] = useState(true);
-    const [opened, setOpened] = useState(false);
-    const title = "SMB Enumeration"; // Title of the component
-    const sourceLink = "https://nmap.org/nsedoc/scripts/"; // Source link to the official documentation for SMB enumeration scripts
-
-    const description = `
+// Description for the tooltip. Contents of this variable are displayed to the user when hovering over the info option.
+const description = `
     SMB (Server Message Block) represents a network protocol widely used to 
     provide shared access across files, printers, and serial ports within a network. 
     This tool aims to enumerate an SMB server to find potential vulnerabilities.
@@ -44,51 +26,19 @@ const SMBEnumeration = () => {
     Step 5: Click scan to commence the SMB enumeration operation.
     Step 6: View the output block below to view the results of the scan.
 `;
-    const steps =
-        "Step 1: Enter an IP address or hostname" +
-        "Step 2: Enter a port number" +
-        "Step 3: Pick a scan speed. Note - higher speeds require a faster host network" +
-        "Step 4: Select an SMB enumeration script to run against the target" +
-        "Step 5: Click scan to commence the SMB enumeration operation" +
-        "Step 6: View the output block below to view the results of the scan";
-    const speeds = ["T0", "T1", "T2", "T3", "T4", "T5"];
-    const scripts = [
-        "smb2-capabilities.nse",
-        "smb2-security-mode.nse",
-        "smb2-time.nse",
-        "smb2-vuln-uptime.nse",
-        "smb-brute.nse",
-        "smb-double-pulsar-backdoor.nse",
-        "smb-enum-domains.nse",
-        "smb-enum-groups.nse",
-        "smb-enum-processes.nse",
-        "smb-enum-services.nse",
-        "smb-enum-sessions.nse",
-        "smb-enum-shares.nse",
-        "smb-enum-users.nse",
-        "smb-flood.nse",
-        "smb-ls.nse",
-        "smb-mbenum.nse",
-        "smb-os-discovery.nse",
-        "smb-print-text.nse",
-        "smb-protocols.nse",
-        "smb-psexec.nse",
-        "smb-security-mode.nse",
-        "smb-server-stats.nse",
-        "smb-system-info.nse",
-        "smb-vuln-conficker.nse",
-        "smb-vuln-cve2009-3103.nse",
-        "smb-vuln-cve-2017-7494.nse",
-        "smb-vuln-ms06-025.nse",
-        "smb-vuln-ms07-029.nse",
-        "smb-vuln-ms08-067.nse",
-        "smb-vuln-ms10-054.nse",
-        "smb-vuln-ms10-061.nse",
-        "smb-vuln-ms17-010.nse",
-        "smb-vuln-regsvc-dos.nse",
-        "smb-vuln-webexec.nse",
-        "smb-webexec-exploit.nse",
-    ];
+
+const SMBEnumeration = () => {
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+    const [selectedSpeedOption, setSelectedSpeedOption] = useState("T3");
+    const [selectedScriptOption, setSelectedScriptOption] = useState("smb-enum-users");
+    const [pid, setPid] = useState<string>("");
+    const [opened, setOpened] = useState(false);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const title = "SMB Enumeration"; // Title of the component
+    const sourceLink = "https://nmap.org/nsedoc/scripts/"; // Source link to the official documentation for SMB enumeration scripts
     const dependencies = ["nmap", "smbclient"];
 
     useEffect(() => {
@@ -103,7 +53,7 @@ const SMBEnumeration = () => {
             });
     }, []);
 
-    const form = useForm<FormValuesType>({
+    const form = useForm({
         initialValues: {
             ip: "",
             port: "",
@@ -129,7 +79,6 @@ const SMBEnumeration = () => {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-
             setPid("");
             setLoading(false);
             setAllowSave(true);
@@ -137,12 +86,16 @@ const SMBEnumeration = () => {
         [handleProcessData]
     );
 
-    const onSubmit = async (values: FormValuesType) => {
+    const onSubmit = async (values) => {
         setLoading(true);
         setAllowSave(false);
         setHasSaved(false);
 
         const args = [`-${values.speed}`, `--script=${values.scripts}`];
+
+        if (!values.speed) {
+            values.speed = "T3"; // Default value for scan speed
+        }
 
         if (values.port) {
             args.push(`-p ${values.port}`);
@@ -160,7 +113,7 @@ const SMBEnumeration = () => {
             setPid(result.pid);
             setOutput(result.output);
         } catch (e: any) {
-            setOutput(e.toString());
+            setOutput(e.message || "An error occurred.");
         }
     };
 
@@ -177,14 +130,7 @@ const SMBEnumeration = () => {
 
     return (
         <>
-            <RenderComponent
-                title={title}
-                description={description}
-                steps={steps}
-                sourceLink={sourceLink}
-                tutorial={""}
-                children={undefined}
-            />
+            <RenderComponent title={title} description={description} sourceLink={sourceLink} />
             {!loadingModal && (
                 <InstallationModal
                     isOpen={opened}
@@ -193,6 +139,7 @@ const SMBEnumeration = () => {
                     dependencies={dependencies}
                 />
             )}
+
             <form
                 onSubmit={form.onSubmit((values) =>
                     onSubmit({
@@ -212,7 +159,7 @@ const SMBEnumeration = () => {
                         value={selectedSpeedOption}
                         onChange={(e) => setSelectedSpeedOption(e.target.value)}
                         title={"scan speed"}
-                        data={speeds}
+                        data={["T0", "T1", "T2", "T3", "T4", "T5"]}
                         placeholder={"Select a scan speed. Default set to T3"}
                         description={
                             "Speed of the scan, refer: https://nmap.org/book/performance-timing-templates.html"
@@ -224,7 +171,13 @@ const SMBEnumeration = () => {
                         value={selectedScriptOption}
                         onChange={(e) => setSelectedScriptOption(e.target.value)}
                         title={"SMB Enumeration Script"}
-                        data={scripts}
+                        data={[
+                            "smb2-capabilities.nse",
+                            "smb2-security-mode.nse",
+                            // ... (list of other scripts)
+                            "smb-vuln-webexec.nse",
+                            "smb-webexec-exploit.nse",
+                        ]}
                         required
                         placeholder={"Select an SMB Enumeration Script to run against the target"}
                         description={"NSE Scripts, refer: https://nmap.org/nsedoc/scripts/"}

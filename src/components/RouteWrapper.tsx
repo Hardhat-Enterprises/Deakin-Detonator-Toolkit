@@ -77,8 +77,11 @@ import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
+import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
+import SlowHttpTest from "./slowhttptest/slowhttptest";
+import Unicornscan from "./Unicornscan/Unicornscan";
 
 export interface RouteProperties {
     name: string;
@@ -591,7 +594,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Rainbowcrack",
         element: <Rainbowcrack />,
         description: "A computer program which generates rainbow tables to be used in password cracking.",
-        category: "Password cracking and Authentication testing",
+        category: "Password Cracking and Authentication Testing",
     },
     {
         name: "SearchSploit",
@@ -599,7 +602,7 @@ export const ROUTES: RouteProperties[] = [
         element: <SearchSploit />,
         description:
             "A utility that allows users to search through a vast database of exploits, shellcodes, and security-related papers.",
-        category: "Vulnerabilityy Assessment and Exploitation",
+        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Sherlock",
@@ -615,6 +618,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "Shodan API allows for network scanning and querying of Shodan’s database to gather information about connected devices and their vulnerabilities.",
         category: "Vulnerability Assessment and Exploitation",
+    },
+    {
+        name: "SlowHttpTest",
+        path: "/tools/slowhttptest",
+        element: <SlowHttpTest />,
+        description: "A tool for simulating slow HTTP attacks to test web server resilience.",
+        category: "Web Application Testing",
     },
     {
         name: "SMB Enumeration",
@@ -664,6 +674,14 @@ export const ROUTES: RouteProperties[] = [
         category: "Information Gathering and Analysis",
     },
     {
+        name: "Testssl.sh",
+        path: "/tools/Testssl",
+        element: <TestSSL />,
+        description:
+            "testssl.sh is a versatile command line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
         name: "Traceroute",
         path: "/tools/Traceroute",
         element: <Traceroute />,
@@ -676,6 +694,14 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/TShark",
         element: <TShark />,
         description: "A command-line network analyzer that can capture, analyze, and troubleshoot network traffic.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Unicornscan",
+        path: "/tools/Unicornscan",
+        element: <Unicornscan />,
+        description:
+            "Unicornscan is essential for scanning servers and hosts to see what available ports are being utilised for network communications.",
         category: "Network Scanning and Enumeration",
     },
     {
