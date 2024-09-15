@@ -110,7 +110,7 @@ const Photon = () => {
 
     /**
      * handleSaveComplete: handle state changes when saves are completed.
-     * Once the output is saved, prevent duplicate saves.
+     * Once the output is saved, prevent duplicate save.
      */
     const handleSaveComplete = () => {
         setHasSaved(true);
