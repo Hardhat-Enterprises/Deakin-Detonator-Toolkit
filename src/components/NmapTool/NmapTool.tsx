@@ -11,7 +11,7 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
- * Presents the form values for the Nmap component.
+ * Represents the form values for the Nmap component.
  */
 interface FormValuesType {
     target: string;
