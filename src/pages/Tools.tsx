@@ -14,6 +14,7 @@ const ToolsPage = () => {
         "Password Cracking and Authentication Testing",
         "Vulnerability Assessment and Exploitation",
         "Web Application Testing",
+        "IOT",
     ];
 
     const [selectedCategory, setSelectedCategory] = useState("");
