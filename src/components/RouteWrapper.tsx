@@ -5,6 +5,7 @@ import ToolsPage from "../pages/Tools";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
+import CVE20221388 from "./CVE-2022-1388/CVE-2022-1388";
 import DirbTool from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
@@ -146,6 +147,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/ZeroLogon",
         element: <ZeroLogon />,
         description: "Zero Logon will let the penetester to perform an authentication attempts on windows server",
+        category: "",
+    },
+    {
+        name: "CVE-2022-1388",
+        path: "/attack-vectors/cve-2022-1388",
+        element: <CVE20221388 />,
+        description: "undisclosed requests may bypass iControl REST authentication.",
         category: "",
     },
     {
