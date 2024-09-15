@@ -82,6 +82,7 @@ import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
 import Unicornscan from "./Unicornscan/Unicornscan";
+import Photon from "./Photon/photon";
 
 export interface RouteProperties {
     name: string;

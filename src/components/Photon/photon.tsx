@@ -105,12 +105,12 @@ const Photon = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData],
+        [handleProcessData]
     );
 
     /**
      * handleSaveComplete: handle state changes when saves are completed.
-     * Once the output is saved, prevent duplicate save.
+     * Once the output is saved, prevent duplicate saves.
      */
     const handleSaveComplete = () => {
         setHasSaved(true);
@@ -138,7 +138,7 @@ const Photon = () => {
                 "python3",
                 args,
                 handleProcessData,
-                handleProcessTermination,
+                handleProcessTermination
             );
 
             setPid(result.pid);
