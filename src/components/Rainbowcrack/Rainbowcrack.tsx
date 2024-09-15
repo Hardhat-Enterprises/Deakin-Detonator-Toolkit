@@ -32,17 +32,29 @@ const RainbowCrack = () => {
     const [hasSaved, setHasSaved] = useState(false); // State variable to track whether output has been saved
 
     // Component Constants
-    const title = "RainbowCrack"; // Title of the component.
+    const title = "RainbowCrack"; // Title of the component
+
     const description =
-        "RainbowCrack is a computer program which utilises rainbow tables to be used in password cracking."; // Description of the component.
+        "RainbowCrack is a command line tool that uses rainbow tables to crack password hashes. It supports multiple hash algorithms, including LM, NTLM, MD5, SHA1 and SHA256."; // Description of the component.
+
     const steps =
-        "How to use RainbowCrack \n" +
-        "Step 1: Enter a hash value. (E.g. 5d41402abc4b2a76b9719d911017c592) \n" +
-        "Step 2: Simply tap on the crack button to crack the hash key. \n" +
-        "The user can even save the output to a file by assigning a file-name under 'save output to file' option."; // Steps to use the component.
-    const sourceLink = ""; // Link to the source code (or RainbowCrack documentation).
+        "How to use RainbowCrack:\n" +
+        "Step 1: Ensure that your rainbow tables (*.rt, *.rtc) are stored in a directory.\n" +
+        "Step 2: Enter the hash value you want to crack in the input field. For a single hash, use the format: ./rcrack [path to tables] -h [hash].\n" +
+        "   - Example: ./rcrack . -h 5d41402abc4b2a76b9719d911017c592\n" +
+        "Step 3: To crack multiple hashes from a file, use the format: ./rcrack [path to tables] -l [hash_list_file].\n" +
+        "   - Example: ./rcrack . -l hash.txt\n" +
+        "Step 4: If you have LM hashes in a pwdump file, use the format: ./rcrack [path to tables] -lm [pwdump_file].\n" +
+        "   - Example: ./rcrack . -lm pwdump.txt\n" +
+        "Step 5: For NTLM hashes in a pwdump file, use the format: ./rcrack [path to tables] -ntlm [pwdump_file].\n" +
+        "   - Example: ./rcrack . -ntlm pwdump.txt\n" +
+        "Step 6: Click the Crack " +
+        title +
+        " button to execute the command and display the results."; // Steps to use the component.
+    const sourceLink = "http://project-rainbowcrack.com/"; // Link to the source code (or RainbowCrack documentation).
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["rcrack"]; // Dependencies required by the component.
+
+    const dependencies = ["rainbowcrack"]; // Dependencies required by the component.just check
 
     // Form hook to handle form input.
     const form = useForm({
@@ -66,7 +78,7 @@ const RainbowCrack = () => {
     }, []);
 
     /**
-     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * handleProcessData:Callback to handle and append new data from the child process to the output.
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
