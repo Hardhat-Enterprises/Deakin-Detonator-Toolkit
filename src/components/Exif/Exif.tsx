@@ -33,16 +33,17 @@ const ExifTool = () => {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    
+
     // Component Constants
     const title = "ExifTool";
-    const description = "ExifTool is a platform-independent command-line application for reading, writing, and editing metadata in a wide variety of file types.";
-    const steps = 
-    "Step 1: Install relevant dependencies from start page\n" +
-    "Step 2: Have an image saved locally and specify file path in the form.\n" +
-    "Step 3: Enter a Metadata tag e.g.Author\n" +
-    "Step 4: Choose to either write or read metadata from the image" +
-    "Step 5: Run the tool!"; // Steps explaining how to run tool
+    const description =
+        "ExifTool is a platform-independent command-line application for reading, writing, and editing metadata in a wide variety of file types.";
+    const steps =
+        "Step 1: Install relevant dependencies from start page\n" +
+        "Step 2: Have an image saved locally and specify file path in the form.\n" +
+        "Step 3: Enter a Metadata tag e.g.Author\n" +
+        "Step 4: Choose to either write or read metadata from the image" +
+        "Step 5: Run the tool!"; // Steps explaining how to run tool
     const sourceLink = ""; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["exiftool"]; // ExifTool dependency.
@@ -57,10 +58,9 @@ const ExifTool = () => {
         },
     });
 
-
     useEffect(() => {
         // Check if the command is available and set the state variables accordingly.
-        checkAllCommandsAvailability(dependencies) 
+        checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
                 setIsCommandAvailable(isAvailable); // Set the command availability state
                 setOpened(!isAvailable); // Set the modal state to opened if the command is not available
@@ -81,9 +81,6 @@ const ExifTool = () => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
-
-    
-
     /**
      * handleProcessTermination: Callback to handle the termination of the child process.
      * Once the process termination is handled, it clears the process PID reference and
@@ -98,15 +95,15 @@ const ExifTool = () => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
 
-            // If the process was terminated manually, display a termination message.
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
 
-            // If the process was terminated with an error, display the exit and signal codes.
+                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-        
+
             // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
 
@@ -115,7 +112,6 @@ const ExifTool = () => {
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
-
 
     /**
      * Handles form submission for the Exif component.
@@ -133,7 +129,7 @@ const ExifTool = () => {
         } else if (values.actionType === "write") {
             args.push("-" + values.tag + "=" + values.value);
         }
-        
+
         // Execute the Exif command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("exiftool", args, handleProcessData, handleProcessTermination)
             .then(() => {
@@ -153,8 +149,8 @@ const ExifTool = () => {
      * Handles the completion of output saving by updating state variables.
      */
     const handleSaveComplete = () => {
-        setHasSaved(true);  //Set hasSaved state to true 
-        setAllowSave(false);    // Disallow further output saving
+        setHasSaved(true); //Set hasSaved state to true
+        setAllowSave(false); // Disallow further output saving
     };
 
     /**
@@ -192,12 +188,7 @@ const ExifTool = () => {
                         {...form.getInputProps("filePath")}
                         placeholder="e.g. /path/to/file.jpg"
                     />
-                    <TextInput
-                        label="Metadata Tag"
-                        required
-                        {...form.getInputProps("tag")}
-                        placeholder="e.g. Author"
-                    />
+                    <TextInput label="Metadata Tag" required {...form.getInputProps("tag")} placeholder="e.g. Author" />
                     <TextInput
                         label="Value (for writing)"
                         {...form.getInputProps("value")}
