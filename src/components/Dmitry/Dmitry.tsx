@@ -50,7 +50,9 @@ const dmitry = () => {
     const steps =
         "Step 1: Enter a valid domain or IP address to be scanned.\n" +
         "       Eg: 192.168.0.1\n\n" +
-        "Step 3: Click Start " + title + " to commence Dmitry's operation.\n\n" +
+        "Step 3: Click Start " +
+        title +
+        " to commence Dmitry's operation.\n\n" +
         "Step 4: View the Output block below to view the results of the tool's execution.\n\n" +
         "Note: For more advanced options, enable the Advanced Mode switch to access additional features.\n\n" +
         "Note 2: If you perform TCP port scanning, you can specify a delay between requests. Default is 2 (milliseconds).\n";
