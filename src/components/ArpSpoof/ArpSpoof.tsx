@@ -191,8 +191,18 @@ const ARPSpoofing = () => {
                 )}
                 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                     <Stack>
-                        {LoadingOverlayAndCancelButtonPkexec(loading, pidGateway, handleProcessData, handleProcessTermination)}
-                        {LoadingOverlayAndCancelButtonPkexec(loading, pidTarget, handleProcessData, handleProcessTermination)}
+                        {LoadingOverlayAndCancelButtonPkexec(
+                            loading,
+                            pidGateway,
+                            handleProcessData,
+                            handleProcessTermination
+                        )}
+                        {LoadingOverlayAndCancelButtonPkexec(
+                            loading,
+                            pidTarget,
+                            handleProcessData,
+                            handleProcessTermination
+                        )}
                         <TextInput label={"Target one IP address"} required {...form.getInputProps("ipGateway")} />
                         <TextInput label={"Target two IP address"} required {...form.getInputProps("ipTarget")} />
                         <Button type={"submit"}>Start Spoof</Button>
