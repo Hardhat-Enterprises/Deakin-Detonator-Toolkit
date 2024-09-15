@@ -79,6 +79,7 @@ import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
+import FirmwareAnalysisTool from "./FirmwareAnalysisTool/FirmwareAnalysisTool";
 
 export interface RouteProperties {
     name: string;
@@ -428,6 +429,14 @@ export const ROUTES: RouteProperties[] = [
         element: <Eyewitness />,
         description: "A tool used for capturing screenshots and gathering information from web servers",
         category: "Web Application Testing",
+    },
+    {
+        name: "FirmwareAnalysisTool",
+        path: "/tools/FirmwareAnalysisTool",
+        element: <FirmwareAnalysisTool />,
+        description:
+            "Firmware Analysis Toolkit (FAT henceforth) is based on Firmadyne with some changes. Firmadyne uses a PostgreSQL database to store information about the emulated images.",
+        category: "IOT",
     },
     {
         name: "Fcrackzip",
