@@ -52,7 +52,7 @@ const NetcatTool = () => {
         "Step 3: If you want to send a file, provide the destination IP address, port number, and file name.\n" +
         "Step 4: If you want to receive a file, provide a port number and the file name.\n" +
         "Step 5: If you want to port scan a domain, provide domain name and a port number. \n\n" +
-        "Note:   You should only use website port scan to a domain that you own.\n" +
+        "Note:   You should only use website port scan on a domain that you own.\n" +
         "Note 2: Using the sending/receiving file option might seem like it is not working, but it is working.\n" +
         "Note 3: You will need two devices for file transfer to work — one for sending and the other needs to be set up on the specified port to capture the incoming file.\n" +
         "Ensure both machines are properly configured and connected to the same network or through an accessible route (such as a VPN, or through valid public IP addresses) to complete the file transfer.\n";
