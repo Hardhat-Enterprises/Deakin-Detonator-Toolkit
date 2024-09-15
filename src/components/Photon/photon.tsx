@@ -47,7 +47,7 @@ const Photon = () => {
         "Step 5: View the output results below.";
     const sourceLink = "https://github.com/s0md3v/Photon"; // Link to the source code.
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["python3"]; // Contains the dependencies required by the component.
+    const dependencies = ["photon"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
     let form = useForm({
