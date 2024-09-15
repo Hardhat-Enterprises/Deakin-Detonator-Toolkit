@@ -52,7 +52,7 @@ const dmitry = () => {
         "       Eg: 192.168.0.1\n\n" +
         "Step 3: Click Start " + title + " to commence Dmitry's operation.\n\n" +
         "Step 4: View the Output block below to view the results of the tool's execution.\n\n" +
-        "Note: For more advanced options, enable the Advanced Mode switch to access additional features.\n" +
+        "Note: For more advanced options, enable the Advanced Mode switch to access additional features.\n\n" +
         "Note 2: If you perform TCP port scanning, you can specify a delay between requests. Default is 2 (milliseconds).\n";
     const sourceLink = "https://www.kali.org/tools/dmitry/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
