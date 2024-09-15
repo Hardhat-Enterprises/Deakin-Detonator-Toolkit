@@ -48,7 +48,7 @@ const NetcatTool = () => {
         "A simple Unix utility which reads and writes data across network connections using TCP or UDP protocol."; // Description of the component.
     const steps =
         "Step 1: If you want to listen for connections for chat or reverse shell choose the listen option and provide a port number.\n" +
-        "Step 2: If you want to scan for ports, provide an IP address and a port range\n" +
+        "Step 2: If you want to scan for ports, provide an IP address and a port range.\n" +
         "Step 3: If you want to send a file, provide the destination IP address, port number, and file name\n" +
         "Step 4: If you want to receive a file, provide a port number and the file name.\n" +
         "Step 5: If you want to port scan a domain, provide domain name and a port number. \n\n" +
