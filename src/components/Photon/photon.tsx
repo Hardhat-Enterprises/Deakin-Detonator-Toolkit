@@ -135,7 +135,7 @@ const Photon = () => {
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "python3",
+                "photon",
                 args,
                 handleProcessData,
                 handleProcessTermination
