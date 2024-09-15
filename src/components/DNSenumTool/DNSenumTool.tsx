@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch, Checkbox } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch, Checkbox, Modal } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -32,6 +32,8 @@ const DnsenumTool = () => {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [missingCommands, setMissingCommands] = useState<string[]>([]);
+    const [modalOpened, setModalOpened] = useState(false);
 
     /**
      * Component Constants.
@@ -108,6 +110,27 @@ const DnsenumTool = () => {
      * It sets up and triggers the dnsenum tool with the given parameters.
      * @param {FormValuesType} values - The form values, containing the domain, threads, pages, scrap, reverse lookup, and timeout.
      */
+
+    const checkAllCommandsAvailability = async () => {
+        const requiredCommands = ["dnsenum", "kill"];
+        const unavailableCommands = [];
+
+        for (const command of requiredCommands) {
+            try {
+                await CommandHelper.runCommand(command, ["--version"]);
+            } catch (e) {
+                unavailableCommands.push(command);
+            }
+        }
+
+        setMissingCommands(unavailableCommands);
+        setModalOpened(unavailableCommands.length > 0); 
+
+    };
+
+    useEffect(() => {
+        checkAllCommandsAvailability();
+    }, []);
 
     //sets the loading state to True, provides arguments for the tool
     const onSubmit = async (values: FormValuesType) => {
@@ -223,9 +246,23 @@ const DnsenumTool = () => {
                     <Button type={"submit"}>Start Enumeration</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </Stack>
-            </form>
-        </RenderComponent>
+        
+                    <Modal 
+                        opened={modalOpened}
+                        onClose={() => setModalOpened(false)}
+                        title="Missing Commands"
+                    >
+                        <p>The Following Commands are missing and nned to be installed:</p>
+                    <ul>
+                        {missingCommands.map((cmd) => (
+                            <li key={cmd}></li>
+                        ))}
+                    </ul>
+                    <p>Please install these commands and try again.</p>
+                </Modal>
+            </Stack>
+        </form>
+     </RenderComponent>
     );
 };
 
