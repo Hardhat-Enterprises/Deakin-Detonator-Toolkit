@@ -5,6 +5,7 @@ import ToolsPage from "../pages/Tools";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
+import CVE20221388 from "./CVE-2022-1388/CVE-2022-1388";
 import DirbTool from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
@@ -139,6 +140,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2021-41773",
         element: <CVE202141773 />,
         description: "Apache 2.4.49 and 2.4.50 RCE",
+        category: "",
+    },
+    {
+        name: "CVE-2022-1388",
+        path: "/attack-vectors/cve-2022-1388",
+        element: <CVE20221388 />,
+        description: "undisclosed requests may bypass iControl REST authentication.",
         category: "",
     },
     {
