@@ -5,6 +5,7 @@ import ToolsPage from "../pages/Tools";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
+import CVE202227925 from "./CVE-2022-27925/CVE-2022-27925";
 import DirbTool from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
@@ -174,6 +175,14 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2022-24112",
         element: <CVE202224112 />,
         description: "Apache APISIX Remote Code Execution Vulnerability",
+        category: "",
+    },
+    {
+        name: "CVE-2022-27925",
+        path: "/attack-vectors/cve-2022-27925",
+        element: <CVE202227925 />,
+        description:
+            "Zimbra Collaboration (aka ZCS) 8.8.15 and 9.0 has mboximport functionality that receives a ZIP archive and extracts files from it.",
         category: "",
     },
     {
