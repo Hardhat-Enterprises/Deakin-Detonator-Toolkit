@@ -45,7 +45,7 @@ const Photon = () => {
         "Step 3: Specify the crawl depth.\n" +
         "Step 4: Click Launch Crawler to start Photon.\n" +
         "Step 5: View the output results below.";
-    const sourceLink = "https://github.com/s0md3v/Photon"; // Link to the source code.
+    const sourceLink = "https://www.kali.org/tools/photon/"; // Link to the source code.
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["photon"]; // Contains the dependencies required by the component.
 
