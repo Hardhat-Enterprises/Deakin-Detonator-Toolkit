@@ -288,6 +288,11 @@
                         "args": true
                     },
                     {
+                        "name": "which",
+                        "cmd": "which",
+                        "args": true
+                    },
+                    {
                         "name": "whois",
                         "cmd": "whois",
                         "args": true
@@ -321,11 +326,7 @@
             "category": "DeveloperTool",
             "copyright": "",
             "deb": {
-                "depends": [
-                    "openjdk-11-jdk",
-                    "python3-impacket",
-                    "dsniff"
-                ],
+                "depends": ["openjdk-11-jdk", "python3-impacket", "dsniff"],
                 "files": {
                     "/usr/share/ddt": "exploits/",
                     "/usr/share/doc/ddt/README.md": "../README.md"
