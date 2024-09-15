@@ -13,8 +13,8 @@ import { Command } from "@tauri-apps/api/shell";
 export const checkCommandAvailability = (commandString: string): Promise<boolean> => {
     return new Promise(async (resolve, reject) => {
         try {
-            // Create a new Command instance to execute 'which' command in bash, checking the availability of the specified commandString
-            const command = new Command("bash", ["-c", "which ${commandString}"]);
+            // Create a new Command instance with the "which" command and the specified commandString
+            const command = new Command("which", [commandString]);
             // Execute the command and get the handle
             const handle = await command.execute();
 
