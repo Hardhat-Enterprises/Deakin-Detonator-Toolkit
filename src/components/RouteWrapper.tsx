@@ -586,7 +586,7 @@ export const ROUTES: RouteProperties[] = [
     {
         name: "Photon",
         path: "/tools/photon",
-        element: <Parsero />,
+        element: <Photon />,
         description: "A fast and flexible crawler designed for open source intelligence.",
         category: "Information Gathering and Analysis",
     },
