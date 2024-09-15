@@ -583,6 +583,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Photon",
+        path: "/tools/photon",
+        element: <Photon />,
+        description: "A fast and flexible crawler designed for open source intelligence.",
+        category: "Information Gathering and Analysis",
+    },
+    {
         name: "RTsort",
         path: "/tools/RTsort",
         element: <RTsort />,
