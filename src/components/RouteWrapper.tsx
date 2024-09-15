@@ -238,7 +238,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Pilgrimage",
         element: <Pilgrimage />,
         description:
-            "A walkthrough on the Pilgrimage Hack The Box challenge focused on exploiting a web application vulnerability to gain access to the system",
+            "A walkthrough on the Pilgrimage Hack The Box challenge focused on exploiting a web application vulnerabilities to gain access to the system",
         category: "Web Application Testing",
     },
     {
