@@ -594,7 +594,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Rainbowcrack",
         element: <Rainbowcrack />,
         description: "A computer program which generates rainbow tables to be used in password cracking.",
-        category: "Password Cracking and Authentication testing",
+        category: "Password Cracking and Authentication Testing",
     },
     {
         name: "SearchSploit",
