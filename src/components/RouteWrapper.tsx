@@ -241,7 +241,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Pilgrimage",
         element: <Pilgrimage />,
         description:
-            "A walkthrough on the Pilgrimage Hack The Box challenge focused on exploiting a web application vulnerability to gain access to the system",
+            "A walkthrough on the Pilgrimage Hack The Box challenge focused on exploiting a web application vulnerabilities to gain access to the system",
         category: "Web Application Testing",
     },
     {
@@ -282,7 +282,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/AircrackNG",
         element: <AircrackNG />,
         description:
-            "A wireless network auditing and cracking tool that can capture and analyze packets from Wi-Fi networks, crack WEP and WPA-PSK passwords, and identify vulnerabilities in wireless networks.",
+            "A wireless network auditing and cracking tool that can capture and analyze packets from Wi-Fi networks, crack WEP and WPA-PSK passwords, and identify vulnerability in wireless networks.",
         category: "Password Cracking and Authentication Testing",
     },
     {
