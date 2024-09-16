@@ -3,12 +3,15 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
-// Define form values type
+/**
+ * Represents the form values for SearchSploit.
+ */
 interface FormValues {
     searchTerm: string;
     searchOption: string;
@@ -26,7 +29,7 @@ Step 3: Select a Non-Searching option.
 Step 4: Enter an Exploit Database ID.
 Step 5: Click Scan to commence SearchSploit's operation.
 Step 6: View the Output block below to view the results of the tool's execution.`;
-const sourceLink = "https://www.exploit-db.com/documentation/Offsec-SearchSploit.pdf";
+const sourceLink = "https://www.kali.org/tools/searchsploit"; // Corrected sourceLink
 const tutorial = "";
 const dependencies = ["searchsploit"];
 const searchOptions = ["Case", "Exact", "Strict", "Title"];
@@ -173,7 +176,13 @@ const SearchSploit = () => {
     }, []);
 
     return (
-        <>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
             {!loadingModal && (
                 <InstallationModal
                     isOpen={opened}
@@ -209,7 +218,7 @@ const SearchSploit = () => {
                         description="Exploit Database ID: Required when using the 'Path' output or Non-Search options."
                         {...form.getInputProps("ebdId")}
                     />
-                    <Button type={"submit"}>Scan</Button>
+                    <Button type={"submit"}>Start {title}</Button> {/* Button text updated */}
                     <Accordion>
                         <Accordion.Item value="item-1">
                             <Accordion.Control>Help:</Accordion.Control>
@@ -239,7 +248,7 @@ const SearchSploit = () => {
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
-        </>
+        </RenderComponent>
     );
 };
 
