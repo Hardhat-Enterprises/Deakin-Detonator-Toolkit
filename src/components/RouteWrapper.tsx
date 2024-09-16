@@ -79,6 +79,7 @@ import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
 import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
+import RDPassSpray from "./rdpassspray/rdpassspray";
 import SQLmap from "./SQLmap/SQLmap";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
 import Unicornscan from "./Unicornscan/Unicornscan";
@@ -581,6 +582,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Parsero />,
         description: "A Python script that reads a web server's robots.txt file to view and analyze Disallow entries.",
         category: "Web Application Testing",
+    },
+    {
+        name: "RDPassSpray",
+        path: "/tools/rdpassspray",
+        element: <RDPassSpray />,
+        description: "A tool for brute-forcing RDP services using username and password lists which is employed for password spraying attacks against remote desktop or RD services.",
+        category: "Password Cracking and Authentication Testing",
     },
     {
         name: "RTsort",
