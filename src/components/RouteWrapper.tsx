@@ -694,8 +694,7 @@ export const ROUTES: RouteProperties[] = [
         name: "Tiger",
         path: "/tools/tiger",
         element: <Tiger />,
-        description:
-            "Audit and Intrusion detection tool used to protect UNIX based systems",
+        description: "Audit and Intrusion detection tool used to protect UNIX based systems",
         category: "Network Scanning",
     },
     {
