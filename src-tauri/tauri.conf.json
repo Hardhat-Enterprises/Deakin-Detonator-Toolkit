@@ -248,6 +248,11 @@
                         "args": true
                     },
                     {
+                        "name": "rdpassspray",
+                        "cmd": "rdpassspray",
+                        "args": true
+                    },
+                    {
                         "name": "rtsort",
                         "cmd": "rtsort",
                         "args": true
