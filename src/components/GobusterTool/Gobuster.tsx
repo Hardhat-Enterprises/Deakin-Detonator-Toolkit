@@ -4,9 +4,10 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { UserGuide } from "../UserGuide/UserGuide";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 const title = "GoBuster Directory and File Brute-Forcing Tool";
 const description_userguide = "GoBuster is a tool used for directory and file brute-forcing on web servers.";
@@ -154,13 +155,20 @@ const GoBusterTool = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
             <form onSubmit={form.onSubmit(onSubmit)}>
-                <LoadingOverlay visible={loading} />
                 <Stack>
-                    {UserGuide(title, description_userguide)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <TextInput label={"Target URL"} required {...form.getInputProps("url")} />
                     <TextInput label={"Wordlist File"} required {...form.getInputProps("wordlist")} />
-                    <Button type={"submit"}>Start Brute-Forcing</Button>
+                    <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
