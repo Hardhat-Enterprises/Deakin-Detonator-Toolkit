@@ -748,8 +748,7 @@ export const ROUTES: RouteProperties[] = [
         name: "Wifite",
         path: "/tools/wifite",
         element: <Wifite />,
-        description:
-            "A tool used to audit WEP, WPA, and WPA2 encrypted networks.",
+        description: "A tool used to audit WEP, WPA, and WPA2 encrypted networks.",
         category: "Web Application Testing",
     },
     {
