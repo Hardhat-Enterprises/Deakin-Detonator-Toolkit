@@ -433,14 +433,6 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
-        name: "FirmwareAnalysisTool",
-        path: "/tools/FirmwareAnalysisTool",
-        element: <FirmwareAnalysisTool />,
-        description:
-            "Firmware Analysis Toolkit (FAT henceforth) is based on Firmadyne with some changes. Firmadyne uses a PostgreSQL database to store information about the emulated images.",
-        category: "IOT",
-    },
-    {
         name: "Fcrackzip",
         path: "/tools/Fcrackzip",
         element: <Fcrackzip />,
@@ -454,6 +446,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A web fuzzer used for discovering hidden files, directories and endpoints on web servers by brute-forcing URLs.",
         category: "Web Application Testing",
+    },
+    {
+        name: "FirmwareAnalysisTool",
+        path: "/tools/FirmwareAnalysisTool",
+        element: <FirmwareAnalysisTool />,
+        description:
+            "Firmware Analysis Toolkit (FAT henceforth) is based on Firmadyne with some changes. Firmadyne uses a PostgreSQL database to store information about the emulated images.",
+        category: "IOT",
     },
     {
         name: "Foremost",
