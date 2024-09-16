@@ -330,8 +330,7 @@ export const ROUTES: RouteProperties[] = [
         name: "Arping",
         path: "/tools/Arping",
         element: <Arping />,
-        description:
-            "Arping is a tool to send ARP requests to a specified IP address to discover the MAC address.",
+        description: "Arping is a tool to send ARP requests to a specified IP address to discover the MAC address.",
         category: "Network Scanning and Enumeration",
     },
     {
