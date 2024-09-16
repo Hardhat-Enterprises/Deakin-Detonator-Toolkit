@@ -18,26 +18,6 @@
                 "sidecar": true,
                 "scope": [
                     {
-                        "name": "arpaname",
-                        "cmd": "arpaname",
-                        "args": true
-                    },
-                    {
-                        "name": "amass",
-                        "cmd": "amass",
-                        "args": true
-                    },
-                    {
-                        "name": "which",
-                        "cmd": "which",
-                        "args": true
-                    },
-                    {
-                        "name": "pkexec",
-                        "cmd": "pkexec",
-                        "args": true
-                    },
-                    {
                         "name": "nmap",
                         "cmd": "nmap",
                         "args": true
@@ -45,6 +25,11 @@
                     {
                         "name": "amap",
                         "cmd": "amap",
+                        "args": true
+                    },
+                    {
+                        "name": "amass",
+                        "cmd": "amass",
                         "args": true
                     },
                     {
