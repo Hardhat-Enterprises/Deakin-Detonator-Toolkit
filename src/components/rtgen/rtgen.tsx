@@ -123,11 +123,16 @@ const Rtgen = () => {
         // Construct arguments for the Rtgen command based on form input
         let args = [];
         args = [
-            "--charset", values.plaintextCharset,
-            "--hash", values.hashAlgorithm,
-            "--chains", values.chainLength,
-            "--table-size", values.tableSize,
-            "--output", values.outputFileName
+            "--charset",
+            values.plaintextCharset,
+            "--hash",
+            values.hashAlgorithm,
+            "--chains",
+            values.chainLength,
+            "--table-size",
+            values.tableSize,
+            "--output",
+            values.outputFileName,
         ];
 
         // Execute the Rtgen command via helper method and handle its output or potential errors
