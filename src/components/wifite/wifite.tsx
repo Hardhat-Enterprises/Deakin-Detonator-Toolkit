@@ -191,11 +191,7 @@ const Wifite = () => {
                         {...form.getInputProps("attackMode")}
                         placeholder="e.g. 1 for deauth"
                     />
-                    <TextInput
-                        label="Channel"
-                        {...form.getInputProps("channel")}
-                        placeholder="e.g. 6"
-                    />
+                    <TextInput label="Channel" {...form.getInputProps("channel")} placeholder="e.g. 6" />
                     <TextInput
                         label="Handshake File"
                         {...form.getInputProps("handshake")}
@@ -212,11 +208,7 @@ const Wifite = () => {
                         onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
                     <Button type="submit">Start Attack</Button>
-                    {output && (
-                        <ConsoleWrapper
-                            output={output}
-                        />
-                    )}
+                    {output && <ConsoleWrapper output={output} />}
                 </Stack>
             </form>
         </RenderComponent>
