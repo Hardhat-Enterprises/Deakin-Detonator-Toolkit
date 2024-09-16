@@ -13,10 +13,11 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
  * Represents the form values for the Wifite component.
  */
 interface FormValuesType {
-    interface: string;
+    targetInterface: string;
     attackMode: string;
-    deauthAttack: boolean;
-    handshakeFile: string;
+    channel: string;
+    handshake: string;
+    beacon: string;
 }
 
 /**
@@ -27,43 +28,43 @@ const Wifite = () => {
     // Component state variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution
-    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving of output
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [verboseMode, setVerboseMode] = useState(false); // State variable for verbose mode
 
     // Component Constants
     const title = "Wifite";
     const description =
-        "Wifite is a wireless network auditing tool designed to automate the process of cracking WPA and WPA2 encryption using various attack methods.";
+        "Wifite is a Python tool for automating the process of attacking WPA and WPA2 networks. It handles the cracking of handshakes and supports multiple attack modes.";
     const steps =
         "=== Required ===\n" +
-        "Step 1: Select a network interface to use for scanning.\n" +
-        "Step 2: Choose an attack mode (e.g., automated, specific AP).\n" +
-        "Step 3: Optionally, specify a file containing handshakes to crack.\n" +
-        "Step 4: Optionally, enable deauthentication attacks to capture handshakes.\n" +
+        "Step 1: Select the network interface to use for scanning.\n" +
+        "Step 2: Specify the attack mode you want to use (e.g., `-a 1` for deauthentication).\n" +
+        "Step 3: Input the channel to scan (if applicable).\n" +
+        "Step 4: Optionally, input a specific handshake file or beacon file to use.\n" +
         " \n" +
         "=== Optional ===\n" +
-        "Step 5: Check the verbose mode checkbox for more detailed output.\n";
+        "Step 5: Enable verbose mode for more detailed output.\n";
     const sourceLink = ""; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
-    const dependencies = ["wifite"]; // Contains the dependencies required by the component
+    const dependencies = ["wifite"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input
     let form = useForm({
         initialValues: {
-            interface: "",
+            targetInterface: "",
             attackMode: "",
-            deauthAttack: false,
-            handshakeFile: "",
+            channel: "",
+            handshake: "",
+            beacon: "",
         },
     });
 
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly
+        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
                 setIsCommandAvailable(isAvailable); // Set the command availability state
@@ -82,7 +83,7 @@ const Wifite = () => {
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
     /**
@@ -95,11 +96,15 @@ const Wifite = () => {
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            // If the process was successful, display a success message
+            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+
+                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
@@ -123,18 +128,21 @@ const Wifite = () => {
 
         // Construct arguments for the Wifite command based on form input
         let args = [];
-        args = [values.interface];
+        args = [values.targetInterface, "-a", values.attackMode];
 
-        if (values.attackMode) {
-            args.push("--attack", values.attackMode);
+        // Check if channel has a value and push it to args
+        if (values.channel) {
+            args.push("--channel", values.channel);
         }
 
-        if (values.deauthAttack) {
-            args.push("--deauth");
+        // Check if handshake has a value and push it to args
+        if (values.handshake) {
+            args.push("--handshake", values.handshake);
         }
 
-        if (values.handshakeFile) {
-            args.push("--handshake", values.handshakeFile);
+        // Check if beacon has a value and push it to args
+        if (values.beacon) {
+            args.push("--beacon", values.beacon);
         }
 
         if (verboseMode) {
@@ -153,7 +161,7 @@ const Wifite = () => {
                 // Deactivate loading state
                 setLoading(false);
             });
-        setAllowSave(true);
+        setHasSaved(false); // Reset save state
     };
 
     /**
@@ -161,16 +169,14 @@ const Wifite = () => {
      */
     const handleSaveComplete = () => {
         setHasSaved(true); // Set hasSaved state to true
-        setAllowSave(false); // Disallow further output saving
     };
 
     /**
-     * Clears the command output and resets state variables related to output saving.
+     * Clears the command output.
      */
     const clearOutput = () => {
         setOutput(""); // Clear the command output
         setHasSaved(false); // Reset hasSaved state
-        setAllowSave(false); // Disallow further output saving
     };
 
     // Render component
@@ -196,32 +202,43 @@ const Wifite = () => {
                     <TextInput
                         label="Network Interface"
                         required
-                        {...form.getInputProps("interface")}
+                        {...form.getInputProps("targetInterface")}
                         placeholder="e.g. wlan0"
                     />
                     <TextInput
                         label="Attack Mode"
+                        required
                         {...form.getInputProps("attackMode")}
-                        placeholder="e.g. automated, specific AP"
+                        placeholder="e.g. 1 for deauth"
                     />
-                    <Checkbox
-                        label="Enable Deauth Attack"
-                        checked={form.values.deauthAttack}
-                        onChange={(e) => form.setFieldValue("deauthAttack", e.currentTarget.checked)}
+                    <TextInput
+                        label="Channel"
+                        {...form.getInputProps("channel")}
+                        placeholder="e.g. 6"
                     />
                     <TextInput
                         label="Handshake File"
-                        {...form.getInputProps("handshakeFile")}
-                        placeholder="e.g. handshakes.cap"
+                        {...form.getInputProps("handshake")}
+                        placeholder="e.g. /path/to/handshake.cap"
+                    />
+                    <TextInput
+                        label="Beacon File"
+                        {...form.getInputProps("beacon")}
+                        placeholder="e.g. /path/to/beacon.pcap"
                     />
                     <Checkbox
                         label="Verbose Mode"
                         checked={verboseMode}
                         onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
-                    <Button type={"submit"}>Start {title}</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} allowSave={allowSave} hasSaved={hasSaved} onSaveComplete={handleSaveComplete} />
+                    <Button type="submit">Start Attack</Button>
+                    {output && (
+                        <ConsoleWrapper
+                            output={output}
+                            hasSaved={hasSaved}
+                            onSaveComplete={handleSaveComplete}
+                        />
+                    )}
                 </Stack>
             </form>
         </RenderComponent>
