@@ -296,8 +296,8 @@ export const ROUTES: RouteProperties[] = [
         name: "Amass",
         path: "/tools/Amass",
         element: <Amass />,
-        description: "Amass is a tool for in-depth DNS enumeration and network mapping",
-        category: "Information Gathering and Reconnaissance",
+        description: "Amass is a tool for in-depth DNS enumeration and network mapping.",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "Arjun",
