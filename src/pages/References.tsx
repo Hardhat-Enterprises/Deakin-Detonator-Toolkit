@@ -142,6 +142,13 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/wpscan/"}
                     />
+                    <Reference
+                        name={"Aircrack-NG"}
+                        description={
+                            "Aircrack-ng is a network security tool used for cracking WEP and WPA/WPA2 passwords by capturing and analyzing wireless network traffic."
+                        }
+                        url={"https://www.kali.org/tools/aircrack-ng/"}
+                    />
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2022-24112"}

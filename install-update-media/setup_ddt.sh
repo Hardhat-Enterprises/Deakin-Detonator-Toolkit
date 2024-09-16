@@ -20,26 +20,47 @@ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
 # Load Cargo environment variables
 source "$HOME/.cargo/env"
 
+# Verify Rust installation
+if ! command -v rustc &>/dev/null; then
+	echo "Rust installation failed. Exiting..."
+	exit 1
+fi
+
 # Install development packages including the necessary
 sudo apt-get install -y \
-  pkgconf \
-  libgtk-3-dev \
-  libsoup2.4-dev \
-  webkit2gtk-4.0 \
-  nodejs \
-  npm
+	pkgconf \
+	libgtk-3-dev \
+	libsoup2.4-dev \
+	webkit2gtk-4.0 \
+	nodejs \
+	npm
+
+# Verify Node.js and npm installation
+if ! command -v node &>/dev/null || ! command -v npm &>/dev/null; then
+	echo "Node.js or npm installation failed. Exiting..."
+	exit 1
+fi
 
 # Check for installation errors
 if [ $? -ne 0 ]; then
-  echo "Error installing packages"
-  exit 1
+	echo "Error installing packages"
+	exit 1
 fi
 
 # Install Yarn globally
 sudo npm install -g yarn
 
+# Verify Yarn installation
+if ! command -v yarn &>/dev/null; then
+	echo "Yarn installation failed. Exiting..."
+	exit 1
+fi
+
 # Install Yarn dependencies
 yarn install
+
+# Move exploits to DDT directory
+chmod +x install-update-media/install_exploits.sh && ./install-update-media/install_exploits.sh
 
 # Modify start script permissions and start application
 chmod +x install-update-media/start-ddt.sh && ./install-update-media/start-ddt.sh

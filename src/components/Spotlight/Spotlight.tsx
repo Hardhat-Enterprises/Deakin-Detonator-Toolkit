@@ -6,6 +6,18 @@ import { useNavigate } from "react-router-dom";
 import { RouteProperties, ROUTES } from "../RouteWrapper";
 
 function SpotlightControl() {
+    /*
+    TODO This works fine, however it may be better if the input is unfocused
+    by blurring the ref onSpotlightClose in the Search component, but I could
+    not get this to work.
+    */
+    const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
+        openSpotlight();
+        if (e.currentTarget) {
+            e.currentTarget.blur();
+        }
+    };
+
     return (
         <Input
             variant="filled"
@@ -13,7 +25,7 @@ function SpotlightControl() {
             size="sm"
             icon={<IconSearch size={16} />}
             placeholder="Quick search here..."
-            onClick={() => openSpotlight()}
+            onClick={handleClick}
         />
     );
 }
