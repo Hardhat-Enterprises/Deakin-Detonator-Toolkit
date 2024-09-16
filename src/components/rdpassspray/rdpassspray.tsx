@@ -51,7 +51,7 @@ const RDPassSpray = () => {
         "Step 6: Enable verbose mode for more detailed output.\n";
     const sourceLink = ""; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
-    const dependencies = ["rdpspray"]; // Contains the dependencies required by the component.
+    const dependencies = ["rdpassspray"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input
     let form = useForm({
