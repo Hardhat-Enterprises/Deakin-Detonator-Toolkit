@@ -54,9 +54,19 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/amap/"}
                     />
                     <Reference
-                        name={"Arjuntool"}
+                        name={"Arjun"}
                         description={"Arjun is a tool for finding hidden HTTP GET and POST parameters in web apps."}
-                        url={"hhttps://www.kali.org/tools/arjun/"}
+                        url={"https://www.kali.org/tools/arjun/"}
+                    />
+                    <Reference
+                        name={"Arpaname"}
+                        description={"Translate IP addresses to the corresponding ARPA names."}
+                        url={"https://www.kali.org/tools/bind9/#arpaname"}
+                    />
+                    <Reference
+                        name={"Arpfingerprint"}
+                        description={"Arpfingerprint is a tool within arp-scan which fingerprint a system using ARP"}
+                        url={"https://www.kali.org/tools/arp-scan/#arp-fingerprint"}
                     />
                     <Reference
                         name={"ArpScan"}
@@ -67,10 +77,8 @@ const ReferencesPage = () => {
                     />
                     <Reference
                         name={"ArpSpoof"}
-                        description={
-                            "Arp-scan is a network scanning tool that actively sends ARP requests to discover devices and IP addresses on a local network."
-                        }
-                        url={"https://www.kali.org/tools/arp-scan/"} ////
+                        description={"Arpspoof is a tool within dsniff package. It intercept packets on a switched LAN"}
+                        url={"https://www.kali.org/tools/dsniff/#arpspoof"}
                     />
                     <Reference
                         name={"BED"}
@@ -118,7 +126,7 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/dmitry/"}
                     />
                     <Reference
-                        name={"Dnsenum"}
+                        name={"DNSenum"}
                         description={
                             "Dnsenum is a multithreaded perl script to enumerate DNS information of a domain and to discover non-contiguous ip blocks."
                         }
@@ -140,13 +148,6 @@ const ReferencesPage = () => {
                         name={"Enum4Linux"}
                         description={"Enux4Linux is a tool for enumerating information from Windows and Samba systems."}
                         url={"https://www.kali.org/tools/enum4linux/"}
-                    />
-                    <Reference
-                        name={"Exploitdb"}
-                        description={
-                            "Exploitdb is used for the searchsploit tool. Contains information about exploits and vulnerabilities."
-                        }
-                        url={"https://github.com/offensive-security/exploitdb"}
                     />
                     <Reference
                         name={"Eyewitness"}
@@ -175,7 +176,7 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/foremost/"}
                     />
                     <Reference
-                        name={"FTP"}
+                        name={"FTPconnect"}
                         description={
                             "The standard ftp command-line client used to transfer files between systems over the File Transfer Protocol (FTP)."
                         }
@@ -189,8 +190,8 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/gitleaks/"}
                     />
                     <Reference
-                        name={"Gobuster"}
-                        description={"Gobuster is a tool used to brute-force."}
+                        name={"GoBuster"}
+                        description={"GoBuster is a tool used to brute-force."}
                         url={"https://www.kali.org/tools/gobuster/"}
                     />
                     <Reference
@@ -214,11 +215,6 @@ const ReferencesPage = () => {
                             "Hydra is a parallelised login cracker which supports numerous protocols to attack."
                         }
                         url={"https://www.kali.org/tools/hydra/"}
-                    />
-                    <Reference
-                        name={"Impacket"}
-                        description={"Impacket is a collection of Python classes for working with network protocols."}
-                        url={"https://github.com/SecureAuthCorp/impacket"}
                     />
                     <Reference
                         name={"JohnTheRipper"}
@@ -263,9 +259,9 @@ const ReferencesPage = () => {
                         url={"https://www.nmap.org"}
                     />
                     <Reference
-                        name={"NSLookup"} /////
-                        description={"Nmap a network scanning tool."}
-                        url={"https://www.nmap.org"}
+                        name={"NSLookup"}
+                        description={"NSlookup  is  a program to query Internet domain name servers."}
+                        url={"https://www.kali.org/tools/bind9/#nslookup"}
                     />
                     <Reference
                         name={"Parsero"}
@@ -283,6 +279,13 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/rainbowcrack/"}
                     />
                     <Reference
+                        name={"SearchSploit"}
+                        description={
+                            "SearchSploit is a tool to search the Exploit Database for public exploits and vulnerabilities."
+                        }
+                        url={"https://www.kali.org/tools/exploitdb/#searchsploit"}
+                    />
+                    <Reference
                         name={"Sherlock"}
                         description={"Sherlock is used to search for usernames across social networks."}
                         url={"https://www.kali.org/tools/sherlock/"}
@@ -293,23 +296,35 @@ const ReferencesPage = () => {
                         url={"https://www.shodan.io/"}
                     />
                     <Reference
-                        name={"SMBEnumeration"} ////
+                        name={"SMBEnumeration"}
                         description={
                             "SMBenumeration is a tool used for enumerating information from SMB (Server Message Block)."
                         }
-                        url={"https://www.nmap.org"}
+                        url={"https://securiumsolutions.com/smb-enumeration-a-guide-step-by-step/"}
                     />
                     <Reference
-                        name={"SMGGhostScanner"} ////
+                        name={"SMBGhostScanner"}
                         description={
-                            "SMG Ghost Scanner is a tool used for network scanning and vulnerability assessment."
+                            "SMB Ghost Scanner is a tool used for network scanning and vulnerability assessment."
                         }
-                        url={"https://www.nmap.org"}
+                        url={"https://github.com/w1ld3r/SMBGhost_Scanner?tab=readme-ov-file"}
                     />
                     <Reference
                         name={"Snmp-check"}
                         description={"Snmp-check is a tool for enumerating on SNMP services."}
                         url={"https://www.kali.org/tools/snmpcheck/"}
+                    />
+                    <Reference
+                        name={"Sublist3r"}
+                        description={"Sublist3r is a tool designed to enumerate subdomains of websites using OSINT"}
+                        url={"https://www.kali.org/tools/sublist3r/"}
+                    />
+                    <Reference
+                        name={"TheHarvester"}
+                        description={
+                            "The Harvester is a tool for gathering emails, subdomains, IPs, and URLs from public sources for reconnaissance."
+                        }
+                        url={"https://www.kali.org/tools/theharvester/"}
                     />
                     <Reference
                         name={"Traceroute"}
@@ -319,13 +334,27 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/traceroute/"}
                     />
                     <Reference
+                        name={"TShark"}
+                        description={"TShark is a tool to dump and analyze network traffic"}
+                        url={"https://www.kali.org/tools/wireshark/#tshark-1"}
+                    />
+                    <Reference
                         name={"Urlsnarf"}
                         description={
                             "Urlsnarf is a tool within dsniff package, which contains tools for listening and creating network traffic"
                         }
                         url={"https://www.kali.org/tools/dsniff/"}
                     />
-
+                    <Reference
+                        name={"WhatWeb"}
+                        description={"WhatWeb identifies websites."}
+                        url={"https://www.kali.org/tools/whatweb/"}
+                    />
+                    <Reference
+                        name={"Whois"}
+                        description={"Whois is a command-line tool used to query databases."}
+                        url={"https://www.kali.org/tools/whois/"}
+                    />
                     <Reference
                         name={"WPScan"}
                         description={
@@ -336,9 +365,40 @@ const ReferencesPage = () => {
 
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
+                        name={"CVE-2021-41773"}
+                        description={"CVE-2021-41773 allows directory traversal attacks."}
+                        url={"cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-41773"}
+                    />
+                    <Reference
+                        name={"CVE-2021-44228"}
+                        description={"CVE-2021-44228 allows Remote Code Execution."}
+                        url={"cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-44228"}
+                    />
+                    <Reference
                         name={"CVE-2022-24112"}
                         description={"Apache APISIX - Remote Code Execution."}
-                        url={"https://apisix.apache.org/"}
+                        url={"https://github.com/M4xSec/Apache-APISIX-CVE-2022-24112"}
+                    />
+                    <Reference
+                        name={"CVE-2022-36804"}
+                        description={"CVE-2022-36804 allows privilege escalation."}
+                        url={"https://nvd.nist.gov/vuln/detail/CVE-2022-36804"}
+                    />
+                    <Reference
+                        name={"FindOffset"}
+                        description={
+                            "Find Offset identifies where a buffer overflow overwrites key memory addresses like EIP."
+                        }
+                        url={
+                            "https://book.hacktricks.xyz/binary-exploitation/rop-return-oriented-programing/ret2lib/ret2lib-+-printf-leak-arm64#find-offset"
+                        }
+                    />
+                    <Reference
+                        name={"Zerologon"}
+                        description={"ZeroLogon allow domain admin access by exploiting weak Netlogon cryptography."}
+                        url={
+                            "https://www.infosecinstitute.com/resources/vulnerabilities/zerologon-cve-2020-1472-technical-overview-and-walkthrough/"
+                        }
                     />
                 </Stack>
             </Group>
