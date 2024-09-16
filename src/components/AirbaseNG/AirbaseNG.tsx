@@ -203,20 +203,24 @@ const AirbaseNG = () => {
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
 
                     {/* Advanced Mode Switch */}
-                    <Switch
-                        size="md"
-                        label="Advanced Mode"
-                        checked={advanceMode}
-                        onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
-                    />
+                    <Tooltip label="Enable advanced settings">
+                        <Switch
+                            size="md"
+                            label="Advanced Mode"
+                            checked={advanceMode}
+                            onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
+                        />
+                    </Tooltip>
 
                     {/* Custom Mode Switch */}
-                    <Switch
-                        size="md"
-                        label="Custom Configuration"
-                        checked={customMode}
-                        onChange={(e) => setCustomMode(e.currentTarget.checked)}
-                    />
+                    <Tooltip label="Enable custom configuration">
+                        <Switch
+                            size="md"
+                            label="Custom Configuration"
+                            checked={customMode}
+                            onChange={(e) => setCustomMode(e.currentTarget.checked)}
+                        />
+                    </Tooltip>
 
                     {/* Basic Mode Inputs */}
                     <TextInput label="Name of your fake host" required {...form.getInputProps("fakeHost")} />
@@ -272,3 +276,4 @@ const AirbaseNG = () => {
 };
 
 export default AirbaseNG;
+
