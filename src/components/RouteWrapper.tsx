@@ -423,18 +423,18 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
-        name: "EyeWitness",
-        path: "/tools/eyewitness",
-        element: <Eyewitness />,
-        description: "A tool used for capturing screenshots and gathering information from web servers",
-        category: "Web Application Testing",
-    },
-    {
         name: "Exif",
         path: "/tools/Exif",
         element: <Exif />,
         description: "A tool used to extract metadata from different file types",
         category: "Information Gathering and Analysis",
+    },
+    {
+        name: "EyeWitness",
+        path: "/tools/eyewitness",
+        element: <Eyewitness />,
+        description: "A tool used for capturing screenshots and gathering information from web servers",
+        category: "Web Application Testing",
     },
     {
         name: "Fcrackzip",
