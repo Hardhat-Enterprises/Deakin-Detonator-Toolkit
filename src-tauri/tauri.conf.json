@@ -293,6 +293,11 @@
                         "args": true
                     },
                     {
+                        "name": "tiger",
+                        "cmd": "tiger",
+                        "args": true
+                    },
+                    {
                         "name": "traceroute",
                         "cmd": "sudo traceroute",
                         "args": true
