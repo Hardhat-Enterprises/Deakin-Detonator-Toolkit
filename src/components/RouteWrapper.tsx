@@ -65,6 +65,7 @@ import Topology from "./WalkthroughPages/Topology";
 import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
+import Rtgen from "./rtgen/rtgen";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import ArpanameTool from "./Arpaname/arpaname";
 import Nikto from "./Nikto/Nikto";
@@ -426,7 +427,6 @@ export const ROUTES: RouteProperties[] = [
 
     description:
       "A Python script that systematically searches for different hosts associated with a given domain, using DNS queries to discover subdomains, IP addresses, and other relevant DNS records. ",
-
     category: "Information Gathering and Analysis",
   },
   {
