@@ -32,29 +32,29 @@ interface FormValuesType {
  */
 const AirbaseNG = () => {
     // State variables to manage the component's functionality.
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
+    const [output, setOutput] = useState("");// State variable to store the output of the command execution.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);// State variable to check if the command is available.
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [opened, setOpened] = useState(!isCommandAvailable);
-    const [loadingModal, setLoadingModal] = useState(true);
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [advanceMode, setAdvanceMode] = useState(false);
     const [customMode, setCustomMode] = useState(false);
 
     // Constants for the component's metadata.
-    const title = "Airbase-ng";
-    const description = "Airbase-ng is a tool to create fake access points.";
+    const title = "Airbase-ng";  // Title of the component.
+    const description = "Airbase-ng is a tool to create fake access points."; // Description of the component.
     const steps =
         "Step 1: Type in the name of your fake host.\n" +
         "Step 2: Select your desired channel.\n" +
         "Step 3: Specify the WLAN interface to be used.\n" +
         "Step 4: Click 'Start AP' to begin the process.\n" +
         "Step 5: View the output block to see the results.";
-    const sourceLink = ""; // Placeholder for source link.
-    const tutorial = ""; // Placeholder for tutorial link.
-    const dependencies = ["aircrack-ng"];
+    const sourceLink = "";  // Link to the source code (or Kali Tools).
+    const tutorial = "";  // Link to the official documentation/tutorial.
+    const dependencies = ["aircrack-ng"];  // Contains the dependencies required by the compon
 
     // Form handling for the component's input fields.
     const form = useForm({
@@ -69,69 +69,76 @@ const AirbaseNG = () => {
             customConfig: "",
             customScript: "",
         },
-
-        // Validation: Ensure essential fields are filled.
-        validate: {
-            fakeHost: (value) => (value ? null : "Fake host name is required."),
-            channel: (value) => (value ? null : "Channel is required."),
-            replayInterface: (value) => (value ? null : "WLAN interface is required."),
-        },
     });
 
     // Effect to check command availability on component mount.
-    useEffect(() => {
+    useEffect(() => {  // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable);
-                setOpened(!isAvailable);
-                setLoadingModal(false);
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
             })
             .catch((error: any) => {
                 // Fix the error type
                 console.error("An error occurred:", error);
-                setLoadingModal(false);
+                setLoadingModal(false); // Also set loading to false in case of error
             });
     }, []);
 
     /**
-     * Handles incoming data from the child process.
-     * @param {string} data - Data received from the process.
+      * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data received to the existing output.
+     * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
     /**
-     * Handles the termination of the child process.
-     * @param {object} param - Process termination details.
-     * @param {number} param.code - Exit code of the process.
-     * @param {number} param.signal - Termination signal.
+     * handleProcessTermination: Callback to handle the termination of the child process.
+     * Once the process termination is handled, it clears the process PID reference and
+     * deactivates the loading overlay.
+     * @param {object} param - An object containing information about the process termination.
+     * @param {number} param.code - The exit code of the terminated process.
+     * @param {number} param.signal - The signal code indicating how the process was terminated.
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
+                // If the process was successful, display a success message.
                 handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 15) {
+            } else if (signal === 15) {   // If the process was terminated manually, display a termination message.
                 handleProcessData("\nProcess was manually terminated.");
-            } else {
+            } else {  
+                // If the process was terminated with an error, display the exit and signal codes.
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            setPid("");
-            setLoading(false);
+            setPid(""); 
+            // Clear the child process pid reference. There is no longer a valid process running.
+            setLoading(false); 
+             // Cancel the loading overlay. The process has completed.
             setAllowSave(true);
+             // Allow Saving as the output is finalised
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData] // Dependency on the handleProcessData callback
     );
 
     /**
-     * Handles the form submission to run the airbase-ng command.
-     * @param {FormValuesType} values - Form values.
+    * onSubmit: Asynchronous handler for the form submission event.
+     * It sets up and triggers the airbase-ng tool with the given parameters.
+     * Once the command is executed, the results or errors are displayed in the output.
+     *
+     * @param {FormValuesType} values - The form values, containing the fake host name, channel, and WLAN interface.
      */
     const onSubmit = async (values: FormValuesType) => {
-        setLoading(true);
-        setAllowSave(false);
+        setLoading(true);  
+        // Activate loading state to indicate ongoing process
+        setAllowSave(false);  
+        // Disallow saving until the tool's execution is complete
 
+         // Construct arguments for the aircrack-ng command based on form input
         const args = ["-e", values.fakeHost, "-c", values.channel, values.replayInterface];
 
         // Advanced Mode Options
@@ -161,9 +168,9 @@ const AirbaseNG = () => {
             setAllowSave(true);
             setPid(pid);
         } catch (error: any) {
-            // Fix the error type
+            // Display any errors encountered during command execution
             setOutput(error.message || "An unknown error occurred.");
-            setLoading(false);
+            setLoading(false);  // Deactivate loading state
             setAllowSave(true);
         }
     };
@@ -178,7 +185,8 @@ const AirbaseNG = () => {
     }, [setOutput]);
 
     const handleSaveComplete = () => {
-        setHasSaved(true);
+        setHasSaved(true);  // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
         setAllowSave(false);
     };
 
@@ -237,13 +245,13 @@ const AirbaseNG = () => {
                             />
                             <Tooltip label="Enable verbose output">
                                 <Switch
-                                    label="Verbose Output"
+                                    label="Verbose output"
                                     {...form.getInputProps("verbosity", { type: "checkbox" })}
                                 />
                             </Tooltip>
                             <Tooltip label="Disable sending beacons">
                                 <Switch
-                                    label="Disable Beacons"
+                                    label="Disable beacons"
                                     {...form.getInputProps("disableBeacons", { type: "checkbox" })}
                                 />
                             </Tooltip>
@@ -253,9 +261,9 @@ const AirbaseNG = () => {
                     {/* Custom Mode Inputs */}
                     {customMode && (
                         <>
-                            <TextInput label="Custom Configuration" {...form.getInputProps("customConfig")} />
+                            <TextInput label="Custom configuration" {...form.getInputProps("customConfig")} />
                             <TextInput
-                                label="Custom Script Path"
+                                label="Custom script path"
                                 placeholder="Path to custom script"
                                 {...form.getInputProps("customScript")}
                             />
