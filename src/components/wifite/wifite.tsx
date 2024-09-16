@@ -3,7 +3,6 @@ import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
@@ -28,9 +27,7 @@ const Wifite = () => {
     // Component state variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution
-    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [opened, setOpened] = useState(false); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [verboseMode, setVerboseMode] = useState(false); // State variable for verbose mode
@@ -67,7 +64,6 @@ const Wifite = () => {
         // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
                 setOpened(!isAvailable); // Set the modal state to opened if the command is not available
                 setLoadingModal(false); // Set loading to false after the check is done
             })
@@ -161,22 +157,6 @@ const Wifite = () => {
                 // Deactivate loading state
                 setLoading(false);
             });
-        setHasSaved(false); // Reset save state
-    };
-
-    /**
-     * Handles the completion of output saving by updating state variables.
-     */
-    const handleSaveComplete = () => {
-        setHasSaved(true); // Set hasSaved state to true
-    };
-
-    /**
-     * Clears the command output.
-     */
-    const clearOutput = () => {
-        setOutput(""); // Clear the command output
-        setHasSaved(false); // Reset hasSaved state
     };
 
     // Render component
@@ -235,8 +215,6 @@ const Wifite = () => {
                     {output && (
                         <ConsoleWrapper
                             output={output}
-                            hasSaved={hasSaved}
-                            onSaveComplete={handleSaveComplete}
                         />
                     )}
                 </Stack>
