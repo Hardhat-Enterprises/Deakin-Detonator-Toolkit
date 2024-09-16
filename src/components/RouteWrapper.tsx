@@ -81,6 +81,7 @@ import Masscan from "./Masscan/Masscan";
 import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
+import Wifite from "./wifite/wifite";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
 import Tiger from "./tiger/tiger";
 import Unicornscan from "./Unicornscan/Unicornscan";
@@ -741,6 +742,14 @@ export const ROUTES: RouteProperties[] = [
         element: <Whois />,
         description:
             "A tool used to query and retrieve information about domain registrations, including registrants and contact details.",
+        category: "Web Application Testing",
+    },
+    {
+        name: "Wifite",
+        path: "/tools/wifite",
+        element: <Wifite />,
+        description:
+            "A tool used to audit WEP, WPA, and WPA2 encrypted networks.",
         category: "Web Application Testing",
     },
     {
