@@ -248,6 +248,11 @@
                         "args": true
                     },
                     {
+                        "name": "rtgen",
+                        "cmd": "rtgen",
+                        "args": true
+                    },
+                    {
                         "name": "rtsort",
                         "cmd": "rtsort",
                         "args": true

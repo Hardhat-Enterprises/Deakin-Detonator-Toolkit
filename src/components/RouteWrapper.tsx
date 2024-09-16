@@ -65,6 +65,7 @@ import Topology from "./WalkthroughPages/Topology";
 import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
+import Rtgen from "./rtgen/rtgen";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import ArpanameTool from "./Arpaname/arpaname";
 import Nikto from "./Nikto/Nikto";
@@ -595,6 +596,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Rainbowcrack />,
         description: "A computer program which generates rainbow tables to be used in password cracking.",
         category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "Rtgen",
+        path: "/tools/rtgen",
+        element: <Rtgen />,
+        description: "A tool for generating random network traffic to simulate various network conditions and loads.",
+        category: "Network Traffic Generation",
     },
     {
         name: "SearchSploit",
