@@ -333,6 +333,11 @@
                         "args": true
                     },
                     {
+                        "name": "wifite",
+                        "cmd": "wifite",
+                        "args": true
+                    },
+                    {
                         "name": "wpscan",
                         "cmd": "wpscan",
                         "args": true
