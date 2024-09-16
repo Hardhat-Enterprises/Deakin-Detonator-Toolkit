@@ -13,8 +13,10 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
  * Represents the form values for the Wifite component.
  */
 interface FormValuesType {
-    wirelessInterface: string;
-    verboseMode: boolean;
+    interface: string;
+    attackMode: string;
+    deauthAttack: boolean;
+    handshakeFile: string;
 }
 
 /**
@@ -27,34 +29,41 @@ const Wifite = () => {
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving of output
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution
     const [verboseMode, setVerboseMode] = useState(false); // State variable for verbose mode
 
     // Component Constants
     const title = "Wifite";
     const description =
-        "Wifite is an automated wireless attack tool used to audit WEP, WPA, and WPA2 encrypted networks.";
+        "Wifite is a wireless network auditing tool designed to automate the process of cracking WPA and WPA2 encryption using various attack methods.";
     const steps =
         "=== Required ===\n" +
-        "Step 1: Select the wireless interface to use.\n" +
-        "Step 2: (Optional) Enable verbose mode for detailed output.\n";
-    const sourceLink = "https://github.com/derv82/wifite"; // Link to the source code
-    const tutorial = "https://github.com/derv82/wifite"; // Link to the official documentation/tutorial
-    const dependencies = ["wifite"]; // Contains the dependencies required by the component.
+        "Step 1: Select a network interface to use for scanning.\n" +
+        "Step 2: Choose an attack mode (e.g., automated, specific AP).\n" +
+        "Step 3: Optionally, specify a file containing handshakes to crack.\n" +
+        "Step 4: Optionally, enable deauthentication attacks to capture handshakes.\n" +
+        " \n" +
+        "=== Optional ===\n" +
+        "Step 5: Check the verbose mode checkbox for more detailed output.\n";
+    const sourceLink = ""; // Link to the source code
+    const tutorial = ""; // Link to the official documentation/tutorial
+    const dependencies = ["wifite"]; // Contains the dependencies required by the component
 
     // Form hook to handle form input
     let form = useForm({
         initialValues: {
-            wirelessInterface: "",
-            verboseMode: false,
+            interface: "",
+            attackMode: "",
+            deauthAttack: false,
+            handshakeFile: "",
         },
     });
 
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
+        // Check if the command is available and set the state variables accordingly
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
                 setIsCommandAvailable(isAvailable); // Set the command availability state
@@ -73,7 +82,7 @@ const Wifite = () => {
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output
     }, []);
 
     /**
@@ -86,15 +95,11 @@ const Wifite = () => {
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            // If the process was successful, display a success message.
+            // If the process was successful, display a success message
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-
-                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-
-                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
@@ -110,7 +115,7 @@ const Wifite = () => {
 
     /**
      * Handles form submission for the Wifite component.
-     * @param {FormValuesType} values - The form values containing the wireless interface and verbose mode.
+     * @param {FormValuesType} values - The form values containing the target domain.
      */
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
@@ -118,12 +123,22 @@ const Wifite = () => {
 
         // Construct arguments for the Wifite command based on form input
         let args = [];
+        args = [values.interface];
 
-        // Build the command based on form input
-        args = ["-i", values.wirelessInterface]; // Set the wireless interface
+        if (values.attackMode) {
+            args.push("--attack", values.attackMode);
+        }
 
-        if (values.verboseMode) {
-            args.push("--verbose"); // Add verbose mode option if enabled
+        if (values.deauthAttack) {
+            args.push("--deauth");
+        }
+
+        if (values.handshakeFile) {
+            args.push("--handshake", values.handshakeFile);
+        }
+
+        if (verboseMode) {
+            args.push("-v"); // Add verbose mode option if enabled
         }
 
         // Execute the Wifite command via helper method and handle its output or potential errors
@@ -179,32 +194,36 @@ const Wifite = () => {
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput
-                        label="Wireless Interface"
+                        label="Network Interface"
                         required
-                        {...form.getInputProps("wirelessInterface")}
+                        {...form.getInputProps("interface")}
                         placeholder="e.g. wlan0"
+                    />
+                    <TextInput
+                        label="Attack Mode"
+                        {...form.getInputProps("attackMode")}
+                        placeholder="e.g. automated, specific AP"
+                    />
+                    <Checkbox
+                        label="Enable Deauth Attack"
+                        checked={form.values.deauthAttack}
+                        onChange={(e) => form.setFieldValue("deauthAttack", e.currentTarget.checked)}
+                    />
+                    <TextInput
+                        label="Handshake File"
+                        {...form.getInputProps("handshakeFile")}
+                        placeholder="e.g. handshakes.cap"
                     />
                     <Checkbox
                         label="Verbose Mode"
-                        checked={form.values.verboseMode}
-                        onChange={() => setVerboseMode(!verboseMode)}
-                        {...form.getInputProps("verboseMode")}
+                        checked={verboseMode}
+                        onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
-                    <Button type="submit" disabled={loading}>
-                        Run Wifite
-                    </Button>
+                    <Button type={"submit"}>Start {title}</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} allowSave={allowSave} hasSaved={hasSaved} onSaveComplete={handleSaveComplete} />
                 </Stack>
             </form>
-
-            {output && (
-                <ConsoleWrapper
-                    output={output}
-                    clearOutput={clearOutput}
-                    allowSave={allowSave}
-                    hasSaved={hasSaved}
-                    onSaveComplete={handleSaveComplete}
-                />
-            )}
         </RenderComponent>
     );
 };
