@@ -39,11 +39,11 @@ const ExifTool = () => {
     const description =
         "ExifTool is a platform-independent command-line application for reading, writing, and editing metadata in a wide variety of file types.";
     const steps =
-        "Step 1: Install relevant dependencies from start page\n" +
-        "Step 2: Have an image saved locally and specify file path in the form.\n" +
-        "Step 3: Enter a Metadata tag e.g.Author\n" +
-        "Step 4: Choose to either write or read metadata from the image" +
-        "Step 5: Run the tool!"; // Steps explaining how to run tool
+        "Step 1: Specify the file path of an image on your machine.\n" +
+        "Step 2: Enter a metadata tag to read or write to.\n" +
+        "Step 3: Choose whether to read or write to the specified metadata field.\n" +
+        "Step 4: Input a value to write to the specified metadata field.\n" +
+        "Step 5: Run the tool!";
     const sourceLink = ""; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["exiftool"]; // ExifTool dependency.
