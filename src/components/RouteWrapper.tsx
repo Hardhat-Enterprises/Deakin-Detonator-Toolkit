@@ -82,6 +82,7 @@ import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
+import Tiger from "./tiger/tiger";
 import Unicornscan from "./Unicornscan/Unicornscan";
 
 export interface RouteProperties {
@@ -688,6 +689,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "testssl.sh is a versatile command line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Tiger",
+        path: "/tools/tiger",
+        element: <Tiger />,
+        description:
+            "Audit and Intrusion detection tool used to protect UNIX based systems",
+        category: "Network Scanning",
     },
     {
         name: "Traceroute",
