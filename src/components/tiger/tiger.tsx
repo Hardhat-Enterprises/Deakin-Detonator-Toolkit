@@ -79,65 +79,80 @@ const Tiger = () => {
             });
     }, []);
 
+    /**
+     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data received to the existing output.
+     * @param {string} data - The data received from the child process.
+     */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
-    const handleProcessTermination = useCallback(
-        ({ code, signal }: { code: number; signal: number }) => {
-            if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 15) {
-                handleProcessData("\nProcess was manually terminated.");
-            } else {
-                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
-            }
-            setPid("");
-            setLoading(false);
-        },
-        [handleProcessData]
-    );
-
+    /**
+     * Handles form submission for the Tiger component.
+     * @param {FormValuesType} values - The form values containing the target domain.
+     */
     const onSubmit = async (values: FormValuesType) => {
+        // Activate loading state to indicate ongoing process
         setLoading(true);
-        let args = [values.targetIP, "-l", values.auditLevel];
 
+        // Construct arguments for the Tiger command based on form input
+        let args = [];
+        args = [values.targetIP, "-l", values.auditLevel];
+
+        // Check if reportFile has a value and push it to args
         if (values.reportFile) {
             args.push("-R", values.reportFile);
         }
+
+        // Check if enableModules has a value and push it to args
         if (values.enableModules) {
             args.push("-E", values.enableModules);
         }
+
+        // Check if excludeModules has a value and push it to args
         if (values.excludeModules) {
             args.push("-X", values.excludeModules);
         }
+
         if (verboseMode) {
-            args.push("-v");
+            args.push("-v"); // Add verbose mode option if enabled
         }
 
-        CommandHelper.runCommandWithPkexec("tiger", args, handleProcessData, handleProcessTermination)
+        // Execute the Tiger command via helper method and handle its output or potential errors
+        CommandHelper.runCommandWithPkexec("tiger", args)
             .then(() => {
+                setOutput(output);
                 setAllowSave(true);
                 setPid(pid);
             })
             .catch((error) => {
+                // Display any errors encountered during command execution
                 setOutput(`Error: ${error.message}`);
+                // Deactivate loading state
                 setLoading(false);
             });
         setAllowSave(true);
     };
 
+    /**
+     * Handles the completion of output saving by updating state variables.
+     */
     const handleSaveComplete = () => {
-        setHasSaved(true);
-        setAllowSave(false);
+        setHasSaved(true); // Set hasSaved state to true
+        setAllowSave(false); // Disallow further output saving
     };
 
+    /**
+     * Clears the command output and resets state variables related to output saving.
+     */
     const clearOutput = () => {
-        setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
+        setOutput(""); // Clear the command output
+        setHasSaved(false); // Reset hasSaved state
+        setAllowSave(false); // Disallow further output saving
     };
 
+    // Render component
     return (
         <RenderComponent
             title={title}
@@ -156,7 +171,7 @@ const Tiger = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButton(loading, pid, handleProcessData, clearOutput)}
                     <TextInput
                         label="Target IP/Hostname"
                         required
@@ -189,7 +204,9 @@ const Tiger = () => {
                         checked={verboseMode}
                         onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
-                    <Button type="submit">Start {title}</Button>
+                    <Button type="submit">
+                        Start {title}
+                    </Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                 </Stack>
             </form>
