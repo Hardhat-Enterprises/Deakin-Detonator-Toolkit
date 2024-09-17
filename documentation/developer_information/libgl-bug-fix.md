@@ -8,7 +8,7 @@ Ensure that you are in the DDT directory.
 
 ```yarn install```
 
-#after installing enter the following
+After installing enter the following: 
 
 yarn run tauri dev
 
