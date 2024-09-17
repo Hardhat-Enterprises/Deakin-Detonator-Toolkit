@@ -204,7 +204,7 @@ const Tiger = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
+                  {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="Target IP/Hostname"
                         required
