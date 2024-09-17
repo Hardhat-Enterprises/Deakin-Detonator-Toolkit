@@ -73,6 +73,6 @@ Review Log files:
 
 ```sudo apt-get remove --purge DDT-toolkit```
 
-sudo apt-get install DDT-toolkit
+```sudo apt-get install DDT-toolkit```
 
 ###### The error would be fixed by now.
