@@ -22,7 +22,7 @@ After installing enter the following:
 
 ##### Install/update graphics Drivers.
 
-sudo apt install open-vm-tools-desktop -y
+```sudo apt install open-vm-tools-desktop -y```
 
 sudo reboot
 
