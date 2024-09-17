@@ -244,7 +244,7 @@ const Tiger = () => {
                     </Button>
                 </Stack>
             </form>
-            <ConsoleWrapper output={output} />
+  
         </RenderComponent>
     );
 };
