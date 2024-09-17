@@ -93,7 +93,7 @@ const AirbaseNG = () => {
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data);
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
     /**
@@ -140,7 +140,7 @@ const AirbaseNG = () => {
         setAllowSave(false);
         // Disallow saving until the tool's execution is complete
 
-        // Construct arguments for the aircrack-ng command based on form input
+        // Construct arguments for the airbase-ng command based on form input
         const args = ["-e", values.fakeHost, "-c", values.channel, values.replayInterface];
 
         // Advanced Mode Options
