@@ -237,7 +237,7 @@ const Tiger = () => {
                         checked={verboseMode}
                         onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
-                    <Button type="submit" disabled={loading}>
+                    <Button type="submit">
                         Run Audit
                     </Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
