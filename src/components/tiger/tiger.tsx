@@ -1,13 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; //v2
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToTextFile/SaveOutputToTextFile"; //v2
 
 /**
  * Represents the form values for the Tiger component.
@@ -32,8 +31,8 @@ const Tiger = () => {
 
     const title = "Tiger";
     const description = "Tiger is a security audit tool for Unix-based systems.";
-    const steps = "Step 1: Specify a file to save the audit report.\n"; + 
-    "Step 2: Click the Start " + title + " button and view the output block for the result. ";
+    const steps = "Step 1: Specify a file to save the audit report.\n" + 
+    "Step 2: Click the Start " + title + " button and view the output block for the result.";
     const sourceLink = "https://www.kali.org/tools/tiger/";
     const dependencies = ["tiger"];
     const tutorial =
@@ -82,17 +81,11 @@ const Tiger = () => {
 
         let args = ["-l", values.reportFile];
 
-        CommandHelper.runCommandWithPkexec("tiger", args, handleProcessData, handleProcessTermination)
-            .then(({ output, pid }) => {
-                setLoading(false);
-                setOutput(output);
-                setAllowSave(true);
-                setPid(pid);
-            })
-            .catch((error) => {
-                setOutput(`Error: ${error.message}`);
-                setLoading(false);
-            });
+        // Remove the command execution logic
+        setLoading(false);
+        setOutput("Command execution logic removed.");
+        setAllowSave(true);
+        setPid(""); // Reset PID if needed
     };
 
     const handleSaveComplete = () => {
