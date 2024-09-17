@@ -36,7 +36,7 @@ Check direct rendering status:
 
 ```glxinfo | grep "direct rendering"```
 
-#Yes message will pop-up
+Yes message will pop-up.
 
 ##### Install Required graphics libraries
 
