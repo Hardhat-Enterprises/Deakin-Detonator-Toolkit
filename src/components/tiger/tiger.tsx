@@ -50,7 +50,7 @@ const Tiger = () => {
         "Step 4: Enable specific modules for the audit by entering module names.\n" +
         "Step 5: Exclude specific modules from the audit by entering module names.\n" +
         "Step 6: Check the verbose mode box for detailed output.\n";
-    const sourceLink = ""; // Link to the source code
+    const sourceLink = "https://www.kali.org/tools/tiger/"; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["tiger"]; // Contains the dependencies required by the component.
 
