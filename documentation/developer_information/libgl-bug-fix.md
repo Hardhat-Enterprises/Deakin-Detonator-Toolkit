@@ -18,7 +18,7 @@ After installing enter the following:
 
 ```sudo apt upgrade -y```
 
-sudo reboot
+```sudo reboot```
 
 ##### Install/update graphics Drivers.
 
