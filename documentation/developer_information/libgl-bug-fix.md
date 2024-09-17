@@ -63,7 +63,7 @@ Now reboot.
 
 #### Enable 3D Acceleration in VM Display settings
 
-##### Check and verfy kernal modules are loaded.
+##### Check and verfy kernal modules are loaded
 
 #Review Log files
 
