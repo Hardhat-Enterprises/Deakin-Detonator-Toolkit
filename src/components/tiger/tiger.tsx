@@ -1,3 +1,29 @@
+import { useState, useEffect, useCallback } from "react";
+import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { CommandHelper } from "../../utils/CommandHelper";
+import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { RenderComponent } from "../UserGuide/UserGuide";
+import InstallationModal from "../InstallationModal/InstallationModal";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; //v2
+
+/**
+ * Represents the form values for the Tiger component.
+ */
+interface FormValuesType {
+    targetIP: string;
+    auditLevel: string;
+    reportFile: string;
+    enableModules: string;
+    excludeModules: string;
+}
+
+/**
+ * The Tiger component.
+ * @returns The Tiger component.
+ */
 const Tiger = () => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
