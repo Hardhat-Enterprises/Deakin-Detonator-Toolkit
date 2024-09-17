@@ -239,7 +239,7 @@ const Tiger = () => {
                         Run Audit
                     </Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button onClick={clearOutput} disabled={loading || output.length === 0}>
+                  
                         Clear Output
                     </Button>
                 </Stack>
