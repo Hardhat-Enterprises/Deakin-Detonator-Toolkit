@@ -131,6 +131,7 @@ const Tiger = () => {
                         placeholder="e.g. /path/to/report.txt"
                     />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+  {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit">Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
