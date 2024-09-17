@@ -28,7 +28,7 @@ After installing enter the following:
 
 ##### Verify Direct rendering infrastructure.
 
-#Install Mesa utilities
+Install Mesa utilities: 
 
 sudo apt install mesa-utils -y
 
