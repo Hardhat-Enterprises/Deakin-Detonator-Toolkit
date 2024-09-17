@@ -121,7 +121,7 @@ const Tiger = () => {
 
         // Execute the Tiger command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("tiger", args)
-            .then(() => {
+            .then(( { output, pid }) => {
                 setOutput(output);
                 setAllowSave(true);
                 setPid(pid);
