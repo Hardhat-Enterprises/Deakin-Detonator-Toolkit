@@ -192,9 +192,7 @@ const Tiger = () => {
                         checked={verboseMode}
                         onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
-                    <Button type="submit">
-                        Start {title}
-                    </Button>
+                    <Button type="submit">Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
