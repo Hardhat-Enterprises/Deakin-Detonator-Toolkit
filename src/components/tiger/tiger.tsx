@@ -240,7 +240,7 @@ const Tiger = () => {
                     </Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                   
-                        Clear Output
+                     
                     </Button>
                 </Stack>
             </form>
