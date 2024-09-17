@@ -10,7 +10,7 @@ Ensure that you are in the DDT directory.
 
 After installing enter the following: 
 
-yarn run tauri dev
+```yarn run tauri dev```
 
 ##### Update the os (kali linux):
 
