@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Stack, TextInput, Checkbox } from "@mantine/core";
+import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -125,7 +125,6 @@ const Tiger = () => {
                 setOutput(output);
                 setAllowSave(true);
                 setPid(pid);
-                setLoading(false); // Deactivate loading state after successful execution
             })
             .catch((error) => {
                 // Display any errors encountered during command execution
@@ -133,6 +132,7 @@ const Tiger = () => {
                 // Deactivate loading state
                 setLoading(false);
             });
+        setAllowSave(true);
     };
 
     /**
@@ -171,7 +171,7 @@ const Tiger = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, clearOutput)}
                     <TextInput
                         label="Target IP/Hostname"
                         required
@@ -192,22 +192,23 @@ const Tiger = () => {
                     <TextInput
                         label="Enable Modules"
                         {...form.getInputProps("enableModules")}
-                        placeholder="e.g. passwd, fs"
+                        placeholder="e.g. module1,module2"
                     />
                     <TextInput
                         label="Exclude Modules"
                         {...form.getInputProps("excludeModules")}
-                        placeholder="e.g. account, cron"
+                        placeholder="e.g. module3,module4"
                     />
                     <Checkbox
                         label="Verbose Mode"
                         checked={verboseMode}
                         onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <Button type="submit">Run Tiger Audit</Button>
                 </Stack>
             </form>
+            {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+            <ConsoleWrapper output={output} />
         </RenderComponent>
     );
 };
