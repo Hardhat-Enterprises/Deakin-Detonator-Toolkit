@@ -42,7 +42,10 @@ const FirmwareAnalysisToolkit = () => {
         "Step 3: View the Output block below to see the results of the analysis.";
     const tutorial = "";
     const sourceLink = "https://github.com/attify/firmware-analysis-toolkit"; // Link to the source code.
-    const dependencies = ["firmadyne"]; // Contains the dependencies required by the component.
+    const dependencies = [
+        "python3",
+        "/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/firmware-analysis-toolkit/fat.py",
+    ];
 
     // Form hook to handle form input.
     let form = useForm({
@@ -99,12 +102,15 @@ const FirmwareAnalysisToolkit = () => {
         setLoading(true);
 
         // Construct arguments for the firmadyne tool based on form input
-        const args = ["firmadyne", values.firmwarePath];
+        const args = [
+            "/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/firmware-analysis-toolkit/fat.py",
+            values.firmwarePath,
+        ];
 
         try {
             // Execute the firmadyne command via helper method and handle its output or potential errors
-            const result = await CommandHelper.runCommandGetPidAndOutput(
-                "sudo",
+            const result = await CommandHelper.runCommandWithPkexec(
+                "python3",
                 args,
                 handleProcessData,
                 handleProcessTermination
