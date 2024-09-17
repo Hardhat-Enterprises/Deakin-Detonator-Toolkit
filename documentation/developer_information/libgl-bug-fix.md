@@ -71,7 +71,7 @@ Review Log files:
 
 ##### Reinstall DDT toolkit.
 
-sudo apt-get remove --purge DDT-toolkit
+```sudo apt-get remove --purge DDT-toolkit```
 
 sudo apt-get install DDT-toolkit
 
