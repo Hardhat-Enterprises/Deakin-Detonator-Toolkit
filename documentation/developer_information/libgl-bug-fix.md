@@ -16,7 +16,7 @@ After installing enter the following:
 
 ```sudo apt update```
 
-sudo apt upgrade -y
+```sudo apt upgrade -y```
 
 sudo reboot
 
