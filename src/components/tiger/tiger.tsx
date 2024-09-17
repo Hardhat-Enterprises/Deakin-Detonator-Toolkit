@@ -46,7 +46,6 @@ const Tiger = () => {
     "Step 5: Exclude specific modules from the audit by entering module names.\n" +
     "Step 6: Check the verbose mode box for detailed output.\n";
   const sourceLink = "https://www.kali.org/tools/tiger/";
-  const tutorial = "";
   const dependencies = ["tiger"];
 
   // Form hook to handle form input
@@ -108,6 +107,7 @@ const Tiger = () => {
 
     CommandHelper.runCommandWithPkexec("tiger", args)
       .then(({ output, pid }) => {
+        setLoading(false);
         setOutput(output);
         setAllowSave(true);
         setPid(pid);
@@ -164,25 +164,26 @@ const Tiger = () => {
           <TextInput
             label="Report File"
             {...form.getInputProps("reportFile")}
-            placeholder="e.g. /path/to/report.txt"
+            placeholder="e.g. audit_report.txt"
           />
           <TextInput
             label="Enable Modules"
             {...form.getInputProps("enableModules")}
-            placeholder="e.g. passwd, fs"
+            placeholder="e.g. module1,module2"
           />
           <TextInput
             label="Exclude Modules"
             {...form.getInputProps("excludeModules")}
-            placeholder="e.g. account, cron"
+            placeholder="e.g. module3,module4"
           />
           <Checkbox
             label="Verbose Mode"
             checked={verboseMode}
             onChange={(event) => setVerboseMode(event.currentTarget.checked)}
           />
-          {/* Removed Button as per your request */}
-          {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+          <Button type="submit">
+            Start {title}
+          </Button>
           <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
         </Stack>
       </form>
