@@ -55,7 +55,7 @@ Now reboot.
 
 ##### Set/add envionment variables.
 
-echo 'export LIBGL_DRIVERS_PATH=/usr/lib/xorg/modules/dri' >> ~/.profile
+```echo 'export LIBGL_DRIVERS_PATH=/usr/lib/xorg/modules/dri' >> ~/.profile```
 
 ```echo 'export LIBGL_DEBUG=verbose' >> ~/.profile```
 
