@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -13,11 +13,7 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
  * Represents the form values for the Tiger component.
  */
 interface FormValuesType {
-    targetIP: string;
-    auditLevel: string;
     reportFile: string;
-    enableModules: string;
-    excludeModules: string;
 }
 
 /**
@@ -33,24 +29,16 @@ const Tiger = () => {
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
     const [pid, setPid] = useState("");
-    const [verboseMode, setVerboseMode] = useState(false);
 
     const title = "Tiger";
     const description = "Tiger is a security audit tool for Unix-based systems.";
-    const steps = 
-        "Step 1: Input the desired audit level.\n" +
-        "Step 2: Specify a file to save the audit report.\n" +
-        "Step 3: Enable or exclude specific modules (optional).\n" +
-        "Step 4: Check verbose mode for detailed output.";
+    const steps = "Step 1: Specify a file to save the audit report.\n";
     const sourceLink = "https://www.kali.org/tools/tiger/";
     const dependencies = ["tiger"];
 
     let form = useForm({
         initialValues: {
-            auditLevel: "",
             reportFile: "",
-            enableModules: "",
-            excludeModules: "",
         },
     });
 
@@ -72,7 +60,7 @@ const Tiger = () => {
     }, []);
 
     const handleProcessTermination = useCallback(
-        ({ code, signal }) => {
+        ({ code, signal }: { code: number; signal: number | null }) => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
             } else if (signal === 15) {
@@ -86,26 +74,10 @@ const Tiger = () => {
         [handleProcessData]
     );
 
-    const onSubmit = async (values) => {
+    const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
-        let args = ["-l", values.auditLevel];
-
-        if (values.reportFile) {
-            args.push("-R", values.reportFile);
-        }
-
-        if (values.enableModules) {
-            args.push("-E", values.enableModules);
-        }
-
-        if (values.excludeModules) {
-            args.push("-X", values.excludeModules);
-        }
-
-        if (verboseMode) {
-            args.push("-v");
-        }
+        let args = ["-l", values.reportFile]; // Only the -l parameter for the report location
 
         CommandHelper.runCommandWithPkexec("tiger", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
@@ -150,30 +122,10 @@ const Tiger = () => {
                 <Stack>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <TextInput
-                        label="Audit Level"
-                        required
-                        {...form.getInputProps("auditLevel")}
-                        placeholder="e.g. 5"
-                    />
-                    <TextInput
                         label="Report File"
+                        required
                         {...form.getInputProps("reportFile")}
                         placeholder="e.g. /path/to/report.txt"
-                    />
-                    <TextInput
-                        label="Enable Modules"
-                        {...form.getInputProps("enableModules")}
-                        placeholder="e.g. passwd, fs"
-                    />
-                    <TextInput
-                        label="Exclude Modules"
-                        {...form.getInputProps("excludeModules")}
-                        placeholder="e.g. account, cron"
-                    />
-                    <Checkbox
-                        label="Verbose Mode"
-                        checked={verboseMode}
-                        onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit">Start {title}</Button>
