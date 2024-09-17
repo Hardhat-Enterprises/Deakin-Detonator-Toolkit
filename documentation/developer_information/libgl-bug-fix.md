@@ -76,4 +76,4 @@ Review Log files:
 
 `sudo apt-get install DDT-toolkit`
 
-###### The error would be fixed by now
+ The error would be fixed by now.
