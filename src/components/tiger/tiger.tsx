@@ -81,18 +81,6 @@ const Tiger = () => {
         setLoading(true);
 
         let args = ["-l", values.reportFile];
-
-        CommandHelper.runCommandWithPkexec("tiger", args, handleProcessData, handleProcessTermination)
-            .then(({ output, pid }) => {
-                setLoading(false);
-                setOutput(output);
-                setAllowSave(true);
-                setPid(pid);
-            })
-            .catch((error) => {
-                setOutput(`Error: ${error.message}`);
-                setLoading(false);
-            });
     };
 
     const handleSaveComplete = () => {
