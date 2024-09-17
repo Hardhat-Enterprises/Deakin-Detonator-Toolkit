@@ -32,7 +32,7 @@ Install Mesa utilities:
 
 ```sudo apt install mesa-utils -y```
 
-#Check direct rendering status
+Check direct rendering status: 
 
 glxinfo | grep "direct rendering"
 
