@@ -30,7 +30,7 @@ After installing enter the following:
 
 Install Mesa utilities: 
 
-sudo apt install mesa-utils -y
+```sudo apt install mesa-utils -y```
 
 #Check direct rendering status
 
