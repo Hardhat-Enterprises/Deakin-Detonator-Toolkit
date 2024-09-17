@@ -83,6 +83,7 @@ import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
 import Unicornscan from "./Unicornscan/Unicornscan";
+import Sqlninja from "./Sqlninja/sqlninja";
 
 export interface RouteProperties {
     name: string;
@@ -664,6 +665,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "SQLmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.",
         category: "Web Application Testing",
+    },
+    {
+        name: "Sqlninja",
+        path: "/tools/sqlninja",
+        element: <Sqlninja />,
+        description:
+            "A tool used to exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end.",
+        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Sublist3r",
