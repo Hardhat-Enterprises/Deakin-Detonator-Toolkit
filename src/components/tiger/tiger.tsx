@@ -35,6 +35,7 @@ const Tiger = () => {
     const steps = "Step 1: Specify a file to save the audit report.\n";
     const sourceLink = "https://www.kali.org/tools/tiger/";
     const dependencies = ["tiger"];
+    const tutorial = "Tiger is a tool that automates security audits on Unix-based systems. It checks file permissions, software configuration, and system vulnerabilities. It's essential to specify where to save the report with the '-l' option. Run Tiger with higher permissions using 'pkexec' for a comprehensive audit.";
 
     let form = useForm({
         initialValues: {
@@ -77,7 +78,7 @@ const Tiger = () => {
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
-        let args = ["-l", values.reportFile]; // Only the -l parameter for the report location
+        let args = ["-l", values.reportFile]; 
 
         CommandHelper.runCommandWithPkexec("tiger", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
@@ -109,6 +110,7 @@ const Tiger = () => {
             description={description}
             steps={steps}
             sourceLink={sourceLink}
+            tutorial={tutorial} 
         >
             {!loadingModal && (
                 <InstallationModal
