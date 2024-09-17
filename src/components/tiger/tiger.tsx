@@ -154,7 +154,7 @@ const Tiger = () => {
         // Execute the Tiger command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("tiger", args, handleProcessData, handleProcessTermination)
             .then(() => {
-                // Deactivate loading state
+              
                 setLoading(false);
             })
             .catch((error) => {
