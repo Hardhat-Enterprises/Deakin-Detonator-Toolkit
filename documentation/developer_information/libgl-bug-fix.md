@@ -24,7 +24,7 @@ After installing enter the following:
 
 ```sudo apt install open-vm-tools-desktop -y```
 
-sudo reboot
+```sudo reboot```
 
 ##### Verify Direct rendering infrastructure.
 
