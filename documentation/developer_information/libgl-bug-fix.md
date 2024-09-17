@@ -4,7 +4,7 @@
 
 ##### Each command should be run on the command line one by one for best results.
 
-#ensure that you are in the DDT directory
+Ensure that you are in the DDT directory. 
 
 yarn install
 
