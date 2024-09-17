@@ -14,7 +14,7 @@ After installing enter the following:
 
 ##### Update the os (kali linux):
 
-sudo apt update
+```sudo apt update```
 
 sudo apt upgrade -y
 
