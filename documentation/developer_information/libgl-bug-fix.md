@@ -50,7 +50,7 @@ Yes message will pop-up.
 
 ```sudo dpkg-reconfigure xserver-xorg```
 
-#now reboot
+Now reboot. 
 ```sudo reboot```
 
 ##### Set/add envionment variables.
