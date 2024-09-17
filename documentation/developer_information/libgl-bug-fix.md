@@ -57,7 +57,7 @@ Yes message will pop-up.
 
 echo 'export LIBGL_DRIVERS_PATH=/usr/lib/xorg/modules/dri' >> ~/.profile
 
-echo 'export LIBGL_DEBUG=verbose' >> ~/.profile
+```echo 'export LIBGL_DEBUG=verbose' >> ~/.profile```
 
 source ~/.profile
 
