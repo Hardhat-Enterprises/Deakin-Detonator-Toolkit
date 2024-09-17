@@ -46,7 +46,7 @@ Yes message will pop-up.
 
 ##### Configure Xorg
 
-sudo mv /etc/X11/xorg.conf /etc/X11/xorg.conf.backup
+```sudo mv /etc/X11/xorg.conf /etc/X11/xorg.conf.backup```
 
 sudo dpkg-reconfigure xserver-xorg
 
