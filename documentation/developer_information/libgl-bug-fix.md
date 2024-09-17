@@ -65,7 +65,7 @@ Now reboot.
 
 ##### Check and verfy kernal modules are loaded
 
-#Review Log files
+Review Log files: 
 
 less /var/log/Xorg.0.log
 
