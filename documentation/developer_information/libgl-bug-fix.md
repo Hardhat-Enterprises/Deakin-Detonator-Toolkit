@@ -67,7 +67,7 @@ Now reboot.
 
 Review Log files: 
 
-less /var/log/Xorg.0.log
+```less /var/log/Xorg.0.log```
 
 ##### Reinstall DDT toolkit.
 
