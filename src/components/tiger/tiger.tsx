@@ -155,7 +155,9 @@ const Tiger = () => {
         CommandHelper.runCommandWithPkexec("tiger", args, handleProcessData, handleProcessTermination)
             .then(() => {
               
-                setLoading(false);
+                setOutput(output);
+                setAllowSave(true);
+                setPid(pid);
             })
             .catch((error) => {
                 // Display any errors encountered during command execution
