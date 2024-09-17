@@ -48,7 +48,7 @@ Yes message will pop-up.
 
 ```sudo mv /etc/X11/xorg.conf /etc/X11/xorg.conf.backup```
 
-sudo dpkg-reconfigure xserver-xorg
+```sudo dpkg-reconfigure xserver-xorg```
 
 #now reboot
 sudo reboot
