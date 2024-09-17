@@ -59,7 +59,7 @@ echo 'export LIBGL_DRIVERS_PATH=/usr/lib/xorg/modules/dri' >> ~/.profile
 
 ```echo 'export LIBGL_DEBUG=verbose' >> ~/.profile```
 
-source ~/.profile
+```source ~/.profile```
 
 #Enable 3D Acceleration in VM Display settings
 
