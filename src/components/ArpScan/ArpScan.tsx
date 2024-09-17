@@ -39,7 +39,7 @@ function ARPScan() {
     const steps =
         "Step 1: Click on the 'Scan' button to start the ARP scan.\n" +
         "Step 2: View the Output block below to see the results of the scan.\n";
-    const sourceLink = ""; // Link to the source code or Kali Tools page.
+    const sourceLink = "https://www.kali.org/tools/arp-scan/"; // Link to the source code or Kali Tools page.
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["arp-scan"]; // Dependencies required for the ARPScan tool.
 
