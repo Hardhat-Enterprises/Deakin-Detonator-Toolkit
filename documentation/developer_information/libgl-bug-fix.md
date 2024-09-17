@@ -40,7 +40,7 @@ Yes message will pop-up.
 
 ##### Install Required graphics libraries
 
-sudo apt install xserver_xorg-video-all -y
+```sudo apt install xserver_xorg-video-all -y```
 
 ```sudo apt install libgl1-mesa-dri -y```
 
