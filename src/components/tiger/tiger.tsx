@@ -1,30 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { CommandHelper } from "../../utils/CommandHelper";
-import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-import { RenderComponent } from "../UserGuide/UserGuide";
-import InstallationModal from "../InstallationModal/InstallationModal";
-import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
-
-/**
- * Represents the form values for the Tiger component.
- */
-interface FormValuesType {
-    targetIP: string;
-    auditLevel: string;
-    reportFile: string;
-    enableModules: string;
-    excludeModules: string;
-}
-
-/**
- * The Tiger component.
- * @returns The Tiger component.
- */
 const Tiger = () => {
-    // Component state variables
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [allowSave, setAllowSave] = useState(false);
@@ -35,28 +9,18 @@ const Tiger = () => {
     const [pid, setPid] = useState("");
     const [verboseMode, setVerboseMode] = useState(false);
 
-    // Component Constants
     const title = "Tiger";
-    const description =
-        "Tiger is a security audit and intrusion detection tool designed to audit Unix-based systems for security issues.";
-    const steps =
-        "=== Required ===\n" +
-        "Step 1: Input a target IP or hostname to audit.\n" +
-        "Step 2: Input the desired audit level (e.g., 1 for basic, 5 for deep).\n" +
-        " \n" +
-        "=== Optional ===\n" +
-        "Step 3: Specify a file to save the audit report.\n" +
-        "Step 4: Enable specific modules for the audit by entering module names.\n" +
-        "Step 5: Exclude specific modules from the audit by entering module names.\n" +
-        "Step 6: Check the verbose mode box for detailed output.\n";
+    const description = "Tiger is a security audit tool for Unix-based systems.";
+    const steps = 
+        "Step 1: Input the desired audit level.\n" +
+        "Step 2: Specify a file to save the audit report.\n" +
+        "Step 3: Enable or exclude specific modules (optional).\n" +
+        "Step 4: Check verbose mode for detailed output.";
     const sourceLink = "https://www.kali.org/tools/tiger/";
-    const tutorial = "";
     const dependencies = ["tiger"];
 
-    // Form hook to handle form input
     let form = useForm({
         initialValues: {
-            targetIP: "",
             auditLevel: "",
             reportFile: "",
             enableModules: "",
@@ -82,7 +46,7 @@ const Tiger = () => {
     }, []);
 
     const handleProcessTermination = useCallback(
-        ({ code, signal }: { code: number; signal: number }) => {
+        ({ code, signal }) => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
             } else if (signal === 15) {
@@ -96,10 +60,10 @@ const Tiger = () => {
         [handleProcessData]
     );
 
-    const onSubmit = async (values: FormValuesType) => {
+    const onSubmit = async (values) => {
         setLoading(true);
 
-        let args = [values.targetIP, "-l", values.auditLevel];
+        let args = ["-l", values.auditLevel];
 
         if (values.reportFile) {
             args.push("-R", values.reportFile);
@@ -146,7 +110,6 @@ const Tiger = () => {
             title={title}
             description={description}
             steps={steps}
-            tutorial={tutorial}
             sourceLink={sourceLink}
         >
             {!loadingModal && (
@@ -160,12 +123,6 @@ const Tiger = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-                    <TextInput
-                        label="Target IP/Hostname"
-                        required
-                        {...form.getInputProps("targetIP")}
-                        placeholder="e.g. 192.168.1.1"
-                    />
                     <TextInput
                         label="Audit Level"
                         required
@@ -192,6 +149,7 @@ const Tiger = () => {
                         checked={verboseMode}
                         onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit">Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
