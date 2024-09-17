@@ -61,7 +61,7 @@ echo 'export LIBGL_DRIVERS_PATH=/usr/lib/xorg/modules/dri' >> ~/.profile
 
 ```source ~/.profile```
 
-#Enable 3D Acceleration in VM Display settings
+#### Enable 3D Acceleration in VM Display settings
 
 ##### Check and verfy kernal modules are loaded.
 
