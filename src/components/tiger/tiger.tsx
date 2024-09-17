@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
+import { Stack, TextInput, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -121,10 +121,11 @@ const Tiger = () => {
 
         // Execute the Tiger command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("tiger", args)
-            .then(( { output, pid }) => {
+            .then(({ output, pid }) => {
                 setOutput(output);
                 setAllowSave(true);
                 setPid(pid);
+                setLoading(false); // Deactivate loading state after successful execution
             })
             .catch((error) => {
                 // Display any errors encountered during command execution
@@ -132,7 +133,6 @@ const Tiger = () => {
                 // Deactivate loading state
                 setLoading(false);
             });
-        setAllowSave(true);
     };
 
     /**
@@ -171,7 +171,7 @@ const Tiger = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pid, handleProcessData, clearOutput)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData)}
                     <TextInput
                         label="Target IP/Hostname"
                         required
@@ -204,11 +204,8 @@ const Tiger = () => {
                         checked={verboseMode}
                         onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
-                    <Button type="submit">
-                        Start {title}
-                    </Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-  <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
         </RenderComponent>
