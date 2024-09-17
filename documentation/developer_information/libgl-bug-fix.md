@@ -34,7 +34,7 @@ Install Mesa utilities:
 
 Check direct rendering status: 
 
-glxinfo | grep "direct rendering"
+```glxinfo | grep "direct rendering"```
 
 #Yes message will pop-up
 
