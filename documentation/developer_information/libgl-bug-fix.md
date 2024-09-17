@@ -6,7 +6,7 @@
 
 Ensure that you are in the DDT directory. 
 
-yarn install
+```yarn install```
 
 #after installing enter the following
 
