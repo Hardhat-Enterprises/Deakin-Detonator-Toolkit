@@ -42,7 +42,7 @@ Yes message will pop-up.
 
 sudo apt install xserver_xorg-video-all -y
 
-sudo apt install libgl1-mesa-dri -y
+```sudo apt install libgl1-mesa-dri -y```
 
 ##### Configure Xorg
 
