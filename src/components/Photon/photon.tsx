@@ -45,9 +45,9 @@ const Photon = () => {
         "Step 3: Specify the crawl depth.\n" +
         "Step 4: Click Launch Crawler to start Photon.\n" +
         "Step 5: View the output results below.";
-    const sourceLink = "https://github.com/s0md3v/Photon"; // Link to the source code.
+    const sourceLink = "https://www.kali.org/tools/photon/"; // Link to the source code.
     const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["python3"]; // Contains the dependencies required by the component.
+    const dependencies = ["photon"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
     let form = useForm({
@@ -126,7 +126,7 @@ const Photon = () => {
         setLoading(true);
 
         // Create the arguments array for the command
-        const args = [`/home/kali/Desktop/tool/Deakin-Detonator-Toolkit/src-tauri/exploits/Photon/photon.py`];
+        const args = [];
         values.url ? args.push(`-u`, `${values.url}`) : undefined;
         values.outputDir ? args.push(`-o`, `${values.outputDir}`) : undefined;
         values.crawlDepth ? args.push(`-l`, `${values.crawlDepth}`) : undefined;
@@ -135,7 +135,7 @@ const Photon = () => {
 
         try {
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "python3",
+                "photon",
                 args,
                 handleProcessData,
                 handleProcessTermination
