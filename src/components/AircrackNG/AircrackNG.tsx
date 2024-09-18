@@ -34,12 +34,14 @@ const title = "Aircrack-ng"; // Contains the title of the component.
 const description = "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphrases using captured network traffic.";
 const steps =
     "How to use Aircrack-ng:\n\n" +
-    "Step 1: Type in the Path to wordlist(s) filename(s) including the extension .txt. E.g. 'example.txt'.\n" +
+    "Step 1: Type in the path to wordlist(s) filename(s) including the extension .txt. e.g. 'example.txt'.\n" +
     "For files containing hexadecimal values, you must put a “h:” in front of the file name.\n" +
     "Step 2: Select the target network based on the access point's MAC address.\n" +
-    "Step 3: Type in the name of your text file including the extension .txt. E.g. 'example.txt'.\n";
-"Step 5: Click 'Start Cracking' to begin the process.\n" +
-    "Step 6: View the output block below to see the results.\n" +
+    "Step 3: Type in the name of your text file including the extension .txt. e.g. 'example.txt'.\n" +
+    "Step 4: Click 'Start " +
+    title +
+    "' to begin the process.\n" +
+    "Step 5: View the output block below to see the results.\n" +
     "Optionally you may select additional advanced options.";
 const sourceLink = "https://www.kali.org/tools/aircrack-ng/"; //link to the source component.
 const tutorial = "";
@@ -255,12 +257,14 @@ const AircrackNG = () => {
                         placeholder={"Pick a attack mode"}
                         label={"WEP or WPA-PSK"}
                     />
-                    <Switch
-                        size="md"
-                        label="Advanced Mode"
-                        checked={advanceMode}
-                        onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
-                    />
+                    {isWEP && (
+                        <Switch
+                            size="md"
+                            label="Advanced Mode"
+                            checked={advanceMode}
+                            onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
+                        />
+                    )}
                     <TextInput
                         label={"Path to wordlist(s) filename(s)."}
                         required
@@ -278,14 +282,14 @@ const AircrackNG = () => {
                     {isWPA && <TextInput label={"Set AP identifier"} required {...form.getInputProps("ESSID")} />}
                     {isWPA && (
                         <TextInput
-                            label={"Use Pcap File (Please Supply FilePath and filename )"}
+                            label={"Use Pcap file (Please supply file path and filename )"}
                             placeholder={"eg: x/x/*.cap"}
                             required
                             {...form.getInputProps("filePath")}
                         />
                     )}
                     <TextInput
-                        label={"Save as key to output file (Please Supply FilePath)"}
+                        label={"Save as key to output file (Please supply file path)"}
                         required
                         {...form.getInputProps("filePath")}
                     />
@@ -295,7 +299,7 @@ const AircrackNG = () => {
                             onChange={(e) => setSelectedCharacter(e.target.value)}
                             data={characters}
                             placeholder={"Set a character type you want"}
-                            label={"Alpha-Numeric or Binary-coded decimal or default (leave unselected)"}
+                            label={"Alpha-Numeric or binary-coded decimal or default (leave unselected)"}
                         />
                     )}
                     {customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
