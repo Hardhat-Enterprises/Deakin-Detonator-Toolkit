@@ -43,7 +43,9 @@ const Photon = () => {
         "Step 1: Enter a valid target URL(eg. https://www.deakin.edu.au).\n" +
         "Step 2: Specify additional options such as output directory, cookies, and user-agent.\n" +
         "Step 3: Specify the crawl depth.\n" +
-        "Step 4: Click Launch Crawler to start Photon.\n" +
+        "Step 4: Click Start " +
+        title +
+        " to start Photon.\n" +
         "Step 5: View the output results below.";
     const sourceLink = "https://www.kali.org/tools/photon/"; // Link to the source code.
     const tutorial = ""; // Link to the official documentation/tutorial.
@@ -204,7 +206,7 @@ const Photon = () => {
                         placeholder={"Specify a user agent (optional)"}
                         {...form.getInputProps("userAgent")}
                     />
-                    <Button type={"submit"}>Launch Crawler</Button>
+                    <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
