@@ -84,6 +84,7 @@ import SQLmap from "./SQLmap/SQLmap";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
 import Tiger from "./tiger/tiger";
 import Unicornscan from "./Unicornscan/Unicornscan";
+import Arping from "./Arping/Arping";
 import Sqlninja from "./Sqlninja/sqlninja";
 
 export interface RouteProperties {
@@ -325,6 +326,13 @@ export const ROUTES: RouteProperties[] = [
         element: <ARPFingerprint />,
         description:
             "A tool to analyse ARP (Address Resolution Protocol) traffic to identify the types of operating systems and network devices on a network.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Arping",
+        path: "/tools/Arping",
+        element: <Arping />,
+        description: "Arping is a tool to send ARP requests to a specified IP address to discover the MAC address.",
         category: "Network Scanning and Enumeration",
     },
     {

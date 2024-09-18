@@ -43,6 +43,11 @@
                         "args": true
                     },
                     {
+                        "name": "arping",
+                        "cmd": "arping",
+                        "args": true
+                    },
+                    {
                         "name": "arp-scan",
                         "cmd": "arp-scan",
                         "args": true
