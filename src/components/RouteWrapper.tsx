@@ -65,6 +65,7 @@ import Topology from "./WalkthroughPages/Topology";
 import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
+import Rtgen from "./rtgen/rtgen";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import ArpanameTool from "./Arpaname/arpaname";
 import Nikto from "./Nikto/Nikto";
@@ -82,6 +83,7 @@ import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
 import Unicornscan from "./Unicornscan/Unicornscan";
+import Sqlninja from "./Sqlninja/sqlninja";
 
 export interface RouteProperties {
     name: string;
@@ -241,7 +243,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Pilgrimage",
         element: <Pilgrimage />,
         description:
-            "A walkthrough on the Pilgrimage Hack The Box challenge focused on exploiting a web application vulnerability to gain access to the system",
+            "A walkthrough on the Pilgrimage Hack The Box challenge focused on exploiting a web application vulnerabilities to gain access to the system",
         category: "Web Application Testing",
     },
     {
@@ -282,7 +284,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/AircrackNG",
         element: <AircrackNG />,
         description:
-            "A wireless network auditing and cracking tool that can capture and analyze packets from Wi-Fi networks, crack WEP and WPA-PSK passwords, and identify vulnerabilities in wireless networks.",
+            "A wireless network auditing and cracking tool that can capture and analyze packets from Wi-Fi networks, crack WEP and WPA-PSK passwords, and identify vulnerability in wireless networks.",
         category: "Password Cracking and Authentication Testing",
     },
     {
@@ -594,7 +596,14 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Rainbowcrack",
         element: <Rainbowcrack />,
         description: "A computer program which generates rainbow tables to be used in password cracking.",
-        category: "Password cracking and Authentication testing",
+        category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "Rtgen",
+        path: "/tools/rtgen",
+        element: <Rtgen />,
+        description: "A tool for generating random network traffic to simulate various network conditions and loads.",
+        category: "Network Traffic Generation",
     },
     {
         name: "SearchSploit",
@@ -602,7 +611,7 @@ export const ROUTES: RouteProperties[] = [
         element: <SearchSploit />,
         description:
             "A utility that allows users to search through a vast database of exploits, shellcodes, and security-related papers.",
-        category: "Vulnerabilityy Assessment and Exploitation",
+        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Sherlock",
@@ -656,6 +665,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "SQLmap is a tool to detect and exploit SQL injection flaws and the taking over of database servers.",
         category: "Web Application Testing",
+    },
+    {
+        name: "Sqlninja",
+        path: "/tools/sqlninja",
+        element: <Sqlninja />,
+        description:
+            "A tool used to exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end.",
+        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Sublist3r",
