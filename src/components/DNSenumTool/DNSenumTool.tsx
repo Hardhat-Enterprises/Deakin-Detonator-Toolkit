@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch, Checkbox, Modal } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch, Modal } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -56,7 +56,7 @@ const DnsenumTool = () => {
         "Step 7: Select Reverse Lookup if required.\n";
     const sourceLink = "https://www.kali.org/tools/dnsenum/";
     const tutorial = "https://www.kali.org/tools/dnsenum/";
-    const dependencies = ["dnsenum"]; // Dependencies required by the component
+    const dependencies = ["dnsenum", "kill"]; // Dependencies required by the component
 
     /**
      * intial form values
@@ -112,20 +112,17 @@ const DnsenumTool = () => {
      */
 
     const checkAllCommandsAvailability = async () => {
-        const requiredCommands = ["dnsenum", "kill"];
         const unavailableCommands = [];
 
-        for (const command of requiredCommands) {
+        for (const command of dependencies) {
             try {
                 await CommandHelper.runCommand(command, ["--version"]);
             } catch (e) {
                 unavailableCommands.push(command);
             }
         }
-
         setMissingCommands(unavailableCommands);
-        setModalOpened(unavailableCommands.length > 0); 
-
+        setModalOpened(unavailableCommands.length > 0);
     };
 
     useEffect(() => {
@@ -173,8 +170,9 @@ const DnsenumTool = () => {
      */
     const handleCancel = () => {
         if (pid !== null) {
-            const args = [`-15`, pid];
-            CommandHelper.runCommand("kill", args);
+            CommandHelper.runCommand("kill", ["-15", pid])
+                .then(() => handleProcessData("\nProcess Terminated Successfully"))
+                .catch((e) => handleProcessData("\nFailed to terminate process: ${e.message}"));
         }
     };
 
@@ -198,7 +196,6 @@ const DnsenumTool = () => {
     // useEffect to clear output on component mount
     useEffect(() => {
         clearOutput();
-
         // Cleanup function to run when the component unmounts
         return () => {
             clearOutput();
@@ -246,23 +243,19 @@ const DnsenumTool = () => {
                     <Button type={"submit"}>Start Enumeration</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-        
-                    <Modal 
-                        opened={modalOpened}
-                        onClose={() => setModalOpened(false)}
-                        title="Missing Commands"
-                    >
-                        <p>The Following Commands are missing and nned to be installed:</p>
-                    <ul>
-                        {missingCommands.map((cmd) => (
-                            <li key={cmd}></li>
-                        ))}
-                    </ul>
-                    <p>Please install these commands and try again.</p>
-                </Modal>
-            </Stack>
-        </form>
-     </RenderComponent>
+
+                    <Modal opened={modalOpened} onClose={() => setModalOpened(false)} title="Missing Commands">
+                        <p>The Following Commands are missing and need to be installed:</p>
+                        <ul>
+                            {missingCommands.map((cmd) => (
+                                <li key={cmd}></li>
+                            ))}
+                        </ul>
+                        <p>Please install these commands and try again.</p>
+                    </Modal>
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 
