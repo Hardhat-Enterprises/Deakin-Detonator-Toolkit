@@ -56,7 +56,7 @@ const Masscan = () => {
         "Step 6: Input a network interface to send and receive packets from during the scan.\n" +
         "Step 7: Check the banner grabbing checkbox to attempt to identify services running on scanned ports.\n" +
         "Step 8: Check the verbose checkbox to run the command in verbose mode.\n";
-    const sourceLink = ""; // Link to the source code
+    const sourceLink = "https://www.kali.org/tools/masscan/"; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["masscan"]; // Contains the dependencies required by the component.
 

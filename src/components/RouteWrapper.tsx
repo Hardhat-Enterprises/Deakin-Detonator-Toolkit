@@ -82,8 +82,10 @@ import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
+import Tiger from "./tiger/tiger";
 import Unicornscan from "./Unicornscan/Unicornscan";
 import Arping from "./Arping/Arping";
+import Sqlninja from "./Sqlninja/sqlninja";
 
 export interface RouteProperties {
     name: string;
@@ -674,6 +676,14 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Sqlninja",
+        path: "/tools/sqlninja",
+        element: <Sqlninja />,
+        description:
+            "A tool used to exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end.",
+        category: "Vulnerability Assessment and Exploitation",
+    },
+    {
         name: "Sublist3r",
         path: "/tools/Sublist3r",
         element: <Sublist3r />,
@@ -696,6 +706,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "testssl.sh is a versatile command line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Tiger",
+        path: "/tools/tiger",
+        element: <Tiger />,
+        description: "Audit and intrusion detection tool used to protect UNIX based systems.",
+        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Traceroute",

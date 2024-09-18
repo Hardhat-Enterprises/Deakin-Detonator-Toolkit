@@ -288,6 +288,11 @@
                         "args": true
                     },
                     {
+                        "name": "sqlninja",
+                        "cmd": "sqlninja",
+                        "args": true
+                    },
+                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
                         "args": true
@@ -295,6 +300,11 @@
                     {
                         "name": "testssl",
                         "cmd": "testssl",
+                        "args": true
+                    },
+                    {
+                        "name": "tiger",
+                        "cmd": "tiger",
                         "args": true
                     },
                     {
