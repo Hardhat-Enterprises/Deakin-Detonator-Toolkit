@@ -32,8 +32,11 @@ const Tiger = () => {
 
     const title = "Tiger";
     const description = "Tiger is a security audit tool for Unix-based systems.";
-    const steps = "Step 1: Specify a file to save the audit report.\n"
-    +"Step 2: Click the Start " + title + " button and view the output block for the result. ";
+    const steps =
+        "Step 1: Specify a file to save the audit report.\n" +
+        "Step 2: Click the Start " +
+        title +
+        " button and view the output block for the result. ";
     const sourceLink = "https://www.kali.org/tools/tiger/";
     const dependencies = ["tiger"];
     const tutorial =
@@ -69,7 +72,7 @@ const Tiger = () => {
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
             } else {
-                handleProcessData(\nProcess terminated with exit code: ${code} and signal code: ${signal});
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
             setPid("");
             setLoading(false);
@@ -81,6 +84,7 @@ const Tiger = () => {
         setLoading(true);
 
         let args = ["-l", values.reportFile];
+
         CommandHelper.runCommandWithPkexec("tiger", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 setOutput(output);
@@ -88,7 +92,7 @@ const Tiger = () => {
                 setPid(pid);
             })
             .catch((error) => {
-                setOutput(Error: ${error.message});
+                setOutput(`Error: ${error.message}`);
                 setLoading(false);
             });
     };
