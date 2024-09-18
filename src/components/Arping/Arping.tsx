@@ -6,7 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
 /**
@@ -141,14 +141,19 @@ const Arping = () => {
         }
         //Execute the Arping component via helper method and handle its output or potential errors.
         CommandHelper.runCommandWithPkexec("arping", args, handleProcessData, handleProcessTermination)
-            .then(() => {
-                setLoading(false);
+            .then(({ output, pid }) => {
+                // Update the UI with the results from the executed command
+                setOutput(output);
+                setAllowSave(true);
+                setPid(pid);
             })
             .catch((error) => {
-                setOutput(`Error: ${error.message}`);
+                // Display any errors encountered during command execution
+                setOutput(error.message);
+                // Deactivate loading state
                 setLoading(false);
+                setAllowSave(true);
             });
-        setAllowSave(true);
     };
 
     /**
@@ -191,7 +196,7 @@ const Arping = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="Target IP Address"
                         required
