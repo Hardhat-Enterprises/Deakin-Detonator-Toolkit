@@ -31,7 +31,7 @@ const Tiger = () => {
     const [pid, setPid] = useState("");
 
     const title = "Tiger";
-    const description = "Tiger is a security audit tool for Unix-based systems.";
+    const description = "Tiger is a security audit tool for Unix-based systems."
     const steps = "Step 1: Specify a file to save the audit report.\n"
     +"Step 2: Click the Start " + title + " button and view the output block for the result. ";
     const sourceLink = "https://www.kali.org/tools/tiger/";
@@ -81,6 +81,7 @@ const Tiger = () => {
         setLoading(true);
 
         let args = ["-l", values.reportFile];
+
         CommandHelper.runCommandWithPkexec("tiger", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 setOutput(output);
