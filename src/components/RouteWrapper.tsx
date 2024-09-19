@@ -146,7 +146,7 @@ export const ROUTES: RouteProperties[] = [
         name: "CVE-2022-1388",
         path: "/attack-vectors/cve-2022-1388",
         element: <CVE20221388 />,
-        description: "undisclosed requests may bypass iControl REST authentication.",
+        description: "Undisclosed requests may bypass iControl REST authentication.",
         category: "",
     },
     {
