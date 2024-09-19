@@ -362,6 +362,21 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/wpscan/"}
                     />
+                    <Reference
+                    	name={"SQLNinja"}
+                    	description={"Sqlninja is an SQL injection tool"}
+                    	url={"https://www.kali.org/tools/sqlninja/"}
+                    />
+                    <Reference
+                    	name={"Tiger"}
+                    	description={"Toolset used to perform security audits of operating system components"}
+                    	url={"https://www.kali.org/tools/tiger/"}
+                    />
+                    <Reference
+                    	name={"Arping"}
+                    	description={"Arping is a tool that sends ARP/ICMP requests to a target device and displays the reply messages"}
+                    	url={"https://www.kali.org/tools/arping/"}
+                    />
 
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
@@ -383,6 +398,11 @@ const ReferencesPage = () => {
                         name={"CVE-2022-36804"}
                         description={"CVE-2022-36804 allows privilege escalation."}
                         url={"https://nvd.nist.gov/vuln/detail/CVE-2022-36804"}
+                    />
+                    <Reference
+                    	name={"CVE-2022-27925"}
+                    	description={"Zimbra Collaboration Suite - Remote Code Execution"}
+                    	url={"https://arcticwolf.com/resources/blog/cve-2022-27925/"}
                     />
                     <Reference
                         name={"FindOffset"}
