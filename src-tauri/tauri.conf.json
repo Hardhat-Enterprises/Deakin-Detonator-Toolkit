@@ -43,6 +43,11 @@
                         "args": true
                     },
                     {
+                        "name": "arping",
+                        "cmd": "arping",
+                        "args": true
+                    },
+                    {
                         "name": "arp-scan",
                         "cmd": "arp-scan",
                         "args": true
@@ -248,6 +253,11 @@
                         "args": true
                     },
                     {
+                        "name": "rtgen",
+                        "cmd": "rtgen",
+                        "args": true
+                    },
+                    {
                         "name": "rtsort",
                         "cmd": "rtsort",
                         "args": true
@@ -278,6 +288,11 @@
                         "args": true
                     },
                     {
+                        "name": "sqlninja",
+                        "cmd": "sqlninja",
+                        "args": true
+                    },
+                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
                         "args": true
@@ -285,6 +300,11 @@
                     {
                         "name": "testssl",
                         "cmd": "testssl",
+                        "args": true
+                    },
+                    {
+                        "name": "tiger",
+                        "cmd": "tiger",
                         "args": true
                     },
                     {
@@ -310,6 +330,11 @@
                     {
                         "name": "whatweb",
                         "cmd": "whatweb",
+                        "args": true
+                    },
+                    {
+                        "name": "which",
+                        "cmd": "which",
                         "args": true
                     },
                     {
@@ -346,11 +371,7 @@
             "category": "DeveloperTool",
             "copyright": "",
             "deb": {
-                "depends": [
-                    "openjdk-11-jdk",
-                    "python3-impacket",
-                    "dsniff"
-                ],
+                "depends": ["openjdk-11-jdk", "python3-impacket", "dsniff"],
                 "files": {
                     "/usr/share/ddt": "exploits/",
                     "/usr/share/doc/ddt/README.md": "../README.md"
