@@ -5,6 +5,8 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
  * Represents the form values for the DnsenumTool component.
@@ -32,8 +34,9 @@ const DnsenumTool = () => {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [missingCommands, setMissingCommands] = useState<string[]>([]);
-    const [modalOpened, setModalOpened] = useState(false);
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [loadingModal, setLoadingModal] = useState(true);
 
     /**
      * Component Constants.
@@ -56,7 +59,7 @@ const DnsenumTool = () => {
         "Step 7: Select Reverse Lookup if required.\n";
     const sourceLink = "https://www.kali.org/tools/dnsenum/";
     const tutorial = "https://www.kali.org/tools/dnsenum/";
-    const dependencies = ["dnsenum", "kill"]; // Dependencies required by the component
+    const dependencies = ["dnsenum"]; // Dependencies required by the component
 
     /**
      * intial form values
@@ -110,24 +113,6 @@ const DnsenumTool = () => {
      * It sets up and triggers the dnsenum tool with the given parameters.
      * @param {FormValuesType} values - The form values, containing the domain, threads, pages, scrap, reverse lookup, and timeout.
      */
-
-    const checkAllCommandsAvailability = async () => {
-        const unavailableCommands = [];
-
-        for (const command of dependencies) {
-            try {
-                await CommandHelper.runCommand(command, ["--version"]);
-            } catch (e) {
-                unavailableCommands.push(command);
-            }
-        }
-        setMissingCommands(unavailableCommands);
-        setModalOpened(unavailableCommands.length > 0);
-    };
-
-    useEffect(() => {
-        checkAllCommandsAvailability();
-    }, []);
 
     //sets the loading state to True, provides arguments for the tool
     const onSubmit = async (values: FormValuesType) => {
@@ -193,6 +178,20 @@ const DnsenumTool = () => {
         setAllowSave(false);
     };
 
+    // useEffect to check for command availability and open modal if required
+    useEffect(() => {
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable);
+                setOpened(isAvailable);
+                setLoadingModal(false);
+            })
+            .catch((error) => {
+                console.error("An error occured: ", error);
+                setLoadingModal(false);
+            });
+    }, []);
+
     // useEffect to clear output on component mount
     useEffect(() => {
         clearOutput();
@@ -210,6 +209,15 @@ const DnsenumTool = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
+            {/* Render the installation modal if commands are not available */}
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <LoadingOverlay visible={loading} />
                 {loading && (
@@ -243,16 +251,6 @@ const DnsenumTool = () => {
                     <Button type={"submit"}>Start Enumeration</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-
-                    <Modal opened={modalOpened} onClose={() => setModalOpened(false)} title="Missing Commands">
-                        <p>The Following Commands are missing and need to be installed:</p>
-                        <ul>
-                            {missingCommands.map((cmd) => (
-                                <li key={cmd}></li>
-                            ))}
-                        </ul>
-                        <p>Please install these commands and try again.</p>
-                    </Modal>
                 </Stack>
             </form>
         </RenderComponent>
