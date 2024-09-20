@@ -4,7 +4,7 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -24,26 +24,30 @@ interface FormValuesType {
  */
 const CloudBrute = () => {
     // Component State Variables.
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
-    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [pid, setPid] = useState("");
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
 
     // Component Constants.
-    const title = "CloudBrute"; // Title of the component.
+    const title = "CloudBrute";
     const description =
-        "CloudBrute is a tool for cloud enumeration and infrastructure discovery in various cloud providers."; // Description of the component.
+        "CloudBrute is a tool for cloud enumeration and infrastructure discovery in various cloud providers.";
     const steps =
         "Step 1: Enter the target domain.\n" +
         "Step 2: Enter a keyword for URL generation.\n" +
         "Step 3: Specify the path to the wordlist file.\n" +
-        "Step 4: Click 'Run CloudBrute' to start the scan.\n" +
+        "Step 4: Click Start " +
+        title +
+        " to start the scan.\n" +
         "Step 5: View the Output block below to see the results of the scan.";
-    const sourceLink = ""; // Link to the source code.
-    const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["cloudbrute"]; // Contains the dependencies required by the component.
+    const sourceLink = "https://www.kali.org/tools/cloudbrute/";
+    const tutorial = "";
+    const dependencies = ["cloudbrute"];
 
     // Form hook to handle form input.
     const form = useForm({
@@ -58,13 +62,13 @@ const CloudBrute = () => {
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-                setLoadingModal(false); // Set loading to false after the check is done
+                setIsCommandAvailable(isAvailable);
+                setOpened(!isAvailable);
+                setLoadingModal(false);
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+                setLoadingModal(false);
             });
     }, []);
 
@@ -74,7 +78,8 @@ const CloudBrute = () => {
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+        setOutput((prevOutput) => prevOutput + "\n" + data);
+        setAllowSave(true);
     }, []);
 
     /**
@@ -95,10 +100,10 @@ const CloudBrute = () => {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
 
-            setPid(""); // Clear the child process pid reference.
-            setLoading(false); // Cancel the loading overlay.
+            setPid("");
+            setLoading(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData]
     );
 
     /**
@@ -110,6 +115,8 @@ const CloudBrute = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+        setAllowSave(false);
+        setHasSaved(false);
         const args = ["-d", values.domain, "-k", values.keyword, "-w", values.wordlist];
         CommandHelper.runCommandGetPidAndOutput("cloudbrute", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
@@ -119,6 +126,7 @@ const CloudBrute = () => {
             .catch((error) => {
                 setLoading(false);
                 setOutput(`Error: ${error.message}`);
+                setAllowSave(true);
             });
     };
 
@@ -127,7 +135,18 @@ const CloudBrute = () => {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
-    }, [setOutput]);
+        setAllowSave(false);
+        setHasSaved(false);
+    }, []);
+
+    /**
+     * handleSaveComplete: Recognises that the output file has been saved.
+     * Passes the saved status back to SaveOutputToTextFile_v2
+     */
+    const handleSaveComplete = useCallback(() => {
+        setHasSaved(true);
+        setAllowSave(false);
+    }, []);
 
     return (
         <RenderComponent
@@ -161,8 +180,8 @@ const CloudBrute = () => {
                         placeholder="/usr/share/dirb/wordlists/common.txt"
                         {...form.getInputProps("wordlist")}
                     />
-                    {SaveOutputToTextFile(output)}
-                    <Button type="submit">Run CloudBrute</Button>
+                    <Button type="submit">Start {title}</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
