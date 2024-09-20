@@ -725,7 +725,6 @@ export const ROUTES: RouteProperties[] = [
         category: "Vulnerability Assessment and Exploitation",
     },
     {
-
         name: "Traceroute",
         path: "/tools/Traceroute",
         element: <Traceroute />,
