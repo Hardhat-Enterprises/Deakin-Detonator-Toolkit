@@ -1,10 +1,12 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch, Checkbox } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch, Modal } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
  * Represents the form values for the DnsenumTool component.
@@ -32,6 +34,9 @@ const DnsenumTool = () => {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [loadingModal, setLoadingModal] = useState(true);
 
     /**
      * Component Constants.
@@ -150,8 +155,9 @@ const DnsenumTool = () => {
      */
     const handleCancel = () => {
         if (pid !== null) {
-            const args = [`-15`, pid];
-            CommandHelper.runCommand("kill", args);
+            CommandHelper.runCommand("kill", ["-15", pid])
+                .then(() => handleProcessData("\nProcess Terminated Successfully"))
+                .catch((e) => handleProcessData("\nFailed to terminate process: ${e.message}"));
         }
     };
 
@@ -172,10 +178,23 @@ const DnsenumTool = () => {
         setAllowSave(false);
     };
 
+    // useEffect to check for command availability and open modal if required
+    useEffect(() => {
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable);
+                setOpened(isAvailable);
+                setLoadingModal(false);
+            })
+            .catch((error) => {
+                console.error("An error occured: ", error);
+                setLoadingModal(false);
+            });
+    }, []);
+
     // useEffect to clear output on component mount
     useEffect(() => {
         clearOutput();
-
         // Cleanup function to run when the component unmounts
         return () => {
             clearOutput();
@@ -190,6 +209,15 @@ const DnsenumTool = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
+            {/* Render the installation modal if commands are not available */}
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <LoadingOverlay visible={loading} />
                 {loading && (
