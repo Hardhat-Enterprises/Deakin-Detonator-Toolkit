@@ -60,7 +60,7 @@ function WPScan() {
     const steps =
         "Step 1: Enter a WordPress URL.\n" +
         "Step 2: Enter any additional parameters for the scan.\n" +
-        "Step 3: Click Scan to commence WPScan's operation.\n" +
+        "Step 3: Click Start " + title + " to commence WPScan's operation.\n" +
         "Step 4: View the Output block below to view the results of the tool's execution.\n" +
         "\n" +
         "API Token: For the API Token field, head to the WPScan website and make a free account.\n" +
@@ -351,7 +351,7 @@ function WPScan() {
                             <Stepper.Step label="Run">
                                 <Stack align="center" mt={20}>
                                     <Button type="submit" disabled={loading} style={{ alignSelf: "center" }}>
-                                        Run WPScan
+                                        Start {title}
                                     </Button>
                                 </Stack>
                             </Stepper.Step>
