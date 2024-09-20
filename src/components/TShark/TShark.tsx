@@ -19,7 +19,7 @@ interface FormValuesType {
 }
 
 //TShark Options
-const tsharkOptions = ["Sniffer", "Reader", "Analyzer"];
+const tsharkOptions = ["Sniffer", "Reader", "Analyser"];
 
 const TShark = () => {
     const [output, setOutput] = useState("");
@@ -43,9 +43,9 @@ const TShark = () => {
         "Step 07: Click start TShark to sniff traffic.\n" +
         "Step 08: Switch to Reader mode.\n" +
         "Step 09: Provide the file path for the capture file and click start TShark.\n" +
-        "Step 10: Switch to Analyzer mode.\n" +
+        "Step 10: Switch to Analyser mode.\n" +
         "Step 11: Provide the file path for the capture file.\n" +
-        "Step 12: Seletc the Analyzer type and click start TShark";
+        "Step 12: Seletc the Analyser type and click start TShark";
 
     const sourceLink = ""; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
@@ -60,8 +60,8 @@ const TShark = () => {
             analysisType: "",
         },
         /* validate: {
-            filePath: (value) => (selectedTSharkOption === "Analyzer" && !value ? 'PCAP file path is required' : null),
-            analysisType: (value) => (selectedTSharkOption === "Analyzer" && !value ? 'Analysis type is required' : null),
+            filePath: (value) => (selectedTSharkOption === "Analyser" && !value ? 'PCAP file path is required' : null),
+            analysisType: (value) => (selectedTSharkOption === "Analyser" && !value ? 'Analysis type is required' : null),
         },*/
     });
 
@@ -113,7 +113,7 @@ const TShark = () => {
      * @param {FormValuesType} values - The form values, containing the <list the form values here, e.g.  interface, packet count, etc>.
      */
     const onSubmit = async (values: FormValuesType) => {
-        console.log("Form submitted with values: ", values);
+        //console.log("Form submitted with values: ", values);
         // Set loading state to true and disallow output saving
         setLoading(true);
         setAllowSave(false);
@@ -173,10 +173,10 @@ const TShark = () => {
                 }
                 break;
 
-            case "Analyzer": // Analyzes the pcap file for the selected traffic analysis
+            case "Analyser": // Analyses the pcap file for the selected traffic analysis
                 //let analysisCommand = `tshark -r ${values.filePath} -q -z io,stat,1`;
                 let analysisCommand;
-                console.log("Analyzer ", analysisCommand);
+                //console.log("Analyser ", analysisCommand);
 
                 switch (values.analysisType) {
                     case "Protocol Statistics":
@@ -301,7 +301,7 @@ const TShark = () => {
                             {...form.getInputProps("filePath")}
                         />
                     )}
-                    {selectedTSharkOption === "Analyzer" && (
+                    {selectedTSharkOption === "Analyser" && (
                         <>
                             <TextInput
                                 label={"File/File Path"}
