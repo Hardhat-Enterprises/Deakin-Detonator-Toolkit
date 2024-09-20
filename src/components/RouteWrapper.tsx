@@ -85,6 +85,7 @@ import SQLmap from "./SQLmap/SQLmap";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
 import Tiger from "./tiger/tiger";
 import Unicornscan from "./Unicornscan/Unicornscan";
+import Photon from "./Photon/photon";
 import Arping from "./Arping/Arping";
 import Sqlninja from "./Sqlninja/sqlninja";
 
@@ -601,6 +602,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Parsero />,
         description: "A Python script that reads a web server's robots.txt file to view and analyze Disallow entries.",
         category: "Web Application Testing",
+    },
+    {
+        name: "Photon",
+        path: "/tools/photon",
+        element: <Photon />,
+        description: "A fast and flexible crawler designed for open source intelligence.",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "RTsort",

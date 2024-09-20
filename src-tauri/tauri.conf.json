@@ -228,6 +228,11 @@
                         "args": true
                     },
                     {
+                        "name": "photon",
+                        "cmd": "photon",
+                        "args": true
+                    },
+                    {
                         "name": "pip3",
                         "cmd": "pip3",
                         "args": true
