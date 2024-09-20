@@ -40,7 +40,7 @@ const ArpanameTool = () => {
         "Step 1: Type in the target IP address\n" +
         "Step 2: Click lookup to run Arpaname.\n" +
         "Step 3: View the output block to see the results. ";
-    const sourceLink = ""; // Link to the source code (or Kali Tools).
+    const sourceLink = "https://www.kali.org/tools/bind9/#arpaname"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["arpaname"];
 

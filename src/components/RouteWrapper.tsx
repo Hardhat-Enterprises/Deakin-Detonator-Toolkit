@@ -5,6 +5,7 @@ import ToolsPage from "../pages/Tools";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
+import CVE202227925 from "./CVE-2022-27925/CVE-2022-27925";
 import DirbTool from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
@@ -65,6 +66,7 @@ import Topology from "./WalkthroughPages/Topology";
 import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
+import Rtgen from "./rtgen/rtgen";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import ArpanameTool from "./Arpaname/arpaname";
 import Nikto from "./Nikto/Nikto";
@@ -80,8 +82,11 @@ import Masscan from "./Masscan/Masscan";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
+import Tiger from "./tiger/tiger";
 import Unicornscan from "./Unicornscan/Unicornscan";
 import FirmwareAnalysisTool from "./FirmwareAnalysisTool/FirmwareAnalysisTool";
+import Arping from "./Arping/Arping";
+import Sqlninja from "./Sqlninja/sqlninja";
 
 export interface RouteProperties {
     name: string;
@@ -177,6 +182,14 @@ export const ROUTES: RouteProperties[] = [
         category: "",
     },
     {
+        name: "CVE-2022-27925",
+        path: "/attack-vectors/cve-2022-27925",
+        element: <CVE202227925 />,
+        description:
+            "Zimbra Collaboration (aka ZCS) 8.8.15 and 9.0 has mboximport functionality that receives a ZIP archive and extracts files from it.",
+        category: "",
+    },
+    {
         name: "Busqueda",
         path: "/walkthroughs/Busqueda",
         element: <Busqueda />,
@@ -241,7 +254,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs/Pilgrimage",
         element: <Pilgrimage />,
         description:
-            "A walkthrough on the Pilgrimage Hack The Box challenge focused on exploiting a web application vulnerability to gain access to the system",
+            "A walkthrough on the Pilgrimage Hack The Box challenge focused on exploiting a web application vulnerabilities to gain access to the system",
         category: "Web Application Testing",
     },
     {
@@ -282,7 +295,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/AircrackNG",
         element: <AircrackNG />,
         description:
-            "A wireless network auditing and cracking tool that can capture and analyze packets from Wi-Fi networks, crack WEP and WPA-PSK passwords, and identify vulnerabilities in wireless networks.",
+            "A wireless network auditing and cracking tool that can capture and analyze packets from Wi-Fi networks, crack WEP and WPA-PSK passwords, and identify vulnerability in wireless networks.",
         category: "Password Cracking and Authentication Testing",
     },
     {
@@ -322,6 +335,13 @@ export const ROUTES: RouteProperties[] = [
         element: <ARPFingerprint />,
         description:
             "A tool to analyse ARP (Address Resolution Protocol) traffic to identify the types of operating systems and network devices on a network.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Arping",
+        path: "/tools/Arping",
+        element: <Arping />,
+        description: "Arping is a tool to send ARP requests to a specified IP address to discover the MAC address.",
         category: "Network Scanning and Enumeration",
     },
     {
@@ -605,6 +625,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Password cracking and Authentication testing",
     },
     {
+        name: "Rtgen",
+        path: "/tools/rtgen",
+        element: <Rtgen />,
+        description: "A tool for generating random network traffic to simulate various network conditions and loads.",
+        category: "Network Traffic Generation",
+    },
+    {
         name: "SearchSploit",
         path: "/tools/SearchSploit",
         element: <SearchSploit />,
@@ -659,6 +686,14 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Sqlninja",
+        path: "/tools/sqlninja",
+        element: <Sqlninja />,
+        description:
+            "A tool used to exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end.",
+        category: "Vulnerability Assessment and Exploitation",
+    },
+    {
         name: "Sublist3r",
         path: "/tools/Sublist3r",
         element: <Sublist3r />,
@@ -675,6 +710,22 @@ export const ROUTES: RouteProperties[] = [
         category: "Information Gathering and Analysis",
     },
     {
+        name: "Testssl.sh",
+        path: "/tools/Testssl",
+        element: <TestSSL />,
+        description:
+            "testssl.sh is a versatile command line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Tiger",
+        path: "/tools/tiger",
+        element: <Tiger />,
+        description: "Audit and intrusion detection tool used to protect UNIX based systems.",
+        category: "Vulnerability Assessment and Exploitation",
+    },
+    {
+
         name: "Traceroute",
         path: "/tools/Traceroute",
         element: <Traceroute />,

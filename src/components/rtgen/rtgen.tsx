@@ -10,23 +10,21 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
 /**
- * Represents the form values for the Masscan component.
+ * Represents the form values for the Rtgen component.
  */
 interface FormValuesType {
-    targetIP: string;
-    targetPort: string;
-    waitTime: string;
-    packetRate: string;
-    excludedIP: string;
-    topPorts: string;
-    interface: string;
+    plaintextCharset: string;
+    hashAlgorithm: string;
+    chainLength: string;
+    tableSize: string;
+    outputFileName: string;
 }
 
 /**
- * The Masscan component.
- * @returns The Masscan component.
+ * The Rtgen component.
+ * @returns The Rtgen component.
  */
-const Masscan = () => {
+const Rtgen = () => {
     // Component state variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution
@@ -36,40 +34,30 @@ const Masscan = () => {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [verboseMode, setVerboseMode] = useState(false); // State variable for verbose mode
-    const [checkedTopPorts, setCheckedTopPorts] = useState(false); //State variable for scanning common ports.
-    const [checkedBannerGrabbing, setCheckedBannerGrabbing] = useState(false); //State variable for banner grabbing.
 
     // Component Constants
-    const title = "Masscan";
+    const title = "Rtgen";
     const description =
-        "Masscan is a network reconnaissance tool designed to scan large IP ranges for open ports and services faster than traditional scanners.";
+        "Rtgen is a tool for generating rainbow tables. These tables can be used to perform fast hash lookups during password cracking operations.";
     const steps =
         "=== Required ===\n" +
-        "Step 1: Input a single IP address or an IP address range/subnet to scan.\n" +
-        "Step 2: Input a port or range of ports to scan. Alternatively check the common ports box and input n number of common ports to scan.\n" +
-        " \n" +
-        "=== Optional ===\n" +
-        "Step 3: Input a wait time to allow Masscan to wait after the last packet is sent to receive any delayed responses.\n" +
-        "Step 4: Input a packet rate to deterine how many packets are sent per second (Slower rates can help avoid detection).\n" +
-        "Step 5: Input a single IP address or an IP address range to exclude from the scan.\n" +
-        "Step 6: Input a network interface to send and receive packets from during the scan.\n" +
-        "Step 7: Check the banner grabbing checkbox to attempt to identify services running on scanned ports.\n" +
-        "Step 8: Check the verbose checkbox to run the command in verbose mode.\n";
-    const sourceLink = "https://www.kali.org/tools/masscan/"; // Link to the source code
+        "Step 1: Input the character set used for plaintext generation (e.g., alphanumeric).\n" +
+        "Step 2: Select the hash algorithm to use (e.g., MD5, SHA1).\n" +
+        "Step 3: Specify the chain length for the rainbow table.\n" +
+        "Step 4: Define the size of the rainbow table.\n" +
+        "Step 5: Provide an output file name where the generated table will be saved.\n";
+    const sourceLink = "https://www.kali.org/tools/rainbowcrack/#rtgen"; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
-    const dependencies = ["masscan"]; // Contains the dependencies required by the component.
+    const dependencies = ["rtgen"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input
     let form = useForm({
         initialValues: {
-            targetIP: "",
-            targetPort: "",
-            waitTime: "",
-            packetRate: "",
-            excludedIP: "",
-            topPorts: "",
-            interface: "",
+            plaintextCharset: "",
+            hashAlgorithm: "",
+            chainLength: "",
+            tableSize: "",
+            outputFileName: "",
         },
     });
 
@@ -109,12 +97,8 @@ const Masscan = () => {
             // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-
-                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-
-                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
@@ -129,52 +113,30 @@ const Masscan = () => {
     );
 
     /**
-     * Handles form submission for the Masscan component.
-     * @param {FormValuesType} values - The form values containing the target domain.
+     * Handles form submission for the Rtgen component.
+     * @param {FormValuesType} values - The form values containing the parameters for table generation.
      */
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
-        // Construct arguments for the Masscan command based on form input
+        // Construct arguments for the Rtgen command based on form input
         let args = [];
-        args = [values.targetIP, "-p", values.targetPort];
+        args = [
+            "--charset",
+            values.plaintextCharset,
+            "--hash",
+            values.hashAlgorithm,
+            "--chains",
+            values.chainLength,
+            "--table-size",
+            values.tableSize,
+            "--output",
+            values.outputFileName,
+        ];
 
-        // Check if waitTime has a value and push it to args
-        if (values.waitTime) {
-            args.push("--wait", values.waitTime);
-        }
-
-        // Check if packetRate has a value and push it to args
-        if (values.packetRate) {
-            args.push("--rate", values.packetRate);
-        }
-
-        // Check if excludedIP has a value and push it to args
-        if (values.excludedIP) {
-            args.push("--exclude", values.excludedIP);
-        }
-
-        // Check if topPorts has a value and push it to args
-        if (values.topPorts) {
-            args.push("--top-ports", values.topPorts);
-        }
-
-        // Check if interface has a value and push it to args
-        if (values.topPorts) {
-            args.push("--interface", values.interface);
-        }
-
-        if (checkedBannerGrabbing) {
-            args.push("--banner"); // Add banner grabbing if option is enabled
-        }
-
-        if (verboseMode) {
-            args.push("-v"); // Add verbose mode option if enabled
-        }
-
-        // Execute the Masscan command via helper method and handle its output or potential errors
-        CommandHelper.runCommandWithPkexec("masscan", args, handleProcessData, handleProcessTermination)
+        // Execute the Rtgen command via helper method and handle its output or potential errors
+        CommandHelper.runCommandWithPkexec("rtgen", args, handleProcessData, handleProcessTermination)
             .then(() => {
                 // Deactivate loading state
                 setLoading(false);
@@ -226,54 +188,36 @@ const Masscan = () => {
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput
-                        label="IP Address/Range/Subnet"
+                        label="Plaintext Charset"
                         required
-                        {...form.getInputProps("targetIP")}
-                        placeholder="e.g. 192.168.1.0"
-                    />
-                    <Checkbox
-                        label={"Scan Common Ports Mode"}
-                        checked={checkedTopPorts}
-                        onChange={(e) => setCheckedTopPorts(e.currentTarget.checked)}
-                    />
-                    {checkedTopPorts ? (
-                        <TextInput
-                            label="Number of Common Ports"
-                            required
-                            {...form.getInputProps("topPorts")}
-                            placeholder="e.g. 100"
-                        />
-                    ) : (
-                        <TextInput
-                            label="Port/Port Range"
-                            required
-                            {...form.getInputProps("targetPort")}
-                            placeholder="e.g. 80 or 80-100"
-                        />
-                    )}
-                    <TextInput label="Response Wait Timer" {...form.getInputProps("waitTime")} placeholder="e.g. 5" />
-                    <TextInput label="Packet Send Rate" {...form.getInputProps("packetRate")} placeholder="e.g. 1000" />
-                    <TextInput
-                        label="Exclude IP(s)"
-                        {...form.getInputProps("excludedIP")}
-                        placeholder="e.g. 192.168.1.4"
+                        {...form.getInputProps("plaintextCharset")}
+                        placeholder="e.g., alphanumeric"
                     />
                     <TextInput
-                        label="Select Network Interface"
-                        {...form.getInputProps("interface")}
-                        placeholder="e.g. eth0"
+                        label="Hash Algorithm"
+                        required
+                        {...form.getInputProps("hashAlgorithm")}
+                        placeholder="e.g., MD5"
                     />
-                    <Checkbox
-                        label="Banner Grabbing"
-                        checked={checkedBannerGrabbing}
-                        onChange={(event) => setCheckedBannerGrabbing(event.currentTarget.checked)}
+                    <TextInput
+                        label="Chain Length"
+                        required
+                        {...form.getInputProps("chainLength")}
+                        placeholder="e.g., 1000"
                     />
-                    <Checkbox
-                        label="Verbose Mode"
-                        checked={verboseMode}
-                        onChange={(event) => setVerboseMode(event.currentTarget.checked)}
+                    <TextInput
+                        label="Table Size"
+                        required
+                        {...form.getInputProps("tableSize")}
+                        placeholder="e.g., 100000"
                     />
-                    <Button type={"submit"}>Start {title}</Button>
+                    <TextInput
+                        label="Output File Name"
+                        required
+                        {...form.getInputProps("outputFileName")}
+                        placeholder="e.g., rainbow_table.rt"
+                    />
+                    <Button type={"submit"}>Generate {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
@@ -282,4 +226,4 @@ const Masscan = () => {
     );
 };
 
-export default Masscan;
+export default Rtgen;

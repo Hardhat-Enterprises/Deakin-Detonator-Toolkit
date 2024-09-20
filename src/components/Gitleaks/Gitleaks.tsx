@@ -43,7 +43,7 @@ function Gitleaks() {
         "Step 2: (Optional) Enable advanced mode and configure additional options.\n" +
         "Step 3: Click the 'Start Gitleaks' button to initiate the scanning process.\n" +
         "Step 4: Review the output in the console to identify any detected secrets or sensitive information.\n";
-    const sourceLink = ""; // Link to the source code or Kali Tools page.
+    const sourceLink = "https://www.kali.org/tools/gitleaks/"; // Link to the source code or Kali Tools page.
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["gitleaks"]; // Dependencies required for the Gitleaks tool.
 
