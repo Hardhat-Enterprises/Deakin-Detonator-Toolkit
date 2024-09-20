@@ -378,7 +378,7 @@ const ReferencesPage = () => {
                             "Arping is a tool that sends ARP/ICMP requests to a target device and displays the reply messages"
                         }
                         url={"https://www.kali.org/tools/arping/"}
-                    />                    
+                    />
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2021-41773"}
