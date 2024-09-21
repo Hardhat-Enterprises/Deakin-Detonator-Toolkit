@@ -65,6 +65,17 @@ jobs:
             # Run the test suite
             - run: yarn run test
 
+            # Install Trivy
+            - run: |
+                  sudo apt-get update
+                  sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+                  wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+                  echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+                  sudo apt-get update && sudo apt-get install trivy
+
+            # Run Trivy vulnerability scan on the repository
+            - run: trivy fs . --exit-code 1 --severity HIGH,CRITICAL
+
     # Application build job
     build:
         runs-on: ubuntu-latest
