@@ -73,8 +73,8 @@ jobs:
                   echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
                   sudo apt-get update && sudo apt-get install trivy
 
-            # Run Trivy vulnerability scan on the repository
-            - run: trivy fs . --exit-code 1 --severity HIGH,CRITICAL
+            # Run Trivy vulnerability + dependency scan
+            - run: trivy fs . --exit-code 1 --severity HIGH,CRITICAL --include-dev-deps --scanners vuln
 
     # Application build job
     build:
