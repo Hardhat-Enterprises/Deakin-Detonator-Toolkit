@@ -213,6 +213,11 @@
                         "args": true
                     },
                     {
+                        "name": "nc",
+                        "cmd": "nc",
+                        "args": true
+                    },
+                    {
                         "name": "nikto",
                         "cmd": "nikto",
                         "args": true
