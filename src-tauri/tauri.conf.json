@@ -83,6 +83,11 @@
                         "args": true
                     },
                     {
+                        "name": "cloudbrute",
+                        "cmd": "cloudbrute",
+                        "args": true
+                    },
+                    {
                         "name": "cp",
                         "cmd": "cp",
                         "args": true
@@ -210,6 +215,11 @@
                     {
                         "name": "nbtscan",
                         "cmd": "nbtscan",
+                        "args": true
+                    },
+                    {
+                        "name": "nc",
+                        "cmd": "nc",
                         "args": true
                     },
                     {
