@@ -69,6 +69,13 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/arp-scan/#arp-fingerprint"}
                     />
                     <Reference
+                        name={"Arping"}
+                        description={
+                            "Arping is a tool that sends ARP/ICMP requests to a target device and displays the reply messages."
+                        }
+                        url={"https://www.kali.org/tools/arping/"}
+                    />
+                    <Reference
                         name={"ArpScan"}
                         description={
                             "Arp-scan is a network scanning tool that actively sends ARP requests to discover devices and IP addresses on a local network."
@@ -315,6 +322,11 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/snmpcheck/"}
                     />
                     <Reference
+                        name={"Sqlninja"}
+                        description={"Sqlninja is an SQL injection tool."}
+                        url={"https://www.kali.org/tools/sqlninja/"}
+                    />
+                    <Reference
                         name={"Sublist3r"}
                         description={"Sublist3r is a tool designed to enumerate subdomains of websites using OSINT"}
                         url={"https://www.kali.org/tools/sublist3r/"}
@@ -325,6 +337,11 @@ const ReferencesPage = () => {
                             "The Harvester is a tool for gathering emails, subdomains, IPs, and URLs from public sources for reconnaissance."
                         }
                         url={"https://www.kali.org/tools/theharvester/"}
+                    />
+                    <Reference
+                        name={"Tiger"}
+                        description={"Toolset used to perform security audits of operating system components."}
+                        url={"https://www.kali.org/tools/tiger/"}
                     />
                     <Reference
                         name={"Traceroute"}
@@ -362,7 +379,6 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/wpscan/"}
                     />
-
                     <Title order={4}>Attack Vectors:</Title>
                     <Reference
                         name={"CVE-2021-41773"}
@@ -378,6 +394,11 @@ const ReferencesPage = () => {
                         name={"CVE-2022-24112"}
                         description={"Apache APISIX - Remote Code Execution."}
                         url={"https://github.com/M4xSec/Apache-APISIX-CVE-2022-24112"}
+                    />
+                    <Reference
+                        name={"CVE-2022-27925"}
+                        description={"Zimbra Collaboration Suite - Remote Code Execution"}
+                        url={"https://arcticwolf.com/resources/blog/cve-2022-27925/"}
                     />
                     <Reference
                         name={"CVE-2022-36804"}
