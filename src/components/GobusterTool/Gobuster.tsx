@@ -4,9 +4,10 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { UserGuide } from "../UserGuide/UserGuide";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 const title = "GoBuster Directory and File Brute-Forcing Tool";
 const description_userguide = "GoBuster is a tool used for directory and file brute-forcing on web servers.";
@@ -37,12 +38,7 @@ const GoBusterTool = () => {
     // Component Constants.
     const title = "GoBuster"; // Title of the component.
     const description = "GoBuster is a tool for directory and file brute-forcing on web servers."; // Description of the component.
-    const steps =
-        "Step 1: Type in the name of your fake host.\n" +
-        "Step 2: Select your desired channel.\n" +
-        "Step 3: Specify the WLAN interface to be used.\n" +
-        "Step 4: Click 'Start AP' to begin the process.\n" +
-        "Step 5: View the output block to see the results. "; // Steps to undertake to use the tool.
+    const steps = "Step 1: Input Target Website URL.\n" + "Step 2: Input the path for Wordlist file.\n"; // Steps to undertake to use the tool.
     const sourceLink = "https://www.kali.org/tools/gobuster/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["gobuster"]; // Contains the dependencies required by the component.
@@ -159,13 +155,20 @@ const GoBusterTool = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
             <form onSubmit={form.onSubmit(onSubmit)}>
-                <LoadingOverlay visible={loading} />
                 <Stack>
-                    {UserGuide(title, description_userguide)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <TextInput label={"Target URL"} required {...form.getInputProps("url")} />
                     <TextInput label={"Wordlist File"} required {...form.getInputProps("wordlist")} />
-                    <Button type={"submit"}>Start Brute-Forcing</Button>
+                    <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>

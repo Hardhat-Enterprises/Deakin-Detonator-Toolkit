@@ -48,6 +48,11 @@
                         "args": true
                     },
                     {
+                        "name": "arping",
+                        "cmd": "arping",
+                        "args": true
+                    },
+                    {
                         "name": "arp-scan",
                         "cmd": "arp-scan",
                         "args": true
@@ -80,6 +85,11 @@
                     {
                         "name": "cewl",
                         "cmd": "cewl",
+                        "args": true
+                    },
+                    {
+                        "name": "cloudbrute",
+                        "cmd": "cloudbrute",
                         "args": true
                     },
                     {
@@ -243,6 +253,11 @@
                         "args": true
                     },
                     {
+                        "name": "photon",
+                        "cmd": "photon",
+                        "args": true
+                    },
+                    {
                         "name": "pip3",
                         "cmd": "pip3",
                         "args": true
@@ -283,6 +298,16 @@
                         "args": true
                     },
                     {
+                        "name": "sqlmap",
+                        "cmd": "sqlmap",
+                        "args": true
+                    },
+                    {
+                        "name": "sqlninja",
+                        "cmd": "sqlninja",
+                        "args": true
+                    },
+                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
                         "args": true
@@ -290,6 +315,21 @@
                     {
                         "name": "theHarvester",
                         "cmd": "theHarvester",
+                        "args": true
+                    },
+                    {
+                        "name": "testssl",
+                        "cmd": "testssl",
+                        "args": true
+                    },
+                    {
+                        "name": "tiger",
+                        "cmd": "tiger",
+                        "args": true
+                    },
+                    {
+                        "name": "traceroute",
+                        "cmd": "sudo traceroute",
                         "args": true
                     },
                     {

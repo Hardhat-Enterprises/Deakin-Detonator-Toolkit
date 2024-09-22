@@ -5,6 +5,8 @@ import ToolsPage from "../pages/Tools";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
+import CVE20221388 from "./CVE-2022-1388/CVE-2022-1388";
+import CVE202227925 from "./CVE-2022-27925/CVE-2022-27925";
 import DirbTool from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
@@ -29,6 +31,7 @@ import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import NbtscanTool from "./NbtscanTool/NbtscanTool";
 import Cewl from "./Cewl/Cewl";
+import CloudBrute from "./CloudBrute/CloudBrute";
 import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
@@ -83,7 +86,11 @@ import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
+import Tiger from "./tiger/tiger";
 import Unicornscan from "./Unicornscan/Unicornscan";
+import Photon from "./Photon/photon";
+import Arping from "./Arping/Arping";
+import Sqlninja from "./Sqlninja/sqlninja";
 
 export interface RouteProperties {
     name: string;
@@ -144,6 +151,13 @@ export const ROUTES: RouteProperties[] = [
         category: "",
     },
     {
+        name: "CVE-2022-1388",
+        path: "/attack-vectors/cve-2022-1388",
+        element: <CVE20221388 />,
+        description: "Undisclosed requests may bypass iControl REST authentication.",
+        category: "",
+    },
+    {
         name: "ZeroLogon",
         path: "/attack-vectors/ZeroLogon",
         element: <ZeroLogon />,
@@ -176,6 +190,14 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2022-24112",
         element: <CVE202224112 />,
         description: "Apache APISIX Remote Code Execution Vulnerability",
+        category: "",
+    },
+    {
+        name: "CVE-2022-27925",
+        path: "/attack-vectors/cve-2022-27925",
+        element: <CVE202227925 />,
+        description:
+            "Zimbra Collaboration (aka ZCS) 8.8.15 and 9.0 has mboximport functionality that receives a ZIP archive and extracts files from it.",
         category: "",
     },
     {
@@ -334,6 +356,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
+        name: "Arping",
+        path: "/tools/Arping",
+        element: <Arping />,
+        description: "Arping is a tool to send ARP requests to a specified IP address to discover the MAC address.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
         name: "ArpScan",
         path: "/tools/arpscan",
         element: <Arpscan />,
@@ -369,6 +398,14 @@ export const ROUTES: RouteProperties[] = [
         element: <Cewl />,
         description: "A tool that generates custom word lists by crawling and analyzing web pages for useful words.",
         category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "CloudBrute",
+        path: "/tools/CloudBrute",
+        element: <CloudBrute />,
+        description:
+            "Cloudbrute is a tool for cloud enumeration and infrastructure discovery in various cloud providers",
+        category: "Cloud Security and Reconnaissance",
     },
     {
         name: "Crackmapexec",
@@ -592,6 +629,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Photon",
+        path: "/tools/photon",
+        element: <Photon />,
+        description: "A fast and flexible crawler designed for open source intelligence.",
+        category: "Information Gathering and Analysis",
+    },
+    {
         name: "RTsort",
         path: "/tools/RTsort",
         element: <RTsort />,
@@ -674,6 +718,14 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Sqlninja",
+        path: "/tools/sqlninja",
+        element: <Sqlninja />,
+        description:
+            "A tool used to exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end.",
+        category: "Vulnerability Assessment and Exploitation",
+    },
+    {
         name: "Sublist3r",
         path: "/tools/Sublist3r",
         element: <Sublist3r />,
@@ -696,6 +748,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "testssl.sh is a versatile command line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Tiger",
+        path: "/tools/tiger",
+        element: <Tiger />,
+        description: "Audit and intrusion detection tool used to protect UNIX based systems.",
+        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Traceroute",

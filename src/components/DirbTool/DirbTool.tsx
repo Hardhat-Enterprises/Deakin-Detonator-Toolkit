@@ -73,7 +73,7 @@ function Dirb() {
         "Step 2: Select the desired parameters for the Dirb command, including the wordlist size.\n" +
         "Step 3: Click the 'Run Dirb' button to initiate the scanning process.\n" +
         "Step 4: Review the output in the console to identify any detected web objects or hidden content.\n";
-    const sourceLink = "";
+    const sourceLink = "https://www.kali.org/tools/dirb/";
     const tutorial = "";
     const dependencies = ["dirb"];
 
