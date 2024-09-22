@@ -298,16 +298,6 @@
                         "args": true
                     },
                     {
-                        "name": "sqlmap",
-                        "cmd": "sqlmap",
-                        "args": true
-                    },
-                    {
-                        "name": "sqlninja",
-                        "cmd": "sqlninja",
-                        "args": true
-                    },
-                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
                         "args": true
@@ -315,21 +305,6 @@
                     {
                         "name": "theHarvester",
                         "cmd": "theHarvester",
-                        "args": true
-                    },
-                    {
-                        "name": "testssl",
-                        "cmd": "testssl",
-                        "args": true
-                    },
-                    {
-                        "name": "tiger",
-                        "cmd": "tiger",
-                        "args": true
-                    },
-                    {
-                        "name": "traceroute",
-                        "cmd": "sudo traceroute",
                         "args": true
                     },
                     {
