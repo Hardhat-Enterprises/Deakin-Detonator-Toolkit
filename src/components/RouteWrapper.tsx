@@ -58,6 +58,7 @@ import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
 import AircrackNG from "./AircrackNG/AircrackNG";
 import AirbaseNG from "./AirbaseNG/AirbaseNG";
+import Amass from "./Amass/Amass";
 import Fcrackzip from "./Fcrackzip/Fcrackzip";
 import GoBusterTool from "./GobusterTool/Gobuster";
 import Keeper from "./WalkthroughPages/Keeper";
@@ -322,6 +323,13 @@ export const ROUTES: RouteProperties[] = [
         element: <AMAP />,
         description: "A network scanning tool used to identify open ports and services on targeted hosts.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Amass",
+        path: "/tools/Amass",
+        element: <Amass />,
+        description: "Amass is a tool for in-depth DNS enumeration and network mapping.",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "Arjun",

@@ -33,6 +33,11 @@
                         "args": true
                     },
                     {
+                        "name": "amass",
+                        "cmd": "amass",
+                        "args": true
+                    },
+                    {
                         "name": "arjun",
                         "cmd": "arjun",
                         "args": true
