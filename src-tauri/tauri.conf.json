@@ -18,21 +18,6 @@
                 "sidecar": true,
                 "scope": [
                     {
-                        "name": "nmap",
-                        "cmd": "nmap",
-                        "args": true
-                    },
-                    {
-                        "name": "airbase-ng",
-                        "cmd": "airbase-ng",
-                        "args": true
-                    },
-                    {
-                        "name": "aircrack-ng",
-                        "cmd": "aircrack-ng",
-                        "args": true
-                    },
-                    {
                         "name": "amap",
                         "cmd": "amap",
                         "args": true
@@ -47,103 +32,14 @@
                         "cmd": "snmp-check",
                         "args": true
                     },
-                        "name": "arjun",
-                        "cmd": "arjun",
+                    {
+                        "name": "python3",
+                        "cmd": "python3",
                         "args": true
                     },
                     {
-                        "name": "arp-fingerprint",
-                        "cmd": "arp-fingerprint",
-                        "args": true
-                    },
-                    {
-                        "name": "arp-scan",
-                        "cmd": "arp-scan",
-                        "args": true
-                    },
-                    {
-                        "name": "arpspoof",
-                        "cmd": "arpspoof",
-                        "args": true
-                    },
-                    {
-                        "name": "bash",
-                        "cmd": "bash",
-                        "args": true
-                    },
-                    {
-                        "name": "bed",
-                        "cmd": "bed",
-                        "args": true
-                    },
-                    {
-                        "name": "bully",
-                        "cmd": "bully",
-                        "args": true
-                    },
-                    {
-                        "name": "cat",
-                        "cmd": "cat",
-                        "args": true
-                    },
-                    {
-                        "name": "cewl",
-                        "cmd": "cewl",
-                        "args": true
-                    },
-                    {
-                        "name": "cp",
-                        "cmd": "cp",
-                        "args": true
-                    },
-                    {
-                        "name": "crackmapexec",
-                        "cmd": "crackmapexec",
-                        "args": true
-                    },
-                    {
-                        "name": "crunch",
-                        "cmd": "crunch",
-                        "args": true
-                    },
-                    {
-                        "name": "dmitry",
-                        "cmd": "dmitry",
-                        "args": true
-                    },
-                    {
-                        "name": "dnsenum",
-                        "cmd": "dnsenum",
-                        "args": true
-                    },
-                    {
-                        "name": "dnsmap",
-                        "cmd": "dnsmap",
-                        "args": true
-                    },
-                    {
-                        "name": "dnsrecon",
-                        "cmd": "dnsrecon",
-                        "args": true
-                    },
-                    {
-                        "name": "enum4linux",
-                        "cmd": "enum4linux",
-                        "args": true
-                    },
-                    {
-                        "name": "eyewitness",
-                        "cmd": "eyewitness",
-                        "args": true
-                    },
-                    {
-                        "name": "fcrackzip",
-                        "cmd": "fcrackzip",
-                        "args": true
-                    },
-                    {
-                        "name": "find",
-                        "cmd": "find",
+                        "name": "dirb",
+                        "cmd": "dirb",
                         "args": true
                     },
                     {
@@ -152,38 +48,18 @@
                         "args": true
                     },
                     {
-                        "name": "gobuster",
-                        "cmd": "gobuster",
-                        "args": true
-                    },
-                    {
-                        "name": "goldeneye",
-                        "cmd": "goldeneye",
-                        "args": true
-                    },
-                    {
                         "name": "hashcat",
                         "cmd": "hashcat",
                         "args": true
                     },
                     {
-                        "name": "hping3",
-                        "cmd": "hping3",
+                        "name": "bash",
+                        "cmd": "bash",
                         "args": true
                     },
                     {
-                        "name": "hydra",
-                        "cmd": "hydra",
-                        "args": true
-                    },
-                    {
-                        "name": "impacket-secretsdump",
-                        "cmd": "impacket-secretsdump",
-                        "args": true
-                    },
-                    {
-                        "name": "impacket-wmiexec",
-                        "cmd": "impacket-wmiexec",
+                        "name": "bully",
+                        "cmd": "bully",
                         "args": true
                     },
                     {
@@ -192,18 +68,68 @@
                         "args": true
                     },
                     {
+                        "name": "zip2john",
+                        "cmd": "zip2john",
+                        "args": true
+                    },
+                    {
+                        "name": "arp-fingerprint ",
+                        "cmd": "arp-fingerprint ",
+                        "args": true
+                    },
+                    {
+                        "name": "rar2john",
+                        "cmd": "rar2john",
+                        "args": true
+                    },
+                    {
+                        "name": "foremost",
+                        "cmd": "foremost",
+                        "args": true
+                    },
+                    {
+                        "name": "hydra",
+                        "cmd": "hydra",
+                        "args": true
+                    },
+                    {
+                        "name": "searchsploit",
+                        "cmd": "searchsploit",
+                        "args": true
+                    },
+                    {
+                        "name": "urlsnarf",
+                        "cmd": "urlsnarf",
+                        "args": true
+                    },
+                    {
+                        "name": "impacket-wmiexec",
+                        "cmd": "impacket-wmiexec",
+                        "args": true
+                    },
+                    {
+                        "name": "impacket-secretsdump",
+                        "cmd": "impacket-secretsdump",
+                        "args": true
+                    },
+                    {
+                        "name": "arpspoof",
+                        "cmd": "arpspoof",
+                        "args": true
+                    },
+                    {
+                        "name": "arp-scan",
+                        "cmd": "arp-scan",
+                        "args": true
+                    },
+                    {
                         "name": "kill",
                         "cmd": "kill",
                         "args": true
                     },
                     {
-                        "name": "ls",
-                        "cmd": "ls",
-                        "args": true
-                    },
-                    {
-                        "name": "masscan",
-                        "cmd": "masscan",
+                        "name": "enum4linux",
+                        "cmd": "enum4linux",
                         "args": true
                     },
                     {
@@ -217,23 +143,28 @@
                         "args": true
                     },
                     {
+                        "name": "dmitry",
+                        "cmd": "dmitry",
+                        "args": true
+                    },
+                    {
+                        "name": "theHarvester",
+                        "cmd": "theHarvester",
+                        "args": true
+                    },
+                    {
+                        "name": "dnsenum",
+                        "cmd": "dnsenum",
+                        "args": true
+                    },
+                    {
                         "name": "nbtscan",
                         "cmd": "nbtscan",
                         "args": true
                     },
                     {
-                        "name": "nikto",
-                        "cmd": "nikto",
-                        "args": true
-                    },
-                    {
-                        "name": "nslookup",
-                        "cmd": "nslookup",
-                        "args": true
-                    },
-                    {
-                        "name": "parsero",
-                        "cmd": "parsero",
+                        "name": "dnsmap",
+                        "cmd": "dnsmap",
                         "args": true
                     },
                     {
@@ -242,38 +173,38 @@
                         "args": true
                     },
                     {
-                        "name": "pkexec",
-                        "cmd": "pkexec",
+                        "name": "ls",
+                        "cmd": "ls",
                         "args": true
                     },
                     {
-                        "name": "python3",
-                        "cmd": "python3",
+                        "name": "cat",
+                        "cmd": "cat",
                         "args": true
                     },
                     {
-                        "name": "rar2john",
-                        "cmd": "rar2john",
+                        "name": "find",
+                        "cmd": "find",
                         "args": true
                     },
                     {
-                        "name": "rcrack",
-                        "cmd": "rcrack",
+                        "name": "cp",
+                        "cmd": "cp",
                         "args": true
                     },
                     {
-                        "name": "rtgen",
-                        "cmd": "rtgen",
+                        "name": "cewl",
+                        "cmd": "cewl",
                         "args": true
                     },
                     {
-                        "name": "rtsort",
-                        "cmd": "rtsort",
+                        "name": "nc",
+                        "cmd": "nc",
                         "args": true
                     },
                     {
-                        "name": "searchsploit",
-                        "cmd": "searchsploit",
+                        "name": "bash",
+                        "cmd": "bash",
                         "args": true
                     },
                     {
@@ -282,28 +213,23 @@
                         "args": true
                     },
                     {
-                        "name": "slowhttptest",
-                        "cmd": "slowhttptest",
+                        "name": "bed",
+                        "cmd": "bed",
                         "args": true
                     },
                     {
-                        "name": "snmp-check",
-                        "cmd": "snmp-check",
+                        "name": "dnsrecon",
+                        "cmd": "dnsrecon",
                         "args": true
                     },
                     {
-                        "name": "sqlmap",
-                        "cmd": "sqlmap",
+                        "name": "crackmapexec",
+                        "cmd": "crackmapexec",
                         "args": true
                     },
                     {
-                        "name": "sublist3r",
-                        "cmd": "sublist3r",
-                        "args": true
-                    },
-                    {
-                        "name": "testssl",
-                        "cmd": "testssl",
+                        "name": "ffuf",
+                        "cmd": "ffuf",
                         "args": true
                     },
                     {
@@ -312,33 +238,53 @@
                         "args": true
                     },
                     {
-                        "name": "tshark",
-                        "cmd": "tshark",
+                        "name": "crunch",
+                        "cmd": "crunch",
                         "args": true
                     },
                     {
-                        "name": "unicornscan",
-                        "cmd": "unicornscan",
+                        "name": "goldeneye",
+                        "cmd": "goldeneye",
                         "args": true
                     },
                     {
-                        "name": "urlsnarf",
-                        "cmd": "urlsnarf",
+                        "name": "WPScan",
+                        "cmd": "WPScan",
                         "args": true
                     },
                     {
-                        "name": "whatweb",
-                        "cmd": "whatweb",
+                        "name": "eyewitness",
+                        "cmd": "eyewitness",
                         "args": true
                     },
                     {
-                        "name": "which",
-                        "cmd": "which",
+                        "name": "parsero",
+                        "cmd": "parsero",
                         "args": true
                     },
                     {
-                        "name": "whois",
-                        "cmd": "whois",
+                        "name": "arjun",
+                        "cmd": "arjun",
+                        "args": true
+                    },
+                    {
+                        "name": "fcrackzip",
+                        "cmd": "fcrackzip",
+                        "args": true
+                    },
+                    {
+                        "name": "gobuster",
+                        "cmd": "gobuster",
+                        "args": true
+                    },
+                    {
+                        "name": "aircrack-ng",
+                        "cmd": "aircrack-ng",
+                        "args": true
+                    },
+                    {
+                        "name": "airbase-ng",
+                        "cmd": "airbase-ng",
                         "args": true
                     },
                     {
@@ -347,8 +293,43 @@
                         "args": true
                     },
                     {
-                        "name": "zip2john",
-                        "cmd": "zip2john",
+                        "name": "rtsort",
+                        "cmd": "rtsort",
+                        "args": true
+                    },
+                    {
+                        "name": "rcrack",
+                        "cmd": "rcrack",
+                        "args": true
+                    },
+                    {
+                        "name": "nslookup",
+                        "cmd": "nslookup",
+                        "args": true
+                    },
+                    {
+                        "name": "whatweb",
+                        "cmd": "whatweb",
+                        "args": true
+                    },
+                    {
+                        "name": "whois",
+                        "cmd": "whois",
+                        "args": true
+                    },
+                    {
+                        "name": "nikto",
+                        "cmd": "nikto",
+                        "args": true
+                    },
+                    {
+                        "name": "sublist3r",
+                        "cmd": "sublist3r",
+                        "args": true
+                    },
+                    {
+                        "name": "tshark",
+                        "cmd": "tshark",
                         "args": true
                     }
                 ]
