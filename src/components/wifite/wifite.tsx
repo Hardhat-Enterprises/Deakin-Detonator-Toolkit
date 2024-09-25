@@ -151,7 +151,10 @@ const Wifite = () => {
         CommandHelper.runCommandWithPkexec("wifite", args, handleProcessData, handleProcessTermination)
             .then(() => {
                 // Deactivate loading state
-                setLoading(false);
+                // Update the UI with the results from the executed command
+                setOutput(output);
+                setAllowSave(true);
+                setPid(pid);
             })
             .catch((error) => {
                 // Display any errors encountered during command execution
