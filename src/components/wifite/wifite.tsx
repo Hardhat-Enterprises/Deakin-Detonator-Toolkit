@@ -42,7 +42,7 @@ const Wifite = () => {
     const tutorial =
         "Wifite is a powerful tool that automates the process of attacking WEP and WPA/WPA2 networks. It captures handshakes and attempts to crack the encryption. Make sure to specify the target network correctly for a successful attack.";
 
-    let form = useForm({
+    const form = useForm({
         initialValues: {
             target: "",
         },
@@ -83,7 +83,7 @@ const Wifite = () => {
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
-        let args = [values.target];
+        const args = [values.target];
 
         CommandHelper.runCommandWithPkexec("wifite", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
