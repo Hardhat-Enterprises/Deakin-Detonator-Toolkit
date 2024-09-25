@@ -212,7 +212,7 @@ const Wifite = () => {
                         checked={verboseMode}
                         onChange={(event) => setVerboseMode(event.currentTarget.checked)}
                     />
-                    <Button type="submit">Start Attack</Button>
+                    <Button type="submit">Start {title}</Button>
                     {output && <ConsoleWrapper output={output} />}
                 </Stack>
             </form>
