@@ -171,7 +171,7 @@ const Wifite = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     <LoadingOverlayAndCancelButton
-                        loading={loading} // Pass loading as a boolean
+                        loading={loading}
                         pid={pid}
                         handleProcessData={handleProcessData}
                         handleProcessTermination={handleProcessTermination}
