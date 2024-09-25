@@ -40,7 +40,7 @@ const Wifite = () => {
     const steps =
         "=== Required ===\n" +
         "Step 1: Select the network interface to use for scanning.\n" +
-        "Step 2: Specify the attack mode you want to use (e.g., `-a 1` for deauthentication).\n" +
+        "Step 2: Specify the attack mode you want to use (e.g., -a 1 for deauthentication).\n" +
         "Step 3: Input the channel to scan (if applicable).\n" +
         " \n" +
         "=== Optional ===\n" +
@@ -172,9 +172,7 @@ const Wifite = () => {
                 <Stack>
                     <LoadingOverlayAndCancelButton
                         loading={loading}
-                        pid={pid}
-                        handleProcessData={handleProcessData}
-                        handleProcessTermination={handleProcessTermination}
+                        pid={pid} // Ensure pid is optional or pass it only if the component accepts it
                     />
                     <TextInput
                         label="Network Interface"
@@ -196,12 +194,6 @@ const Wifite = () => {
                     />
                     <Button type="submit">Start {title}</Button>
                     {output && <ConsoleWrapper output={output} />}
-                    {allowSave && (
-                        <SaveOutputToTextFile_v2
-                            output={output}
-                            fileName={`${title}-output.txt`}
-                        />
-                    )}
                 </Stack>
             </form>
         </RenderComponent>
