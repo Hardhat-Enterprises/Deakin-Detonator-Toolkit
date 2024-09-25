@@ -170,10 +170,7 @@ const Wifite = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    <LoadingOverlayAndCancelButton
-                        loading={loading}
-                        pid={pid} // Ensure pid is optional or pass it only if the component accepts it
-                    />
+                    <LoadingOverlayAndCancelButton loading={loading} />
                     <TextInput
                         label="Network Interface"
                         required
