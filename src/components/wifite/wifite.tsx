@@ -27,6 +27,7 @@ const Wifite = () => {
     // Component state variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
