@@ -37,15 +37,17 @@ const Hashcat = () => {
     const title = "Hashcat";
     const description =
         "Hashcat is an advanced password recovery tool that provides brute-force attacks that are conducted with the hash values of passwords that are either guessed or applied by the tool. DDT currently supports 3 attack modes including Straight, Brute-force, and Hybrid Wordlist + Mask.";
-    const Steps =
-        "Step-by-Step Guide:" +
-        "Step 1: Pick an attack mode." +
-        "Step 2: Input hash type and hash algorithm code." +
-        "Step 3: Input the hash value." +
-        "Step 4: Input the password file." +
-        "Step 5: Add additional commands as needed." +
-        "Step 6: Click Scan to commence." +
-        "Step 7: View the output below.";
+    const steps =
+        "Step-by-Step Guide: \n" +
+        "Step 1: Pick an attack mode. \n" +
+        "Step 2: Input hash type and hash algorithm code. \n" +
+        "Step 3: Input the hash value. \n" +
+        "Step 4: Input the password file. \n" +
+        "Step 5: Add additional commands as needed. \n" +
+        "Step 6: Click Start " +
+        title +
+        " to commence. \n" +
+        "Step 7: View the output below. \n";
     const sourceLink = "https://www.kali.org/tools/hashcat/"; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["hashcat"]; // Contains the dependencies required by the component
@@ -181,90 +183,111 @@ const Hashcat = () => {
     };
 
     return (
-        <form
-            onSubmit={form.onSubmit((values) =>
-                onSubmit({ ...values, attackMode: selectedModeOption, inputType: selectedInputOption })
-            )}
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
         >
-            <LoadingOverlay visible={loading} />
-            {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
             )}
 
-            <Grid>
-                <Grid.Col span={6}>
-                    <NativeSelect
-                        data={attackModeOptions}
-                        label="Attack Mode"
-                        placeholder="Pick one"
-                        value={selectedModeOption}
-                        onChange={(event) => setSelectedModeOption(event.currentTarget.value)}
-                        required
-                    />
-                </Grid.Col>
-                <Grid.Col span={6}>
-                    <NativeSelect
-                        data={inputTypeOptions}
-                        label="Input Type"
-                        placeholder="Pick one"
-                        value={selectedInputOption}
-                        onChange={(event) => setSelectedInputOption(event.currentTarget.value)}
-                        required
-                    />
-                </Grid.Col>
-            </Grid>
-
-            <Stack>
-                {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-                <NumberInput label="Hash Algorithm Code" {...form.getInputProps("hashAlgorithmCode")} required />
-                {!isFile && <TextInput label="Hash Value" {...form.getInputProps("hashValue")} required />}
-                {isFile && <TextInput label="Hash File Path" {...form.getInputProps("hashFilePath")} required />}
-                {isPasswordFile && (
-                    <TextInput label="Password File Path" {...form.getInputProps("passwordFilePath")} required />
+            <form
+                onSubmit={form.onSubmit((values) =>
+                    onSubmit({ ...values, attackMode: selectedModeOption, inputType: selectedInputOption })
                 )}
-                {isCharset && (
-                    <>
-                        <TextInput label="Mask Charset" placeholder="?l?d" {...form.getInputProps("maskCharsets")} />
-                        <Grid>
-                            <Grid.Col span={6}>
-                                <NumberInput
-                                    label="Minimum Password Length"
-                                    {...form.getInputProps("minPwdLen")}
-                                    required
-                                />
-                            </Grid.Col>
-                            <Grid.Col span={6}>
-                                <NumberInput
-                                    label="Maximum Password Length"
-                                    {...form.getInputProps("maxPwdLen")}
-                                    required
-                                />
-                            </Grid.Col>
-                        </Grid>
-                    </>
+            >
+                <LoadingOverlay visible={loading} />
+                {loading && (
+                    <div>
+                        <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
+                            Cancel
+                        </Button>
+                    </div>
                 )}
-                <TextInput
-                    label="Additional Commands"
-                    placeholder="e.g. --force"
-                    {...form.getInputProps("additionalCommand")}
-                />
-            </Stack>
 
-            <Button type="submit" mt="md">
-                Scan
-            </Button>
-            <Button mt="md" onClick={clearOutput}>
-                Clear Output
-            </Button>
+                <Grid>
+                    <Grid.Col span={6}>
+                        <NativeSelect
+                            data={attackModeOptions}
+                            label="Attack Mode"
+                            placeholder="Pick one"
+                            value={selectedModeOption}
+                            onChange={(event) => setSelectedModeOption(event.currentTarget.value)}
+                            required
+                        />
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                        <NativeSelect
+                            data={inputTypeOptions}
+                            label="Input Type"
+                            placeholder="Pick one"
+                            value={selectedInputOption}
+                            onChange={(event) => setSelectedInputOption(event.currentTarget.value)}
+                            required
+                        />
+                    </Grid.Col>
+                </Grid>
 
-            <ConsoleWrapper output={output} />
+                <Stack>
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    <NumberInput label="Hash Algorithm Code" {...form.getInputProps("hashAlgorithmCode")} required />
+                    {!isFile && <TextInput label="Hash Value" {...form.getInputProps("hashValue")} required />}
+                    {isFile && <TextInput label="Hash File Path" {...form.getInputProps("hashFilePath")} required />}
+                    {isPasswordFile && (
+                        <TextInput label="Password File Path" {...form.getInputProps("passwordFilePath")} required />
+                    )}
+                    {isCharset && (
+                        <>
+                            <TextInput
+                                label="Mask Charset"
+                                placeholder="?l?d"
+                                {...form.getInputProps("maskCharsets")}
+                            />
+                            <Grid>
+                                <Grid.Col span={6}>
+                                    <NumberInput
+                                        label="Minimum Password Length"
+                                        {...form.getInputProps("minPwdLen")}
+                                        required
+                                    />
+                                </Grid.Col>
+                                <Grid.Col span={6}>
+                                    <NumberInput
+                                        label="Maximum Password Length"
+                                        {...form.getInputProps("maxPwdLen")}
+                                        required
+                                    />
+                                </Grid.Col>
+                            </Grid>
+                        </>
+                    )}
+                    <TextInput
+                        label="Additional Commands"
+                        placeholder="e.g. --force"
+                        {...form.getInputProps("additionalCommand")}
+                    />
+                </Stack>
 
-            {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-        </form>
+                <Button type="submit" mt="md">
+                    Start {title}
+                </Button>
+                <Button mt="md" onClick={clearOutput}>
+                    Clear Output
+                </Button>
+
+                <ConsoleWrapper output={output} />
+
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+            </form>
+        </RenderComponent>
     );
 };
 
