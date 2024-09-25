@@ -149,7 +149,7 @@ const Wifite = () => {
 
         // Execute the Wifite command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("wifite", args, handleProcessData, handleProcessTermination)
-            .then(() => {
+            .then(({ output, pid }) => {
                 // Deactivate loading state
                 // Update the UI with the results from the executed command
                 setOutput(output);
