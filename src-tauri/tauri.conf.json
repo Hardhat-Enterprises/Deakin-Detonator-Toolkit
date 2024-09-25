@@ -327,11 +327,7 @@
                         "cmd": "whois",
                         "args": true
                     },
-                    /*{
-                        "name": "wifite",
-                        "cmd": "wifite",
-                        "args": true
-                    }, */
+                  
                     {
                         "name": "wpscan",
                         "cmd": "wpscan",
