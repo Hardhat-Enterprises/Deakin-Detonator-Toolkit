@@ -8,6 +8,7 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; //v2
+
 /**
  * Represents the form values for the Wifite component.
  */
@@ -15,8 +16,6 @@ interface FormValuesType {
     targetInterface: string;
     attackMode: string;
     channel: string;
-    handshake: string;
-    beacon: string;
 }
 
 /**
@@ -32,6 +31,7 @@ const Wifite = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [verboseMode, setVerboseMode] = useState(false); // State variable for verbose mode
+    const [allowSave, setAllowSave] = useState(false); // State to allow saving output
 
     // Component Constants
     const title = "Wifite";
@@ -42,10 +42,9 @@ const Wifite = () => {
         "Step 1: Select the network interface to use for scanning.\n" +
         "Step 2: Specify the attack mode you want to use (e.g., `-a 1` for deauthentication).\n" +
         "Step 3: Input the channel to scan (if applicable).\n" +
-        "Step 4: Optionally, input a specific handshake file or beacon file to use.\n" +
         " \n" +
         "=== Optional ===\n" +
-        "Step 5: Enable verbose mode for more detailed output.\n";
+        "Step 4: Enable verbose mode for more detailed output.\n";
     const sourceLink = ""; // Link to the source code
     const tutorial = ""; // Link to the official documentation/tutorial
     const dependencies = ["wifite"]; // Contains the dependencies required by the component.
@@ -56,8 +55,6 @@ const Wifite = () => {
             targetInterface: "",
             attackMode: "",
             channel: "",
-            handshake: "",
-            beacon: "",
         },
     });
 
@@ -133,16 +130,6 @@ const Wifite = () => {
             args.push("--channel", values.channel);
         }
 
-        // Check if handshake has a value and push it to args
-        if (values.handshake) {
-            args.push("--handshake", values.handshake);
-        }
-
-        // Check if beacon has a value and push it to args
-        if (values.beacon) {
-            args.push("--beacon", values.beacon);
-        }
-
         if (verboseMode) {
             args.push("-v"); // Add verbose mode option if enabled
         }
@@ -153,7 +140,7 @@ const Wifite = () => {
                 // Deactivate loading state
                 // Update the UI with the results from the executed command
                 setOutput(output);
-                setAllowSave(true);
+                setAllowSave(true); // Allow saving the output
                 setPid(pid);
             })
             .catch((error) => {
@@ -183,7 +170,12 @@ const Wifite = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                  {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    <LoadingOverlayAndCancelButton
+                        loading={loading}
+                        pid={pid}
+                        handleProcessData={handleProcessData}
+                        handleProcessTermination={handleProcessTermination}
+                    />
                     <TextInput
                         label="Network Interface"
                         required
@@ -197,16 +189,6 @@ const Wifite = () => {
                         placeholder="e.g. 1 for deauth"
                     />
                     <TextInput label="Channel" {...form.getInputProps("channel")} placeholder="e.g. 6" />
-                    <TextInput
-                        label="Handshake File"
-                        {...form.getInputProps("handshake")}
-                        placeholder="e.g. /path/to/handshake.cap"
-                    />
-                    <TextInput
-                        label="Beacon File"
-                        {...form.getInputProps("beacon")}
-                        placeholder="e.g. /path/to/beacon.pcap"
-                    />
                     <Checkbox
                         label="Verbose Mode"
                         checked={verboseMode}
