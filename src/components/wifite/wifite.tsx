@@ -65,6 +65,7 @@ const Wifite = () => {
         // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set the command availability state
                 setOpened(!isAvailable); // Set the modal state to opened if the command is not available
                 setLoadingModal(false); // Set loading to false after the check is done
             })
