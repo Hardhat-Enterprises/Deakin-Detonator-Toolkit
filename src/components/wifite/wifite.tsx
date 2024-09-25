@@ -196,6 +196,12 @@ const Wifite = () => {
                     />
                     <Button type="submit">Start {title}</Button>
                     {output && <ConsoleWrapper output={output} />}
+                    {allowSave && (
+                        <SaveOutputToTextFile_v2
+                            output={output}
+                            fileName={`${title}-output.txt`}
+                        />
+                    )}
                 </Stack>
             </form>
         </RenderComponent>
