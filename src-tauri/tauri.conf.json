@@ -118,13 +118,13 @@
                         "args": true
                     },
                     {
-                        "name": "eyewitness",
-                        "cmd": "eyewitness",
+                        "name": "exif",
+                        "cmd": "exif",
                         "args": true
                     },
                     {
-                        "name": "exif",
-                        "cmd": "exif",
+                        "name": "eyewitness",
+                        "cmd": "eyewitness",
                         "args": true
                     },
                     {
