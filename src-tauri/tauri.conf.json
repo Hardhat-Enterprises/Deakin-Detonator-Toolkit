@@ -123,6 +123,11 @@
                         "args": true
                     },
                     {
+                        "name": "exif",
+                        "cmd": "exif",
+                        "args": true
+                    },
+                    {
                         "name": "fcrackzip",
                         "cmd": "fcrackzip",
                         "args": true
