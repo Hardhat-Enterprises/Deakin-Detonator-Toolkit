@@ -83,7 +83,6 @@ jobs:
                   scan-type: "library"
                   format: "table"
                   severity: "HIGH,CRITICAL"
-                  vuln-type: "os,library"
                   scan-ref: "."
 
     # Application build job
