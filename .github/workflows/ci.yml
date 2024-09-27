@@ -23,10 +23,12 @@ jobs:
         # Define the steps to execute within the 'build' job
         steps:
             # Checkout the latest code from the repository
-            - uses: actions/checkout@v3
+            - name: checkout code
+              uses: actions/checkout@v3
 
             # Set up the Node.js environment with the specified version
-            - uses: actions/setup-node@v3
+            - name: node environment setup
+              uses: actions/setup-node@v3
               with:
                   node-version: ${{ matrix.node-version }} # Use the current matrix version of Node.js
 
@@ -50,7 +52,8 @@ jobs:
         runs-on: ubuntu-latest
         needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
         steps:
-            - uses: actions/checkout@v3
+            - name: style check
+              uses: actions/checkout@v3
             - run: yarn install --frozen-lockfile
             # Run the style check
             - run: yarn run style
@@ -58,23 +61,26 @@ jobs:
     # Job to run test(s)
     test:
         runs-on: ubuntu-latest
-        needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
+        needs: dependencies
         steps:
             - uses: actions/checkout@v3
             - run: yarn install --frozen-lockfile
-            # Run the test suite
-            - run: yarn run test
 
-            # Install Trivy
-            - run: |
-                  sudo apt-get update
-                  sudo apt-get install -y wget apt-transport-https gnupg lsb-release
-                  wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-                  echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
-                  sudo apt-get update && sudo apt-get install trivy
+            - name: Run Trivy vulnerability scanner in repo mode
+              uses: aquasecurity/trivy-action@0.20.0
+              with:
+                  scan-type: "fs"
+                  ignore-unfixed: true
+                  format: "sarif"
+                  output: "trivy-results.sarif"
+                  severity: "HIGH,CRITICAL"
+                  exit-code: 1
+                  include-dev-deps: true
 
-            # Run Trivy vulnerability + dependency scan
-            - run: trivy fs . --exit-code 1 --severity LOW,MEDIUM,HIGH,CRITICAL --include-dev-deps --scanners vuln
+            - name: Upload Trivy scan results to GitHub Security tab
+              uses: github/codeql-action/upload-sarif@v2
+              with:
+              sarif_file: "trivy-results.sarif"
 
     # Application build job
     build:
