@@ -9,6 +9,9 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; // Renaming the component for clarity
 
+/**
+ * Interface to define the structure of form values for Hashcat.
+ */
 interface FormValuesType {
     attackMode: string;
     inputType: string;
@@ -22,18 +25,24 @@ interface FormValuesType {
     maxPwdLen: number;
 }
 
+/**
+ * Hashcat component.
+ * A tool for brute-forcing passwords with Hashcat. It includes form inputs for various attack modes,
+ * input types, and other configurations required to run Hashcat.
+ */
 const Hashcat = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [selectedModeOption, setSelectedModeOption] = useState("");
-    const [selectedInputOption, setSelectedInputOption] = useState("");
-    const [pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
+    const [loading, setLoading] = useState(false); // Tracks if a command is currently running
+    const [output, setOutput] = useState(""); // Stores command-line output
+    const [selectedModeOption, setSelectedModeOption] = useState(""); // Tracks selected attack mode
+    const [selectedInputOption, setSelectedInputOption] = useState(""); // Tracks selected input type
+    const [pid, setPid] = useState(""); // Tracks the process ID of the running command
+    const [allowSave, setAllowSave] = useState(false); // Controls whether the output can be saved
+    const [hasSaved, setHasSaved] = useState(false); // Tracks if the output has already been saved
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // Checks if Hashcat is installed
+    const [opened, setOpened] = useState(!isCommandAvailable); // Controls visibility of installation modal
+    const [loadingModal, setLoadingModal] = useState(true); // Tracks if the modal is in loading state
 
+    // Component metadata for rendering
     const title = "Hashcat";
     const description =
         "Hashcat is an advanced password recovery tool that provides brute-force attacks that are conducted with the hash values of passwords that are either guessed or applied by the tool. DDT currently supports 3 attack modes including Straight, Brute-force, and Hybrid Wordlist + Mask.";
@@ -48,13 +57,15 @@ const Hashcat = () => {
         title +
         " to commence. \n" +
         "Step 7: View the output below. \n";
-    const sourceLink = "https://www.kali.org/tools/hashcat/"; // Link to the source code
+    const sourceLink = "https://www.kali.org/tools/hashcat/"; // Link to Hashcat's official site
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["hashcat"]; // Contains the dependencies required by the component
 
+    // Options for attack mode and input type
     const inputTypeOptions = ["Hash Value", "File"];
     const attackModeOptions = ["Straight", "Brute-force", "Hybrid Wordlist + Mask"];
 
+    // Initialize the form state with default values
     const form = useForm<FormValuesType>({
         initialValues: {
             attackMode: "",
@@ -70,25 +81,33 @@ const Hashcat = () => {
         },
     });
 
-    // Check if the command is available and set the state variables accordingly.
+    /**
+     * useEffect hook to check if Hashcat is installed on the system.
+     * It updates the modal state and command availability status.
+     */
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-                setLoadingModal(false); // Set loading to false after the check is done
+                setIsCommandAvailable(isAvailable); // Set command availability state
+                setOpened(!isAvailable); // Open modal if the command is not available
+                setLoadingModal(false); // Set loading state for modal to false
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+                setLoadingModal(false); // Set loading state for modal to false on error
             });
     }, []);
 
+    /**
+     * Handles appending data to the output when new data arrives from the running command.
+     */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
+    /**
+     * Handles the termination of the Hashcat process and updates the output accordingly.
+     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
@@ -98,14 +117,17 @@ const Hashcat = () => {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            setPid("");
-            setLoading(false);
-            setAllowSave(true);
-            setHasSaved(false);
+            setPid(""); // Clear the process ID
+            setLoading(false); // Set loading to false when the process finishes
+            setAllowSave(true); // Enable save option
+            setHasSaved(false); // Reset save status
         },
         [handleProcessData]
     );
 
+    /**
+     * Sends a signal to kill the running Hashcat process by its process ID.
+     */
     const handleCancel = () => {
         if (pid !== null) {
             const args = [`-15`, pid];
@@ -113,12 +135,16 @@ const Hashcat = () => {
         }
     };
 
+    /**
+     * Submits the form and starts the Hashcat process with the provided options.
+     */
     const onSubmit = async (values: FormValuesType) => {
-        setLoading(true);
-        setAllowSave(false);
+        setLoading(true); // Show loading overlay
+        setAllowSave(false); // Disable saving while the process is running
 
-        const args = [`-m${values.hashAlgorithmCode}`];
+        const args = [`-m${values.hashAlgorithmCode}`]; // Add hash algorithm code to the arguments
 
+        // Add attack mode argument based on the selected option
         if (selectedModeOption === "Straight") {
             args.push("-a0");
         } else if (selectedModeOption === "Brute-force") {
@@ -127,12 +153,14 @@ const Hashcat = () => {
             args.push("-a6");
         }
 
+        // Add input type argument based on the selected option
         if (selectedInputOption === "Hash Value") {
             args.push(values.hashValue);
         } else if (selectedInputOption === "File") {
             args.push(values.hashFilePath);
         }
 
+        // Add password file path if required by the selected attack mode
         if (selectedModeOption === "Straight") {
             args.push(values.passwordFilePath);
         } else if (selectedModeOption === "Brute-force" || selectedModeOption === "Hybrid Wordlist + Mask") {
@@ -148,38 +176,47 @@ const Hashcat = () => {
             }
         }
 
+        // Add any additional commands
         if (values.additionalCommand) {
             args.push(values.additionalCommand);
         }
 
         try {
+            // Run the Hashcat command and capture the output and PID
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "hashcat",
                 args,
                 handleProcessData,
                 handleProcessTermination
             );
-            setPid(result.pid);
-            setOutput(result.output);
+            setPid(result.pid); // Set the process ID
+            setOutput(result.output); // Set the initial output
         } catch (e: any) {
-            setOutput(e.message);
-            setAllowSave(true);
+            setOutput(e.message); // Capture any errors
+            setAllowSave(true); // Enable save option after error
         }
     };
 
+    /**
+     * Clears the console output.
+     */
     const clearOutput = useCallback(() => {
-        setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
+        setOutput(""); // Clear the output
+        setHasSaved(false); // Reset save status
+        setAllowSave(false); // Disable save until new output is generated
     }, [setOutput]);
 
+    // Determine if password file or charset inputs are needed based on the attack mode
     const isPasswordFile = selectedModeOption === "Straight" || selectedModeOption === "Hybrid Wordlist + Mask";
     const isCharset = selectedModeOption === "Brute-force" || selectedModeOption === "Hybrid Wordlist + Mask";
     const isFile = selectedInputOption === "File";
 
+    /**
+     * Handles the save completion event.
+     */
     const handleSaveComplete = () => {
-        setHasSaved(true);
-        setAllowSave(false);
+        setHasSaved(true); // Mark the output as saved
+        setAllowSave(false); // Disable save button until new output is generated
     };
 
     return (
