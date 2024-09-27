@@ -24,6 +24,7 @@ import SMBGhostScanner from "./SMBGhostScanner/SMBGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
+import Exif from "./Exif/Exif";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import Metagoofil from "./metagoofil/metagoofil";
 import Dmitry from "./Dmitry/Dmitry";
@@ -471,6 +472,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used to gather information from Windows machines using the SMB protocol, including user accounts and share details.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Exif",
+        path: "/tools/Exif",
+        element: <Exif />,
+        description: "A tool used to extract metadata from different file types",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "EyeWitness",

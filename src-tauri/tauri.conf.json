@@ -133,6 +133,11 @@
                         "args": true
                     },
                     {
+                        "name": "exif",
+                        "cmd": "exif",
+                        "args": true
+                    },
+                    {
                         "name": "eyewitness",
                         "cmd": "eyewitness",
                         "args": true
