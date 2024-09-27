@@ -81,7 +81,6 @@ jobs:
               uses: aquasecurity/trivy-action@0.20.0
               with:
                   scan-type: "library"
-                  ignore-unfixed: true
                   format: "table"
                   severity: "HIGH,CRITICAL"
                   vuln-type: "os,library"
