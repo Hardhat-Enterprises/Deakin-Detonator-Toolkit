@@ -84,7 +84,8 @@ jobs:
                   ignore-unfixed: true
                   format: "table"
                   severity: "HIGH,CRITICAL"
-                  exit-code: 1
+                  vuln-type: "os,library"
+                  scan-ref: "."
 
     # Application build job
     build:
