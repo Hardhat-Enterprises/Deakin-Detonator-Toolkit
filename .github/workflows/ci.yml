@@ -65,6 +65,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - run: yarn install --frozen-lockfile
+            - run: yarn run test
 
             - name: Run Trivy vulnerability scanner in repo mode
               uses: aquasecurity/trivy-action@0.20.0
@@ -80,7 +81,7 @@ jobs:
             - name: Upload Trivy scan results to GitHub Security tab
               uses: github/codeql-action/upload-sarif@v2
               with:
-              sarif_file: "trivy-results.sarif"
+                  sarif_file: "trivy-results.sarif"
 
     # Application build job
     build:
