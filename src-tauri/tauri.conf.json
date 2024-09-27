@@ -362,6 +362,7 @@
                         "cmd": "whois",
                         "args": true
                     },
+                  
                     {
                         "name": "wpscan",
                         "cmd": "wpscan",
