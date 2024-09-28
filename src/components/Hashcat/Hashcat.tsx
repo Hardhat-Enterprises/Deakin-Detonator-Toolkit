@@ -1,33 +1,17 @@
-import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Grid, Alert } from "@mantine/core";
+import { Button, LoadingOverlay, NativeSelect, NumberInput, Stack, TextInput, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IconAlertCircle } from "@tabler/icons";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; //v2
+import { RenderComponent } from "../UserGuide/UserGuide";
+import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; // Renaming the component for clarity
 
-const title = "Hashcat";
-const description_userguide =
-    "Hashcat is an advanced password recovery tool that provides brute-force " +
-    "attacks that are conducted with the hash values of passwords that are either " +
-    "guessed or applied by the tool. DDT currently supports 3 " +
-    "attack modes including Straight, Brute-force and Hybrid Wordlist + Mask.\n\n" +
-    "A list of the Hashing Algorithm codes can be found at: https://hashcat.net/hashcat\n\n" +
-    "How to use Hashcat:\n\n" +
-    "Step 1: Pick an attack mode\n" +
-    "       E.g. Straight\n\n" +
-    "Step 2: Input hash type and hash algorithm code\n" +
-    "       E.g. Hash Value, 2\n\n" +
-    "Step 3: Input the hash value\n" +
-    "       E.g. ae71a4222ef1893879b442f14c40c370\n\n" +
-    "Step 4: Input password file.\n" +
-    "        E.g. /root/pwd.txt\n\n" +
-    "Step 5: Add additional commands as required, refer to weblink above.\n" +
-    "       E.g. --force\n\n" +
-    "Step 6: Click Scan to commence the Hashcat operation.\n\n" +
-    "Step 7: View the Output block below to view the results";
-
+/**
+ * Interface to define the structure of form values for Hashcat.
+ */
 interface FormValuesType {
     attackMode: string;
     inputType: string;
@@ -41,19 +25,48 @@ interface FormValuesType {
     maxPwdLen: number;
 }
 
-const inputType = ["Hash Value", "File"];
-const attackMode = ["Straight", "Brute-force", "Hybride Wordlist + Mask"];
-
+/**
+ * Hashcat component.
+ * A tool for brute-forcing passwords with Hashcat. It includes form inputs for various attack modes,
+ * input types, and other configurations required to run Hashcat.
+ */
 const Hashcat = () => {
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [selectedModeOption, setSelectedModeOption] = useState("");
-    const [selectedInputOption, setSelectedInputOption] = useState("");
-    const [pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
+    const [loading, setLoading] = useState(false); // Tracks if a command is currently running
+    const [output, setOutput] = useState(""); // Stores command-line output
+    const [selectedModeOption, setSelectedModeOption] = useState(""); // Tracks selected attack mode
+    const [selectedInputOption, setSelectedInputOption] = useState(""); // Tracks selected input type
+    const [pid, setPid] = useState(""); // Tracks the process ID of the running command
+    const [allowSave, setAllowSave] = useState(false); // Controls whether the output can be saved
+    const [hasSaved, setHasSaved] = useState(false); // Tracks if the output has already been saved
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // Checks if Hashcat is installed
+    const [opened, setOpened] = useState(!isCommandAvailable); // Controls visibility of installation modal
+    const [loadingModal, setLoadingModal] = useState(true); // Tracks if the modal is in loading state
 
-    let form = useForm({
+    // Component metadata for rendering
+    const title = "Hashcat";
+    const description =
+        "Hashcat is an advanced password recovery tool that provides brute-force attacks that are conducted with the hash values of passwords that are either guessed or applied by the tool. DDT currently supports 3 attack modes including Straight, Brute-force, and Hybrid Wordlist + Mask.";
+    const steps =
+        "Step-by-Step Guide: \n" +
+        "Step 1: Pick an attack mode. \n" +
+        "Step 2: Input hash type and hash algorithm code. \n" +
+        "Step 3: Input the hash value. \n" +
+        "Step 4: Input the password file. \n" +
+        "Step 5: Add additional commands as needed. \n" +
+        "Step 6: Click Start " +
+        title +
+        " to commence. \n" +
+        "Step 7: View the output below. \n";
+    const sourceLink = "https://www.kali.org/tools/hashcat/"; // Link to Hashcat's official site
+    const tutorial = ""; // Link to the official documentation/tutorial.
+    const dependencies = ["hashcat"]; // Contains the dependencies required by the component
+
+    // Options for attack mode and input type
+    const inputTypeOptions = ["Hash Value", "File"];
+    const attackModeOptions = ["Straight", "Brute-force", "Hybrid Wordlist + Mask"];
+
+    // Initialize the form state with default values
+    const form = useForm<FormValuesType>({
         initialValues: {
             attackMode: "",
             inputType: "",
@@ -68,14 +81,33 @@ const Hashcat = () => {
         },
     });
 
-    // Uses the callback function of runCommandGetPidAndOutput to handle and save data
-    // generated by the executing process into the output state variable.
-    const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+    /**
+     * useEffect hook to check if Hashcat is installed on the system.
+     * It updates the modal state and command availability status.
+     */
+    useEffect(() => {
+        checkAllCommandsAvailability(dependencies)
+            .then((isAvailable) => {
+                setIsCommandAvailable(isAvailable); // Set command availability state
+                setOpened(!isAvailable); // Open modal if the command is not available
+                setLoadingModal(false); // Set loading state for modal to false
+            })
+            .catch((error) => {
+                console.error("An error occurred:", error);
+                setLoadingModal(false); // Set loading state for modal to false on error
+            });
     }, []);
-    // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
-    // the termination of that process, resetting state variables, handling the output data,
-    // and informing the user.
+
+    /**
+     * Handles appending data to the output when new data arrives from the running command.
+     */
+    const handleProcessData = useCallback((data: string) => {
+        setOutput((prevOutput) => prevOutput + "\n" + data);
+    }, []);
+
+    /**
+     * Handles the termination of the Hashcat process and updates the output accordingly.
+     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
@@ -85,17 +117,17 @@ const Hashcat = () => {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            // Clear the child process pid reference
-            setPid("");
-            // Cancel the Loading Overlay
-            setLoading(false);
-            // Allow Saving as the output is finalised
-            setAllowSave(true);
-            setHasSaved(false);
+            setPid(""); // Clear the process ID
+            setLoading(false); // Set loading to false when the process finishes
+            setAllowSave(true); // Enable save option
+            setHasSaved(false); // Reset save status
         },
         [handleProcessData]
     );
-    // Sends a SIGTERM signal to gracefully terminate the process
+
+    /**
+     * Sends a signal to kill the running Hashcat process by its process ID.
+     */
     const handleCancel = () => {
         if (pid !== null) {
             const args = [`-15`, pid];
@@ -103,202 +135,196 @@ const Hashcat = () => {
         }
     };
 
+    /**
+     * Submits the form and starts the Hashcat process with the provided options.
+     */
     const onSubmit = async (values: FormValuesType) => {
-        setLoading(true);
+        setLoading(true); // Show loading overlay
+        setAllowSave(false); // Disable saving while the process is running
 
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
+        const args = [`-m${values.hashAlgorithmCode}`]; // Add hash algorithm code to the arguments
 
-        const args = [`-m${values.hashAlgorithmCode}`];
+        // Add attack mode argument based on the selected option
         if (selectedModeOption === "Straight") {
-            args.push(`-a0`);
+            args.push("-a0");
         } else if (selectedModeOption === "Brute-force") {
-            args.push(`-a3`);
-        } else if (selectedModeOption === "Hybride Wordlist + Mask") {
-            args.push(`-a6`);
+            args.push("-a3");
+        } else if (selectedModeOption === "Hybrid Wordlist + Mask") {
+            args.push("-a6");
         }
+
+        // Add input type argument based on the selected option
         if (selectedInputOption === "Hash Value") {
-            args.push(`${values.hashValue}`);
+            args.push(values.hashValue);
         } else if (selectedInputOption === "File") {
-            args.push(`${values.hashFilePath}`);
+            args.push(values.hashFilePath);
         }
+
+        // Add password file path if required by the selected attack mode
         if (selectedModeOption === "Straight") {
-            args.push(`${values.passwordFilePath}`);
-        } else if (selectedModeOption === "Brute-force") {
-            args.push(`--increment`);
+            args.push(values.passwordFilePath);
+        } else if (selectedModeOption === "Brute-force" || selectedModeOption === "Hybrid Wordlist + Mask") {
             args.push(
-                `--increment`,
-                `--increment-min`,
+                "--increment",
+                "--increment-min",
                 `${values.minPwdLen}`,
-                `--increment-max`,
+                "--increment-max",
                 `${values.maxPwdLen}`
             );
             if (values.maskCharsets) {
-                args.push(`${values.maskCharsets}`);
-            }
-        } else if (selectedModeOption === "Hybride Wordlist + Mask") {
-            args.push(`${values.passwordFilePath}`);
-            args.push(
-                `--increment`,
-                `--increment-min`,
-                `${values.minPwdLen}`,
-                `--increment-max`,
-                `${values.maxPwdLen}`
-            );
-            if (values.maskCharsets) {
-                args.push(`${values.maskCharsets}`);
+                args.push(values.maskCharsets);
             }
         }
+
+        // Add any additional commands
         if (values.additionalCommand) {
-            args.push(`${values.additionalCommand}`);
+            args.push(values.additionalCommand);
         }
 
         try {
+            // Run the Hashcat command and capture the output and PID
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "hashcat",
                 args,
                 handleProcessData,
                 handleProcessTermination
             );
-            setPid(result.pid);
-            setOutput(result.output);
+            setPid(result.pid); // Set the process ID
+            setOutput(result.output); // Set the initial output
         } catch (e: any) {
-            setOutput(e.message);
-            setAllowSave(true);
+            setOutput(e.message); // Capture any errors
+            setAllowSave(true); // Enable save option after error
         }
     };
 
+    /**
+     * Clears the console output.
+     */
     const clearOutput = useCallback(() => {
-        setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
+        setOutput(""); // Clear the output
+        setHasSaved(false); // Reset save status
+        setAllowSave(false); // Disable save until new output is generated
     }, [setOutput]);
 
-    const isPasswordFile = selectedModeOption === "Straight" || selectedModeOption === "Hybride Wordlist + Mask";
-    const isCharset = selectedModeOption === "Brute-force" || selectedModeOption === "Hybride Wordlist + Mask";
-    const isFile = selectedInputOption == "File";
+    // Determine if password file or charset inputs are needed based on the attack mode
+    const isPasswordFile = selectedModeOption === "Straight" || selectedModeOption === "Hybrid Wordlist + Mask";
+    const isCharset = selectedModeOption === "Brute-force" || selectedModeOption === "Hybrid Wordlist + Mask";
+    const isFile = selectedInputOption === "File";
 
+    /**
+     * Handles the save completion event.
+     */
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
-        setHasSaved(true);
-        setAllowSave(false);
+        setHasSaved(true); // Mark the output as saved
+        setAllowSave(false); // Disable save button until new output is generated
     };
 
     return (
-        <form
-            onSubmit={form.onSubmit((values) =>
-                onSubmit({ ...values, attackMode: selectedModeOption, inputType: selectedInputOption })
-            )}
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
         >
-            <LoadingOverlay visible={loading} />
-            {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
             )}
 
-            <Stack>
-                {UserGuide(title, description_userguide)}
-                <NativeSelect
-                    value={selectedModeOption}
-                    onChange={(e) => setSelectedModeOption(e.target.value)}
-                    title={"Attack mode"}
-                    data={attackMode}
-                    required
-                    placeholder={"Pick a attack mode"}
-                    label={"Attack mode, refer: https://hashcat.net/hashcat"}
-                />
+            <form
+                onSubmit={form.onSubmit((values) =>
+                    onSubmit({ ...values, attackMode: selectedModeOption, inputType: selectedInputOption })
+                )}
+            >
+                <LoadingOverlay visible={loading} />
+                {loading && (
+                    <div>
+                        <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
+                            Cancel
+                        </Button>
+                    </div>
+                )}
+
                 <Grid>
-                    <Grid.Col span={3}>
+                    <Grid.Col span={6}>
                         <NativeSelect
-                            value={selectedInputOption}
-                            onChange={(e) => setSelectedInputOption(e.target.value)}
-                            label={"Input Hash Type"}
-                            data={inputType}
+                            data={attackModeOptions}
+                            label="Attack Mode"
+                            placeholder="Pick one"
+                            value={selectedModeOption}
+                            onChange={(event) => setSelectedModeOption(event.currentTarget.value)}
                             required
-                            placeholder={"Input type"}
                         />
                     </Grid.Col>
-                    <Grid.Col span={9}>
-                        <NumberInput
-                            label={"Hash Algorithm, refer: https://hashcat.net/hashcat"}
-                            placeholder={"Enter the Hash Algorithm code"}
+                    <Grid.Col span={6}>
+                        <NativeSelect
+                            data={inputTypeOptions}
+                            label="Input Type"
+                            placeholder="Pick one"
+                            value={selectedInputOption}
+                            onChange={(event) => setSelectedInputOption(event.currentTarget.value)}
                             required
-                            {...form.getInputProps("hashAlgorithmCode")}
                         />
                     </Grid.Col>
                 </Grid>
-                {!isFile && (
-                    <TextInput
-                        label={"Input hash value"}
-                        placeholder={"eg:ae71a4222ef1893879b442f14c40c370"}
-                        required
-                        {...form.getInputProps("hashValue")}
-                    />
-                )}
-                {isFile && (
-                    <TextInput
-                        label={"Input hash file path"}
-                        placeholder={" eg: /root/hash.txt"}
-                        required
-                        {...form.getInputProps("hashFilePath")}
-                    />
-                )}
-                {isPasswordFile && (
-                    <TextInput
-                        label={"Input password file"}
-                        placeholder={"eg: /root/pwd.txt"}
-                        required
-                        {...form.getInputProps("passwordFilePath")}
-                    />
-                )}
-                {isCharset && (
-                    <Grid>
-                        <Grid.Col span={6}>
-                            <NumberInput
-                                label={"Minimum password length"}
-                                placeholder={"Start from 1"}
-                                required
-                                {...form.getInputProps("minPwdLen")}
+
+                <Stack>
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    <NumberInput label="Hash Algorithm Code" {...form.getInputProps("hashAlgorithmCode")} required />
+                    {!isFile && <TextInput label="Hash Value" {...form.getInputProps("hashValue")} required />}
+                    {isFile && <TextInput label="Hash File Path" {...form.getInputProps("hashFilePath")} required />}
+                    {isPasswordFile && (
+                        <TextInput label="Password File Path" {...form.getInputProps("passwordFilePath")} required />
+                    )}
+                    {isCharset && (
+                        <>
+                            <TextInput
+                                label="Mask Charset"
+                                placeholder="?l?d"
+                                {...form.getInputProps("maskCharsets")}
                             />
-                        </Grid.Col>
-                        <Grid.Col span={6}>
-                            <NumberInput
-                                label={"Maximum password length"}
-                                placeholder={"Recommend not bigger than 8"}
-                                required
-                                {...form.getInputProps("maxPwdLen")}
-                            />
-                        </Grid.Col>
-                    </Grid>
-                )}
-                {isCharset && (
+                            <Grid>
+                                <Grid.Col span={6}>
+                                    <NumberInput
+                                        label="Minimum Password Length"
+                                        {...form.getInputProps("minPwdLen")}
+                                        required
+                                    />
+                                </Grid.Col>
+                                <Grid.Col span={6}>
+                                    <NumberInput
+                                        label="Maximum Password Length"
+                                        {...form.getInputProps("maxPwdLen")}
+                                        required
+                                    />
+                                </Grid.Col>
+                            </Grid>
+                        </>
+                    )}
                     <TextInput
-                        label={"Mask Charsets, refer: https://hashcat.net/hashcat"}
-                        placeholder={"eg: ?d?d?d?d"}
-                        {...form.getInputProps("maskCharsets")}
+                        label="Additional Commands"
+                        placeholder="e.g. --force"
+                        {...form.getInputProps("additionalCommand")}
                     />
-                )}
-                <TextInput
-                    label={"Additional command, refer: https://hashcat.net/hashcat"}
-                    placeholder={"eg: --force"}
-                    {...form.getInputProps("additionalCommand")}
-                />
-                <Alert
-                    icon={<IconAlertCircle size={16} />}
-                    radius="md"
-                    children={
-                        "Please try with additional command '--force', otherwise you have to download OpenCL for hashcat. "
-                    }
-                ></Alert>
-                <Button type={"submit"}>Crack</Button>
+                </Stack>
+
+                <Button type="submit" mt="md">
+                    Start {title}
+                </Button>
+                <Button mt="md" onClick={clearOutput}>
+                    Clear Output
+                </Button>
+
+                <ConsoleWrapper output={output} />
+
                 {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+            </form>
+        </RenderComponent>
     );
 };
 
