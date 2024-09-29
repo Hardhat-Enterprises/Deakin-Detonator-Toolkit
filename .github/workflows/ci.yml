@@ -77,14 +77,6 @@ jobs:
                   severity: "HIGH,CRITICAL"
                   exit-code: 1
 
-            # Dependency scanning
-            - name: Run Trivy for dependency scanning
-              uses: aquasecurity/trivy-action@0.20.0
-              with:
-                  scan-type: "library"
-                  format: "table"
-                  scan-ref: "."
-
     # Application build job
     build:
         runs-on: ubuntu-latest
