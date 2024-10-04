@@ -67,15 +67,21 @@ jobs:
             - run: yarn install --frozen-lockfile
             - run: yarn run test
 
+            # General hygiene
+            - name: Snyk Code Scan
+              uses: actions/checkout@v3
+            - run: npm install -g snyk
+            - run: snyk code test
+
             # Vulnerability scanning
-            - name: Run Trivy vulnerability scanner in repo mode
-              uses: aquasecurity/trivy-action@0.20.0
-              with:
-                  scan-type: "fs"
-                  ignore-unfixed: true
-                  format: "table"
-                  severity: "HIGH,CRITICAL"
-                  exit-code: 1
+            #- name: Run Trivy vulnerability scanner in repo mode
+            # uses: aquasecurity/trivy-action@0.20.0
+            # with:
+            #     scan-type: "fs"
+            #     ignore-unfixed: true
+            #     format: "table"
+            #     severity: "HIGH,CRITICAL"
+            #     exit-code: 1
             # Secrets scan
             - name: Run TruffleHog scan
               run: |
