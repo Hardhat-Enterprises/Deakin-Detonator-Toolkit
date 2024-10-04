@@ -9,9 +9,6 @@ on:
     pull_request:
         branches: [main, dev] # Triggers the workflow on PULL REQUESTS targeting 'main' and 'dev'
 
-env:
-  NODE_VERSION: 20
-
 jobs:
     # Dependency setup job
     dependencies:
@@ -21,7 +18,7 @@ jobs:
         # Strategy to run jobs in parallel with different Node.js versions
         strategy:
             matrix:
-                node-version: [$NODE_VERSION] # Tests against alternating Node.js version(s) specified
+                node-version: [20] # Tests against alternating Node.js version(s) specified
 
         steps:
             - name: checkout code
