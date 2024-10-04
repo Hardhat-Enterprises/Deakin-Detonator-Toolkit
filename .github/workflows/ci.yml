@@ -20,7 +20,8 @@ jobs:
 
         # Strategy to run jobs in parallel with different Node.js versions
         strategy:
-                node-version: $NODE_VERSION #[20] # Tests against alternating Node.js version(s) specified
+            matrix:
+                node-version: [$NODE_VERSION] # Tests against alternating Node.js version(s) specified
 
         steps:
             - name: checkout code
@@ -30,7 +31,7 @@ jobs:
             - name: node environment setup
               uses: actions/setup-node@v3
               with:
-                  node-version: $NODE_VERSION #${{ matrix.node-version }} # Use the current matrix version of Node.js
+                  node-version: ${{ matrix.node-version }} # Use the current matrix version of Node.js
 
             # Cache Node.js modules to speed up subsequent runs
             - name: Cache Node.js modules
