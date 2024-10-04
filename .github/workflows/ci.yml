@@ -9,16 +9,19 @@ on:
     pull_request:
         branches: [main, dev] # Triggers the workflow on PULL REQUESTS targeting 'main' and 'dev'
 
+env:
+  NODE_VERSION: 20
+
 jobs:
     # Dependency setup job
     dependencies:
         runs-on: ubuntu-latest
-        timeout-minutes: 30 # Stop job if it runs longer than 30 minutes
+        timeout-minutes: $NODE_VERSION # Stop job if it runs longer than 30 minutes
 
         # Strategy to run jobs in parallel with different Node.js versions
         strategy:
             matrix:
-                node-version: 20 #[20] # Tests against alternating Node.js version(s) specified
+                node-version: $NODE_VERSION #[20] # Tests against alternating Node.js version(s) specified
 
         steps:
             - name: checkout code
@@ -28,7 +31,7 @@ jobs:
             - name: node environment setup
               uses: actions/setup-node@v3
               with:
-                  node-version: ${{ matrix.node-version }} # Use the current matrix version of Node.js
+                  node-version: $NODE_VERSION #${{ matrix.node-version }} # Use the current matrix version of Node.js
 
             # Cache Node.js modules to speed up subsequent runs
             - name: Cache Node.js modules
