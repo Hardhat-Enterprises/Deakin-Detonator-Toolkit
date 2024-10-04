@@ -16,11 +16,10 @@ jobs:
     # Dependency setup job
     dependencies:
         runs-on: ubuntu-latest
-        timeout-minutes: $NODE_VERSION # Stop job if it runs longer than 30 minutes
+        timeout-minutes: 30 # Stop job if it runs longer than 30 minutes
 
         # Strategy to run jobs in parallel with different Node.js versions
         strategy:
-            matrix:
                 node-version: $NODE_VERSION #[20] # Tests against alternating Node.js version(s) specified
 
         steps:
