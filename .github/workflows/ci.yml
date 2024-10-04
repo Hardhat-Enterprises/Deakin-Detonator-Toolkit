@@ -77,12 +77,11 @@ jobs:
                   severity: "HIGH,CRITICAL"
                   exit-code: 1
             # Secrets scan
-            - name: secrets scan
-              uses: trufflesecurity/trufflehog-actions-scan@v3
-              with:
-                  scan_type: github
-                  repo: https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
-                  only_verified: true
+            - name: Run TruffleHog scan
+              run: |
+                  docker run --rm -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github \
+                  --repo https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit \
+                  --only-verified
 
     # Application build job
     build:
