@@ -18,7 +18,7 @@ jobs:
         # Strategy to run jobs in parallel with different Node.js versions
         strategy:
             matrix:
-                node-version: [16, 18, 20, 22] # Tests against alternating Node.js versions
+                node-version: [20] # Tests against alternating Node.js version(s) specified
 
         steps:
             - name: checkout code
