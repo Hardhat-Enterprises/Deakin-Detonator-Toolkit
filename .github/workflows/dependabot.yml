@@ -1,9 +1,0 @@
-version: 2
-updates:
-    - package-ecosystem: "yarn" # Use 'yarn' for Yarn projects
-      directory: "/" # The location of the yarn.lock file
-      schedule:
-          interval: "weekly" # Frequency for updates
-      commit-message:
-          prefix: "fix"
-      open-pull-requests-limit: 5
