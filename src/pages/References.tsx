@@ -373,6 +373,11 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/whois/"}
                     />
                     <Reference
+                        name={"Wifite"}
+                        description={"Wifite is a command-line tool to brute force WifiNwt password"}
+                        url={"https://www.kali.org/tools/wifite/"}
+                    />
+                    <Reference
                         name={"WPScan"}
                         description={
                             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues."
