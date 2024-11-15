@@ -1,27 +1,94 @@
+# GitHub Actions Workflow for CI/CD Pipeline
+# This workflow is triggered on pushes and pull requests to the 'main' and 'dev' branches.
+
 name: CI
 
 on:
     push:
-        branches: [main, dev]
+        branches: [main, dev] # Triggers the workflow on PUSHES to 'main' and 'dev'
     pull_request:
-        branches: [main, dev]
+        branches: [main, dev] # Triggers the workflow on PULL REQUESTS targeting 'main' and 'dev'
 
 jobs:
-    build:
+    # Dependency setup job
+    dependencies:
         runs-on: ubuntu-latest
-        permissions:
-            checks: write
-            pull-requests: write
-            contents: read
+        timeout-minutes: 30 # Stop job if it runs longer than 30 minutes
+
+        # Strategy to run jobs in parallel with different Node.js versions
+        strategy:
+            matrix:
+                node-version: [20] # Tests against alternating Node.js version(s) specified
 
         steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
+            - name: checkout code
+              uses: actions/checkout@v3
+
+            # Set up the Node.js environment with the specified version
+            - name: node environment setup
+              uses: actions/setup-node@v3
               with:
-                  node-version: "16"
-                  cache: "npm"
+                  node-version: ${{ matrix.node-version }} # Use the current matrix version of Node.js
+
+            # Cache Node.js modules to speed up subsequent runs
+            - name: Cache Node.js modules
+              uses: actions/cache@v3
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }} # Cache key based on OS and package-lock.json hash
+                  restore-keys: |
+                      ${{ runner.os }}-node- # Restore cache with a partial match if the exact key isn't found
+            # Install Yarn globally to manage dependencies
             - run: npm install --global yarn
+
+            # Install project dependencies using Yarn and ensure they match the lockfile
             - run: yarn install --frozen-lockfile
-            - run: yarn run style
-            - run: yarn run build
+
+    # Style check job (linting)
+    style:
+        runs-on: ubuntu-latest
+        needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
+        steps:
+            - name: style check
+              uses: actions/checkout@v3
+            - run: yarn install --frozen-lockfile
+            - run: yarn run style # Run the style check
+
+    # General tests
+    test:
+        runs-on: ubuntu-latest
+        needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
+        steps:
+            - uses: actions/checkout@v3
+            - run: yarn install --frozen-lockfile
             - run: yarn run test
+
+    # Security tests
+    security_test:
+        runs-on: ubuntu-latest
+        needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
+        steps:
+            # Vulnerability scanning
+            - name: Run Trivy vulnerability scanner in repo mode
+              uses: aquasecurity/trivy-action@0.20.0
+              with:
+                  scan-type: "fs"
+                  ignore-unfixed: true
+                  format: "table"
+                  severity: "HIGH,CRITICAL"
+                  exit-code: 1
+
+              # Secrets scan
+            - name: Run TruffleHog scan
+              run: |
+                  docker run --rm -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github \
+                  --repo https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit \
+                  --only-verified
+    # Application build job
+    build:
+        runs-on: ubuntu-latest
+        needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
+        steps:
+            - uses: actions/checkout@v3
+            - run: yarn install --frozen-lockfile
+            - run: yarn run build # Build the project
