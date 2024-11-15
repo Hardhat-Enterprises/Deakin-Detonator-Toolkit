@@ -158,7 +158,9 @@ const ReferencesPage = () => {
                     />
                     <Reference
                         name={"ExifTool"}
-                        description={"ExifTool is a customizable set of Perl modules plus a full-featured command-line application called exiftool for reading and writing meta information in a wide variety of files"}
+                        description={
+                            "ExifTool is a customizable set of Perl modules plus a full-featured command-line application called exiftool for reading and writing meta information in a wide variety of files"
+                        }
                         url={"https://www.kali.org/tools/libimage-exiftool-perl/"}
                     />
                     <Reference
@@ -282,7 +284,9 @@ const ReferencesPage = () => {
                     />
                     <Reference
                         name={"Photon"}
-                        description={"This package includes a fast and flexible crawler designed for open source intelligence (OSINT)"}
+                        description={
+                            "This package includes a fast and flexible crawler designed for open source intelligence (OSINT)"
+                        }
                         url={"https://www.kali.org/tools/photon/"}
                     />
                     <Reference
