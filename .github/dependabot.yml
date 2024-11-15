@@ -5,12 +5,12 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "daily"
+    - package-ecosystem: "npm"
+      directory: "/" # Location of package manifests
+      schedule:
+          interval: "daily"
 
-  - package-ecosystem: "cargo" # For Rust packages
-    directory: "/src-tauri" # Location of Cargo.toml if not in root
-    schedule:
-      interval: "daily"
+    - package-ecosystem: "cargo" # For Rust packages
+      directory: "/src-tauri" # Location of Cargo.toml if not in root
+      schedule:
+          interval: "daily"
