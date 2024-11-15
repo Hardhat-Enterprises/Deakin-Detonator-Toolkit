@@ -69,6 +69,12 @@ jobs:
         needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
         steps:
             # Vulnerability scanning
+            - name: Cache Trivy DB  # Add the cache step before Trivy scan
+              uses: actions/cache@v3
+              with:
+                  path: ~/.cache/trivy/db
+                  key: ${{ runner.os }}-trivy-db  # Cache key for the Trivy DB
+
             - name: Run Trivy vulnerability scanner in repo mode
               uses: aquasecurity/trivy-action@0.20.0
               with:
@@ -84,6 +90,7 @@ jobs:
                   docker run --rm -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github \
                   --repo https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit \
                   --only-verified
+
     # Application build job
     build:
         runs-on: ubuntu-latest
