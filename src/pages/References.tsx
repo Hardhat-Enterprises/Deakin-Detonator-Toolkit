@@ -107,6 +107,13 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/cewl/"}
                     />
                     <Reference
+                        name={"CloudBrute"}
+                        description={
+                            "Cloudbrute is a tool for cloud enumeration and infrastructure discovery in various cloud providers"
+                        }
+                        url={"https://www.kali.org/tools/cloudbrute/"}
+                    />
+                    <Reference
                         name={"CrackMapExec"}
                         description={
                             "CrackMapExec is a post-exploitation tool used for pentesting Windows/Active Directory environments."
