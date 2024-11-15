@@ -49,11 +49,11 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 🔧 Setup
 
-To install the Deakin Detonator Toolkit on Kali, you can follow method below. The method is a one&#8209;step process that utilises a bash script. If it doesn't work, follow the additional steps below.
+To install Deakin Detonator Toolkit on Kali, you can follow the method below. The method is a one&#8209;step process that utilises a bash script. If it doesn't work, follow the additional steps below.
 
 ## Run the application (dependency install and run)
 
-1. Run the following command, this will install dependent packages, patching and start the application:
+1. Run the following command, this will install all dependencies, apply patching and start the application:
 
     ```
     curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/setup_ddt.sh -o setup_ddt.sh && chmod +x setup_ddt.sh && ./setup_ddt.sh
@@ -73,13 +73,13 @@ To install the Deakin Detonator Toolkit on Kali, you can follow method below. Th
     sudo apt full-upgrade -y
     ```
 
-3. Open Network Repository:
+3. Open your APT sources list:
 
     ```bash
     sudo nano /etc/apt/sources.list
     ```
 
-4. Add the following lines to the Network Repository:
+4. Add the following as new lines to your APT sources list:
 
     ```bash
     deb http://security.debian.org/debian-security buster/updates main
