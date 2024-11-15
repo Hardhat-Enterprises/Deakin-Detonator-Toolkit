@@ -4,10 +4,14 @@
 name: CI
 
 on:
-    push:
-        branches: [main, dev] # Triggers the workflow on PUSHES to 'main' and 'dev'
-    pull_request:
-        branches: [main, dev] # Triggers the workflow on PULL REQUESTS targeting 'main' and 'dev'
+  push:
+    branches:
+      - main   # Trigger the workflow on PUSHES to 'main'
+      - dev    # Trigger the workflow on PUSHES to 'dev'
+  pull_request:
+    branches:
+      - main   # Trigger the workflow on PULL REQUESTS targeting 'main'
+      - dev    # Trigger the workflow on PULL REQUESTS targeting 'dev'
 
 jobs:
     # Dependency setup job
