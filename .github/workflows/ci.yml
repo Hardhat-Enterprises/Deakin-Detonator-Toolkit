@@ -77,6 +77,8 @@ jobs:
                   format: "table"
                   severity: "HIGH,CRITICAL"
                   exit-code: 1
+                  TRIVY_SKIP_DB_UPDATE: true
+                  TRIVY_SKIP_JAVA_DB_UPDATE: true
 
               # Secrets scan
             - name: Run TruffleHog scan
