@@ -6,7 +6,7 @@
 | 0003   |                                                                                               |          |
 | 0004   |                                                                                               |          |
 | 0005   | RESERVED                                                                                      |          |
-| 0006   | RESERVED                                                                                      |          |
+| 0006   | Proposed integration of the Tcpdump tool into PT-GUI                                                                                      |          |
 | 0007   |                                                                                               |          |
 | 0008   |                                                                                               |          |
 | 0009   |                                                                                               |          |
