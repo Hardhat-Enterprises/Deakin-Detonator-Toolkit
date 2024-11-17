@@ -107,6 +107,13 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/cewl/"}
                     />
                     <Reference
+                        name={"CloudBrute"}
+                        description={
+                            "Cloudbrute is a tool for cloud enumeration and infrastructure discovery in various cloud providers"
+                        }
+                        url={"https://www.kali.org/tools/cloudbrute/"}
+                    />
+                    <Reference
                         name={"CrackMapExec"}
                         description={
                             "CrackMapExec is a post-exploitation tool used for pentesting Windows/Active Directory environments."
@@ -155,6 +162,13 @@ const ReferencesPage = () => {
                         name={"Enum4Linux"}
                         description={"Enux4Linux is a tool for enumerating information from Windows and Samba systems."}
                         url={"https://www.kali.org/tools/enum4linux/"}
+                    />
+                    <Reference
+                        name={"ExifTool"}
+                        description={
+                            "ExifTool is a customizable set of Perl modules plus a full-featured command-line application called exiftool for reading and writing meta information in a wide variety of files"
+                        }
+                        url={"https://www.kali.org/tools/libimage-exiftool-perl/"}
                     />
                     <Reference
                         name={"Eyewitness"}
@@ -276,6 +290,13 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/parsero/"}
                     />
                     <Reference
+                        name={"Photon"}
+                        description={
+                            "This package includes a fast and flexible crawler designed for open source intelligence (OSINT)"
+                        }
+                        url={"https://www.kali.org/tools/photon/"}
+                    />
+                    <Reference
                         name={"RainbowCrack"}
                         description={"RainbowCrack is a tool used to crack hashes with rainbow tables"}
                         url={"https://www.kali.org/tools/rainbowcrack/"}
@@ -373,6 +394,11 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/whois/"}
                     />
                     <Reference
+                        name={"Wifite"}
+                        description={"Wifite is a tool to audit WEP or WPA encrypted wireless networks"}
+                        url={"https://www.kali.org/tools/wifite/"}
+                    />
+                    <Reference
                         name={"WPScan"}
                         description={
                             "WPScan is an enumeration tool that scans remote WordPress installations in attempt to identify security issues."
@@ -380,6 +406,11 @@ const ReferencesPage = () => {
                         url={"https://www.kali.org/tools/wpscan/"}
                     />
                     <Title order={4}>Attack Vectors:</Title>
+                    <Reference
+                        name={"CVE-2022-1388"}
+                        description={"CVE-2022-1388 allows undisclosed requests to bypass iControl REST authentication"}
+                        url={"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-1388"}
+                    />
                     <Reference
                         name={"CVE-2021-41773"}
                         description={"CVE-2021-41773 allows directory traversal attacks."}

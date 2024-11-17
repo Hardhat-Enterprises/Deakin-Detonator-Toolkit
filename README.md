@@ -49,19 +49,19 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 🔧 Setup
 
-To install the Deakin Detonator Toolkit on Kali, you can follow either the new or old methods. The new method is a one&#8209;step process that utilises a bash script. If that doesn't work, the old method will take you through the steps manually.
+To install Deakin Detonator Toolkit on Kali, you can follow the method below. The method is a one&#8209;step process that utilises a bash script. If it doesn't work, follow the additional steps below.
 
 ## Run the application (dependency install and run)
 
-1. Run the following command, this will install dependent packages, patching and and start the application:
+1. Run the following command, this will install all dependencies, apply patching and start the application:
 
     ```
     curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/setup_ddt.sh -o setup_ddt.sh && chmod +x setup_ddt.sh && ./setup_ddt.sh
     ```
 
-## Old method
+## Troubleshooting Steps
 
-1. Use this method if you get errors with the new method. Update your Kali:
+1. Use this method if you encounter any errors with the above method. Update your Kali:
 
     ```bash
     sudo apt update
@@ -70,104 +70,44 @@ To install the Deakin Detonator Toolkit on Kali, you can follow either the new o
 2. Upgrade your Kali:
 
     ```bash
-    sudo apt upgrade --fix-missing -y
+    sudo apt full-upgrade -y
     ```
 
-3. Install missing dependencies:
+3. Open your APT sources list:
 
     ```bash
-    sudo apt install libwebkit2gtk-4.0-dev \
-        build-essential \
-        curl \
-        wget \
-        libssl-dev \
-        libgtk-3-dev \
-        libayatana-appindicator3-dev \
-        librsvg2-dev \
-        dsniff \
-    	dnsmap \
-    	goldeneye \
-    	arjun \
-    	parsero \
-    	sherlock \
-    	foremost \
-        bed
+    sudo nano /etc/apt/sources.list
     ```
 
-4. Close your current terminal and open a new one.
-
-5. Install Rust:
+4. Add the following as new lines to your APT sources list:
 
     ```bash
-    curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+    deb http://security.debian.org/debian-security buster/updates main
+    deb http://ftp.au.debian.org/debian buster main
     ```
 
-6. Install Volta or Node. Volta no longer supports Apple silicon chip series (M series). Therefore, we can use an alternative like Node instead:
-
-    ### for Apple silicon series user
+5. Update Kali again:
 
     ```bash
-    sudo apt install nodejs npm
+    sudo apt update
     ```
 
-    ### for Windows machines with an Intel/AMD chipset
+6. Run:
 
     ```bash
-    curl https://get.volta.sh | bash
+    sudo apt install libenchant1c2a -y
     ```
 
-7. Close your current terminal and open a new one.
-
-8. Install Node:
-
-    ### for Apple silicon series user
+7. Run:
 
     ```bash
-    npm install node
+    sudo apt install libwebkit2gtk-4.0-dev -y
     ```
 
-    ### for Windows machines with an Intel/AMD chipset
+8. Finally, rerun the original command, which will install the remaining dependant packages, patching and then start the application:
 
     ```bash
-    volta install node
-    ```
-
-9. Install Yarn:
-
-    ### for Apple silicon series user
-
-    ```bash
-    npm install yarn
-    ```
-
-    ### for Windows machines with an Intel/AMD chipset
-
-    ```bash
-    volta install yarn
-    ```
-
-10. Clone the repo:
-
-    ```bash
-    git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit
-    ```
-
-11. Change current directory to the toolkit:
-
-    ```bash
-    cd Deakin-Detonator-Toolkit
-    ```
-
-12. Install project dependencies:
-
-    ```bash
-    yarn install
-    ```
-
-13. Run the application (dev mode):
-
-    ```bash
-    yarn run tauri dev
+    curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/setup_ddt.sh -o setup_ddt.sh && chmod +x setup_ddt.sh && ./setup_ddt.sh
     ```
 
 # 📷 Screenshot
