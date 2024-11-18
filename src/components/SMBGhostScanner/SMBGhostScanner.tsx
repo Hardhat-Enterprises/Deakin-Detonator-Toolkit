@@ -98,7 +98,7 @@ const SMBGhostScanner = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -131,7 +131,7 @@ const SMBGhostScanner = () => {
                 "python3",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);

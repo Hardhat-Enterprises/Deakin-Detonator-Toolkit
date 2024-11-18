@@ -103,7 +103,7 @@ function ARPFingerprinting() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
@@ -135,7 +135,7 @@ function ARPFingerprinting() {
                 "arp-fingerprint",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
         } catch (error: any) {
             // If an error occurs during command execution, display the error message.

@@ -121,7 +121,7 @@ const Crackmapexec = () => {
             setIsSaveAllowed(true); // Allow Saving as the output is finalised
             setHasBeenSaved(false); // Reset save status
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -164,7 +164,7 @@ const Crackmapexec = () => {
                 "crackmapexec",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setProcessId(result.pid); // Store the process ID of the running command
             setOutput(result.output); // Display the initial output of the command

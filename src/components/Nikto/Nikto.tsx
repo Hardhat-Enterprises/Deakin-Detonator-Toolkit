@@ -138,7 +138,7 @@ function Nikto() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -238,7 +238,7 @@ function Nikto() {
                 "nikto",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(pid);
             setOutput(output);

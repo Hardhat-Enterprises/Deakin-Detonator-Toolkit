@@ -134,7 +134,7 @@ export function BEDTool() {
             setAllowSave(true); // Allow Saving as the output is finalised.
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**

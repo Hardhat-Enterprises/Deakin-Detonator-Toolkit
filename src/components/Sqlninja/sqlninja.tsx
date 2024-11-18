@@ -115,7 +115,7 @@ function Sqlninja() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback.
+        [handleProcessData], // Dependency on the handleProcessData callback.
     );
 
     // Actions taken after saving the output.

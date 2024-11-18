@@ -107,7 +107,7 @@ const RainbowCrack = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**

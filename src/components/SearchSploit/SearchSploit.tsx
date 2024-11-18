@@ -89,7 +89,7 @@ const SearchSploit = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // Handle process cancellation
@@ -121,7 +121,7 @@ const SearchSploit = () => {
                 "searchsploit",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);

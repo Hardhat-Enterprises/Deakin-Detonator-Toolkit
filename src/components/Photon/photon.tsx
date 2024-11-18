@@ -107,7 +107,7 @@ const Photon = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -140,7 +140,7 @@ const Photon = () => {
                 "photon",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(result.pid);

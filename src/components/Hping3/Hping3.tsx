@@ -138,7 +138,7 @@ const Hping3 = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     const handleSaveComplete = () => {

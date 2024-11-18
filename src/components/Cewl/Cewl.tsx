@@ -133,7 +133,7 @@ const Cewl = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback.
+        [handleProcessData], // Dependency on the handleProcessData callback.
     );
 
     // Actions taken after saving the output.
@@ -203,7 +203,7 @@ const Cewl = () => {
                 "cewl",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             // Update the UI with the results from the executed command.
             setPid(result.pid);

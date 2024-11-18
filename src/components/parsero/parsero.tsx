@@ -71,7 +71,7 @@ const Parsero = () => {
             setPid("");
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     const handleSaveComplete = () => {

@@ -40,7 +40,7 @@ export function SaveOutputToTextFile_v2(
     outputToSave: string,
     allowSave: boolean,
     hasSaved: boolean,
-    onSave: () => void
+    onSave: () => void,
 ) {
     const [filename, setFilename] = useState("");
 

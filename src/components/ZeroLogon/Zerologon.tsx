@@ -111,7 +111,7 @@ const ZeroLogon = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -127,7 +127,7 @@ const ZeroLogon = () => {
             "python3",
             args,
             handleProcessData,
-            handleProcessTermination
+            handleProcessTermination,
         );
 
         setPid(result.pid);

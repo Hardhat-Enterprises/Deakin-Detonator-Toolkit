@@ -156,7 +156,7 @@ const TestSSL = () => {
             setOutput((prevOutput) => prevOutput + "\nScan was manually terminated.");
         } else {
             setOutput(
-                (prevOutput) => prevOutput + `\nScan terminated with exit code: ${code} and signal code: ${signal}`
+                (prevOutput) => prevOutput + `\nScan terminated with exit code: ${code} and signal code: ${signal}`,
             );
         }
         setLoading(false);
@@ -196,7 +196,7 @@ const TestSSL = () => {
                 "testssl",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPidTarget(result.pid);
         } catch (error: unknown) {

@@ -119,7 +119,7 @@ const ARPSpoofing = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     // Actions taken after saving the output
@@ -156,7 +156,7 @@ const ARPSpoofing = () => {
             "arpspoof",
             argsGateway,
             handleProcessData,
-            handleProcessTermination
+            handleProcessTermination,
         );
         setPidGateway(result_gateway.pid);
 
@@ -165,7 +165,7 @@ const ARPSpoofing = () => {
             "arpspoof",
             argsTarget,
             handleProcessData,
-            handleProcessTermination
+            handleProcessTermination,
         );
         setPidTarget(result_target.pid);
 
@@ -195,13 +195,13 @@ const ARPSpoofing = () => {
                             loading,
                             pidGateway,
                             handleProcessData,
-                            handleProcessTermination
+                            handleProcessTermination,
                         )}
                         {LoadingOverlayAndCancelButtonPkexec(
                             loading,
                             pidTarget,
                             handleProcessData,
-                            handleProcessTermination
+                            handleProcessTermination,
                         )}
                         <TextInput label={"Target one IP address"} required {...form.getInputProps("ipGateway")} />
                         <TextInput label={"Target two IP address"} required {...form.getInputProps("ipTarget")} />

@@ -77,7 +77,7 @@ const Tiger = () => {
             setPid("");
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     const onSubmit = async (values: FormValuesType) => {

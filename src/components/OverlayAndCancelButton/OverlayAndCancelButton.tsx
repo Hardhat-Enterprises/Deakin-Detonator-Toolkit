@@ -63,7 +63,7 @@ export function LoadingOverlayAndCancelButtonPkexec(
     loading: boolean,
     pid: string,
     onData: (data: string) => void,
-    onTermination: ({ code, signal }: { code: number; signal: number }) => void
+    onTermination: ({ code, signal }: { code: number; signal: number }) => void,
 ) {
     // Sends a SIGINT signal to gracefully terminate the active process passed as an argument
     const handleCancel = () => {
