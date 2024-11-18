@@ -78,6 +78,7 @@ jobs:
                   format: "table"
                   severity: "HIGH,CRITICAL"
                   exit-code: 1
+                  github-pat: ${{ secrets.GITHUB_TOKEN }}
 
               # Secrets scan
             - name: Run TruffleHog scan
