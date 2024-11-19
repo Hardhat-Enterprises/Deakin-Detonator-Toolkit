@@ -18,6 +18,11 @@
                 "sidecar": true,
                 "scope": [
                     {
+    			"name": "nmap",
+   			"cmd": "/usr/bin/nmap",
+    			"args": true
+		    },
+                    {
                         "name": "airbase-ng",
                         "cmd": "airbase-ng",
                         "args": true
