@@ -427,6 +427,11 @@ const ReferencesPage = () => {
                         url={"https://github.com/M4xSec/Apache-APISIX-CVE-2022-24112"}
                     />
                     <Reference
+                        name={"CVE-2022-26134"}
+                        description={"CVE-2022-26134 allows Remote Code Execution."}
+                        url={"https://github.com/hev0x/CVE-2022-26134"}
+                    />
+                    <Reference
                         name={"CVE-2022-27925"}
                         description={"Zimbra Collaboration Suite - Remote Code Execution"}
                         url={"https://arcticwolf.com/resources/blog/cve-2022-27925/"}
