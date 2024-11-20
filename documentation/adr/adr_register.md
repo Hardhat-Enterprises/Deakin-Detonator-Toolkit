@@ -6,7 +6,11 @@
 | 0003   |                                                                                               |          |
 | 0004   |                                                                                               |          |
 | 0005   | RESERVED                                                                                      |          |
+<<<<<<< HEAD
 | 0006   | Integration of the Tcpdump tool into PT-GUI                                                                                      |          |
+=======
+| 0006   |integration of the Tcpdump tool into PT-GUI                                                                                      |          |
+>>>>>>> 5262ca4c3c060d8b02706b447322e78db9811ca4
 | 0007   |                                                                                               |          |
 | 0008   |                                                                                               |          |
 | 0009   |                                                                                               |          |
