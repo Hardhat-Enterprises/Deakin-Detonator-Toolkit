@@ -65,6 +65,13 @@ const walkthroughsData = {
     route: "/walkthroughs",
 };
 
+const toutorialsData = {
+    icon: <IconStepInto size={16} />,
+    color: "pink",
+    label: "Toutorials",
+    route: "/toutorials",
+};
+
 const referencesData = {
     icon: <IconSearch size={16} />,
     color: "green",
@@ -72,7 +79,7 @@ const referencesData = {
     route: "/references",
 };
 
-const data = [aboutData, toolsData, attackVectorsData, walkthroughsData, referencesData];
+const data = [aboutData, toolsData, attackVectorsData, walkthroughsData, toutorialsData, referencesData];
 
 export function MainLinks() {
     const links = data.map((link) => <MainLink {...link} key={link.label} />);

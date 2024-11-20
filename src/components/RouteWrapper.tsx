@@ -20,6 +20,7 @@ import Urlsnarf from "./Urlsnarf/Urlsnarf";
 import { ZeroLogon } from "./ZeroLogon/Zerologon";
 import SearchSploit from "./SearchSploit/SearchSploit";
 import { WalkthroughsPage } from "../pages/Walkthroughs";
+import { ToutorialsPage } from "/home/kali/Desktop/GitHub/Deakin-Detonator-Toolkit/src/pages/Toutorials"
 import SMBGhostScanner from "./SMBGhostScanner/SMBGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
@@ -136,6 +137,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs",
         element: <WalkthroughsPage />,
         description: "Walkthroughs page",
+        category: "",
+    },
+    {
+        name: "Toutorials",
+        path: "/toutorials",
+        element: <ToutorialsPage />,
+        description: "Toutorials page",
         category: "",
     },
     {
