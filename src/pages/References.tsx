@@ -1,38 +1,56 @@
-import { Group, Stack, Title } from "@mantine/core";
+import { Accordion, Group, Stack, Title, useMantineTheme } from "@mantine/core";
+import { IconTools, IconTarget, IconStepInto } from "@tabler/icons";
 import { Reference } from "../components/Reference/Reference";
 
 const ReferencesPage = () => {
+    const theme = useMantineTheme();
+    const getColor = (color: string) => theme.colors[color][theme.colorScheme === "dark" ? 5 : 7];
+
     return (
         <>
+            {/* Page Title */}
             <Group position={"center"}>
-                <div>
-                    <p>
-                        <Title>References</Title>
-                    </p>
-                </div>
+                <Title order={1}>References</Title>
             </Group>
 
-            <Group position={"center"} align={"left"}>
-                <Stack>
-                    <Title order={4}>GUI Development:</Title>
-                    <Reference
-                        name={"ReactJS"}
-                        description={"Deakin Detonator Toolkit is built using ReactJS"}
-                        url={"https://www.reactjs.org"}
-                    />
-                    <Reference
-                        name={"Mantine"}
-                        description={"Mantine is a React UI component library"}
-                        url={"https://mantine.dev"}
-                    />
-                    <Reference
-                        name={"TypeScript"}
-                        description={"TypeScript is a typed superset of JavaScript"}
-                        url={"https://www.typescriptlang.org"}
-                    />
-                    <Title order={4}>Tools:</Title>
+        <Accordion multiple>
+            {/* GUI Development Category */}
+            <Accordion.Item value="GUIDevelopment">
+                <Accordion.Control icon={<IconTools size={16} color={getColor("blue")} />}>
+                    <Title order={4}>GUI Development</Title>
+                </Accordion.Control>
+                <Accordion.Panel>
+                    <Group position="center" spacing="md">
+                        <Stack align="center" spacing="md">
+                            <Reference
+                                name={"ReactJS"}
+                                description={"Deakin Detonator Toolkit is built using ReactJS"}
+                                url={"https://www.reactjs.org"}
+                            />
+                            <Reference
+                                name={"Mantine"}
+                                description={"Mantine is a React UI component library"}
+                                url={"https://mantine.dev"}
+                            />
+                            <Reference
+                                name={"TypeScript"}
+                                description={"TypeScript is a typed superset of JavaScript"}
+                                url={"https://www.typescriptlang.org"}
+                            />
+                        </Stack>
+                    </Group>
+                </Accordion.Panel>
+            </Accordion.Item>
 
-                    <Reference
+            {/* Tools Category */}
+            <Accordion.Item value="Tools">
+                <Accordion.Control icon={<IconTools size={16} color={getColor("violet")} />}>
+                    <Title order={4}>Tools</Title>
+                </Accordion.Control>
+                <Accordion.Panel>
+                    <Group position="center" spacing="md">
+                        <Stack align="center" spacing="md">
+                        <Reference
                         name={"Airbase-NG"}
                         description={
                             "Airbase-ng is multi-purpose tool aimed at attacking clients as opposed to the Access Point (AP) itself."
@@ -106,6 +124,7 @@ const ReferencesPage = () => {
                         description={"CeWL (Custom Word List generator) is a ruby app which spiders a given URL."}
                         url={"https://www.kali.org/tools/cewl/"}
                     />
+                     
                     <Reference
                         name={"CloudBrute"}
                         description={
@@ -405,8 +424,20 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/wpscan/"}
                     />
-                    <Title order={4}>Attack Vectors:</Title>
-                    <Reference
+                        </Stack>
+                    </Group>
+                </Accordion.Panel>
+            </Accordion.Item>
+
+            {/* Attack Vectors Category */}
+            <Accordion.Item value="AttackVectors">
+                <Accordion.Control icon={<IconTarget size={16} color={getColor("red")} />}>
+                    <Title order={4}>Attack Vectors</Title>
+                </Accordion.Control>
+                <Accordion.Panel>
+                    <Group position="center" spacing="md">
+                        <Stack align="center" spacing="md">
+                        <Reference
                         name={"CVE-2022-1388"}
                         description={"CVE-2022-1388 allows undisclosed requests to bypass iControl REST authentication"}
                         url={"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-1388"}
@@ -452,8 +483,11 @@ const ReferencesPage = () => {
                             "https://www.infosecinstitute.com/resources/vulnerabilities/zerologon-cve-2020-1472-technical-overview-and-walkthrough/"
                         }
                     />
-                </Stack>
-            </Group>
+                        </Stack>
+                    </Group>
+                </Accordion.Panel>
+            </Accordion.Item>               
+        </Accordion>
         </>
     );
 };
