@@ -5,7 +5,7 @@
         <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Deakin Detonator Toolkit</title>
-        <style>
+        <!-- <style>
             /* Optional: Center the logo on the page */
             #logo-container {
                 text-align: center;
@@ -16,21 +16,21 @@
                 height: auto;
                 cursor: pointer; /* Optional: Change cursor on hover */
             }
-        </style>
+        </style> -->
     </head>
     <body>
         <!-- Logo Container -->
-        <div id="logo-container">
+        <!-- <div id="logo-container">
             <a href="/about">
                 <img id="logo" src="logo-light.png" alt="Deakin Detonator Toolkit Logo" />
             </a>
-        </div>
+        </div> -->
 
         <!-- Main Application -->
         <div id="root"></div>
         <script type="module" src="/src/main.tsx"></script>
 
-        <script>
+        <!--  <script>
             // Detect user's color scheme and set the logo accordingly
             const logo = document.getElementById("logo");
             const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -46,6 +46,6 @@
                 const newColorScheme = e.matches ? "logo-dark.png" : "logo-light.png";
                 logo.src = newColorScheme;
             });
-        </script>
+        </script> -->
     </body>
 </html>
