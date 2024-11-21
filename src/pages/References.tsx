@@ -71,6 +71,13 @@ const ReferencesPage = () => {
                                     }
                                     url={"https://www.kali.org/tools/amap/"}
                                 />
+                                 <Reference
+                                    name={"Amass"}
+                                    description={
+                                        "The OWASP Amass Project performs network mapping of attack surfaces and external asset discovery using open source information gathering and active reconnaissance techniques."
+                                    }
+                                    url={"https://github.com/owasp-amass/amass"}
+                                />
                                 <Reference
                                     name={"Arjun"}
                                     description={
@@ -260,6 +267,11 @@ const ReferencesPage = () => {
                                     url={"https://hashcat.net/hashcat"}
                                 />
                                 <Reference
+                                    name={"Hping3"}
+                                    description={"hping3 is a network tool able to send custom ICMP/UDP/TCP packets and to display target replies like ping does with ICMP replies."}
+                                    url={"https://www.kali.org/tools/hping3/"}
+                                />
+                                <Reference
                                     name={"Hydra"}
                                     description={
                                         "Hydra is a parallelised login cracker which supports numerous protocols to attack."
@@ -342,6 +354,11 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/rainbowcrack/"}
                                 />
                                 <Reference
+                                    name={"RTgen"}
+                                    description={"PLACEHOLDER TEXT."}
+                                    url={"PLACEHOLDER TEXT"}
+                                />
+                                <Reference
                                     name={"SearchSploit"}
                                     description={
                                         "SearchSploit is a tool to search the Exploit Database for public exploits and vulnerabilities."
@@ -361,6 +378,11 @@ const ReferencesPage = () => {
                                     url={"https://www.shodan.io/"}
                                 />
                                 <Reference
+                                    name={"SlowHttpTest"}
+                                    description={"PLACEHOLDER TEXT"}
+                                    url={"PLACEHOLDER TEXT"}
+                                />
+                                <Reference
                                     name={"SMBEnumeration"}
                                     description={
                                         "SMBenumeration is a tool used for enumerating information from SMB (Server Message Block)."
@@ -378,6 +400,11 @@ const ReferencesPage = () => {
                                     name={"Snmp-check"}
                                     description={"Snmp-check is a tool for enumerating on SNMP services."}
                                     url={"https://www.kali.org/tools/snmpcheck/"}
+                                />
+                                 <Reference
+                                    name={"SQLMap"}
+                                    description={"sqlmap automates the process of detecting and exploiting SQL injection flaws."}
+                                    url={"https://github.com/sqlmapproject/sqlmap"}
                                 />
                                 <Reference
                                     name={"Sqlninja"}
@@ -399,6 +426,11 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/theharvester/"}
                                 />
                                 <Reference
+                                    name={"Testssl.sh"}
+                                    description={"PLACEHOLDER TEXT"}
+                                    url={"PLACEHOLDER TEXT"}
+                                />
+                                <Reference
                                     name={"Tiger"}
                                     description={
                                         "Toolset used to perform security audits of operating system components."
@@ -416,6 +448,11 @@ const ReferencesPage = () => {
                                     name={"TShark"}
                                     description={"TShark is a tool to dump and analyze network traffic"}
                                     url={"https://www.kali.org/tools/wireshark/#tshark-1"}
+                                />
+                                <Reference
+                                    name={"Unicornscan"}
+                                    description={"PLACEHOLDER TEXT"}
+                                    url={"PLACEHOLDER TEXT"}
                                 />
                                 <Reference
                                     name={"Urlsnarf"}
