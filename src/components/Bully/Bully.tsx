@@ -9,6 +9,7 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
+
 /**
  * Represents the form values for the Bully component.
  */
@@ -43,7 +44,7 @@ function Bully() {
         "Step 4: Initiate the brute-force attack: Click the 'Start Bully Attack' button to begin the attack using the provided options.\n" +
         "Step 5: Review the output: After the attack is complete, review the output to identify the cracked WPS PIN, if successful.\n";
     const sourceLink = "https://www.kali.org/tools/bully/";
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1j0CL-eh2bt83joDEB7m8LLiQtpYNvFPdcOwom9uIMw4/edit#heading=h.4nshcwccvzc3";
     const dependencies = ["bully"];
 
     // Form hook to handle form input.
