@@ -189,6 +189,15 @@ const ReferencesPage = () => {
                         }
                         url={"https://www.kali.org/tools/ffuf/"}
                     />
+                     <Reference
+                        name={"FindOffset"}
+                        description={
+                            "Find Offset identifies where a buffer overflow overwrites key memory addresses like EIP."
+                        }
+                        url={
+                            "https://book.hacktricks.xyz/binary-exploitation/rop-return-oriented-programing/ret2lib/ret2lib-+-printf-leak-arm64#find-offset"
+                        }
+                    />
                     <Reference
                         name={"Foremost"}
                         description={
@@ -435,15 +444,6 @@ const ReferencesPage = () => {
                         name={"CVE-2022-36804"}
                         description={"CVE-2022-36804 allows privilege escalation."}
                         url={"https://nvd.nist.gov/vuln/detail/CVE-2022-36804"}
-                    />
-                    <Reference
-                        name={"FindOffset"}
-                        description={
-                            "Find Offset identifies where a buffer overflow overwrites key memory addresses like EIP."
-                        }
-                        url={
-                            "https://book.hacktricks.xyz/binary-exploitation/rop-return-oriented-programing/ret2lib/ret2lib-+-printf-leak-arm64#find-offset"
-                        }
                     />
                     <Reference
                         name={"Zerologon"}
