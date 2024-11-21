@@ -328,6 +328,11 @@
                         "args": true
                     },
                     {
+                        "name": "tcpdump",
+                        "cmd": "tcpdump",
+                        "args": true
+                    },
+                    {
                         "name": "testssl",
                         "cmd": "testssl",
                         "args": true
