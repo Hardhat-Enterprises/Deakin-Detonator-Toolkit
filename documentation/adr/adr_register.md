@@ -3,7 +3,7 @@
 | 0000   | Example entry change                                                                          | APPROVED |
 | 0001   | RESERVED                                                                                      |          |
 | 0002   | Introduction of static vulnerability and secret scanning into our Pipeline via Github Actions | APPROVED |
-| 0003   |                                                                                               |          |
+| 0003   | Sherlock tutorial added                                                                         PROPOSED                    |          |
 | 0004   |                                                                                               |          |
 | 0005   | RESERVED                                                                                      |          |
 | 0006   | RESERVED                                                                                      |          |
