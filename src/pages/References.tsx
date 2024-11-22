@@ -355,8 +355,8 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"RTgen"}
-                                    description={"PLACEHOLDER TEXT."}
-                                    url={"PLACEHOLDER TEXT"}
+                                    description={"RTgen is a tool within RainbowCrack, used to implement hash algorithms."}
+                                    url={"https://www.kali.org/tools/rainbowcrack/"}
                                 />
                                 <Reference
                                     name={"SearchSploit"}
