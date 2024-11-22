@@ -379,8 +379,8 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"SlowHttpTest"}
-                                    description={"PLACEHOLDER TEXT"}
-                                    url={"PLACEHOLDER TEXT"}
+                                    description={"SlowHttpTest is a tool used to  simulate some application layer Denial of Service attacks by prolonging HTTP connections in different ways"}
+                                    url={"https://www.kali.org/tools/slowhttptest/"}
                                 />
                                 <Reference
                                     name={"SMBEnumeration"}
