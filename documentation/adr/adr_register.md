@@ -6,7 +6,7 @@
 | 0003   | Integrating WafW00f for Web Application Firewall Detection                                    | APPROVED |
 | 0004   |                                                                                               |          |
 | 0005   | RESERVED                                                                                      |          |
-| 0006   | RESERVED                                                                                      |          |
+| 0006   | Implementation of TCPdump into PTGUI                                                          | APPROVED |
 | 0007   |                                                                                               |          |
 | 0008   |                                                                                               |          |
 | 0009   |                                                                                               |          |
