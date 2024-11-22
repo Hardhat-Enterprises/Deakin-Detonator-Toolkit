@@ -427,8 +427,8 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"Testssl.sh"}
-                                    description={"PLACEHOLDER TEXT"}
-                                    url={"PLACEHOLDER TEXT"}
+                                    description={"testssl.sh is a free command line tool which checks a server's service on any port for the support of TLS/SSL ciphers, protocols as well as cryptographic flaws"}
+                                    url={"https://testssl.sh/"}
                                 />
                                 <Reference
                                     name={"Tiger"}
@@ -451,8 +451,8 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"Unicornscan"}
-                                    description={"PLACEHOLDER TEXT"}
-                                    url={"PLACEHOLDER TEXT"}
+                                    description={"Unicornscan is a new information gathering and correlation engine built for and by members of the security research and testing communities."}
+                                    url={"https://www.kali.org/tools/unicornscan/"}
                                 />
                                 <Reference
                                     name={"Urlsnarf"}
