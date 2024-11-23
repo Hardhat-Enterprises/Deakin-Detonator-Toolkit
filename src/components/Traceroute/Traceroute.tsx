@@ -8,7 +8,8 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { ChatGPTHelper } from "../../utils/ChatGPTHelper";
+import AskChatGPT from "../AskChatGPT/AskChatGPT";
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
 
 /**
  * FormValuesType defines the structure for the form values used in the TracerouteTool component.
@@ -40,8 +41,6 @@ const Traceroute = () => {
     const [allowSave, setAllowSave] = useState(false); // State variable indicating whether the current state is valid and the results can be saved.
     const [hasSaved, setHasSaved] = useState(false); // State variable that tracks whether the results have already been saved to avoid redundant operations.
     const [chatGPTResponse, setChatGPTResponse] = useState("");
-    const [chatGPTLoading, setChatGPTLoading] = useState(false);
-
     // Form hook to handle form input.
 
     // Component Constants.
@@ -88,26 +87,6 @@ const Traceroute = () => {
                 setLoadingModal(false);
             });
     }, []);
-
-    const handleAskChatGPT = async () => {
-        if (!output) {
-            setChatGPTResponse("Please run the traceroute command first.");
-            return;
-        }
-
-        setChatGPTLoading(true);
-        try {
-            const response = await ChatGPTHelper.sendToChatGPT(
-                "Analyze the following traceroute output for potential insights:",
-                output
-            );
-            setChatGPTResponse(response);
-        } catch (error) {
-            setChatGPTResponse(`Error: ${error.message}`);
-        } finally {
-            setChatGPTLoading(false);
-        }
-    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -279,17 +258,15 @@ const Traceroute = () => {
                     />
                     <Button type={"submit"}>start traceroute</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button onClick={handleAskChatGPT} disabled={!output || chatGPTLoading}>
-                        {chatGPTLoading ? "Asking ChatGPT..." : "Ask ChatGPT"}
-                    </Button>
+
+                    <AskChatGPT toolInput={title} output={output} setChatGPTResponse={setChatGPTResponse} />
                     {chatGPTResponse && (
-                        <div>
+                        <div style={{ marginTop: "20px" }}>
                             <h3>ChatGPT Response:</h3>
-                            <div style={{ whiteSpace: "pre-wrap", fontFamily: "monospace", lineHeight: "1.5" }}>
-                                {chatGPTResponse}
-                            </div>
+                            <ChatGPTOutput output={chatGPTResponse} />
                         </div>
                     )}
+
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
