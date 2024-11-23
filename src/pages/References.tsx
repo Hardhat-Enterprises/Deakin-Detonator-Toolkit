@@ -89,9 +89,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"Arpaname"}
-                                    description={
-                                        "Translate IP addresses to the corresponding ARPA names."
-                                    }
+                                    description={"Translate IP addresses to the corresponding ARPA names."}
                                     url={"https://www.kali.org/tools/bind9/#arpaname"}
                                 />
                                 <Reference
@@ -186,9 +184,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"DNSMap"}
-                                    description={
-                                        "DNSMap can scan for subdomains using brute-forcing techniques."
-                                    }
+                                    description={"DNSMap can scan for subdomains using brute-forcing techniques."}
                                     url={"https://www.kali.org/tools/dnsmap/"}
                                 />
                                 <Reference
@@ -264,9 +260,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"GyoiThon"}
-                                    description={
-                                        "GyoiThon is Intelligence Gathering tool for Web Server."
-                                    }
+                                    description={"GyoiThon is Intelligence Gathering tool for Web Server."}
                                     url={"https://www.kali.org/tools/goldeneye/"}
                                 />
                                 <Reference
@@ -290,9 +284,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"JohnTheRipper"}
-                                    description={
-                                        "JohnTheRipper is a free and open source password cracking tool."
-                                    }
+                                    description={"JohnTheRipper is a free and open source password cracking tool."}
                                     url={"https://www.openwall.com/john"}
                                 />
                                 <Reference
@@ -338,9 +330,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"NSLookup"}
-                                    description={
-                                        "NSlookup  is  a program to query Internet domain name servers."
-                                    }
+                                    description={"NSlookup  is  a program to query Internet domain name servers."}
                                     url={"https://www.kali.org/tools/bind9/#nslookup"}
                                 />
                                 <Reference
@@ -359,16 +349,12 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"RainbowCrack"}
-                                    description={
-                                        "RainbowCrack is a tool used to crack hashes with rainbow tables."
-                                    }
+                                    description={"RainbowCrack is a tool used to crack hashes with rainbow tables."}
                                     url={"https://www.kali.org/tools/rainbowcrack/"}
                                 />
                                 <Reference
                                     name={"RTsort"}
-                                    description={
-                                        "RTSort is a tool within RainbowCrack, used to sort rainbow table."
-                                    }
+                                    description={"RTSort is a tool within RainbowCrack, used to sort rainbow table."}
                                     url={"https://www.kali.org/tools/rainbowcrack/"}
                                 />
                                 <Reference
@@ -387,9 +373,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"Sherlock"}
-                                    description={
-                                        "Sherlock is used to search for usernames across social networks."
-                                    }
+                                    description={"Sherlock is used to search for usernames across social networks."}
                                     url={"https://www.kali.org/tools/sherlock/"}
                                 />
                                 <Reference
@@ -411,24 +395,18 @@ const ReferencesPage = () => {
                                     description={
                                         "SMBenumeration is a tool used for enumerating information from SMB (Server Message Block)."
                                     }
-                                    url={
-                                        "https://securiumsolutions.com/smb-enumeration-a-guide-step-by-step/"
-                                    }
+                                    url={"https://securiumsolutions.com/smb-enumeration-a-guide-step-by-step/"}
                                 />
                                 <Reference
                                     name={"SMBGhostScanner"}
                                     description={
                                         "SMB Ghost Scanner is a tool used for network scanning and vulnerability assessment."
                                     }
-                                    url={
-                                        "https://github.com/w1ld3r/SMBGhost_Scanner?tab=readme-ov-file"
-                                    }
+                                    url={"https://github.com/w1ld3r/SMBGhost_Scanner?tab=readme-ov-file"}
                                 />
                                 <Reference
                                     name={"Snmp-check"}
-                                    description={
-                                        "Snmp-check is a tool for enumerating on SNMP services."
-                                    }
+                                    description={"Snmp-check is a tool for enumerating on SNMP services."}
                                     url={"https://www.kali.org/tools/snmpcheck/"}
                                 />
                                 <Reference
@@ -480,9 +458,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"TShark"}
-                                    description={
-                                        "TShark is a tool to dump and analyze network traffic."
-                                    }
+                                    description={"TShark is a tool to dump and analyze network traffic."}
                                     url={"https://www.kali.org/tools/wireshark/#tshark-1"}
                                 />
                                 <Reference
@@ -513,16 +489,12 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"Whois"}
-                                    description={
-                                        "Whois is a command-line tool used to query databases."
-                                    }
+                                    description={"Whois is a command-line tool used to query databases."}
                                     url={"https://www.kali.org/tools/whois/"}
                                 />
                                 <Reference
                                     name={"Wifite"}
-                                    description={
-                                        "Wifite is a tool to audit WEP or WPA encrypted wireless networks."
-                                    }
+                                    description={"Wifite is a tool to audit WEP or WPA encrypted wireless networks."}
                                     url={"https://www.kali.org/tools/wifite/"}
                                 />
                                 <Reference
@@ -537,7 +509,7 @@ const ReferencesPage = () => {
                     </Accordion.Panel>
                 </Accordion.Item>
 
-                {/* Attack Vectors Category- */}
+                {/* Attack Vectors Category-- */}
                 <Accordion.Item value="AttackVectors">
                     <Accordion.Control icon={<IconTarget size={16} color={getColor("red")} />}>
                         <Title order={4}>Attack Vectors</Title>
@@ -550,15 +522,11 @@ const ReferencesPage = () => {
                                     description={
                                         "CVE-2022-1388 allows undisclosed requests to bypass iControl REST authentication."
                                     }
-                                    url={
-                                        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-1388"
-                                    }
+                                    url={"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-1388"}
                                 />
                                 <Reference
                                     name={"CVE-2021-41773"}
-                                    description={
-                                        "CVE-2021-41773 allows directory traversal attacks."
-                                    }
+                                    description={"CVE-2021-41773 allows directory traversal attacks."}
                                     url={"cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-41773"}
                                 />
                                 <Reference
@@ -573,9 +541,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"CVE-2022-27925"}
-                                    description={
-                                        "Zimbra Collaboration Suite - Remote Code Execution."
-                                    }
+                                    description={"Zimbra Collaboration Suite - Remote Code Execution."}
                                     url={"https://github.com/M4xSec/Apache-APISIX-CVE-2022-24112"}
                                 />
                                 <Reference
@@ -585,9 +551,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"CVE-2022-27925"}
-                                    description={
-                                        "Zimbra Collaboration Suite - Remote Code Execution"
-                                    }
+                                    description={"Zimbra Collaboration Suite - Remote Code Execution"}
                                     url={"https://arcticwolf.com/resources/blog/cve-2022-27925/"}
                                 />
                                 <Reference
