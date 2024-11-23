@@ -71,6 +71,7 @@ const ReferencesPage = () => {
                                     }
                                     url={"https://www.kali.org/tools/amap/"}
                                 />
+
                                  <Reference
                                     name={"Amass"}
                                     description={
@@ -78,6 +79,7 @@ const ReferencesPage = () => {
                                     }
                                     url={"https://github.com/owasp-amass/amass"}
                                 />
+
                                 <Reference
                                     name={"Arjun"}
                                     description={
@@ -87,9 +89,12 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"Arpaname"}
+
                                     description={
                                         "Translate IP addresses to the corresponding ARPA names."
                                     }
+                                    description={"Translate IP addresses to the corresponding ARPA names."}
+
                                     url={"https://www.kali.org/tools/bind9/#arpaname"}
                                 />
                                 <Reference
@@ -158,6 +163,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"Crunch"}
+
                                     description={
                                         "Crunch is a wordlist generator."
                                     }
@@ -301,6 +307,7 @@ const ReferencesPage = () => {
                                     description={
                                         "JohnTheRipper is a free and open source password cracking tool."
                                     }
+                                    description={"JohnTheRipper is a free and open source password cracking tool."}
                                     url={"https://www.openwall.com/john"}
                                 />
                                 <Reference
@@ -510,6 +517,13 @@ const ReferencesPage = () => {
                                     name={"Urlsnarf"}
                                     description={
                                         "Urlsnarf is a tool within dsniff package, which contains tools for listening and creating network traffic."
+                                    description={"TShark is a tool to dump and analyze network traffic"}
+                                    url={"https://www.kali.org/tools/wireshark/#tshark-1"}
+                                />
+                                <Reference
+                                    name={"Urlsnarf"}
+                                    description={
+                                        "Urlsnarf is a tool within dsniff package, which contains tools for listening and creating network traffic"
                                     }
                                     url={"https://www.kali.org/tools/dsniff/"}
                                 />
@@ -518,6 +532,7 @@ const ReferencesPage = () => {
                                     description={
                                         "WhatWeb identifies websites."
                                     }
+                                    description={"WhatWeb identifies websites."}
                                     url={"https://www.kali.org/tools/whatweb/"}
                                 />
                                 <Reference
@@ -525,6 +540,7 @@ const ReferencesPage = () => {
                                     description={
                                         "Whois is a command-line tool used to query databases."
                                     }
+                                    description={"Whois is a command-line tool used to query databases."}
                                     url={"https://www.kali.org/tools/whois/"}
                                 />
                                 <Reference
@@ -532,6 +548,7 @@ const ReferencesPage = () => {
                                     description={
                                         "Wifite is a tool to audit WEP or WPA encrypted wireless networks."
                                     }
+                                    description={"Wifite is a tool to audit WEP or WPA encrypted wireless networks"}
                                     url={"https://www.kali.org/tools/wifite/"}
                                 />
                                 <Reference
@@ -587,6 +604,16 @@ const ReferencesPage = () => {
                                     description={
                                         "Zimbra Collaboration Suite - Remote Code Execution."
                                     }
+                                    url={"https://github.com/M4xSec/Apache-APISIX-CVE-2022-24112"}
+                                />
+                                <Reference
+                                    name={"CVE-2022-26134"}
+                                    description={"CVE-2022-26134 allows Remote Code Execution."}
+                                    url={"https://github.com/hev0x/CVE-2022-26134"}
+                                />
+                                <Reference
+                                    name={"CVE-2022-27925"}
+                                    description={"Zimbra Collaboration Suite - Remote Code Execution"}
                                     url={"https://arcticwolf.com/resources/blog/cve-2022-27925/"}
                                 />
                                 <Reference
