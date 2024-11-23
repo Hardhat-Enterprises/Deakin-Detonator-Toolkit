@@ -7,7 +7,7 @@
 | 0004   |                                                                                               |          |
 | 0005   | RESERVED                                                                                      |          |
 | 0006   | Implementation of TCPdump into PTGUI                                                          | APPROVED |
-| 0007   |                                                                                               |          |
+| 0007   | Introduction of OpenAPI integration                                                           | PROPOSED |
 | 0008   |                                                                                               |          |
 | 0009   |                                                                                               |          |
 | 0010   |                                                                                               |          |
