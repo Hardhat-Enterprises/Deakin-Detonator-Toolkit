@@ -6,7 +6,7 @@ export const ChatGPTHelper = {
      * @returns The response from ChatGPT as a string.
      */
     async sendToChatGPT(prompt: string, data: string): Promise<string> {
-        const apiKey = process.env.OPENAI_API_KEY;
+        const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
         const apiUrl = "https://api.openai.com/v1/chat/completions";
 
         if (!apiKey) {
