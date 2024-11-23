@@ -89,12 +89,9 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"Arpaname"}
-
                                     description={
                                         "Translate IP addresses to the corresponding ARPA names."
                                     }
-                                    description={"Translate IP addresses to the corresponding ARPA names."}
-
                                     url={"https://www.kali.org/tools/bind9/#arpaname"}
                                 />
                                 <Reference
@@ -307,7 +304,6 @@ const ReferencesPage = () => {
                                     description={
                                         "JohnTheRipper is a free and open source password cracking tool."
                                     }
-                                    description={"JohnTheRipper is a free and open source password cracking tool."}
                                     url={"https://www.openwall.com/john"}
                                 />
                                 <Reference
@@ -532,7 +528,6 @@ const ReferencesPage = () => {
                                     description={
                                         "WhatWeb identifies websites."
                                     }
-                                    description={"WhatWeb identifies websites."}
                                     url={"https://www.kali.org/tools/whatweb/"}
                                 />
                                 <Reference
@@ -540,7 +535,6 @@ const ReferencesPage = () => {
                                     description={
                                         "Whois is a command-line tool used to query databases."
                                     }
-                                    description={"Whois is a command-line tool used to query databases."}
                                     url={"https://www.kali.org/tools/whois/"}
                                 />
                                 <Reference
@@ -548,7 +542,6 @@ const ReferencesPage = () => {
                                     description={
                                         "Wifite is a tool to audit WEP or WPA encrypted wireless networks."
                                     }
-                                    description={"Wifite is a tool to audit WEP or WPA encrypted wireless networks"}
                                     url={"https://www.kali.org/tools/wifite/"}
                                 />
                                 <Reference
