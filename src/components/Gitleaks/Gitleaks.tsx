@@ -40,10 +40,10 @@ function Gitleaks() {
         "Gitleaks is a tool for detecting hardcoded secrets like passwords, API keys, and tokens in git repositories."; // Description of the component.
     const steps =
         "Step 1: Enter the path to the directory you want to scan for secrets.\n" +
-            "\t=> E.g: /home/kali/Desktop/My-Project/Deakin-Detonator-Toolkit/\n" +
+        "\t=> E.g: /home/kali/Desktop/My-Project/Deakin-Detonator-Toolkit/\n" +
         "Step 2: (Optional) Enable advanced mode and configure additional options.\n" +
-            "\t=> Log options = trace, debug, info, warn, error, fatal.\n" +
-            "\t=> Output file must already exist. E.g.: /home/kali/Desktop/My-Project/logfile.txt\n"+
+        "\t=> Log options = trace, debug, info, warn, error, fatal.\n" +
+        "\t=> Output file must already exist. E.g.: /home/kali/Desktop/My-Project/logfile.txt\n" +
         "Step 3: Click the 'Start Gitleaks' button to initiate the scanning process.\n" +
         "Step 4: Review the output in the console to identify any detected secrets or sensitive information.\n";
     const sourceLink = "https://www.kali.org/tools/gitleaks/"; // Link to the source code or Kali Tools page.
