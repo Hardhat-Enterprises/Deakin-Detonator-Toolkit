@@ -537,7 +537,7 @@ const ReferencesPage = () => {
                     </Accordion.Panel>
                 </Accordion.Item>
 
-                {/* Attack Vectors Category */}
+                {/* Attack Vectors Category- */}
                 <Accordion.Item value="AttackVectors">
                     <Accordion.Control icon={<IconTarget size={16} color={getColor("red")} />}>
                         <Title order={4}>Attack Vectors</Title>
