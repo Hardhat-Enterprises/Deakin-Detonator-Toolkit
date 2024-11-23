@@ -4,7 +4,8 @@ import { Reference } from "../components/Reference/Reference";
 
 const ReferencesPage = () => {
     const theme = useMantineTheme();
-    const getColor = (color: string) => theme.colors[color][theme.colorScheme === "dark" ? 5 : 7];
+    const getColor = (color: string) =>
+        theme.colors[color][theme.colorScheme === "dark" ? 5 : 7];
 
     return (
         <>
@@ -16,7 +17,9 @@ const ReferencesPage = () => {
             <Accordion multiple>
                 {/* GUI Development Category */}
                 <Accordion.Item value="GUIDevelopment">
-                    <Accordion.Control icon={<IconTools size={16} color={getColor("blue")} />}>
+                    <Accordion.Control
+                        icon={<IconTools size={16} color={getColor("blue")} />}
+                    >
                         <Title order={4}>GUI Development</Title>
                     </Accordion.Control>
                     <Accordion.Panel>
@@ -24,17 +27,23 @@ const ReferencesPage = () => {
                             <Stack align="center" spacing="md">
                                 <Reference
                                     name={"ReactJS"}
-                                    description={"Deakin Detonator Toolkit is built using ReactJS"}
+                                    description={
+                                        "Deakin Detonator Toolkit is built using ReactJS"
+                                    }
                                     url={"https://www.reactjs.org"}
                                 />
                                 <Reference
                                     name={"Mantine"}
-                                    description={"Mantine is a React UI component library"}
+                                    description={
+                                        "Mantine is a React UI component library"
+                                    }
                                     url={"https://mantine.dev"}
                                 />
                                 <Reference
                                     name={"TypeScript"}
-                                    description={"TypeScript is a typed superset of JavaScript"}
+                                    description={
+                                        "TypeScript is a typed superset of JavaScript"
+                                    }
                                     url={"https://www.typescriptlang.org"}
                                 />
                             </Stack>
@@ -44,7 +53,11 @@ const ReferencesPage = () => {
 
                 {/* Tools Category */}
                 <Accordion.Item value="Tools">
-                    <Accordion.Control icon={<IconTools size={16} color={getColor("violet")} />}>
+                    <Accordion.Control
+                        icon={
+                            <IconTools size={16} color={getColor("violet")} />
+                        }
+                    >
                         <Title order={4}>Tools</Title>
                     </Accordion.Control>
                     <Accordion.Panel>
@@ -55,14 +68,18 @@ const ReferencesPage = () => {
                                     description={
                                         "Airbase-ng is multi-purpose tool aimed at attacking clients as opposed to the Access Point (AP) itself."
                                     }
-                                    url={"https://www.kali.org/tools/aircrack-ng/#airbase-ng"}
+                                    url={
+                                        "https://www.kali.org/tools/aircrack-ng/#airbase-ng"
+                                    }
                                 />
                                 <Reference
                                     name={"Aircrack-NG"}
                                     description={
                                         "Aircrack-ng is a network security tool used for cracking WEP and WPA/WPA2 passwords by capturing and analyzing wireless network traffic."
                                     }
-                                    url={"https://www.kali.org/tools/aircrack-ng/"}
+                                    url={
+                                        "https://www.kali.org/tools/aircrack-ng/"
+                                    }
                                 />
                                 <Reference
                                     name={"Amap"}
@@ -72,7 +89,7 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/amap/"}
                                 />
 
-                                 <Reference
+                                <Reference
                                     name={"Amass"}
                                     description={
                                         "The OWASP Amass Project performs network mapping of attack surfaces and external asset discovery using open source information gathering and active reconnaissance techniques."
@@ -92,14 +109,18 @@ const ReferencesPage = () => {
                                     description={
                                         "Translate IP addresses to the corresponding ARPA names."
                                     }
-                                    url={"https://www.kali.org/tools/bind9/#arpaname"}
+                                    url={
+                                        "https://www.kali.org/tools/bind9/#arpaname"
+                                    }
                                 />
                                 <Reference
                                     name={"Arpfingerprint"}
                                     description={
                                         "Arpfingerprint is a tool within arp-scan which fingerprint a system using ARP."
                                     }
-                                    url={"https://www.kali.org/tools/arp-scan/#arp-fingerprint"}
+                                    url={
+                                        "https://www.kali.org/tools/arp-scan/#arp-fingerprint"
+                                    }
                                 />
                                 <Reference
                                     name={"Arping"}
@@ -120,7 +141,9 @@ const ReferencesPage = () => {
                                     description={
                                         "Arpspoof is a tool within dsniff package. It intercept packets on a switched LAN."
                                     }
-                                    url={"https://www.kali.org/tools/dsniff/#arpspoof"}
+                                    url={
+                                        "https://www.kali.org/tools/dsniff/#arpspoof"
+                                    }
                                 />
                                 <Reference
                                     name={"BED"}
@@ -149,18 +172,21 @@ const ReferencesPage = () => {
                                     description={
                                         "Cloudbrute is a tool for cloud enumeration and infrastructure discovery in various cloud providers."
                                     }
-                                    url={"https://www.kali.org/tools/cloudbrute/"}
+                                    url={
+                                        "https://www.kali.org/tools/cloudbrute/"
+                                    }
                                 />
                                 <Reference
                                     name={"CrackMapExec"}
                                     description={
                                         "CrackMapExec is a post-exploitation tool used for pentesting Windows/Active Directory environments."
                                     }
-                                    url={"https://www.kali.org/tools/crackmapexec/"}
+                                    url={
+                                        "https://www.kali.org/tools/crackmapexec/"
+                                    }
                                 />
                                 <Reference
                                     name={"Crunch"}
-
                                     description={
                                         "Crunch is a wordlist generator."
                                     }
@@ -206,28 +232,36 @@ const ReferencesPage = () => {
                                     description={
                                         "Enux4Linux is a tool for enumerating information from Windows and Samba systems."
                                     }
-                                    url={"https://www.kali.org/tools/enum4linux/"}
+                                    url={
+                                        "https://www.kali.org/tools/enum4linux/"
+                                    }
                                 />
                                 <Reference
                                     name={"ExifTool"}
                                     description={
                                         "ExifTool is a customizable set of Perl modules plus a full-featured command-line application called exiftool for reading and writing meta information in a wide variety of files."
                                     }
-                                    url={"https://www.kali.org/tools/libimage-exiftool-perl/"}
+                                    url={
+                                        "https://www.kali.org/tools/libimage-exiftool-perl/"
+                                    }
                                 />
                                 <Reference
                                     name={"Eyewitness"}
                                     description={
                                         "EyeWitness is designed to take screenshots of websites, provide some server header info, and identify default credentials if possible."
                                     }
-                                    url={"https://www.kali.org/tools/eyewitness/"}
+                                    url={
+                                        "https://www.kali.org/tools/eyewitness/"
+                                    }
                                 />
                                 <Reference
                                     name={"Fcrackzip"}
                                     description={
                                         "fcrackzip is a fast password cracker."
                                     }
-                                    url={"https://www.kali.org/tools/fcrackzip/"}
+                                    url={
+                                        "https://www.kali.org/tools/fcrackzip/"
+                                    }
                                 />
                                 <Reference
                                     name={"Ffuf"}
@@ -269,20 +303,22 @@ const ReferencesPage = () => {
                                     description={
                                         "GoldenEye is a HTTP DoS Test Tool."
                                     }
-                                    url={"https://www.kali.org/tools/goldeneye/"}
+                                    url={
+                                        "https://www.kali.org/tools/goldeneye/"
+                                    }
                                 />
                                 <Reference
                                     name={"GyoiThon"}
                                     description={
                                         "GyoiThon is Intelligence Gathering tool for Web Server."
                                     }
-                                    url={"https://www.kali.org/tools/goldeneye/"}
+                                    url={
+                                        "https://www.kali.org/tools/goldeneye/"
+                                    }
                                 />
                                 <Reference
                                     name={"Hashcat"}
-                                    description={
-                                        "Hashcat has cracking tools"
-                                    }
+                                    description={"Hashcat has cracking tools"}
                                     url={"https://hashcat.net/hashcat"}
                                 />
                                 <Reference
@@ -308,9 +344,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"Masscan"}
-                                    description={
-                                        "MASSCAN is TCP port scanner."
-                                    }
+                                    description={"MASSCAN is TCP port scanner."}
                                     url={"https://www.kali.org/tools/masscan/"}
                                 />
                                 <Reference
@@ -318,14 +352,18 @@ const ReferencesPage = () => {
                                     description={
                                         "Metagoofil is an information gathering tool."
                                     }
-                                    url={"https://www.kali.org/tools/metagoofil/"}
+                                    url={
+                                        "https://www.kali.org/tools/metagoofil/"
+                                    }
                                 />
                                 <Reference
                                     name={"MSFvenom"}
                                     description={
                                         "MSFVenom is a command-line tool that is part of the Metasploit framework."
                                     }
-                                    url={"https://www.offsec.com/metasploit-unleashed/msfvenom/"}
+                                    url={
+                                        "https://www.offsec.com/metasploit-unleashed/msfvenom/"
+                                    }
                                 />
                                 <Reference
                                     name={"NBTscan"}
@@ -360,7 +398,9 @@ const ReferencesPage = () => {
                                     description={
                                         "NSlookup  is  a program to query Internet domain name servers."
                                     }
-                                    url={"https://www.kali.org/tools/bind9/#nslookup"}
+                                    url={
+                                        "https://www.kali.org/tools/bind9/#nslookup"
+                                    }
                                 />
                                 <Reference
                                     name={"Parsero"}
@@ -381,28 +421,36 @@ const ReferencesPage = () => {
                                     description={
                                         "RainbowCrack is a tool used to crack hashes with rainbow tables."
                                     }
-                                    url={"https://www.kali.org/tools/rainbowcrack/"}
+                                    url={
+                                        "https://www.kali.org/tools/rainbowcrack/"
+                                    }
                                 />
                                 <Reference
                                     name={"RTsort"}
                                     description={
                                         "RTSort is a tool within RainbowCrack, used to sort rainbow table."
                                     }
-                                    url={"https://www.kali.org/tools/rainbowcrack/"}
+                                    url={
+                                        "https://www.kali.org/tools/rainbowcrack/"
+                                    }
                                 />
                                 <Reference
                                     name={"RTgen"}
                                     description={
                                         "RTgen is a tool within RainbowCrack, used to implement hash algorithms."
                                     }
-                                    url={"https://www.kali.org/tools/rainbowcrack/"}
+                                    url={
+                                        "https://www.kali.org/tools/rainbowcrack/"
+                                    }
                                 />
                                 <Reference
                                     name={"SearchSploit"}
                                     description={
                                         "SearchSploit is a tool to search the Exploit Database for public exploits and vulnerabilities."
                                     }
-                                    url={"https://www.kali.org/tools/exploitdb/#searchsploit"}
+                                    url={
+                                        "https://www.kali.org/tools/exploitdb/#searchsploit"
+                                    }
                                 />
                                 <Reference
                                     name={"Sherlock"}
@@ -423,35 +471,45 @@ const ReferencesPage = () => {
                                     description={
                                         "SlowHttpTest is a tool used to  simulate some application layer Denial of Service attacks by prolonging HTTP connections in different ways."
                                     }
-                                    url={"https://www.kali.org/tools/slowhttptest/"}
+                                    url={
+                                        "https://www.kali.org/tools/slowhttptest/"
+                                    }
                                 />
                                 <Reference
                                     name={"SMBEnumeration"}
                                     description={
                                         "SMBenumeration is a tool used for enumerating information from SMB (Server Message Block)."
                                     }
-                                    url={"https://securiumsolutions.com/smb-enumeration-a-guide-step-by-step/"}
+                                    url={
+                                        "https://securiumsolutions.com/smb-enumeration-a-guide-step-by-step/"
+                                    }
                                 />
                                 <Reference
                                     name={"SMBGhostScanner"}
                                     description={
                                         "SMB Ghost Scanner is a tool used for network scanning and vulnerability assessment."
                                     }
-                                    url={"https://github.com/w1ld3r/SMBGhost_Scanner?tab=readme-ov-file"}
+                                    url={
+                                        "https://github.com/w1ld3r/SMBGhost_Scanner?tab=readme-ov-file"
+                                    }
                                 />
                                 <Reference
                                     name={"Snmp-check"}
                                     description={
                                         "Snmp-check is a tool for enumerating on SNMP services."
                                     }
-                                    url={"https://www.kali.org/tools/snmpcheck/"}
+                                    url={
+                                        "https://www.kali.org/tools/snmpcheck/"
+                                    }
                                 />
-                                 <Reference
+                                <Reference
                                     name={"SQLMap"}
                                     description={
                                         "sqlmap automates the process of detecting and exploiting SQL injection flaws."
                                     }
-                                    url={"https://github.com/sqlmapproject/sqlmap"}
+                                    url={
+                                        "https://github.com/sqlmapproject/sqlmap"
+                                    }
                                 />
                                 <Reference
                                     name={"Sqlninja"}
@@ -465,14 +523,18 @@ const ReferencesPage = () => {
                                     description={
                                         "Sublist3r is a tool designed to enumerate subdomains of websites using OSINT."
                                     }
-                                    url={"https://www.kali.org/tools/sublist3r/"}
+                                    url={
+                                        "https://www.kali.org/tools/sublist3r/"
+                                    }
                                 />
                                 <Reference
                                     name={"TheHarvester"}
                                     description={
                                         "The Harvester is a tool for gathering emails, subdomains, IPs, and URLs from public sources for reconnaissance."
                                     }
-                                    url={"https://www.kali.org/tools/theharvester/"}
+                                    url={
+                                        "https://www.kali.org/tools/theharvester/"
+                                    }
                                 />
                                 <Reference
                                     name={"Testssl.sh"}
@@ -493,28 +555,36 @@ const ReferencesPage = () => {
                                     description={
                                         "The traceroute utility displays the route used by IP packets on their way to a specified network (or Internet) host."
                                     }
-                                    url={"https://www.kali.org/tools/traceroute/"}
+                                    url={
+                                        "https://www.kali.org/tools/traceroute/"
+                                    }
                                 />
                                 <Reference
                                     name={"TShark"}
                                     description={
                                         "TShark is a tool to dump and analyze network traffic."
                                     }
-                                    url={"https://www.kali.org/tools/wireshark/#tshark-1"}
+                                    url={
+                                        "https://www.kali.org/tools/wireshark/#tshark-1"
+                                    }
                                 />
                                 <Reference
                                     name={"Unicornscan"}
                                     description={
                                         "Unicornscan is a new information gathering and correlation engine built for and by members of the security research and testing communities."
                                     }
-                                    url={"https://www.kali.org/tools/unicornscan/"}
+                                    url={
+                                        "https://www.kali.org/tools/unicornscan/"
+                                    }
                                 />
                                 <Reference
                                     name={"Urlsnarf"}
                                     description={
                                         "Urlsnarf is a tool within dsniff package, which contains tools for listening and creating network traffic."
                                     }
-                                    url={"https://www.kali.org/tools/wireshark/#tshark-1"}
+                                    url={
+                                        "https://www.kali.org/tools/wireshark/#tshark-1"
+                                    }
                                 />
                                 <Reference
                                     name={"Urlsnarf"}
@@ -525,9 +595,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"WhatWeb"}
-                                    description={
-                                        "WhatWeb identifies websites."
-                                    }
+                                    description={"WhatWeb identifies websites."}
                                     url={"https://www.kali.org/tools/whatweb/"}
                                 />
                                 <Reference
@@ -558,7 +626,9 @@ const ReferencesPage = () => {
 
                 {/* Attack Vectors Category */}
                 <Accordion.Item value="AttackVectors">
-                    <Accordion.Control icon={<IconTarget size={16} color={getColor("red")} />}>
+                    <Accordion.Control
+                        icon={<IconTarget size={16} color={getColor("red")} />}
+                    >
                         <Title order={4}>Attack Vectors</Title>
                     </Accordion.Control>
                     <Accordion.Panel>
@@ -569,66 +639,90 @@ const ReferencesPage = () => {
                                     description={
                                         "CVE-2022-1388 allows undisclosed requests to bypass iControl REST authentication."
                                     }
-                                    url={"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-1388"}
+                                    url={
+                                        "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-1388"
+                                    }
                                 />
                                 <Reference
                                     name={"CVE-2021-41773"}
                                     description={
                                         "CVE-2021-41773 allows directory traversal attacks."
                                     }
-                                    url={"cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-41773"}
+                                    url={
+                                        "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-41773"
+                                    }
                                 />
                                 <Reference
                                     name={"CVE-2021-44228"}
                                     description={
                                         "CVE-2021-44228 allows Remote Code Execution."
                                     }
-                                    url={"cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-44228"}
+                                    url={
+                                        "cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-44228"
+                                    }
                                 />
                                 <Reference
                                     name={"CVE-2022-24112"}
                                     description={
                                         "Apache APISIX - Remote Code Execution."
                                     }
-                                    url={"https://github.com/M4xSec/Apache-APISIX-CVE-2022-24112"}
+                                    url={
+                                        "https://github.com/M4xSec/Apache-APISIX-CVE-2022-24112"
+                                    }
                                 />
                                 <Reference
                                     name={"CVE-2022-27925"}
                                     description={
                                         "Zimbra Collaboration Suite - Remote Code Execution."
                                     }
-                                    url={"https://github.com/M4xSec/Apache-APISIX-CVE-2022-24112"}
+                                    url={
+                                        "https://github.com/M4xSec/Apache-APISIX-CVE-2022-24112"
+                                    }
                                 />
                                 <Reference
                                     name={"CVE-2022-26134"}
-                                    description={"CVE-2022-26134 allows Remote Code Execution."}
-                                    url={"https://github.com/hev0x/CVE-2022-26134"}
+                                    description={
+                                        "CVE-2022-26134 allows Remote Code Execution."
+                                    }
+                                    url={
+                                        "https://github.com/hev0x/CVE-2022-26134"
+                                    }
                                 />
                                 <Reference
                                     name={"CVE-2022-27925"}
-                                    description={"Zimbra Collaboration Suite - Remote Code Execution"}
-                                    url={"https://arcticwolf.com/resources/blog/cve-2022-27925/"}
+                                    description={
+                                        "Zimbra Collaboration Suite - Remote Code Execution"
+                                    }
+                                    url={
+                                        "https://arcticwolf.com/resources/blog/cve-2022-27925/"
+                                    }
                                 />
                                 <Reference
                                     name={"CVE-2022-36804"}
                                     description={
                                         "CVE-2022-36804 allows privilege escalation."
                                     }
-                                    url={"https://nvd.nist.gov/vuln/detail/CVE-2022-36804"}
+                                    url={
+                                        "https://nvd.nist.gov/vuln/detail/CVE-2022-36804"
+                                    }
                                 />
                                 <Reference
                                     name={"FindOffset"}
                                     description={
                                         "Find Offset identifies where a buffer overflow overwrites key memory addresses like EIP."
                                     }
-                                    url={"https://book.hacktricks.xyz/binary-exploitation/rop-return-oriented-programing/ret2lib/ret2lib-+-printf-leak-arm64#find-offset"}
+                                    url={
+                                        "https://book.hacktricks.xyz/binary-exploitation/rop-return-oriented-programing/ret2lib/ret2lib-+-printf-leak-arm64#find-offset"
+                                    }
                                 />
                                 <Reference
                                     name={"Zerologon"}
                                     description={
                                         "ZeroLogon allow domain admin access by exploiting weak Netlogon cryptography."
                                     }
-                                    url={"https://www.infosecinstitute.com/resources/vulnerabilities/zerologon-cve-2020-1472-technical-overview-and-walkthrough/"}
+                                    url={
+                                        "https://www.infosecinstitute.com/resources/vulnerabilities/zerologon-cve-2020-1472-technical-overview-and-walkthrough/"
+                                    }
                                 />
                             </Stack>
                         </Group>
