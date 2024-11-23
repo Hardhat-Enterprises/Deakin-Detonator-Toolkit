@@ -517,7 +517,7 @@ const ReferencesPage = () => {
                                     name={"Urlsnarf"}
                                     description={
                                         "Urlsnarf is a tool within dsniff package, which contains tools for listening and creating network traffic."
-                                    description={"TShark is a tool to dump and analyze network traffic"}
+                                    }
                                     url={"https://www.kali.org/tools/wireshark/#tshark-1"}
                                 />
                                 <Reference
