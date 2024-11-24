@@ -35,10 +35,10 @@ const Sherlock = () => {
     const description =
         "Sherlock is a tool used for searching social networks for specified usernames.\n\n" +
         "Further information can be found at: https://www.kali.org/tools/sherlock/\n\n" +
-        "Using Sherlock:\n\n" ;
-        
-    const steps = 
-    "*Note: For multiple usernames, add a space in between. E.g. 'Greg John Billy'*\n\n" +
+        "Using Sherlock:\n\n";
+
+    const steps =
+        "*Note: For multiple usernames, add a space in between. E.g. 'Greg John Billy'*\n\n" +
         "Step 1: Input the username(s) you wish to search for in the Username field.\n" +
         "       Eg: socialperson38\n\n" +
         "Step 2: Click Start Searching to commence Sherlock's operation.\n\n" +
@@ -154,13 +154,13 @@ const Sherlock = () => {
     }, [setOutput]);
 
     return (
-        <RenderComponent 
-        title={title} 
-        description={description} 
-        steps={steps} 
-        tutorial={tutorial} 
-        sourceLink={sourceLink}>
-            
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
