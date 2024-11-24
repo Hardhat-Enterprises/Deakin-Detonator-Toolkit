@@ -65,10 +65,15 @@ const AMAP = () => {
                 setIsCommandAvailable(isAvailable); // Set the command availability state
                 setOpened(!isAvailable); // Set the modal state to opened if the command is not available
                 setLoadingModal(false); // Set loading to false after the check is done
+
+                if (!isAvailable) {
+                    alert("Required dependency is not installed. Please install it to proceed.");
+                }
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+                setLoadingModal(false);
+                alert("An error occured while checking dependencies."); // Also set loading to false in case of error
             });
     }, []);
 
