@@ -258,7 +258,7 @@ const Traceroute = () => {
                     />
                     <Button type={"submit"}>start traceroute</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                     <AskChatGPT toolInput={title} output={output} setChatGPTResponse={setChatGPTResponse} />
                     {chatGPTResponse && (
                         <div style={{ marginTop: "20px" }}>
@@ -266,8 +266,6 @@ const Traceroute = () => {
                             <ChatGPTOutput output={chatGPTResponse} />
                         </div>
                     )}
-
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
         </RenderComponent>

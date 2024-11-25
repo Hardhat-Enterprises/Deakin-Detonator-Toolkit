@@ -24,6 +24,9 @@ const ChatGPTOutput = ({ output, clearOutputCallback, hideClearButton, title = "
     if (output) {
         return (
             <>
+                <p style={{ fontSize: "12px", color: "gray", marginTop: "10px" }}>
+                    Disclaimer: ChatGPT responses are automated and may not be 100% correct.
+                </p>
                 <div ref={outputContainerRef} style={{ maxHeight: "300px", overflowY: "auto" }}>
                     <Prism language={"markdown"}>{output}</Prism>
                 </div>
