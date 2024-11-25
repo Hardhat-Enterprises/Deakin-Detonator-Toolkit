@@ -5,6 +5,7 @@ import {
     ColorScheme,
     ColorSchemeProvider,
     Header,
+    Image,
     MantineProvider,
     MediaQuery,
     Text,
@@ -24,6 +25,7 @@ export default function App() {
     const theme = useMantineTheme();
     const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
     const [opened, setOpened] = useState(false);
+    const [imageSrc, setImageSrc] = useState<string>("");
 
     const toggleColorScheme = (value?: ColorScheme) => {
         const nextColorScheme = value || (colorScheme === "dark" ? "light" : "dark");
@@ -46,6 +48,13 @@ export default function App() {
 
     useEffect(() => {
         document.body.className = colorScheme + "-mode"; // Initialize body class
+        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        if (prefersDarkScheme) {
+            setImageSrc("/src/logo/logo-dark.png"); // Use dark mode logo
+        } else {
+            setImageSrc("/src/logo/logo-light.png"); // Use light mode logo
+        }
     }, [colorScheme]);
 
     return (
@@ -69,8 +78,11 @@ export default function App() {
                             </MediaQuery>
                         }
                         header={
-                            <Header height={70} p="md">
-                                <Center inline>
+                            <Header height={70} p="md" style={{ padding: "10px" }}>
+                                <Center
+                                    inline
+                                    style={{ display: "flex", justifyContent: "space-between", width: "100%" }}
+                                >
                                     <MediaQuery largerThan="sm" styles={{ display: "none" }}>
                                         <Burger
                                             opened={opened}
@@ -83,6 +95,14 @@ export default function App() {
                                     <Text className={"large-text"} inherit variant={"gradient"} component={"span"}>
                                         Deakin Detonator Toolkit
                                     </Text>
+                                    <Image
+                                        radius="md"
+                                        height={60}
+                                        width="auto"
+                                        fit="contain"
+                                        src={imageSrc}
+                                        alt="Logo"
+                                    />
                                 </Center>
                             </Header>
                         }
