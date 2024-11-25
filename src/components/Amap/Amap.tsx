@@ -35,11 +35,12 @@ const AMAP = () => {
 
     // Component Constants.
     const title = "AMAP"; // Title of the component.
-    const description = "AMAP is a tool for application protocol detection and service fingerprinting."; // Description of the component.
+    const description =
+        "AMAP is a tool for application protocol detection and service fingerprinting. These processes help identify the specific services running on a target host by analyzing network traffic and patterns."; // Description of the component.
     const steps =
         "Step 1: Enter the target host to scan.\n" +
         "Step 2: Specify the port(s) to scan.\n" +
-        "Step 3: (Optional) Enter additional options.\n" +
+        "Step 3: (Optional) Enter connection or response timeout settings.\n" +
         "Step 4: Click 'Start Scan' to begin the process.\n" +
         "Step 5: View the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/amap/"; // Link to the source code (or AMAP documentation).
@@ -65,10 +66,15 @@ const AMAP = () => {
                 setIsCommandAvailable(isAvailable); // Set the command availability state
                 setOpened(!isAvailable); // Set the modal state to opened if the command is not available
                 setLoadingModal(false); // Set loading to false after the check is done
+
+                if (!isAvailable) {
+                    alert("Required dependency is not installed. Please install it to proceed.");
+                }
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+                setLoadingModal(false);
+                alert("An error occured while checking dependencies."); // Also set loading to false in case of error
             });
     }, []);
 
