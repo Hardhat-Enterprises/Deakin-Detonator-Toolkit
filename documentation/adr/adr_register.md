@@ -11,4 +11,4 @@
 | 0008   |                                                                                               |          |
 | 0009   |                                                                                               |          |
 | 0010   |                                                                                               |          |
-| 0008   | Introduction of OpenAPI integration                                                           | PROPOSED |
+| 0011   | Introduction of OpenAPI integration                                                           | PROPOSED |
