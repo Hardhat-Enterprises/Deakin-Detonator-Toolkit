@@ -9,4 +9,4 @@
 5. Addd a name and select 'Create secret key'
 6. Copy the key
 7. Create a file called '.env' in the root directory of the project
-8. Add the following line and save: OPENAI_API_KEY="put your OpenAI API key here"
+8. Add the following line and save: VITE_OPENAI_API_KEY="put your OpenAI API key here"
