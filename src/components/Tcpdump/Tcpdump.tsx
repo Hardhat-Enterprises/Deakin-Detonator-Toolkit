@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { Button, Stack, TextInput, Alert } from "@mantine/core";
+import { Button,NativeSelect, Stack, TextInput, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -10,10 +10,13 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
- * Represents the form values for the ARPScan component.
+ * Represents the form values for the Tcpdump component.
+ * @field hostname: The IP address to be used
+ * @field Optionswitch: Allows the user to select the different options for scanning.
  */
 interface FormValuesType {
-    interface: string;
+    hostname: string;
+    Tcpdumpswitch: string;
 }
 
 /**
@@ -25,6 +28,8 @@ function Tcpdump() {
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [selectedScanOption, setSelectedTcpdumpOption] = useState(""); // State to store the selected scan type.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
@@ -46,11 +51,18 @@ function Tcpdump() {
     // Form hook to handle form input.
     const form = useForm<FormValuesType>({
         initialValues: {
-            interface: "",
+            hostname: "",
+            Tcpdumpswitch: ""
         },
     });
 
-    // Check the availability of all commands in the dependencies array.
+    const Tcpdumpswitch = [
+        "First 5 packets",
+        "TCP packets only"
+    ]
+
+
+    // Check the availability of commands in the dependencies array.
     useEffect(() => {
         // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
@@ -107,14 +119,6 @@ function Tcpdump() {
         [handleProcessData] // Dependency on the handleProcessData callback
     );
 
-    /**
-     * handleSaveComplete: Recognizes that the output file has been saved.
-     * Passes the saved status back to SaveOutputToTextFile_v2.
-     */
-    const handleSaveComplete = () => {
-        setHasSaved(true);
-        setAllowSave(false);
-    };
 
     /**
      * onSubmit: Asynchronous handler for the form submission event.
@@ -125,36 +129,46 @@ function Tcpdump() {
     const onSubmit = async (values: FormValuesType) => {
         // Set the loading state to true to indicate that the process is starting.
         setLoading(true);
-
-        // Disable saving the output to a file while the process is running.
-        setAllowSave(false);
-
-        // Construct the arguments for the Tcpdump command.
-        const args = ['/usr/share/ddt/Tcpdump.py', values.ip];                 //***Need to look at this if setting arguments***
-        const output = await CommandHelper.runCommand("python3", args);
+        let args = [""];
         
-        setOutput(output);
-        setLoading(false);
+        //Switch for different options
+        switch (values.Tcpdumpswitch) {
+            case "First 5 packets":
+                args = [`/usr/share/ddt/Bash-Scripts/Tcpdump.sh`];
+                args.push('-c 5 -i'); //Can put other options first, then hostname, tested
+                args.push(`${values.hostname}`);
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                        setAllowSave(true);
+                    })
+                    .catch((error: any) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
+            break;
 
-        //Not sure if need this block still?
+            case "TCP packets only":
+                args = [`/usr/share/ddt/Bash-Scripts/Tcpdump.sh`];
+                args.push('-c 20 tcp port 80 -i');
+                args.push(`${values.hostname}`)
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                        setAllowSave(true);
+                    })
+                    .catch((error: any) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
+            break;
 
-        // try {
-        //     // Execute the Tcpdump command using the CommandHelper utility with pkexec.
-        //     await CommandHelper.runCommandWithPkexec("arp-scan", args, handleProcessData, handleProcessTermination);
-        // } catch (error: any) {
-        //     // If an error occurs during command execution, display the error message.
-        //     setOutput(`Error: ${error.message}`);
-
-        //     // Set the loading state to false since the process failed.
-        //     setLoading(false);
-
-        //     // Allow saving the output (which includes the error message) to a file.
-        //     setAllowSave(true);
-        // }
-    };
+        }
 
     /**
-     * clearOutput: Callback function to clear the console output.
+     * clearOutput: Clears the screen
      * It resets the state variable holding the output, thereby clearing the display.
      */
     const clearOutput = useCallback(() => {
@@ -163,9 +177,12 @@ function Tcpdump() {
         setAllowSave(false);
     }, []);
 
-    return (
-        <>
-            {/* Render the UserGuide component with component details */}
+    const handleSaveComplete = useCallback(() => {
+        setHasSaved(true);
+        setAllowSave(false);
+    }, []);
+
+    return (        
             <RenderComponent
                 title={title}
                 description={description}
@@ -182,26 +199,27 @@ function Tcpdump() {
                         dependencies={dependencies}
                     ></InstallationModal>
                 )}
-                <form onSubmit={form.onSubmit(onSubmit)}>
-                    {/* Render the loading overlay and cancel button */}
-                    {LoadingOverlayAndCancelButton(loading, "")}
-                    <Stack>
-                        <TextInput label={"Network Interface"} required {...form.getInputProps("interface")} />
-                        {loading && (
-                            <Alert radius="md">Scanning network on interface: {form.values.interface}...</Alert>
-                        )}
-                        <Button type={"submit"} disabled={loading}>
-                            Start {title}
-                        </Button>
-                        {/* Render the save output to file component */}
-                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                        {/* Render the console wrapper component */}
-                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                    </Stack>
-                </form>
-            </RenderComponent>
-        </>
-    );
-}
+                <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, Tcpdumpswitch: selectedScanOption }))}>
+                        <Stack>
+                            {LoadingOverlayAndCancelButton(loading, pid)}
+                            <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
+                            <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("tracerouteOptions")} />
+                            <NativeSelect
+                                value={selectedScanOption}
+                                onChange={(e) => setSelectedTcpdumpOption(e.target.value)}
+                                title={"Traceroute option"}
+                                data={Tcpdumpswitch}
+                                required
+                                description={"Type of scan to perform"}
+                            />
+                            <Button type={"submit"}>start traceroute</Button>
+                            {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                            <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                        </Stack>
+                    </form>
+                </RenderComponent>
+            );
+        }    
+    }   
 
 export default Tcpdump;
