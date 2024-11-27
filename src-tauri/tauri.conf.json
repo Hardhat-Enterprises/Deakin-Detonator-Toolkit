@@ -382,6 +382,11 @@
                         "args": true
                     },
                     {
+                    "name": "geoiplookup",
+                    "cmd": "zip2john",
+                    "args": true
+                    },
+                    {
                         "name": "zip2john",
                         "cmd": "zip2john",
                         "args": true
