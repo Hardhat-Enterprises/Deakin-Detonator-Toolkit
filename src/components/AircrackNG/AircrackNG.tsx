@@ -18,12 +18,12 @@ interface FormValuesType {
     BSSID: string;
     ESSID: string;
     keyFile: string;
-    securityType: string;
     characters: string;
     MACAddress: string;
     PMKID: string;
     customConfig: string;
     fakeHost: string;
+    // securityType: string;
     // New channel: string;
     // New replayInterface: string;
     // New
@@ -35,7 +35,7 @@ const description = "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphr
 const steps =
     "How to use Aircrack-ng:\n\n" +
     "Step 1: Type in the path to wordlist(s) filename(s) including the extension .txt. e.g. 'example.txt'.\n" +
-    "For files containing hexadecimal values, you must put a “h:” in front of the file name.\n" +
+    "For files containing hexadecimal values, you must put a “h:” in front of the file name.\n" 
     "Step 2: Select the target network based on the access point's MAC address.\n" +
     "Step 3: Type in the name of your text file including the extension .txt. e.g. 'example.txt'.\n" +
     "Step 4: Click 'Start " +
@@ -57,7 +57,7 @@ const AircrackNG = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
-    const [selectedModeOption, setSelectedModeOption] = useState("");
+    const [selectedModeOption, setSelectedModeOption] = useState("WEP");
     const [advanceMode, setAdvanceMode] = useState(false);
     const [customMode, setCustomMode] = useState(false);
 
@@ -71,7 +71,7 @@ const AircrackNG = () => {
     const types = ["WEP", "WPA"]; // Security types supported by Aircrack-ng.
     //const typesRequiringAdvancedWEPConfig = ["WEP"]; // Security types requiring advanced WEP configuration.
     //const typesRequiringAdvancedWPAConfig = ["WPA"]; // Security types requiring advanced WPA configuration.
-    const characters = ["Alpha-Numeric", "Binary Coded Decimal", "Default"]; // Character types supported by Aircrack-ng.
+    const characters = ["Default", "Alpha-Numeric", "Binary Coded Decimal"]; // Character types supported by Aircrack-ng.
     const dependencies = ["aircrack-ng"]; // Dependencies required for the Aircrack-ng tool.
 
     useEffect(() => {
@@ -100,15 +100,15 @@ const AircrackNG = () => {
             BSSID: "",
             ESSID: "",
             keyFile: "",
-            securityType: "",
             characters: "",
             MACAddress: "",
             PMKID: "",
             customConfig: "",
             fakeHost: "",
-            //New channel: "",
-            //New replayInterface: "",
-            //New
+            // securityType: "",
+            // New channel: "",
+            // New replayInterface: "",
+            // New
         },
     });
 
@@ -177,27 +177,33 @@ const AircrackNG = () => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
-        // Construct arguments for the aircrack-ng command based on form input
+        // Initialise the arguments for the aircrack-ng command based on form input
         const args = [values.capFile];
-        values.wordList ? args.push(`-w`, values.wordList) : undefined;
-        values.keyFile ? args.push(`-l`, values.keyFile) : undefined;
-        if (selectedtype == "WEP") {
-            values.securityType ? args.push(`-a 1`, values.securityType) : undefined;
-            values.BSSID ? args.push(`-b`, values.BSSID) : undefined;
-        } else if (selectedtype == "WPA") {
-            values.securityType ? args.push(`-a 2`, values.securityType) : undefined;
-            values.ESSID ? args.push(`-e`, values.ESSID) : undefined;
-        }
-        //Advanced section
-        if (selectedtype == "WEP") {
-            selectedcharacter === "Alpha-Numeric" ? args.push(`-c`) : undefined;
-            selectedcharacter === "Binary Coded Decimal" ? args.push(`-t`) : undefined;
-            values.MACAddress ? args.push(`-m`, values.MACAddress) : undefined;
-        } else if (selectedtype == "WPA") {
-            values.PMKID ? args.push(`-I`, values.PMKID) : undefined;
-        }
-        //Custom Configuration section
-        values.customConfig ? args.push(values.customConfig) : undefined;
+        if (values.keyFile) args.push(`-l`, values.keyFile);
+
+        // WEP-specific options
+        //if (selectedtype == "WEP") {
+            //if (values.securityType) args.push(`-a 1`, values.securityType);
+        if (values.BSSID) args.push(`-b`, values.BSSID);
+
+        // Advanced WEP options
+        if (selectedcharacter === "Alpha-Numeric") args.push(`-c`);
+        if (selectedcharacter === "Binary Coded Decimal") args.push(`-t`);
+        if (values.MACAddress) args.push(`-m`, values.MACAddress);
+        //}
+
+        // WPA-specific options
+        //if (selectedtype == "WPA") {
+            //if (values.securityType) args.push(`-a 2`, values.securityType);
+        if (values.wordList) args.push(`-w`, values.wordList);
+        if (values.ESSID) args.push(`-e`, values.ESSID);
+
+            // Advanced WPA options
+            //if (values.PMKID) args.push(`-I`, values.PMKID);
+        //}
+
+        // Custom Configuration section
+        //if (values.customConfig) args.push(values.customConfig);
 
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("aircrack-ng", args, handleProcessData, handleProcessTermination)
@@ -230,6 +236,11 @@ const AircrackNG = () => {
     const isWEP = selectedModeOption === "WEP";
     const isWPA = selectedModeOption === "WPA";
 
+    // Resets the form whenever the mode changes (from WEP to WPA or vice versa)
+    useEffect(() => {
+        form.reset();
+    }, [selectedModeOption]);
+
     return (
         <RenderComponent
             title={title}
@@ -254,7 +265,6 @@ const AircrackNG = () => {
                         onChange={(e) => setSelectedModeOption(e.target.value)}
                         data={types}
                         required
-                        placeholder={"Pick a attack mode"}
                         label={"WEP or WPA-PSK"}
                     />
                     {isWEP && (
@@ -262,44 +272,46 @@ const AircrackNG = () => {
                             size="md"
                             label="Advanced Mode"
                             checked={advanceMode}
-                            onChange={(e) => setAdvanceMode(e.currentTarget.checked)}
+                            onChange={(e) => {
+                                const isChecked = e.currentTarget.checked;
+                                setAdvanceMode(isChecked);
+                                if (!isChecked) {
+                                    setSelectedCharacter("Default");  // Reset character selection when turning off Advanced Mode
+                                }
+                            }}
                         />
                     )}
-                    <TextInput
-                        label={"Path to wordlist(s) filename(s)."}
-                        required
-                        {...form.getInputProps("wordList")}
-                        {...form.getInputProps("filePath")}
-                    />
+                    {isWPA && (
+                        <TextInput
+                            label={"Wordlist(s) filename(s) (Please supply file path and filename)"}
+                            required
+                            {...form.getInputProps("wordList")}
+                        />
+                    )}
                     {isWEP && (
                         <TextInput
-                            label={"Set AP MAC address"}
+                            label={"Set AP MAC address (BSSID)"}
                             placeholder={"eg: xx:xx:xx:xx:xx:xx"}
-                            required
                             {...form.getInputProps("BSSID")}
                         />
                     )}
-                    {isWPA && <TextInput label={"Set AP identifier"} required {...form.getInputProps("ESSID")} />}
-                    {isWPA && (
-                        <TextInput
-                            label={"Use Pcap file (Please supply file path and filename )"}
-                            placeholder={"eg: x/x/*.cap"}
-                            required
-                            {...form.getInputProps("filePath")}
-                        />
-                    )}
+                    {isWPA && <TextInput label={"Set AP identifier"} {...form.getInputProps("ESSID")} />}
                     <TextInput
-                        label={"Save as key to output file (Please supply file path)"}
+                        label={"Packet capture file (Please supply file path and filename)"}
+                        placeholder={"eg: x/x/*.cap"}
                         required
-                        {...form.getInputProps("filePath")}
+                        {...form.getInputProps("capFile")}
+                    />
+                    <TextInput
+                        label={"Save as key to output file (Please supply file path and filename)"}
+                        {...form.getInputProps("keyFile")}
                     />
                     {advanceMode && isWEP && (
                         <NativeSelect
                             value={selectedcharacter}
                             onChange={(e) => setSelectedCharacter(e.target.value)}
                             data={characters}
-                            placeholder={"Set a character type you want"}
-                            label={"Alpha-Numeric or binary-coded decimal or default (leave unselected)"}
+                            label={"Alpha-numeric or binary-coded decimal or default"}
                         />
                     )}
                     {customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
