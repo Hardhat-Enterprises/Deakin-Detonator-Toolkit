@@ -36,14 +36,16 @@ function Tcpdump() {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
 
     // Component Constants.
-    const title = "Tcpdump Tool"; // Title of the component.
+    const title = "Tcpdump"; // Title of the component.
     const description =
-        "Tcp dump is a packet analysis tool that allows a user to view packets being transmitted over the local" +
-        "network. It is often used to troubleshoot network issues. It includes the ability to filter traffic" +
+        "Tcpdump is a packet analysis tool that allows a user to view packets being transmitted over the local " +
+        "network. It is often used to troubleshoot network issues. It includes the ability to filter traffic " +
         "by features such as network protocol, IP address or interface. "; // Description of the component.
     const steps =
-        "Step 1: Click on the 'Start' button to start the Tcpdump.\n" +
-        "Step 2: View the Output block below to see the results of the scan.\n";
+        "Step 1: Enter the IP address you wish to scan."
+        "Step 2: Select one of the scanning options. The command will be formatted to \n" +
+        "produce the type of scan selected."
+        "Step 3: Click start to view the Output block below and see the results of the scan.\n";
     const sourceLink = "https://www.tcpdump.org/"; // Link to the source code or Kali Tools page.
     const tutorial = "https://www.tcpdump.org/manpages/"; // Link to the official documentation/tutorial.
     const dependencies = ["libpcap"]; // Dependencies required for the ARPScan tool.
@@ -52,7 +54,7 @@ function Tcpdump() {
     const form = useForm<FormValuesType>({
         initialValues: {
             hostname: "",
-            Tcpdumpswitch: ""
+            Tcpdumpswitch: "First 5 packets"
         },
     });
 
@@ -60,7 +62,6 @@ function Tcpdump() {
         "First 5 packets",
         "TCP packets only"
     ]
-
 
     // Check the availability of commands in the dependencies array.
     useEffect(() => {
@@ -119,7 +120,6 @@ function Tcpdump() {
         [handleProcessData] // Dependency on the handleProcessData callback
     );
 
-
     /**
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the ARPScan tool with the given parameters.
@@ -127,10 +127,9 @@ function Tcpdump() {
      * @param {FormValuesType} values - The form values, containing the network interface.
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Set the loading state to true to indicate that the process is starting.
         setLoading(true);
         let args = [""];
-        
+
         //Switch for different options
         switch (values.Tcpdumpswitch) {
             case "First 5 packets":
@@ -165,8 +164,11 @@ function Tcpdump() {
                     });
             break;
 
+            default:
+                break;
         }
-
+    };
+    
     /**
      * clearOutput: Clears the screen
      * It resets the state variable holding the output, thereby clearing the display.
@@ -182,16 +184,17 @@ function Tcpdump() {
         setAllowSave(false);
     }, []);
 
-    return (        
-            <RenderComponent
-                title={title}
-                description={description}
-                steps={steps}
-                tutorial={tutorial}
-                sourceLink={sourceLink}
-            >
-                {/* Render the installation modal if the command is not available */}
-                {!loadingModal && (
+    return(
+        <RenderComponent
+        title={title}
+        description={description}
+        steps={steps}
+        tutorial={tutorial}
+        sourceLink={sourceLink}
+        >
+
+        {/* Render the installation modal if the command is not available */}
+        {!loadingModal && (
                     <InstallationModal
                         isOpen={opened}
                         setOpened={setOpened}
@@ -199,27 +202,27 @@ function Tcpdump() {
                         dependencies={dependencies}
                     ></InstallationModal>
                 )}
-                <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, Tcpdumpswitch: selectedScanOption }))}>
-                        <Stack>
-                            {LoadingOverlayAndCancelButton(loading, pid)}
-                            <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
-                            <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("tracerouteOptions")} />
-                            <NativeSelect
-                                value={selectedScanOption}
-                                onChange={(e) => setSelectedTcpdumpOption(e.target.value)}
-                                title={"Traceroute option"}
-                                data={Tcpdumpswitch}
-                                required
-                                description={"Type of scan to perform"}
-                            />
-                            <Button type={"submit"}>start traceroute</Button>
-                            {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                            <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                        </Stack>
-                    </form>
-                </RenderComponent>
-            );
-        }    
-    }   
+
+
+        <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, Tcpdumpswitch: selectedScanOption }))}>
+            <Stack>
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
+                <NativeSelect
+                    value={selectedScanOption}
+                    onChange={(e) => setSelectedTcpdumpOption(e.target.value)}
+                    title={"Scan type"}
+                    data={Tcpdumpswitch}
+                    required
+                    description={"Type of scan to perform"}
+                    />
+                    <Button type={"submit"}>start tcpdump</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
+    )
+}   
 
 export default Tcpdump;
