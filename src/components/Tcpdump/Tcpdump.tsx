@@ -133,7 +133,7 @@ function Tcpdump() {
         //Switch for different options
         switch (values.Tcpdumpswitch) {
             case "First 5 packets":
-                args = [`/usr/share/ddt/Bash-Scripts/Tcpdump.sh`];
+                args = [`/usr/share/ddt/Bash-Scripts/Tcpdumpshell.sh`];
                 args.push('-c 5 -i'); //Can put other options first, then hostname, tested
                 args.push(`${values.hostname}`);
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
@@ -149,7 +149,7 @@ function Tcpdump() {
             break;
 
             case "TCP packets only":
-                args = [`/usr/share/ddt/Bash-Scripts/Tcpdump.sh`];
+                args = [`/usr/share/ddt/Bash-Scripts/Tcpdumpshell.sh`];
                 args.push('-c 20 tcp port 80 -i');
                 args.push(`${values.hostname}`)
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
