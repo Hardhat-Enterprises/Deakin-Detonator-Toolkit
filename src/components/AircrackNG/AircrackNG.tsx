@@ -35,8 +35,8 @@ const description = "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphr
 const steps =
     "How to use Aircrack-ng:\n\n" +
     "Step 1: Type in the path to wordlist(s) filename(s) including the extension .txt. e.g. 'example.txt'.\n" +
-    "For files containing hexadecimal values, you must put a “h:” in front of the file name.\n";
-"Step 2: Select the target network based on the access point's MAC address.\n" +
+    "For files containing hexadecimal values, you must put a “h:” in front of the file name.\n" 
+    "Step 2: Select the target network based on the access point's MAC address.\n" +
     "Step 3: Type in the name of your text file including the extension .txt. e.g. 'example.txt'.\n" +
     "Step 4: Click 'Start " +
     title +
@@ -183,7 +183,7 @@ const AircrackNG = () => {
 
         // WEP-specific options
         //if (selectedtype == "WEP") {
-        //if (values.securityType) args.push(`-a 1`, values.securityType);
+            //if (values.securityType) args.push(`-a 1`, values.securityType);
         if (values.BSSID) args.push(`-b`, values.BSSID);
 
         // Advanced WEP options
@@ -194,12 +194,12 @@ const AircrackNG = () => {
 
         // WPA-specific options
         //if (selectedtype == "WPA") {
-        //if (values.securityType) args.push(`-a 2`, values.securityType);
+            //if (values.securityType) args.push(`-a 2`, values.securityType);
         if (values.wordList) args.push(`-w`, values.wordList);
         if (values.ESSID) args.push(`-e`, values.ESSID);
 
-        // Advanced WPA options
-        //if (values.PMKID) args.push(`-I`, values.PMKID);
+            // Advanced WPA options
+            //if (values.PMKID) args.push(`-I`, values.PMKID);
         //}
 
         // Custom Configuration section
@@ -276,7 +276,7 @@ const AircrackNG = () => {
                                 const isChecked = e.currentTarget.checked;
                                 setAdvanceMode(isChecked);
                                 if (!isChecked) {
-                                    setSelectedCharacter("Default"); // Reset character selection when turning off Advanced Mode
+                                    setSelectedCharacter("Default");  // Reset character selection when turning off Advanced Mode
                                 }
                             }}
                         />
