@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { invoke } from '@tauri-apps/api/tauri'; // Import the Tauri API invoke function
+import { invoke } from '@tauri-apps/api/tauri'; // Import Tauri's invoke function
 
 const IPInsight = () => {
-    // State to store IP input, results, and errors
     const [ipAddress, setIpAddress] = useState('');
     const [traceResults, setTraceResults] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // Function to handle the IP tracing logic
+    // Function to trigger backend command
     const handleTraceIP = async () => {
-        if (!ipAddress) {
+        if (!ipAddress.trim()) {
             setError('Please enter a valid IP address.');
             return;
         }
@@ -18,19 +17,18 @@ const IPInsight = () => {
         setTraceResults(null); // Clear previous results
 
         try {
-            // Call the backend Tauri command
             const response = await invoke<string>('trace_ip_full', { ip: ipAddress });
             setTraceResults(response);
         } catch (err) {
             console.error('Error tracing IP:', err);
-            setError('Failed to trace IP. Please check the address and try again.');
+            setError('Failed to trace IP. Ensure the backend is configured correctly.');
         }
     };
 
     return (
         <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
             <h1>IP Insight Tool</h1>
-            <p>Enter an IP address to trace its route, ownership, and location.</p>
+            <p>Enter an IP address to retrieve its trace, ownership, and geolocation information.</p>
 
             <input
                 type="text"
@@ -63,14 +61,12 @@ const IPInsight = () => {
                 Trace IP
             </button>
 
-            {/* Show errors */}
             {error && (
                 <p style={{ color: 'red', marginTop: '10px' }}>
                     {error}
                 </p>
             )}
 
-            {/* Show results */}
             {traceResults && (
                 <div style={{ marginTop: '20px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '5px' }}>
                     <h2>Trace Results:</h2>
@@ -82,3 +78,5 @@ const IPInsight = () => {
         </div>
     );
 };
+
+export default IPInsight;
