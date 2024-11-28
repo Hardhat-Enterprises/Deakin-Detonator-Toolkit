@@ -6,7 +6,7 @@ const IPInsight = () => {
     const [traceResults, setTraceResults] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // Function to trigger backend command
+    // Function to trigger backend command          
     const handleTraceIP = async () => {
         if (!ipAddress.trim()) {
             setError('Please enter a valid IP address.');
