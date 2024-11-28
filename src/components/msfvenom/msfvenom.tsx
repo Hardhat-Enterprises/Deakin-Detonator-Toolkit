@@ -558,3 +558,5 @@ const PayloadGenerator = () => {
         </RenderComponent>
     );
 };
+
+export default PayloadGenerator;
