@@ -55,7 +55,7 @@ const ZeroLogon = () => {
     const steps = ""; // Steps for using the tool, if applicable.
     const sourceLink =
         "https://www.infosecinstitute.com/resources/vulnerabilities/zerologon-cve-2020-1472-technical-overview-and-walkthrough"; // Link to the source code or relevant documentation.
-    const tutorial = ""; // Link to the official tutorial/documentation.
+    const tutorial = "https://docs.google.com/document/d/1D_qHImf9zkRiSnFdBnAuMuiIKotLGst9_y0PR5ozrCs/edit?usp=sharing"; // Link to the official tutorial/documentation.
     const dependencies = ["python3"]; // Dependencies required by the component.
 
     // Form hook to handle form input.

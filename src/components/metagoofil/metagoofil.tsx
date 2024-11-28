@@ -49,7 +49,7 @@ function Metagoofil() {
         "Step 5: Click scan to commence the Metagoofil operation.\n" +
         "Step 6: View the Output block below to view the results of the tool's execution."; //Steps to run the component
     const sourceLink = "https://www.kali.org/tools/metagoofil/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/10RQ82QbVrjiS6-MdZpbV3r32dhhPSMtD0c6nQOP3RoY/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["metagoofil"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.

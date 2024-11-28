@@ -100,10 +100,8 @@ export function RenderComponent(component: ComponentProps) {
                 </Tabs.Panel>
                 <Tabs.Panel value="tutorial">
                     <Text className={styles.text} size="md">
-                    <iframe
+                   <iframe
                     src={component.tutorial}
-                    frameBorder={0}
-                    marginHeight={0}
                     width={3000}
                     height={1000}
                 />

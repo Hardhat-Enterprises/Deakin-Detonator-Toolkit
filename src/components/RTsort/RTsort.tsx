@@ -38,7 +38,7 @@ const RTSort = () => {
         "Step 3: View the output block to view the results of the tool's execution.\n";
 
     const sourceLink = "https://gitlab.com/kalilinux/packages/rainbowcrack"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1d_DmZxMeOaoJexz5mNqXMXd48rmTCWjwYAQg-Eyu7Qs/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["rcrack"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.

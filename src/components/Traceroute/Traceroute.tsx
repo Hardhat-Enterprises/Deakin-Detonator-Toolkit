@@ -51,7 +51,7 @@ const Traceroute = () => {
         "Step 4: Click Scan to commence Traceroute operation.\n" +
         "Step 5: View the Output block below to view the results of the tool's execution.";
     const sourceLink = "https://www.kali.org/tools/traceroute/"; // Link to the source code(or kali tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1ouILL7EQVS03Cu5pdMsksybJZmuFcPzzQ9xDhBNJgtk/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["traceroute"]; // Contains the dependencies required by the component.
 
     // Traceroute Options - Types of traceroute scans available.

@@ -40,7 +40,7 @@ const Sublist3r = () => {
         "Step 2: Start the enumeration process to gather subdomains.\n" +
         "Step 3: Review the enumerated subdomains for further analysis.\n";
     const sourceLink = "https://github.com/aboul3la/Sublist3r"; // Link to the source code
-    const tutorial = ""; // Link to the official documentation/tutorial
+    const tutorial = "https://docs.google.com/document/d/1b0XrFVPR1Xtczqomx1bE7K6Km7kQjUzzYzIe3UojXH4/edit?usp=sharing"; // Link to the official documentation/tutorial
     const dependencies = ["sublist3r"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input

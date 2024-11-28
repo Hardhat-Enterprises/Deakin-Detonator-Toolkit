@@ -47,7 +47,7 @@ const Rtgen = () => {
         "Step 4: Define the size of the rainbow table.\n" +
         "Step 5: Provide an output file name where the generated table will be saved.\n";
     const sourceLink = "https://www.kali.org/tools/rainbowcrack/#rtgen"; // Link to the source code
-    const tutorial = ""; // Link to the official documentation/tutorial
+    const tutorial = "https://docs.google.com/document/d/1oTDlAp708Lrxhs-KwhfX9G3RgNrk2gGa1Xm7KhRnZXg/edit?usp=sharing"; // Link to the official documentation/tutorial
     const dependencies = ["rtgen"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input

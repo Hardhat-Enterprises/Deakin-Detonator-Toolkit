@@ -52,7 +52,7 @@ const DNSMap = () => {
         "Step 4: View the Output block below to view the results of the tool's execution.\n\n" +
         "Switch to Advanced Mode for further options.";
     const sourceLink = "https://www.kali.org/tools/dnsmap/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/15iZ-USnXOVe-zLBLC_ROp0OTqXO_Nh7WtGO6YHfqQsc/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["dnsmap"]; // Contains the dependencies required by the component.
 
     //Form Hook to handle input

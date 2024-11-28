@@ -55,7 +55,7 @@ const RainbowCrack = () => {
         title +
         " button to execute the command and display the results."; // Steps to use the component.
     const sourceLink = "http://project-rainbowcrack.com/"; // Link to the source code (or RainbowCrack documentation).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/16j7ejucqvkNHo1p-fcUjxTYV6aAbSPT6TQDUYRgfa_0/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["rainbowcrack"]; // Dependencies required by the component.
 
     // Form hook to handle form input.

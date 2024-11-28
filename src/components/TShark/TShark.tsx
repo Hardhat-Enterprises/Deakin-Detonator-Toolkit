@@ -43,7 +43,7 @@ const TShark = () => {
         "Step 8: Switch to Reader mode.\n" +
         "Step 9: Provide the file path for the capture file and click start TShark.";
     const sourceLink = "https://www.kali.org/tools/wireshark/#tshark-1"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1o-gmZEqlV49kM4n_bPBlQaxRkK1mLcO-OSElhx1P-6M/edit?usp=sharing"; // Link to the official documentation/tutorial.
 
     let form = useForm({
         initialValues: {

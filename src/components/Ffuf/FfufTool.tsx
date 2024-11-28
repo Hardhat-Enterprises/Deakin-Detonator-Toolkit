@@ -62,7 +62,7 @@ const FfufTool = () => {
         "Step 5: View the Output block below to view the results of the Scan.";
     const steps = ""; // Left blank due to steps being included in description
     const sourceLink = "https://www.kali.org/tools/ffuf/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1ntOm0yiqLnhTfqqcmbJC3bpjzJ5Ymqe3Oi67qULHWTE/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["ffuf"]; // Contains the dependencies required by the component.
 
     // Form Hook to handle form input.

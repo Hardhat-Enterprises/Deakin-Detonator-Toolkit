@@ -46,7 +46,7 @@ const Unicornscan = () => {
     const steps =
         "Step 1: Provide the target URL or IP address to scan.\nStep 2: Select the scan type (TCP or UDP).\nStep 3: Configure additional scan options as needed.\nStep 4: Start the scan to gather information about potential vulnerabilities and misconfigurations.\nStep 5: Review the scan output to identify any security issues.\n";
     const sourceLink = "https://github.com/dneufeld/unicornscan";
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1HtJT-YFscJkkpCpCwTf6AdXaatavyiM1Vf01-KkMD7U/edit?usp=sharing";
     const dependencies = ["unicornscan"];
 
     // Options for the dropdown menu

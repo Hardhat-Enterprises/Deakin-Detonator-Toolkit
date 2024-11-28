@@ -49,7 +49,7 @@ const Goldeneye = () => {
         "Step 4: Click Launch DoS Attack to commence GoldenEye's operation.\n" +
         "Step 5: View the Output block below to view the results of the tool's execution.";
     const sourceLink = "https://www.kali.org/tools/goldeneye/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1ZJzgzzECVu2s2T4SrH-e-Xiqon08LJq3amBwjPrD5ww/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["python3"]; // Contains the dependencies required by the component.
     const dosHttpMethod = ["get", "post", "random"]; //Contains types of dosHttpMethod available
     const sslCheckStatus = ["Yes", "No"]; //Contains selection for form value sslCheckStatus

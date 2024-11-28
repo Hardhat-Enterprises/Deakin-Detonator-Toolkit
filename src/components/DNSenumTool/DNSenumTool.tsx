@@ -58,7 +58,7 @@ const DnsenumTool = () => {
         "Step 6: Enter the timeout value.\n" +
         "Step 7: Select Reverse Lookup if required.\n";
     const sourceLink = "https://www.kali.org/tools/dnsenum/";
-    const tutorial = "https://www.kali.org/tools/dnsenum/";
+    const tutorial = "https://docs.google.com/document/d/16uxD3S1daRg1w24uwuhdWgQ3F4MUwxDQdhjKvT3TwVE/edit?usp=sharing";
     const dependencies = ["dnsenum"]; // Dependencies required by the component
 
     /**

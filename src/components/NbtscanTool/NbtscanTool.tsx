@@ -49,7 +49,7 @@ const NbtscanTool = () => {
         "Step 3: View the output block to see the results.\n\n" +
         "Switch to Advanced Mode for further options.";
     const sourceLink = "https://www.kali.org/tools/nbtscan/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1myi770eezUjb13Xt6MhQexlyUUio5sswfWLY9Q88vCE/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["Nbtscan"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.

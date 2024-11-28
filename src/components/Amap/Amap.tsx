@@ -43,7 +43,7 @@ const AMAP = () => {
         "Step 4: Click 'Start Scan' to begin the process.\n" +
         "Step 5: View the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/amap/"; // Link to the source code (or AMAP documentation).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1jDsVS14S8DxTF_h6aMyUCGZ6KNBKTYYLRWN-rZySAUk/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["amap"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.

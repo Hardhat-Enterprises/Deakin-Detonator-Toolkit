@@ -40,7 +40,7 @@ const Wifite = () => {
     const sourceLink = "https://www.kali.org/tools/wifite/";
     const dependencies = ["wifite"];
     const tutorial =
-        "Wifite is a powerful tool that automates the process of attacking WEP and WPA/WPA2 networks. It captures handshakes and attempts to crack the encryption. Make sure to specify the target network correctly for a successful attack.";
+        "https://docs.google.com/document/d/1sbLdAH7QMHSUwM-tCZ1rBrq1v4-AeI8Qd55G7DJBcxk/edit?usp=sharing";
 
     const form = useForm({
         initialValues: {

@@ -55,7 +55,7 @@ const Foremost = () => {
         "Step 5: Click Run Foremost to commence Foremost's operation.\n" +
         "Step 6: View the Output block below to view the results of the tool's execution."; //Steps to run the component
     const sourceLink = "https://www.kali.org/tools/foremost/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1gCIJuxsPUmsRnzZT3arLLNeycIgrcpEINhyh9epfvs4/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["foremost"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
