@@ -35,8 +35,8 @@ const description = "Aircrack-ng is a tool for cracking WEP and WPA/WPA2 passphr
 const steps =
     "How to use Aircrack-ng:\n\n" +
     "Step 1: Type in the path to wordlist(s) filename(s) including the extension .txt. e.g. 'example.txt'.\n" +
-    "For files containing hexadecimal values, you must put a “h:” in front of the file name.\n";
-"Step 2: Select the target network based on the access point's MAC address.\n" +
+    "For files containing hexadecimal values, you must put a “h:” in front of the file name.\n" +
+    "Step 2: Select the target network based on the access point's MAC address.\n" +
     "Step 3: Type in the name of your text file including the extension .txt. e.g. 'example.txt'.\n" +
     "Step 4: Click 'Start " +
     title +
