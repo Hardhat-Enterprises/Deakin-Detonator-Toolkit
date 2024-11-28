@@ -36,11 +36,14 @@ const AMAP = () => {
     // Component Constants.
     const title = "AMAP"; // Title of the component.
     const description =
-        "AMAP is a tool for application protocol detection and service fingerprinting. These processes help identify the specific services running on a target host by analyzing network traffic and patterns."; // Description of the component.
+        "AMAP is a tool for application protocol detection and service fingerprinting. " +
+        "Application protocol detection identifies the type of communication protocol used by a service, " + // Description of the component.
+        "while service fingerprinting pinpoints the specific application and version running on a host. " + // Define the main functional component for the AMAP tool.
+        "These processes help in understanding what services are active on a network and assessing potential vulnerabilities."; // This component handles the configuration, execution, and result display of the AMAP command-line tool.
     const steps =
         "Step 1: Enter the target host to scan.\n" +
         "Step 2: Specify the port(s) to scan.\n" +
-        "Step 3: (Optional) Enter connection or response timeout settings.\n" +
+        "Step 3: Enter connection or response timeout settings (optional). E.g-> '-A','-v' or '-o'\n" +
         "Step 4: Click 'Start Scan' to begin the process.\n" +
         "Step 5: View the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/amap/"; // Link to the source code (or AMAP documentation).
