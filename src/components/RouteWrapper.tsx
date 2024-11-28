@@ -93,6 +93,7 @@ import Unicornscan from "./Unicornscan/Unicornscan";
 import Photon from "./Photon/photon";
 import Arping from "./Arping/Arping";
 import Sqlninja from "./Sqlninja/sqlninja";
+import IPInsight from './IPInsight/IPInsight';
 
 export interface RouteProperties {
     name: string;
@@ -563,6 +564,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used for brute-forcing login credentials across various protocols, such as HTTP, FTP, and SSH.",
         category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "IP Insight",
+        path: "/tools/IPInsight",
+        element: <IPInsight />,
+        description:
+            "Trace IP address details, including route, ownership, and location",
+        category: "Network Tools",
     },
     {
         name: "JohnTheRipper",
