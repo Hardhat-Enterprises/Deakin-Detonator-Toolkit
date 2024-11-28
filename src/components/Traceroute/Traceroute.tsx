@@ -32,7 +32,7 @@ const Traceroute = () => {
     const [output, setOutput] = useState(""); //State to store the output from the traceroute command
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [selectedScanOption, setSelectedTracerouteOption] = useState(""); // State to store the selected scan type.
+    const [selectedScanOption, setSelectedTracerouteOption] = useState("Traceroute ICMP scan"); // State to store the selected scan type.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the model is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the model.
@@ -140,6 +140,7 @@ const Traceroute = () => {
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
+                console.log(args);
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
                     .then(({ pid, output }) => {
                         setPid(pid);
