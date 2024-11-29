@@ -558,14 +558,6 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
-        name: "IP Insight",
-        path: "/tools/IpInsight",
-        element: <IPInsight />,
-        description:
-            "Trace IP address details, including route, ownership, and location.",
-        category: "Network tool",
-    },
-    {
         name: "Hydra",
         path: "/tools/Hydra",
         element: <Hydra />,
