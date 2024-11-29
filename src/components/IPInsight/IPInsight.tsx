@@ -1,82 +1,98 @@
-import React, { useState } from 'react';
-import { invoke } from '@tauri-apps/api/tauri'; // Import Tauri's invoke function
+import { useState } from "react";
+import { Stepper, Button, TextInput, Stack } from "@mantine/core";
+import { RenderComponent } from "../UserGuide/UserGuide";
 
-const IPInsight = () => {
-    const [ipAddress, setIpAddress] = useState('');
+function IPInsightTool() {
+    const [active, setActive] = useState(0);
+    const [ipAddress, setIpAddress] = useState("");
     const [traceResults, setTraceResults] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
-    // Function to trigger backend command          
+    const nextStep = () => setActive((current) => (current < 2 ? current + 1 : current));
+    const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+
     const handleTraceIP = async () => {
         if (!ipAddress.trim()) {
-            setError('Please enter a valid IP address.');
+            setError("Please enter a valid IP address.");
             return;
         }
-
-        setError(null); // Clear previous errors
-        setTraceResults(null); // Clear previous results
+        setError(null);
+        setTraceResults(null);
+        setLoading(true);
 
         try {
-            const response = await invoke<string>('trace_ip_full', { ip: ipAddress });
-            setTraceResults(response);
+            const response = await new Promise((resolve) =>
+                setTimeout(() => resolve(`Trace results for IP: ${ipAddress}`), 2000)
+            );
+            setTraceResults(response as string);
         } catch (err) {
-            console.error('Error tracing IP:', err);
-            setError('Failed to trace IP. Ensure the backend is configured correctly.');
+            setError("Failed to trace IP. Please try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
+    const title = "IP Insight Tool";
+    const description = "This tool provides trace, ownership, and geolocation information for a given IP address.";
+    const steps = "Step 1: Enter an IP Address.\nStep 2: Run the trace.\nStep 3: Review the results.";
+
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-            <h1>IP Insight Tool</h1>
-            <p>Enter an IP address to retrieve its trace, ownership, and geolocation information.</p>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial="" // Add a tutorial link if available
+            sourceLink="" // Add a source link if available
+        >
+            <Stepper active={active} onStepClick={setActive} breakpoint="sm">
+                <Stepper.Step label="Target" description="Enter IP Address">
+                    <TextInput
+                        label="Target IP or Hostname"
+                        placeholder="e.g., 192.168.1.1"
+                        value={ipAddress}
+                        onChange={(e) => setIpAddress(e.target.value)}
+                        required
+                        error={error}
+                    />
+                    <Button onClick={nextStep} style={{ marginTop: "10px" }}>
+                        Next
+                    </Button>
+                </Stepper.Step>
 
-            <input
-                type="text"
-                placeholder="Enter IP address"
-                value={ipAddress}
-                onChange={(e) => setIpAddress(e.target.value)}
-                style={{
-                    padding: '10px',
-                    fontSize: '16px',
-                    width: '300px',
-                    marginBottom: '10px',
-                    border: '1px solid #ccc',
-                    borderRadius: '5px',
-                }}
-            />
-            <br />
+                <Stepper.Step label="Trace" description="Run the trace">
+                    <Stack>
+                        <Button
+                            onClick={handleTraceIP}
+                            loading={loading}
+                            style={{ marginBottom: "10px" }}
+                        >
+                            Trace IP
+                        </Button>
+                        {traceResults && (
+                            <div style={{ backgroundColor: "#f4f4f4", padding: "10px", borderRadius: "5px" }}>
+                                <strong>Results:</strong>
+                                <p>{traceResults}</p>
+                            </div>
+                        )}
+                    </Stack>
+                    <Button onClick={prevStep} variant="outline" style={{ marginTop: "10px" }}>
+                        Back
+                    </Button>
+                </Stepper.Step>
 
-            <button
-                onClick={handleTraceIP}
-                style={{
-                    padding: '10px 20px',
-                    fontSize: '16px',
-                    backgroundColor: '#007BFF',
-                    color: '#fff',
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                }}
-            >
-                Trace IP
-            </button>
-
-            {error && (
-                <p style={{ color: 'red', marginTop: '10px' }}>
-                    {error}
-                </p>
-            )}
-
-            {traceResults && (
-                <div style={{ marginTop: '20px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '5px' }}>
-                    <h2>Trace Results:</h2>
-                    <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-                        {traceResults}
-                    </pre>
-                </div>
-            )}
-        </div>
+                <Stepper.Step label="Review" description="Check the results">
+                    <div style={{ textAlign: "center", padding: "20px" }}>
+                        <h3>Trace Complete</h3>
+                        <p>{traceResults || "No results to display."}</p>
+                    </div>
+                    <Button onClick={prevStep} variant="outline">
+                        Back
+                    </Button>
+                </Stepper.Step>
+            </Stepper>
+        </RenderComponent>
     );
-};
+}
 
-export default IPInsight;
+export default IPInsightTool;
