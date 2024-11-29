@@ -10,5 +10,5 @@
 | 0007   | Integrating IP Tracing via Traceroute, Whois, and Geo IP in DDT                               | APPROVED |
 | 0008   |                                                                                               |          |
 | 0009   |                                                                                               |          |
-| 0010   |                                                                                               |          |
+| 0010   | Implementation of Fping into PT-GUI                                                           | APPROVED |
 | 0011   | Introduction of OpenAPI integration                                                           | PROPOSED |
