@@ -99,9 +99,15 @@ const Enum4Linux = () => {
 
         if (osinfo) options = options.concat(" -o");
 
-        const args = values.paramAlt
-            ? [options, values.paramMain, values.paramAlt, values.ipAddress]
-            : [options, values.paramMain, values.ipAddress];
+        let args = []; //Making args mutable, need to check if parameters are provided.
+
+        args.push(options);
+
+        if (values.paramMain) args.push(values.paramMain);
+
+        if (values.paramAlt) args.push(values.paramAlt);
+
+        args.push(values.ipAddress);
 
         CommandHelper.runCommandGetPidAndOutput("enum4linux", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
