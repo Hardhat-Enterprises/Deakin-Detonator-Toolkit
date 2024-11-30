@@ -42,10 +42,10 @@ function Tcpdump() {
         "network. It is often used to troubleshoot network issues. It includes the ability to filter traffic " +
         "by features such as network protocol, IP address or interface. "; // Description of the component.
     const steps =
-        "Step 1: Enter the IP address you wish to scan."
-        "Step 2: Select one of the scanning options. The command will be formatted to \n" +
-        "produce the type of scan selected."
-        "Step 3: Click start to view the Output block below and see the results of the scan.\n";
+        "Step 1: Enter the IP address you wish to scan. \n" +
+        "Step 2: Select one of the scanning options. The command will be formatted to " +
+        "produce the type of scan selected.\n" +
+        "Step 3: Click start to view the output block below and see the results of the scan.\n";
     const sourceLink = "https://www.tcpdump.org/"; // Link to the source code or Kali Tools page.
     const tutorial = "https://www.tcpdump.org/manpages/"; // Link to the official documentation/tutorial.
     const dependencies = ["libpcap"]; // Dependencies required for the ARPScan tool.
@@ -60,7 +60,8 @@ function Tcpdump() {
 
     const Tcpdumpswitch = [
         "First 5 packets",
-        "TCP packets only"
+        "TCP packets only",
+        "Detailed output"
     ]
 
     // Check the availability of commands in the dependencies array.
@@ -164,6 +165,22 @@ function Tcpdump() {
                     });
             break;
 
+            case "Detailed output":
+                args = [`/usr/share/ddt/Bash-Scripts/Tcpdumpshell.sh`];
+                args.push('-vv -c 20 -i');
+                args.push(`${values.hostname}`)
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                        setAllowSave(true);
+                    })
+                    .catch((error: any) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
+            break;
+
             default:
                 break;
         }
@@ -216,7 +233,7 @@ function Tcpdump() {
                     required
                     description={"Type of scan to perform"}
                     />
-                    <Button type={"submit"}>start tcpdump</Button>
+                    <Button type={"submit"}>Start Tcpdump</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
