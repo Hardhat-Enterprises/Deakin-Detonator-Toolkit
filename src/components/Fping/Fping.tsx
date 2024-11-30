@@ -120,7 +120,7 @@ function Fping() {
      * It sets up and triggers the Fping tool with the given parameter.
      * Once the command is executed, the results or errors are displayed in the output.
      *
-     * @param {FormValuesType} values - The form value containing the target.
+     * @param {FormValuesType} values - The form value containing the target/targets.
      */
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process.
@@ -130,13 +130,8 @@ function Fping() {
         setAllowSave(false);
 
         // Construct the argmentss for the Fping command based on form input.
-        const args = [];
-
-        // Adds the file path of the target list.
-        if (values.target) {
-            args.push(values.target);
-        }
-        
+        // Takes the input values and makes an array while trimming the input of extra whitespace.
+        const args = values.target.trim().split(/\s+/);
 
         // Execute the bash command via helper method and handle its output or potential errors.
         CommandHelper.runCommandGetPidAndOutput("fping", args, handleProcessData, handleProcessTermination)
