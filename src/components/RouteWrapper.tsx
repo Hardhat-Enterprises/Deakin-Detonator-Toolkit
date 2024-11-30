@@ -93,6 +93,8 @@ import Unicornscan from "./Unicornscan/Unicornscan";
 import Photon from "./Photon/photon";
 import Arping from "./Arping/Arping";
 import Sqlninja from "./Sqlninja/sqlninja";
+import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
+import Wafw00f from "./wafw00f/wafw00f";
 
 export interface RouteProperties {
     name: string;
@@ -200,6 +202,13 @@ export const ROUTES: RouteProperties[] = [
         element: <CVE202227925 />,
         description:
             "Zimbra Collaboration (aka ZCS) 8.8.15 and 9.0 has mboximport functionality that receives a ZIP archive and extracts files from it.",
+        category: "",
+    },
+    {
+        name: "CVE-2022-26134",
+        path: "/attack-vectors/cve-2022-26134",
+        element: <CVE202226134 />,
+        description: "Confluence Pre-Auth Remote Code Execution via OGNL Injection",
         category: "",
     },
     {
@@ -794,6 +803,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Urlsnarf />,
         description: "A tool used for capturing and logging HTTP requests and URLs transmitted over a network.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Wafw00f",
+        path: "/tools/wafw00f",
+        element: <Wafw00f />,
+        description: "A tool for detecting and fingerprinting web application firewalls (WAFs).",
+        category: "Web Application Testing",
     },
     {
         name: "WhatWeb",

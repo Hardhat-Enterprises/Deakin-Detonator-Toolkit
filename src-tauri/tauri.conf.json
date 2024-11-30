@@ -358,6 +358,11 @@
                         "args": true
                     },
                     {
+                        "name": "wafw00f",
+                        "cmd": "wafw00f",
+                        "args": true
+                    },
+                    {
                         "name": "whatweb",
                         "cmd": "whatweb",
                         "args": true
