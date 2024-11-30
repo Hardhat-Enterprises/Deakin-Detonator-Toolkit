@@ -41,7 +41,8 @@ const ZeroLogon = () => {
         "here lays within an implementation flaw for AES-CFB8 where a cryptographic transformation takes place with use of a " +
         "session key.\n\nFurther information can be found at: https://www.crowdstrike.com/blog/cve-2020-1472-zerologon-" +
         "security-advisory/\n\n";
-    const steps = "Using ZeroLogon:\n\n" +
+    const steps =
+        "Using ZeroLogon:\n\n" +
         "Step 1: Enter a domain controller name.\n" +
         "       Eg: TEST-AD\n\n" +
         "Step 2: Enter a target IP address.\n" +
