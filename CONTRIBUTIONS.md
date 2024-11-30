@@ -12,7 +12,7 @@ Thank you for your interest in contributing to the Deakin Detonator Toolkit aka 
 
 ## 👶Getting Started
 
-To get started with contributing, follow these steps; If you're not familiar with using Git team recommends you to first understand how the **[Git](https://deakin365.sharepoint.com/:w:/s/HardhatEnterprises2/Ee1Nlb_OZDVIlElD5RBO5o0BzG0OTRTFHIhWpTNwaxthmQ?e=Bg0rTb)** works with **[GitHub](https://deakin365.sharepoint.com/:b:/s/HardhatEnterprises2/ETU_JVpc67BCqgp6W7vm9ewBzbWCnlneQc-mzhiOIwGd8g?e=2pW0ld)**.
+To get started with contributing, follow these steps; If you're not familiar with using Git, we recommend you to first understand how the **[Git](https://deakin365.sharepoint.com/:w:/s/HardhatEnterprises2/Ee1Nlb_OZDVIlElD5RBO5o0BzG0OTRTFHIhWpTNwaxthmQ?e=Bg0rTb)** works with **[GitHub](https://deakin365.sharepoint.com/:b:/s/HardhatEnterprises2/ETU_JVpc67BCqgp6W7vm9ewBzbWCnlneQc-mzhiOIwGd8g?e=2pW0ld)**.
 
 1. **Clone the Repository**:
 
@@ -47,6 +47,7 @@ To maintain code quality, please adhere to the following coding standards:
            yarn run style
            npx prettier -w file-name
         ```
+    -   Note: `npx prettier -w file-name` will overwrite its changes to the original file, we recommend you to maintain a copy of the original changes you made to the file before you run this command. If `yarn run style` does not detect any issues in the command line, there's no need to run `npx prettier -w file-name`
 -   If you're still unsure what more is needed of coding standards, the team recommends you to refer the **[Coding Standards](https://deakin365.sharepoint.com/:b:/s/HardhatEnterprises2/ESf1jjS7KOJCt1QnALLgmY8BAxWJouKQGX3itT94KG_Iog?e=5MHBFa)**
 
 ## 🧑‍🍳Submitting Contributions
