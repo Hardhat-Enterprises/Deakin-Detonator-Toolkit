@@ -95,6 +95,7 @@ import Arping from "./Arping/Arping";
 import Sqlninja from "./Sqlninja/sqlninja";
 import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
+import Fping from "./Fping/Fping"
 
 export interface RouteProperties {
     name: string;
@@ -518,6 +519,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used for file carving, which extracts specific types of files from disk images or data streams based on file headers and footers.",
         category: "File Analysis and Recovery",
+    },
+    {
+        name: "Fping",
+        path: "/tools/fping",
+        element: <Fping />,
+        description:
+            "A tool used to send Internet Control Message Protocol echo requests to determine if a target host is responding.",
+        category: "Web Application Testing",
     },
     {
         name: "FTPconnect",
