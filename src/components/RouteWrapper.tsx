@@ -491,7 +491,7 @@ export const ROUTES: RouteProperties[] = [
         name: "EyeWitness",
         path: "/tools/eyewitness",
         element: <Eyewitness />,
-        description: 
+        description:
             "A tool used to capture screenshots and gather information such as banners, headers, and other details from web servers.",
         category: "Web Application Testing",
     },
@@ -536,8 +536,7 @@ export const ROUTES: RouteProperties[] = [
         name: "GoBuster",
         path: "/tools/GoBusterTool",
         element: <GoBusterTool />,
-        description:
-            "A web directory brute-forcing tool used to discover hidden directories and files on web servers.",
+        description: "A web directory brute-forcing tool used to discover hidden directories and files on web servers.",
         category: "Web Application Testing",
     },
     {
@@ -715,7 +714,8 @@ export const ROUTES: RouteProperties[] = [
         name: "SMB-Ghost Scanner",
         path: "/tools/SMBGhostScanner",
         element: <SMBGhostScanner />,
-        description: "A tool used to detect whether a target is vulnerable to the CVE-2020-0796 vulnerability in SMBv3.",
+        description:
+            "A tool used to detect whether a target is vulnerable to the CVE-2020-0796 vulnerability in SMBv3.",
         category: "Vulnerability Assessment and Exploitation",
     },
     {
@@ -730,8 +730,7 @@ export const ROUTES: RouteProperties[] = [
         name: "SQLmap",
         path: "/tools/SQLmap",
         element: <SQLmap />,
-        description:
-            "A tool for detecting and exploiting SQL injection flaws and taking control of database servers.",
+        description: "A tool for detecting and exploiting SQL injection flaws and taking control of database servers.",
         category: "Web Application Testing",
     },
     {
