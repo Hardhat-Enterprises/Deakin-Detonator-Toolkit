@@ -235,6 +235,13 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/foremost/"}
                                 />
                                 <Reference
+                                    name={"Fping"}
+                                    description={
+                                        "Fping is a ping like program which uses the Internet Control Message Protocol (ICMP) echo request to determine if a target host is responding."
+                                    }
+                                    url={"https://www.kali.org/tools/fping/"}
+                                />
+                                <Reference
                                     name={"FTPconnect"}
                                     description={
                                         "The standard ftp command-line client used to transfer files between systems over the File Transfer Protocol (FTP)."

@@ -163,6 +163,11 @@
                         "args": true
                     },
                     {
+                        "name": "fping",
+                        "cmd": "fping",
+                        "args": true
+                    },
+                    {
                         "name": "gitleaks",
                         "cmd": "gitleaks",
                         "args": true
