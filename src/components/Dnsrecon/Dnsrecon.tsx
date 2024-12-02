@@ -47,6 +47,10 @@ function Dnsrecon() {
         initialValues: {
             url: "",
         },
+        validate: {
+            url: (value) =>
+                /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w-]*)*$/i.test(value) ? null : "Invalid URL format", // Regex for URL validation
+        },
     });
 
     // Check the availability of all commands in the dependencies array.
