@@ -3,25 +3,24 @@ import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-//import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+//import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 /**
  * Represents the form values for the Rtgen component.
  */
 interface FormValuesType {
-    hashAlgorithm: string;
-    plaintextCharset: string;
-    plaintextLengthMin: string;
-    plaintextLengthMax: string;
-    tableIndex: string,
-    chainLength: string;
-    chainCount: string;
-    partIndex: string,
+    hashAlgorithm: string;          // <hash_algorithm>
+    charset: string;                // <charset>
+    plaintextLengthMin: string;     // <plaintext_length_min>
+    plaintextLengthMax: string;     // <plaintext_length_max>
+    tableIndex: string,             // <table_index>
+    chainLength: string;            // <chain_length>
+    chainCount: string;             // <chain_count>
+    partIndex: string,              // <part_index>
 }
 
 /**
@@ -58,7 +57,7 @@ const Rtgen = () => {
     let form = useForm({
         initialValues: {
             hashAlgorithm: "",
-            plaintextCharset: "",
+            charset: "",
             plaintextLengthMin: "",
             plaintextLengthMax: "",
             tableIndex: "",
@@ -132,25 +131,21 @@ const Rtgen = () => {
         // Construct arguments for the Rtgen command based on form input
         let args = [];
         args = [
-            values.hashAlgorithm,       // <hash_algorithm>
-            values.plaintextCharset,    // <plaintext_charset>
-            values.plaintextLengthMin,  // <plaintext_length_min>
-            values.plaintextLengthMax,  // <plaintext_length_max>
-            values.tableIndex,          // <table_index>
-            values.chainLength,         // <chain_length>
-            values.chainCount,          // <chain_count>
-            values.partIndex,           // <part_index>
+            values.hashAlgorithm,
+            values.charset,
+            values.plaintextLengthMin,
+            values.plaintextLengthMax,
+            values.tableIndex,
+            values.chainLength,
+            values.chainCount,
+            values.partIndex,
         ];
         
         // Execute the Rtgen command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("rtgen", args, handleProcessData, handleProcessTermination)
-            .then(() => {
+            .then(({ output }) => {
                 // Update the output with the results of the command execution.
-                //setOutput(output);
-
-                // Store the process ID of the executed command.
-                //setPid(pid);
-
+                setOutput(output);
                 // Deactivate loading state
                 setLoading(false);
             })
@@ -165,11 +160,12 @@ const Rtgen = () => {
 
     /**
      * Handles the completion of output saving by updating state variables.
-     */
+     */ /*
     const handleSaveComplete = () => {
         setHasSaved(true); // Set hasSaved state to true
         setAllowSave(false); // Disallow further output saving
     };
+    */
 
     /**
      * Clears the command output and resets state variables related to output saving.
@@ -207,9 +203,9 @@ const Rtgen = () => {
                         placeholder="e.g., MD5"
                     />
                     <TextInput
-                        label="Plaintext Charset"
+                        label="Character set"
                         required
-                        {...form.getInputProps("plaintextCharset")}
+                        {...form.getInputProps("charset")}
                         placeholder="e.g., alphanumeric"
                     />
                     <TextInput
@@ -255,7 +251,7 @@ const Rtgen = () => {
                         placeholder="e.g., 0"
                     />
                     <Button type={"submit"}>Generate {title}</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    {/* {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)} */}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
