@@ -59,14 +59,14 @@ function Fping() {
     const title = "Fping"; // Title of the component.
     const description =
         "Fping is a ping like program which uses the Internet Control Message Protocol (ICMP) echo request to determine if a target host is responding."; // Description of the component.
-    const steps = 
-            "Step 1: If using a file containing targets, click the switch for file path entry.\n" +
-            "Step 2: Fill in either the targets or the file path of the target list.\n" +
-            "Step 3: If not using advanced options click Start Fping to initiate.\n" +
-            "Advanced Options:\n" +
-            "Step 4: Click the advanced options switch to display.\n" +
-            "Step 5: Determine what advanced options you require and click the respective switches, as well as field inputs.\n" +
-            "Step 6: Click Start Fping to initate with advanced options.";
+    const steps =
+        "Step 1: If using a file containing targets, click the switch for file path entry.\n" +
+        "Step 2: Fill in either the targets or the file path of the target list.\n" +
+        "Step 3: If not using advanced options click Start Fping to initiate.\n" +
+        "Advanced Options:\n" +
+        "Step 4: Click the advanced options switch to display.\n" +
+        "Step 5: Determine what advanced options you require and click the respective switches, as well as field inputs.\n" +
+        "Step 6: Click Start Fping to initate with advanced options.";
     const sourceLink = "https://www.kali.org/tools/Fping/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
     const dependencies = ["fping"]; // Constains the dependencies required for the component.
