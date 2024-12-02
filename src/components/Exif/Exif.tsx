@@ -94,12 +94,8 @@ const ExifTool = () => {
             // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-
-                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-
-                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
@@ -168,8 +164,8 @@ const ExifTool = () => {
             title={title}
             description={description}
             steps={steps}
-            tutorial={tutorial}
-            sourceLink={sourceLink}
+            tutorial={tutorial} // Pass tutorial
+            sourceLink={sourceLink} // Pass sourceLink
         >
             {!loadingModal && (
                 <InstallationModal
@@ -189,11 +185,16 @@ const ExifTool = () => {
                         placeholder="e.g. /path/to/file.jpg"
                     />
                     <TextInput label="Metadata Tag" required {...form.getInputProps("tag")} placeholder="e.g. Author" />
-                    <TextInput
-                        label="Value (for writing)"
-                        {...form.getInputProps("value")}
-                        placeholder="e.g. John Doe"
-                    />
+
+                    {/* Conditionally render the 'Value' input field based on the actionType */}
+                    {form.values.actionType === "write" && (
+                        <TextInput
+                            label="Value (for writing)"
+                            {...form.getInputProps("value")}
+                            placeholder="e.g. John Doe"
+                        />
+                    )}
+
                     <Checkbox
                         label="Read Metadata"
                         checked={form.values.actionType === "read"}

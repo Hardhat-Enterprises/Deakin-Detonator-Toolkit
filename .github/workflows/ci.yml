@@ -38,7 +38,6 @@ jobs:
                   key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }} # Cache key based on OS and package-lock.json hash
                   restore-keys: |
                       ${{ runner.os }}-node- # Restore cache with a partial match if the exact key isn't found
-
             # Install Yarn globally to manage dependencies
             - run: npm install --global yarn
 
@@ -78,6 +77,8 @@ jobs:
                   format: "table"
                   severity: "HIGH,CRITICAL"
                   exit-code: 1
+                  TRIVY_SKIP_DB_UPDATE: true
+                  TRIVY_SKIP_JAVA_DB_UPDATE: true
 
               # Secrets scan
             - name: Run TruffleHog scan
@@ -85,7 +86,6 @@ jobs:
                   docker run --rm -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github \
                   --repo https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit \
                   --only-verified
-
     # Application build job
     build:
         runs-on: ubuntu-latest

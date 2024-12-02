@@ -8,6 +8,8 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import AskChatGPT from "../AskChatGPT/AskChatGPT";
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
 
 /**
  * FormValuesType defines the structure for the form values used in the TracerouteTool component.
@@ -32,12 +34,13 @@ const Traceroute = () => {
     const [output, setOutput] = useState(""); //State to store the output from the traceroute command
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [selectedScanOption, setSelectedTracerouteOption] = useState(""); // State to store the selected scan type.
+    const [selectedScanOption, setSelectedTracerouteOption] = useState("Traceroute ICMP scan"); // State to store the selected scan type.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the model is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the model.
     const [allowSave, setAllowSave] = useState(false); // State variable indicating whether the current state is valid and the results can be saved.
     const [hasSaved, setHasSaved] = useState(false); // State variable that tracks whether the results have already been saved to avoid redundant operations.
+    const [chatGPTResponse, setChatGPTResponse] = useState("");
     // Form hook to handle form input.
 
     // Component Constants.
@@ -256,6 +259,13 @@ const Traceroute = () => {
                     <Button type={"submit"}>start traceroute</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <AskChatGPT toolInput={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                    {chatGPTResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>ChatGPT Response:</h3>
+                            <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
                 </Stack>
             </form>
         </RenderComponent>

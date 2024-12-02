@@ -1,4 +1,4 @@
-import { Button, Stack, Tooltip, TextInput, Switch } from "@mantine/core";
+import { Button, Stack, NativeSelect, Tooltip, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -33,20 +33,21 @@ const Enum4Linux = () => {
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
     const [customMode, setCustomMode] = useState(false);
+    const [selectedOption, setselectedOption] = useState("M");
 
     const dependencies = ["enum4linux"];
     const title = "Enum4Linux";
     const description = "Enum4linux is a tool used for enumerating information from Windows and Samba systems.";
     const steps =
         "Step 1: Enter the IP address of the target.\n" +
-        "Step 2: Type in the option you want for enumeration. For example, -U for users, -S for shares.\n" +
+        "Step 2: Select the option you want for enumeration. Options for enumerating machines, users and shared directories.\n" +
         "Step 3: Enter any additional parameters you want to add, like specific credentials.\n" +
         "Step 4: Click the Start " +
         title +
         " button and view the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/enum4linux/"; // Link to the source code (or Kali Tools).
     const tutorial = ""; // Link to the official documentation/tutorial.
-
+    const [osinfo, setInfo] = useState(false);
     const form = useForm({
         initialValues: {
             ipAddress: "",
@@ -94,10 +95,19 @@ const Enum4Linux = () => {
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
         setAllowSave(false);
-        const options = `-${values.argumentMain}`;
-        const args = values.argumentAlt
-            ? [options, values.paramMain, `-${values.argumentAlt}`, values.paramAlt, values.ipAddress]
-            : [options, values.paramMain, values.ipAddress];
+        let options = `-${selectedOption}`;
+
+        if (osinfo) options = options.concat(" -o");
+
+        let args = []; //Making args mutable, need to check if parameters are provided.
+
+        args.push(options);
+
+        if (values.paramMain) args.push(values.paramMain);
+
+        if (values.paramAlt) args.push(values.paramAlt);
+
+        args.push(values.ipAddress);
 
         CommandHelper.runCommandGetPidAndOutput("enum4linux", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
@@ -148,6 +158,12 @@ const Enum4Linux = () => {
                         checked={customMode}
                         onChange={(e) => setCustomMode(e.currentTarget.checked)}
                     />
+                    <Switch
+                        size="md"
+                        label="Include OS Information"
+                        checked={osinfo}
+                        onChange={(e) => setInfo(e.currentTarget.checked)}
+                    />
                     <Tooltip
                         label="Enter the IP address of the target system you want to enumerate."
                         position="right"
@@ -161,16 +177,20 @@ const Enum4Linux = () => {
                         />
                     </Tooltip>
 
-                    <Tooltip
-                        label="Choose the enumeration option, e.g., U for users, S for shares."
-                        position="right"
-                        withArrow
-                    >
-                        <TextInput
-                            label="Option"
+                    <Tooltip label="Choose the enumeration option" position="right" withArrow>
+                        <NativeSelect
+                            label="Options"
+                            value={selectedOption}
+                            onChange={(e) => {
+                                setselectedOption(e.target.value);
+                            }}
+                            title="Select Options"
+                            data={[
+                                { label: "Machine List", value: "M" },
+                                { label: "User List", value: "U" },
+                                { label: "Share List", value: "S" },
+                            ]}
                             required
-                            {...form.getInputProps("argumentMain")}
-                            placeholder="Example: U"
                         />
                     </Tooltip>
 
@@ -187,17 +207,6 @@ const Enum4Linux = () => {
                     </Tooltip>
                     {customMode && (
                         <>
-                            <Tooltip
-                                label="Choose the additional option, e.g., U for users, S for shares."
-                                position="right"
-                                withArrow
-                            >
-                                <TextInput
-                                    label="Additional Options"
-                                    {...form.getInputProps("argumentAlt")}
-                                    placeholder="Example: S"
-                                />
-                            </Tooltip>
                             <Tooltip
                                 label="Additional parameter for the chosen option like password if required."
                                 position="right"

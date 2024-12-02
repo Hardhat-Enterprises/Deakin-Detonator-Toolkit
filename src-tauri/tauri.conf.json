@@ -18,6 +18,11 @@
                 "sidecar": true,
                 "scope": [
                     {
+    			"name": "nmap",
+   			"cmd": "/usr/bin/nmap",
+    			"args": true
+		    },
+                    {
                         "name": "airbase-ng",
                         "cmd": "airbase-ng",
                         "args": true
@@ -40,6 +45,11 @@
                     {
                         "name": "arjun",
                         "cmd": "arjun",
+                        "args": true
+                    },
+                    {
+                        "name": "arpaname",
+                        "cmd": "arpaname",
                         "args": true
                     },
                     {
@@ -350,6 +360,11 @@
                     {
                         "name": "urlsnarf",
                         "cmd": "urlsnarf",
+                        "args": true
+                    },
+                    {
+                        "name": "wafw00f",
+                        "cmd": "wafw00f",
                         "args": true
                     },
                     {
