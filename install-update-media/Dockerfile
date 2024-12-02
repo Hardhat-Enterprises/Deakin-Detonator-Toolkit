@@ -14,13 +14,30 @@ ENV XDG_RUNTIME_DIR=/run/user/1000
 ### Set Frontend to Noninteractive
 ARG DEBIAN_FRONTEND=noninteractive
 
-### Update Sources and Install Dependencies
+### Update Sources to Use Only Kali Rolling
 RUN echo "deb http://http.kali.org/kali kali-rolling main contrib non-free" > /etc/apt/sources.list && \
+    apt-get update
+
+### Add Debian Bullseye or Buster Repository
+RUN echo "deb http://deb.debian.org/debian bullseye main contrib non-free" >> /etc/apt/sources.list && \
     apt-get update && \
+    apt-get install -y libjavascriptcoregtk-4.0-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+
+### Configure PKG_CONFIG_PATH
+ENV PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:${PKG_CONFIG_PATH}
+
+RUN pkg-config --libs --cflags javascriptcoregtk-4.0 || echo "javascriptcoregtk-4.0 not found"
+
+
+### Test pkg-config
+RUN pkg-config --libs --cflags javascriptcoregtk-4.0 || echo "javascriptcoregtk-4.0 not found"
+
+### Update Sources and Install Dependencies
+RUN apt-get update && \
     apt-get install -y \
-        libgdk-pixbuf-2.0-0 \
-        libgdk-pixbuf2.0-common \
-        libgdk-pixbuf2.0-bin \
         git \
         curl \
         pkgconf \
