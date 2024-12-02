@@ -14,6 +14,7 @@ import InstallationModal from "../InstallationModal/InstallationModal";
  */
 interface FormValuesType {
     target: string;
+    filePath: string;
 }
 
 /**
@@ -30,6 +31,7 @@ function Fping() {
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [checkedFilePath, setFilePath] = useState(false); // State variable to indicate if using a file containing targets.
 
     // Component Constants.
     const title = "Fping"; // Title of the component.
@@ -44,6 +46,7 @@ function Fping() {
     const form = useForm({
         initialValues: {
             target: "",
+            filePath: "",
         },
     });
 
@@ -130,9 +133,15 @@ function Fping() {
         setAllowSave(false);
 
         // Construct the argmentss for the Fping command based on form input.
-        // Takes the input values and makes an array while trimming the input of extra whitespace.
-        const args = values.target.trim().split(/\s+/);
-
+        const args: string[] = [];
+        // Takes the input values of the targets and makes an array while trimming the input of extra whitespace.
+        if (!checkedFilePath) {
+            args.push(...values.target.trim().split(/\s+/));
+        }
+        // Uses the specified file path of the target list.
+        if (checkedFilePath) {
+            args.push("-f", values.filePath)
+        }
         // Execute the bash command via helper method and handle its output or potential errors.
         CommandHelper.runCommandGetPidAndOutput("fping", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
@@ -172,12 +181,27 @@ function Fping() {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                 <Stack>
-                    <TextInput
-                        label={"Target"}
-                        {...form.getInputProps("target")}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    <Switch
+                        label="Target File"
+                        checked={checkedFilePath}
+                        onChange={(e) => setFilePath(e.currentTarget.checked)}
                     />
+                    {!checkedFilePath && (
+                        <TextInput
+                            label={"Target"}
+                            placeholder={"E.g. Google.com Amazon.com Youtube.com"}
+                            {...form.getInputProps("target")}
+                        />
+                    )}
+                    {checkedFilePath && (
+                        <TextInput
+                            label={"File Path"}
+                            placeholder="E.g. /home/kali/Documents/targets.txt"
+                            {...form.getInputProps("filePath")}
+                        />
+                    )}
                     <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
