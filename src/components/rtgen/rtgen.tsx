@@ -13,14 +13,14 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
  * Represents the form values for the Rtgen component.
  */
 interface FormValuesType {
-    hashAlgorithm: string;          // <hash_algorithm>
-    charset: string;                // <charset>
-    plaintextLengthMin: string;     // <plaintext_length_min>
-    plaintextLengthMax: string;     // <plaintext_length_max>
-    tableIndex: string,             // <table_index>
-    chainLength: string;            // <chain_length>
-    chainCount: string;             // <chain_count>
-    partIndex: string,              // <part_index>
+    hashAlgorithm: string; // <hash_algorithm>
+    charset: string; // <charset>
+    plaintextLengthMin: string; // <plaintext_length_min>
+    plaintextLengthMax: string; // <plaintext_length_max>
+    tableIndex: string; // <table_index>
+    chainLength: string; // <chain_length>
+    chainCount: string; // <chain_count>
+    partIndex: string; // <part_index>
 }
 
 /**
@@ -66,7 +66,7 @@ const Rtgen = () => {
             partIndex: "",
         },
     });
-    
+
     useEffect(() => {
         // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
@@ -103,10 +103,10 @@ const Rtgen = () => {
             // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-            // If the process was terminated due to a signal, display the signal code.
+                // If the process was terminated due to a signal, display the signal code.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-            // If the process was terminated with an error, display the exit code and signal code.
+                // If the process was terminated with an error, display the exit code and signal code.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
@@ -140,7 +140,7 @@ const Rtgen = () => {
             values.chainCount,
             values.partIndex,
         ];
-        
+
         // Execute the Rtgen command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("rtgen", args, handleProcessData, handleProcessTermination)
             .then(({ output }) => {
