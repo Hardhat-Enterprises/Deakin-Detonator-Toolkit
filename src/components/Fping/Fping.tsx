@@ -391,12 +391,12 @@ function Fping() {
                             </Group>
                             <Group>
                                 <Switch
-                                    label="Elapsed time on return packets"
+                                    label="Show elapsed time on return packets"
                                     checked={checkedElapsed}
                                     onChange={(e) => setCheckedElapsed(e.currentTarget.checked)}
                                 />
                                 <Switch
-                                    label="Accumulated Outage time"
+                                    label="Show accumulated Outage time"
                                     checked={checkedOutage}
                                     onChange={(e) => setCheckedOutage(e.currentTarget.checked)}
                                 />
