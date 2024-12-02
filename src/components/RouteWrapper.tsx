@@ -95,7 +95,7 @@ import Arping from "./Arping/Arping";
 import Sqlninja from "./Sqlninja/sqlninja";
 import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
-import Fping from "./Fping/Fping"
+import Fping from "./Fping/Fping";
 
 export interface RouteProperties {
     name: string;
