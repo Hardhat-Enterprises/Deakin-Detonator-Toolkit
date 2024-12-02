@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, Switch } from "@mantine/core";
+import { Button, Stack, TextInput, Switch, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -15,6 +15,14 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     target: string;
     filePath: string;
+    size: string;
+    backoff: string;
+    count: string;
+    ttl: string;
+    interface: string;
+    period: string;
+    retries: string;
+    source: string;
 }
 
 /**
@@ -48,6 +56,14 @@ function Fping() {
         initialValues: {
             target: "",
             filePath: "",
+            size: "",
+            backoff: "",
+            count: "",
+            ttl: "",
+            interface: "",
+            period: "",
+            retries: "",
+            source: "",
         },
     });
 
@@ -143,6 +159,38 @@ function Fping() {
         if (checkedFilePath) {
             args.push("-f", values.filePath)
         }
+        //Advanced input options
+        if (checkedAdvanced) {
+            //Number of pings to each target.
+            if (values.count) {
+                args.push("-c", values.count);
+            }
+            //Exponential backoff factor.
+            if (values.backoff) {
+                args.push("-B", values.backoff);
+            }
+            //Size of ping data in bytes to send.
+            if (values.size) {
+                args.push("-b", values.size);
+            }
+            //Time to Live hops.
+            if (values.ttl) {
+                args.push("-H", values.ttl);
+            }
+            //Bind to a particular interface.
+            if (values.interface) {
+                args.push("-I", values.interface);
+            }
+            //Interval between ping packets.
+            if (values.period) {
+                args.push("-p", values.period);
+            }
+            //Number of retries.
+            if (values.retries) {
+                args.push("-r", values.retries);
+            }
+        }
+
         // Execute the bash command via helper method and handle its output or potential errors.
         CommandHelper.runCommandGetPidAndOutput("fping", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
@@ -189,11 +237,6 @@ function Fping() {
                         checked={checkedFilePath}
                         onChange={(e) => setFilePath(e.currentTarget.checked)}
                     />
-                    <Switch
-                        label="Advanced Options"
-                        checked={checkedAdvanced}
-                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
-                    />
                     {!checkedFilePath && (
                         <TextInput
                             label={"Target"}
@@ -207,6 +250,55 @@ function Fping() {
                             placeholder="E.g. /home/kali/Documents/targets.txt"
                             {...form.getInputProps("filePath")}
                         />
+                    )}
+                    <Switch
+                        label="Advanced Options"
+                        checked={checkedAdvanced}
+                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                    />
+                    {checkedAdvanced && (
+                        <>
+                        <Group>
+                        <TextInput
+                            label={"Bind to a particular interface"}
+                            {...form.getInputProps("interface")}
+                        />
+                        <TextInput
+                            label={"Amount of pings to send each target"}
+                            {...form.getInputProps("count")}
+                        />
+                        <TextInput
+                            label={"Set source IP Address"}
+                            {...form.getInputProps("source")}
+                        />
+                        <TextInput
+                            label={"Time to Live hops"}
+                            {...form.getInputProps("ttl")}
+                        />
+                        </Group>
+                        <Group>
+                        <TextInput
+                            label={"Size in bytes"}
+                            placeholder="default: 56"
+                            {...form.getInputProps("size")}
+                        />
+                        <TextInput
+                            label={"Exponential backoff factor"}
+                            placeholder="default: 1.5"
+                            {...form.getInputProps("backoff")}
+                        />
+                        <TextInput
+                            label={"Interval between ping packets to one target"}
+                            placeholder="default: 1000 ms"
+                            {...form.getInputProps("period")}
+                        />
+                        <TextInput
+                            label={"Number of retries"}
+                            placeholder="default: 3"
+                            {...form.getInputProps("retries")}
+                        />
+                        </Group>
+                        </>
                     )}
                     <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
