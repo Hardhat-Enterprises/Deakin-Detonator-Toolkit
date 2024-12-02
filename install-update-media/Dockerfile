@@ -27,10 +27,10 @@ RUN echo "deb http://security.debian.org/debian-security buster/updates main" >>
 
 ### Update Sources and Install Dependencies
 RUN apt-get update && \
-    apt-get upgrade -y && \
     apt-get install -y \
         libgdk-pixbuf-2.0-0=2.42.12+dfsg-1+b1 \
-        libgdk-pixbuf2.0-common=2.42.12+dfsg-1 && \
+        libgdk-pixbuf2.0-common=2.42.12+dfsg-1 \
+        libgdk-pixbuf2.0-bin=2.42.12+dfsg-1+b1\
     apt-get install -y \
         git \
         curl \
