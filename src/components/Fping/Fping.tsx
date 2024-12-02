@@ -196,35 +196,51 @@ function Fping() {
             }
             //Sends random packet data.
             if (checkedRandom) {
-                args.push("-R")
+                args.push("-R");
             }
             //Sets the Don't Frag flag.
             if (checkedDontFrag) {
-                args.push("-M")
+                args.push("-M");
             }
             //Shows targets by address.
             if (checkedAddress) {
-                args.push("-A")
+                args.push("-A");
             }
             //Shows targets by name.
             if (checkedName) {
-                args.push("-d")
+                args.push("-d");
             }
             //Show elapsed time on return packets.
             if (checkedElapsed) {
-                args.push("-e")
+                args.push("-e");
             }
             //Show the accumulated outage time.
             if (checkedOutage) {
-                args.push("-o")
+                args.push("-o");
             }
             //Show quiet output.
             if (checkedQuiet) {
-                args.push("-q")
+                args.push("-q");
             }
             //Show the final stats.
             if (checkedStats) {
-                args.push("-s")
+                args.push("-s");
+            }
+            //Only ping IPv4 targets.
+            if (checkedIPv4) {
+                args.push("-4");
+            }
+            //Only ping IPv6 targets.
+            if (checkedIPv6) {
+                args.push("-6");
+            }
+            //Only show targets that are alive.
+            if (checkedAlive) {
+                args.push("-a");
+            }
+            //Only show targets that are unreachable.
+            if (checkedUnreachable) {
+                args.push("-u");
             }
         }
         // Takes the input values of the targets and makes an array while trimming the input of extra whitespace.
@@ -303,6 +319,54 @@ function Fping() {
                     />
                     {checkedAdvanced && (
                         <>
+                            <Group>
+                                <Switch
+                                    label="Only ping IPv4 targets"
+                                    checked={checkedIPv4}
+                                    onChange={(e) => {
+                                        setCheckedIPv4(e.currentTarget.checked);
+                                        //Turn off IPv6 switch when IPv4 is checked.
+                                        if (e.currentTarget.checked) {
+                                            setCheckedIPv6(false);
+                                        }
+                                    }}
+                                />
+                                <Switch
+                                    label="Only ping IPv6 targets"
+                                    checked={checkedIPv6}
+                                    onChange={(e) => {
+                                        setCheckedIPv6(e.currentTarget.checked);
+                                        //Turn off IPv4 switch when IPv6 is checked.
+                                        if (e.currentTarget.checked) {
+                                            setCheckedIPv4(false);
+                                        }
+                                    }}
+                                />
+                            </Group>
+                            <Group>
+                                <Switch
+                                    label="Show targets that are alive"
+                                    checked={checkedAlive}
+                                    onChange={(e) => {
+                                        setCheckedAlive(e.currentTarget.checked);
+                                        //Turn off Unreachable switch when Alive is checked.
+                                        if (e.currentTarget.checked) {
+                                            setCheckedUnreachable(false);
+                                        }
+                                    }}
+                                />
+                                <Switch
+                                    label="Show targets that are unreachable"
+                                    checked={checkedUnreachable}
+                                    onChange={(e) => {
+                                        setCheckedUnreachable(e.currentTarget.checked);
+                                        //Turn off Alive switch when Unreachable is checked.
+                                        if (e.currentTarget.checked) {
+                                            setCheckedAlive(false);
+                                        }
+                                    }}
+                                />
+                            </Group>
                             <Group>
                                 <Switch
                                     label="Send random packet data"
