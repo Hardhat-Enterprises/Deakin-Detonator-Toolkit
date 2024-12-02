@@ -41,6 +41,19 @@ function Fping() {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [checkedFilePath, setFilePath] = useState(false); // State variable to indicate if using a file containing targets.
     const [checkedAdvanced, setCheckedAdvanced] = useState(false); // State variable to indicate advanced settings.
+    //Advanced mode state variables.
+    const [checkedIPv4, setCheckedIPv4] = useState(false); //State variable to indicate to only ping IPv4 Targets.
+    const [checkedIPv6, setCheckedIPv6] = useState(false); //State variable to indicate to only ping IPv6 Targets.
+    const [checkedAlive, setCheckedAlive] = useState(false); //State variable to indicate targets that are alive.
+    const [checkedUnreachable, setCheckedUnreachable] = useState(false); //State variable to indicate targets that are unreachable.
+    const [checkedRandom, setCheckedRandom] = useState(false); //State variable to indicate to send random packet data.
+    const [checkedDontFrag, setCheckedDontFrag] = useState(false); //State variable to indicate to set the don't fragment flag.
+    const [checkedAddress, setCheckedAddress] = useState(false); //State variable to indicate to show targets by address.
+    const [checkedName, setCheckedName] = useState(false); //State variable to indicate to show targets by name.
+    const [checkedElapsed, setCheckedElapsed] = useState(false); //State variable to indicate to show elapsed time on return packets.
+    const [checkedOutage, setCheckedOutage] = useState(false); //State variable to indicate to show accumulated outage time.
+    const [checkedQuiet, setCheckedQuiet] = useState(false); //State variable to indicate to show quiet output.
+    const [checkedStats, setCheckedStats] = useState(false); //State variable to indicate to show final stats output.
 
     // Component Constants.
     const title = "Fping"; // Title of the component.
@@ -151,14 +164,6 @@ function Fping() {
 
         // Construct the argmentss for the Fping command based on form input.
         const args: string[] = [];
-        // Takes the input values of the targets and makes an array while trimming the input of extra whitespace.
-        if (!checkedFilePath) {
-            args.push(...values.target.trim().split(/\s+/));
-        }
-        // Uses the specified file path of the target list.
-        if (checkedFilePath) {
-            args.push("-f", values.filePath)
-        }
         //Advanced input options
         if (checkedAdvanced) {
             //Number of pings to each target.
@@ -189,6 +194,46 @@ function Fping() {
             if (values.retries) {
                 args.push("-r", values.retries);
             }
+            //Sends random packet data.
+            if (checkedRandom) {
+                args.push("-R")
+            }
+            //Sets the Don't Frag flag.
+            if (checkedDontFrag) {
+                args.push("-M")
+            }
+            //Shows targets by address.
+            if (checkedAddress) {
+                args.push("-A")
+            }
+            //Shows targets by name.
+            if (checkedName) {
+                args.push("-d")
+            }
+            //Show elapsed time on return packets.
+            if (checkedElapsed) {
+                args.push("-e")
+            }
+            //Show the accumulated outage time.
+            if (checkedOutage) {
+                args.push("-o")
+            }
+            //Show quiet output.
+            if (checkedQuiet) {
+                args.push("-q")
+            }
+            //Show the final stats.
+            if (checkedStats) {
+                args.push("-s")
+            }
+        }
+        // Takes the input values of the targets and makes an array while trimming the input of extra whitespace.
+        if (!checkedFilePath) {
+            args.push(...values.target.trim().split(/\s+/));
+        }
+        // Uses the specified file path of the target list.
+        if (checkedFilePath) {
+            args.push("-f", values.filePath);
         }
 
         // Execute the bash command via helper method and handle its output or potential errors.
@@ -258,46 +303,84 @@ function Fping() {
                     />
                     {checkedAdvanced && (
                         <>
-                        <Group>
-                        <TextInput
-                            label={"Bind to a particular interface"}
-                            {...form.getInputProps("interface")}
-                        />
-                        <TextInput
-                            label={"Amount of pings to send each target"}
-                            {...form.getInputProps("count")}
-                        />
-                        <TextInput
-                            label={"Set source IP Address"}
-                            {...form.getInputProps("source")}
-                        />
-                        <TextInput
-                            label={"Time to Live hops"}
-                            {...form.getInputProps("ttl")}
-                        />
-                        </Group>
-                        <Group>
-                        <TextInput
-                            label={"Size in bytes"}
-                            placeholder="default: 56"
-                            {...form.getInputProps("size")}
-                        />
-                        <TextInput
-                            label={"Exponential backoff factor"}
-                            placeholder="default: 1.5"
-                            {...form.getInputProps("backoff")}
-                        />
-                        <TextInput
-                            label={"Interval between ping packets to one target"}
-                            placeholder="default: 1000 ms"
-                            {...form.getInputProps("period")}
-                        />
-                        <TextInput
-                            label={"Number of retries"}
-                            placeholder="default: 3"
-                            {...form.getInputProps("retries")}
-                        />
-                        </Group>
+                            <Group>
+                                <Switch
+                                    label="Send random packet data"
+                                    checked={checkedRandom}
+                                    onChange={(e) => setCheckedRandom(e.currentTarget.checked)}
+                                />
+                                <Switch
+                                    label="Set the Don't Frag flag"
+                                    checked={checkedDontFrag}
+                                    onChange={(e) => setCheckedDontFrag(e.currentTarget.checked)}
+                                />
+                                <Switch
+                                    label="Show targets by address"
+                                    checked={checkedAddress}
+                                    onChange={(e) => setCheckedAddress(e.currentTarget.checked)}
+                                />
+                                <Switch
+                                    label="Show targets by name"
+                                    checked={checkedName}
+                                    onChange={(e) => setCheckedName(e.currentTarget.checked)}
+                                />
+                            </Group>
+                            <Group>
+                                <Switch
+                                    label="Elapsed time on return packets"
+                                    checked={checkedElapsed}
+                                    onChange={(e) => setCheckedElapsed(e.currentTarget.checked)}
+                                />
+                                <Switch
+                                    label="Accumulated Outage time"
+                                    checked={checkedOutage}
+                                    onChange={(e) => setCheckedOutage(e.currentTarget.checked)}
+                                />
+                                <Switch
+                                    label="Show quiet output"
+                                    checked={checkedQuiet}
+                                    onChange={(e) => setCheckedQuiet(e.currentTarget.checked)}
+                                />
+                                <Switch
+                                    label="Show final stats"
+                                    checked={checkedStats}
+                                    onChange={(e) => setCheckedStats(e.currentTarget.checked)}
+                                />
+                            </Group>
+                            <Group>
+                                <TextInput
+                                    label={"Bind to a particular interface"}
+                                    {...form.getInputProps("interface")}
+                                />
+                                <TextInput
+                                    label={"Amount of pings to send each target"}
+                                    {...form.getInputProps("count")}
+                                />
+                                <TextInput label={"Set source IP Address"} {...form.getInputProps("source")} />
+                                <TextInput label={"Time to Live hops"} {...form.getInputProps("ttl")} />
+                            </Group>
+                            <Group>
+                                <TextInput
+                                    label={"Size in bytes"}
+                                    placeholder="default: 56"
+                                    {...form.getInputProps("size")}
+                                />
+                                <TextInput
+                                    label={"Exponential backoff factor"}
+                                    placeholder="default: 1.5"
+                                    {...form.getInputProps("backoff")}
+                                />
+                                <TextInput
+                                    label={"Interval between ping packets to one target"}
+                                    placeholder="default: 1000 ms"
+                                    {...form.getInputProps("period")}
+                                />
+                                <TextInput
+                                    label={"Number of retries"}
+                                    placeholder="default: 3"
+                                    {...form.getInputProps("retries")}
+                                />
+                            </Group>
                         </>
                     )}
                     <Button type={"submit"}>Start {title}</Button>
