@@ -8,6 +8,6 @@
 | 0005   | RESERVED                                                                                      |          |
 | 0006   | RESERVED                                                                                      |          |
 | 0007   |                                                                                               |          |
-| 0008   |                                                                                               |          |
+| 0008   | Integrating Suricata for real-time network analysis                                           | REJECTED |
 | 0009   |                                                                                               |          |
 | 0010   |                                                                                               |          |
