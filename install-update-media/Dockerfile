@@ -14,24 +14,13 @@ ENV XDG_RUNTIME_DIR=/run/user/1000
 ### Set Frontend to Noninteractive
 ARG DEBIAN_FRONTEND=noninteractive
 
-### Update Sources and Configure Pinning
-RUN echo "deb http://security.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list && \
-    echo "deb http://ftp.au.debian.org/debian buster main" >> /etc/apt/sources.list && \
-    echo "Package: *" > /etc/apt/preferences.d/kali-debian && \
-    echo "Pin: release a=kali-rolling" >> /etc/apt/preferences.d/kali-debian && \
-    echo "Pin-Priority: 900" >> /etc/apt/preferences.d/kali-debian && \
-    echo "Package: *" >> /etc/apt/preferences.d/kali-debian && \
-    echo "Pin: release a=buster" >> /etc/apt/preferences.d/kali-debian && \
-    echo "Pin-Priority: 800" >> /etc/apt/preferences.d/kali-debian && \
-    apt-get update
-
 ### Update Sources and Install Dependencies
-RUN apt-get update && \
+RUN echo "deb http://http.kali.org/kali kali-rolling main contrib non-free" > /etc/apt/sources.list && \
+    apt-get update && \
     apt-get install -y \
-        libgdk-pixbuf-2.0-0=2.42.12+dfsg-1+b1 \
-        libgdk-pixbuf2.0-common=2.42.12+dfsg-1 \
-        libgdk-pixbuf2.0-bin=2.42.12+dfsg-1+b1\
-    apt-get install -y \
+        libgdk-pixbuf-2.0-0 \
+        libgdk-pixbuf2.0-common \
+        libgdk-pixbuf2.0-bin \
         git \
         curl \
         pkgconf \
