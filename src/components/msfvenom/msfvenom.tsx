@@ -306,8 +306,7 @@ const PayloadGenerator = () => {
             tutorial={tutorial}
             steps={steps}
             sourceLink={sourcelink}
-        > 
-
+        >
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <LoadingOverlay visible={loading} />
                 {loading && (
@@ -416,10 +415,18 @@ const PayloadGenerator = () => {
                                 />
                             )}
                             {requiredVariables.includes("DLL") && (
-                                <TextInput label="DLL" placeholder="Enter DLL local path" {...form.getInputProps("dll")} />
+                                <TextInput
+                                    label="DLL"
+                                    placeholder="Enter DLL local path"
+                                    {...form.getInputProps("dll")}
+                                />
                             )}
                             {requiredVariables.includes("PATH") && (
-                                <TextInput label="PATH" placeholder="Enter path to file" {...form.getInputProps("path")} />
+                                <TextInput
+                                    label="PATH"
+                                    placeholder="Enter path to file"
+                                    {...form.getInputProps("path")}
+                                />
                             )}
                             {requiredVariables.includes("PE") && (
                                 <TextInput

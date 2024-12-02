@@ -39,8 +39,7 @@ const Wifite = () => {
         " button and view the output block for the result.";
     const sourceLink = "https://www.kali.org/tools/wifite/";
     const dependencies = ["wifite"];
-    const tutorial =
-        "https://docs.google.com/document/d/1sbLdAH7QMHSUwM-tCZ1rBrq1v4-AeI8Qd55G7DJBcxk/edit?usp=sharing";
+    const tutorial = "https://docs.google.com/document/d/1sbLdAH7QMHSUwM-tCZ1rBrq1v4-AeI8Qd55G7DJBcxk/edit?usp=sharing";
 
     const form = useForm({
         initialValues: {

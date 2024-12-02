@@ -186,11 +186,11 @@ const Crackmapexec = () => {
 
     return (
         <RenderComponent
-        title={title}
-        tutorial={tutorial}
-        description={descriptionUserGuide}
-        steps={steps}
-        sourceLink={sourceLink}
+            title={title}
+            tutorial={tutorial}
+            description={descriptionUserGuide}
+            steps={steps}
+            sourceLink={sourceLink}
         >
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <LoadingOverlay visible={isLoading} />

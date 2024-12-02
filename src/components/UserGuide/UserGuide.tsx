@@ -3,8 +3,6 @@ import { IconAbacus, IconBuildingLighthouse, IconQuestionMark, IconSettings } fr
 import styles from "./UserGuide.module.css";
 import React from "react";
 
-
-
 interface ComponentProps {
     title: string; // Title of the component. This should be strictly limited to the title.
     description: string; // Description of the component. This should not include steps.
@@ -100,15 +98,10 @@ export function RenderComponent(component: ComponentProps) {
                 </Tabs.Panel>
                 <Tabs.Panel value="tutorial">
                     <Text className={styles.text} size="md">
-                   <iframe
-                    src={component.tutorial}
-                    width={3000}
-                    height={1000}
-                />
+                        <iframe src={component.tutorial} width={3000} height={1000} />
                     </Text>
                 </Tabs.Panel>
             </Tabs>
         </>
     );
-  
 }

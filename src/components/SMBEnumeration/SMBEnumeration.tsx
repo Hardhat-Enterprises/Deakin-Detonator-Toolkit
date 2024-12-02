@@ -12,8 +12,7 @@ const title = "SMB Enumeration";
 const steps = "";
 const description = "";
 const tutorial = "https://docs.google.com/document/d/1bFpB8Vo8osE4SBKme5wJcgLbp7wgmjnw76SCPeF3CoU/edit?usp=sharing";
-const sourcelink ="";
-
+const sourcelink = "";
 
 // Description for the tooltip. Contents of this variable are displayed to the user when
 // hovering over the info option.
@@ -189,11 +188,11 @@ const SMBEnumeration = () => {
 
     return (
         <RenderComponent
-        title={title}
-        description={description}
-        steps={steps}
-        tutorial={tutorial}
-        sourceLink={sourcelink}
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourcelink}
         >
             <form
                 onSubmit={form.onSubmit((values) =>
@@ -222,7 +221,9 @@ const SMBEnumeration = () => {
                         title={"Scan speed"}
                         data={speeds}
                         placeholder={"Select a scan speed. Default set to T3"}
-                        description={"Speed of the scan, refer: https://nmap.org/book/performance-timing-templates.html"}
+                        description={
+                            "Speed of the scan, refer: https://nmap.org/book/performance-timing-templates.html"
+                        }
                     />
 
                     {/* SMB Script dropdown */}
