@@ -321,14 +321,6 @@ export const ROUTES: RouteProperties[] = [
         category: "Password Cracking and Authentication Testing",
     },
     {
-        name: "AI-based pen-testing tool (Gyoithon)",
-        path: "/tools/gyoithon",
-        element: <Gyoithon />,
-        description:
-            "An AI-powered penetration testing tool designed to automate the discovery and exploitation of vulnerabilities in HTTP/HTTPS-based web applications.",
-        category: "Web Application Testing",
-    },
-    {
         name: "Amap",
         path: "/tools/Amap",
         element: <AMAP />,
@@ -549,6 +541,14 @@ export const ROUTES: RouteProperties[] = [
         category: "Attack Tools",
     },
     {
+        name: "Gyoithon",
+        path: "/tools/gyoithon",
+        element: <Gyoithon />,
+        description:
+            "An AI-powered penetration testing tool designed to automate the discovery and exploitation of vulnerabilities in HTTP/HTTPS-based web applications.",
+        category: "Web Application Testing",
+    },
+    {
         name: "Hashcat",
         path: "/tools/hashcat",
         element: <Hashcat />,
@@ -653,13 +653,6 @@ export const ROUTES: RouteProperties[] = [
         category: "Information Gathering and Analysis",
     },
     {
-        name: "RTsort",
-        path: "/tools/RTsort",
-        element: <RTsort />,
-        description: "A subfunction of the Rainbow Crack tool used for sorting and managing created rainbow tables.",
-        category: "Password Cracking and Authentication Testing",
-    },
-    {
         name: "Rainbowcrack",
         path: "/tools/Rainbowcrack",
         element: <Rainbowcrack />,
@@ -672,6 +665,13 @@ export const ROUTES: RouteProperties[] = [
         element: <Rtgen />,
         description: "A tool that generates rainbow tables to be used in password cracking.",
         category: "Network Traffic Generation",
+    },
+    {
+        name: "Rtsort",
+        path: "/tools/RTsort",
+        element: <RTsort />,
+        description: "A subfunction of the Rainbow Crack tool used for sorting and managing created rainbow tables.",
+        category: "Password Cracking and Authentication Testing",
     },
     {
         name: "SearchSploit",
@@ -751,20 +751,20 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
+        name: "Testssl",
+        path: "/tools/Testssl",
+        element: <TestSSL />,
+        description:
+            "A versatile command-line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
         name: "The Harvester",
         path: "/tools/theharvester",
         element: <TheHarvester />,
         description:
             "A tool used for gathering information from various public sources, such as search engines and social media, to find email addresses and domain details.",
         category: "Information Gathering and Analysis",
-    },
-    {
-        name: "Testssl.sh",
-        path: "/tools/Testssl",
-        element: <TestSSL />,
-        description:
-            "A versatile command-line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
-        category: "Network Scanning and Enumeration",
     },
     {
         name: "Tiger",
