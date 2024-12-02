@@ -664,7 +664,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/rtgen",
         element: <Rtgen />,
         description: "A tool that generates rainbow tables to be used in password cracking.",
-        category: "Network Traffic Generation",
+        category: "Password Cracking and Authentication Testing",
     },
     {
         name: "Rtsort",
