@@ -1,4 +1,4 @@
-import { Button, NativeSelect, Stack, TextInput, Switch } from "@mantine/core";
+import { Button, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -32,6 +32,7 @@ function Fping() {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [checkedFilePath, setFilePath] = useState(false); // State variable to indicate if using a file containing targets.
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false); // State variable to indicate advanced settings.
 
     // Component Constants.
     const title = "Fping"; // Title of the component.
@@ -187,6 +188,11 @@ function Fping() {
                         label="Target File"
                         checked={checkedFilePath}
                         onChange={(e) => setFilePath(e.currentTarget.checked)}
+                    />
+                    <Switch
+                        label="Advanced Options"
+                        checked={checkedAdvanced}
+                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                     />
                     {!checkedFilePath && (
                         <TextInput
