@@ -27,12 +27,11 @@ RUN echo "deb http://security.debian.org/debian-security buster/updates main" >>
 
 ### Update Sources and Install Dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        shared-mime-info \
-        libgdk-pixbuf2.0-bin && \
     apt-get install -y \
-        libgdk-pixbuf2.0-0=2.38.1+dfsg-1 \
-        libgdk-pixbuf2.0-common=2.38.1+dfsg-1\
+        libgdk-pixbuf-2.0-0 \
+        libgdk-pixbuf2.0-common \
+        shared-mime-info \
+        libgdk-pixbuf2.0-bin\
         git \
         curl \
         pkgconf \
