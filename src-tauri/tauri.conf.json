@@ -353,11 +353,6 @@
                         "args": true
                     },
                     {
-                        "name": "tshark",
-                        "cmd": "tshark",
-                        "args": true
-                    },
-                    {
                         "name": "unicornscan",
                         "cmd": "unicornscan",
                         "args": true
