@@ -74,7 +74,6 @@ import Rtgen from "./rtgen/rtgen";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import ArpanameTool from "./Arpaname/arpaname";
 import Nikto from "./Nikto/Nikto";
-import TShark from "./TShark/TShark";
 import Bully from "./Bully/Bully";
 import AMAP from "./Amap/Amap";
 import Gitleaks from "./Gitleaks/Gitleaks";
@@ -788,13 +787,6 @@ export const ROUTES: RouteProperties[] = [
         element: <Traceroute />,
         description:
             "A network diagnostic tool that tracks the path packets take as they travel from a source to a destination.",
-        category: "Network Scanning and Enumeration",
-    },
-    {
-        name: "TShark",
-        path: "/tools/TShark",
-        element: <TShark />,
-        description: "A command-line network analyser that can capture, analyse, and troubleshoot network traffic.",
         category: "Network Scanning and Enumeration",
     },
     {

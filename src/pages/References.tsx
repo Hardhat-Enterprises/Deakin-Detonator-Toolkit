@@ -464,11 +464,6 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/traceroute/"}
                                 />
                                 <Reference
-                                    name={"TShark"}
-                                    description={"TShark is a tool to dump and analyze network traffic."}
-                                    url={"https://www.kali.org/tools/wireshark/#tshark-1"}
-                                />
-                                <Reference
                                     name={"Unicornscan"}
                                     description={
                                         "Unicornscan is a new information gathering and correlation engine built for and by members of the security research and testing communities."
