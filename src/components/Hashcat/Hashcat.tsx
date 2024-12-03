@@ -58,7 +58,7 @@ const Hashcat = () => {
         " to commence. \n" +
         "Step 7: View the output below. \n";
     const sourceLink = "https://www.kali.org/tools/hashcat/"; // Link to Hashcat's official site
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1m6bucq0EDFT0UMkOvcTEmWby1TT_qbeL14ohW1JXkSg/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["hashcat"]; // Contains the dependencies required by the component
 
     // Options for attack mode and input type

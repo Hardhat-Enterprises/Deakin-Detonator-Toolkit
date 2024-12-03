@@ -42,7 +42,7 @@ export function Amass() {
         "' to start the enumeration.\n" +
         "Step 3: View the Output block below to see the results of the scan.";
     const sourceLink = "https://www.kali.org/tools/amass/";
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1t7YrU1qMx9agtTsxorAkk__OZ88UIq9V4M3CVkDqmxE/edit?usp=sharing";
     const dependencies = ["amass"];
 
     // Form hook to handle form input.

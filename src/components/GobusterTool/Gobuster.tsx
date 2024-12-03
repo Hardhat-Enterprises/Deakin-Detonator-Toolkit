@@ -44,7 +44,7 @@ const GoBusterTool = () => {
         "Step 2: Specify the path to a wordlist file (e.g., /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt).\n" +
         "Step 3: Click Start GoBuster to initiate the scan."; // Steps to undertake to use the tool. // Steps to undertake to use the tool.
     const sourceLink = "https://www.kali.org/tools/gobuster/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1fMANB1rlFPlWFKaRqKhWhuaw3wQ8bsY4CKJp6XQpGBw/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["gobuster"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.

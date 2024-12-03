@@ -65,7 +65,7 @@ export function WalkthroughsPage() {
                 title="Filter for a Category"
                 data={categories}
                 required
-                placeholder="Filter for a Category"
+                //placeholder="Filter for a Category"
             />
             <Table horizontalSpacing="xl" verticalSpacing="md" fontSize="md">
                 <thead>

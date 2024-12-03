@@ -55,7 +55,7 @@ const TheHarvester = () => {
         "Step 5: View the Output block below to view the results of the tool's execution.\n" +
         "Switch to Advanced Mode for further options.";
     const sourceLink = "https://gitlab.com/kalilinux/packages/theharvester"; // Link to the source code.
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1o97UljHxEzmI_IoQa15-Kcl9KnAbXB-2VGpnSljZQus/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["theHarvester"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.

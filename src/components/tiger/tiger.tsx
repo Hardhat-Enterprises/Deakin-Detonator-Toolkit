@@ -39,8 +39,7 @@ const Tiger = () => {
         " button and view the output block for the result. ";
     const sourceLink = "https://www.kali.org/tools/tiger/";
     const dependencies = ["tiger"];
-    const tutorial =
-        "Tiger is a tool that automates security audits on Unix-based systems. It checks file permissions, software configuration, and system vulnerabilities. It's essential to specify where to save the report with the '-l' option. Run Tiger with higher permissions using 'pkexec' for a comprehensive audit.";
+    const tutorial = "https://docs.google.com/document/d/1bkG-s9h6bpsCWq2IW1pOJbxpCPc_ZcqNwswup_iSB5k/edit?usp=sharing";
 
     let form = useForm({
         initialValues: {

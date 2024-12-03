@@ -45,7 +45,7 @@ function SQLmap() {
         "Step 2: Start the process.\n" +
         "Step 3: Review the output for further analysis.\n";
     const sourceLink = "https://github.com/sqlmapproject/sqlmap"; // Link to the source code
-    const tutorial = ""; // Link to the official documentation/tutorial
+    const tutorial = "https://docs.google.com/document/d/1O0yp3_vazO2UsnUBcbSyeuYJXq9x7Vcsjjsfw_LLhEc/edit?usp=sharing"; // Link to the official documentation/tutorial
     const dependencies = ["sqlmap"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input

@@ -18,7 +18,7 @@ const steps =
     "Step 2: Click scan to commence SMB-Ghost Scanners operation.\n" +
     "Step 3: View the Output block below to view the results of the tools execution."; // Steps for viewing the component
 const sourceLink = "https://github.com/w1ld3r/SMBGhost_Scanner?tab=readme-ov-file"; // Link to the source code or documentation.
-const tutorial = ""; // Link to the official documentation/tutorial.
+const tutorial = "https://docs.google.com/document/d/1bVNVFUnwX9VMTaSd-OMneKfs5b61swiFLx0d7haFHcA/edit?usp=sharing"; // Link to the official documentation/tutorial.
 const dependencies = ["python3"]; // Contains the dependencies required by the component.
 /**
  * Interface representing the form values used in the SMBGhostScanner component.

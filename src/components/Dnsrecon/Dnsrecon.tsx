@@ -39,7 +39,7 @@ function Dnsrecon() {
         "Step 2: Click start DNSRecon to commence DNSRecon's operation.\n" +
         "Step 3: View the output block below to view the results of the tool's execution.\n";
     const sourceLink = "https://www.kali.org/tools/dnsrecon/"; // Link to the source code or Kali Tools page.
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1ZEBKlad_0qlAugE0_1YLUMACLC0m9JyfpUPl6WkF0wc/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["dnsrecon"]; // Dependencies required for the Dnsrecon tool.
 
     // Form hook to handle form input.

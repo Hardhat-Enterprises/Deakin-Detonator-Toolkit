@@ -44,7 +44,7 @@ const steps =
     "Step 5: View the output block below to see the results.\n" +
     "Optionally you may select additional advanced options.";
 const sourceLink = "https://www.kali.org/tools/aircrack-ng/"; //link to the source component.
-const tutorial = "";
+const tutorial = "https://docs.google.com/document/d/1uMAojanvI4lQkJ5q9lx4HOioNbYTPbfY59RCHvQn4ow/edit?usp=sharing";
 const dependencies = "Aircrack-NG"; //contains the dependancies required for the component.
 
 const AircrackNG = () => {

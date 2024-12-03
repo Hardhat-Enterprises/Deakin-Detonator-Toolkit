@@ -46,7 +46,7 @@ const Enum4Linux = () => {
         title +
         " button and view the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/enum4linux/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1F4F-CGdQoedHk3A4nSthafHocbhTwKZv8GnBCtghouQ/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const [osinfo, setInfo] = useState(false);
     const form = useForm({
         initialValues: {

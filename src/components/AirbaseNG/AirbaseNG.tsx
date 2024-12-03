@@ -53,7 +53,7 @@ const AirbaseNG = () => {
         "Step 4: Click 'Start AP' to begin the process.\n" +
         "Step 5: View the output block to see the results.";
     const sourceLink = "https://www.kali.org/tools/aircrack-ng/#airbase-ng"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1B1DCpYKFMOn-aEKUJhFvvHnQDxe6KqeLqCgKWijn9pM/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["aircrack-ng"]; // Contains the dependencies required by the compon
 
     // Form handling for the component's input fields.
