@@ -9,16 +9,15 @@ jobs:
     update-trivy-db:
         runs-on: ubuntu-latest
         steps:
-            # Step 1: Setup oras (for interacting with OCI registries like GitHub Container Registry)
+            # Set up oras to interact with OCI registries, such as GitHub Container Registry
             - name: Setup oras
               uses: oras-project/setup-oras@v1
 
-            # Step 2: Get current date to create a unique cache key
+            # Set the current date to be used in the cache key
             - name: Get current date
               id: date
               run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
-            # Step 3: Download and extract the Trivy vulnerability database
             - name: Download and extract the vulnerability DB
               run: |
                   mkdir -p $GITHUB_WORKSPACE/.cache/trivy/db
@@ -26,7 +25,6 @@ jobs:
                   tar -xzf db.tar.gz -C $GITHUB_WORKSPACE/.cache/trivy/db
                   rm db.tar.gz
 
-            # Step 4: Download and extract the Java vulnerability database
             - name: Download and extract the Java DB
               run: |
                   mkdir -p $GITHUB_WORKSPACE/.cache/trivy/java-db
@@ -34,11 +32,8 @@ jobs:
                   tar -xzf javadb.tar.gz -C $GITHUB_WORKSPACE/.cache/trivy/java-db
                   rm javadb.tar.gz
 
-            # Step 5: Cache the databases to speed up future workflows
             - name: Cache DBs
-              uses: actions/cache@v4
+              uses: actions/cache/save@v3
               with:
                   path: ${{ github.workspace }}/.cache/trivy
-                  key: cache-trivy-${{ steps.date.outputs.date }}
-                  restore-keys: |
-                      cache-trivy-
+                  key: cache-trivy-${{ steps.date.outputs.date }} # Cache key based on the current date
