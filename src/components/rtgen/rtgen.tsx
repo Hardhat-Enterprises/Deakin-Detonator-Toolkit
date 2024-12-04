@@ -41,14 +41,23 @@ const Rtgen = () => {
     // Component Constants
     const title = "Rtgen";
     const description =
-        "Rtgen is a tool for generating rainbow tables. These tables can be used to perform fast hash lookups during password cracking operations.";
+        "Rtgen is a tool for creating rainbow tables, which are precomputed lookup tables used to crack password hashes. These tables allow for faster recovery of plaintext passwords from hashed values.";
     const steps =
-        "=== Required ===\n" +
-        "Step 1: Input the character set used for plaintext generation (e.g., alphanumeric).\n" +
-        "Step 2: Select the hash algorithm to use (e.g., MD5, SHA1).\n" +
-        "Step 3: Specify the chain length for the rainbow table.\n" +
-        "Step 4: Define the size of the rainbow table.\n" +
-        "Step 5: Provide an output file name where the generated table will be saved.\n";
+        "=== How to Use Rtgen ===\n" +
+        "Step 1: Select the hash algorithm in the 'Hash Algorithm' field.\n" +
+        "Supported algorithms: lm, ntlm, md5, sha1, sha256.\n\n" +
+        "Step 2: Define the character set for plaintext generation.\n" +
+        "Supported sets: numeric, alpha, alpha-numeric, loweralpha, loweralpha-numeric, mixalpha, mixalpha-numeric, ascii-32-95, ascii-32-65-123-4, alpha-numeric-symbol32-space.\n" +
+        "Note: Custom character sets can be created by modifying 'charset.txt' in '/usr/share/rainbowcrack'.\n\n" +
+        "Step 3: Specify the minimum and maximum plaintext lengths (e.g., 1 to 7).\n" +
+        "These fields define the minimum and maximum lengths of plaintext passwords to include in the table.\n\n" +
+        "Step 4: Configure table parameters:\n" +
+        "- Table Index: Number to distinguish multiple tables (e.g., 0).\n" +
+        "- Chain Length: Number of hashes per chain (e.g., 1000). Higher values reduce table count but increase computation time.\n" +
+        "- Chain Count: Total chains to generate (e.g., 100000). Higher values improve success rates but increase table size.\n" +
+        "- Part Index: Used for splitting table generation into parts. Set to 0 if not splitting.\n\n" +
+        "Step 5: Click 'Generate Rtgen' to start creating the table.\n" +
+        "The generated rainbow table will be saved in '/usr/share/rainbowcrack'.";
     const sourceLink = "https://www.kali.org/tools/rainbowcrack/#rtgen"; // Link to the source code
     const tutorial = "https://docs.google.com/document/d/1oTDlAp708Lrxhs-KwhfX9G3RgNrk2gGa1Xm7KhRnZXg/edit?usp=sharing"; // Link to the official documentation/tutorial
     const dependencies = ["rtgen"]; // Contains the dependencies required by the component.
