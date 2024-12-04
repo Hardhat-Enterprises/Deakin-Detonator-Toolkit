@@ -38,7 +38,7 @@ const netcatOptions = ["Listen", "Connect", "Port Scan", "Send File", "Receive F
 
 /**
  * The Netcat component.
- * @returns The Netcat component.import path from 'path'
+ * @returns The Netcat component.
  */
 //Tool name must be capital or jsx will cry out errors :P
 const NetcatTool = () => {
