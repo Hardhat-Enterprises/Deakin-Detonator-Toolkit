@@ -13,4 +13,4 @@
 | 0010   | Implementation of Fping into PT-GUI                                                           | APPROVED |
 | 0011   | Introduction of OpenAPI integration                                                           | PROPOSED |
 | 0012   |                                                                                               |          |
-| 0013   | Integrating Subjack for Subdomain Takeover Detection                                          | PROPOSED |
+| 0013   | Integrating Subjack for Subdomain Takeover Detection                                          | APPROVED |
