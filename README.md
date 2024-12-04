@@ -108,7 +108,51 @@ To install Deakin Detonator Toolkit on Kali, you can follow the method below. Th
 
     ```bash
     curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/setup_ddt.sh -o setup_ddt.sh && chmod +x setup_ddt.sh && ./setup_ddt.sh
+
     ```
+
+# 🐋 Container setup [In beta]
+
+DDT currently runs from a container in a limited capacity. See the list of functional services in the readme.md file in the `install-update-media/container` directory.
+
+To run Deakin Detonator Toolkit from a container, follow the following steps below based on your host OS.
+
+## Run the application from a container
+
+🍎 Mac hosts:
+
+1. Download xquartz to use as X server: https://www.xquartz.org/
+
+2. xquartz > settings > security > tick allow connections from network clients
+
+3. Build the container: `docker build -t deakin-detonator-toolkit .`
+
+4. Run the container `sudo docker run -it --network host --privileged -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix deakin-detonator-toolkit /bin/bash`
+
+5. Run DDT: `yarn run tauri dev`
+
+🪟 Windows hosts:
+
+1. Download vcxsrv to use as X server: https://vcxsrv.com/
+
+2. Start xlaunch with these options:
+   Multiple Windows.
+   Check Disable access control (to allow connections from Docker).
+3. Keep VcXsrv running in the background
+4. Build the container: `docker build -t deakin-detonator-toolkit .`
+5. Run the container: `docker run -it --network host --privileged -e DISPLAY=host.docker.internal:0 deakin-detonator-toolkit /bin/bash`
+6. Run DDT: `yarn run tauri dev`
+
+🐧 Linux hosts:
+
+1. Allow docker access access to xhost `xhost +local:docker`
+
+2. Build the container: `docker build -t deakin-detonator-toolkit .`
+
+3. Run the container `sudo docker run -it --network host --privileged -e DISPLAY=host.docker.internal:0 -v /tmp/.X11-unix:/tmp/.X11-unix deakin-detonator-toolkit /bin/bash`
+
+4. Run DDT: `yarn run tauri dev`
+   XQuartz
 
 # 📷 Screenshot
 
