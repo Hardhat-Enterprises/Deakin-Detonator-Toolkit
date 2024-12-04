@@ -158,7 +158,7 @@ const NetcatTool = () => {
 
         //Switch case
         switch (values.netcatOptions) {
-            case "Listen": //Sets up nc listener, nc synimport { FilePicker } from "../FileHandler/FilePicker";ax: nc -lvp <port number>
+            case "Listen": //Sets up nc listener, nc syntax: nc -lvp <port number>
                 args = [`-l${verboseFlag}p`];
                 args.push(values.portNumber);
 
@@ -205,7 +205,7 @@ const NetcatTool = () => {
                 break;
 
             case "Port Scan": //nc syntax: nc -zv <ip address/hostname> <port range>
-                //addition of -n will not perform any dns or name lookups.import path from 'path'
+                //addition of -n will not perform any dns or name lookups.
 
                 args = [`-z${verboseFlag}n`];
                 args.push(`${values.ipAddress}`);
