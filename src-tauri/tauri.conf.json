@@ -343,6 +343,11 @@
                         "args": true
                     },
                     {
+                        "name": "theHarvester",
+                        "cmd": "theHarvester",
+                        "args": true
+                    },
+                    {
                         "name": "tiger",
                         "cmd": "tiger",
                         "args": true
