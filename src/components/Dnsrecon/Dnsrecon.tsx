@@ -13,7 +13,7 @@ import { RenderComponent } from "../UserGuide/UserGuide";
  * Represents the form values for the Dnsrecon component.
  */
 interface FormValuesType {
-    url: string;
+    domain: string;
 }
 
 /**
@@ -35,7 +35,7 @@ function Dnsrecon() {
     const title = "DNSRecon"; // Title of the component.
     const description = "DNSRecon is a tool for DNS enumeration and scanning."; // Description of the component.
     const steps =
-        "Step 1: Enter a target domain URL, for example, https://www.deakin.edu.au\n" +
+        "Step 1: Enter Target Domain: Use the correct format (e.g., deakin.edu.au). Avoid including http:// or https://.\n" +
         "Step 2: Click start DNSRecon to commence DNSRecon's operation.\n" +
         "Step 3: View the output block below to view the results of the tool's execution.\n";
     const sourceLink = "https://www.kali.org/tools/dnsrecon/"; // Link to the source code or Kali Tools page.
@@ -45,11 +45,10 @@ function Dnsrecon() {
     // Form hook to handle form input.
     const form = useForm<FormValuesType>({
         initialValues: {
-            url: "",
+            domain: "",
         },
         validate: {
-            url: (value) =>
-                /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w-]*)*$/i.test(value) ? null : "Invalid URL format", // Regex for URL validation
+            domain: (value) => (/^(([\w-]+\.)+[a-zA-Z]{2,})$/i.test(value) ? null : "Invalid domain format"), // Regex for domain validation
         },
     });
 
@@ -136,7 +135,7 @@ function Dnsrecon() {
         setAllowSave(false);
 
         // Construct the arguments for the Dnsrecon command.
-        const args = ["-d", values.url];
+        const args = ["-d", values.domain];
 
         try {
             // Execute the Dnsrecon command using the CommandHelper utility.
@@ -196,7 +195,12 @@ function Dnsrecon() {
                     {/* Render the loading overlay and cancel button */}
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Stack>
-                        <TextInput label={"URL"} required {...form.getInputProps("url")} />
+                        <TextInput
+                            label={"Domain Name"}
+                            placeholder="Enter a valid domain name, e.g., deakin.edu.au"
+                            required
+                            {...form.getInputProps("domain")}
+                        />
                         <Button type={"submit"}>Start {title}</Button>
                         {/* Render the save output to file component */}
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
