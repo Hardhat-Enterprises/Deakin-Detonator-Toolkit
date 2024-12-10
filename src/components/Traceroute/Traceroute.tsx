@@ -140,7 +140,7 @@ const Traceroute = () => {
         // Switch case to handle different traceroute scan options based on user selection.
         switch (values.traceRouteSwitch) {
             case "Traceroute ICMP scan":
-                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
+                args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
@@ -158,7 +158,7 @@ const Traceroute = () => {
             // Traceroute TCP scan uses the '-T' option.
             // Syntax: traceroute -T <hostname>
             case "Traceroute TCP scan":
-                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
+                args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-T`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
@@ -176,7 +176,7 @@ const Traceroute = () => {
             // Traceroute UDP scan uses the '-U' option.
             // Syntax: traceroute -U <hostname>
             case "Traceroute UDP scan":
-                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
+                args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-U`);
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
@@ -194,7 +194,7 @@ const Traceroute = () => {
             // Traceroute custom scan allows specifying additional options
             // Syntax: traceroute <options> <hostname>
             case "Traceroute custom scan":
-                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
+                args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`${values.traceRouteOptions}`); // Adds custom options to the arguments list.
                 args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
