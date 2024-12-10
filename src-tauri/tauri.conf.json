@@ -333,6 +333,12 @@
                         "args": true
                     },
                     {
+                        "name": "subjack",
+                        "cmd": "subjack",
+                        "args": true
+                    },
+                      
+                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
                         "args": true

@@ -95,6 +95,7 @@ import Sqlninja from "./Sqlninja/sqlninja";
 import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
+import Subjack from "./Subjack/Subjack";
 
 export interface RouteProperties {
     name: string;
@@ -749,6 +750,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used to exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end.",
         category: "Vulnerability Assessment and Exploitation",
+    },
+    {
+        name: "Subjack",
+        path: "/tools/Subjack",
+        element: <Subjack />,
+        description: "Subdomain takeover detection tool.",
+        category: "Web Application Testing",
     },
     {
         name: "Sublist3r",
