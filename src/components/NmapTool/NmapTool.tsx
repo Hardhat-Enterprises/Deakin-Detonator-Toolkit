@@ -55,7 +55,7 @@ function Nmap() {
         "Step 2: Configure scan options.\n" +
         "Step 3: Run the Nmap scan and review results.";
     const sourceLink = "https://nmap.org/book/man.html";
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1F2hVxspkDsGRWWSTYzRuZD4EW_KeIdFem4cspHaMovo/edit?usp=sharing";
     const dependencies = ["nmap"];
 
     // Initialize the form hook with initial values

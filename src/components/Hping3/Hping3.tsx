@@ -66,7 +66,7 @@ const Hping3 = () => {
         " requires sudo privileges to run).\n" +
         "Step 3: View the results in the output block.";
     const sourceLink = "https://www.kali.org/tools/hping3/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1C_37p_KcvXxnRboNDe9VvvJmqHiLhptnvPwdM2vQ-D0/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["hping3"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.

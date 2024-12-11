@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput, Radio } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -14,6 +14,7 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
  */
 interface FormValuesType {
     ipAddress: string;
+    ipType: "IPv4" | "IPv6";
 }
 
 /**
@@ -41,7 +42,7 @@ const ArpanameTool = () => {
         "Step 2: Click lookup to run Arpaname.\n" +
         "Step 3: View the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/bind9/#arpaname"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1dwLjkG_kFi2shSGeDVQByz64j-93ghUAElsPE9T3YLU/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["arpaname"];
 
     // Check for command availability on component mount
@@ -62,6 +63,7 @@ const ArpanameTool = () => {
     const form = useForm<FormValuesType>({
         initialValues: {
             ipAddress: "",
+            ipType: "IPv4", //Default type used is IPv4
         },
     });
 
@@ -115,10 +117,11 @@ const ArpanameTool = () => {
      * @param {string} ip - The IP address string to be validated.
      * @returns {boolean} True if the input is a valid IP address, false otherwise.
      */
-    const validateIPAddress = (ip: string) => {
+    const validateIPAddress = (ip: string, type: "IPv4" | "IPv6") => {
         const ipv4Pattern = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-        const ipv6Pattern = /^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4}|:)$/;
-        return ipv4Pattern.test(ip) || ipv6Pattern.test(ip);
+        const ipv6Pattern =
+            /^(([0-9a-fA-F]{1,4}:){1,7}[0-9a-fA-F]{1,4}|(([0-9a-fA-F]{1,4}:){0,6}:([0-9a-fA-F]{1,4}:){0,6}[0-9a-fA-F]{1,4})|::)$/;
+        return type === "IPv4" ? ipv4Pattern.test(ip) : ipv6Pattern.test(ip);
     };
 
     /**
@@ -126,8 +129,8 @@ const ArpanameTool = () => {
      * @param {FormValuesType} values - The form values containing the IP address.
      */
     const onSubmit = async (values: FormValuesType) => {
-        if (!validateIPAddress(values.ipAddress)) {
-            setErrorMessage("Please enter a valid IP address."); // Set error message for invalid IP
+        if (!validateIPAddress(values.ipAddress, values.ipType)) {
+            setErrorMessage(`Please enter a valid ${values.ipType} address.`); // Set error message for invalid IP
             return;
         }
         // Disallow saving until the tool's execution is complete
@@ -182,6 +185,16 @@ const ArpanameTool = () => {
                     {LoadingOverlayAndCancelButton(loading, pidTarget)}
                     <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")}></TextInput>
                     {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
+                    <Radio.Group
+                        value={form.values.ipType}
+                        onChange={(value) => form.setFieldValue("ipType", value as "IPv4" | "IPv6")}
+                        label="Select IP Type"
+                        required
+                    >
+                        <Radio value="IPv4" label="IPv4" />
+                        <Radio value="IPv6" label="IPv6" />
+                    </Radio.Group>
+                    {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
                     {/* Render error message if present */}
                     <Button type={"submit"}>Lookup</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}

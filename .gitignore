@@ -27,3 +27,6 @@ dist-ssr
 Exploit.class
 Exploit.java
 src-tauri/exploits/GyoiThon/host.txt
+
+# .env file
+.env

@@ -40,7 +40,7 @@ function Whois() {
         "Step 2: Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
         "Step 3: Review the scan output to identify any security issues.\n";
     const sourceLink = "https://github.com/weppos/whois"; // Link to the source code
-    const tutorial = ""; // Link to the official documentation/tutorial
+    const tutorial = "https://docs.google.com/document/d/1n-QxEXGDOdOlYZ13OGQPV7QdnOEsJF4vPtObGy0vYbs/edit?usp=sharing"; // Link to the official documentation/tutorial
     const dependencies = ["whois"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input

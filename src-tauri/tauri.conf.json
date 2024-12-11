@@ -18,6 +18,11 @@
                 "sidecar": true,
                 "scope": [
                     {
+    			"name": "nmap",
+   			"cmd": "/usr/bin/nmap",
+    			"args": true
+		    },
+                    {
                         "name": "airbase-ng",
                         "cmd": "airbase-ng",
                         "args": true
@@ -48,6 +53,11 @@
                     {
                         "name": "arjun",
                         "cmd": "arjun",
+                        "args": true
+                    },
+                    {
+                        "name": "arpaname",
+                        "cmd": "arpaname",
                         "args": true
                     },
                     {
@@ -158,6 +168,11 @@
                     {
                         "name": "find",
                         "cmd": "find",
+                        "args": true
+                    },
+                    {
+                        "name": "fping",
+                        "cmd": "fping",
                         "args": true
                     },
                     {
@@ -326,6 +341,12 @@
                         "args": true
                     },
                     {
+                        "name": "subjack",
+                        "cmd": "subjack",
+                        "args": true
+                    },
+                      
+                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
                         "args": true
@@ -333,6 +354,11 @@
                     {
                         "name": "testssl",
                         "cmd": "testssl",
+                        "args": true
+                    },
+                    {
+                        "name": "theHarvester",
+                        "cmd": "theHarvester",
                         "args": true
                     },
                     {
@@ -346,11 +372,6 @@
                         "args": true
                     },
                     {
-                        "name": "tshark",
-                        "cmd": "tshark",
-                        "args": true
-                    },
-                    {
                         "name": "unicornscan",
                         "cmd": "unicornscan",
                         "args": true
@@ -358,6 +379,11 @@
                     {
                         "name": "urlsnarf",
                         "cmd": "urlsnarf",
+                        "args": true
+                    },
+                    {
+                        "name": "wafw00f",
+                        "cmd": "wafw00f",
                         "args": true
                     },
                     {

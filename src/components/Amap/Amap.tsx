@@ -35,15 +35,19 @@ const AMAP = () => {
 
     // Component Constants.
     const title = "AMAP"; // Title of the component.
-    const description = "AMAP is a tool for application protocol detection and service fingerprinting."; // Description of the component.
+    const description =
+        "AMAP is a tool for application protocol detection and service fingerprinting. " +
+        "Application protocol detection identifies the type of communication protocol used by a service, " + // Description of the component.
+        "while service fingerprinting pinpoints the specific application and version running on a host. " + // Define the main functional component for the AMAP tool.
+        "These processes help in understanding what services are active on a network and assessing potential vulnerabilities."; // This component handles the configuration, execution, and result display of the AMAP command-line tool.
     const steps =
         "Step 1: Enter the target host to scan.\n" +
         "Step 2: Specify the port(s) to scan.\n" +
-        "Step 3: (Optional) Enter additional options.\n" +
+        "Step 3: Enter connection or response timeout settings (optional). E.g-> '-A','-v' or '-o'\n" +
         "Step 4: Click 'Start Scan' to begin the process.\n" +
         "Step 5: View the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/amap/"; // Link to the source code (or AMAP documentation).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1jDsVS14S8DxTF_h6aMyUCGZ6KNBKTYYLRWN-rZySAUk/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["amap"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
@@ -65,10 +69,15 @@ const AMAP = () => {
                 setIsCommandAvailable(isAvailable); // Set the command availability state
                 setOpened(!isAvailable); // Set the modal state to opened if the command is not available
                 setLoadingModal(false); // Set loading to false after the check is done
+
+                if (!isAvailable) {
+                    alert("Required dependency is not installed. Please install it to proceed.");
+                }
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+                setLoadingModal(false);
+                alert("An error occured while checking dependencies."); // Also set loading to false in case of error
             });
     }, []);
 

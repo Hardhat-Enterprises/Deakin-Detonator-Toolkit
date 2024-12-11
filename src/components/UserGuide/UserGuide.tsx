@@ -79,7 +79,7 @@ export function RenderComponent(component: ComponentProps) {
                     <Tabs.Tab value="configuration" icon={<IconSettings width={16} height={16} />}>
                         Configuration
                     </Tabs.Tab>
-                    <Tabs.Tab value="tutorial" disabled icon={<IconAbacus width={16} height={16} />}>
+                    <Tabs.Tab value="tutorial" icon={<IconAbacus width={16} height={16} />}>
                         Tutorial
                     </Tabs.Tab>
                 </Tabs.List>
@@ -96,11 +96,9 @@ export function RenderComponent(component: ComponentProps) {
                     <Title>Configure {component.title}</Title>
                     {component.children}
                 </Tabs.Panel>
-
                 <Tabs.Panel value="tutorial">
                     <Text className={styles.text} size="md">
-                        <pre style={{ whiteSpace: "pre-wrap" }}>{component.tutorial}</pre>
-                        <pre style={{ whiteSpace: "pre-wrap" }}>{component.sourceLink}</pre>
+                        <iframe src={component.tutorial} width={3000} height={1000} />
                     </Text>
                 </Tabs.Panel>
             </Tabs>
