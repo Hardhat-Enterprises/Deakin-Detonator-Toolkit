@@ -8,6 +8,8 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import AskChatGPT from "../AskChatGPT/AskChatGPT";
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
 
 /**
  * Represents the form values for the Amass component.
@@ -30,6 +32,7 @@ export function Amass() {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
+    const [chatGPTResponse, setChatGPTResponse] = useState("");
 
     // Component Constants.
     const title = "Amass";
@@ -136,6 +139,13 @@ export function Amass() {
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit">Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <AskChatGPT toolInput={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                    {chatGPTResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>ChatGPT Response:</h3>
+                            <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
                 </Stack>
             </form>
         </RenderComponent>
