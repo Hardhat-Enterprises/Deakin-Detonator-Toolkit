@@ -142,7 +142,7 @@
                     },
                     {
                         "name": "exif",
-                        "cmd": "/usr/bin/exif",
+                        "cmd": "exif",
                         "args": true
                     },
                     {
