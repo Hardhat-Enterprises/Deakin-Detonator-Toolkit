@@ -48,9 +48,7 @@ function Dnsrecon() {
             domain: "",
         },
         validate: {
-            domain: (value) =>
-            /^(([\w-]+\.)+[a-zA-Z]{2,})$/i.test(value) ? null : "Invalid domain format", // Regex for domain validation
-            
+            domain: (value) => (/^(([\w-]+\.)+[a-zA-Z]{2,})$/i.test(value) ? null : "Invalid domain format"), // Regex for domain validation
         },
     });
 
@@ -197,7 +195,12 @@ function Dnsrecon() {
                     {/* Render the loading overlay and cancel button */}
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Stack>
-                        <TextInput label={"Domain Name"} placeholder="Enter a valid domain name, e.g., deakin.edu.au" required {...form.getInputProps("domain")} />
+                        <TextInput
+                            label={"Domain Name"}
+                            placeholder="Enter a valid domain name, e.g., deakin.edu.au"
+                            required
+                            {...form.getInputProps("domain")}
+                        />
                         <Button type={"submit"}>Start {title}</Button>
                         {/* Render the save output to file component */}
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
