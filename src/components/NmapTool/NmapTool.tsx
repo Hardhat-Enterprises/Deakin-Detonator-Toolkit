@@ -9,6 +9,8 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import AskChatGPT from "../AskChatGPT/AskChatGPT"; // Import the AskChatGPT component
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput"; // Import for displaying GPT responses
 
 /**
  * Represents the form values for the Nmap component.
@@ -36,6 +38,7 @@ function Nmap() {
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
+    const [chatGPTResponse, setChatGPTResponse] = useState(""); // State for ChatGPT response
     const [hasSaved, setHasSaved] = useState(false);
     const [active, setActive] = useState(0);
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
@@ -313,6 +316,14 @@ function Nmap() {
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                         {/* Render the ConsoleWrapper component */}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                        {/* Add Ask ChatGPT Component */}
+                        <AskChatGPT toolName={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                        {chatGPTResponse && (
+                            <div style={{ marginTop: "20px" }}>
+                                <h3>ChatGPT Response:</h3>
+                                <ChatGPTOutput output={chatGPTResponse} />
+                            </div>
+                        )}
                     </Stack>
                 </form>
             </RenderComponent>
