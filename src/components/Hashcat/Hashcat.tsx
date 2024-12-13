@@ -165,6 +165,7 @@ const Hashcat = () => {
             args.push(values.passwordFilePath);
         } else if (selectedModeOption === "Brute-force" || selectedModeOption === "Hybrid Wordlist + Mask") {
             args.push(
+                values.passwordFilePath, // Add the dictionary file path
                 "--increment",
                 "--increment-min",
                 `${values.minPwdLen}`,
