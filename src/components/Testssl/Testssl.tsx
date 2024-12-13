@@ -48,7 +48,7 @@ const TestSSL = () => {
         "' to begin the process.\n" +
         "Step 4: View the output to see the results of the SSL/TLS analysis.";
     const sourceLink = "https://github.com/drwetter/testssl.sh";
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1rfn6q8nPgSlO8tsGnLagyOfhCTVPkjXZf8XvfaOjfuk/edit?usp=sharing";
     const dependencies = ["testssl.sh"];
 
     /**

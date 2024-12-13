@@ -52,7 +52,7 @@ const ARPSpoofing = () => {
     // Component Constants.
     const dependencies = ["dsniff"]; // Contains the dependencies required for the component.
     const sourceLink = "https://github.com/tecknicaltom/dsniff/blob/master/arpspoof.c"; // contains link to the source code (arpspoof)
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1j3vLjUvu_0Iazn3sLmmP_ANp-fuovKXVudqQYUAO8Hs/edit?usp=sharing";
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {

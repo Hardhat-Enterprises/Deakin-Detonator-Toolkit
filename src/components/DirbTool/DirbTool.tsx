@@ -74,7 +74,7 @@ function Dirb() {
         "Step 3: Click the 'Run Dirb' button to initiate the scanning process.\n" +
         "Step 4: Review the output in the console to identify any detected web objects or hidden content.\n";
     const sourceLink = "https://www.kali.org/tools/dirb/";
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1ztwWJSPsqgvwX7YapxbfLEd1da4_pRnMJOe4EFSN2Bc/edit?usp=sharing";
     const dependencies = ["dirb"];
 
     // Initialize the form hook with initial values

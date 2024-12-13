@@ -145,7 +145,9 @@ export function NSLookup() {
                 title={title}
                 description={description}
                 steps={steps}
-                tutorial={""} // Empty string since we don't need the tutorial section
+                tutorial={
+                    "https://docs.google.com/document/d/1Yuyo7KHj-iWTjRyzcQpw_e2yMHfDU8ND5Xg0_uCFUDI/edit?usp=sharing"
+                } // Empty string since we don't need the tutorial section
                 sourceLink={"https://www.nslookup.io"} // This will output the link to NSLookup
                 children={""}
             />

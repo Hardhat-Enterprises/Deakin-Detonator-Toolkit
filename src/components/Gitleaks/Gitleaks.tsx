@@ -40,11 +40,14 @@ function Gitleaks() {
         "Gitleaks is a tool for detecting hardcoded secrets like passwords, API keys, and tokens in git repositories."; // Description of the component.
     const steps =
         "Step 1: Enter the path to the directory you want to scan for secrets.\n" +
+        "\t=> E.g: /home/kali/Desktop/My-Project/Deakin-Detonator-Toolkit/\n" +
         "Step 2: (Optional) Enable advanced mode and configure additional options.\n" +
+        "\t=> Log options = trace, debug, info, warn, error, fatal.\n" +
+        "\t=> Output file must already exist. E.g.: /home/kali/Desktop/My-Project/logfile.txt\n" +
         "Step 3: Click the 'Start Gitleaks' button to initiate the scanning process.\n" +
         "Step 4: Review the output in the console to identify any detected secrets or sensitive information.\n";
     const sourceLink = "https://www.kali.org/tools/gitleaks/"; // Link to the source code or Kali Tools page.
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1ka_PXuOMS-hxdWc9JTkpnQ9IqwRbD08R1Tvop9CKvp8/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["gitleaks"]; // Dependencies required for the Gitleaks tool.
 
     // Form hook to handle form input.
@@ -160,12 +163,12 @@ function Gitleaks() {
         if (advancedMode) {
             // Add the log options argument if a value is provided.
             if (values.logOpts) {
-                additionalArgs.push("--log-opts", values.logOpts);
+                additionalArgs.push("--log-level", values.logOpts);
             }
 
             // Add the report path argument if a value is provided.
             if (values.reportPath) {
-                additionalArgs.push("-r", values.reportPath);
+                additionalArgs.push("--report-path", values.reportPath);
             }
         }
 

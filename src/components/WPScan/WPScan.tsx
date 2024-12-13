@@ -68,7 +68,7 @@ function WPScan() {
         "API Token: For the API Token field, head to the WPScan website and make a free account.\n" +
         "           Once logged in, you can visit the API Token section and copy it into the tool.\n";
     const sourceLink = "https://github.com/wpscanteam/wpscan";
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1qkCw-Ktjih6C1R_ylEbVJlDwfJLpxmL7W7leO17AjS0/edit?usp=sharing";
     const dependencies = ["wpscan"];
 
     // Initialize the form hook with initial values

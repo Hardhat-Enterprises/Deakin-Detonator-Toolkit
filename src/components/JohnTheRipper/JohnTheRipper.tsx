@@ -70,7 +70,7 @@ const JohnTheRipper = () => {
         "Step 6: Click 'Start John the Ripper'.\n" +
         "Step 7: View the output block to view the results of the tools execution.\n";
     const sourceLink = "https://github.com/openwall/john"; // Link to the source code.
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1aRE9aSsaxEm_joT4-1w3ow5fZo2iILD8UJA87cdz9T0/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["john"]; // Contains the dependencies required by the component
 
     // Form hook to handle form input.

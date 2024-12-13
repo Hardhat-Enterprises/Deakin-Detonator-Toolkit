@@ -57,7 +57,7 @@ const NetcatTool = () => {
         "Note 3: You will need two devices for file transfer to work — one for sending and the other needs to be set up on the specified port to capture the incoming file.\n" +
         "Ensure both machines are properly configured and connected to the same network or through an accessible route (such as a VPN, or through valid public IP addresses) to complete the file transfer.\n";
     const sourceLink = "https://www.kali.org/tools/netcat/"; // Link to the source code
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1NQ-hy8NBuTTUJzHebST5UF42JPjJ3yfIvNgWbM7FPLE/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["nc"]; // Contains the dependencies required by the component
 
     // Check if the command is available and set the state variables accordingly.

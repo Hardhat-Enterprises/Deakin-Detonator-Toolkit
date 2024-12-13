@@ -6,8 +6,13 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { RenderComponent } from "../UserGuide/UserGuide";
 
 const title = "SMB Enumeration";
+const steps = "";
+const description = "";
+const tutorial = "https://docs.google.com/document/d/1bFpB8Vo8osE4SBKme5wJcgLbp7wgmjnw76SCPeF3CoU/edit?usp=sharing";
+const sourcelink = "";
 
 // Description for the tooltip. Contents of this variable are displayed to the user when
 // hovering over the info option.
@@ -182,57 +187,67 @@ const SMBEnumeration = () => {
     }, []);
 
     return (
-        <form
-            onSubmit={form.onSubmit((values) =>
-                onSubmit({ ...values, speed: selectedSpeedOption, scripts: selectedScriptOption })
-            )}
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourcelink}
         >
-            {LoadingOverlayAndCancelButton(loading, pid)}
-            {InstallationModal && (
-                <InstallationModal
-                    isOpen={opened}
-                    setOpened={setOpened}
-                    feature_description={description_userguide}
-                    dependencies={[]} // Add dependencies if needed
-                />
-            )}
-            <Stack>
-                {/* Render the user guide description */}
-                <TextInput label={"Target IP or hostname"} required {...form.getInputProps("ip")} />
-                <TextInput label={"Port"} required {...form.getInputProps("port")} placeholder={"Example: 445"} />
+            <form
+                onSubmit={form.onSubmit((values) =>
+                    onSubmit({ ...values, speed: selectedSpeedOption, scripts: selectedScriptOption })
+                )}
+            >
+                {LoadingOverlayAndCancelButton(loading, pid)}
+                {InstallationModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description_userguide}
+                        dependencies={[]} // Add dependencies if needed
+                    />
+                )}
+                <Stack>
+                    {/* Render the user guide description */}
+                    <TextInput label={"Target IP or hostname"} required {...form.getInputProps("ip")} />
+                    <TextInput label={"Port"} required {...form.getInputProps("port")} placeholder={"Example: 445"} />
 
-                {/* Scan Speed dropdown */}
-                <NativeSelect
-                    label={"Scan speed"}
-                    value={selectedSpeedOption}
-                    onChange={(e) => setSelectedSpeedOption(e.target.value)}
-                    title={"Scan speed"}
-                    data={speeds}
-                    placeholder={"Select a scan speed. Default set to T3"}
-                    description={"Speed of the scan, refer: https://nmap.org/book/performance-timing-templates.html"}
-                />
+                    {/* Scan Speed dropdown */}
+                    <NativeSelect
+                        label={"Scan speed"}
+                        value={selectedSpeedOption}
+                        onChange={(e) => setSelectedSpeedOption(e.target.value)}
+                        title={"Scan speed"}
+                        data={speeds}
+                        placeholder={"Select a scan speed. Default set to T3"}
+                        description={
+                            "Speed of the scan, refer: https://nmap.org/book/performance-timing-templates.html"
+                        }
+                    />
 
-                {/* SMB Script dropdown */}
-                <NativeSelect
-                    label={"SMB Enumeration Script"}
-                    value={selectedScriptOption}
-                    onChange={(e) => setSelectedScriptOption(e.target.value)}
-                    title={"SMB Enumeration Script"}
-                    data={scripts}
-                    placeholder={"Select an SMB Enumeration Script to run against the target"}
-                    description={"NSE Scripts, refer: https://nmap.org/nsedoc/scripts/"}
-                />
+                    {/* SMB Script dropdown */}
+                    <NativeSelect
+                        label={"SMB Enumeration Script"}
+                        value={selectedScriptOption}
+                        onChange={(e) => setSelectedScriptOption(e.target.value)}
+                        title={"SMB Enumeration Script"}
+                        data={scripts}
+                        placeholder={"Select an SMB Enumeration Script to run against the target"}
+                        description={"NSE Scripts, refer: https://nmap.org/nsedoc/scripts/"}
+                    />
 
-                {/* Submit button */}
-                <Button type={"submit"}>Scan</Button>
+                    {/* Submit button */}
+                    <Button type={"submit"}>Scan</Button>
 
-                {/* Save Output to Text File component */}
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    {/* Save Output to Text File component */}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
 
-                {/* ConsoleWrapper to display the command output */}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+                    {/* ConsoleWrapper to display the command output */}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 

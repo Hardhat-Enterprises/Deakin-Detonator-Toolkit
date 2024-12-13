@@ -34,7 +34,8 @@ const Sherlock = () => {
     const title = "Sherlock Tool"; // Title of the component
     const description =
         "Sherlock is a tool used for searching social networks for specified usernames.\n\n" +
-        "Further information can be found at: https://www.kali.org/tools/sherlock/\n\n" +
+        "Further information can be found at: https://www.kali.org/tools/sherlock/\n\n";
+    const steps =
         "Using Sherlock:\n\n" +
         "*Note: For multiple usernames, add a space in between. E.g. 'Greg John Billy'*\n\n" +
         "Step 1: Input the username(s) you wish to search for in the Username field.\n" +
@@ -42,7 +43,7 @@ const Sherlock = () => {
         "Step 2: Click Start Searching to commence Sherlock's operation.\n\n" +
         "Step 3: View the Output block below to view the results of the tool's execution.";
     const sourceLink = "https://www.kali.org/tools/sherlock/";
-    const tutorial = ""; // No specific tutorial URL available
+    const tutorial = "https://docs.google.com/document/d/13P51Pa0k0NUEV0FNueRp4mAUjvc2mLNatKkrlkIcz20/edit?usp=sharing"; // No specific tutorial URL available
     const dependencies = ["sherlock"]; // Contains required dependencies
 
     // Form hook to manage form input
@@ -154,11 +155,7 @@ const Sherlock = () => {
         <RenderComponent
             title={title}
             description={description}
-            steps={
-                "Step 1: Input the username(s) you wish to search for in the Username field.\n" +
-                "Step 2: Click Start Searching to commence Sherlock's operation.\n" +
-                "Step 3: View the Output block below to view the results of the tool's execution."
-            }
+            steps={steps}
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
