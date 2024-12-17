@@ -161,9 +161,12 @@ const Hashcat = () => {
         }
 
         // Add password file path if required by the selected attack mode
-        if (selectedModeOption === "Straight") {
+        if (selectedModeOption === "Straight" || selectedModeOption === "Hybrid Wordlist + Mask") {
             args.push(values.passwordFilePath);
-        } else if (selectedModeOption === "Brute-force" || selectedModeOption === "Hybrid Wordlist + Mask") {
+            if (values.maskCharsets) {
+                args.push(values.maskCharsets);
+            }
+        } else if (selectedModeOption === "Brute-force") {
             args.push(
                 "--increment",
                 "--increment-min",
