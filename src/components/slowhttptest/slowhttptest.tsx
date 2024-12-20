@@ -130,9 +130,8 @@ function SlowHttpTest() {
         setLoading(true); // Enable the Loading Overlay
 
         const args = [`-u`, `${values.url}`];
-        args.push(`--timeout`, `${values.timeout}`);
-        args.push(`--requests`, `${values.requests}`);
-        args.push(`--no-prompt`);
+        args.push(`-i`, `${values.timeout}`);
+        args.push(`-r`, `${values.requests}`);
 
         CommandHelper.runCommandGetPidAndOutput("slowhttptest", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
