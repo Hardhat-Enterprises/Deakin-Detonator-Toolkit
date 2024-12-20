@@ -132,6 +132,7 @@ function SlowHttpTest() {
         const args = [`-u`, `${values.url}`];
         args.push(`-i`, `${values.timeout}`);
         args.push(`-r`, `${values.requests}`);
+        args.push(`-H`);
 
         CommandHelper.runCommandGetPidAndOutput("slowhttptest", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
