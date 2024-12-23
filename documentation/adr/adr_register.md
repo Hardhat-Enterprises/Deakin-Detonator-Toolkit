@@ -12,5 +12,5 @@
 | 0009   | Removing TShark from PT-GUI                                                                   | APPROVED |
 | 0010   | Implementation of Fping into PT-GUI                                                           | APPROVED |
 | 0011   | Introduction of OpenAPI integration                                                           | PROPOSED |
-| 0012   |                                                                                               |          |
+| 0012   | Integrating Cohere for Tool Output Analysis                                                   | PROPOSED |
 | 0013   | Integrating Subjack for Subdomain Takeover Detection                                          | APPROVED |
