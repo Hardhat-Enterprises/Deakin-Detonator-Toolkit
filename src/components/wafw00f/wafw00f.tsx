@@ -10,6 +10,8 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import { useForm } from "@mantine/form";
 import AskChatGPT from "../AskChatGPT/AskChatGPT";
 import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
+import AskCohere from "../AskCohere/AskCohere";
+import CohereOutput from "../AskCohere/CohereOutput";
 
 const Wafw00f = () => {
     const title = "WafW00f";
@@ -33,6 +35,7 @@ const Wafw00f = () => {
     const [loadingModal, setLoadingModal] = useState(true);
     const [findAllWAFs, setFindAllWAFs] = useState(false); // State for '-a' flag
     const [chatGPTResponse, setChatGPTResponse] = useState(""); // ChatGPT response
+    const [cohereResponse, setCohereResponse] = useState(""); // Cohere response
 
     // Form hook to manage input fields
     const form = useForm({
@@ -202,6 +205,13 @@ const Wafw00f = () => {
                         <div style={{ marginTop: "20px" }}>
                             <h3>ChatGPT Response:</h3>
                             <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
+                    <AskCohere toolName={title} output={output} setCohereResponse={setCohereResponse} />
+                    {cohereResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>Cohere Response:</h3>
+                            <CohereOutput output={cohereResponse} />
                         </div>
                     )}
                 </Stack>
