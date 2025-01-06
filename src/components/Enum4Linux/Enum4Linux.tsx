@@ -8,6 +8,8 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import AskChatGPT from "../AskChatGPT/AskChatGPT";
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
 
 /**
  * Represents the form values for the Enum4Linux component.
@@ -34,6 +36,7 @@ const Enum4Linux = () => {
     const [loadingModal, setLoadingModal] = useState(true);
     const [customMode, setCustomMode] = useState(false);
     const [selectedOption, setselectedOption] = useState("M");
+    const [chatGPTResponse, setChatGPTResponse] = useState("");
 
     const dependencies = ["enum4linux"];
     const title = "Enum4Linux";
@@ -223,6 +226,13 @@ const Enum4Linux = () => {
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit">Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <AskChatGPT toolName={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                    {chatGPTResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>ChatGPT Response:</h3>
+                            <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
                 </Stack>
             </form>
         </RenderComponent>
