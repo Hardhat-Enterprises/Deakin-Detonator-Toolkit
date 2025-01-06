@@ -10,6 +10,8 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import AskChatGPT from "../AskChatGPT/AskChatGPT";
 import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
+import AskCohere from "../AskCohere/AskCohere"; // Import AskCohere component
+import CohereOutput from "../AskCohere/CohereOutput"; // Import CohereOutput component
 
 /**
  * Represents the form values for the Subjack component.
@@ -58,6 +60,7 @@ function Subjack() {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [chatGPTResponse, setChatGPTResponse] = useState("");
+    const [cohereResponse, setCohereResponse] = useState(""); // Cohere response state
     const [hasSaved, setHasSaved] = useState(false);
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [opened, setOpened] = useState(!isCommandAvailable);
@@ -233,6 +236,13 @@ function Subjack() {
                             <div style={{ marginTop: "20px" }}>
                                 <h3>ChatGPT Response:</h3>
                                 <ChatGPTOutput output={chatGPTResponse} />
+                            </div>
+                        )}
+                        <AskCohere toolName={title} output={output} setCohereResponse={setCohereResponse} />
+                        {cohereResponse && (
+                            <div style={{ marginTop: "20px" }}>
+                                <h3>Cohere Response:</h3>
+                                <CohereOutput output={cohereResponse} />
                             </div>
                         )}
                     </Stack>
