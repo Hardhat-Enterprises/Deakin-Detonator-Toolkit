@@ -6,6 +6,8 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import AskChatGPT from "../AskChatGPT/AskChatGPT";
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
 
 /**
  * Represents the form values for the Sherlock component.
@@ -29,6 +31,7 @@ const Sherlock = () => {
     const [pid, setPid] = useState(""); // Process ID of the command execution
     const [allowSave, setAllowSave] = useState(false); // Allow saving output state
     const [hasSaved, setHasSaved] = useState(false); // Indicates whether output has been saved
+    const [chatGPTResponse, setChatGPTResponse] = useState("");
 
     // Component Constants
     const title = "Sherlock Tool"; // Title of the component
@@ -196,6 +199,13 @@ const Sherlock = () => {
                     <Button type={"submit"}>Start Searching!</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <AskChatGPT toolName={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                    {chatGPTResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>ChatGPT Response:</h3>
+                            <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
                 </Stack>
             </form>
         </RenderComponent>
