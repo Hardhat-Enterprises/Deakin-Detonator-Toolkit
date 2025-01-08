@@ -37,7 +37,7 @@ const Tiger = () => {
         "Step 2: Click the Start " +
         title +
         " button and view the output block for the result. ";
-        const description = `
+    const description = `
         Tiger is a comprehensive security audit tool for Unix-based systems. 
         It automates security checks, including file permissions, software configurations, and potential vulnerabilities, 
         to ensure system integrity and compliance.
