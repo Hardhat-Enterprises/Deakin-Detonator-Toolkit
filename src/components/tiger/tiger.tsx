@@ -31,12 +31,29 @@ const Tiger = () => {
     const [pid, setPid] = useState("");
 
     const title = "Tiger";
-    const description = "Tiger is a security audit tool for Unix-based systems.";
+    //const description = "Tiger is a security audit tool for Unix-based systems.";
     const steps =
         "Step 1: Specify a file to save the audit report.\n" +
         "Step 2: Click the Start " +
         title +
         " button and view the output block for the result. ";
+        const description = `
+        Tiger is a comprehensive security audit tool for Unix-based systems. 
+        It automates security checks, including file permissions, software configurations, and potential vulnerabilities, 
+        to ensure system integrity and compliance.
+        
+        Key Features:
+        - Identifies misconfigured file permissions and weak passwords.
+        - Analyzes system configurations for vulnerabilities.
+        - Generates a detailed audit report.
+        
+        Usage Notes:
+        - Make sure to run Tiger with elevated permissions (e.g., using 'pkexec') to perform a full system audit.
+        - Specify a valid file path to save the audit report (e.g., '/tmp/tiger_report.txt').
+        
+        This tool is ideal for administrators and security professionals looking to enhance the security posture of Unix-based systems.
+        `;
+        
     const sourceLink = "https://www.kali.org/tools/tiger/";
     const dependencies = ["tiger"];
     const tutorial =
