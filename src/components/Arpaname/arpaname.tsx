@@ -8,6 +8,8 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { CommandHelper } from "../../utils/CommandHelper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import AskChatGPT from "../AskChatGPT/AskChatGPT";
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
 
 /**
  * Represents the form values for the Arpaname component.
@@ -35,6 +37,7 @@ const ArpanameTool = () => {
     const [errorMessage, setErrorMessage] = useState<string>(""); // State variable to store the error message
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+    const [chatGPTResponse, setChatGPTResponse] = useState("");
 
     // Component Constants.
     const steps =
@@ -199,6 +202,13 @@ const ArpanameTool = () => {
                     <Button type={"submit"}>Lookup</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <AskChatGPT toolName={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                    {chatGPTResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>ChatGPT Response:</h3>
+                            <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
                 </Stack>
             </form>
         </RenderComponent>
