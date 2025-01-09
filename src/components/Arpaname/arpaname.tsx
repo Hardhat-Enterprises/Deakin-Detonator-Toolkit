@@ -10,6 +10,8 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import AskChatGPT from "../AskChatGPT/AskChatGPT";
 import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
+import AskCohere from "../AskCohere/AskCohere";
+import CohereOutput from "../AskCohere/CohereOutput";
 
 /**
  * Represents the form values for the Arpaname component.
@@ -37,7 +39,9 @@ const ArpanameTool = () => {
     const [errorMessage, setErrorMessage] = useState<string>(""); // State variable to store the error message
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
-    const [chatGPTResponse, setChatGPTResponse] = useState("");
+    const [chatGPTResponse, setChatGPTResponse] = useState(""); //ChatGPT response
+    const [cohereResponse, setCohereResponse] = useState(""); // Cohere response
+
 
     // Component Constants.
     const steps =
@@ -207,6 +211,13 @@ const ArpanameTool = () => {
                         <div style={{ marginTop: "20px" }}>
                             <h3>ChatGPT Response:</h3>
                             <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
+                    <AskCohere toolName={title} output={output} setCohereResponse={setCohereResponse} />
+                    {cohereResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>Cohere Response:</h3>
+                            <CohereOutput output={cohereResponse} />
                         </div>
                     )}
                 </Stack>
