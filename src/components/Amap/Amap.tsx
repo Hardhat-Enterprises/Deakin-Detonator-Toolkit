@@ -10,6 +10,8 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import AskChatGPT from "../AskChatGPT/AskChatGPT";
 import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
+import AskCohere from "../AskCohere/AskCohere";
+import CohereOutput from "../AskCohere/CohereOutput";
 
 /**
  * Represents the form values for the AMAP component.
@@ -34,7 +36,8 @@ const AMAP = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-    const [chatGPTResponse, setChatGPTResponse] = useState("");
+    const [chatGPTResponse, setChatGPTResponse] = useState(""); //ChatGPT response
+    const [cohereResponse, setCohereResponse] = useState(""); // Cohere response
 
     // Component Constants.
     const title = "AMAP"; // Title of the component.
@@ -207,6 +210,13 @@ const AMAP = () => {
                         <div style={{ marginTop: "20px" }}>
                             <h3>ChatGPT Response:</h3>
                             <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
+                    <AskCohere toolName={title} output={output} setCohereResponse={setCohereResponse} />
+                    {cohereResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>Cohere Response:</h3>
+                            <CohereOutput output={cohereResponse} />
                         </div>
                     )}
                 </Stack>
