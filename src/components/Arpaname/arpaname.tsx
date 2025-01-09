@@ -42,7 +42,6 @@ const ArpanameTool = () => {
     const [chatGPTResponse, setChatGPTResponse] = useState(""); //ChatGPT response
     const [cohereResponse, setCohereResponse] = useState(""); // Cohere response
 
-
     // Component Constants.
     const steps =
         "Step 1: Type in the target IP address\n" +
