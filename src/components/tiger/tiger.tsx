@@ -31,33 +31,14 @@ const Tiger = () => {
     const [pid, setPid] = useState("");
 
     const title = "Tiger";
-    //const description = "Tiger is a security audit tool for Unix-based systems.";
+    const description = "Tiger is a security audit tool for Unix-based systems. It scans for vulnerabilities, such as misconfigured file permissions and weak passwords, to enhance system security.";
     const steps =
-        "Step 1: Specify a file to save the audit report.\n" +
-        "Step 2: Click the Start " +
-        title +
-        " button and view the output block for the result. ";
-        const description = `
-        Tiger is a comprehensive security audit tool for Unix-based systems. 
-        It automates security checks, including file permissions, software configurations, and potential vulnerabilities, 
-        to ensure system integrity and compliance.
-        
-        Key Features:
-        - Identifies misconfigured file permissions and weak passwords.
-        - Analyzes system configurations for vulnerabilities.
-        - Generates a detailed audit report.
-        
-        Usage Notes:
-        - Make sure to run Tiger with elevated permissions (e.g., using 'pkexec') to perform a full system audit.
-        - Specify a valid file path to save the audit report (e.g., '/tmp/tiger_report.txt').
-        
-        This tool is ideal for administrators and security professionals looking to enhance the security posture of Unix-based systems.
-        `;
-        
+        "Step 1: Enter the path to save the audit report in the Report File field (e.g., `/home/user/tiger_audit_report.txt`).\n" +
+        "Step 2: Click the Start Tiger button to begin the scan. " +
+        "Step 3: Check the results displayed in the output block or the saved report file at the specified location. ";
     const sourceLink = "https://www.kali.org/tools/tiger/";
     const dependencies = ["tiger"];
-    const tutorial =
-        "Tiger is a tool that automates security audits on Unix-based systems. It checks file permissions, software configuration, and system vulnerabilities. It's essential to specify where to save the report with the '-l' option. Run Tiger with higher permissions using 'pkexec' for a comprehensive audit.";
+    const tutorial = "https://docs.google.com/document/d/1bkG-s9h6bpsCWq2IW1pOJbxpCPc_ZcqNwswup_iSB5k/edit?usp=sharing";
 
     let form = useForm({
         initialValues: {
