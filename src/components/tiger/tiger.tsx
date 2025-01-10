@@ -37,7 +37,6 @@ const Tiger = () => {
         "Step 1: Enter the path to save the audit report in the Report File field (e.g., /home/user/tiger_audit_report.txt). \n" +
         "Step 2: Click the Start Tiger button to begin the scan. \n" +
         "Step 3: Check the results displayed in the output block or the saved report file at the specified location. \n";
-
     const sourceLink = "https://www.kali.org/tools/tiger/";
     const dependencies = ["tiger"];
     const tutorial =
