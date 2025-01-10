@@ -31,7 +31,8 @@ const Tiger = () => {
     const [pid, setPid] = useState("");
 
     const title = "Tiger";
-    const description = "Tiger is a security audit tool for Unix-based systems. It scans for vulnerabilities, such as misconfigured file permissions and weak passwords, to enhance system security.";
+    const description =
+        "Tiger is a security audit tool for Unix-based systems. It scans for vulnerabilities, such as misconfigured file permissions and weak passwords, to enhance system security.";
     const steps =
         "Step 1: Enter the path to save the audit report in the Report File field (e.g., `/home/user/tiger_audit_report.txt`).\n" +
         "Step 2: Click the Start Tiger button to begin the scan. " +
