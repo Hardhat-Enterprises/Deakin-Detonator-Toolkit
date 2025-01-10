@@ -42,9 +42,15 @@ const Unicornscan = () => {
 
     // Component Constants
     const title = "Unicornscan";
-    const description = "Unicornscan is a tool used to gather information about systems and services on a network.";
+    const description =
+        "Unicornscan is a network information gathering tool used to identify systems, services, and potential vulnerabilities. It supports advanced scanning techniques for TCP, UDP, and other network protocols. ";
+    //const steps ="Step 1: Provide the target URL or IP address to scan.\nStep 2: Select the scan type (TCP or UDP).\nStep 3: Configure additional scan options as needed.\nStep 4: Start the scan to gather information about potential vulnerabilities and misconfigurations.\nStep 5: Review the scan output to identify any security issues.\n";
     const steps =
-        "Step 1: Provide the target URL or IP address to scan.\nStep 2: Select the scan type (TCP or UDP).\nStep 3: Configure additional scan options as needed.\nStep 4: Start the scan to gather information about potential vulnerabilities and misconfigurations.\nStep 5: Review the scan output to identify any security issues.\n";
+        "Step 1: Provide the target IP address or URL. (e.g.: 192.168.1.10 or www.example.com)\n" +
+        "Step 2: Select the type of scan (TCP or UDP). (e.g: TCP Scan (-mT) for identifying open TCP ports) \n" +
+        "Step 3: Configure additional options as needed \n   - Rate (packets per second): e.g., 1000\n   - Source Port: e.g., 53\n   - Source IP: e.g., 192.168.1.100\n   - Interface: e.g., eth0\n   - Ports: e.g., 1-1024\n" +
+        "Step 4: Start the scan by clicking the 'Start Unicornscan' button. \n" +
+        "Step 5: SReview the output to identify vulnerabilities and misconfigurations.";
     const sourceLink = "https://github.com/dneufeld/unicornscan";
     const tutorial = "https://docs.google.com/document/d/1HtJT-YFscJkkpCpCwTf6AdXaatavyiM1Vf01-KkMD7U/edit?usp=sharing";
     const dependencies = ["unicornscan"];
