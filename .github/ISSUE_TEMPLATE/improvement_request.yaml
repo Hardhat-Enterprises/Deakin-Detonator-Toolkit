@@ -1,0 +1,43 @@
+name: Improvement Request
+description: Suggest an improvement or ugrade to an existing tool!
+title: "[Improvement Request]: "
+labels: ["update", "UI/UX", "tool-improvement"]
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Thanks for taking the time to fill out this Improvement Request!
+    - type: input
+      id: name
+      attributes:
+          label: Short name for Improvement
+          description: Improvement description
+          placeholder: ex. Update nmap tool description to include specific example in Step 1
+      validations:
+          required: true
+    - type: dropdown
+      id: priority
+      attributes:
+          label: Priority
+          description: What is the priority of this feature?
+          multiple: true
+          options:
+              - High
+              - Medium
+              - Low
+    - type: input
+      id: categories
+      attributes:
+          label: Categories
+          description: Applicable categories for development/implementation?
+          placeholder: (UI, UX, Enhancement, Accessability, etc.)
+      validations:
+          required: true
+    - type: textarea
+      id: detailed_description
+      attributes:
+          label: Description of Feature
+          description: A clear and concise description of what the tool and improvement is, and how it is different to the current version of the tool. Attach any relevant supporting screenshots or documents here.
+          placeholder: A clear and concise description of what you want to happen.
+      validations:
+          required: true
