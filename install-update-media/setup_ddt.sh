@@ -11,6 +11,12 @@ echo libc6 libraries/restart-without-asking boolean true | sudo debconf-set-sele
 # Update package list
 sudo apt-get update -y
 
+# Upgrade packages in list
+sudo apt-get upgrade -y
+
+# Autoremove automatically installed and no longer required packages
+sudo apt autoremove -y
+
 # Clone the Deakin Detonator Toolkit repository and change directory to the directory
 git clone https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit && cd Deakin-Detonator-Toolkit
 
@@ -58,6 +64,9 @@ fi
 
 # Install Yarn dependencies
 yarn install
+
+# Update tauri-build 
+cd src-tauri && cargo update && cd -
 
 # Move exploits to DDT directory
 chmod +x install-update-media/install_exploits.sh && ./install-update-media/install_exploits.sh

@@ -8,7 +8,9 @@
 | 0005   | RESERVED                                                                                      |          |
 | 0006   | Implementation of TCPdump into PTGUI                                                          | APPROVED |
 | 0007   | Integrating IP Tracing via Traceroute, Whois, and Geo IP in DDT                               | APPROVED |
-| 0008   |                                                                                               |          |
-| 0009   |                                                                                               |          |
+| 0008   | Integrating Suricata for real-time network analysis                                           | REJECTED |
+| 0009   | Removing TShark from PT-GUI                                                                   | APPROVED |
 | 0010   | Implementation of Fping into PT-GUI                                                           | APPROVED |
 | 0011   | Introduction of OpenAPI integration                                                           | PROPOSED |
+| 0012   | Integrating Cohere for Tool Output Analysis                                                   | APPROVED |
+| 0013   | Integrating Subjack for Subdomain Takeover Detection                                          | APPROVED |

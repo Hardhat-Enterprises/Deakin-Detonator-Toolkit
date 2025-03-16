@@ -9,6 +9,8 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { installDependencies } from "../../utils/InstallHelper";
+import AskChatGPT from "../AskChatGPT/AskChatGPT";
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
 
 /**
  * Title and Description of the tool
@@ -39,6 +41,7 @@ export function NSLookup() {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // Command availability state
     const [loadingModal, setLoadingModal] = useState(true); // Loading state for modal
     const dependencies = ["bind9"]; // List of dependencies
+    const [chatGPTResponse, setChatGPTResponse] = useState("");
 
     /**
      * useEffect hook: Checks the availability of necessary commands and updates the modal state accordingly.
@@ -145,7 +148,9 @@ export function NSLookup() {
                 title={title}
                 description={description}
                 steps={steps}
-                tutorial={""} // Empty string since we don't need the tutorial section
+                tutorial={
+                    "https://docs.google.com/document/d/1Yuyo7KHj-iWTjRyzcQpw_e2yMHfDU8ND5Xg0_uCFUDI/edit?usp=sharing"
+                } // Empty string since we don't need the tutorial section
                 sourceLink={"https://www.nslookup.io"} // This will output the link to NSLookup
                 children={""}
             />
@@ -197,6 +202,13 @@ export function NSLookup() {
                     <Button type={"submit"}>Scan</Button>
                     {/* Component for displaying command output and providing a clear output button */}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <AskChatGPT toolName={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                    {chatGPTResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>ChatGPT Response:</h3>
+                            <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
                 </Stack>
             </form>
         </>

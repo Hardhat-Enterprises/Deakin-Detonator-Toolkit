@@ -45,7 +45,7 @@ const ExifTool = () => {
         "Step 4: Input a value to write to the specified metadata field.\n" +
         "Step 5: Run the tool!";
     const sourceLink = ""; // Link to the source code
-    const tutorial = ""; // Link to the official documentation/tutorial
+    const tutorial = "https://docs.google.com/document/d/1g4RFhVeMK3CRXRlGfSR5LMNiS4Xb5HuHcoq1K2i2J3c/edit?usp=sharing"; // Link to the official documentation/tutorial
     const dependencies = ["exiftool"]; // ExifTool dependency.
 
     // Form hook to handle form input

@@ -48,7 +48,7 @@ const Urlsnarf = () => {
         "Step 4: Click the start Urlsnarf button.\n" +
         "Step 5: View the Output block to see the results.";
     const sourceLink = "https://linux.die.net/man/8/urlsnarf"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1TT3NcGul1FzKHdh18FIvOsQ9sDSLCnIlcDPVXc9Jmas/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["dsniff"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.

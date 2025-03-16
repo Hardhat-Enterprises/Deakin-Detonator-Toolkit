@@ -30,7 +30,7 @@ Step 4: Enter an Exploit Database ID.
 Step 5: Click Scan to commence SearchSploit's operation.
 Step 6: View the Output block below to view the results of the tool's execution.`;
 const sourceLink = "https://www.kali.org/tools/searchsploit"; // Corrected sourceLink
-const tutorial = "";
+const tutorial = "https://docs.google.com/document/d/1lpQN_77zpZQftxqqTaw_DtYbRLH-rqh0COLEsBkBBhk/edit?usp=sharing";
 const dependencies = ["searchsploit"];
 const searchOptions = ["Case", "Exact", "Strict", "Title"];
 const outputTypes = ["json", "Overflow", "Path", "Verbose", "www"];

@@ -47,7 +47,7 @@ function Gitleaks() {
         "Step 3: Click the 'Start Gitleaks' button to initiate the scanning process.\n" +
         "Step 4: Review the output in the console to identify any detected secrets or sensitive information.\n";
     const sourceLink = "https://www.kali.org/tools/gitleaks/"; // Link to the source code or Kali Tools page.
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1ka_PXuOMS-hxdWc9JTkpnQ9IqwRbD08R1Tvop9CKvp8/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["gitleaks"]; // Dependencies required for the Gitleaks tool.
 
     // Form hook to handle form input.

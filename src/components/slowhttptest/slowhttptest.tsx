@@ -31,7 +31,7 @@ const steps =
     "Step 3: Define the number of requests to be sent in the third field.\n\n" +
     "Step 4: Press the scan button.";
 const sourceLink = "https://github.com/stamparm/slowhttptest"; // Link to the source code or relevant documentation.
-const tutorial = ""; // Link to the official tutorial/documentation.
+const tutorial = "https://docs.google.com/document/d/1H_2wECvvjTGRlzH-sQtxV2Td8U6F-bCEP4qlQxbqRws/edit?usp=sharing"; // Link to the official tutorial/documentation.
 const dependencies = ["slowhttptest"]; // Dependencies required by the component.
 
 function SlowHttpTest() {
@@ -130,9 +130,9 @@ function SlowHttpTest() {
         setLoading(true); // Enable the Loading Overlay
 
         const args = [`-u`, `${values.url}`];
-        args.push(`--timeout`, `${values.timeout}`);
-        args.push(`--requests`, `${values.requests}`);
-        args.push(`--no-prompt`);
+        args.push(`-i`, `${values.timeout}`);
+        args.push(`-r`, `${values.requests}`);
+        args.push(`-H`);
 
         CommandHelper.runCommandGetPidAndOutput("slowhttptest", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {

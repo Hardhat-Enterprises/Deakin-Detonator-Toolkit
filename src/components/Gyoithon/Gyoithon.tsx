@@ -55,7 +55,7 @@ const Gyoithon = () => {
         sourceLink +
         "\n\nUsing the tool:\nPlease follow the steps listed within the tool.";
     const steps = ""; // Contains the steps of the component.
-    const tutorial = ""; // Contains the link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1wbPWL_4WyU-6d-wdQHV32Ku35RPdGoS3SJacIMjfLyQ/edit?usp=sharing"; // Contains the link to the official documentation/tutorial.
     const dependencies = ["Gyoithon"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.

@@ -235,6 +235,13 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/foremost/"}
                                 />
                                 <Reference
+                                    name={"Fping"}
+                                    description={
+                                        "Fping is a ping like program which uses the Internet Control Message Protocol (ICMP) echo request to determine if a target host is responding."
+                                    }
+                                    url={"https://www.kali.org/tools/fping/"}
+                                />
+                                <Reference
                                     name={"FTPconnect"}
                                     description={
                                         "The standard ftp command-line client used to transfer files between systems over the File Transfer Protocol (FTP)."
@@ -422,6 +429,13 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/sqlninja/"}
                                 />
                                 <Reference
+                                    name={"Subjack"}
+                                    description={
+                                        "Subjack is a tool to detect subdomain takeovers. It identifies vulnerable subdomains that could be hijacked."
+                                    }
+                                    url={"https://www.kali.org/tools/subjack/"}
+                                />
+                                <Reference
                                     name={"Sublist3r"}
                                     description={
                                         "Sublist3r is a tool designed to enumerate subdomains of websites using OSINT."
@@ -457,11 +471,6 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/traceroute/"}
                                 />
                                 <Reference
-                                    name={"TShark"}
-                                    description={"TShark is a tool to dump and analyze network traffic."}
-                                    url={"https://www.kali.org/tools/wireshark/#tshark-1"}
-                                />
-                                <Reference
                                     name={"Unicornscan"}
                                     description={
                                         "Unicornscan is a new information gathering and correlation engine built for and by members of the security research and testing communities."
@@ -471,16 +480,16 @@ const ReferencesPage = () => {
                                 <Reference
                                     name={"Urlsnarf"}
                                     description={
-                                        "Urlsnarf is a tool within dsniff package, which contains tools for listening and creating network traffic."
-                                    }
-                                    url={"https://www.kali.org/tools/wireshark/#tshark-1"}
-                                />
-                                <Reference
-                                    name={"Urlsnarf"}
-                                    description={
                                         "Urlsnarf is a tool within dsniff package, which contains tools for listening and creating network traffic"
                                     }
                                     url={"https://www.kali.org/tools/dsniff/"}
+                                />
+                                <Reference
+                                    name={"WafW00f"}
+                                    description={
+                                        "WafW00f is a tool to identify and fingerprint Web Application Firewalls (WAFs)."
+                                    }
+                                    url={"https://www.kali.org/tools/wafw00f/"}
                                 />
                                 <Reference
                                     name={"WhatWeb"}

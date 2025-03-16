@@ -8,6 +8,8 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import AskChatGPT from "../AskChatGPT/AskChatGPT";
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
 
 /**
  * Represents the form values for the Enum4Linux component.
@@ -34,6 +36,7 @@ const Enum4Linux = () => {
     const [loadingModal, setLoadingModal] = useState(true);
     const [customMode, setCustomMode] = useState(false);
     const [selectedOption, setselectedOption] = useState("M");
+    const [chatGPTResponse, setChatGPTResponse] = useState("");
 
     const dependencies = ["enum4linux"];
     const title = "Enum4Linux";
@@ -46,7 +49,7 @@ const Enum4Linux = () => {
         title +
         " button and view the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/enum4linux/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1F4F-CGdQoedHk3A4nSthafHocbhTwKZv8GnBCtghouQ/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const [osinfo, setInfo] = useState(false);
     const form = useForm({
         initialValues: {
@@ -223,6 +226,13 @@ const Enum4Linux = () => {
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit">Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <AskChatGPT toolName={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                    {chatGPTResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>ChatGPT Response:</h3>
+                            <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
                 </Stack>
             </form>
         </RenderComponent>

@@ -163,6 +163,11 @@
                         "args": true
                     },
                     {
+                        "name": "fping",
+                        "cmd": "fping",
+                        "args": true
+                    },
+                    {
                         "name": "gitleaks",
                         "cmd": "gitleaks",
                         "args": true
@@ -328,6 +333,12 @@
                         "args": true
                     },
                     {
+                        "name": "subjack",
+                        "cmd": "subjack",
+                        "args": true
+                    },
+                      
+                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
                         "args": true
@@ -338,6 +349,11 @@
                         "args": true
                     },
                     {
+                        "name": "theHarvester",
+                        "cmd": "theHarvester",
+                        "args": true
+                    },
+                    {
                         "name": "tiger",
                         "cmd": "tiger",
                         "args": true
@@ -345,11 +361,6 @@
                     {
                         "name": "traceroute",
                         "cmd": "sudo traceroute",
-                        "args": true
-                    },
-                    {
-                        "name": "tshark",
-                        "cmd": "tshark",
                         "args": true
                     },
                     {
