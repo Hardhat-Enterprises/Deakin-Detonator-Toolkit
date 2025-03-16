@@ -1,35 +1,35 @@
-| ADR ID | Description                                                                                   | Status       |
-| ------ | --------------------------------------------------------------------------------------------- | --------     |
-| 0000   | Example entry change                                                                          | APPROVED     |
-| 0001   | Containerising DDT                                                                            | APPROVED     |
-| 0002   | Introduction of static vulnerability and secret scanning into our Pipeline via Github Actions | IMPLEMENTED  |
-| 0003   | Integrating WafW00f for Web Application Firewall Detection                                    | W-I-P        |
-| 0004   | -empty-                                                                                       |              |
-| 0005   | RESERVED                                                                                      |              |
-| 0006   | Implementation of TCPdump into PTGUI                                                          | W-I-P        |
-| 0007   | Integrating IP Tracing via Traceroute, Whois, and Geo IP in DDT                               | APPROVED     |
-| 0008   | Integrating Suricata for real-time network analysis                                           | REJECTED     |
-| 0009   | Removing TShark from PT-GUI                                                                   | APPROVED     |
-| 0010   | Implementation of Fping into PT-GUI                                                           | W-I-P        |
-| 0011   | Introduction of OpenAPI integration                                                           | W-I-P        |
-| 0012   | Integrating Cohere for Tool Output Analysis                                                   | W-I-P        |
-| 0013   | Integrating Subjack for Subdomain Takeover Detection                                          | W-I-P        |
-| 0014   | -empty-                                                                                       |              |
-| 0015   | -empty-                                                                                       |              |
-| 0016   | -empty-                                                                                       |              |
-| 0017   | -empty-                                                                                       |              |
-| 0018   | -empty-                                                                                       |              |
-| 0019   | -empty-                                                                                       |              |
-| 0020   | -empty-                                                                                       |              |
-| 0021   | -empty-                                                                                       |              |
-| 0022   | -empty-                                                                                       |              |
-| 0023   | -empty-                                                                                       |              |
-| 0024   | -empty-                                                                                       |              |
-| 0025   | -empty-                                                                                       |              |
-| 0026   | -empty-                                                                                       |              |
-| 0027   | -empty-                                                                                       |              |
-| 0028   | -empty-                                                                                       |              |
-| 0029   | -empty-                                                                                       |              |
-| 0030   | -empty-                                                                                       |              |
-| 0031   | -empty-                                                                                       |              |
-| 0032   | -empty-                                                                                       |              |
+| ADR ID | Description                                                                                   | Status      |
+| ------ | --------------------------------------------------------------------------------------------- | ----------- |
+| 0000   | Example entry change                                                                          | APPROVED    |
+| 0001   | Containerising DDT                                                                            | APPROVED    |
+| 0002   | Introduction of static vulnerability and secret scanning into our Pipeline via Github Actions | IMPLEMENTED |
+| 0003   | Integrating WafW00f for Web Application Firewall Detection                                    | W-I-P       |
+| 0004   | -empty-                                                                                       |             |
+| 0005   | RESERVED                                                                                      |             |
+| 0006   | Implementation of TCPdump into PTGUI                                                          | W-I-P       |
+| 0007   | Integrating IP Tracing via Traceroute, Whois, and Geo IP in DDT                               | APPROVED    |
+| 0008   | Integrating Suricata for real-time network analysis                                           | REJECTED    |
+| 0009   | Removing TShark from PT-GUI                                                                   | APPROVED    |
+| 0010   | Implementation of Fping into PT-GUI                                                           | W-I-P       |
+| 0011   | Introduction of OpenAPI integration                                                           | W-I-P       |
+| 0012   | Integrating Cohere for Tool Output Analysis                                                   | W-I-P       |
+| 0013   | Integrating Subjack for Subdomain Takeover Detection                                          | W-I-P       |
+| 0014   | -empty-                                                                                       |             |
+| 0015   | -empty-                                                                                       |             |
+| 0016   | -empty-                                                                                       |             |
+| 0017   | -empty-                                                                                       |             |
+| 0018   | -empty-                                                                                       |             |
+| 0019   | -empty-                                                                                       |             |
+| 0020   | -empty-                                                                                       |             |
+| 0021   | -empty-                                                                                       |             |
+| 0022   | -empty-                                                                                       |             |
+| 0023   | -empty-                                                                                       |             |
+| 0024   | -empty-                                                                                       |             |
+| 0025   | -empty-                                                                                       |             |
+| 0026   | -empty-                                                                                       |             |
+| 0027   | -empty-                                                                                       |             |
+| 0028   | -empty-                                                                                       |             |
+| 0029   | -empty-                                                                                       |             |
+| 0030   | -empty-                                                                                       |             |
+| 0031   | -empty-                                                                                       |             |
+| 0032   | -empty-                                                                                       |             |
