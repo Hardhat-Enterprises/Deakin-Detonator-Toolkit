@@ -5,15 +5,15 @@
 
 version: 2.1
 updates:
-# Enable version updates for npm
-  - package-ecosystem: "npm" # See documentation for other possible values
-  # Look for 'package.json' and 'lock' files in the 'root' directory
-    directory: "/" # Location of package manifests
-    # Check the npm registry for updates once/week
-    schedule:
-      interval: "weekly"
-      day: "sunday"
-    # increase the version requirements for npm dependencies
-    # only when required
-    versioning-strategy: "increase-if-necessary"
-    open-pull-requests-limit: 10
+    # Enable version updates for npm
+    - package-ecosystem: "npm" # See documentation for other possible values
+      # Look for 'package.json' and 'lock' files in the 'root' directory
+      directory: "/" # Location of package manifests
+      # Check the npm registry for updates once/week
+      schedule:
+          interval: "weekly"
+          day: "sunday"
+      # increase the version requirements for npm dependencies
+      # only when required
+      versioning-strategy: "increase-if-necessary"
+      open-pull-requests-limit: 10
