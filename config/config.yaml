@@ -1,0 +1,19 @@
+providers:
+    - amazon
+    - alibaba
+    - microsoft
+    - digitalocean
+    - linode
+    - vultr
+    - google
+
+environments:
+    - test
+    - dev
+    - prod
+    - stage
+    - staging
+    - bak
+
+proxytype: http
+ipinfo: ""
