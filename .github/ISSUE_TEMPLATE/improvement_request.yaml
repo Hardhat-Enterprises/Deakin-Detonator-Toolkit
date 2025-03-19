@@ -1,5 +1,5 @@
 name: Improvement Request
-description: Suggest an improvement or ugrade to an existing tool!
+description: Suggest an improvement or upgrade to an existing tool!
 title: "[Improvement Request]: "
 labels: ["update", "UI/UX", "tool-improvement"]
 body:
@@ -10,18 +10,19 @@ body:
     - type: input
       id: name
       attributes:
-          label: Short name for Improvement
+          label: Short name for suggested Improvement
           description: Improvement description
-          placeholder: ex. Update nmap tool description to include specific example in Step 1
+          placeholder: ex. Update nmap tool description to include a specific example in Step 1
       validations:
           required: true
     - type: dropdown
       id: priority
       attributes:
           label: Priority
-          description: What is the priority of this feature?
+          description: Please select the priority level for this improvement request
           multiple: true
           options:
+              - Urgent
               - High
               - Medium
               - Low
@@ -30,7 +31,7 @@ body:
       attributes:
           label: Categories
           description: Applicable categories for development/implementation?
-          placeholder: (UI, UX, Enhancement, Accessability, etc.)
+          placeholder: (UI, UX, Enhancement, Accessibility, etc.)
       validations:
           required: true
     - type: textarea
