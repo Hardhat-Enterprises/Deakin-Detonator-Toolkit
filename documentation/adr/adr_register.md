@@ -1,8 +1,8 @@
 | ADR ID | Description                                                                                   | Status      |
 | ------ | --------------------------------------------------------------------------------------------- | ----------- |
 | 0000   | Example entry change                                                                          | APPROVED    |
-| 0001   | Containerising DDT                                                                            | APPROVED    |       
-| 0002   | Introduction of static vulnerability and secret scanning into our Pipeline via Github Actions | IMPLEMENTED | 
+| 0001   | Containerising DDT                                                                            | APPROVED    |
+| 0002   | Introduction of static vulnerability and secret scanning into our Pipeline via Github Actions | IMPLEMENTED |
 | 0003   | Integrating WafW00f for Web Application Firewall Detection                                    | IMPLEMENTED |
 | 0004   | -empty-                                                                                       | -           |
 | 0005   | RESERVED                                                                                      | -           |
