@@ -1,14 +1,16 @@
-import { Image, Text, Accordion, useMantineTheme, Stack, Title } from "@mantine/core";
+import { useState } from "react";
+import { Modal, Button, Image, Text, Accordion, useMantineTheme, Stack, Title } from "@mantine/core";
 import { IconStepInto, IconTools, IconSearch, IconTarget } from "@tabler/icons";
 
 const AboutPage = () => {
     const theme = useMantineTheme();
+    const [modalOpened, setModalOpened] = useState(true);
     const getColor = (color: string) => theme.colors[color][theme.colorScheme === "dark" ? 5 : 7];
 
     const imageContainerStyles = {
         width: "100%",
         maxWidth: "100%",
-        overflowX: "auto", // Add horizontal scrollbar for overflow
+        overflowX: "auto" as "auto", // Add horizontal scrollbar for overflow
         display: "flex",
         justifyContent: "center",
     };
@@ -20,6 +22,26 @@ const AboutPage = () => {
 
     return (
         <>
+            <Modal
+                opened={modalOpened}
+                onClose={() => setModalOpened(false)}
+                title=""
+                centered
+                closeOnEscape={false}
+                withCloseButton={false}
+
+                overlayOpacity={0.7}
+                overlayBlur={3}
+            >
+                
+                <Image src="src/logo/logo-dark.png" alt="logo"/>
+                <Text align={"center"}>DDT does not condone unethical hacking,</Text> 
+                <Text align={"center"}> Misuse can lead to jail time.</Text>  
+                <Text align={"center"}>Hacking is BAD! Don't Hack!</Text>
+                <Button fullWidth onClick={() => setModalOpened(false)} mt="md">
+                    I Understand
+                </Button>
+            </Modal>
             <Stack align={"center"}>
                 <Title>About the Deakin Detonator Toolkit</Title>
                 <Text>In its simplest definition, Deakin Detonator Toolkit is a penetration testing toolkit.</Text>
