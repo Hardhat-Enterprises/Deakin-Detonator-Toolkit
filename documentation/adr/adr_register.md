@@ -14,7 +14,7 @@
 | 0011   | Introduction of OpenAPI integration                                                           | IMPLEMENTED |
 | 0012   | Integrating Cohere for Tool Output Analysis                                                   | IMPLEMENTED |
 | 0013   | Integrating Subjack for Subdomain Takeover Detection                                          | W-I-P       |
-| 0014   | -empty-                                                                                       | -           |
+| 0014   | Removing Dirb from PT-GUI                                                                     | PROPOSED    |
 | 0015   | -empty-                                                                                       | -           |
 | 0016   | -empty-                                                                                       | -           |
 | 0017   | -empty-                                                                                       | -           |
