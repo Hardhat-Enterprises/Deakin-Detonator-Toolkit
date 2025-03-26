@@ -34,19 +34,22 @@ const AboutPage = () => {
                 overlayBlur={3}
                 size="xl"
                 styles={{
-                    title: { fontSize: "2rem", fontWeight: "bold", textAlign: "center", width: "100%" }
+                    title: { fontSize: "2rem", fontWeight: "bold", textAlign: "center", width: "100%" },
                 }}
             >
-                <Image src="src/logo/logo-dark.png" alt="logo" width={300} 
-                       style={{ display: "block", margin: "0 auto" }} />
-                <Text align={"center"}>DDT does not condone unethical hacking,</Text> 
-                <Text align={"center"}> Misuse can lead to jail time.</Text>  
+                <Image
+                    src="src/logo/logo-dark.png"
+                    alt="logo"
+                    width={300}
+                    style={{ display: "block", margin: "0 auto" }}
+                />
+                <Text align={"center"}>DDT does not condone unethical hacking,</Text>
+                <Text align={"center"}> Misuse can lead to jail time.</Text>
                 <Text align={"center"}>Hacking is BAD! Don't Hack!</Text>
                 <Button fullWidth onClick={() => setModalOpened(false)} mt="lg">
                     I Understand
                 </Button>
             </Modal>
-
 
             <Stack align={"center"}>
                 <Title>About the Deakin Detonator Toolkit</Title>
