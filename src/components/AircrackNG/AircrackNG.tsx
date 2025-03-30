@@ -4,7 +4,7 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+//import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -23,6 +23,9 @@ interface FormValuesType {
     PMKID: string;
     customConfig: string;
     fakeHost: string;
+    KoreK: string;
+    quietMode: string;
+    fudge: string;
     // securityType: string;
     // New channel: string;
     // New replayInterface: string;
@@ -66,13 +69,16 @@ const AircrackNG = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
     const [selectedModeOption, setSelectedModeOption] = useState("WEP");
     const [advanceMode, setAdvanceMode] = useState(false);
+    const [KoreKMode, setKoreKMode] = useState(false);
+    const [quietMode, setQuietMode] = useState(false);
+    const [fudgeMode, setFudgeMode] = useState(false);
     const [customMode, setCustomMode] = useState(false);
 
     // AirCrack-ng specific state variables.
     const [selectedtype, setSelectedType] = useState(""); // State variable to store the selected security type.
     //const [AdvancedMode, setAdvancedMode] = useState(false); // State variable to store the selected mode.
     const [selectedcharacter, setSelectedCharacter] = useState(""); // State variable to store the selected character type.
-    const [CustomConfig, setCustomConfig] = useState(false); // State variable to store the selected custom configuration.
+    //const [CustomConfig, setCustomConfig] = useState(false); // State variable to store the selected custom configuration.
 
     // Component Constants.
     const types = ["WEP", "WPA"]; // Security types supported by Aircrack-ng.
@@ -112,6 +118,9 @@ const AircrackNG = () => {
             PMKID: "",
             customConfig: "",
             fakeHost: "",
+            KoreK: "",
+            quietMode: "",
+            fudge: "",
             // securityType: "",
             // New channel: "",
             // New replayInterface: "",
@@ -156,19 +165,19 @@ const AircrackNG = () => {
             setLoading(false);
 
             // Now that loading has completed, allow the user to save the output to a file.
-            setAllowSave(true);
-            setHasSaved(false);
+            //setAllowSave(true);
+            //setHasSaved(false);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
 
     // Actions taken after saving the output
-    const handleSaveComplete = () => {
+    /*const handleSaveComplete = () => {
         // Indicating that the file has saved which is passed
         // back into SaveOutputToTextFile to inform the user
         setHasSaved(true);
         setAllowSave(false);
-    };
+    };*/
 
     /**
      * onSubmit: Asynchronous handler for the form submission event.
@@ -197,6 +206,9 @@ const AircrackNG = () => {
         if (selectedcharacter === "Alpha-Numeric") args.push(`-c`);
         if (selectedcharacter === "Binary Coded Decimal") args.push(`-t`);
         if (values.MACAddress) args.push(`-m`, values.MACAddress);
+        if (KoreKMode) args.push(`-K`);
+        if (quietMode) args.push(`-q`);
+        if (fudgeMode) args.push(`-f`, values.fudge);
         //}
 
         // WPA-specific options
@@ -210,7 +222,7 @@ const AircrackNG = () => {
         //}
 
         // Custom Configuration section
-        //if (values.customConfig) args.push(values.customConfig);
+        if (customMode) args.push(values.customConfig);
 
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("aircrack-ng", args, handleProcessData, handleProcessTermination)
@@ -269,25 +281,36 @@ const AircrackNG = () => {
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <NativeSelect
                         value={selectedModeOption}
-                        onChange={(e) => setSelectedModeOption(e.target.value)}
+                        onChange={(e) => {
+                            setSelectedModeOption(e.target.value);
+                            // Turns advanced options off when switching modes
+                            setAdvanceMode(false);
+                            setKoreKMode(false);
+                            setQuietMode(false);
+                            setFudgeMode(false);
+                            setCustomMode(false);
+                        }}
                         data={types}
                         required
                         label={"WEP or WPA-PSK"}
                     />
-                    {isWEP && (
-                        <Switch
-                            size="md"
-                            label="Advanced Mode"
-                            checked={advanceMode}
-                            onChange={(e) => {
-                                const isChecked = e.currentTarget.checked;
-                                setAdvanceMode(isChecked);
-                                if (!isChecked) {
-                                    setSelectedCharacter("Default"); // Reset character selection when turning off Advanced Mode
-                                }
-                            }}
-                        />
-                    )}
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={advanceMode}
+                        onChange={(e) => {
+                            const isChecked = e.currentTarget.checked;
+                            setAdvanceMode(isChecked);
+                            if (!isChecked) {
+                                setSelectedCharacter("Default"); // Reset character selection when turning off Advanced Mode
+                                // Resets advanced mode toggle options
+                                setKoreKMode(false);
+                                setQuietMode(false);
+                                setFudgeMode(false);
+                                setCustomMode(false);
+                            }
+                        }}
+                    />
                     {isWPA && (
                         <TextInput
                             label={"Wordlist(s) filename(s) (Please supply file path and filename)"}
@@ -295,14 +318,13 @@ const AircrackNG = () => {
                             {...form.getInputProps("wordList")}
                         />
                     )}
-                    {isWEP && (
-                        <TextInput
-                            label={"Set AP MAC address (BSSID)"}
-                            placeholder={"eg: xx:xx:xx:xx:xx:xx"}
-                            {...form.getInputProps("BSSID")}
-                        />
-                    )}
-                    {isWPA && <TextInput label={"Set AP identifier"} {...form.getInputProps("ESSID")} />}
+                    <TextInput
+                        label={"Set AP MAC address (BSSID)"}
+                        placeholder={"eg: xx:xx:xx:xx:xx:xx"}
+                        {...form.getInputProps("BSSID")}
+                    />
+                    {/*{isWPA && <TextInput label={"Set AP identifier"} {...form.getInputProps("ESSID")} />}*/}
+                    <TextInput label={"Set AP identifier (ESSID)"} {...form.getInputProps("ESSID")} />
                     <TextInput
                         label={"Packet capture file (Please supply file path and filename)"}
                         placeholder={"eg: x/x/*.cap"}
@@ -321,8 +343,66 @@ const AircrackNG = () => {
                             label={"Alpha-numeric or binary-coded decimal or default"}
                         />
                     )}
-                    {customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    {advanceMode && (
+                        <div style={{ display: "flex", gap: "1rem" }}>
+                            <Switch
+                                size="md"
+                                label="Quiet Mode (Requires BSSID or ESSID)"
+                                checked={quietMode}
+                                onChange={(e) => {
+                                    const isChecked = e.currentTarget.checked;
+                                    setQuietMode(isChecked);
+                                }}
+                            />
+                            {isWEP && (
+                                <Switch
+                                    size="md"
+                                    label="Enable KoreK"
+                                    checked={KoreKMode}
+                                    onChange={(e) => {
+                                        const isChecked = e.currentTarget.checked;
+                                        setKoreKMode(isChecked);
+                                    }}
+                                />
+                            )}
+                            {isWEP && (
+                                <Switch
+                                    size="md"
+                                    label="Set Fudge"
+                                    checked={fudgeMode}
+                                    onChange={(e) => {
+                                        const isChecked = e.currentTarget.checked;
+                                        setFudgeMode(isChecked);
+                                        if (!isChecked) {
+                                            setSelectedCharacter("Default");
+                                        }
+                                    }}
+                                />
+                            )}
+                            <Switch
+                                size="md"
+                                label="Custom Mode"
+                                checked={customMode}
+                                onChange={(e) => {
+                                    const isChecked = e.currentTarget.checked;
+                                    setCustomMode(isChecked);
+                                }}
+                            />
+                        </div>
+                    )}
+                    {fudgeMode && (
+                        <TextInput
+                            label={"Set Fudge value"}
+                            placeholder={"2"}
+                            required
+                            {...form.getInputProps("fudge")}
+                        />
+                    )}
+                    {customMode && (
+                        <TextInput label={"Custom Parameters"} required {...form.getInputProps("customConfig")} />
+                    )}
+                    {/*{customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}*/}
+                    {/* {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)} */}
                     <Button type={"submit"}>Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
