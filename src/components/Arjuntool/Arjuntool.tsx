@@ -38,8 +38,8 @@ function Arjuntool() {
         "Step 1: Enter a valid URL, e.g. https://www.deakin.edu.au.\n" +
         "Step 2: Switch on stability mode if you need stability over speed.\n" +
         "Step 3: Click the scan button to commence scanning.\n" +
-        "Step 4: View the output block below to see the results.";
-    +"Step 5: Enter an optional JSON output filename, e.g. arjunoutput.json.\n";
+        "Step 4: View the output block below to see the results."; +
+        "Step 5: Enter an optional JSON output filename, e.g. arjunoutput.json.\n";
     const sourceLink = "https://github.com/s0md3v/Arjun"; // Link to the source code (or Kali Tools).
     const tutorial = "https://docs.google.com/document/d/1zIsHBJPQDL9KLkZK0ztg1DuMoumwwWwV3lJdwjVRJ-c/edit?usp=sharing"; // Link to the official documentation/tutorial.
 
@@ -143,23 +143,19 @@ function Arjuntool() {
         if (values.outputFileName) {
             args.push("-o", values.outputFileName);
         }
+        try {
+        // Execute the arpa command using the CommandHelper utility with pkexec.
+            await CommandHelper.runCommandWithPkexec("arjun", args, handleProcessData, handleProcessTermination);
+        } catch (error: any) {
+            // If an error occurs during command execution, display the error message.
+            setOutput(`Error: ${error.message}`);
 
-        // Execute the arjun command via helper method and handle its output or potential errors
-        CommandHelper.runCommandGetPidAndOutput("arjun", args, handleProcessData, handleProcessTermination)
-            .then(({ pid, output }) => {
-                // Update the output with the results of the command execution.
-                setOutput(output);
+            // Set the loading state to false since the process failed.
+            setLoading(false);
 
-                // Store the process ID of the executed command.
-                setPid(pid);
-            })
-            .catch((error) => {
-                // Display any errors encountered during command execution.
-                setOutput(error.message);
-
-                // Deactivate loading state.
-                setLoading(false);
-            });
+            // Allow saving the output (which includes the error message) to a file.
+            setAllowSave(true);
+        }
     };
 
     /**
