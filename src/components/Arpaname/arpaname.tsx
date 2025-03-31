@@ -24,7 +24,7 @@ interface FormValuesType {
  * @returns JSX.Element The rendered ArpanameTool component
  */
 function ArpanameTool() {
-  //Component variables
+    //Component variables
     const [loading, setLoading] = useState(false); // State variable to track if the process is currently loading
     const [output, setOutput] = useState(""); // State variable to store the output of the process
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
@@ -72,7 +72,7 @@ function ArpanameTool() {
     It updates the state by appending the new data received to the existing output.
     @param {string} data - The data received from the child process.
     */
-     const handleProcessData = useCallback((data: string) => {
+    const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
@@ -109,7 +109,7 @@ function ArpanameTool() {
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
-	// Actions taken after saving the output
+    // Actions taken after saving the output
     const handleSaveComplete = () => {
         // Indicating that the file has saved which is passed
         // back into SaveOutputToTextFile to inform the user
@@ -140,17 +140,17 @@ function ArpanameTool() {
         }
         // Prepare arguments for the arpaname command
         const argsIP = [values.ipAddress];
-        
+
         // Reset the error message state when validation succeeds
-       	setErrorMessage("");
-       	
-       	// Disallow saving until the tool's execution is complete
+        setErrorMessage("");
+
+        // Disallow saving until the tool's execution is complete
         setAllowSave(false);
-        
+
         // Activate loading state to indicate ongoing process
         setLoading(true);
         try {
-        // Execute the arpaname command using the CommandHelper utility with pkexec.
+            // Execute the arpaname command using the CommandHelper utility with pkexec.
             await CommandHelper.runCommandWithPkexec("arpaname", argsIP, handleProcessData, handleProcessTermination);
         } catch (error: any) {
             // If an error occurs during command execution, display the error message.
@@ -162,7 +162,7 @@ function ArpanameTool() {
             // Allow saving the output (which includes the error message) to a file.
             setAllowSave(true);
         }
-     };
+    };
     /**
      * Callback function to clear the output state.
      * This function is memoized using the `useCallback` hook to prevent unnecessary re-renders.
@@ -174,44 +174,44 @@ function ArpanameTool() {
     }, [setOutput]);
 
     return (
-    	<>
-	    <RenderComponent
-		title={title}
-		description={description}
-		steps={steps}
-		tutorial={tutorial}
-		sourceLink={sourceLink}
-	    >
-		 {!loadingModal && (
-		     <InstallationModal
-		         isOpen={opened}
-		         setOpened={setOpened}
-		         feature_description={description}
-		         dependencies={dependencies}
-		     ></InstallationModal>
-		 )}
-		 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-		     <Stack>
-		         {LoadingOverlayAndCancelButton(loading, pid)}
-		         <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")}/>
-		         {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
-		         <Radio.Group
-		             value={form.values.ipType}
-		             onChange={(value) => form.setFieldValue("ipType", value as "IPv4" | "IPv6")}
-		             label="Select IP Type"
-		             required
-		         >
-		             <Radio value="IPv4" label="IPv4" />
-		             <Radio value="IPv6" label="IPv6" />
-		         </Radio.Group>
-		         {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
-		         <Button type={"submit"}>Lookup</Button>
-                         {/* Render the save output to file component */}
-                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                         {/* Render the console wrapper component */}
-                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                     </Stack>
-            	 </form>
+        <>
+            <RenderComponent
+                title={title}
+                description={description}
+                steps={steps}
+                tutorial={tutorial}
+                sourceLink={sourceLink}
+            >
+                {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+                )}
+                <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                    <Stack>
+                        {LoadingOverlayAndCancelButton(loading, pid)}
+                        <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
+                        {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
+                        <Radio.Group
+                            value={form.values.ipType}
+                            onChange={(value) => form.setFieldValue("ipType", value as "IPv4" | "IPv6")}
+                            label="Select IP Type"
+                            required
+                        >
+                            <Radio value="IPv4" label="IPv4" />
+                            <Radio value="IPv6" label="IPv6" />
+                        </Radio.Group>
+                        {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
+                        <Button type={"submit"}>Lookup</Button>
+                        {/* Render the save output to file component */}
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        {/* Render the console wrapper component */}
+                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    </Stack>
+                </form>
             </RenderComponent>
         </>
     );

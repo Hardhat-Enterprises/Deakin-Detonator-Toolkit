@@ -38,8 +38,8 @@ function Arjuntool() {
         "Step 1: Enter a valid URL, e.g. https://www.deakin.edu.au.\n" +
         "Step 2: Switch on stability mode if you need stability over speed.\n" +
         "Step 3: Click the scan button to commence scanning.\n" +
-        "Step 4: View the output block below to see the results."; +
-        "Step 5: Enter an optional JSON output filename, e.g. arjunoutput.json.\n";
+        "Step 4: View the output block below to see the results.";
+    +"Step 5: Enter an optional JSON output filename, e.g. arjunoutput.json.\n";
     const sourceLink = "https://github.com/s0md3v/Arjun"; // Link to the source code (or Kali Tools).
     const tutorial = "https://docs.google.com/document/d/1zIsHBJPQDL9KLkZK0ztg1DuMoumwwWwV3lJdwjVRJ-c/edit?usp=sharing"; // Link to the official documentation/tutorial.
 
@@ -144,7 +144,7 @@ function Arjuntool() {
             args.push("-o", values.outputFileName);
         }
         try {
-        // Execute the arpa command using the CommandHelper utility with pkexec.
+            // Execute the arpa command using the CommandHelper utility with pkexec.
             await CommandHelper.runCommandWithPkexec("arjun", args, handleProcessData, handleProcessTermination);
         } catch (error: any) {
             // If an error occurs during command execution, display the error message.
