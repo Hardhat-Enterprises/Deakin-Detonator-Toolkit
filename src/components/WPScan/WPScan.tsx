@@ -1,116 +1,109 @@
-import { Button, Stack, TextInput, Switch, NativeSelect, NumberInput, Grid } from "@mantine/core";
+// Import necessary hooks and components from React and other libraries
+import { useState, useCallback, useEffect } from "react";
+import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { RenderComponent } from "../UserGuide/UserGuide";
-import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import InstallationModal from "../InstallationModal/InstallationModal";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import InstallationModal from "../InstallationModal/InstallationModal";
+import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
- * Represents the form values for the wpscan component.
+ * Represents the form values for the WPScan component.
  */
 interface FormValuesType {
     url: string;
-    lowBound: number;
-    upBound: number;
+    enumerationType: string;
     customEnum: string;
+    detectionMode: string;
     verbose: boolean;
-    output: string;
-    format: string;
+    outputFormat: string;
+    stealthy: boolean;
     passwords: string;
     usernames: string;
-    stealthy: boolean;
-    custom: string;
+    outputFile: string;
     apiToken: string;
+    randomUserAgent: boolean;
+    forceSsl: boolean;
+    disableTlsChecks: boolean;
+    httpAuth: string;
+    proxy: string;
 }
 
 /**
  * The WPScan component.
  * @returns The WPScan component.
  */
-const WPScan = () => {
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
-    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false); // State variable to check if advanced mode is enabled.
-    const [checkedCustom, setCheckedCustom] = useState(false); // State variable to check if custom mode is enabled.
-    const [selectedEnumerationType, setselectedEnumerationType] = useState(""); // State variable to store selected enumeration type
-    const [selectedDetectionMode, setSelectedDetectionMode] = useState(""); // State variable to store selected detection mode.
-    const [selectedOutputFormat, setSelectedOutputFormat] = useState(""); // State variable to store selected output format.
-    const [verboseChecked, setVerboseChecked] = useState(false); // State variable to check if verbose mode is enabled.
-    const [stealthyChecked, setStealthyChecked] = useState(false); // State variable to check if verbose mode is enabled.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable that indicates if the modal is opened.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable to indicate loading state of the modal.
-    const [allowSave, setAllowSave] = useState(false); // State variable to indicate if saving is allowed
-    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved
+function WPScan() {
+    // Declare state variables for component
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [pid, setPid] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+    const [active, setActive] = useState(0);
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [loadingModal, setLoadingModal] = useState(true);
 
-    // Component Constants.
-    const title = "WPScan"; // Title of the component.
-    const description = "WPScan scans remote WordPress installations to find security issues"; // Description of the component.
+    // Additional state variables for section visibility
+    const [basicOpened, setBasicOpened] = useState(true);
+    const [advancedOpened, setAdvancedOpened] = useState(false);
+    const [authOpened, setAuthOpened] = useState(false);
+    const [outputOpened, setOutputOpened] = useState(false);
+
+    // Declare constants for the component
+    const title = "WPScan";
+    const description = "WPScan scans remote WordPress installations to find security issues";
     const steps =
         "Step 1: Enter a WordPress URL.\n" +
-        "Step 2: Enter any additional options for the scan.\n" +
-        "Step 3: Enter any additional parameters for the scan.\n" +
-        "Step 4: Click Scan to commence WPScan's operation.\n" +
-        "Step 5: View the Output block below to view the results of the tool's execution.\n" + //Steps to run the component
+        "Step 2: Enter any additional parameters for the scan.\n" +
+        "Step 3: Click Start " +
+        title +
+        " to commence WPScan's operation.\n" +
+        "Step 4: View the Output block below to view the results of the tool's execution.\n" +
         "\n" +
         "API Token: For the API Token field, head to the WPScan website and make a free account.\n" +
         "           Once logged in, you can visit the API Token section and copy it into the tool.\n";
-    const sourceLink = "https://www.kali.org/tools/wpscan/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["wpscan"]; // Contains the dependencies required by the component.
-    const enumerationtypes = [
-        "Vulnerable plugins",
-        "All Plugins",
-        "Popular Plugins",
-        "Vulnerable themes",
-        "All themes",
-        "Popular themes",
-        "Timthumbs",
-        "Config Backups",
-        "Db exports",
-        "UID range",
-        "MID range",
-        "Custom",
-    ]; // Contains types of enumeration available.
-    const enumerationRequiringRange = ["UID range", "MID range"]; // Contains the enumeration types that requires specification of ranges.
-    const detectionModes = ["mixed", "passive", "aggressive"]; // Contains detection modes available.
-    const outputFormats = ["cli-no-colour", "cli-no-color", "json", "cli"]; // Contains the output formats available.
+    const sourceLink = "https://github.com/wpscanteam/wpscan";
+    const tutorial = "https://docs.google.com/document/d/1qkCw-Ktjih6C1R_ylEbVJlDwfJLpxmL7W7leO17AjS0/edit?usp=sharing";
+    const dependencies = ["wpscan"];
 
-    // Form hook to handle form input.
-    let form = useForm({
+    // Initialize the form hook with initial values
+    const form = useForm<FormValuesType>({
         initialValues: {
             url: "",
-            lowBound: 0,
-            upBound: 0,
+            enumerationType: "",
             customEnum: "",
+            detectionMode: "",
             verbose: false,
-            output: "",
-            format: "",
+            outputFormat: "",
             stealthy: false,
             passwords: "",
             usernames: "",
-            custom: "",
+            outputFile: "",
             apiToken: "",
+            randomUserAgent: false,
+            forceSsl: false,
+            disableTlsChecks: false,
+            httpAuth: "",
+            proxy: "",
         },
     });
 
-    // Check if the command is available and set the state variables accordingly.
+    // Check the availability of commands in the dependencies array
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-                setLoadingModal(false); // Set loading to false after the check is done
+                setIsCommandAvailable(isAvailable);
+                setOpened(!isAvailable);
+                setLoadingModal(false);
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+                setLoadingModal(false);
             });
     }, []);
 
@@ -120,40 +113,27 @@ const WPScan = () => {
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
-        if (!allowSave) setAllowSave(true);
+        setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
     /**
      * handleProcessTermination: Callback to handle the termination of the child process.
-     * Once the process termination is handled, it clears the process PID reference and
-     * deactivates the loading overlay.
+     * Once the process termination is handled, it deactivates the loading overlay.
      * @param {object} param - An object containing information about the process termination.
      * @param {number} param.code - The exit code of the terminated process.
      * @param {number} param.signal - The signal code indicating how the process was terminated.
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-
-                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-
-                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
 
-            // Clear the child process pid reference. There is no longer a valid process running.
-            setPid("");
-
-            // Cancel the loading overlay. The process has completed.
             setLoading(false);
-
-            // Allow Saving as the output is finalised
             setAllowSave(true);
             setHasSaved(false);
         },
@@ -161,244 +141,230 @@ const WPScan = () => {
     );
 
     /**
-     * handleSaveComplete: handle state changes when saves are completed
-     * Once the output is saved, prevent duplicate saves
+     * handSaveComplete: Recognises that the output file has been saved.
+     * Passes the saved status back to SaveOutputToTextFile_v2
      */
     const handleSaveComplete = () => {
-        //Disallow saving once the output is saved
         setHasSaved(true);
         setAllowSave(false);
     };
 
     /**
      * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the wpscan tool with the given parameters.
+     * It sets up and triggers the WPScan tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
-     *
-     * @param {FormValuesType} values - The form values, containing the url, lowBound, upBound, customEnum, verbose, output, format, stealthy, passwords, usernames, custom
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Activate loading state to indicate ongoing process
         setLoading(true);
+        setAllowSave(false);
 
-        // Construct arguments for the wpscan command based on form input
-        const args = [`--url`, values.url];
-        if (selectedEnumerationType != "" && checkedAdvanced) {
-            selectedEnumerationType === "Vulnerable plugins" ? args.push(`-e`, `vp`) : undefined;
-            selectedEnumerationType === "All Plugins" ? args.push(`-e`, `ap`) : undefined;
-            selectedEnumerationType === "Popular Plugins" ? args.push(`-e`, `p`) : undefined;
-            selectedEnumerationType === "Vulnerable themes" ? args.push(`-e`, `vt`) : undefined;
-            selectedEnumerationType === "All themes" ? args.push(`-e`, `at`) : undefined;
-            selectedEnumerationType === "Popular themes" ? args.push(`-e`, `t`) : undefined;
-            selectedEnumerationType === "Timthumbs" ? args.push(`-e`, `tt`) : undefined;
-            selectedEnumerationType === "Config Backups" ? args.push(`-e`, `cb`) : undefined;
-            selectedEnumerationType === "Db exports" ? args.push(`-e`, `dbe`) : undefined;
-            selectedEnumerationType === "UID range"
-                ? args.push(`-e`, `u${values.lowBound}-${values.upBound}`)
-                : undefined;
-            selectedEnumerationType === "MID range"
-                ? args.push(`-e`, `m${values.lowBound}-${values.upBound}`)
-                : undefined;
-            selectedEnumerationType === "Custom" ? args.push(`-e`, `${values.customEnum}`) : undefined;
-        }
+        const args: string[] = ["--url", values.url];
 
-        if (selectedDetectionMode) {
-            args.push(`detection-mode`, `${selectedDetectionMode}`);
-        }
-
-        if (verboseChecked) {
-            args.push(`-v`);
-        }
-
-        if (selectedOutputFormat) {
-            args.push(`-f`, `${selectedOutputFormat}`);
-        }
-        if (stealthyChecked) {
-            args.push(`--stealthy`);
-        }
-
-        if (values.passwords) {
-            args.push(`--passwords`, `${values.passwords}`);
-        }
-        if (values.usernames) {
-            args.push(`--usernames`, `${values.usernames}`);
-        }
-        if (values.output) {
-            args.push(`-o`, `${values.output}`);
-        }
-        if (values.apiToken) {
-            args.push(`--api-token`, `${values.apiToken}`);
-        }
-
-        if (checkedCustom) {
-            args.push(`${values.custom}`);
-        }
+        if (values.enumerationType) args.push("-e", values.enumerationType);
+        if (values.customEnum) args.push("-e", values.customEnum);
+        if (values.detectionMode) args.push("--detection-mode", values.detectionMode);
+        if (values.verbose) args.push("--verbose");
+        if (values.outputFormat) args.push("--format", values.outputFormat);
+        if (values.stealthy) args.push("--stealthy");
+        if (values.passwords) args.push("--passwords", values.passwords);
+        if (values.usernames) args.push("--usernames", values.usernames);
+        if (values.outputFile) args.push("--output", values.outputFile);
+        if (values.apiToken) args.push("--api-token", values.apiToken);
+        if (values.randomUserAgent) args.push("--random-user-agent");
+        if (values.forceSsl) args.push("--force-ssl");
+        if (values.disableTlsChecks) args.push("--disable-tls-checks");
+        if (values.httpAuth) args.push("--http-auth", values.httpAuth);
+        if (values.proxy) args.push("--proxy", values.proxy);
 
         try {
-            // Execute the wpscan command via helper method and handle its output or potential errors
-            const result = await CommandHelper.runCommandGetPidAndOutput(
+            const { pid, output } = await CommandHelper.runCommandGetPidAndOutput(
                 "wpscan",
                 args,
                 handleProcessData,
                 handleProcessTermination
             );
-
-            // Update the UI with the results from the executed command
-            setPid(result.pid);
-            setOutput(result.output);
-        } catch (e: any) {
-            // Display any errors encountered during command execution
-            setOutput(e.message);
-            // Deactivate loading state
+            setPid(pid);
+            setOutput(output);
+        } catch (error: any) {
+            setOutput(`Error: ${error.message}`);
             setLoading(false);
+            setAllowSave(true);
         }
     };
 
     /**
-     * Clears the output state.
+     * clearOutput: Callback function to clear the console output.
+     * It resets the state variable holding the output, thereby clearing the display.
      */
     const clearOutput = useCallback(() => {
         setOutput("");
-
-        //Disallow saving when output is cleared
         setHasSaved(false);
         setAllowSave(false);
-    }, [setOutput]);
+    }, []);
+
+    // Function to handle the next step in the Stepper.
+    const nextStep = () => setActive((current) => (current < 2 ? current + 1 : current));
+
+    // Function to handle the previous step in the Stepper.
+    const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
 
     return (
-        <RenderComponent
-            title={title}
-            description={description}
-            steps={steps}
-            tutorial={tutorial}
-            sourceLink={sourceLink}
-        >
-            {!loadingModal && (
-                <InstallationModal
-                    isOpen={opened}
-                    setOpened={setOpened}
-                    feature_description={description}
-                    dependencies={dependencies}
-                ></InstallationModal>
-            )}
-            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                {LoadingOverlayAndCancelButton(loading, pid)}
-                <Stack>
-                    <TextInput
-                        label={"URL of target WordPress site"}
-                        placeholder={"Example: http://www.wordpress.com/sample"}
-                        required
-                        {...form.getInputProps("url")}
-                    />
-                    <Switch
-                        size="md"
-                        label="Advanced Mode"
-                        checked={checkedAdvanced}
-                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
-                    />
-                    {checkedAdvanced && (
-                        <>
-                            <Switch
-                                size="md"
-                                label="Stealthy"
-                                checked={stealthyChecked}
-                                onChange={(e) => setStealthyChecked(e.currentTarget.checked)}
-                            />
-                            <Switch
-                                size="md"
-                                label="Verbose"
-                                checked={verboseChecked}
-                                onChange={(e) => setVerboseChecked(e.currentTarget.checked)}
-                            />
-                            <TextInput
-                                label={"API Token"}
-                                placeholder={"Enter your WPScan API token"}
-                                {...form.getInputProps("apiToken")}
-                            />
-                            <NativeSelect
-                                value={selectedEnumerationType}
-                                onChange={(e) => setselectedEnumerationType(e.target.value)}
-                                title={"Enumeration Options"}
-                                data={enumerationtypes}
-                                placeholder={"Types"}
-                                description={"Please select an enumeration type"}
-                            />
-                            {enumerationRequiringRange.includes(selectedEnumerationType) && (
-                                <>
-                                    <Grid>
-                                        <Grid.Col span={6}>
-                                            <NumberInput
-                                                label={"Lower Range"}
-                                                placeholder={"e.g. 1"}
-                                                {...form.getInputProps("lowbound")}
-                                            />
-                                        </Grid.Col>
+        <>
+            <RenderComponent
+                title={title}
+                description={description}
+                steps={steps}
+                tutorial={tutorial}
+                sourceLink={sourceLink}
+            >
+                {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+                )}
+                <form onSubmit={form.onSubmit(onSubmit)}>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Stack>
+                        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
+                            <Stepper.Step label="Target">
+                                <TextInput label="WordPress URL" required {...form.getInputProps("url")} />
+                            </Stepper.Step>
+                            <Stepper.Step label="Scan Options">
+                                <Grid>
+                                    <Grid.Col span={3}>
+                                        <Button
+                                            onClick={() => setBasicOpened(!basicOpened)}
+                                            variant="outline"
+                                            fullWidth
+                                        >
+                                            {basicOpened ? "Hide Basic Options" : "Show Basic Options"}
+                                        </Button>
+                                    </Grid.Col>
+                                    <Grid.Col span={3}>
+                                        <Button
+                                            onClick={() => setAdvancedOpened(!advancedOpened)}
+                                            variant="outline"
+                                            fullWidth
+                                        >
+                                            {advancedOpened ? "Hide Advanced Options" : "Show Advanced Options"}
+                                        </Button>
+                                    </Grid.Col>
+                                    <Grid.Col span={3}>
+                                        <Button onClick={() => setAuthOpened(!authOpened)} variant="outline" fullWidth>
+                                            {authOpened ? "Hide Authentication Options" : "Show Authentication Options"}
+                                        </Button>
+                                    </Grid.Col>
+                                    <Grid.Col span={3}>
+                                        <Button
+                                            onClick={() => setOutputOpened(!outputOpened)}
+                                            variant="outline"
+                                            fullWidth
+                                        >
+                                            {outputOpened ? "Hide Output Options" : "Show Output Options"}
+                                        </Button>
+                                    </Grid.Col>
+                                </Grid>
 
-                                        <Grid.Col span={6}>
-                                            <NumberInput
-                                                label={"Upper Range"}
-                                                placeholder={"e.g. 5"}
-                                                {...form.getInputProps("upbound")}
-                                            />
-                                        </Grid.Col>
-                                    </Grid>
-                                </>
-                            )}
-                            {selectedEnumerationType === "Custom" && (
-                                <TextInput
-                                    label={"Custom Enumeration"}
-                                    placeholder={"e.g. vp ap u1-5"}
-                                    {...form.getInputProps("customenum")}
-                                />
-                            )}
-                            <NativeSelect
-                                value={selectedDetectionMode}
-                                onChange={(e) => setSelectedDetectionMode(e.target.value)}
-                                title={"Detectionmode"}
-                                data={detectionModes}
-                                placeholder={"Detection Modes"}
-                                description={"Please select a detection type"}
-                            />
-                            <TextInput
-                                label={"Ouput to file"}
-                                placeholder={"File Name"}
-                                {...form.getInputProps("output")}
-                            />
-                            <NativeSelect
-                                value={selectedOutputFormat}
-                                onChange={(e) => setSelectedOutputFormat(e.target.value)}
-                                title={"Output Format"}
-                                data={outputFormats}
-                                placeholder={"Output Format"}
-                                description={"Please select an output format"}
-                            />
-                            <TextInput
-                                label={" List of passwords to use during the password attack."}
-                                placeholder={"Input Filepath"}
-                                {...form.getInputProps("passwords")}
-                            />
-                            <TextInput
-                                label={"List of usernames to use during the password attack."}
-                                placeholder={"Input Filepath"}
-                                {...form.getInputProps("usernames")}
-                            />
-                        </>
-                    )}
-                    <Switch
-                        size="md"
-                        label="Custom Mode"
-                        checked={checkedCustom}
-                        onChange={(e) => setCheckedCustom(e.currentTarget.checked)}
-                    />
-                    {checkedCustom && <TextInput label={"Custom Configuration"} {...form.getInputProps("custom")} />}
+                                {basicOpened && (
+                                    <Stack mt={10}>
+                                        <Select
+                                            label="Enumeration Type"
+                                            data={[
+                                                { value: "vp", label: "Vulnerable plugins" },
+                                                { value: "ap", label: "All Plugins" },
+                                                { value: "p", label: "Popular Plugins" },
+                                                { value: "vt", label: "Vulnerable themes" },
+                                                { value: "at", label: "All themes" },
+                                                { value: "t", label: "Popular themes" },
+                                                { value: "tt", label: "Timthumbs" },
+                                                { value: "cb", label: "Config Backups" },
+                                                { value: "dbe", label: "Db exports" },
+                                                { value: "u", label: "User IDs" },
+                                                { value: "m", label: "Media IDs" },
+                                            ]}
+                                            {...form.getInputProps("enumerationType")}
+                                        />
+                                        <TextInput label="Custom Enumeration" {...form.getInputProps("customEnum")} />
+                                    </Stack>
+                                )}
 
-                    <Button type={"submit"}>Scan</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </Stack>
-            </form>
-        </RenderComponent>
+                                {advancedOpened && (
+                                    <Stack mt={10}>
+                                        <Select
+                                            label="Detection Mode"
+                                            data={[
+                                                { value: "mixed", label: "Mixed" },
+                                                { value: "passive", label: "Passive" },
+                                                { value: "aggressive", label: "Aggressive" },
+                                            ]}
+                                            {...form.getInputProps("detectionMode")}
+                                        />
+                                        <Switch
+                                            label="Verbose"
+                                            {...form.getInputProps("verbose", { type: "checkbox" })}
+                                        />
+                                        <Switch
+                                            label="Stealthy"
+                                            {...form.getInputProps("stealthy", { type: "checkbox" })}
+                                        />
+                                        <Switch
+                                            label="Random User Agent"
+                                            {...form.getInputProps("randomUserAgent", { type: "checkbox" })}
+                                        />
+                                        <Switch
+                                            label="Force SSL"
+                                            {...form.getInputProps("forceSsl", { type: "checkbox" })}
+                                        />
+                                        <Switch
+                                            label="Disable TLS Checks"
+                                            {...form.getInputProps("disableTlsChecks", { type: "checkbox" })}
+                                        />
+                                        <TextInput label="HTTP Authentication" {...form.getInputProps("httpAuth")} />
+                                        <TextInput label="Proxy" {...form.getInputProps("proxy")} />
+                                    </Stack>
+                                )}
+
+                                {authOpened && (
+                                    <Stack mt={10}>
+                                        <TextInput label="Password List" {...form.getInputProps("passwords")} />
+                                        <TextInput label="Username List" {...form.getInputProps("usernames")} />
+                                        <TextInput label="API Token" {...form.getInputProps("apiToken")} />
+                                    </Stack>
+                                )}
+
+                                {outputOpened && (
+                                    <Stack mt={10}>
+                                        <Select
+                                            label="Output Format"
+                                            data={[
+                                                { value: "cli", label: "CLI" },
+                                                { value: "json", label: "JSON" },
+                                                { value: "cli-no-color", label: "CLI (No Color)" },
+                                            ]}
+                                            {...form.getInputProps("outputFormat")}
+                                        />
+                                        <TextInput label="Output File" {...form.getInputProps("outputFile")} />
+                                    </Stack>
+                                )}
+                            </Stepper.Step>
+                            <Stepper.Step label="Run">
+                                <Stack align="center" mt={20}>
+                                    <Button type="submit" disabled={loading} style={{ alignSelf: "center" }}>
+                                        Start {title}
+                                    </Button>
+                                </Stack>
+                            </Stepper.Step>
+                        </Stepper>
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    </Stack>
+                </form>
+            </RenderComponent>
+        </>
     );
-};
+}
 
 export default WPScan;

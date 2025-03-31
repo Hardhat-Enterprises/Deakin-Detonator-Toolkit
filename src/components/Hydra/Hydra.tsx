@@ -57,7 +57,7 @@ const Hydra = () => {
         "Step 7: Click Crack to commence Hydra's operation.\n" +
         "Step 8: View the Output block below to view the results"; //Steps to run the component
     const sourceLink = "https://www.kali.org/tools/hydra/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/14h62IT7RE86O0-15vUZekNV5IaIWcFy6deNageIJ9J0/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["hydra"]; // Contains the dependencies required by the component.
     const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic", "No Password"]; //Contain options for password input types
     const loginInputTypes = ["Single Login", "File", "No Username"]; // Contain options for login input types

@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -9,6 +9,8 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { installDependencies } from "../../utils/InstallHelper";
+import AskChatGPT from "../AskChatGPT/AskChatGPT";
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
 
 /**
  * Title and Description of the tool
@@ -19,28 +21,32 @@ const description =
 const steps =
     "How to use NSLookup.\n\n" +
     "Step 1: Enter an IP or Web URL.\n" +
-    "E.g. 127.0.0.1\n\n" +
-    "Step 2: View the Output block below to view the results of the Scan.";
-const sourceLink = "https://www.nslookup.io"; //For Render Compomnet
+    "       E.g. 127.0.0.1\n\n" +
+    "Step 2: Select the query type (e.g., A, MX, NS).\n\n" +
+    "Step 3: View the Output block below to view the results of the Scan.";
 
-// Form Value Interface
-interface FormValuesType {
-    ipAddress: string; // IP Address that needs to be looked up
+interface FormValues {
+    ipaddress: string;
+    queryType: string;
 }
 
-function NSLookup() {
-    // State the Variables
-    const [loading, setLoading] = useState(false); // Indication of running the process
-    const [pid, setPid] = useState(""); // Process ID
-    const [output, setOutput] = useState(""); // Output
-    const [allowSave, setAllowSave] = useState(false); // Looking whether the process can be saved
-    const [hasSaved, setHasSaved] = useState(false); // Indication of saved process
+export function NSLookup() {
+    const [loading, setLoading] = useState(false);
+    const [pid, setPid] = useState("");
+    const [output, setOutput] = useState("");
+    const [history, setHistory] = useState<string[]>([]);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
     const [opened, setOpened] = useState(false); // Modal open state
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // Command Availability state
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // Command availability state
     const [loadingModal, setLoadingModal] = useState(true); // Loading state for modal
-    const dependencies = ["bind9"];
+    const dependencies = ["bind9"]; // List of dependencies
+    const [chatGPTResponse, setChatGPTResponse] = useState("");
 
-    // Check if the command is available and set the state variables accordingly.
+    /**
+     * useEffect hook: Checks the availability of necessary commands and updates the modal state accordingly.
+     * This hook runs only once when the component is mounted.
+     */
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
@@ -54,10 +60,11 @@ function NSLookup() {
             });
     }, []);
 
-    // Form Hook to handle form input
-    const form = useForm({
+    // Initialize form with default values for IP address and query type
+    let form = useForm({
         initialValues: {
-            ipAddress: "",
+            ipaddress: "",
+            queryType: "A", // Default query type is "A"
         },
     });
 
@@ -76,34 +83,47 @@ function NSLookup() {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
+            // Clear the child process PID reference
             setPid("");
             setLoading(false);
+
+            // Allow Saving as the output is finalized
             setAllowSave(true);
             setHasSaved(false);
         },
         [handleProcessData]
     );
 
-    // Updating the state of Saving the output
+    /**
+     * handleSaveComplete: Callback function executed after the output is saved to a file.
+     * It updates the state to indicate that the file has been saved and disables the save button.
+     */
     const handleSaveComplete = () => {
         setHasSaved(true);
         setAllowSave(false);
     };
 
-    // Handling the submitted form
-    const onSubmit = (values: FormValuesType) => {
-        const ipAddress = values.ipAddress.trim();
-        if (!ipAddress) {
-            setOutput("Error: No IP address or hostname provided.");
-            return;
-        }
-
+    /**
+     * onSubmit: Handler function triggered when the form is submitted.
+     * It prepares the arguments for the command, initiates the command execution, and updates the state with the process PID and output.
+     * If an error occurs during execution, it updates the output with the error message.
+     *
+     * @param {FormValues} values - An object containing the form input values (IP address and query type).
+     */
+    const onSubmit = (values: FormValues) => {
         setAllowSave(false);
         setLoading(true);
 
-        CommandHelper.runCommandGetPidAndOutput("nslookup", [ipAddress], handleProcessData, handleProcessTermination)
+        const query = `${values.queryType} - ${values.ipaddress}`;
+        // Add to history if not already present
+        if (!history.includes(query)) {
+            setHistory((prevHistory) => [...prevHistory, query]);
+        }
 
-            .then(({ pid, output }: { pid: string; output: string }) => {
+        const args = [values.ipaddress, "-type=" + values.queryType];
+        CommandHelper.runCommandGetPidAndOutput("nslookup", args, handleProcessData, handleProcessTermination)
+            .then(({ pid, output }) => {
+                setPid(pid);
                 setOutput(output);
             })
             .catch((error) => {
@@ -112,7 +132,10 @@ function NSLookup() {
             });
     };
 
-    // Clearing the output
+    /**
+     * clearOutput: Callback function to clear the current output displayed in the UI.
+     * This function resets the output state to an empty string.
+     */
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
@@ -125,8 +148,10 @@ function NSLookup() {
                 title={title}
                 description={description}
                 steps={steps}
-                tutorial={""} // Empty string since we don't need the tutorial section
-                sourceLink={sourceLink} // This will output the link to NSLookup
+                tutorial={
+                    "https://docs.google.com/document/d/1Yuyo7KHj-iWTjRyzcQpw_e2yMHfDU8ND5Xg0_uCFUDI/edit?usp=sharing"
+                } // Empty string since we don't need the tutorial section
+                sourceLink={"https://www.nslookup.io"} // This will output the link to NSLookup
                 children={""}
             />
 
@@ -141,15 +166,49 @@ function NSLookup() {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-                    <TextInput
-                        label={"Please enter the IP Address for NSLookup"}
-                        required
-                        {...form.getInputProps("ipAddress")}
+                    {/* Dropdown for selecting from history of previous queries */}
+                    <Select
+                        label="History"
+                        placeholder="Select from history"
+                        data={history}
+                        onChange={(value) => {
+                            if (value) {
+                                const [queryType, ipaddress] = value.split(" - ");
+                                form.setValues({ ipaddress, queryType });
+                            }
+                        }}
                     />
-
+                    {/* Dropdown for selecting query type */}
+                    <Select
+                        label="Query Type"
+                        data={[
+                            { value: "A", label: "A (Address)" },
+                            { value: "MX", label: "MX (Mail Exchange)" },
+                            { value: "NS", label: "NS (Name Server)" },
+                            { value: "CNAME", label: "CNAME (Canonical Name)" },
+                            { value: "TXT", label: "TXT (Text)" },
+                        ]}
+                        {...form.getInputProps("queryType")}
+                    />
+                    {/* Input field for entering IP address or domain name */}
+                    <TextInput
+                        label={"Please enter the IP Address for nslookup"}
+                        required
+                        {...form.getInputProps("ipaddress")}
+                    />
+                    {/* Component for saving output to a text file */}
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type={"submit"}>Start {title}</Button>
+                    {/* Submit button for executing the nslookup command */}
+                    <Button type={"submit"}>Scan</Button>
+                    {/* Component for displaying command output and providing a clear output button */}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <AskChatGPT toolName={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                    {chatGPTResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>ChatGPT Response:</h3>
+                            <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
                 </Stack>
             </form>
         </>

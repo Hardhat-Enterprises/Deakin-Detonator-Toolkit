@@ -31,7 +31,7 @@ const steps =
     "Step 3: Add a number in the third field for the maximum number of seconds for EyeWitness to try and screenshot a webpage, e.g. 20. \n\n" +
     "Step 4: Press the scan button. ";
 const sourceLink = "https://www.kali.org/tools/eyewitness/#eyewitness"; // Link to the source code or relevant documentation.
-const tutorial = ""; // Link to the official tutorial/documentation.
+const tutorial = "https://docs.google.com/document/d/1V4lIQbeIbKwNiLQqSXvJZ0HM34q5FDxe2HHP2t6d8mA/edit?usp=sharing"; // Link to the official tutorial/documentation.
 const dependencies = ["eyewitness"]; // Dependencies required by the component.
 
 function Eyewitness() {

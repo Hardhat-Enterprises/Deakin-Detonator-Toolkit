@@ -18,6 +18,11 @@
                 "sidecar": true,
                 "scope": [
                     {
+    			"name": "nmap",
+   			"cmd": "/usr/bin/nmap",
+    			"args": true
+		    },
+                    {
                         "name": "airbase-ng",
                         "cmd": "airbase-ng",
                         "args": true
@@ -33,13 +38,28 @@
                         "args": true
                     },
                     {
+                        "name": "amass",
+                        "cmd": "amass",
+                        "args": true
+                    },
+                    {
                         "name": "arjun",
                         "cmd": "arjun",
                         "args": true
                     },
                     {
+                        "name": "arpaname",
+                        "cmd": "arpaname",
+                        "args": true
+                    },
+                    {
                         "name": "arp-fingerprint",
                         "cmd": "arp-fingerprint",
+                        "args": true
+                    },
+                    {
+                        "name": "arping",
+                        "cmd": "arping",
                         "args": true
                     },
                     {
@@ -75,6 +95,11 @@
                     {
                         "name": "cewl",
                         "cmd": "cewl",
+                        "args": true
+                    },
+                    {
+                        "name": "cloudbrute",
+                        "cmd": "cloudbrute",
                         "args": true
                     },
                     {
@@ -118,6 +143,11 @@
                         "args": true
                     },
                     {
+                        "name": "exif",
+                        "cmd": "exif",
+                        "args": true
+                    },
+                    {
                         "name": "eyewitness",
                         "cmd": "eyewitness",
                         "args": true
@@ -130,6 +160,11 @@
                     {
                         "name": "find",
                         "cmd": "find",
+                        "args": true
+                    },
+                    {
+                        "name": "fping",
+                        "cmd": "fping",
                         "args": true
                     },
                     {
@@ -150,6 +185,11 @@
                     {
                         "name": "hashcat",
                         "cmd": "hashcat",
+                        "args": true
+                    },
+                    {
+                        "name": "hping3",
+                        "cmd": "hping3",
                         "args": true
                     },
                     {
@@ -203,6 +243,11 @@
                         "args": true
                     },
                     {
+                        "name": "nc",
+                        "cmd": "nc",
+                        "args": true
+                    },
+                    {
                         "name": "nikto",
                         "cmd": "nikto",
                         "args": true
@@ -215,6 +260,11 @@
                     {
                         "name": "parsero",
                         "cmd": "parsero",
+                        "args": true
+                    },
+                    {
+                        "name": "photon",
+                        "cmd": "photon",
                         "args": true
                     },
                     {
@@ -243,6 +293,11 @@
                         "args": true
                     },
                     {
+                        "name": "rtgen",
+                        "cmd": "rtgen",
+                        "args": true
+                    },
+                    {
                         "name": "rtsort",
                         "cmd": "rtsort",
                         "args": true
@@ -258,13 +313,49 @@
                         "args": true
                     },
                     {
+                        "name": "slowhttptest",
+                        "cmd": "slowhttptest",
+                        "args": true
+                    },
+                    {
                         "name": "snmp-check",
                         "cmd": "snmp-check",
                         "args": true
                     },
                     {
+                        "name": "sqlmap",
+                        "cmd": "sqlmap",
+                        "args": true
+                    },
+                    {
+                        "name": "sqlninja",
+                        "cmd": "sqlninja",
+                        "args": true
+                    },
+                    {
+                        "name": "subjack",
+                        "cmd": "subjack",
+                        "args": true
+                    },
+                      
+                    {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
+                        "args": true
+                    },
+                    {
+                        "name": "testssl",
+                        "cmd": "testssl",
+                        "args": true
+                    },
+                    {
+                        "name": "theHarvester",
+                        "cmd": "theHarvester",
+                        "args": true
+                    },
+                    {
+                        "name": "tiger",
+                        "cmd": "tiger",
                         "args": true
                     },
                     {
@@ -273,8 +364,8 @@
                         "args": true
                     },
                     {
-                        "name": "tshark",
-                        "cmd": "tshark",
+                        "name": "unicornscan",
+                        "cmd": "unicornscan",
                         "args": true
                     },
                     {
@@ -283,8 +374,18 @@
                         "args": true
                     },
                     {
+                        "name": "wafw00f",
+                        "cmd": "wafw00f",
+                        "args": true
+                    },
+                    {
                         "name": "whatweb",
                         "cmd": "whatweb",
+                        "args": true
+                    },
+                    {
+                        "name": "which",
+                        "cmd": "which",
                         "args": true
                     },
                     {
@@ -292,9 +393,10 @@
                         "cmd": "whois",
                         "args": true
                     },
+                  
                     {
-                        "name": "WPScan",
-                        "cmd": "WPScan",
+                        "name": "wpscan",
+                        "cmd": "wpscan",
                         "args": true
                     },
                     {
@@ -321,11 +423,7 @@
             "category": "DeveloperTool",
             "copyright": "",
             "deb": {
-                "depends": [
-                    "openjdk-11-jdk",
-                    "python3-impacket",
-                    "dsniff"
-                ],
+                "depends": ["openjdk-11-jdk", "python3-impacket", "dsniff"],
                 "files": {
                     "/usr/share/ddt": "exploits/",
                     "/usr/share/doc/ddt/README.md": "../README.md"

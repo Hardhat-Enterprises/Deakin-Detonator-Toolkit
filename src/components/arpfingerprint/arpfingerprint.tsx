@@ -38,8 +38,8 @@ function ARPFingerprinting() {
     const steps = "Step 1: Enter the IP address of the target device.\n";
     ("Step 2: Click Scan to start ARP fingerprinting.\n");
     ("Step 3: View the Output block below to see the fingerprinting results.");
-    const sourceLink = ""; // Link to the source code or Kali Tools page.
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const sourceLink = "https://www.kali.org/tools/arp-scan/#arp-fingerprint"; // Link to the source code or Kali Tools page.
+    const tutorial = "https://docs.google.com/document/d/1PLMdKlXsbzYI9rF25Fo_Gv8aDJvtai0s09hPjM7NA6w/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["arp-scan"]; // Dependencies required for the ARPfingerprint tool.
 
     // Form hook to handle form input.

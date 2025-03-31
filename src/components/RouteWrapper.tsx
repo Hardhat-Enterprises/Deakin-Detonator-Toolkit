@@ -5,6 +5,8 @@ import ToolsPage from "../pages/Tools";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
+import CVE20221388 from "./CVE-2022-1388/CVE-2022-1388";
+import CVE202227925 from "./CVE-2022-27925/CVE-2022-27925";
 import DirbTool from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
@@ -22,6 +24,7 @@ import SMBGhostScanner from "./SMBGhostScanner/SMBGhostScanner";
 import ARPSpoofing from "./ArpSpoof/ArpSpoof";
 import { CVE202224112 } from "./CVE-2022-24112/CVE-2022-24112";
 import Enum4Linux from "./Enum4Linux/Enum4Linux";
+import Exif from "./Exif/Exif";
 import DnsenumTool from "./DNSenumTool/DNSenumTool";
 import Metagoofil from "./metagoofil/metagoofil";
 import Dmitry from "./Dmitry/Dmitry";
@@ -29,6 +32,7 @@ import DNSMap from "./DNSMap/DNSMap";
 import Gyoithon from "./Gyoithon/Gyoithon";
 import NbtscanTool from "./NbtscanTool/NbtscanTool";
 import Cewl from "./Cewl/Cewl";
+import CloudBrute from "./CloudBrute/CloudBrute";
 import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
@@ -55,6 +59,7 @@ import TheHarvester from "./theharvester/theharvester";
 import PayloadGenerator from "./msfvenom/msfvenom";
 import AircrackNG from "./AircrackNG/AircrackNG";
 import AirbaseNG from "./AirbaseNG/AirbaseNG";
+import Amass from "./Amass/Amass";
 import Fcrackzip from "./Fcrackzip/Fcrackzip";
 import GoBusterTool from "./GobusterTool/Gobuster";
 import Keeper from "./WalkthroughPages/Keeper";
@@ -65,10 +70,10 @@ import Topology from "./WalkthroughPages/Topology";
 import Persistence from "./WalkthroughPages/Persistence";
 import RTsort from "./RTsort/RTsort";
 import Rainbowcrack from "./Rainbowcrack/Rainbowcrack";
+import Rtgen from "./rtgen/rtgen";
 import NSLookup from "./NSLookupTool/NSLookupTool";
 import ArpanameTool from "./Arpaname/arpaname";
 import Nikto from "./Nikto/Nikto";
-import TShark from "./TShark/TShark";
 import Bully from "./Bully/Bully";
 import AMAP from "./Amap/Amap";
 import Gitleaks from "./Gitleaks/Gitleaks";
@@ -77,6 +82,20 @@ import Sublist3r from "./Sublist3r/Sublist3r";
 import Arpscan from "./ArpScan/ArpScan";
 import Whois from "./Whois/Whois";
 import Masscan from "./Masscan/Masscan";
+import TestSSL from "./Testssl/Testssl";
+import Hping3 from "./Hping3/Hping3";
+import SQLmap from "./SQLmap/SQLmap";
+import Wifite from "./wifite/wifite";
+import SlowHttpTest from "./slowhttptest/slowhttptest";
+import Tiger from "./tiger/tiger";
+import Unicornscan from "./Unicornscan/Unicornscan";
+import Photon from "./Photon/photon";
+import Arping from "./Arping/Arping";
+import Sqlninja from "./Sqlninja/sqlninja";
+import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
+import Wafw00f from "./wafw00f/wafw00f";
+import Fping from "./Fping/Fping";
+import Subjack from "./Subjack/Subjack";
 
 export interface RouteProperties {
     name: string;
@@ -137,10 +156,17 @@ export const ROUTES: RouteProperties[] = [
         category: "",
     },
     {
+        name: "CVE-2022-1388",
+        path: "/attack-vectors/cve-2022-1388",
+        element: <CVE20221388 />,
+        description: "Undisclosed requests may bypass iControl REST authentication.",
+        category: "",
+    },
+    {
         name: "ZeroLogon",
         path: "/attack-vectors/ZeroLogon",
         element: <ZeroLogon />,
-        description: "Zero Logon will let the penetester to perform an authentication attempts on windows server",
+        description: "Zero Logon will let the pentester to perform an authentication attempts on windows server",
         category: "",
     },
     {
@@ -172,96 +198,111 @@ export const ROUTES: RouteProperties[] = [
         category: "",
     },
     {
+        name: "CVE-2022-27925",
+        path: "/attack-vectors/cve-2022-27925",
+        element: <CVE202227925 />,
+        description:
+            "Zimbra Collaboration (aka ZCS) 8.8.15 and 9.0 has mboximport functionality that receives a ZIP archive and extracts files from it.",
+        category: "",
+    },
+    {
+        name: "CVE-2022-26134",
+        path: "/attack-vectors/cve-2022-26134",
+        element: <CVE202226134 />,
+        description: "Confluence Pre-Auth Remote Code Execution via OGNL Injection",
+        category: "",
+    },
+    {
         name: "Busqueda",
         path: "/walkthroughs/Busqueda",
         element: <Busqueda />,
-        description: "A walkthrough on Busqueda Hack the Box challenge",
-        category: "",
+        description: "A walkthrough on the Busqueda Hack The Box challenge",
+        category: "Miscellaneous",
     },
     {
         name: "Fawn",
         path: "/walkthroughs/Fawn",
         element: <Fawn />,
-        description: "A walkthrough on the Fawn HackTheBox Challenge showcasing DDT nmap tool",
-        category: "",
+        description: "A walkthrough on the Fawn Hack The Box Challenge showcasing DDT nmap tool",
+        category: "Miscellaneous",
     },
     {
         name: "Keeper",
         path: "/walkthroughs/Keeper",
         element: <Keeper />,
         description:
-            "A walkthrough on the Keeper HackTheBox Challenge showcasing privilege escalation and web application security",
-        category: "",
+            "A walkthrough on the Keeper Hack The Box Challenge showcasing privilege escalation and web application security",
+        category: "Web Application Testing",
     },
     {
         name: "Monitorstwo",
         path: "/walkthroughs/Monitorstwo",
         element: <Monitorstwo />,
         description:
-            "A walkthrough on the Monitorstwo HackTheBox Challenge centered around network monitoring and intrusion detection systems",
-        category: "",
+            "A walkthrough on the Monitorstwo Hack The Box Challenge centered around network monitoring and intrusion detection systems",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Meow",
         path: "/walkthroughs/Meow",
         element: <Meow />,
         description:
-            "A walkthrough on the Meow HackTheBox challenge involving basic enumeration and exploitation techniques to gain access to the target system.",
-        category: "",
+            "A walkthrough on the Meow Hack The Box challenge involving basic enumeration and exploitation techniques to gain access to the target system.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "MrRobot",
         path: "/walkthroughs/MrRobot",
         element: <MrRobot />,
         description: "A walkthrough on the Mr Robot TryHackMe Capture the flag",
-        category: "",
+        category: "Miscellaneous",
     },
     {
         name: "Pentesting",
         path: "/walkthroughs/Pentesting",
         element: <Pentesting />,
         description: "A walkthrough on a Pentesting room with focus on brute force attack and privilege escalation",
-        category: "",
+        category: "Penetration Testing",
     },
     {
         name: "Persistence",
         path: "/walkthroughs/Persistence",
         element: <Persistence />,
         description:
-            "A walkthrough on HTB challenge: Persistence is Key with focus on forensics investigation on an FTP server",
-        category: "",
+            "A walkthrough on the Hack The Box challenge: Persistence is Key with focus on forensics investigation on an FTP server",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "Pilgrimage",
         path: "/walkthroughs/Pilgrimage",
         element: <Pilgrimage />,
         description:
-            "A walkthrough on the Pilgrimage Hack the Box challenge focused on exploiting a web application vulnerability to gain access to the system",
-        category: "",
+            "A walkthrough on the Pilgrimage Hack The Box challenge focused on exploiting a web application vulnerabilities to gain access to the system",
+        category: "Web Application Testing",
     },
     {
         name: "Racecar",
         path: "/walkthroughs/Racecar",
         element: <Racecar />,
         description:
-            "A walkthrough on Racecar Hack the Box challenge utilizing cryptographic analysis and reverse engineering skills to decipher and exploit a custom encryption algorithm",
-        category: "",
+            "A walkthrough on Racecar Hack The Box challenge utilising cryptographic analysis and reverse engineering skills to decipher and exploit a custom encryption algorithm",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "Redeemer",
         path: "/walkthroughs/Redeemer",
         element: <Redeemer />,
         description:
-            "A walkthrough on the Redeemer HackTheBox challenge showcasing enumeration and post-exploitation tasks, testing your expertise in penetration testing",
-        category: "",
+            "A walkthrough on the Redeemer Hack The Box challenge showcasing enumeration and post-exploitation tasks, testing your expertise in penetration testing",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Topology",
         path: "/walkthroughs/Topology",
         element: <Topology />,
         description:
-            "A walkthrough on Topology Hack the Box challenge which requires knowledge of network protocols, routing, and security configurations",
-        category: "",
+            "A walkthrough on Topology Hack The Box challenge which requires knowledge of network protocols, routing, and security configurations",
+        category: "Network Scanning and Enumeration",
     },
     //TOOLS BELOW THIS COMMENT - PLEASE ADD NEW TOOLS IN ALPHABETICAL ORDER
     {
@@ -269,7 +310,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/AirbaseNG",
         element: <AirbaseNG />,
         description:
-            "A network attack tool that can create a fake access point (AP) to capture and analyze traffic from devices that connect to it.",
+            "A network attack tool that can create a fake access point (AP) to capture and analyse traffic from devices that connect to it.",
         category: "Wireless Attacks and Rogue Access Point Creation",
     },
     {
@@ -277,30 +318,30 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/AircrackNG",
         element: <AircrackNG />,
         description:
-            "A wireless network auditing and cracking tool that can capture and analyze packets from Wi-Fi networks, crack WEP and WPA-PSK passwords, and identify vulnerabilities in wireless networks.",
+            "A wireless network auditing tool designed for analysing packets captured from Wi-Fi networks, cracking WEP and WPA-PSK passwords, and identifying vulnerabilities in wireless networks.",
         category: "Password Cracking and Authentication Testing",
-    },
-    {
-        name: "AI-based pen-testing tool (Gyoithon)",
-        path: "/tools/gyoithon",
-        element: <Gyoithon />,
-        description:
-            "An AI-powered pen-testing tool that employs Naive Bayes and Deep Neural Network algorithms to detect HTTP/HTTPS ports",
-        category: "Web Application Testing",
     },
     {
         name: "Amap",
         path: "/tools/Amap",
         element: <AMAP />,
-        description: "A network scanning tool used to identify open ports and services on targeted hosts.",
+        description:
+            "A network scanning tool designed to identify and fingerprint services and applications running on open ports of targeted hosts.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Amass",
+        path: "/tools/Amass",
+        element: <Amass />,
+        description: "A tool for in-depth DNS enumeration and network mapping.",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "Arjun",
         path: "/tools/Arjuntool",
         element: <Arjuntool />,
         description:
-            "A tool that helps find hidden GET & POST parameters for URL endpoints by analyzing web traffic and identifying possible query parameters",
+            "A tool that helps find hidden GET and POST parameters for URL endpoints by analysing web traffic and identifying potential query parameters.",
         category: "Web Application Testing",
     },
     {
@@ -316,7 +357,14 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/ARPFingerprint",
         element: <ARPFingerprint />,
         description:
-            "A tool to analyse ARP (Address Resolution Protocol) traffic to identify the types of operating systems and network devices on a network.",
+            "A tool to analyse ARP (Address Resolution Protocol) traffic and identify the types of operating systems and network devices on a network.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Arping",
+        path: "/tools/Arping",
+        element: <Arping />,
+        description: "A tool used to send ARP requests to a specified IP address to discover the MAC address.",
         category: "Network Scanning and Enumeration",
     },
     {
@@ -346,15 +394,23 @@ export const ROUTES: RouteProperties[] = [
         name: "Bully",
         path: "/tools/bully",
         element: <Bully />,
-        description: " A tool used for brute-forcing WPS PINs to gain unauthorized access to wireless networks.",
+        description: "A tool used for brute-forcing WPS PINs to gain unauthorised access to wireless networks.",
         category: "Network Scanning and Enumeration",
     },
     {
         name: "Cewl",
         path: "/tools/Cewl",
         element: <Cewl />,
-        description: "A tool that generates custom word lists by crawling and analyzing web pages for useful words.",
+        description: "A tool that generates custom word lists by crawling and analysing web pages for useful words.",
         category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "CloudBrute",
+        path: "/tools/CloudBrute",
+        element: <CloudBrute />,
+        description:
+            "A tool used for discovering cloud-based infrastructure and services across various cloud providers through enumeration techniques.",
+        category: "Cloud Security and Reconnaissance",
     },
     {
         name: "Crackmapexec",
@@ -399,17 +455,15 @@ export const ROUTES: RouteProperties[] = [
         name: "DNSMap",
         path: "/tools/dnsmap",
         element: <DNSMap />,
-        description: "A tool that can visualize and analyze DNS records associated with a domain or IP address",
+        description: "A tool that can visualise and analyse DNS records associated with a domain or IP address",
         category: "Information Gathering and Analysis",
     },
     {
         name: "DNSRecon",
         path: "/tools/Dnsrecon",
         element: <Dnsrecon />,
-
         description:
-            "A Python script that systematically searches for different hosts associated with a given domain, using DNS queries to discover subdomains, IP addresses, and other relevant DNS records. ",
-
+            "A Python script that systematically searches for different hosts associated with a given domain, using DNS queries to discover subdomains, IP addresses, and other relevant DNS records.",
         category: "Information Gathering and Analysis",
     },
     {
@@ -421,17 +475,25 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
+        name: "Exif",
+        path: "/tools/Exif",
+        element: <Exif />,
+        description: "A tool used to extract metadata from different file types.",
+        category: "Information Gathering and Analysis",
+    },
+    {
         name: "EyeWitness",
         path: "/tools/eyewitness",
         element: <Eyewitness />,
-        description: "A tool used for capturing screenshots and gathering information from web servers",
+        description:
+            "A tool used to capture screenshots and gather information such as banners, headers, and other details from web servers.",
         category: "Web Application Testing",
     },
     {
         name: "Fcrackzip",
         path: "/tools/Fcrackzip",
         element: <Fcrackzip />,
-        description: "A tool for cracking the password of a protected zip file",
+        description: "A tool for cracking the password of a protected ZIP file.",
         category: "Password Cracking and Authentication Testing",
     },
     {
@@ -451,10 +513,18 @@ export const ROUTES: RouteProperties[] = [
         category: "File Analysis and Recovery",
     },
     {
+        name: "Fping",
+        path: "/tools/fping",
+        element: <Fping />,
+        description:
+            "A tool used to send Internet Control Message Protocol echo requests to determine if a target host is responding.",
+        category: "Web Application Testing",
+    },
+    {
         name: "FTPconnect",
         path: "/tools/FTPconnect",
         element: <FTPconnect />,
-        description: "A tool used for connecting to and interacting with FTP servers",
+        description: "A tool used for connecting to and interacting with FTP servers.",
         category: "Miscellaneous",
     },
     {
@@ -468,8 +538,7 @@ export const ROUTES: RouteProperties[] = [
         name: "GoBuster",
         path: "/tools/GoBusterTool",
         element: <GoBusterTool />,
-        description:
-            "A web directory brute-forcing tool that can discover hidden directories and files on web servers.",
+        description: "A web directory brute-forcing tool used to discover hidden directories and files on web servers.",
         category: "Web Application Testing",
     },
     {
@@ -481,12 +550,28 @@ export const ROUTES: RouteProperties[] = [
         category: "Attack Tools",
     },
     {
+        name: "Gyoithon",
+        path: "/tools/gyoithon",
+        element: <Gyoithon />,
+        description:
+            "An AI-powered penetration testing tool designed to automate the discovery and exploitation of vulnerabilities in HTTP/HTTPS-based web applications.",
+        category: "Web Application Testing",
+    },
+    {
         name: "Hashcat",
         path: "/tools/hashcat",
         element: <Hashcat />,
         description:
             "A password recovery tool that uses brute-force, dictionary, and other attack methods to crack hashed passwords.",
         category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "Hping3",
+        path: "/tools/hping3",
+        element: <Hping3 />,
+        description:
+            "A network packet crafting and analysis tool. It is used for testing firewalls, network performance, port scanning, and network auditing.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Hydra",
@@ -507,7 +592,7 @@ export const ROUTES: RouteProperties[] = [
         name: "Masscan",
         path: "/tools/Masscan",
         element: <Masscan />,
-        description: "Masscan is a quick and effective port scanning tool used for network reconnaissance.",
+        description: "A quick and effective port scanning tool used for network reconnaissance.",
         category: "Network Scanning and Enumeration",
     },
     {
@@ -537,7 +622,7 @@ export const ROUTES: RouteProperties[] = [
         name: "Netcat",
         path: "/tools/Netcat",
         element: <NetcatTool />,
-        description: "A that can create, read, and write network connections using TCP or UDP protocols.",
+        description: "A tool that can create, read, and write network connections using TCP or UDP protocols.",
         category: "Network Scanning and Enumeration",
     },
     {
@@ -566,22 +651,36 @@ export const ROUTES: RouteProperties[] = [
         name: "Parsero",
         path: "/tools/parsero",
         element: <Parsero />,
-        description: "A Python script that reads a web server's robots.txt file to view and analyze Disallow entries.",
+        description: "A Python script that reads a web server's robots.txt file to view and analyse Disallow entries.",
         category: "Web Application Testing",
     },
     {
-        name: "RTsort",
-        path: "/tools/RTsort",
-        element: <RTsort />,
-        description: "A subfunction of the Rainbow Crack tool used for sorting and managing created rainbow tables.",
-        category: "Password Cracking and Authentication Testing",
+        name: "Photon",
+        path: "/tools/photon",
+        element: <Photon />,
+        description: "A fast and flexible crawler designed for open source intelligence.",
+        category: "Information Gathering and Analysis",
     },
     {
         name: "Rainbowcrack",
         path: "/tools/Rainbowcrack",
         element: <Rainbowcrack />,
-        description: "A computer program which generates rainbow tables to be used in password cracking.",
-        category: "Password cracking and Authentication testing",
+        description: "A tool that uses rainbow tables to crack password hashes.",
+        category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "Rtgen",
+        path: "/tools/rtgen",
+        element: <Rtgen />,
+        description: "A tool that generates rainbow tables to be used in password cracking.",
+        category: "Password Cracking and Authentication Testing",
+    },
+    {
+        name: "Rtsort",
+        path: "/tools/RTsort",
+        element: <RTsort />,
+        description: "A subfunction of the Rainbow Crack tool used for sorting and managing created rainbow tables.",
+        category: "Password Cracking and Authentication Testing",
     },
     {
         name: "SearchSploit",
@@ -589,7 +688,7 @@ export const ROUTES: RouteProperties[] = [
         element: <SearchSploit />,
         description:
             "A utility that allows users to search through a vast database of exploits, shellcodes, and security-related papers.",
-        category: "Vulnerabilityy Assessment and Exploitation",
+        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Sherlock",
@@ -603,8 +702,15 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/shodan-api-tool",
         element: <ShodanAPITool />,
         description:
-            "Shodan API allows for network scanning and querying of Shodan’s database to gather information about connected devices and their vulnerabilities.",
+            "A tool used for network scanning and querying of Shodan's database to gather information about connected devices and their vulnerabilities.",
         category: "Vulnerability Assessment and Exploitation",
+    },
+    {
+        name: "SlowHttpTest",
+        path: "/tools/slowhttptest",
+        element: <SlowHttpTest />,
+        description: "A tool for simulating slow HTTP attacks to test web server resilience.",
+        category: "Web Application Testing",
     },
     {
         name: "SMB Enumeration",
@@ -618,7 +724,8 @@ export const ROUTES: RouteProperties[] = [
         name: "SMB-Ghost Scanner",
         path: "/tools/SMBGhostScanner",
         element: <SMBGhostScanner />,
-        description: "A tool used to detect whether a target is vulnerable to the CVE-2020-0796 vulnerability in SMBv3",
+        description:
+            "A tool used to detect whether a target is vulnerable to the CVE-2020-0796 vulnerability in SMBv3.",
         category: "Vulnerability Assessment and Exploitation",
     },
     {
@@ -630,12 +737,42 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
+        name: "SQLmap",
+        path: "/tools/SQLmap",
+        element: <SQLmap />,
+        description: "A tool for detecting and exploiting SQL injection flaws and taking control of database servers.",
+        category: "Web Application Testing",
+    },
+    {
+        name: "Sqlninja",
+        path: "/tools/sqlninja",
+        element: <Sqlninja />,
+        description:
+            "A tool used to exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end.",
+        category: "Vulnerability Assessment and Exploitation",
+    },
+    {
+        name: "Subjack",
+        path: "/tools/Subjack",
+        element: <Subjack />,
+        description: "Subdomain takeover detection tool.",
+        category: "Web Application Testing",
+    },
+    {
         name: "Sublist3r",
         path: "/tools/Sublist3r",
         element: <Sublist3r />,
         description:
-            "A tool that can efficiently discover subdomains associated with a given domain using various techniques, such as DNS queries, Google search, and passive DNS records,",
+            "A tool that can efficiently discover subdomains associated with a given domain using various techniques, such as DNS queries, Google search, and passive DNS records.",
         category: "Web Application Testing",
+    },
+    {
+        name: "Testssl",
+        path: "/tools/Testssl",
+        element: <TestSSL />,
+        description:
+            "A versatile command-line tool designed to check a server's SSL/TLS configuration and identify potential vulnerabilities.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "The Harvester",
@@ -646,6 +783,13 @@ export const ROUTES: RouteProperties[] = [
         category: "Information Gathering and Analysis",
     },
     {
+        name: "Tiger",
+        path: "/tools/tiger",
+        element: <Tiger />,
+        description: "An audit and intrusion detection tool used to protect UNIX based systems.",
+        category: "Vulnerability Assessment and Exploitation",
+    },
+    {
         name: "Traceroute",
         path: "/tools/Traceroute",
         element: <Traceroute />,
@@ -654,10 +798,11 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
-        name: "TShark",
-        path: "/tools/TShark",
-        element: <TShark />,
-        description: "A command-line network analyzer that can capture, analyze, and troubleshoot network traffic.",
+        name: "Unicornscan",
+        path: "/tools/Unicornscan",
+        element: <Unicornscan />,
+        description:
+            "A tool used for scanning servers and hosts to identify open ports and services being utilised for network communications.",
         category: "Network Scanning and Enumeration",
     },
     {
@@ -668,11 +813,18 @@ export const ROUTES: RouteProperties[] = [
         category: "Network Scanning and Enumeration",
     },
     {
+        name: "Wafw00f",
+        path: "/tools/wafw00f",
+        element: <Wafw00f />,
+        description: "A tool for detecting and fingerprinting web application firewalls (WAFs).",
+        category: "Web Application Testing",
+    },
+    {
         name: "WhatWeb",
         path: "/tools/WhatWeb",
         element: <WhatWeb />,
         description:
-            "A tool used to identify and analyze web technologies, such as web servers and frameworks, used by websites.",
+            "A tool for identifying and analysing the web technologies used by websites, including web servers and frameworks.",
         category: "Web Application Testing",
     },
     {
@@ -682,6 +834,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used to query and retrieve information about domain registrations, including registrants and contact details.",
         category: "Web Application Testing",
+    },
+    {
+        name: "Wifite",
+        path: "/tools/wifite",
+        element: <Wifite />,
+        description: "A tool used to audit WEP, WPA, and WPA2 encrypted networks.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "WPScan",

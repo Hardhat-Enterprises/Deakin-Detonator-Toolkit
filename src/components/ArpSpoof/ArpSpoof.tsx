@@ -1,10 +1,11 @@
-import { Button, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState, useEffect, useCallback } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
@@ -51,7 +52,7 @@ const ARPSpoofing = () => {
     // Component Constants.
     const dependencies = ["dsniff"]; // Contains the dependencies required for the component.
     const sourceLink = "https://github.com/tecknicaltom/dsniff/blob/master/arpspoof.c"; // contains link to the source code (arpspoof)
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1j3vLjUvu_0Iazn3sLmmP_ANp-fuovKXVudqQYUAO8Hs/edit?usp=sharing";
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
@@ -189,11 +190,25 @@ const ARPSpoofing = () => {
                     ></InstallationModal>
                 )}
                 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                    <TextInput label={"Target one IP address"} required {...form.getInputProps("ip1")} />
-                    <TextInput label={"Target two IP address"} required {...form.getInputProps("ip2")} />
-                    <Button type={"submit"}>Start Spoof</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <Stack>
+                        {LoadingOverlayAndCancelButtonPkexec(
+                            loading,
+                            pidGateway,
+                            handleProcessData,
+                            handleProcessTermination
+                        )}
+                        {LoadingOverlayAndCancelButtonPkexec(
+                            loading,
+                            pidTarget,
+                            handleProcessData,
+                            handleProcessTermination
+                        )}
+                        <TextInput label={"Target one IP address"} required {...form.getInputProps("ipGateway")} />
+                        <TextInput label={"Target two IP address"} required {...form.getInputProps("ipTarget")} />
+                        <Button type={"submit"}>Start Spoof</Button>
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    </Stack>
                 </form>
             </>
         </RenderComponent>

@@ -8,6 +8,8 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { FilePicker } from "../FileHandler/FilePicker";
+import { generateFilePath } from "../FileHandler/FileHandler";
 
 /**
  * Represents the form values for the RainbowCrack component.
@@ -30,19 +32,31 @@ const RainbowCrack = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [allowSave, setAllowSave] = useState(false); // State variable to enable/disable saving
     const [hasSaved, setHasSaved] = useState(false); // State variable to track whether output has been saved
+    const [fileNames, setFileNames] = useState<string[]>([]); // State variable to store the file names.
 
     // Component Constants
-    const title = "RainbowCrack"; // Title of the component.
+    const title = "RainbowCrack"; // Title of the component
+
     const description =
-        "RainbowCrack is a computer program which utilises rainbow tables to be used in password cracking."; // Description of the component.
+        "RainbowCrack is a command line tool that uses rainbow tables to crack password hashes. It supports multiple hash algorithms, including LM, NTLM, MD5, SHA1 and SHA256."; // Description of the component.
+
     const steps =
-        "How to use RainbowCrack \n" +
-        "Step 1: Enter a hash value. (E.g. 5d41402abc4b2a76b9719d911017c592) \n" +
-        "Step 2: Simply tap on the crack button to crack the hash key. \n" +
-        "The user can even save the output to a file by assigning a file-name under 'save output to file' option."; // Steps to use the component.
-    const sourceLink = ""; // Link to the source code (or RainbowCrack documentation).
-    const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["rcrack"]; // Dependencies required by the component.
+        "How to use RainbowCrack:\n" +
+        "Step 1: Ensure that your rainbow tables (*.rt, *.rtc) are stored in a directory.\n" +
+        "Step 2: Enter the hash value you want to crack in the input field. For a single hash, use the format: ./rcrack [path to tables] -h [hash].\n" +
+        "   - Example: ./rcrack . -h 5d41402abc4b2a76b9719d911017c592\n" +
+        "Step 3: To crack multiple hashes from a file, use the format: ./rcrack [path to tables] -l [hash_list_file].\n" +
+        "   - Example: ./rcrack . -l hash.txt\n" +
+        "Step 4: If you have LM hashes in a pwdump file, use the format: ./rcrack [path to tables] -lm [pwdump_file].\n" +
+        "   - Example: ./rcrack . -lm pwdump.txt\n" +
+        "Step 5: For NTLM hashes in a pwdump file, use the format: ./rcrack [path to tables] -ntlm [pwdump_file].\n" +
+        "   - Example: ./rcrack . -ntlm pwdump.txt\n" +
+        "Step 6: Click the Crack " +
+        title +
+        " button to execute the command and display the results."; // Steps to use the component.
+    const sourceLink = "http://project-rainbowcrack.com/"; // Link to the source code (or RainbowCrack documentation).
+    const tutorial = "https://docs.google.com/document/d/16j7ejucqvkNHo1p-fcUjxTYV6aAbSPT6TQDUYRgfa_0/edit?usp=sharing"; // Link to the official documentation/tutorial.
+    const dependencies = ["rainbowcrack"]; // Dependencies required by the component.
 
     // Form hook to handle form input.
     const form = useForm({
@@ -66,7 +80,7 @@ const RainbowCrack = () => {
     }, []);
 
     /**
-     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * handleProcessData:Callback to handle and append new data from the child process to the output.
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
@@ -90,6 +104,8 @@ const RainbowCrack = () => {
             }
             setPid("");
             setLoading(false);
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
@@ -100,9 +116,18 @@ const RainbowCrack = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+        setAllowSave(false);
 
         // Construct arguments for rainbowcrack command based on form input
-        const args = [values.hashValue];
+        const args = ["."];
+
+        if (fileNames.length === 0) {
+            args.push("-h", values.hashValue);
+        } else {
+            const filePath = generateFilePath("Rainbowcrack");
+            const dataUploadPath = filePath + "/" + fileNames[0];
+            args.push("-l", dataUploadPath);
+        }
 
         // Execute the rainbowcrack command via helper method
         CommandHelper.runCommandGetPidAndOutput("rcrack", args, handleProcessData, handleProcessTermination)
@@ -144,12 +169,30 @@ const RainbowCrack = () => {
                     dependencies={dependencies}
                 />
             )}
-            <form onSubmit={form.onSubmit(onSubmit)}>
+            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput label="Hash Value" required {...form.getInputProps("hashValue")} />
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <TextInput
+                        label="Hash Value"
+                        required
+                        disabled={fileNames.length > 0}
+                        value={fileNames.length > 0 ? "" : form.values.hashValue}
+                        onChange={(event) => {
+                            if (fileNames.length === 0) {
+                                form.setFieldValue("hashValue", event.currentTarget.value);
+                            }
+                        }}
+                    />
+                    <FilePicker
+                        fileNames={fileNames}
+                        setFileNames={setFileNames}
+                        multiple={false}
+                        componentName="Rainbowcrack"
+                        labelText="Hash File"
+                        placeholderText="Click to select file(s)"
+                    />
                     <Button type="submit">Crack</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>

@@ -2,13 +2,18 @@
 
 Provide a clear and concise title for the architecture decision.
 
-## Status
+## Proposal status
 
 What is the status of this decision?
 
 -   Proposed
--   Accepted
 -   Rejected
+
+## Implementation status
+
+-   Implemented
+-   Work in progress
+-   Cancelled
 
 ## Context
 
