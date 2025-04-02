@@ -23,7 +23,7 @@ interface FormValuesType {
 
 //Tool options
 
-const toolOptions = ["Scan a range of ports", "Send SYN packets to a specific port"];
+const toolOptions = ["Select Configuration", "Scan a range of ports", "Send SYN packets to a specific port"];
 
 /**
  * The hping3 component.
