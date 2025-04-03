@@ -33,3 +33,4 @@
 | 0030   | -empty-                                                                                       | -           |
 | 0031   | -empty-                                                                                       | -           |
 | 0032   | -empty-                                                                                       | -           |
+| 0110 | Remove CrackMapExec Tool | PROPOSED |
