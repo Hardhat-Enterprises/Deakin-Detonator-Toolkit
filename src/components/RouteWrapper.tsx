@@ -194,8 +194,9 @@ export const ROUTES: RouteProperties[] = [
         name: "CVE-2022-26809",
         path: "/attack-vectors/cve-2022-26809",
         element: <CVE202226809 />,
-        description: "A vulnerability in Microsoft RPC runtime that executes arbitrary code by sending a crafted RPC request to the Windows RPCSS service.",
-        category: ""
+        description:
+            "A vulnerability in Microsoft RPC runtime that executes arbitrary code by sending a crafted RPC request to the Windows RPCSS service.",
+        category: "",
     },
     {
         name: "CVE-2022-24112",
