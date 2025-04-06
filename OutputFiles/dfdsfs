@@ -1,0 +1,12 @@
+$ nmap -T4 --script=smb-brute.nse -p gsdgsga invalid_ip
+
+
+
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-04-04 16:32 EDT
+
+Found no matches for the service mask 'gsdgsga' and your specified protocols
+
+QUITTING!
+
+
+Process terminated with exit code: 1 and signal code: null
