@@ -95,6 +95,7 @@ import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
+import CVE202226809 from "./CVE-2022-26809/CVE-2022-26809";
 
 export interface RouteProperties {
     name: string;
@@ -188,6 +189,13 @@ export const ROUTES: RouteProperties[] = [
         element: <FindOffset />,
         description: "Find the offset to the instruction pointer in a buffer overflow vulnerable binary.",
         category: "",
+    },
+    {
+        name: "CVE-2022-26809",
+        path: "/attack-vectors/cve-2022-26809",
+        element: <CVE202226809 />,
+        description: "A vulnerability in Microsoft RPC runtime that executes arbitrary code by sending a crafted RPC request to the Windows RPCSS service.",
+        category: ""
     },
     {
         name: "CVE-2022-24112",
