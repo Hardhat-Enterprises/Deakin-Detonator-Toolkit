@@ -76,7 +76,7 @@ export default function App() {
                                     </Group>
                                 </Aside>
                             </MediaQuery>
-                        }
+                        }                      
                         header={
                             <Header height={70} p="md" style={{ padding: "10px" }}>
                                 <Center

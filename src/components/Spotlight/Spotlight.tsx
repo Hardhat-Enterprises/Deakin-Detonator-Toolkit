@@ -24,7 +24,7 @@ function SpotlightControl() {
             radius="lg"
             size="sm"
             icon={<IconSearch size={16} />}
-            placeholder="Quick search here..."
+            placeholder="[Ctrl + K] Search..."
             onClick={handleClick}
         />
     );
@@ -45,7 +45,7 @@ function Search() {
 
     return (
         <SpotlightProvider
-            limit={4}
+            limit={6}
             highlightQuery
             actions={actions}
             searchIcon={<IconSearch size={18} />}
@@ -55,8 +55,10 @@ function Search() {
                 )
             }
             searchPlaceholder="Search..."
-            shortcut="mod + shift + 1"
+            shortcut={['mod + K', '/']}
             nothingFoundMessage="Nothing found..."
+            transition={"slide-down"}
+            transitionDuration={300}
         >
             <SpotlightControl />
         </SpotlightProvider>
