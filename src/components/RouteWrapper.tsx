@@ -7,6 +7,7 @@ import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
 import CVE20221388 from "./CVE-2022-1388/CVE-2022-1388";
 import CVE202227925 from "./CVE-2022-27925/CVE-2022-27925";
+import CVE202222963 from "./CVE-2022-22963/CVE202222963";
 import DirbTool from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
@@ -210,6 +211,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2022-26134",
         element: <CVE202226134 />,
         description: "Confluence Pre-Auth Remote Code Execution via OGNL Injection",
+        category: "",
+    },
+    {
+        name: "CVE-2022-22963",
+        path: "/attack-vectors/cve-2022-22963",
+        element: <CVE202222963 />,
+        description: "Spring Cloud Function SpEL injection RCE exploit.",
         category: "",
     },
     {
