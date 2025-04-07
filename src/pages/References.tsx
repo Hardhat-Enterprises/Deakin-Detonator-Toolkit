@@ -162,13 +162,6 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/crunch/"}
                                 />
                                 <Reference
-                                    name={"Dirb"}
-                                    description={
-                                        "Dirb is a tool that can scan a website, enumerating directories and files that may be present."
-                                    }
-                                    url={"https://www.kali.org/tools/dirb/"}
-                                />
-                                <Reference
                                     name={"DMitry"}
                                     description={
                                         "DMitry is a tool for gathering information about a host, including subdomains, emails, and open ports."
