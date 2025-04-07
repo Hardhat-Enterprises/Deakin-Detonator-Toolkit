@@ -23,5 +23,3 @@ We will remove the CrackMapExec tool from the Deakin Detonator Toolkit. This inc
 - Reduces maintenance burden by eliminating an unused and unsupported tool.
 - Improves user experience by avoiding broken functionality in the GUI.
 - Slightly reduces the overall feature set, but this is outweighed by improved reliability.
-
-
