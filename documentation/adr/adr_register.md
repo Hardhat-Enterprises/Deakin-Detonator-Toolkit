@@ -16,7 +16,8 @@
 | 0013   | Integrating Subjack for Subdomain Takeover Detection                                          | W-I-P       |
 | 0014   | Removing Dirb from PT-GUI                                                                     | IMPLEMENTED |
 | 0015   | -empty-                                                                                       | -           |
-| 0016   | -empty-                                                                                       | -           |
+0016 | Remove CrackMapExec Tool | PROPOSED |
+                                                                                     | -           |
 | 0017   | -empty-                                                                                       | -           |
 | 0018   | -empty-                                                                                       | -           |
 | 0019   | -empty-                                                                                       | -           |
