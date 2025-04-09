@@ -96,6 +96,7 @@ import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
+import NewsFeed from "./NewsFeed/NewsFeed"
 
 export interface RouteProperties {
     name: string;
@@ -140,6 +141,13 @@ export const ROUTES: RouteProperties[] = [
         element: <WalkthroughsPage />,
         description: "Walkthroughs page",
         category: "",
+    },
+    {
+        name: "NewsFeed",
+        path:"/news",
+        element:<NewsFeed />,
+        description:"NewsFeed",
+        category:"",
     },
     {
         name: "References",
@@ -842,6 +850,7 @@ export const ROUTES: RouteProperties[] = [
         description: "A tool used to audit WEP, WPA, and WPA2 encrypted networks.",
         category: "Network Scanning and Enumeration",
     },
+
     {
         name: "WPScan",
         path: "/tools/WPScan",
