@@ -20,7 +20,7 @@ import "./App.css";
 import Navigation from "./components/NavBar/Navigation";
 import { ROUTES } from "./components/RouteWrapper";
 import { NotificationsProvider } from "@mantine/notifications";
-import HomePage from "./pages/HomePage"; 
+import HomePage from "./pages/HomePage";
 
 export default function App() {
     const theme = useMantineTheme();
@@ -58,21 +58,39 @@ export default function App() {
                             <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
                                 <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 120, lg: 120 }}>
                                     <Group style={{ justifyContent: "center" }}>
-                                        <Button onClick={() => window.history.back()} color="red">Go Back</Button>
+                                        <Button onClick={() => window.history.back()} color="red">
+                                            Go Back
+                                        </Button>
                                     </Group>
                                 </Aside>
                             </MediaQuery>
                         }
                         header={
                             <Header height={70} p="md" style={{ padding: "10px" }}>
-                                <Center inline style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+                                <Center
+                                    inline
+                                    style={{ display: "flex", justifyContent: "space-between", width: "100%" }}
+                                >
                                     <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-                                        <Burger opened={opened} onClick={toggleOpened} size="sm" color={theme.colors.gray[6]} mr="xl" />
+                                        <Burger
+                                            opened={opened}
+                                            onClick={toggleOpened}
+                                            size="sm"
+                                            color={theme.colors.gray[6]}
+                                            mr="xl"
+                                        />
                                     </MediaQuery>
                                     <Text className="large-text" inherit variant="gradient" component="span">
                                         Deakin Detonator Toolkit
                                     </Text>
-                                    <Image radius="md" height={60} width="auto" fit="contain" src={imageSrc} alt="Logo" />
+                                    <Image
+                                        radius="md"
+                                        height={60}
+                                        width="auto"
+                                        fit="contain"
+                                        src={imageSrc}
+                                        alt="Logo"
+                                    />
                                 </Center>
                             </Header>
                         }
