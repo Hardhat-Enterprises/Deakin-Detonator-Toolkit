@@ -17,7 +17,7 @@
 | 0014   | Removing Dirb from PT-GUI                                                                     | IMPLEMENTED |
 | 0015   | Add ethical hacking and other legal warnings to DDT                                           | PROPOSED    |
 | 0016   | -empty-                                                                                       | -           |
-| 0017   |  Remove CrackMapExec Tool                                                                     | PROPOSED    |
+| 0017   | Remove CrackMapExec Tool                                                                      | PROPOSED    |
 | 0019   | -empty-                                                                                       | -           |
 | 0020   | -empty-                                                                                       | -           |
 | 0021   | -empty-                                                                                       | -           |
