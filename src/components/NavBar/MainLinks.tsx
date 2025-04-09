@@ -72,7 +72,14 @@ const referencesData = {
     route: "/references",
 };
 
-const data = [aboutData, toolsData, attackVectorsData, walkthroughsData, referencesData];
+const scenarioTrainingData = {
+    icon: <IconStepInto size={16} />,
+    color: "teal",
+    label: "Scenario Training",
+    route: "/scenario-training",
+};
+
+const data = [aboutData, toolsData, attackVectorsData, walkthroughsData, scenarioTrainingData, referencesData];
 
 export function MainLinks() {
     const links = data.map((link) => <MainLink {...link} key={link.label} />);

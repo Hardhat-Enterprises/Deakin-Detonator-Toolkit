@@ -2,6 +2,7 @@ import AboutPage from "../pages/About";
 import { AttackVectors } from "../pages/AttackVectors";
 import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
+import { ScenarioTraining } from "../pages/ScenarioTraining";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
@@ -140,6 +141,13 @@ export const ROUTES: RouteProperties[] = [
         description: "Walkthroughs page",
         category: "",
     },
+    {
+        name: "Scenario Training",
+        path: "/scenario-training",
+        element: <ScenarioTraining />,
+        description: "Generate custom scenarios using ChatGPT",
+        category: "",
+    },    
     {
         name: "References",
         path: "/references",
@@ -854,3 +862,8 @@ export function getAttackVectors() {
 export function getWalkthroughs() {
     return ROUTES.filter((route) => route.path.startsWith("/walkthroughs/"));
 }
+
+export function getTrainingRoutes() {
+    return ROUTES.filter((route) => route.path.startsWith("/scenario-training"));
+}
+
