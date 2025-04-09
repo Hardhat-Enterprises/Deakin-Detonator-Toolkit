@@ -7,8 +7,6 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
-import { toBeRequired } from "@testing-library/jest-dom/matchers";
 
 /**
  * Represents the form values for the Masscan component.
