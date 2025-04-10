@@ -7,8 +7,6 @@ import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
 import CVE20221388 from "./CVE-2022-1388/CVE-2022-1388";
 import CVE202227925 from "./CVE-2022-27925/CVE-2022-27925";
-import CVE202222963 from "./CVE-2022-22963/CVE202222963";
-import DirbTool from "./DirbTool/DirbTool";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
 import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
@@ -97,6 +95,7 @@ import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
+import CVE202222963 from "./CVE-2022-22963/CVE202222963";
 
 export interface RouteProperties {
     name: string;
@@ -435,13 +434,6 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used to generate custom wordlists based on specified patterns, character sets, and lengths.",
         category: "Password Cracking and Authentication Testing",
-    },
-    {
-        name: "Dirb",
-        path: "/tools/Dirb",
-        element: <DirbTool />,
-        description: "A tool used for directory and file brute-forcing on web servers to discover hidden resources.",
-        category: "Web Application Testing",
     },
     {
         name: "dmitry",

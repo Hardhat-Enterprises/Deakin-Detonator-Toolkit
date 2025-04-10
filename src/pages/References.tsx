@@ -569,6 +569,11 @@ const ReferencesPage = () => {
                                     url={"https://nvd.nist.gov/vuln/detail/CVE-2022-36804"}
                                 />
                                 <Reference
+                                    name={"CVE-2022-22963"}
+                                    description={"Spring Cloud Function - SpEL Injection Remote Code Execution."}
+                                    url={"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-22963"}
+                                />
+                                <Reference
                                     name={"FindOffset"}
                                     description={
                                         "Find Offset identifies where a buffer overflow overwrites key memory addresses like EIP."
