@@ -6,7 +6,7 @@ import {
     BeginnerInformationContent,
 } from "../BeginnerGuideLessonContent/BeginnerGuideLessonContent";
 import { IconBook, IconArrowRight, IconCheck } from "@tabler/icons";
-import BGuideLesson from "../BeginnerGuideLessonPage/beginnerGuideLessonPage";
+import BGuideLesson from "../BeginnerGuideLessonPage/BeginnerGuideLessonPage";
 
 const BPathPage: React.FC = () => {
     const navigate = useNavigate();
