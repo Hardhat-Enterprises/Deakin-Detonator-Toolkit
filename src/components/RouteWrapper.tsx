@@ -95,6 +95,7 @@ import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
+import CVE202222963 from "./CVE-2022-22963/CVE202222963";
 
 export interface RouteProperties {
     name: string;
@@ -209,6 +210,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2022-26134",
         element: <CVE202226134 />,
         description: "Confluence Pre-Auth Remote Code Execution via OGNL Injection",
+        category: "",
+    },
+    {
+        name: "CVE-2022-22963",
+        path: "/attack-vectors/cve-2022-22963",
+        element: <CVE202222963 />,
+        description: "Spring Cloud Function SpEL injection RCE exploit.",
         category: "",
     },
     {
