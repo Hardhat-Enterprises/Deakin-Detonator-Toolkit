@@ -95,6 +95,7 @@ import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
+import BPathPage from "./BeginnerGuideHomePage/BeginnerGuideHomePage";
 
 export interface RouteProperties {
     name: string;
@@ -127,6 +128,13 @@ export const ROUTES: RouteProperties[] = [
         category: "",
     },
     {
+        name: "Beginner Guide Lesson",
+        path: "/beginner-guides",
+        element: <BPathPage />,
+        description: "Beginner guide home page",
+        category: "",
+    },
+    {
         name: "Attack Vectors",
         path: "/attack-vectors",
         element: <AttackVectors />,
@@ -145,6 +153,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/references",
         element: <ReferencesPage />,
         description: "Attack Vectors page",
+        category: "",
+    },
+    {
+        name: "Beginner Guide Lesson",
+        path: "/beginner-guides/lesson:lessonId",
+        element: <BPathPage />,
+        description: "Dynamic lesson router",
         category: "",
     },
     {
