@@ -5,8 +5,8 @@ import {
     BeginnerGuideLessonContentFormat,
     BeginnerInformationContent,
 } from "../BeginnerGuideLessonContent/BeginnerGuideLessonContent";
-import { IconBook, IconArrowRight } from "@tabler/icons";
-import BGuideLesson from "../beginnerGuideLessonPage/beginnerGuideLessonPage";
+import { IconBook, IconArrowRight, IconCheck } from "@tabler/icons";
+import BGuideLesson from "../BeginnerGuideLessonPage/beginnerGuideLessonPage";
 
 const BPathPage: React.FC = () => {
     const navigate = useNavigate();
@@ -43,12 +43,21 @@ const BPathPage: React.FC = () => {
                                         <Badge color="blue" size="sm" variant="filled">
                                             {lesson.lessonDifficulty}
                                         </Badge>
+                                        {lesson.lessonCompletionStatus && (
+                                            <Badge color="green" size="sm" variant="filled">
+                                                <Group spacing="xs">
+                                                    <IconCheck size={14} />
+                                                    <Text size="xs">Completed</Text>
+                                                </Group>
+                                            </Badge>
+                                        )}
                                     </Group>
                                     <Button
                                         rightIcon={<IconArrowRight size={16} />}
                                         onClick={() => navigateToLesson(index)}
+                                        color={lesson.lessonCompletionStatus ? "green" : "blue"}
                                     >
-                                        Start Lesson
+                                        {lesson.lessonCompletionStatus ? "Review" : "Start"} Lesson
                                     </Button>
                                 </Group>
                                 <Text color="dimmed">{lesson.lessonDescription}</Text>

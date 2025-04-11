@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Container, Title, Text, Card, Stack, Badge, Collapse, Button, Group, Grid, Divider } from "@mantine/core";
 import { BeginnerInformationContent } from "../BeginnerGuideLessonContent/BeginnerGuideLessonContent";
 import { IconCheck, IconRocket, IconArrowRight, IconArrowLeft } from "@tabler/icons";
+import { useNavigate } from "react-router-dom";
 
 interface BGuideProps {
     lessonIndex: number;
 }
 
 const BGuideLesson: React.FC<BGuideProps> = ({ lessonIndex }) => {
+    const navigate = useNavigate();
     const guideData = BeginnerInformationContent[lessonIndex];
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [openSection, setOpenSection] = useState<number | null>(null);
@@ -50,6 +52,11 @@ const BGuideLesson: React.FC<BGuideProps> = ({ lessonIndex }) => {
             setCurrentPageIndex(currentPageIndex - 1);
             setOpenSection(null);
         }
+    };
+
+    const handleLessonComplete = () => {
+        BeginnerInformationContent[lessonIndex].lessonCompletionStatus = true;
+        navigate("/beginner-guides");
     };
 
     return (
@@ -102,6 +109,7 @@ const BGuideLesson: React.FC<BGuideProps> = ({ lessonIndex }) => {
                                     color="green"
                                     disabled={!currentPageComplete}
                                     title={currentPageComplete ? "Complete lesson" : "View all sections to complete"}
+                                    onClick={handleLessonComplete}
                                 >
                                     Complete
                                 </Button>

@@ -6,6 +6,7 @@ export interface BeginnerGuideLessonContentFormat {
     lessonName: string;
     lessonDifficulty: string;
     lessonDescription: string;
+    lessonCompletionStatus?: boolean;
     lessonContent: {
         isContentPractical: boolean;
         pageContent: {
