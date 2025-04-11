@@ -5,6 +5,7 @@ import {
     ColorScheme,
     ColorSchemeProvider,
     Header,
+    Image,
     MantineProvider,
     MediaQuery,
     Text,
@@ -13,7 +14,7 @@ import {
     Aside,
     Group,
 } from "@mantine/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navigation from "./components/NavBar/Navigation";
@@ -24,10 +25,13 @@ export default function App() {
     const theme = useMantineTheme();
     const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
     const [opened, setOpened] = useState(false);
+    const [imageSrc, setImageSrc] = useState<string>("");
 
     const toggleColorScheme = (value?: ColorScheme) => {
         const nextColorScheme = value || (colorScheme === "dark" ? "light" : "dark");
         setColorScheme(nextColorScheme);
+        document.body.className = nextColorScheme + "-mode"; // Update body class
+        console.log("Color scheme toggled to:", nextColorScheme); // Log the color scheme change
     };
 
     const toggleOpened = () => {
@@ -41,6 +45,17 @@ export default function App() {
     const handleGoForward = () => {
         window.history.forward();
     };
+
+    useEffect(() => {
+        document.body.className = colorScheme + "-mode"; // Initialize body class
+        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        if (prefersDarkScheme) {
+            setImageSrc("/src/logo/logo-dark.png"); // Use dark mode logo
+        } else {
+            setImageSrc("/src/logo/logo-light.png"); // Use light mode logo
+        }
+    }, [colorScheme]);
 
     return (
         <div className="App">
@@ -63,8 +78,11 @@ export default function App() {
                             </MediaQuery>
                         }
                         header={
-                            <Header height={70} p="md">
-                                <Center inline>
+                            <Header height={70} p="md" style={{ padding: "10px" }}>
+                                <Center
+                                    inline
+                                    style={{ display: "flex", justifyContent: "space-between", width: "100%" }}
+                                >
                                     <MediaQuery largerThan="sm" styles={{ display: "none" }}>
                                         <Burger
                                             opened={opened}
@@ -77,13 +95,21 @@ export default function App() {
                                     <Text className={"large-text"} inherit variant={"gradient"} component={"span"}>
                                         Deakin Detonator Toolkit
                                     </Text>
+                                    <Image
+                                        radius="md"
+                                        height={60}
+                                        width="auto"
+                                        fit="contain"
+                                        src={imageSrc}
+                                        alt="Logo"
+                                    />
                                 </Center>
                             </Header>
                         }
                     >
                         <Routes>
                             {ROUTES.map((route) => (
-                                <Route {...route}></Route>
+                                <Route key={route.path} {...route}></Route>
                             ))}
                         </Routes>
                     </AppShell>

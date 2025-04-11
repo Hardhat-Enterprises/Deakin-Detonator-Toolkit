@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch, Checkbox } from "@mantine/core";
+import { Button, Stack, TextInput, Switch, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -55,7 +55,7 @@ const TheHarvester = () => {
         "Step 5: View the Output block below to view the results of the tool's execution.\n" +
         "Switch to Advanced Mode for further options.";
     const sourceLink = "https://gitlab.com/kalilinux/packages/theharvester"; // Link to the source code.
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1o97UljHxEzmI_IoQa15-Kcl9KnAbXB-2VGpnSljZQus/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["theHarvester"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
@@ -156,23 +156,26 @@ const TheHarvester = () => {
 
         // Construct arguments for the Harvester based on form input and if choice variables are utilised
         const args = ["-d", `${values.domain}`, "-l", `${values.resultLimit}`, "-b", `${values.source}`];
-        if (values.startresult) {
-            args.push(`-S ${values.startresult}`);
-        }
-        if (values.useshodan === true) {
-            args.push(`-s`);
-        }
-        if (values.dnslookup === true) {
-            args.push(`-n`);
-        }
-        if (values.dnsbrute === true) {
-            args.push(`-c`);
-        }
-        if (values.virtualHost === true) {
-            args.push(`-v`);
-        }
-        if (values.takeover === true) {
-            args.push(`-t`);
+        //Advanced Setting Checks
+        if (checkedAdvanced) {
+            if (values.startresult) {
+                args.push(`-S ${values.startresult}`);
+            }
+            if (values.useshodan === true) {
+                args.push(`-s`);
+            }
+            if (values.dnslookup === true) {
+                args.push(`-n`);
+            }
+            if (values.dnsbrute === true) {
+                args.push(`-c`);
+            }
+            if (values.virtualHost === true) {
+                args.push(`-v`);
+            }
+            if (values.takeover === true) {
+                args.push(`-t`);
+            }
         }
         const filteredArgs = args.filter((arg) => arg !== "");
         try {
@@ -220,14 +223,6 @@ const TheHarvester = () => {
                 <form onSubmit={form.onSubmit(onSubmit)}>
                     <Stack>
                         {LoadingOverlayAndCancelButton(loading, pid)}
-                        <LoadingOverlay visible={loading} />
-                        {loading && (
-                            <div>
-                                <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                                    Cancel
-                                </Button>
-                            </div>
-                        )}
                         <Switch
                             size="md"
                             label="Advanced Mode"
@@ -279,29 +274,24 @@ const TheHarvester = () => {
                                 />
                                 <Checkbox
                                     label={"Use Shodan to query discovered hosts."}
-                                    type="checkbox"
                                     {...form.getInputProps("useshodan")}
                                 />
                                 <Checkbox
                                     label={"DNS Lookup (Enable DNS server lookup)"}
-                                    type="checkbox"
                                     {...form.getInputProps("dnslookup")}
                                 />
                                 <Checkbox
                                     label={"DNS Brute (Perform a DNS brute force on the domain.)"}
-                                    type="checkbox"
                                     {...form.getInputProps("dnsbrute")}
                                 />
                                 <Checkbox
                                     label={
                                         "Virtual Host (Verify host name via DNS resolution and search for virtual hosts.)"
                                     }
-                                    type="checkbox"
                                     {...form.getInputProps("virtualhost")}
                                 />
                                 <Checkbox
                                     label={"Takeover (Check for takeovers.)"}
-                                    type="checkbox"
                                     {...form.getInputProps("takeover")}
                                 />
                             </>

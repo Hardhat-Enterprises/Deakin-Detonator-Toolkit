@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent, UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 /**
@@ -52,7 +52,9 @@ const descriptionUserGuide =
     "Further information can be found at: https://www.kali.org/tools/crackmapexec/";
 
 /** Tutorial section left intentionally empty. */
-const tutorial = "";
+const tutorial = "https://docs.google.com/document/d/1w1ODdQGZA8EVSH0GgzgYIzSCFdFDHefgwa4RA95sG04/edit?usp=sharing";
+const steps = "";
+const sourceLink = "";
 
 /**
  * Crackmapexec component used to run penetration testing on Windows/Active Directory environments.
@@ -183,42 +185,50 @@ const Crackmapexec = () => {
     }, [setOutput]);
 
     return (
-        <form onSubmit={form.onSubmit(onSubmit)}>
-            <LoadingOverlay visible={isLoading} />
-            {isLoading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
-            )}
-            <Stack>
-                {UserGuide(title, descriptionUserGuide)}
-                <Switch
-                    size="md"
-                    label="Advanced Mode"
-                    checked={isAdvancedChecked}
-                    onChange={(e) => setIsAdvancedChecked(e.currentTarget.checked)}
-                />
-
-                <TextInput label={"IP"} required {...form.getInputProps("ip")} />
-                <TextInput label={"Username"} required {...form.getInputProps("username")} />
-                <TextInput label={"Password"} required {...form.getInputProps("password")} />
-                {isAdvancedChecked && (
-                    <>
-                        <TextInput
-                            label={"Timeout"}
-                            placeholder={"Time (in seconds) to wait for response to requests. Default is 60"}
-                            required
-                            {...form.getInputProps("timeout")}
-                        />
-                    </>
+        <RenderComponent
+            title={title}
+            tutorial={tutorial}
+            description={descriptionUserGuide}
+            steps={steps}
+            sourceLink={sourceLink}
+        >
+            <form onSubmit={form.onSubmit(onSubmit)}>
+                <LoadingOverlay visible={isLoading} />
+                {isLoading && (
+                    <div>
+                        <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
+                            Cancel
+                        </Button>
+                    </div>
                 )}
-                <Button type={"submit"}>Start Searching!</Button>
-                {SaveOutputToTextFile_v2(output, isSaveAllowed, hasBeenSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+                <Stack>
+                    {UserGuide(title, descriptionUserGuide)}
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={isAdvancedChecked}
+                        onChange={(e) => setIsAdvancedChecked(e.currentTarget.checked)}
+                    />
+
+                    <TextInput label={"IP"} required {...form.getInputProps("ip")} />
+                    <TextInput label={"Username"} required {...form.getInputProps("username")} />
+                    <TextInput label={"Password"} required {...form.getInputProps("password")} />
+                    {isAdvancedChecked && (
+                        <>
+                            <TextInput
+                                label={"Timeout"}
+                                placeholder={"Time (in seconds) to wait for response to requests. Default is 60"}
+                                required
+                                {...form.getInputProps("timeout")}
+                            />
+                        </>
+                    )}
+                    <Button type={"submit"}>Start Searching!</Button>
+                    {SaveOutputToTextFile_v2(output, isSaveAllowed, hasBeenSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 

@@ -20,8 +20,9 @@ const steps =
     "       Eg: 200\n\n" +
     "Step 3: Click the 'Find offset' button to commence the tool's operation.\n\n" +
     "Step 4: View the output window to see if the exploit was successful and to view the offset value.\n\n";
-const tutorial = " "; //input tutorial here once completed
-const sourceLink = ""; //sourceLink not available, as tool is a mix from PWNtools repurposed for DDT.
+const tutorial = "https://docs.google.com/document/d/1SmSO-myw43Ez0X9EhXDaxziJzi7VYMbaHestAEWawSU/edit?usp=sharing";
+const sourceLink =
+    "https://book.hacktricks.xyz/binary-exploitation/rop-return-oriented-programing/ret2lib/ret2lib-+-printf-leak-arm64#find-offset"; //sourceLink not available, as tool is a mix from PWNtools repurposed for DDT.
 
 interface FormValues {
     pathToBinary: string;

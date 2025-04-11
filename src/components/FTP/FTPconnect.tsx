@@ -39,7 +39,7 @@ function FTPconnect() {
         "Step 2: If prompted with a login, type the login details. If not prompted, type in 'user' and then type in login details.\n" +
         "Step 3: Type lcd to change the current directory to the default directory.";
     const sourceLink = "https://www.kali.org/tools/tnftp/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1wBfZvzU9aC-9FqqiblAWjfkRxNxa1rNIQrQMnWKY8sA/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = [""]; // Constains the dependencies required for the component.
 
     // Form hook to handle form input.

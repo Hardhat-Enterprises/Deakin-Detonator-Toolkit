@@ -9,6 +9,10 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import AskChatGPT from "../AskChatGPT/AskChatGPT"; // Import the AskChatGPT component
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput"; // Import for displaying GPT responses
+import AskCohere from "../AskCohere/AskCohere";
+import CohereOutput from "../AskCohere/CohereOutput";
 
 /**
  * Represents the form values for the Nmap component.
@@ -36,6 +40,7 @@ function Nmap() {
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
+    const [chatGPTResponse, setChatGPTResponse] = useState(""); // State for ChatGPT response
     const [hasSaved, setHasSaved] = useState(false);
     const [active, setActive] = useState(0);
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
@@ -45,6 +50,7 @@ function Nmap() {
     // Additional state variables for section visibility
     const [basicOpened, setBasicOpened] = useState(true);
     const [advancedOpened, setAdvancedOpened] = useState(false);
+    const [cohereResponse, setCohereResponse] = useState("");
 
     // Declare constants for the component
     const title = "Nmap";
@@ -55,7 +61,7 @@ function Nmap() {
         "Step 2: Configure scan options.\n" +
         "Step 3: Run the Nmap scan and review results.";
     const sourceLink = "https://nmap.org/book/man.html";
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1F2hVxspkDsGRWWSTYzRuZD4EW_KeIdFem4cspHaMovo/edit?usp=sharing";
     const dependencies = ["nmap"];
 
     // Initialize the form hook with initial values
@@ -313,6 +319,21 @@ function Nmap() {
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                         {/* Render the ConsoleWrapper component */}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                        {/* Add Ask ChatGPT Component */}
+                        <AskChatGPT toolName={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                        {chatGPTResponse && (
+                            <div style={{ marginTop: "20px" }}>
+                                <h3>ChatGPT Response:</h3>
+                                <ChatGPTOutput output={chatGPTResponse} />
+                            </div>
+                        )}
+                        <AskCohere toolName={title} output={output} setCohereResponse={setCohereResponse} />
+                        {cohereResponse && (
+                            <div style={{ marginTop: "20px" }}>
+                                <h3>Cohere Response:</h3>
+                                <CohereOutput output={cohereResponse} />
+                            </div>
+                        )}
                     </Stack>
                 </form>
             </RenderComponent>

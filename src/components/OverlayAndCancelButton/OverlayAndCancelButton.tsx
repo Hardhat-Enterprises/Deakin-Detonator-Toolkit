@@ -1,4 +1,4 @@
-import { LoadingOverlay, Button } from "@mantine/core";
+import { LoadingOverlay, Button, Modal } from "@mantine/core";
 import { CommandHelper } from "../../utils/CommandHelper";
 
 /**
@@ -18,13 +18,33 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
 
     return (
         <>
-            <LoadingOverlay visible={loading} />
+            <LoadingOverlay visible={loading} overlayBlur={3} style={{ zIndex: 1000, position: "fixed" }} />
             {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
+                <Modal
+                    opened={loading}
+                    onClose={() => {}}
+                    title=""
+                    centered
+                    withCloseButton={false}
+                    overlayOpacity={0.5}
+                    overlayBlur={3}
+                    zIndex={2000}
+                    size="lg"
+                >
+                    <p style={{ fontSize: "18px", textAlign: "center" }}>
+                        The process is running. You can cancel it below:
+                    </p>
+                    <Button
+                        variant="outline"
+                        color="red"
+                        onClick={handleCancel}
+                        size="xl"
+                        fullWidth
+                        style={{ marginTop: "20px" }}
+                    >
+                        Cancel Process
                     </Button>
-                </div>
+                </Modal>
             )}
         </>
     );
@@ -65,13 +85,33 @@ export function LoadingOverlayAndCancelButtonPkexec(
     //Returns a loadingoverlay function to handle process termination for pkexec
     return (
         <>
-            <LoadingOverlay visible={loading} />
+            <LoadingOverlay visible={loading} overlayBlur={3} style={{ zIndex: 1000, position: "fixed" }} />
             {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
+                <Modal
+                    opened={loading}
+                    onClose={() => {}}
+                    title=""
+                    centered
+                    withCloseButton={false}
+                    overlayOpacity={0.5}
+                    overlayBlur={3}
+                    zIndex={2000}
+                    size="lg"
+                >
+                    <p style={{ fontSize: "18px", textAlign: "center" }}>
+                        The process is running.You can cancel it below:
+                    </p>
+                    <Button
+                        variant="outline"
+                        color="red"
+                        onClick={handleCancel}
+                        size="xl"
+                        fullWidth
+                        style={{ marginTop: "20px" }}
+                    >
+                        Cancel Process
                     </Button>
-                </div>
+                </Modal>
             )}
         </>
     );

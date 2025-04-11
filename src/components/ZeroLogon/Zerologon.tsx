@@ -36,12 +36,9 @@ const ZeroLogon = () => {
     // Component Constants.
     const title = "ZeroLogon"; // Title of the component.
     const description =
-        "The ZeroLogon CVE allows an attacker that has unauthenticated access to a domain controller within their network " +
-        "access to create a Netlogon session that can be exploited to grant domain administrative privileges. The vulnerability " +
-        "here lays within an implementation flaw for AES-CFB8 where a cryptographic transformation takes place with use of a " +
-        "session key.\n\nFurther information can be found at: https://www.crowdstrike.com/blog/cve-2020-1472-zerologon-" +
-        "security-advisory/\n\n" +
-        "Using ZeroLogon:\n\n" +
+        "The ZeroLogon CVE allows unauthenticated attackers to exploit a flaw in AES-CFB8 implementation, creating a Netlogon session to gain domain admin privileges.\n\n" +
+        "More details: https://www.crowdstrike.com/blog/cve-2020-1472-zerologon-security-advisory/\n\n";
+    const steps =
         "Step 1: Enter a domain controller name.\n" +
         "       Eg: TEST-AD\n\n" +
         "Step 2: Enter a target IP address.\n" +
@@ -51,10 +48,10 @@ const ZeroLogon = () => {
         "Step 4: Enter any relevant hashes.\n" +
         "       Eg: Administrator:500:CEEB0FA9F240C200417EAF40CFAC29C3:D280553F0103F2E643406517296E7582:::\n\n" +
         "Step 5: Click Exploit to commence ZeroLogon’s operation.\n\n" +
-        "Step 6: View the Output block below to view the results of the attack vector's execution.";
-    const steps = ""; // Steps for using the tool, if applicable.
-    const sourceLink = ""; // Link to the source code or relevant documentation.
-    const tutorial = ""; // Link to the official tutorial/documentation.
+        "Step 6: View the Output block below to view the results of the attack vector's execution."; // Steps for using the tool, if applicable.
+    const sourceLink =
+        "https://www.infosecinstitute.com/resources/vulnerabilities/zerologon-cve-2020-1472-technical-overview-and-walkthrough"; // Link to the source code or relevant documentation.
+    const tutorial = "https://docs.google.com/document/d/1QNj00E-2ZCRYYjxMVWF-AD3nERMI9QRHhyv0S3E9ucc/edit?usp=sharing"; // Link to the official tutorial/documentation.
     const dependencies = ["python3"]; // Dependencies required by the component.
 
     // Form hook to handle form input.

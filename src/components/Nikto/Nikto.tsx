@@ -66,7 +66,7 @@ function Nikto() {
         "Step 3: Click the 'Run Nikto' button to initiate the scanning process.\n" +
         "Step 4: Review the output in the console to identify potential vulnerabilities and misconfigurations.\n";
     const sourceLink = "https://github.com/sullo/nikto";
-    const tutorial = "https://cirt.net/Nikto2";
+    const tutorial = "https://docs.google.com/document/d/136gID61GZYxOugoVPH0KhT-jfe5-ELKPyFJL_UXLE3c/edit?usp=sharing";
     const dependencies = ["nikto"];
 
     // Initialize the form hook with initial values
