@@ -4,11 +4,16 @@
 )]
 
 mod file_handler;
-use file_handler::save_file;
+use file_handler::{save_file, fetch_hacker_news};
+
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![save_file])
+    .invoke_handler(tauri::generate_handler![
+        save_file,
+        fetch_hacker_news
+    ])
+    
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

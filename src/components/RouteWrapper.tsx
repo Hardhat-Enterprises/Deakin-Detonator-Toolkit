@@ -95,6 +95,8 @@ import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
+import NewsFeed from "./NewsFeed/NewsFeed"; // adjust the path as needed
+
 
 export interface RouteProperties {
     name: string;
@@ -287,6 +289,15 @@ export const ROUTES: RouteProperties[] = [
             "A walkthrough on Racecar Hack The Box challenge utilising cryptographic analysis and reverse engineering skills to decipher and exploit a custom encryption algorithm",
         category: "Information Gathering and Analysis",
     },
+
+    {
+        name: "NewsFeed",
+        path: "/news",
+        element: <NewsFeed />,
+        description: "NewsFeed to show current cyber news",
+        category: "Education",
+    },
+
     {
         name: "Redeemer",
         path: "/walkthroughs/Redeemer",
