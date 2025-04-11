@@ -19,10 +19,53 @@ interface FormValuesType {
 }
 
 /**
+ * NEW: Validates if the hash input matches one of the supported formats.
+ * @param hash - The hash string entered by the user.
+ * @returns A string if invalid, or null if valid.
+ */
+const validateHashFormat = (hash: string): string | null => {
+    const patterns: { [key: string]: RegExp } = {
+        LM: /^[A-F0-9]{32}$/,
+        NTLM: /^[a-fA-F0-9]{32}$/,
+        MD5: /^[a-fA-F0-9]{32}$/,
+        SHA1: /^[a-fA-F0-9]{40}$/,
+        SHA256: /^[a-fA-F0-9]{64}$/,
+    };
+
+    for (const regex of Object.values(patterns)) {
+        if (regex.test(hash)) return null;
+    }
+
+    return "Invalid hash format. Supported: LM, NTLM, MD5, SHA1, SHA256.";
+};
+
+/**
  * The RainbowCrack component.
  * @returns The RainbowCrack component.
  */
 const RainbowCrack = () => {
+
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [pid, setPid] = useState("");
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+
+    const title = "RainbowCrack";
+    const description =
+        "RainbowCrack is a computer program which utilises rainbow tables to be used in password cracking.";
+    const steps =
+        "How to use RainbowCrack \n" +
+        "Step 1: Enter a hash value. (E.g. 5d41402abc4b2a76b9719d911017c592) \n" +
+        "Step 2: Simply tap on the crack button to crack the hash key. \n" +
+        "The user can even save the output to a file by assigning a file-name under 'save output to file' option.";
+    const sourceLink = "";
+    const tutorial = "";
+    const dependencies = ["rcrack"];
+=======
     // Component State Variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
@@ -58,14 +101,19 @@ const RainbowCrack = () => {
     const tutorial = "https://docs.google.com/document/d/16j7ejucqvkNHo1p-fcUjxTYV6aAbSPT6TQDUYRgfa_0/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["rainbowcrack"]; // Dependencies required by the component.
 
-    // Form hook to handle form input.
-    const form = useForm({
+
+    /**
+     * NEW: Form hook with validation logic for hash input
+     */
+    const form = useForm<FormValuesType>({
         initialValues: {
             hashValue: "",
         },
+        validate: {
+            hashValue: (value) => validateHashFormat(value),
+        },
     });
 
-    // Check if the command is available and set state variables accordingly.
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
@@ -79,20 +127,17 @@ const RainbowCrack = () => {
             });
     }, []);
 
+
+=======
     /**
      * handleProcessData:Callback to handle and append new data from the child process to the output.
      * @param {string} data - The data received from the child process.
      */
+
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+        setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
-    /**
-     * handleProcessTermination: Callback to handle the termination of the child process.
-     * @param {object} param - An object containing information about the process termination.
-     * @param {number} param.code - The exit code of the terminated process.
-     * @param {number} param.signal - The signal code indicating how the process was terminated.
-     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
@@ -110,12 +155,11 @@ const RainbowCrack = () => {
         [handleProcessData]
     );
 
-    /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * @param {FormValuesType} values - The form values.
-     */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+
+        const args = [values.hashValue];
+
         setAllowSave(false);
 
         // Construct arguments for rainbowcrack command based on form input
@@ -129,7 +173,7 @@ const RainbowCrack = () => {
             args.push("-l", dataUploadPath);
         }
 
-        // Execute the rainbowcrack command via helper method
+
         CommandHelper.runCommandGetPidAndOutput("rcrack", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 setOutput(output);
@@ -142,17 +186,14 @@ const RainbowCrack = () => {
             });
     };
 
-    /**
-     * Clears the output state.
-     */
     const clearOutput = useCallback(() => {
         setOutput("");
     }, [setOutput]);
 
     const handleSaveComplete = () => {
-        // This function could handle any actions needed after saving the output
         setHasSaved(true);
     };
+
     return (
         <RenderComponent
             title={title}
@@ -172,6 +213,23 @@ const RainbowCrack = () => {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
+
+
+                    {/* NEW: Validating hash input and showing error message if invalid */}
+                    <TextInput
+                        label="Hash Value"
+                        required
+                        {...form.getInputProps("hashValue", { validateInputOnBlur: true })}
+                    />
+
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
+                    {/* NEW: Disable submit button if form is invalid */}
+                    <Button type="submit" disabled={!form.isValid()}>
+                        Crack
+                    </Button>
+
+
                     <TextInput
                         label="Hash Value"
                         required
@@ -193,6 +251,7 @@ const RainbowCrack = () => {
                     />
                     <Button type="submit">Crack</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
