@@ -97,7 +97,6 @@ import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
 import NewsFeed from "./NewsFeed/NewsFeed"; // adjust the path as needed
 
-
 export interface RouteProperties {
     name: string;
     path: string;
