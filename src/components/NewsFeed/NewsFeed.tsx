@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { Button } from "@mantine/core";
-
+ // Defined type
 type NewsItem = {
     title: string;
     link: string;
