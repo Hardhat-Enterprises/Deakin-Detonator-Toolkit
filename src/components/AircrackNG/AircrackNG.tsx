@@ -32,38 +32,13 @@ interface FormValuesType {
     // New
 }
 
-// Component Constants
-const title = "Aircrack-ng";
-const description =
-    "Aircrack-ng is a tool for recovering Wi-Fi encryption keys. It supports both WEP and WPA/WPA2-PSK modes for decrypting captured network traffic.";
-const steps =
-    "=== Aircrack-ng User Guide ===\n\n" +
-    "=== WEP Mode ===\n" +
-    "1. WEP or WPA-PSK: Select 'WEP' from the dropdown menu.\n\n" +
-    "2. Advanced Mode (Optional): Toggle 'Advanced Mode' to enable additional configuration for output format.\n\n" +
-    "3. Set AP MAC Address (BSSID) (Optional): Provide the MAC address of the access point (e.g., XX:XX:XX:XX:XX:XX).\n\n" +
-    "4. Packet Capture File: Specify the path and filename of the packet capture file containing intercepted packets (e.g., /path/to/file.cap).\n\n" +
-    "5. Save Key to Output File (Optional): Provide the file path and name where the recovered key should be saved.\n\n" +
-    "6. Alpha-numeric or Binary-coded Decimal or Default (Advanced Mode Only): If 'Advanced Mode' is enabled, choose the format for the key.\n\n" +
-    "7. Start Aircrack-ng: Once all fields are configured, click 'Start Aircrack-ng' to begin the key recovery process.\n\n" +
-    "=== WPA/WPA2-PSK Mode ===\n" +
-    "1. WEP or WPA-PSK: Select 'WPA' from the dropdown menu.\n\n" +
-    "2. Wordlist(s) Filename(s): Specify the file path(s) to the wordlist(s) that will be used for the dictionary attack (e.g., /path/to/wordlist.txt).\n\n" +
-    "3. Set AP Identifier (Optional): Provide the identifier for the access point you are targeting.\n\n" +
-    "4. Packet Capture File: Specify the path and filename of the packet capture file containing the WPA handshake (e.g., /path/to/file.cap).\n\n" +
-    "5. Save Key to Output File (Optional): Provide a file path and name where the recovered key will be saved.\n\n" +
-    "6. Start Aircrack-ng: Click 'Start Aircrack-ng' to initiate the dictionary attack.";
-const sourceLink = "https://www.kali.org/tools/aircrack-ng/"; //link to the source component.
-const tutorial = "https://docs.google.com/document/d/1uMAojanvI4lQkJ5q9lx4HOioNbYTPbfY59RCHvQn4ow/edit?usp=sharing";
-const dependencies = "Aircrack-NG"; //contains the dependancies required for the component.
-
 const AircrackNG = () => {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
-    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
+    //const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
+    //const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
@@ -74,8 +49,33 @@ const AircrackNG = () => {
     const [fudgeMode, setFudgeMode] = useState(false);
     const [customMode, setCustomMode] = useState(false);
 
+    // Component Constants
+    const title = "Aircrack-ng";
+    const description =
+        "Aircrack-ng is a tool for recovering Wi-Fi encryption keys. It supports both WEP and WPA/WPA2-PSK modes for decrypting captured network traffic.";
+    const steps =
+        "=== Aircrack-ng User Guide ===\n\n" +
+        "=== WEP Mode ===\n" +
+        "1. WEP or WPA-PSK: Select 'WEP' from the dropdown menu.\n\n" +
+        "2. Advanced Mode (Optional): Toggle 'Advanced Mode' to enable additional configuration for output format.\n\n" +
+        "3. Set AP MAC Address (BSSID) (Optional): Provide the MAC address of the access point (e.g., XX:XX:XX:XX:XX:XX).\n\n" +
+        "4. Packet Capture File: Specify the path and filename of the packet capture file containing intercepted packets (e.g., /path/to/file.cap).\n\n" +
+        "5. Save Key to Output File (Optional): Provide the file path and name where the recovered key should be saved.\n\n" +
+        "6. Alpha-numeric or Binary-coded Decimal or Default (Advanced Mode Only): If 'Advanced Mode' is enabled, choose the format for the key.\n\n" +
+        "7. Start Aircrack-ng: Once all fields are configured, click 'Start Aircrack-ng' to begin the key recovery process.\n\n" +
+        "=== WPA/WPA2-PSK Mode ===\n" +
+        "1. WEP or WPA-PSK: Select 'WPA' from the dropdown menu.\n\n" +
+        "2. Wordlist(s) Filename(s): Specify the file path(s) to the wordlist(s) that will be used for the dictionary attack (e.g., /path/to/wordlist.txt).\n\n" +
+        "3. Set AP Identifier (Optional): Provide the identifier for the access point you are targeting.\n\n" +
+        "4. Packet Capture File: Specify the path and filename of the packet capture file containing the WPA handshake (e.g., /path/to/file.cap).\n\n" +
+        "5. Save Key to Output File (Optional): Provide a file path and name where the recovered key will be saved.\n\n" +
+        "6. Start Aircrack-ng: Click 'Start Aircrack-ng' to initiate the dictionary attack.";
+    const sourceLink = "https://www.kali.org/tools/aircrack-ng/"; //link to the source component.
+    const tutorial = "https://docs.google.com/document/d/1uMAojanvI4lQkJ5q9lx4HOioNbYTPbfY59RCHvQn4ow/edit?usp=sharing";
+    //const dependencies = "Aircrack-NG"; //contains the dependancies required for the component.
+
     // AirCrack-ng specific state variables.
-    const [selectedtype, setSelectedType] = useState(""); // State variable to store the selected security type.
+    //const [selectedtype, setSelectedType] = useState(""); // State variable to store the selected security type.
     //const [AdvancedMode, setAdvancedMode] = useState(false); // State variable to store the selected mode.
     const [selectedcharacter, setSelectedCharacter] = useState(""); // State variable to store the selected character type.
     //const [CustomConfig, setCustomConfig] = useState(false); // State variable to store the selected custom configuration.
@@ -188,7 +188,7 @@ const AircrackNG = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
+        //setAllowSave(false);
 
         // Activate loading state to indicate ongoing process
         setLoading(true);
@@ -248,8 +248,8 @@ const AircrackNG = () => {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
+        //setHasSaved(false);
+        //setAllowSave(false);
     }, [setOutput]);
 
     const isWEP = selectedModeOption === "WEP";
