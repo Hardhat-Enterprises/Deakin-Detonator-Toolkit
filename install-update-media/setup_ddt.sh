@@ -2,8 +2,10 @@
 
 set -e
 
-# Add Debian security updates and main repository to sources.list
-sudo sh -c 'echo "deb http://security.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list && echo "deb http://ftp.au.debian.org/debian buster main" >> /etc/apt/sources.list'
+# Add Debian security updates and main repository to sources.list if not already added
+# NOTE: ^ indicates string pattern starts on a new line. Avoids matching with hash version, e.g.: #deb
+grep -q "^deb http://security.debian.org/debian-security buster/updates main" "/etc/apt/sources.list" && echo 'Already added Debian security to sources.list.' || sudo sh -c 'echo "deb http://security.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list'
+grep -q "^deb http://ftp.au.debian.org/debian buster main" "/etc/apt/sources.list" && echo 'Already added Debian to sources.list.' || sudo sh -c 'echo "deb http://ftp.au.debian.org/debian buster main" >> /etc/apt/sources.list'
 
 # Preconfigure debconf to restart services during upgrades without asking
 echo libc6 libraries/restart-without-asking boolean true | sudo debconf-set-selections
