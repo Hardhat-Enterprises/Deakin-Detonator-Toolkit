@@ -17,10 +17,9 @@
 | 0014   | Removing Dirb from PT-GUI                                                                     | IMPLEMENTED |
 | 0015   | Add ethical hacking and other legal warnings to DDT                                           | PROPOSED    |
 | 0016   | -empty-                                                                                       | -           |
-| 0017   | -empty-                                                                                       | -           |
-| 0018   | -empty-                                                                                       | -           |
+| 0017   | Remove CrackMapExec Tool                                                                      | APPROVED    |
 | 0019   | -empty-                                                                                       | -           |
-| 0020   | -empty-                                                                                       | -           |
+| 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | W-I-P       |
 | 0021   | -empty-                                                                                       | -           |
 | 0022   | -empty-                                                                                       | -           |
 | 0023   | -empty-                                                                                       | -           |
