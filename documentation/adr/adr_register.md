@@ -18,7 +18,7 @@
 | 0015   | Add ethical hacking and other legal warnings to DDT                                           | PROPOSED    |
 | 0016   | -empty-                                                                                       | -           |
 | 0017   | Remove CrackMapExec Tool                                                                      | APPROVED    |
-| 0019   | -empty-                                                                                       | -           |
+| 0019   | Add Anonsurf functionality to toolkit                                                         | W-I-P       |
 | 0020   | -empty-                                                                                       | -           |
 | 0021   | -empty-                                                                                       | -           |
 | 0022   | -empty-                                                                                       | -           |
