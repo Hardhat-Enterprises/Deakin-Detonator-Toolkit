@@ -36,7 +36,6 @@ import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
-import Crackmapexec from "./Crackmapexec/Crackmapexec";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
@@ -411,14 +410,7 @@ export const ROUTES: RouteProperties[] = [
             "A tool used for discovering cloud-based infrastructure and services across various cloud providers through enumeration techniques.",
         category: "Cloud Security and Reconnaissance",
     },
-    {
-        name: "Crackmapexec",
-        path: "/tools/Crackmapexec",
-        element: <Crackmapexec />,
-        description:
-            "A post-exploitation tool used for automating the assessment and exploitation of large Active Directory networks.",
-        category: "Vulnerability Assessment and Exploitation",
-    },
+    
     {
         name: "Crunch",
         path: "/tools/Crunch",
