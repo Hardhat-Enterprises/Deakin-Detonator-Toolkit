@@ -1,6 +1,6 @@
-import { Button, Select, Stack, Switch, TextInput } from "@mantine/core";
+import { Button, Select, Stack, Switch, TextInput, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapperWithBuiltinOverlay";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -37,6 +37,8 @@ export function BEDTool() {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants.
     const title = "BEDTool"; // Title of the component.
@@ -101,7 +103,27 @@ export function BEDTool() {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -214,6 +236,17 @@ export function BEDTool() {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
+
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform vulnerability scans, use with caution and only on networks you own or have explicit permission to test.
+                        </Alert>
+                    )}
+
+                    {!showAlert && (
+                        <Button onClick={handleShowAlert}>Show Alert</Button>
+                    )}
+
                     <Switch
                         size="md"
                         label="Manual Network Configuration"
