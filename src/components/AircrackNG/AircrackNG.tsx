@@ -1,6 +1,6 @@
-import { Button, NativeSelect, Stack, TextInput, Switch } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput, Switch, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -23,10 +23,6 @@ interface FormValuesType {
     PMKID: string;
     customConfig: string;
     fakeHost: string;
-    // securityType: string;
-    // New channel: string;
-    // New replayInterface: string;
-    // New
 }
 
 // Component Constants
@@ -67,17 +63,15 @@ const AircrackNG = () => {
     const [selectedModeOption, setSelectedModeOption] = useState("WEP");
     const [advanceMode, setAdvanceMode] = useState(false);
     const [customMode, setCustomMode] = useState(false);
+    const [showAlert, setShowAlert] = useState(true); // Initial state is true
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // AirCrack-ng specific state variables.
     const [selectedtype, setSelectedType] = useState(""); // State variable to store the selected security type.
-    //const [AdvancedMode, setAdvancedMode] = useState(false); // State variable to store the selected mode.
     const [selectedcharacter, setSelectedCharacter] = useState(""); // State variable to store the selected character type.
-    const [CustomConfig, setCustomConfig] = useState(false); // State variable to store the selected custom configuration.
 
     // Component Constants.
     const types = ["WEP", "WPA"]; // Security types supported by Aircrack-ng.
-    //const typesRequiringAdvancedWEPConfig = ["WEP"]; // Security types requiring advanced WEP configuration.
-    //const typesRequiringAdvancedWPAConfig = ["WPA"]; // Security types requiring advanced WPA configuration.
     const characters = ["Default", "Alpha-Numeric", "Binary Coded Decimal"]; // Character types supported by Aircrack-ng.
     const dependencies = ["aircrack-ng"]; // Dependencies required for the Aircrack-ng tool.
 
@@ -97,27 +91,28 @@ const AircrackNG = () => {
                 // Set the loading state of the installation modal to false in case of error.
                 setLoadingModal(false);
             });
+
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
 
-    // Form Hook to handle form input.
-    const form = useForm({
-        initialValues: {
-            capFile: "",
-            wordList: "",
-            BSSID: "",
-            ESSID: "",
-            keyFile: "",
-            characters: "",
-            MACAddress: "",
-            PMKID: "",
-            customConfig: "",
-            fakeHost: "",
-            // securityType: "",
-            // New channel: "",
-            // New replayInterface: "",
-            // New
-        },
-    });
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -189,28 +184,16 @@ const AircrackNG = () => {
         if (values.keyFile) args.push(`-l`, values.keyFile);
 
         // WEP-specific options
-        //if (selectedtype == "WEP") {
-        //if (values.securityType) args.push(`-a 1`, values.securityType);
         if (values.BSSID) args.push(`-b`, values.BSSID);
 
         // Advanced WEP options
         if (selectedcharacter === "Alpha-Numeric") args.push(`-c`);
         if (selectedcharacter === "Binary Coded Decimal") args.push(`-t`);
         if (values.MACAddress) args.push(`-m`, values.MACAddress);
-        //}
 
         // WPA-specific options
-        //if (selectedtype == "WPA") {
-        //if (values.securityType) args.push(`-a 2`, values.securityType);
         if (values.wordList) args.push(`-w`, values.wordList);
         if (values.ESSID) args.push(`-e`, values.ESSID);
-
-        // Advanced WPA options
-        //if (values.PMKID) args.push(`-I`, values.PMKID);
-        //}
-
-        // Custom Configuration section
-        //if (values.customConfig) args.push(values.customConfig);
 
         // Execute the aircrack-ng command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("aircrack-ng", args, handleProcessData, handleProcessTermination)
@@ -243,6 +226,22 @@ const AircrackNG = () => {
     const isWEP = selectedModeOption === "WEP";
     const isWPA = selectedModeOption === "WPA";
 
+    // Form Hook to handle form input.
+    const form = useForm({
+        initialValues: {
+            capFile: "",
+            wordList: "",
+            BSSID: "",
+            ESSID: "",
+            keyFile: "",
+            characters: "",
+            MACAddress: "",
+            PMKID: "",
+            customConfig: "",
+            fakeHost: "",
+        },
+    });
+
     // Resets the form whenever the mode changes (from WEP to WPA or vice versa)
     useEffect(() => {
         form.reset();
@@ -267,6 +266,17 @@ const AircrackNG = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to crack wifi passwords, use with caution and only on networks you own or have explicit permission to test.
+                        </Alert>
+                    )}
+
+                    {!showAlert && (
+                        <Button onClick={handleShowAlert}>Show Alert</Button>
+                    )}
+
                     <NativeSelect
                         value={selectedModeOption}
                         onChange={(e) => setSelectedModeOption(e.target.value)}
@@ -330,5 +340,4 @@ const AircrackNG = () => {
         </RenderComponent>
     );
 };
-
 export default AircrackNG;
