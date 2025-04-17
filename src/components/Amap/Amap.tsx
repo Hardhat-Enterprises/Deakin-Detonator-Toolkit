@@ -1,6 +1,6 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -38,6 +38,8 @@ const AMAP = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [chatGPTResponse, setChatGPTResponse] = useState(""); //ChatGPT response
     const [cohereResponse, setCohereResponse] = useState(""); // Cohere response
+    const [showAlert, setShowAlert] = useState(true); // Initial state is true
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants.
     const title = "AMAP"; // Title of the component.
@@ -75,17 +77,33 @@ const AMAP = () => {
                 setIsCommandAvailable(isAvailable); // Set the command availability state
                 setOpened(!isAvailable); // Set the modal state to opened if the command is not available
                 setLoadingModal(false); // Set loading to false after the check is done
-
-                if (!isAvailable) {
-                    alert("Required dependency is not installed. Please install it to proceed.");
-                }
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false);
-                alert("An error occured while checking dependencies."); // Also set loading to false in case of error
             });
+
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -190,6 +208,17 @@ const AMAP = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
+
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to scan ports, use with caution and only on networks you own or have explicit permission to test.
+                        </Alert>
+                    )}
+
+                    {!showAlert && (
+                        <Button onClick={handleShowAlert}>Show Alert</Button>
+                    )}
+
                     <TextInput label={"Target Host"} required {...form.getInputProps("target")} />
                     <TextInput label={"Port(s)"} required {...form.getInputProps("port")} />
                     <TextInput
