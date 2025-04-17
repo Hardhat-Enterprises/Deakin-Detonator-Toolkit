@@ -410,7 +410,7 @@ export const ROUTES: RouteProperties[] = [
             "A tool used for discovering cloud-based infrastructure and services across various cloud providers through enumeration techniques.",
         category: "Cloud Security and Reconnaissance",
     },
-    
+
     {
         name: "Crunch",
         path: "/tools/Crunch",
