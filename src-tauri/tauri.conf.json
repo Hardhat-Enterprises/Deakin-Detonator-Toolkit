@@ -107,11 +107,7 @@
                         "cmd": "cp",
                         "args": true
                     },
-                    {
-                        "name": "crackmapexec",
-                        "cmd": "crackmapexec",
-                        "args": true
-                    },
+                    
                     {
                         "name": "crunch",
                         "cmd": "crunch",
