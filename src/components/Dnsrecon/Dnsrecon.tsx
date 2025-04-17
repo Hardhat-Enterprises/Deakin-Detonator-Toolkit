@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
-import { Button, Stack, TextInput } from "@mantine/core";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Button, Stack, TextInput, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -30,6 +30,8 @@ function Dnsrecon() {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants.
     const title = "DNSRecon"; // Title of the component.
@@ -65,7 +67,27 @@ function Dnsrecon() {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -195,6 +217,15 @@ function Dnsrecon() {
                     {/* Render the loading overlay and cancel button */}
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Stack>
+                        {showAlert && (
+                            <Alert title="Warning: Potential Risks" color="red">
+                                This tool is used to perform DNS enumeration, use with caution and only on targets you own or have explicit permission to test.
+                            </Alert>
+                        )}
+
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert}>Show Alert</Button>
+                        )}
                         <TextInput
                             label={"Domain Name"}
                             placeholder="Enter a valid domain name, e.g., deakin.edu.au"
