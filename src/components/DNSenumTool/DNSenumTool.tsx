@@ -1,6 +1,6 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch, Modal } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch, Modal, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -37,6 +37,8 @@ const DnsenumTool = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     /**
      * Component Constants.
@@ -190,7 +192,27 @@ const DnsenumTool = () => {
                 console.error("An error occured: ", error);
                 setLoadingModal(false);
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     // useEffect to clear output on component mount
     useEffect(() => {
@@ -228,6 +250,15 @@ const DnsenumTool = () => {
                     </div>
                 )}
                 <Stack>
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform DNS enumeration, use with caution and only on targets you own or have explicit permission to test.
+                        </Alert>
+                    )}
+
+                    {!showAlert && (
+                        <Button onClick={handleShowAlert}>Show Alert</Button>
+                    )}
                     <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
                     <Switch
                         size="md"
