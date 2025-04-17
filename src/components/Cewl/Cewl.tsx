@@ -1,6 +1,6 @@
-import { Button, LoadingOverlay, Stack, TextInput, Checkbox, Switch, NativeSelect } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Checkbox, Switch, NativeSelect, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -43,6 +43,8 @@ const Cewl = () => {
     const [checkedCount, setCheckedCount] = useState(false); // State variable to show the count for each word found.
     const [checkedEmail, setCheckedEmail] = useState(false); // State variable to include and show email addresses.
     const [checkedLowercase, setCheckedLowercase] = useState(false); // State variable to show only lowercase words.
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants.
     const methods = ["No authentication", "Basic", "Digest"]; // Variable to store authentication methods.
@@ -90,12 +92,32 @@ const Cewl = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error.
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /** *
      * handleProcessData: Callback to handle and append new data from the child process to the output.
-     *  It updates the state by appending the new data received to the existing output.
-     *  @param {string} data - The data received from the child process.
+     * It updates the state by appending the new data received to the existing output.
+     * @param {string} data - The data received from the child process.
      * */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
@@ -248,6 +270,17 @@ const Cewl = () => {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
+
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to generate custom wordlists, use with caution and only on websites you own or have explicit permission to test.
+                        </Alert>
+                    )}
+
+                    {!showAlert && (
+                        <Button onClick={handleShowAlert}>Show Alert</Button>
+                    )}
+
                     <Switch
                         size="md"
                         label="Advanced Mode"
@@ -296,7 +329,7 @@ const Cewl = () => {
                                     onChange={(e) => setAuthType(e.target.value)}
                                     label={"Authentication Type"}
                                     data={methods}
-                                    placeholder={"Select authentication type"}
+                                    //placeholder={"Select authentication type"}
                                 />
                             )}
                             {isBasicAuth && (
