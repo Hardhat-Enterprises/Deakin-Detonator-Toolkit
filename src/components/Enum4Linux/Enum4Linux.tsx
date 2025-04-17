@@ -1,6 +1,6 @@
-import { Button, Stack, NativeSelect, Tooltip, TextInput, Switch } from "@mantine/core";
+import { Button, Stack, NativeSelect, Tooltip, TextInput, Switch, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -37,6 +37,8 @@ const Enum4Linux = () => {
     const [customMode, setCustomMode] = useState(false);
     const [selectedOption, setselectedOption] = useState("M");
     const [chatGPTResponse, setChatGPTResponse] = useState("");
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     const dependencies = ["enum4linux"];
     const title = "Enum4Linux";
@@ -72,7 +74,27 @@ const Enum4Linux = () => {
                 console.error("Error checking command availability:", error);
                 setLoadingModal(false);
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data);
@@ -167,6 +189,15 @@ const Enum4Linux = () => {
                         checked={osinfo}
                         onChange={(e) => setInfo(e.currentTarget.checked)}
                     />
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform information gathering, use with caution and only on targets you own or have explicit permission to test.
+                        </Alert>
+                    )}
+
+                    {!showAlert && (
+                        <Button onClick={handleShowAlert}>Show Alert</Button>
+                    )}
                     <Tooltip
                         label="Enter the IP address of the target system you want to enumerate."
                         position="right"
