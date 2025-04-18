@@ -4,7 +4,7 @@
 | 0001   | Containerising DDT                                                                            | APPROVED    |
 | 0002   | Introduction of static vulnerability and secret scanning into our Pipeline via Github Actions | IMPLEMENTED |
 | 0003   | Integrating WafW00f for Web Application Firewall Detection                                    | IMPLEMENTED |
-| 0004   | -empty-                                                                                       | -           |
+| 0004   | Cyber News Feed                                                                               | W-I-P git   |
 | 0005   | RESERVED                                                                                      | -           |
 | 0006   | Implementation of TCPdump into PTGUI                                                          | W-I-P       |
 | 0007   | Integrating IP Tracing via Traceroute, Whois, and Geo IP in DDT                               | APPROVED    |
@@ -19,7 +19,7 @@
 | 0016   | -empty-                                                                                       | -           |
 | 0017   | Remove CrackMapExec Tool                                                                      | APPROVED    |
 | 0019   | -empty-                                                                                       | -           |
-| 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | W-I-P       |
+| 0020   | -empty-                                                                                       | -           |
 | 0021   | -empty-                                                                                       | -           |
 | 0022   | -empty-                                                                                       | -           |
 | 0023   | -empty-                                                                                       | -           |
