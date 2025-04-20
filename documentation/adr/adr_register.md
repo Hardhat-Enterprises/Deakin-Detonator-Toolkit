@@ -5,7 +5,7 @@
 | 0002   | Introduction of static vulnerability and secret scanning into our Pipeline via Github Actions | IMPLEMENTED |
 | 0003   | Integrating WafW00f for Web Application Firewall Detection                                    | IMPLEMENTED |
 | 0004   | -empty-                                                                                       | -           |
-| 0005   | RESERVED                                                                                      | -           |
+| 0005   | yaRESERVED                                                                                      | -           |
 | 0006   | Implementation of TCPdump into PTGUI                                                          | W-I-P       |
 | 0007   | Integrating IP Tracing via Traceroute, Whois, and Geo IP in DDT                               | APPROVED    |
 | 0008   | Integrating Suricata for real-time network analysis                                           | REJECTED    |
