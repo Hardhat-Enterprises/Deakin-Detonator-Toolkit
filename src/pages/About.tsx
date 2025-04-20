@@ -43,9 +43,15 @@ const AboutPage = () => {
                     width={300}
                     style={{ display: "block", margin: "0 auto" }}
                 />
-                <Text align={"center"}>DDT does not condone unethical hacking,</Text>
-                <Text align={"center"}> Misuse can lead to jail time.</Text>
-                <Text align={"center"}>Hacking is BAD! Don't Hack!</Text>
+                <Text align="center" style={{ overflowWrap: "break-word", whiteSpace: "normal",}}>
+                Hacking is a crime. This application is for <strong>Educational Purposes Only!</strong>
+                <br /><br />
+                Misuse of this application can lead to violation of Australian and/or International Law.
+                <br /><br />
+                By using this application, you confirm that you have obtained proper authorization from all relevant parties before conducting any penetration testing with this software.
+                <br /><br />
+                <strong><u>You</u></strong> are solely responsible for managing this authorization.
+                </Text>
                 <Button fullWidth onClick={() => setModalOpened(false)} mt="lg">
                     I Understand
                 </Button>
