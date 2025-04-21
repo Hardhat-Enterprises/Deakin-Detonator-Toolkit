@@ -8,6 +8,10 @@ import { SaveOutputToTextFile } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import AskChatGPT from "../AskChatGPT/AskChatGPT";
+import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
+import AskCohere from "../AskCohere/AskCohere";
+import CohereOutput from "../AskCohere/CohereOutput";
 
 /**
  * Represents the form values for the AMAP component.
@@ -32,18 +36,24 @@ const AMAP = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [chatGPTResponse, setChatGPTResponse] = useState(""); //ChatGPT response
+    const [cohereResponse, setCohereResponse] = useState(""); // Cohere response
 
     // Component Constants.
     const title = "AMAP"; // Title of the component.
-    const description = "AMAP is a tool for application protocol detection and service fingerprinting."; // Description of the component.
+    const description =
+        "AMAP is a tool for application protocol detection and service fingerprinting. " +
+        "Application protocol detection identifies the type of communication protocol used by a service, " + // Description of the component.
+        "while service fingerprinting pinpoints the specific application and version running on a host. " + // Define the main functional component for the AMAP tool.
+        "These processes help in understanding what services are active on a network and assessing potential vulnerabilities."; // This component handles the configuration, execution, and result display of the AMAP command-line tool.
     const steps =
         "Step 1: Enter the target host to scan.\n" +
         "Step 2: Specify the port(s) to scan.\n" +
-        "Step 3: (Optional) Enter additional options.\n" +
+        "Step 3: Enter connection or response timeout settings (optional). E.g-> '-A','-v' or '-o'\n" +
         "Step 4: Click 'Start Scan' to begin the process.\n" +
         "Step 5: View the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/amap/"; // Link to the source code (or AMAP documentation).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1jDsVS14S8DxTF_h6aMyUCGZ6KNBKTYYLRWN-rZySAUk/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["amap"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
@@ -65,10 +75,15 @@ const AMAP = () => {
                 setIsCommandAvailable(isAvailable); // Set the command availability state
                 setOpened(!isAvailable); // Set the modal state to opened if the command is not available
                 setLoadingModal(false); // Set loading to false after the check is done
+
+                if (!isAvailable) {
+                    alert("Required dependency is not installed. Please install it to proceed.");
+                }
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+                setLoadingModal(false);
+                alert("An error occured while checking dependencies."); // Also set loading to false in case of error
             });
     }, []);
 
@@ -190,6 +205,20 @@ const AMAP = () => {
                     {SaveOutputToTextFile(output)}
                     <Button type={"submit"}>Start Scan</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    <AskChatGPT toolName={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                    {chatGPTResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>ChatGPT Response:</h3>
+                            <ChatGPTOutput output={chatGPTResponse} />
+                        </div>
+                    )}
+                    <AskCohere toolName={title} output={output} setCohereResponse={setCohereResponse} />
+                    {cohereResponse && (
+                        <div style={{ marginTop: "20px" }}>
+                            <h3>Cohere Response:</h3>
+                            <CohereOutput output={cohereResponse} />
+                        </div>
+                    )}
                 </Stack>
             </form>
         </RenderComponent>

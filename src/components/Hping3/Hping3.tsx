@@ -33,7 +33,7 @@ const Hping3 = () => {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [selectedOption, setSelectedOption] = useState("");
+    const [selectedOption, setSelectedOption] = useState("Scan a range of ports");
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [allowSave, setAllowSave] = useState(false);
@@ -66,7 +66,7 @@ const Hping3 = () => {
         " requires sudo privileges to run).\n" +
         "Step 3: View the results in the output block.";
     const sourceLink = "https://www.kali.org/tools/hping3/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1C_37p_KcvXxnRboNDe9VvvJmqHiLhptnvPwdM2vQ-D0/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["hping3"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.

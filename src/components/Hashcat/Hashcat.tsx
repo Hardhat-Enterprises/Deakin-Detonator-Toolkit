@@ -58,7 +58,7 @@ const Hashcat = () => {
         " to commence. \n" +
         "Step 7: View the output below. \n";
     const sourceLink = "https://www.kali.org/tools/hashcat/"; // Link to Hashcat's official site
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1m6bucq0EDFT0UMkOvcTEmWby1TT_qbeL14ohW1JXkSg/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["hashcat"]; // Contains the dependencies required by the component
 
     // Options for attack mode and input type
@@ -161,9 +161,12 @@ const Hashcat = () => {
         }
 
         // Add password file path if required by the selected attack mode
-        if (selectedModeOption === "Straight") {
+        if (selectedModeOption === "Straight" || selectedModeOption === "Hybrid Wordlist + Mask") {
             args.push(values.passwordFilePath);
-        } else if (selectedModeOption === "Brute-force" || selectedModeOption === "Hybrid Wordlist + Mask") {
+            if (values.maskCharsets) {
+                args.push(values.maskCharsets);
+            }
+        } else if (selectedModeOption === "Brute-force") {
             args.push(
                 "--increment",
                 "--increment-min",

@@ -31,16 +31,15 @@ const Tiger = () => {
     const [pid, setPid] = useState("");
 
     const title = "Tiger";
-    const description = "Tiger is a security audit tool for Unix-based systems.";
+    const description =
+        "Tiger is a security audit tool for Unix-based systems. It scans for vulnerabilities, such as misconfigured file permissions and weak passwords, to enhance system security.";
     const steps =
-        "Step 1: Specify a file to save the audit report.\n" +
-        "Step 2: Click the Start " +
-        title +
-        " button and view the output block for the result. ";
+        "Step 1: Enter the path to save the audit report in the Report File field (e.g., `/home/user/tiger_audit_report.txt`).\n" +
+        "Step 2: Click the Start Tiger button to begin the scan.\n" +
+        "Step 3: Check the results displayed in the output block or the saved report file at the specified location. ";
     const sourceLink = "https://www.kali.org/tools/tiger/";
     const dependencies = ["tiger"];
-    const tutorial =
-        "Tiger is a tool that automates security audits on Unix-based systems. It checks file permissions, software configuration, and system vulnerabilities. It's essential to specify where to save the report with the '-l' option. Run Tiger with higher permissions using 'pkexec' for a comprehensive audit.";
+    const tutorial = "https://docs.google.com/document/d/1bkG-s9h6bpsCWq2IW1pOJbxpCPc_ZcqNwswup_iSB5k/edit?usp=sharing";
 
     let form = useForm({
         initialValues: {

@@ -43,7 +43,7 @@ function Bully() {
         "Step 4: Initiate the brute-force attack: Click the 'Start Bully Attack' button to begin the attack using the provided options.\n" +
         "Step 5: Review the output: After the attack is complete, review the output to identify the cracked WPS PIN, if successful.\n";
     const sourceLink = "https://www.kali.org/tools/bully/";
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/10tkQFxvgBaZdTONo4rB7NpLlmkiNVJJkCCGQZVqk37c/edit?usp=sharing";
     const dependencies = ["bully"];
 
     // Form hook to handle form input.

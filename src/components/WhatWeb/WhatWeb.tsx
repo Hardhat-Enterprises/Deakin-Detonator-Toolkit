@@ -57,7 +57,7 @@ function WhatWeb() {
         "Step 2: Configure scan options.\n" +
         "Step 3: Run WhatWeb and review results.";
     const sourceLink = "https://github.com/urbanadventurer/WhatWeb";
-    const tutorial = "https://github.com/urbanadventurer/WhatWeb/wiki";
+    const tutorial = "https://docs.google.com/document/d/1IUrB6sX_Ykk5hyrcelRSwi4l7QMqc_YxpyEPCmUarzc/edit?usp=sharing";
     const dependencies = ["whatweb"];
 
     // Initialize the form hook with initial values

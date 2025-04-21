@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
+import { Button, Stack, TextInput, Checkbox, LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 
 /**
@@ -57,11 +57,11 @@ const Masscan = () => {
         "Step 7: Check the banner grabbing checkbox to attempt to identify services running on scanned ports.\n" +
         "Step 8: Check the verbose checkbox to run the command in verbose mode.\n";
     const sourceLink = "https://www.kali.org/tools/masscan/"; // Link to the source code
-    const tutorial = ""; // Link to the official documentation/tutorial
+    const tutorial = "https://docs.google.com/document/d/1VmJ2i5pIYZB4b1pdngMioBdlNmz9Ki6VJsaB4e0aBcc/edit?usp=sharing"; // Link to the official documentation/tutorial
     const dependencies = ["masscan"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input
-    let form = useForm({
+    const form = useForm({
         initialValues: {
             targetIP: "",
             targetPort: "",
@@ -173,11 +173,12 @@ const Masscan = () => {
             args.push("-v"); // Add verbose mode option if enabled
         }
 
+        CommandHelper;
         // Execute the Masscan command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("masscan", args, handleProcessData, handleProcessTermination)
-            .then(() => {
-                // Deactivate loading state
-                setLoading(false);
+            .then(({ output, pid }) => {
+                setOutput(output);
+                setPid(pid);
             })
             .catch((error) => {
                 // Display any errors encountered during command execution
@@ -224,13 +225,14 @@ const Masscan = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="IP Address/Range/Subnet"
                         required
                         {...form.getInputProps("targetIP")}
                         placeholder="e.g. 192.168.1.0"
                     />
+
                     <Checkbox
                         label={"Scan Common Ports Mode"}
                         checked={checkedTopPorts}

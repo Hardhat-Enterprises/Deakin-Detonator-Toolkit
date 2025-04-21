@@ -28,7 +28,7 @@ const Fcrackzip = () => {
     const [output, setOutput] = useState(""); // Stores the output of command execution
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
-    const [attackMethod, setAttackmethod] = useState(""); // Stores the selected attack method
+    const [attackMethod, setAttackmethod] = useState("Dictionary"); // Stores the selected attack method
     const [checkedUnzip, setCheckedUnzip] = useState(true); // Indicates if unzip option is checked
     const [pid, setPid] = useState(""); // Stores the process ID
     const [useCharsetUppercase, setCharsetUppercase] = useState(false); // Indicates if uppercase character set is selected
@@ -53,7 +53,7 @@ const Fcrackzip = () => {
         "Step 3: You can save output by checking 'Save Output to File'\n" +
         "Step 4: Click start cracking!";
     // Link to the tutorial
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1VGIv2XtJWxURo35ey8PdNza4otn-SxG7ZJaHmQ7xmIs/edit?usp=sharing";
     // Link to the source code
     const sourceLink = "https://www.kali.org/tools/fcrackzip/";
 

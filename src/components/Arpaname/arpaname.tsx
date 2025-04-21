@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput, Radio } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -14,6 +14,7 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
  */
 interface FormValuesType {
     ipAddress: string;
+    ipType: "IPv4" | "IPv6";
 }
 
 /**
@@ -22,27 +23,27 @@ interface FormValuesType {
  * displaying the results of the arpaname command.
  * @returns JSX.Element The rendered ArpanameTool component
  */
-const ArpanameTool = () => {
-    const title = "Arpaname"; // Title of the tool displayed in the UI
-    const description = "Perform reverse DNS lookups for IP addresses."; // Brief description of the tool's functionality
+function ArpanameTool() {
+    //Component variables
     const [loading, setLoading] = useState(false); // State variable to track if the process is currently loading
     const [output, setOutput] = useState(""); // State variable to store the output of the process
-    const [pidTarget, setPidTarget] = useState(""); // State variable to store the PID of the target process.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [errorMessage, setErrorMessage] = useState<string>(""); // State variable to store the error message
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
-
     // Component Constants.
+    const title = "Arpaname"; // Title of the tool displayed in the UI
+    const description = "Perform reverse DNS lookups for IP addresses."; // Brief description of the tool's functionality
     const steps =
         "Step 1: Type in the target IP address\n" +
         "Step 2: Click lookup to run Arpaname.\n" +
         "Step 3: View the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/bind9/#arpaname"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
-    const dependencies = ["arpaname"];
+    const tutorial = "https://docs.google.com/document/d/1dwLjkG_kFi2shSGeDVQByz64j-93ghUAElsPE9T3YLU/edit?usp=sharing"; // Link to the official documentation/tutorial.
+    const dependencies = ["bind9"];
 
     // Check for command availability on component mount
     useEffect(() => {
@@ -59,9 +60,10 @@ const ArpanameTool = () => {
             });
     }, []);
 
-    const form = useForm<FormValuesType>({
+    let form = useForm<FormValuesType>({
         initialValues: {
             ipAddress: "",
+            ipType: "IPv4", //Default type used is IPv4
         },
     });
 
@@ -71,7 +73,7 @@ const ArpanameTool = () => {
     @param {string} data - The data received from the child process.
     */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data);
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
     /**
@@ -84,25 +86,30 @@ const ArpanameTool = () => {
     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            // If the process was terminated successfully, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+                // If the process was terminated due to a signal, display the signal code.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+                // If the process was terminated with an error, display the exit code and signal code.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            setLoading(false); // Indicate that the process is no longer running
-            // Allow the user to save the output to a file.
-            setAllowSave(true); // Enable the save option now that the process has completed
-            setHasSaved(false); // Reset the saved state for the new output
-        },
-        [handleProcessData]
-    );
 
-    /**
-     * Handles the completion of the save operation.
-     * Updates state to reflect that the output has been saved and disables further saving.
-     */
+            // Clear the child process pid reference. There is no longer a valid process running.
+            setPid("");
+
+            // Cancel the loading overlay. The process has completed.
+            setLoading(false);
+
+            // Now that loading has completed, allow the user to save the output to a file.
+            setAllowSave(true);
+            setHasSaved(false);
+        },
+        [handleProcessData] // Dependency on the handleProcessData callback
+    );
+    // Actions taken after saving the output
     const handleSaveComplete = () => {
         // Indicating that the file has saved which is passed
         // back into SaveOutputToTextFile to inform the user
@@ -115,10 +122,11 @@ const ArpanameTool = () => {
      * @param {string} ip - The IP address string to be validated.
      * @returns {boolean} True if the input is a valid IP address, false otherwise.
      */
-    const validateIPAddress = (ip: string) => {
+    const validateIPAddress = (ip: string, type: "IPv4" | "IPv6") => {
         const ipv4Pattern = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-        const ipv6Pattern = /^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4}|:)$/;
-        return ipv4Pattern.test(ip) || ipv6Pattern.test(ip);
+        const ipv6Pattern =
+            /^(([0-9a-fA-F]{1,4}:){1,7}[0-9a-fA-F]{1,4}|(([0-9a-fA-F]{1,4}:){0,6}:([0-9a-fA-F]{1,4}:){0,6}[0-9a-fA-F]{1,4})|::)$/;
+        return type === "IPv4" ? ipv4Pattern.test(ip) : ipv6Pattern.test(ip);
     };
 
     /**
@@ -126,31 +134,35 @@ const ArpanameTool = () => {
      * @param {FormValuesType} values - The form values containing the IP address.
      */
     const onSubmit = async (values: FormValuesType) => {
-        if (!validateIPAddress(values.ipAddress)) {
-            setErrorMessage("Please enter a valid IP address."); // Set error message for invalid IP
+        if (!validateIPAddress(values.ipAddress, values.ipType)) {
+            setErrorMessage(`Please enter a valid ${values.ipType} address.`); // Set error message for invalid IP
             return;
         }
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
+        // Prepare arguments for the arpaname command
+        const argsIP = [values.ipAddress];
+
         // Reset the error message state when validation succeeds
         setErrorMessage("");
+
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+
         // Activate loading state to indicate ongoing process
         setLoading(true);
+        try {
+            // Execute the arpaname command using the CommandHelper utility with pkexec.
+            await CommandHelper.runCommandWithPkexec("arpaname", argsIP, handleProcessData, handleProcessTermination);
+        } catch (error: any) {
+            // If an error occurs during command execution, display the error message.
+            setOutput(`Error: ${error.message}`);
 
-        const argsIP = [values.ipAddress]; // Prepare arguments for the arpaname command
+            // Set the loading state to false since the process failed.
+            setLoading(false);
 
-        // Execute arpaname command for the target
-        const result_target = await CommandHelper.runCommandGetPidAndOutput(
-            "arpaname",
-            argsIP,
-            handleProcessData, // Pass handleProcessData as callback for handling process data
-            handleProcessTermination
-        );
-        setPidTarget(result_target.pid); // Store the process ID for potential termination
-
-        setLoading(false); // Hide loading indicator after command completion
+            // Allow saving the output (which includes the error message) to a file.
+            setAllowSave(true);
+        }
     };
-
     /**
      * Callback function to clear the output state.
      * This function is memoized using the `useCallback` hook to prevent unnecessary re-renders.
@@ -162,34 +174,47 @@ const ArpanameTool = () => {
     }, [setOutput]);
 
     return (
-        <RenderComponent
-            title={title}
-            description={description}
-            steps={steps}
-            tutorial={tutorial}
-            sourceLink={sourceLink}
-        >
-            {!loadingModal && (
-                <InstallationModal
-                    isOpen={opened}
-                    setOpened={setOpened}
-                    feature_description={description}
-                    dependencies={dependencies}
-                ></InstallationModal>
-            )}
-            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pidTarget)}
-                    <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")}></TextInput>
-                    {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
-                    {/* Render error message if present */}
-                    <Button type={"submit"}>Lookup</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </Stack>
-            </form>
-        </RenderComponent>
+        <>
+            <RenderComponent
+                title={title}
+                description={description}
+                steps={steps}
+                tutorial={tutorial}
+                sourceLink={sourceLink}
+            >
+                {!loadingModal && (
+                    <InstallationModal
+                        isOpen={opened}
+                        setOpened={setOpened}
+                        feature_description={description}
+                        dependencies={dependencies}
+                    ></InstallationModal>
+                )}
+                <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                    <Stack>
+                        {LoadingOverlayAndCancelButton(loading, pid)}
+                        <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")} />
+                        {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
+                        <Radio.Group
+                            value={form.values.ipType}
+                            onChange={(value) => form.setFieldValue("ipType", value as "IPv4" | "IPv6")}
+                            label="Select IP Type"
+                            required
+                        >
+                            <Radio value="IPv4" label="IPv4" />
+                            <Radio value="IPv6" label="IPv6" />
+                        </Radio.Group>
+                        {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
+                        <Button type={"submit"}>Lookup</Button>
+                        {/* Render the save output to file component */}
+                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        {/* Render the console wrapper component */}
+                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    </Stack>
+                </form>
+            </RenderComponent>
+        </>
     );
-};
+}
 
 export default ArpanameTool;

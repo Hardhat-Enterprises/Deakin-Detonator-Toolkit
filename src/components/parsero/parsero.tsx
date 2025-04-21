@@ -31,7 +31,7 @@ const Parsero = () => {
     const steps =
         "Step 1: Enter a URL. (E.g. www.google.com)\n" + "Step 2: Click Start Parsero\n" + "Step 3: View Results";
     const sourceLink = "https://www.kali.org/tools/parsero/";
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1VxbjDGxRu-36WckaLlF7fWI_r_O6Ez2EbEnCdZfXXkA/edit?usp=sharing";
     const dependencies = ["parsero"];
 
     const form = useForm<FormValuesType>({

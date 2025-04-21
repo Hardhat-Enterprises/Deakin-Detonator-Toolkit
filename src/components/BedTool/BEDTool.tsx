@@ -48,7 +48,7 @@ export function BEDTool() {
         "3. Custom Configuration (Optional): Activate 'Custom Configuration' to enter a specific target IP address and port number. If this is not enabled, the tool will default to scanning the local machine.\n" +
         "4. Start Scan: Click the 'Scan' button to begin the evaluation.";
     const sourceLink = "https://www.kali.org/tools/bed/"; // Link to the source documentation.
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1BPzqMP5b9C9OjsJuIKXfxPyMxDd6oqUhrTvwi29fOKo/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["bed"]; // Contains the dependencies required by the component.
 
     // Plugin-related constants

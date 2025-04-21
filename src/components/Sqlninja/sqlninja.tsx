@@ -45,7 +45,7 @@ function Sqlninja() {
         "Step 3: Select if you want verbose output.\n" +
         "Step 4: Click on the Start button to initiate sqlninja.";
     const sourceLink = "https://www.kali.org/tools/sqlninja/"; // Link to the source code (or Kali Tools).
-    const tutorial = ""; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1EaiwnltxhPL5TenUhU-ux9-WzP85BP7dLMfGNNv5ns8/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["sqlninja"]; // Constains the dependencies required for the component.
     const attackMode = ["test", "escalation", "upload", "backscan"]; //Contains the attack modes that are available.
 

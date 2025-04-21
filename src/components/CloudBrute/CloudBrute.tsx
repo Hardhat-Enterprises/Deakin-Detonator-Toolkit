@@ -46,7 +46,7 @@ const CloudBrute = () => {
         " to start the scan.\n" +
         "Step 5: View the Output block below to see the results of the scan.";
     const sourceLink = "https://www.kali.org/tools/cloudbrute/";
-    const tutorial = "";
+    const tutorial = "https://docs.google.com/document/d/1jxEqsWXp2GsNFSU-0B41MZK5EaG5csh41tzUpUX0wcw/edit?usp=sharing";
     const dependencies = ["cloudbrute"];
 
     // Form hook to handle form input.
