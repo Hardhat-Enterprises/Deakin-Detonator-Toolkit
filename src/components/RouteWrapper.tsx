@@ -95,7 +95,7 @@ import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
-
+import Tcpdump from "./Tcpdump/Tcpdump";
 
 export interface RouteProperties {
     name: string;
