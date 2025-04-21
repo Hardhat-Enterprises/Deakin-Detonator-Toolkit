@@ -10,14 +10,20 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
- * Represents the form values for the Tcpdump component.
- * @field hostname: The IP address to be used
+ * Represents the form values for the Tcpdump component. 
+ * @field interface: The interface used when listening for traffic 
  * @field Optionswitch: Allows the user to select the different options for scanning.
  */
 interface FormValuesType {
-    hostname: string;
+    interface: string;
     Tcpdumpswitch: string;
 }
+
+enum tcpdumpOptions {
+    "First 5 packets",
+    "TCP packets only",
+    "Detailed output",
+};
 
 /**
  * The Tcpdump component.
@@ -42,27 +48,22 @@ function Tcpdump() {
         "network. It is often used to troubleshoot network issues. It includes the ability to filter traffic " +
         "by features such as network protocol, IP address or interface. "; // Description of the component.
     const steps =
-        "Step 1: Enter the IP address you wish to scan. \n" +
+        "Step 1: Enter the network interface you wish to scan.\n" +
+        "\tExamples: wlan0, eth0, lo.\n" +
         "Step 2: Select one of the scanning options. The command will be formatted to " +
         "produce the type of scan selected.\n" +
         "Step 3: Click start to view the output block below and see the results of the scan.\n";
     const sourceLink = "https://www.tcpdump.org/"; // Link to the source code or Kali Tools page.
     const tutorial = "https://www.tcpdump.org/manpages/"; // Link to the official documentation/tutorial.
-    const dependencies = ["libpcap"]; // Dependencies required for the ARPScan tool.
+    const dependencies = ["tcpdump"]; // Usually pre-installed with most Linux distributions, but best to double check.
 
     // Form hook to handle form input.
     const form = useForm<FormValuesType>({
         initialValues: {
-            hostname: "",
-            Tcpdumpswitch: "First 5 packets"
+            interface: "",
+            Tcpdumpswitch: tcpdumpOptions[0],
         },
     });
-
-    const Tcpdumpswitch = [
-        "First 5 packets",
-        "TCP packets only",
-        "Detailed output"
-    ]
 
     // Check the availability of commands in the dependencies array.
     useEffect(() => {
@@ -125,65 +126,46 @@ function Tcpdump() {
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the ARPScan tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
-     * @param {FormValuesType} values - The form values, containing the network interface.
+     * @param {FormValuesType} values - The form values, containing the network address and tcp option.
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-        let args = [""];
+        let switchArgs = "-c 5"; // default option
 
-        //Switch for different options
-        switch (values.Tcpdumpswitch) {
-            case "First 5 packets":
-                args = [`/usr/share/ddt/Bash-Scripts/Tcpdumpshell.sh`];
-                args.push('-c 5 -i'); //Can put other options first, then hostname, tested
-                args.push(`${values.hostname}`);
-                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
-                    .then(({ pid, output }) => {
-                        setPid(pid);
-                        setOutput(output);
-                        setAllowSave(true);
-                    })
-                    .catch((error: any) => {
-                        setLoading(false);
-                        setOutput(`Error: ${error.message}`);
-                    });
-            break;
-
-            case "TCP packets only":
-                args = [`/usr/share/ddt/Bash-Scripts/Tcpdumpshell.sh`];
-                args.push('-c 20 tcp port 80 -i');
-                args.push(`${values.hostname}`)
-                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
-                    .then(({ pid, output }) => {
-                        setPid(pid);
-                        setOutput(output);
-                        setAllowSave(true);
-                    })
-                    .catch((error: any) => {
-                        setLoading(false);
-                        setOutput(`Error: ${error.message}`);
-                    });
-            break;
-
-            case "Detailed output":
-                args = [`/usr/share/ddt/Bash-Scripts/Tcpdumpshell.sh`];
-                args.push('-vv -c 20 -i');
-                args.push(`${values.hostname}`)
-                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
-                    .then(({ pid, output }) => {
-                        setPid(pid);
-                        setOutput(output);
-                        setAllowSave(true);
-                    })
-                    .catch((error: any) => {
-                        setLoading(false);
-                        setOutput(`Error: ${error.message}`);
-                    });
-            break;
-
-            default:
-                break;
+        //Switch for options other than default 
+        if (values.Tcpdumpswitch == tcpdumpOptions[1]){
+            switchArgs = "-c 20 tcp port 80"; // update options
         }
+
+        else if (values.Tcpdumpswitch == tcpdumpOptions[2]){
+            switchArgs = "-c 5 -vv"; // update options, 
+            // could also be vvv possible TODO item 
+        }
+
+        const args = [
+            "-i",
+            values.interface,
+            switchArgs,
+        ]
+
+            // Try execute thetcpdump command via helper method and handle its output or potential errors 
+            try {
+                const { output, pid } = await CommandHelper.runCommandWithPkexec(
+                    dependencies[0],
+                    args,
+                    handleProcessData,
+                    handleProcessTermination
+                );
+                setOutput(output);
+                setAllowSave(true);
+                setPid(pid);
+            } catch (error: any) {
+                // Display any errors encountered during command execution
+                setOutput(error.message || "An unknown error occurred.");
+                setLoading(false); // Deactivate loading state
+                setAllowSave(true);
+            }
+
     };
     
     /**
@@ -220,16 +202,15 @@ function Tcpdump() {
                     ></InstallationModal>
                 )}
 
-
         <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, Tcpdumpswitch: selectedScanOption }))}>
             <Stack>
                 {LoadingOverlayAndCancelButton(loading, pid)}
-                <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
+                <TextInput label={"interface/IP address"} {...form.getInputProps("interface")} />
                 <NativeSelect
                     value={selectedScanOption}
                     onChange={(e) => setSelectedTcpdumpOption(e.target.value)}
                     title={"Scan type"}
-                    data={Tcpdumpswitch}
+                    data={[tcpdumpOptions[0],tcpdumpOptions[1],tcpdumpOptions[2]]}
                     required
                     description={"Type of scan to perform"}
                     />
