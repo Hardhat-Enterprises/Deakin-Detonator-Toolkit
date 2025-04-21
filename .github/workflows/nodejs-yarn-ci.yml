@@ -6,6 +6,7 @@
 #   yarn install                        -> https://classic.yarnpkg.com/en/docs/cli/install
 #   actions/checkout                    -> https://github.com/actions/checkout
 #   actions/setup-node                  -> https://github.com/actions/setup-node
+#   syntax                              -> https://docs.github.com/en/actions/writing-workflows/
 
 name: node.js CI
 
@@ -86,10 +87,7 @@ jobs:
         # Set up job
         runs-on: ubuntu-latest
         timeout-minutes: 30 # Stop job if it runs longer than 30 minutes, default 360
-        # Ensures this job only runs after the 'dependencies' and 'build' jobs are successful
-        needs: |
-            dependencies 
-            build
+        needs: [dependencies, build] # Ensures this job only runs after the 'dependencies' and 'build' jobs are successful
         steps:
             # Step 1
             - name: Get actions for checking out repo
