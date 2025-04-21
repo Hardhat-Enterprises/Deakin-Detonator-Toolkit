@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import { Button,NativeSelect, Stack, TextInput, Alert } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -10,8 +10,8 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
- * Represents the form values for the Tcpdump component. 
- * @field interface: The interface used when listening for traffic 
+ * Represents the form values for the Tcpdump component.
+ * @field interface: The interface used when listening for traffic
  * @field Optionswitch: Allows the user to select the different options for scanning.
  */
 interface FormValuesType {
@@ -23,7 +23,7 @@ enum tcpdumpOptions {
     "First 5 packets",
     "TCP packets only",
     "Detailed output",
-};
+}
 
 /**
  * The Tcpdump component.
@@ -132,42 +132,35 @@ function Tcpdump() {
         setLoading(true);
         let switchArgs = "-c 5"; // default option
 
-        //Switch for options other than default 
-        if (values.Tcpdumpswitch == tcpdumpOptions[1]){
+        //Switch for options other than default
+        if (values.Tcpdumpswitch == tcpdumpOptions[1]) {
             switchArgs = "-c 20 tcp port 80"; // update options
+        } else if (values.Tcpdumpswitch == tcpdumpOptions[2]) {
+            switchArgs = "-c 5 -vv"; // update options,
+            // could also be vvv possible TODO item
         }
 
-        else if (values.Tcpdumpswitch == tcpdumpOptions[2]){
-            switchArgs = "-c 5 -vv"; // update options, 
-            // could also be vvv possible TODO item 
+        const args = ["-i", values.interface, switchArgs];
+
+        // Try execute thetcpdump command via helper method and handle its output or potential errors
+        try {
+            const { output, pid } = await CommandHelper.runCommandWithPkexec(
+                dependencies[0],
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+            setOutput(output);
+            setAllowSave(true);
+            setPid(pid);
+        } catch (error: any) {
+            // Display any errors encountered during command execution
+            setOutput(error.message || "An unknown error occurred.");
+            setLoading(false); // Deactivate loading state
+            setAllowSave(true);
         }
-
-        const args = [
-            "-i",
-            values.interface,
-            switchArgs,
-        ]
-
-            // Try execute thetcpdump command via helper method and handle its output or potential errors 
-            try {
-                const { output, pid } = await CommandHelper.runCommandWithPkexec(
-                    dependencies[0],
-                    args,
-                    handleProcessData,
-                    handleProcessTermination
-                );
-                setOutput(output);
-                setAllowSave(true);
-                setPid(pid);
-            } catch (error: any) {
-                // Display any errors encountered during command execution
-                setOutput(error.message || "An unknown error occurred.");
-                setLoading(false); // Deactivate loading state
-                setAllowSave(true);
-            }
-
     };
-    
+
     /**
      * clearOutput: Clears the screen
      * It resets the state variable holding the output, thereby clearing the display.
@@ -183,36 +176,35 @@ function Tcpdump() {
         setAllowSave(false);
     }, []);
 
-    return(
+    return (
         <RenderComponent
-        title={title}
-        description={description}
-        steps={steps}
-        tutorial={tutorial}
-        sourceLink={sourceLink}
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
         >
+            {/* Render the installation modal if the command is not available */}
+            {!loadingModal && (
+                <InstallationModal
+                    isOpen={opened}
+                    setOpened={setOpened}
+                    feature_description={description}
+                    dependencies={dependencies}
+                ></InstallationModal>
+            )}
 
-        {/* Render the installation modal if the command is not available */}
-        {!loadingModal && (
-                    <InstallationModal
-                        isOpen={opened}
-                        setOpened={setOpened}
-                        feature_description={description}
-                        dependencies={dependencies}
-                    ></InstallationModal>
-                )}
-
-        <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, Tcpdumpswitch: selectedScanOption }))}>
-            <Stack>
-                {LoadingOverlayAndCancelButton(loading, pid)}
-                <TextInput label={"interface/IP address"} {...form.getInputProps("interface")} />
-                <NativeSelect
-                    value={selectedScanOption}
-                    onChange={(e) => setSelectedTcpdumpOption(e.target.value)}
-                    title={"Scan type"}
-                    data={[tcpdumpOptions[0],tcpdumpOptions[1],tcpdumpOptions[2]]}
-                    required
-                    description={"Type of scan to perform"}
+            <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, Tcpdumpswitch: selectedScanOption }))}>
+                <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <TextInput label={"interface/IP address"} {...form.getInputProps("interface")} />
+                    <NativeSelect
+                        value={selectedScanOption}
+                        onChange={(e) => setSelectedTcpdumpOption(e.target.value)}
+                        title={"Scan type"}
+                        data={[tcpdumpOptions[0], tcpdumpOptions[1], tcpdumpOptions[2]]}
+                        required
+                        description={"Type of scan to perform"}
                     />
                     <Button type={"submit"}>Start Tcpdump</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
@@ -220,7 +212,7 @@ function Tcpdump() {
                 </Stack>
             </form>
         </RenderComponent>
-    )
-}   
+    );
+}
 
 export default Tcpdump;
