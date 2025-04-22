@@ -21,7 +21,6 @@ import Navigation from "./components/NavBar/Navigation";
 import { ROUTES } from "./components/RouteWrapper";
 import { NotificationsProvider } from "@mantine/notifications";
 
-
 export default function App() {
     const theme = useMantineTheme();
     const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
@@ -96,7 +95,6 @@ export default function App() {
                         }
                     >
                         <Routes>
-                            
                             {ROUTES.map((route) => (
                                 <Route key={route.path} {...route} />
                             ))}

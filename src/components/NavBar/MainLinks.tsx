@@ -80,7 +80,6 @@ const referencesData = {
     route: "/references",
 };
 
-
 const data = [homeData, aboutData, toolsData, attackVectorsData, walkthroughsData, referencesData];
 
 export function MainLinks() {
