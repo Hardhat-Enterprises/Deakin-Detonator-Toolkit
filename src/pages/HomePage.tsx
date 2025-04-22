@@ -18,9 +18,9 @@ const HomePage = () => {
                     <Card shadow="sm" p="lg" radius="md" withBorder>
                         <CardSection>
                             <Image
-                                src="/logo/Rookie.png" // Corrected path
+                                src="src/logo/Rookie.png" 
                                 alt="Beginner section preview"
-                                height={200}
+                                height={window.outerHeight/2}
                             />
                         </CardSection>
                         <Title order={3} align="center" mt="md">
@@ -41,9 +41,9 @@ const HomePage = () => {
                     <Card shadow="sm" p="lg" radius="md" withBorder>
                         <CardSection>
                             <Image
-                                src="/logo/Advanced.png" // Corrected path
+                                src="src/logo/Advanced.png" 
                                 alt="Advanced section preview"
-                                height={200}
+                                height={window.outerHeight/2}
                             />
                         </CardSection>
                         <Title order={3} align="center" mt="md">

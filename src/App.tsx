@@ -20,7 +20,7 @@ import "./App.css";
 import Navigation from "./components/NavBar/Navigation";
 import { ROUTES } from "./components/RouteWrapper";
 import { NotificationsProvider } from "@mantine/notifications";
-import HomePage from "./pages/HomePage";
+
 
 export default function App() {
     const theme = useMantineTheme();
@@ -96,7 +96,7 @@ export default function App() {
                         }
                     >
                         <Routes>
-                            <Route path="/" element={<HomePage />} />
+                            
                             {ROUTES.map((route) => (
                                 <Route key={route.path} {...route} />
                             ))}

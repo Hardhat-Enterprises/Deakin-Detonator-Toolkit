@@ -1,4 +1,5 @@
 import AboutPage from "../pages/About";
+import HomePage from "../pages/HomePage";
 import { AttackVectors } from "../pages/AttackVectors";
 import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
@@ -108,7 +109,7 @@ export const ROUTES: RouteProperties[] = [
     {
         name: "Home",
         path: "/",
-        element: <AboutPage />,
+        element: <HomePage />,
         description: "Home page",
         category: "",
     },
