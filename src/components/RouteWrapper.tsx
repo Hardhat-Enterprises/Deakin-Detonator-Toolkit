@@ -763,8 +763,7 @@ export const ROUTES: RouteProperties[] = [
         name: "Tcpdump",
         path: "/tools/Tcpdump",
         element: <Tcpdump />,
-        description:
-            "A tool used for packet capture and filtering across a network.",
+        description: "A tool used for packet capture and filtering across a network.",
         category: "Network Scanning and Enumeration",
     },
     {

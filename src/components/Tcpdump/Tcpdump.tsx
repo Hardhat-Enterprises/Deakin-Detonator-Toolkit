@@ -23,6 +23,8 @@ enum tcpdumpOptions {
     "First 5 packets",
     "TCP packets only",
     "Detailed output",
+    "DHCP capture",
+    "Syn/Ack packets",
 }
 
 /**
@@ -134,15 +136,18 @@ function Tcpdump() {
 
         //Switch for options other than default
         if (values.Tcpdumpswitch == tcpdumpOptions[1]) {
-            switchArgs = "-c 20 tcp port 80"; // update options
+            switchArgs = "-c 20 tcp port 80"; 
         } else if (values.Tcpdumpswitch == tcpdumpOptions[2]) {
-            switchArgs = "-c 5 -vv"; // update options,
-            // could also be vvv possible TODO item
+            switchArgs = "-c 5 -vv"; 
+        } else if (values.Tcpdumpswitch == tcpdumpOptions[3]) {
+            switchArgs = "-c 10 -v -n port 67 or 68";
+        } else if (values.Tcpdumpswitch == tcpdumpOptions[4]) {
+            switchArgs = "-c 5 -vv 'tcp[tcpflags] = 0x12'";
         }
 
         const args = ["-i", values.interface, switchArgs];
 
-        // Try execute thetcpdump command via helper method and handle its output or potential errors
+        // Try execute the Tcpdump command via helper method and handle its output or potential errors
         try {
             const { output, pid } = await CommandHelper.runCommandWithPkexec(
                 dependencies[0],
@@ -202,7 +207,7 @@ function Tcpdump() {
                         value={selectedScanOption}
                         onChange={(e) => setSelectedTcpdumpOption(e.target.value)}
                         title={"Scan type"}
-                        data={[tcpdumpOptions[0], tcpdumpOptions[1], tcpdumpOptions[2]]}
+                        data={[tcpdumpOptions[0], tcpdumpOptions[1], tcpdumpOptions[2], tcpdumpOptions[3], tcpdumpOptions[4]]}
                         required
                         description={"Type of scan to perform"}
                     />
