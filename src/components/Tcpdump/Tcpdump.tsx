@@ -136,9 +136,9 @@ function Tcpdump() {
 
         //Switch for options other than default
         if (values.Tcpdumpswitch == tcpdumpOptions[1]) {
-            switchArgs = "-c 20 tcp port 80"; 
+            switchArgs = "-c 20 tcp port 80";
         } else if (values.Tcpdumpswitch == tcpdumpOptions[2]) {
-            switchArgs = "-c 5 -vv"; 
+            switchArgs = "-c 5 -vv";
         } else if (values.Tcpdumpswitch == tcpdumpOptions[3]) {
             switchArgs = "-c 10 -v -n port 67 or 68";
         } else if (values.Tcpdumpswitch == tcpdumpOptions[4]) {
@@ -207,7 +207,13 @@ function Tcpdump() {
                         value={selectedScanOption}
                         onChange={(e) => setSelectedTcpdumpOption(e.target.value)}
                         title={"Scan type"}
-                        data={[tcpdumpOptions[0], tcpdumpOptions[1], tcpdumpOptions[2], tcpdumpOptions[3], tcpdumpOptions[4]]}
+                        data={[
+                            tcpdumpOptions[0],
+                            tcpdumpOptions[1],
+                            tcpdumpOptions[2],
+                            tcpdumpOptions[3],
+                            tcpdumpOptions[4],
+                        ]}
                         required
                         description={"Type of scan to perform"}
                     />
