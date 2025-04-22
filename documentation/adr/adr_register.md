@@ -18,11 +18,11 @@
 | 0015   | Add ethical hacking and other legal warnings to DDT                                           | PROPOSED    |
 | 0016   | -empty-                                                                                       | -           |
 | 0017   | Remove CrackMapExec Tool                                                                      | APPROVED    |
-| 0019   | Created an ADR for Anonsurf functionality                                                         | W-I-P       |
+| 0019   |
 | 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | W-I-P       |
 | 0021   | -empty-                                                                                       | -           |
 | 0022   | -empty-                                                                                       | -           |
-| 0023   | -empty-                                                                                       | -           |
+| 0023   | Created an ADR for Anonsurf functionality                                                     | W-I-P       |
 | 0024   | -empty-                                                                                       | -           |
 | 0025   | -empty-                                                                                       | -           |
 | 0026   | -empty-                                                                                       | -           |
