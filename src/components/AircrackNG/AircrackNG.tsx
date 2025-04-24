@@ -277,20 +277,6 @@ const AircrackNG = () => {
     const isWEP = selectedModeOption === "WEP";
     const isWPA = selectedModeOption === "WPA";
 
-    // Form Hook to handle form input.
-    const form = useForm({
-        initialValues: {
-            capFile: "",
-            wordList: "",
-            BSSID: "",
-            ESSID: "",
-            keyFile: "",
-            characters: "",
-            MACAddress: "",
-            PMKID: "",
-            customConfig: "",
-            fakeHost: "",
-        },
     });
 
     // Resets the form whenever the mode changes (from WEP to WPA or vice versa)
