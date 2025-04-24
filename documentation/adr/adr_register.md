@@ -9,7 +9,7 @@
 | 0006   | Implementation of TCPdump into PTGUI                                                          | W-I-P       |
 | 0007   | Integrating IP Tracing via Traceroute, Whois, and Geo IP in DDT                               | APPROVED    |
 | 0008   | Integrating Suricata for real-time network analysis                                           | REJECTED    |
-| 0009   | Removing TShark from PT-GUI                                                                   | APPROVED    |
+| 0009   | Removing TShark from PT-GUI                                                                   | IMPLEMENTED |
 | 0010   | Implementation of Fping into PT-GUI                                                           | IMPLEMENTED |
 | 0011   | Introduction of OpenAPI integration                                                           | IMPLEMENTED |
 | 0012   | Integrating Cohere for Tool Output Analysis                                                   | IMPLEMENTED |
@@ -18,8 +18,9 @@
 | 0015   | Add ethical hacking and other legal warnings to DDT                                           | PROPOSED    |
 | 0016   | -empty-                                                                                       | -           |
 | 0017   | Remove CrackMapExec Tool                                                                      | APPROVED    |
-| 0019   | -empty-                                                                                       | -           |
-| 0020   | -empty-                                                                                       | -           |
+| 0018   | -empty-                                                                                       | -           |
+| 0019   | Replacement of Wifite with Wifite2                                                            | APPROVED    |
+| 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | W-I-P       |
 | 0021   | -empty-                                                                                       | -           |
 | 0022   | -empty-                                                                                       | -           |
 | 0023   | -empty-                                                                                       | -           |
