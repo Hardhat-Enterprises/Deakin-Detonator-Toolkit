@@ -82,7 +82,6 @@ const AircrackNG = () => {
     const [selectedcharacter, setSelectedCharacter] = useState(""); // State variable to store the selected character type.
     //const [selectedtype, setSelectedType] = useState(""); // State variable to store the selected security type.
     //const [AdvancedMode, setAdvancedMode] = useState(false); // State variable to store the selected mode.
-    const [selectedcharacter, setSelectedCharacter] = useState(""); // State variable to store the selected character type.
     //const [CustomConfig, setCustomConfig] = useState(false); // State variable to store the selected custom configuration.
 
 
