@@ -277,7 +277,7 @@ const AircrackNG = () => {
     const isWEP = selectedModeOption === "WEP";
     const isWPA = selectedModeOption === "WPA";
 
-    });
+    };
 
     // Resets the form whenever the mode changes (from WEP to WPA or vice versa)
     useEffect(() => {
