@@ -242,13 +242,12 @@ const Fcrackzip = () => {
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to crack passwords, use with caution and only on files you own or have explicit permission to test.
+                            This tool is used to crack passwords, use with caution and only on files you own or have
+                            explicit permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <TextInput
                         label={"Zip file"}
                         placeholder="Specify the zip file."

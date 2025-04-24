@@ -214,13 +214,12 @@ const Crunch = () => {
                     <LoadingOverlay visible={loading} />
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to generate password lists, which can be used for malicious purposes. Use with caution and only for ethical testing or purposes you have explicit permission for.
+                            This tool is used to generate password lists, which can be used for malicious purposes. Use
+                            with caution and only for ethical testing or purposes you have explicit permission for.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     {/* {UserGuide(title, description_userguide)} */}
                     <TextInput
                         label={"Minimum password length"}

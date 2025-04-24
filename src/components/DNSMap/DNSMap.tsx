@@ -214,13 +214,12 @@ const DNSMap = () => {
                     />
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to perform DNS enumeration, use with caution and only on targets you own or have explicit permission to test.
+                            This tool is used to perform DNS enumeration, use with caution and only on targets you own
+                            or have explicit permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
 
                     <TextInput

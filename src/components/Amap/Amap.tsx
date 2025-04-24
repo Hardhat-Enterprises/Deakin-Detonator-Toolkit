@@ -211,13 +211,12 @@ const AMAP = () => {
 
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to scan ports, use with caution and only on networks you own or have explicit permission to test.
+                            This tool is used to scan ports, use with caution and only on networks you own or have
+                            explicit permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                     <TextInput label={"Target Host"} required {...form.getInputProps("target")} />
                     <TextInput label={"Port(s)"} required {...form.getInputProps("port")} />

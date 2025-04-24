@@ -191,13 +191,12 @@ const Enum4Linux = () => {
                     />
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to perform information gathering, use with caution and only on targets you own or have explicit permission to test.
+                            This tool is used to perform information gathering, use with caution and only on targets you
+                            own or have explicit permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <Tooltip
                         label="Enter the IP address of the target system you want to enumerate."
                         position="right"

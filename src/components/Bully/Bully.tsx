@@ -214,13 +214,12 @@ function Bully() {
 
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to perform brute-force attacks on WPS PIN authentication, use with caution and only on networks you own or have explicit permission to test.
+                            This tool is used to perform brute-force attacks on WPS PIN authentication, use with caution
+                            and only on networks you own or have explicit permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                     <Stack>
                         <TextInput

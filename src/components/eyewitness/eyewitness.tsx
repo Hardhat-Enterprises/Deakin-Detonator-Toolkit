@@ -198,13 +198,12 @@ function Eyewitness() {
                 <Stack>
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to perform website enumeration, use with caution and only on targets you own or have explicit permission to test.
+                            This tool is used to perform website enumeration, use with caution and only on targets you
+                            own or have explicit permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <p>{description}</p>
                     <TextInput
                         label={"Enter the file name or path containing URLs:"}

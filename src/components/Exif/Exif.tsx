@@ -220,13 +220,12 @@ const ExifTool = () => {
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to read and write metadata to files. Use with caution and only on files you own or have explicit permission to modify.
+                            This tool is used to read and write metadata to files. Use with caution and only on files
+                            you own or have explicit permission to modify.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="File Path"

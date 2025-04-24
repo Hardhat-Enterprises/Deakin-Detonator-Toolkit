@@ -292,13 +292,12 @@ const dmitry = () => {
                     />
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to perform information gathering, use with caution and only on targets you own or have explicit permission to test.
+                            This tool is used to perform information gathering, use with caution and only on targets you
+                            own or have explicit permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <TextInput label={"Domain or IP"} required {...form.getInputProps("domain")} />
 
                     {checkedAdvanced && (

@@ -270,16 +270,14 @@ const Cewl = () => {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to generate custom wordlists, use with caution and only on websites you own or have explicit permission to test.
+                            This tool is used to generate custom wordlists, use with caution and only on websites you
+                            own or have explicit permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                     <Switch
                         size="md"

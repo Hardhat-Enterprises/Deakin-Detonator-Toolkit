@@ -192,13 +192,12 @@ const CloudBrute = () => {
 
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to perform cloud enumeration, use with caution and only on cloud environments you own or have explicit permission to test.
+                            This tool is used to perform cloud enumeration, use with caution and only on cloud
+                            environments you own or have explicit permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                     <TextInput
                         label="Target Domain"

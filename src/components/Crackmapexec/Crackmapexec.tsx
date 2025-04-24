@@ -231,13 +231,12 @@ const Crackmapexec = () => {
                     {UserGuide(title, descriptionUserGuide)}
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to perform penetration testing on Windows/Active Directory environments, use with caution and only on networks you own or have explicit permission to test.
+                            This tool is used to perform penetration testing on Windows/Active Directory environments,
+                            use with caution and only on networks you own or have explicit permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <Switch
                         size="md"
                         label="Advanced Mode"

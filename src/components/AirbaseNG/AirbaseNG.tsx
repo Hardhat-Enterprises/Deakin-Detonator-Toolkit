@@ -237,13 +237,13 @@ const AirbaseNG = () => {
 
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool can create fake access points, potentially causing network disruptions and security vulnerabilities. Use with caution and only on networks you own or have explicit permission to test.
+                            This tool can create fake access points, potentially causing network disruptions and
+                            security vulnerabilities. Use with caution and only on networks you own or have explicit
+                            permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                     {/* Advanced Mode Switch */}
                     <Tooltip label="Enable advanced settings">

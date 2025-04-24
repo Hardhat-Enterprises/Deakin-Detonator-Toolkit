@@ -205,13 +205,12 @@ function ARPScan() {
 
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to perform ARP Scans, use with caution and only on networks you own or have explicit permission to test.
+                            This tool is used to perform ARP Scans, use with caution and only on networks you own or
+                            have explicit permission to test.
                         </Alert>
                     )}
 
-                    {!showAlert && (
-                        <Button onClick={handleShowAlert}>Show Alert</Button>
-                    )}
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                     <Stack>
                         <TextInput label={"Network Interface"} required {...form.getInputProps("interface")} />

@@ -229,13 +229,12 @@ const ARPSpoofing = () => {
 
                         {showAlert && (
                             <Alert title="Warning: Potential Risks" color="red">
-                                This tool is used to perform ARP Spoofing, use with caution and only on networks you own or have explicit permission to test.
+                                This tool is used to perform ARP Spoofing, use with caution and only on networks you own
+                                or have explicit permission to test.
                             </Alert>
                         )}
 
-                        {!showAlert && (
-                            <Button onClick={handleShowAlert}>Show Alert</Button>
-                        )}
+                        {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                         <TextInput label={"Target one IP address"} required {...form.getInputProps("ipGateway")} />
                         <TextInput label={"Target two IP address"} required {...form.getInputProps("ipTarget")} />
