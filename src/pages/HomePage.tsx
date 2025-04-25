@@ -2,7 +2,6 @@ import { Image, Text, Stack, Title, Button, Grid, Card, CardSection, useMantineT
 import { IconRocket, IconSchool } from "@tabler/icons";
 
 const HomePage = () => {
-    
     return (
         <>
             <Stack align={"center"}>
@@ -28,7 +27,7 @@ const HomePage = () => {
                             Perfect for those starting their journey in penetration testing. Learn the basics through
                             guided walkthroughs and simple tools.
                         </Text>
-                        <Button fullWidth color="blue" mt="md" leftIcon={<IconSchool size={18} />} disabled> 
+                        <Button fullWidth color="blue" mt="md" leftIcon={<IconSchool size={18} />} disabled>
                             Explore Beginner
                         </Button>
                     </Card>
