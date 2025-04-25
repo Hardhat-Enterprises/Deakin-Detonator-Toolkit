@@ -2,9 +2,7 @@ import { Image, Text, Stack, Title, Button, Grid, Card, CardSection, useMantineT
 import { IconRocket, IconSchool } from "@tabler/icons";
 
 const HomePage = () => {
-    const theme = useMantineTheme();
-    const getColor = (color: string) => theme.colors[color][theme.colorScheme === "dark" ? 5 : 7];
-
+    
     return (
         <>
             <Stack align={"center"}>
@@ -30,7 +28,7 @@ const HomePage = () => {
                             Perfect for those starting their journey in penetration testing. Learn the basics through
                             guided walkthroughs and simple tools.
                         </Text>
-                        <Button fullWidth color="blue" mt="md" leftIcon={<IconSchool size={18} />}>
+                        <Button fullWidth color="blue" mt="md" leftIcon={<IconSchool size={18} />} disabled> 
                             Explore Beginner
                         </Button>
                     </Card>
@@ -53,7 +51,7 @@ const HomePage = () => {
                             Dive deep into advanced penetration testing techniques and tools. Ideal for experienced
                             testers seeking complex strategies.
                         </Text>
-                        <Button fullWidth color="violet" mt="md" leftIcon={<IconRocket size={18} />}>
+                        <Button fullWidth color="violet" mt="md" leftIcon={<IconRocket size={18} />} disabled>
                             Explore Advanced
                         </Button>
                     </Card>
