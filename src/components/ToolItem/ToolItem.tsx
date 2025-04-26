@@ -1,6 +1,6 @@
 import { Button } from "@mantine/core";
 import { IconRocket } from "@tabler/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 interface ToolItemProps {
     title: string;

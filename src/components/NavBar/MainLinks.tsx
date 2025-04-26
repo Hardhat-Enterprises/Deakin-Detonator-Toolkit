@@ -1,7 +1,7 @@
 import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
 import { IconQuestionMark, IconStepInto, IconTools, IconSearch, IconTarget } from "@tabler/icons";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 interface MainLinkProps {
     icon: React.ReactNode;

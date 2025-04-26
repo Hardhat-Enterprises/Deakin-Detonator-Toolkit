@@ -2,7 +2,7 @@ import { Input } from "@mantine/core";
 import type { SpotlightAction } from "@mantine/spotlight";
 import { openSpotlight, SpotlightProvider } from "@mantine/spotlight";
 import { IconSearch } from "@tabler/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { RouteProperties, ROUTES } from "../../components/RouteWrapper";
 
 /**

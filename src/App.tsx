@@ -15,7 +15,7 @@ import {
     Group,
 } from "@mantine/core";
 import { useState, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router";
 import "./App.css";
 import Navigation from "./components/NavBar/Navigation";
 import { ROUTES } from "./components/RouteWrapper";
@@ -109,7 +109,7 @@ export default function App() {
                     >
                         <Routes>
                             {ROUTES.map((route) => (
-                                <Route key={route.path} {...route}></Route>
+                                <Route path={route.path} element={route.element}></Route>
                             ))}
                         </Routes>
                     </AppShell>
