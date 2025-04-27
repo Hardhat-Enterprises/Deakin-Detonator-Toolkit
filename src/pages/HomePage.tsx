@@ -1,9 +1,17 @@
 import { Image, Text, Stack, Title, Button, Grid, Card, CardSection, useMantineTheme } from "@mantine/core";
 import { IconRocket, IconSchool } from "@tabler/icons";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+    let navigate = useNavigate();
+
+    // function to handle event, clicking Explore Beginner button
+    function handleClickBeginner() {
+        navigate('/beginnerhome');
+    }
+    
     return (
-        <>
+        <> 
             <Stack align={"center"}>
                 <Title>Welcome to the Deakin Detonator Toolkit</Title>
                 <Text>Your one-stop toolkit for both beginners and advanced penetration testers.</Text>
@@ -27,7 +35,7 @@ const HomePage = () => {
                             Perfect for those starting their journey in penetration testing. Learn the basics through
                             guided walkthroughs and simple tools.
                         </Text>
-                        <Button fullWidth color="blue" mt="md" leftIcon={<IconSchool size={18} />} disabled>
+                        <Button fullWidth color="blue" mt="md" leftIcon={<IconSchool size={18} />} onClick={handleClickBeginner}>
                             Explore Beginner
                         </Button>
                     </Card>
