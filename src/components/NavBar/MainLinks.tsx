@@ -1,5 +1,5 @@
 import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
-import { IconHome, IconQuestionMark, IconStepInto, IconTools, IconSearch, IconTarget } from "@tabler/icons";
+import { IconHome, IconQuestionMark, IconStepInto, IconTools, IconSearch, IconTarget, IconPuzzle  } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -52,6 +52,13 @@ const aboutData = {
     route: "/about",
 };
 
+const beginnerData = {
+    icon: <IconPuzzle size={16} />,
+    color: "lightblue",
+    label: "Beginner",
+    route: "/beginnerhome",
+};
+
 const toolsData = {
     icon: <IconTools size={16} />,
     color: "violet",
@@ -80,7 +87,7 @@ const referencesData = {
     route: "/references",
 };
 
-const data = [homeData, aboutData, toolsData, attackVectorsData, walkthroughsData, referencesData];
+const data = [homeData, aboutData, beginnerData, toolsData, attackVectorsData, walkthroughsData, referencesData];
 
 export function MainLinks() {
     const links = data.map((link) => <MainLink {...link} key={link.label} />);

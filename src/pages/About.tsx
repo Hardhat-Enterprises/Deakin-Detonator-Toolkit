@@ -8,7 +8,7 @@ const AboutPage = () => {
     const getColor = (color: string) => theme.colors[color][theme.colorScheme === "dark" ? 5 : 7];
 
     const imageContainerStyles = {
-        width: "100%",
+        width: "100%", 
         maxWidth: "100%",
         overflowX: "auto" as "auto", // Add horizontal scrollbar for overflow
         display: "flex",

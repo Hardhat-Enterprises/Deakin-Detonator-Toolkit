@@ -1,5 +1,6 @@
 import AboutPage from "../pages/About";
 import HomePage from "../pages/HomePage";
+import BeginnerHomePage from "../pages/BeginnerSection/BeginnerHomePage";
 import { AttackVectors } from "../pages/AttackVectors";
 import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
@@ -119,6 +120,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/about",
         element: <AboutPage />,
         description: "About page",
+        category: "",
+    },
+    {
+        name: "Beginner",
+        path: "/beginnerhome",
+        element: <BeginnerHomePage />,
+        description: "Beginner section home page",
         category: "",
     },
     {
