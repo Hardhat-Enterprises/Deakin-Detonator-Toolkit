@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
-import { Button, Select, Card, Text, Group, Badge } from "@mantine/core";
+import { Button, Select, Card, Text, Group, Badge, TextInput } from "@mantine/core";
 import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { showNotification } from "@mantine/notifications";
 
@@ -31,7 +31,7 @@ const categoryColors: { [key: string]: string } = {
   Hacking: "green",
 };
 
-// 🏷️ Function to detect category based on news item
+// 🏷️ Detect category from text
 function detectCategory(item: NewsItem): string | null {
   const text = (item.title + " " + item.description).toLowerCase();
   for (const category of categories) {
@@ -46,6 +46,7 @@ export default function NewsFeed() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [filteredNews, setFilteredNews] = useState<NewsItem[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [refreshing, setRefreshing] = useState(false);
@@ -75,19 +76,32 @@ export default function NewsFeed() {
   }, []);
 
   useEffect(() => {
-    if (selectedCategory === "All") {
-      setFilteredNews(news);
-    } else {
+    filterNews();
+  }, [selectedCategory, searchQuery, news]);
+
+  const filterNews = () => {
+    let filtered = [...news];
+
+    if (selectedCategory !== "All") {
       const lowerCategory = selectedCategory.toLowerCase();
-      setFilteredNews(
-        news.filter(
-          (item) =>
-            item.title.toLowerCase().includes(lowerCategory) ||
-            item.description.toLowerCase().includes(lowerCategory)
-        )
+      filtered = filtered.filter(
+        (item) =>
+          item.title.toLowerCase().includes(lowerCategory) ||
+          item.description.toLowerCase().includes(lowerCategory)
       );
     }
-  }, [selectedCategory, news]);
+
+    if (searchQuery.trim() !== "") {
+      const lowerSearch = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (item) =>
+          item.title.toLowerCase().includes(lowerSearch) ||
+          item.description.toLowerCase().includes(lowerSearch)
+      );
+    }
+
+    setFilteredNews(filtered);
+  };
 
   const saveArticle = async (item: NewsItem) => {
     const safeTitle = item.title ? item.title.replace(/[<>:"/\\|?*]+/g, "").slice(0, 50) : "Article";
@@ -176,6 +190,17 @@ ${item.description}
         />
       </div>
 
+      {/* Search Bar */}
+      <div style={{ marginBottom: "1rem" }}>
+        <TextInput
+          placeholder="Search news..."
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.currentTarget.value)}
+          radius="md"
+          size="sm"
+        />
+      </div>
+
       {/* Error/Loading */}
       {loading && <Text>Loading news...</Text>}
       {error && <Text color="red">{error}</Text>}
@@ -210,7 +235,8 @@ ${item.description}
                   >
                     {item.title}
                   </a>
-                  {/* 🏷️ Show Badge if category detected */}
+
+                  {/* 🏷️ Badge */}
                   {detectedCategory && (
                     <Badge color={categoryColors[detectedCategory]} size="sm" variant="filled">
                       {detectedCategory}
