@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
-import { Button, Select, Card, Text, Group } from "@mantine/core";
+import { Button, Select, Card, Text, Group, Badge } from "@mantine/core";
 import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { showNotification } from "@mantine/notifications";
 
@@ -20,6 +20,27 @@ const categories = [
   "Ransomware",
   "Hacking",
 ];
+
+// 🏷️ Category to color map
+const categoryColors: { [key: string]: string } = {
+  Malware: "red",
+  Phishing: "orange",
+  Breach: "grape",
+  "Zero-Day": "blue",
+  Ransomware: "cyan",
+  Hacking: "green",
+};
+
+// 🏷️ Function to detect category based on news item
+function detectCategory(item: NewsItem): string | null {
+  const text = (item.title + " " + item.description).toLowerCase();
+  for (const category of categories) {
+    if (category !== "All" && text.includes(category.toLowerCase())) {
+      return category;
+    }
+  }
+  return null;
+}
 
 export default function NewsFeed() {
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -68,7 +89,6 @@ export default function NewsFeed() {
     }
   }, [selectedCategory, news]);
 
-  // 💾 Save article to Desktop
   const saveArticle = async (item: NewsItem) => {
     const safeTitle = item.title ? item.title.replace(/[<>:"/\\|?*]+/g, "").slice(0, 50) : "Article";
     const content = `
@@ -162,50 +182,62 @@ ${item.description}
 
       {/* News List */}
       <div style={{ marginTop: "1rem" }}>
-        {filteredNews.map((item, index) => (
-          <Card
-            key={index}
-            shadow="xs"
-            radius="md"
-            withBorder
-            p="md"
-            mb="sm"
-            style={{ backgroundColor: "#1f1f1f" }}
-          >
-            <Group position="apart" style={{ marginBottom: "0.5rem" }}>
-              <a
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  color: "#4dabf7",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                  textDecoration: "none",
-                }}
-              >
-                {item.title}
-              </a>
+        {filteredNews.map((item, index) => {
+          const detectedCategory = detectCategory(item);
 
-              {/* 💾 Save Button */}
-              <Button
-                size="xs"
-                variant="outline"
-                color="green"
-                onClick={() => saveArticle(item)}
-              >
-                💾 Save
-              </Button>
-            </Group>
+          return (
+            <Card
+              key={index}
+              shadow="xs"
+              radius="md"
+              withBorder
+              p="md"
+              mb="sm"
+              style={{ backgroundColor: "#1f1f1f" }}
+            >
+              <Group position="apart" style={{ marginBottom: "0.5rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "#4dabf7",
+                      fontWeight: "bold",
+                      fontSize: "1rem",
+                      textDecoration: "none",
+                    }}
+                  >
+                    {item.title}
+                  </a>
+                  {/* 🏷️ Show Badge if category detected */}
+                  {detectedCategory && (
+                    <Badge color={categoryColors[detectedCategory]} size="sm" variant="filled">
+                      {detectedCategory}
+                    </Badge>
+                  )}
+                </div>
 
-            <Text size="xs" color="dimmed" mt="xs">
-              {item.pub_date}
-            </Text>
-            <Text size="sm" mt="xs" color="gray">
-              {item.description}
-            </Text>
-          </Card>
-        ))}
+                {/* 💾 Save Button */}
+                <Button
+                  size="xs"
+                  variant="outline"
+                  color="green"
+                  onClick={() => saveArticle(item)}
+                >
+                  💾 Save
+                </Button>
+              </Group>
+
+              <Text size="xs" color="dimmed" mt="xs">
+                {item.pub_date}
+              </Text>
+              <Text size="sm" mt="xs" color="gray">
+                {item.description}
+              </Text>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
