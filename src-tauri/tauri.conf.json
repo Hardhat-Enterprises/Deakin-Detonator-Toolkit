@@ -409,11 +409,13 @@
             "fs": {
                 "all": true,
                 "scope": [
-                    "$TEMP/**",
-                    "$HOME/Deakin-Detonator-Toolkit/**",
-                    "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**"
+                  "$TEMP/**",
+                  "$HOME/Deakin-Detonator-Toolkit/**",
+                  "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**",
+                  "$DESKTOP/**"
                 ]
             },
+              
             "path": {
                 "all": true
             }
