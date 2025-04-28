@@ -99,7 +99,6 @@ import Subjack from "./Subjack/Subjack";
 import BPathPage from "./BeginnerGuideHomePage/BeginnerGuideHomePage";
 import Tcpdump from "./Tcpdump/Tcpdump";
 
-
 export interface RouteProperties {
     name: string;
     path: string;
