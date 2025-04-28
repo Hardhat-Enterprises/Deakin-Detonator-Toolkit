@@ -18,7 +18,7 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
 
     return (
         <>
-            <LoadingOverlay visible={loading} overlayBlur={3} style={{ zIndex: 1000, position: "fixed" }} />
+            <LoadingOverlay visible={false} overlayBlur={3} style={{ zIndex: 1000, position: "fixed" }} />
             {loading && (
                 <Modal
                     opened={loading}
@@ -85,7 +85,7 @@ export function LoadingOverlayAndCancelButtonPkexec(
     //Returns a loadingoverlay function to handle process termination for pkexec
     return (
         <>
-            <LoadingOverlay visible={loading} overlayBlur={3} style={{ zIndex: 1000, position: "fixed" }} />
+            <LoadingOverlay visible={false} overlayBlur={3} style={{ zIndex: 1000, position: "fixed" }} />
             {loading && (
                 <Modal
                     opened={loading}
