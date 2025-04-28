@@ -1,4 +1,5 @@
 import AboutPage from "../pages/About";
+import HomePage from "../pages/HomePage";
 import { AttackVectors } from "../pages/AttackVectors";
 import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
@@ -96,6 +97,8 @@ import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
 import BPathPage from "./BeginnerGuideHomePage/BeginnerGuideHomePage";
+import Tcpdump from "./Tcpdump/Tcpdump";
+
 
 export interface RouteProperties {
     name: string;
@@ -109,7 +112,7 @@ export const ROUTES: RouteProperties[] = [
     {
         name: "Home",
         path: "/",
-        element: <AboutPage />,
+        element: <HomePage />,
         description: "Home page",
         category: "",
     },
@@ -772,6 +775,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool that can efficiently discover subdomains associated with a given domain using various techniques, such as DNS queries, Google search, and passive DNS records.",
         category: "Web Application Testing",
+    },
+    {
+        name: "Tcpdump",
+        path: "/tools/Tcpdump",
+        element: <Tcpdump />,
+        description: "A tool used for packet capture and filtering across a network.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Testssl",
