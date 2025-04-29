@@ -436,6 +436,13 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/sublist3r/"}
                                 />
                                 <Reference
+                                    name={"Tcpdump"}
+                                    description={
+                                        "Tcpdump is a powerful commmand line packet analyser with a wide variety of configurations."
+                                    }
+                                    url={"https://www.tcpdump.org/"}
+                                />
+                                <Reference
                                     name={"TheHarvester"}
                                     description={
                                         "The Harvester is a tool for gathering emails, subdomains, IPs, and URLs from public sources for reconnaissance."
