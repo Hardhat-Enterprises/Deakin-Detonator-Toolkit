@@ -71,7 +71,7 @@ export function LoadingOverlayAndCancelButtonPkexec(
             //Run termination command if pid is found
             if (pid !== null) {
                 const args = [`-2`, pid];
-                CommandHelper.runCommandWithPkexec("kill", args, onData, onTermination);
+                CommandHelper.runCommand("kill", args);
             } else {
                 //Throws error if failed to get process ID for termination
                 throw new Error("Error: Failed to get process ID ");
