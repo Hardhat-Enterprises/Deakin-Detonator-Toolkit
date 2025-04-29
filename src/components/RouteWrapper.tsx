@@ -142,12 +142,12 @@ export const ROUTES: RouteProperties[] = [
         category: "",
     },
     {
-        name: "Scenario Training",
+        name: "AI Training Scenario",
         path: "/scenario-training",
         element: <ScenarioTraining />,
-        description: "Generate custom scenarios using ChatGPT",
+        description: "Generate AI-assisted penetration testing scenarios using GPT-4",
         category: "",
-    },    
+    },
     {
         name: "References",
         path: "/references",
@@ -866,4 +866,3 @@ export function getWalkthroughs() {
 export function getTrainingRoutes() {
     return ROUTES.filter((route) => route.path.startsWith("/scenario-training"));
 }
-

@@ -1,5 +1,5 @@
 import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
-import { IconQuestionMark, IconStepInto, IconTools, IconSearch, IconTarget } from "@tabler/icons";
+import { IconQuestionMark, IconStepInto, IconTools, IconSearch, IconTarget, IconReportAnalytics } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -73,9 +73,9 @@ const referencesData = {
 };
 
 const scenarioTrainingData = {
-    icon: <IconStepInto size={16} />,
+    icon: <IconReportAnalytics size={16} />,
     color: "teal",
-    label: "Scenario Training",
+    label: "AI Training Scenario",
     route: "/scenario-training",
 };
 
