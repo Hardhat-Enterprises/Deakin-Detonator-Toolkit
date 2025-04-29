@@ -30,7 +30,7 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
                         top: "10px",
                         right: "10px",
                         zIndex: 1001,
-                        pointerEvents: "all",
+                        pointerEvents: "all", // This ensures the button is clickable
                     }}
                     onClick={handleCancel}
                 >
