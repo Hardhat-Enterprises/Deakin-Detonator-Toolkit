@@ -1,5 +1,5 @@
 import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
-import { IconQuestionMark, IconStepInto, IconTools, IconSearch, IconTarget, IconReportAnalytics } from "@tabler/icons";
+import { IconHome, IconQuestionMark, IconStepInto, IconTools, IconSearch, IconTarget, IconReportAnalytics } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -37,6 +37,14 @@ function MainLink({ icon, color, label, route }: MainLinkProps) {
     );
 }
 
+// Home Page Data
+const homeData = {
+    icon: <IconHome size={16} />,
+    color: "teal",
+    label: "Home",
+    route: "/",
+};
+
 const aboutData = {
     icon: <IconQuestionMark size={16} />,
     color: "orange",
@@ -73,13 +81,13 @@ const referencesData = {
 };
 
 const scenarioTrainingData = {
-    icon: <IconReportAnalytics size={16} />,
-    color: "teal",
-    label: "AI Training Scenario",
-    route: "/scenario-training",
+  icon: <IconReportAnalytics size={16} />,
+  color: "teal",
+  label: "AI Training Scenario",
+  route: "/scenario-training",
 };
 
-const data = [aboutData, toolsData, attackVectorsData, walkthroughsData, scenarioTrainingData, referencesData];
+const data = [homeData, aboutData, toolsData, attackVectorsData, walkthroughsData, scenarioTrainingData, referencesData];
 
 export function MainLinks() {
     const links = data.map((link) => <MainLink {...link} key={link.label} />);
