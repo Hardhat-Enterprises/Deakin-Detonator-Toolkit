@@ -23,7 +23,7 @@
 | 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | W-I-P       |
 | 0021   | -empty-                                                                                       | -           |
 | 0022   | -empty-                                                                                       | -           |
-| 0023   | -empty-                                                                                       | -           |
+| 0023   | Created an ADR for Anonsurf functionality                                                     | W-I-P       |
 | 0024   | -empty-                                                                                       | -           |
 | 0025   | -empty-                                                                                       | -           |
 | 0026   | -empty-                                                                                       | -           |
