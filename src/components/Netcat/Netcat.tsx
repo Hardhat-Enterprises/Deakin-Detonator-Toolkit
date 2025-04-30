@@ -151,6 +151,7 @@ const NetcatTool = () => {
 
         let args: string[] = [];
         const verboseFlag = checkedVerboseMode ? "-vn" : "-n";
+        const verboseFlagWithSpaceAndDash = checkedVerboseMode ? " -v" : "";
 
         // Construct arguments based on the selected Netcat option
         switch (values.netcatOptions) {
@@ -163,22 +164,37 @@ const NetcatTool = () => {
             case "Port Scan":
                 args = ["-z", verboseFlag, values.ipAddress, values.portNumber];
                 break;
-            case "Send File":
-                if (!fileNames.length) {
-                    setOutput("Error: No file selected for sending.");
-                    setLoading(false);
-                    return;
-                }
-                args = ["-w", "10", values.ipAddress, values.portNumber, "<", fileNames[0]];
-                break;
 
-            case "Receive File":
-                if (!values.filePath) {
-                    setOutput("Error: No file path provided for receiving.");
-                    setLoading(false);
-                    return;
+            case "Send File": //Sends file from attacker to victim, syntax: nc -v -w <timeout seconds> <IP address> <port number> < <file path>
+                //File to send can be located anywhere, as long as file path is correctly specified
+
+                const baseFilePath = "/home/kali";
+                const fileToSend = fileNames[0];
+                const cleanName = cleanFileName(fileToSend);
+
+                //Concatenate the base file path with the cleaned file name
+                const dataUploadPath = `${baseFilePath}/${cleanName}`;
+
+                //Output the final clean file path for debugging
+                args.push("-l", dataUploadPath);
+
+                try {
+                    let command = `nc${verboseFlagWithSpaceAndDash} -w 10 ${values.ipAddress} ${values.portNumber} < ${dataUploadPath}`;
+                    let output = await CommandHelper.runCommand("bash", ["-c", command]);
+                    setOutput(output);
+                } catch (e: any) {
+                    setOutput(e);
                 }
-                args = ["-l", verboseFlag, "-p", values.portNumber, ">", values.filePath];
+                break;
+            case "Receive File": //Receives file from victim to attacker, syntax: nc -lvp <port number> > <file path and file name>
+                //Files can be recieved in any directory
+                try {
+                    let command = `nc -l${verboseFlag}p ${values.portNumber} > ${values.filePath}`;
+                    let output = await CommandHelper.runCommand("bash", ["-c", command]);
+                    setOutput(output);
+                } catch (e: any) {
+                    setOutput(e);
+                }
                 break;
             case "Website Port Scan":
                 args = ["-z", verboseFlag, values.websiteUrl, values.portNumber];
