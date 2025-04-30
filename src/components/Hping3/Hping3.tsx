@@ -120,7 +120,7 @@ const Hping3 = () => {
                 handleProcessData("\nProcess completed successfully.");
 
                 // If the process was terminated manually, display a termination message.
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nProcess was manually terminated.");
 
                 // If the process was terminated with an error, display the exit and signal codes.

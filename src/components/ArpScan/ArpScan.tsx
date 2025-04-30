@@ -89,7 +89,7 @@ function ARPScan() {
                 handleProcessData("\nARP scan completed successfully.");
 
                 // If the process was terminated manually, display a termination message.
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nARP scan was manually terminated.");
 
                 // If the process was terminated with an error, display the exit and signal codes.
