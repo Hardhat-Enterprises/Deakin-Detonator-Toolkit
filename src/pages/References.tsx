@@ -162,13 +162,6 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/crunch/"}
                                 />
                                 <Reference
-                                    name={"Dirb"}
-                                    description={
-                                        "Dirb is a tool that can scan a website, enumerating directories and files that may be present."
-                                    }
-                                    url={"https://www.kali.org/tools/dirb/"}
-                                />
-                                <Reference
                                     name={"DMitry"}
                                     description={
                                         "DMitry is a tool for gathering information about a host, including subdomains, emails, and open ports."
@@ -441,6 +434,13 @@ const ReferencesPage = () => {
                                         "Sublist3r is a tool designed to enumerate subdomains of websites using OSINT."
                                     }
                                     url={"https://www.kali.org/tools/sublist3r/"}
+                                />
+                                <Reference
+                                    name={"Tcpdump"}
+                                    description={
+                                        "Tcpdump is a powerful commmand line packet analyser with a wide variety of configurations."
+                                    }
+                                    url={"https://www.tcpdump.org/"}
                                 />
                                 <Reference
                                     name={"TheHarvester"}
