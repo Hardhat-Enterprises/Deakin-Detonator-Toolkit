@@ -18,7 +18,7 @@
 | 0015   | Add ethical hacking and other legal warnings to DDT                                           | PROPOSED    |
 | 0016   | -empty-                                                                                       | -           |
 | 0017   | Remove CrackMapExec Tool                                                                      | APPROVED    |
-| 0018   | Adding NetDiscover as a Network Reconnaissance Tool                                           | PROPOSED    |
+| 0018   | Adding NetDiscover as a Network Reconnaissance Tool                                           | APPROVED    |
 | 0019   | Replacement of Wifite with Wifite2                                                            | APPROVED    |
 | 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | W-I-P       |
 | 0021   | -empty-                                                                                       | -           |
