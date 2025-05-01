@@ -254,7 +254,7 @@ const NetcatTool = () => {
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid,"", handleProcessData, handleProcessTermination)}
                     <Checkbox
                         label={"Verbose Mode"}
                         checked={checkedVerboseMode}
