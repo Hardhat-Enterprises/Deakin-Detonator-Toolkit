@@ -152,7 +152,7 @@ const ARPSpoofing = () => {
         const argsTarget = [`-t`, values.ipTarget, values.ipGateway];
 
         CommandHelper;
-        // Execute the arpspoof command for the Gateway using helper method 
+        // Execute the arpspoof command for the Gateway using helper method
         CommandHelper.runCommandWithPkexec("arpspoof", argsGateway, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 setOutput(output);
@@ -164,19 +164,18 @@ const ARPSpoofing = () => {
                 // Deactivate loading state
                 setLoading(false);
             });
-            // Execute the arpspoof command for the Target using helper method 
-            CommandHelper.runCommandWithPkexec("arpspoof", argsTarget, handleProcessData, handleProcessTermination)
-                .then(({ output, pid }) => {
-                    setOutput(output);
-                    setPidTarget(pid);
-                })
-                .catch((error) => {
-                    // Display any errors encountered during command execution
-                    setOutput(`Error: ${error.message}`);
-                    // Deactivate loading state
-                    setLoading(false);
-                });
-        
+        // Execute the arpspoof command for the Target using helper method
+        CommandHelper.runCommandWithPkexec("arpspoof", argsTarget, handleProcessData, handleProcessTermination)
+            .then(({ output, pid }) => {
+                setOutput(output);
+                setPidTarget(pid);
+            })
+            .catch((error) => {
+                // Display any errors encountered during command execution
+                setOutput(`Error: ${error.message}`);
+                // Deactivate loading state
+                setLoading(false);
+            });
     };
 
     return (
@@ -198,7 +197,13 @@ const ARPSpoofing = () => {
                 )}
                 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                     <Stack>
-                        {LoadingOverlayAndCancelButtonPkexec(loading,pidGateway, pidTarget,handleProcessData,handleProcessTermination)}
+                        {LoadingOverlayAndCancelButtonPkexec(
+                            loading,
+                            pidGateway,
+                            pidTarget,
+                            handleProcessData,
+                            handleProcessTermination
+                        )}
                         <TextInput label={"Target one IP address"} required {...form.getInputProps("ipGateway")} />
                         <TextInput label={"Target two IP address"} required {...form.getInputProps("ipTarget")} />
                         <Button type={"submit"}>Start Spoof</Button>

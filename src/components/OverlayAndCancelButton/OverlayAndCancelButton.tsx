@@ -2,7 +2,6 @@ import { LoadingOverlay, Button, Modal } from "@mantine/core";
 import { CommandHelper } from "../../utils/CommandHelper";
 import { Command } from "@tauri-apps/api/shell";
 
-
 /**
  * Overlay to successfully terminate processes for tools not requiring pkexec
  * @param loading - An object containing information about the process termination.
@@ -65,10 +64,10 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
 export function LoadingOverlayAndCancelButtonPkexec(
     loading: boolean,
     pid: string,
-    pid2: string = "", //This argument is optional when calling this function as a default value is defined here. Pid2 is used to allow tools 
-    // that create multiple instances such as ArpSpoof to be sucessfully canceled. If you do not include an argument for pid2 when you call this 
+    pid2: string = "", //This argument is optional when calling this function as a default value is defined here. Pid2 is used to allow tools
+    // that create multiple instances such as ArpSpoof to be sucessfully canceled. If you do not include an argument for pid2 when you call this
     // function, you will get a warning, but the function will still work. To avoid getting a warning, simply include emtpy quotation marks in pid2's place. Example:
-    // {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)} 
+    // {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
     onData: (data: string) => void,
     onTermination: ({ code, signal }: { code: number; signal: number }) => void
 ) {
@@ -79,12 +78,11 @@ export function LoadingOverlayAndCancelButtonPkexec(
             if (pid !== null) {
                 const args = [`-2`, pid];
                 CommandHelper.runCommand("kill", args);
-            } 
-            if (pid2 !== null){
-                const args = ['-2', pid2];
-                CommandHelper.runCommand("kill", args);
             }
-            else {
+            if (pid2 !== null) {
+                const args = ["-2", pid2];
+                CommandHelper.runCommand("kill", args);
+            } else {
                 //Throws error if failed to get process ID for termination
                 throw new Error("Error: Failed to get process ID ");
             }
