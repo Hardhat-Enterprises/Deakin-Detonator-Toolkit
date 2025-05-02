@@ -220,7 +220,7 @@ export const ROUTES: RouteProperties[] = [
         element: <CVE202322527 />,
         description: "Unauthenticated RCE in Atlassian Confluence via OGNL injection",
         category: "",
-    },    
+    },
     {
         name: "Busqueda",
         path: "/walkthroughs/Busqueda",
