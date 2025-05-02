@@ -193,7 +193,7 @@ const SearchSploit = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleCancel, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleCancel, handleProcessTermination)}
                     <TextInput label={"Search Term"} {...form.getInputProps("searchTerm")} />
                     <NativeSelect
                         {...form.getInputProps("searchOption")}
