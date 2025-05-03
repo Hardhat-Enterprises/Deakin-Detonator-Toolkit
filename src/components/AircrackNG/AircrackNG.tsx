@@ -7,8 +7,8 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
-import { Tooltip, ActionIcon } from '@mantine/core';
-import { IconInfoCircle } from '@tabler/icons';
+import { Tooltip, ActionIcon } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons";
 
 /**
  * Represents the form values for the Aircrack-ng component.
@@ -127,10 +127,10 @@ const AircrackNG = () => {
             // If the process was terminated successfully, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-            // If the process was terminated due to a signal, display the signal code.
+                // If the process was terminated due to a signal, display the signal code.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-            // If the process was terminated with an error, display the exit code and signal code.
+                // If the process was terminated with an error, display the exit code and signal code.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
@@ -214,7 +214,7 @@ const AircrackNG = () => {
         setFudgeMode(false);
         setQuietMode(false);
         setCustomMode(false);
-        
+
         form.setFieldValue("customConfig", "");
         form.setFieldValue("fudge", "");
     };
@@ -322,7 +322,7 @@ const AircrackNG = () => {
                                         position="top"
                                         withArrow
                                     >
-                                        <ActionIcon style={{ marginLeft: '-15px', marginTop: '-3px' }}>
+                                        <ActionIcon style={{ marginLeft: "-15px", marginTop: "-3px" }}>
                                             <IconInfoCircle size={16} />
                                         </ActionIcon>
                                     </Tooltip>
