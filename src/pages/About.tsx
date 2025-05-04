@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Modal, Button, Image, Text, Accordion, useMantineTheme, Stack, Title } from "@mantine/core";
+
+import { Image, Text, Accordion, useMantineTheme, Stack, Title } from "@mantine/core";
 import { IconStepInto, IconTools, IconSearch, IconTarget } from "@tabler/icons";
 
 const AboutPage = () => {
     const theme = useMantineTheme();
-    const [modalOpened, setModalOpened] = useState(true);
+
     const getColor = (color: string) => theme.colors[color][theme.colorScheme === "dark" ? 5 : 7];
 
     const imageContainerStyles = {
@@ -22,47 +22,7 @@ const AboutPage = () => {
 
     return (
         <>
-            <Modal
-                opened={modalOpened}
-                onClose={() => setModalOpened(false)}
-                title="Welcome to the Deakin Detonator Toolkit"
-                centered
-                closeOnEscape={false}
-                withCloseButton={false}
-                closeOnClickOutside={false}
-                overlayOpacity={0.7}
-                overlayBlur={3}
-                size="xl"
-                styles={{
-                    title: { fontSize: "2rem", fontWeight: "bold", textAlign: "center", width: "100%" },
-                }}
-            >
-                <Image
-                    src="src/logo/logo-dark.png"
-                    alt="logo"
-                    width={300}
-                    style={{ display: "block", margin: "0 auto" }}
-                />
-                <Text align="center" style={{ overflowWrap: "break-word", whiteSpace: "normal" }}>
-                    Hacking is a crime. This application is for <strong>Educational Purposes Only!</strong>
-                    <br />
-                    <br />
-                    Misuse of this application can lead to violation of Australian and/or International Law.
-                    <br />
-                    <br />
-                    By using this application, you confirm that you have obtained proper authorization from all relevant
-                    parties before conducting any penetration testing with this software.
-                    <br />
-                    <br />
-                    <strong>
-                        <u>You</u>
-                    </strong>{" "}
-                    are solely responsible for managing this authorization.
-                </Text>
-                <Button fullWidth onClick={() => setModalOpened(false)} mt="lg">
-                    I Understand
-                </Button>
-            </Modal>
+
 
             <Stack align={"center"}>
                 <Title>About the Deakin Detonator Toolkit</Title>
