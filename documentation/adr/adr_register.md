@@ -32,3 +32,4 @@
 | 0030   | -empty-                                                                                       | -           |
 | 0031   | -empty-                                                                                       | -           |
 | 0032   | -empty-                                                                                       | -           |
+| 0018   | Enhancing the Whois Tool with Advanced UI and Data Features                                   | PROPOSED    |
