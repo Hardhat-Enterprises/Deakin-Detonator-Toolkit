@@ -98,7 +98,7 @@ const Arping = () => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
                 // If the process was terminated manually, display a termination message.
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nProcess was manually terminated.");
             } else {
                 // If the process was terminated with an error, display the exit and signal codes.
@@ -196,7 +196,7 @@ const Arping = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="Target IP Address"
                         required
