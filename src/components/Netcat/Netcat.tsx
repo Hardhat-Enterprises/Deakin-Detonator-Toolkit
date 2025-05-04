@@ -146,94 +146,23 @@ const NetcatTool = () => {
      * @returns {Promise<void>} - A promise that resolves when the command execution is complete.
      */
     const onSubmit = async (values: FormValuesType) => {
-        //Starts off with the IP address after netcat
-        //Ex: nc <ip address>
-        let args = [];
+        setLoading(true); // Activate loading overlay
+        setAllowSave(false); // Disable saving until the command completes
 
-        //If verbose mode is checked, v flag is added to args
-        //These two lines are used for different command structures so typos don't occur in the presence or absence of verbose mode
-        //A task for future students could be to reduce it to one line of code that works across all commands without creating syntax errors
-        const verboseFlag = checkedVerboseMode ? "v" : "";
+        let args: string[] = [];
+        const verboseFlag = checkedVerboseMode ? "-vn" : "-n";
         const verboseFlagWithSpaceAndDash = checkedVerboseMode ? " -v" : "";
 
-        //Switch case
+        // Construct arguments based on the selected Netcat option
         switch (values.netcatOptions) {
-            case "Listen": //Sets up nc listener, nc syntax: nc -lvp <port number>
-                args = [`-l${verboseFlag}p`];
-                args.push(values.portNumber);
-
-                CommandHelper.runCommandGetPidAndOutput("nc", args, handleProcessData, handleProcessTermination)
-                    .then(({ output, pid }) => {
-                        // Update the UI with the results from the executed command
-                        setOutput(output);
-                        console.log(pid);
-                        setPid(pid);
-                    })
-                    .catch((error) => {
-                        // Display any errors encountered during command execution
-                        setOutput(error.message);
-                        // Deactivate loading state
-                        setLoading(false);
-                    });
-
+            case "Listen":
+                args = ["-l", verboseFlag, "-p", values.portNumber];
                 break;
-
-            case "Connect": //Connects to an nc listener, nc syntax: nc -v <ip address> <port number>
-                let command = `nc${verboseFlagWithSpaceAndDash} ${values.ipAddress} ${values.portNumber}`;
-
-                //Using a "command" variable and executing it through bash makes it easier to avoid syntax errors associated with
-                //verbose mode selection and using the args[] structure (syntax error is an extra space when verbose is unchecked).
-                CommandHelper.runCommandGetPidAndOutput(
-                    "bash",
-                    ["-c", command],
-                    handleProcessData,
-                    handleProcessTermination
-                )
-                    .then(({ output, pid }) => {
-                        // Update the UI with the results from the executed command
-                        setOutput(output);
-                        console.log(pid);
-                        setPid(pid);
-                    })
-                    .catch((error) => {
-                        // Display any errors encountered during command execution
-                        setOutput(error.message);
-                        // Deactivate loading state
-                        setLoading(false);
-                    });
-
+            case "Connect":
+                args = [verboseFlag, values.ipAddress, values.portNumber];
                 break;
-
-            case "Port Scan": //nc syntax: nc -zv <ip address/hostname> <port range>
-                //addition of -n will not perform any dns or name lookups.
-
-                args = [`-z${verboseFlag}n`];
-                args.push(`${values.ipAddress}`);
-                if (values.portNumber.includes("-")) {
-                    //checks for port range specifed by the inclusion of "-"
-                    const [portStart, portEnd] = values.portNumber.split("-").map(Number); //Splits range by "-", assigns two consts with the split port numbers
-
-                    for (let currentPort = portStart; currentPort <= portEnd; currentPort++) {
-                        //Iterates through every port from start to end
-                        try {
-                            let output = await CommandHelper.runCommand("nc", [...args, String(currentPort)]);
-                            setOutput(output);
-                        } catch (e: any) {
-                            setOutput(e);
-                        }
-                    }
-                } else {
-                    //else port number has been inputted
-                    args.push(`${values.portNumber}`);
-
-                    try {
-                        let output = await CommandHelper.runCommand("nc", args);
-                        setOutput(output);
-                    } catch (e: any) {
-                        setOutput(e);
-                    }
-                }
-
+            case "Port Scan":
+                args = ["-z", verboseFlag, values.ipAddress, values.portNumber];
                 break;
 
             case "Send File": //Sends file from attacker to victim, syntax: nc -v -w <timeout seconds> <IP address> <port number> < <file path>
@@ -266,24 +195,23 @@ const NetcatTool = () => {
                 } catch (e: any) {
                     setOutput(e);
                 }
-
                 break;
-
-            case "Website Port scan": //Scans a website for ports, syntax: nc -zv <hostname> <port range>
-                args = [`-z${verboseFlag}`]; //PLease only use website portscan on a website/Domain that you own
-                args.push(`${values.websiteUrl}`);
-                args.push(`${values.portNumber}`);
-
-                try {
-                    let output = await CommandHelper.runCommand("nc", args);
-                    setOutput(output);
-                } catch (e: any) {
-                    setOutput(e);
-                }
-
+            case "Website Port Scan":
+                args = ["-z", verboseFlag, values.websiteUrl, values.portNumber];
                 break;
+            default: // Deactivate loading overlay
+                setOutput("Invalid Netcat option selected.");
+                setLoading(false);
+                return;
         }
-        setAllowSave(true);
+
+        try {
+            await CommandHelper.runCommandWithPkexec("nc", args, handleProcessData, handleProcessTermination);
+        } catch (error: any) {
+            console.error("Error executing command:", error.message);
+            setOutput(`Error: ${error.message}`);
+            setLoading(false); // Deactivate loading overlay
+        }
     };
 
     /**
@@ -326,7 +254,7 @@ const NetcatTool = () => {
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <Checkbox
                         label={"Verbose Mode"}
                         checked={checkedVerboseMode}
