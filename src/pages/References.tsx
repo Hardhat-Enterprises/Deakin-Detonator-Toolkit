@@ -65,14 +65,6 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/aircrack-ng/"}
                                 />
                                 <Reference
-                                    name={"Amap"}
-                                    description={
-                                        "Amap is a network scanning tool used for identifying services and applications running on open ports by performing application layer fingerprinting."
-                                    }
-                                    url={"https://www.kali.org/tools/amap/"}
-                                />
-
-                                <Reference
                                     name={"Amass"}
                                     description={
                                         "The OWASP Amass Project performs network mapping of attack surfaces and external asset discovery using open source information gathering and active reconnaissance techniques."

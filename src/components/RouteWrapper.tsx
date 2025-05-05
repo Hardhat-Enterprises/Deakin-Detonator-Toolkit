@@ -75,7 +75,6 @@ import NSLookup from "./NSLookupTool/NSLookupTool";
 import ArpanameTool from "./Arpaname/arpaname";
 import Nikto from "./Nikto/Nikto";
 import Bully from "./Bully/Bully";
-import AMAP from "./Amap/Amap";
 import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
@@ -329,14 +328,6 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A wireless network auditing tool designed for analysing packets captured from Wi-Fi networks, cracking WEP and WPA-PSK passwords, and identifying vulnerabilities in wireless networks.",
         category: "Password Cracking and Authentication Testing",
-    },
-    {
-        name: "Amap",
-        path: "/tools/Amap",
-        element: <AMAP />,
-        description:
-            "A network scanning tool designed to identify and fingerprint services and applications running on open ports of targeted hosts.",
-        category: "Network Scanning and Enumeration",
     },
     {
         name: "Amass",
