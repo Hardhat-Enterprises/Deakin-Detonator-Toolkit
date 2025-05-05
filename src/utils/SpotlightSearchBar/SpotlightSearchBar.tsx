@@ -62,7 +62,7 @@ function Search() {
 
     return (
         <SpotlightProvider
-            limit={4} // Limit the number of search results displayed
+            limit={6} // Limit the number of search results displayed
             highlightQuery // Highlight the query in the search results
             actions={actions} // The list of Spotlight actions
             searchIcon={<IconSearch size={18} />} // Icon displayed in the Spotlight search bar
@@ -79,8 +79,10 @@ function Search() {
                 )
             }
             searchPlaceholder="Search..." // Placeholder text for the Spotlight search bar
-            shortcut="mod + shift + 1" // Keyboard shortcut to open Spotlight (e.g., Ctrl+Shift+1)
+            shortcut={['mod + k', '/']} // Keyboard shortcut to open Spotlight (e.g., Ctrl+K)
             nothingFoundMessage="Nothing found..." // Message displayed when no results are found
+            transition={"slide-down"}
+            transitionDuration={300}
         >
             <SpotlightControl />
         </SpotlightProvider>
