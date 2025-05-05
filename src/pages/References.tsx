@@ -561,6 +561,11 @@ const ReferencesPage = () => {
                                     url={"https://nvd.nist.gov/vuln/detail/CVE-2022-36804"}
                                 />
                                 <Reference
+                                    name={"CVE-2023-22527"}
+                                    description={"CVE-2023-22527 allows RCE in Atlassian Confluence."}
+                                    url={"https://nvd.nist.gov/vuln/detail/CVE-2023-22527"}
+                                />
+                                <Reference
                                     name={"FindOffset"}
                                     description={
                                         "Find Offset identifies where a buffer overflow overwrites key memory addresses like EIP."

@@ -96,6 +96,7 @@ import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
 import Tcpdump from "./Tcpdump/Tcpdump";
+import CVE202322527 from "./CVE-2023-22527/CVE-2023-22527";
 
 export interface RouteProperties {
     name: string;
@@ -210,6 +211,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2022-26134",
         element: <CVE202226134 />,
         description: "Confluence Pre-Auth Remote Code Execution via OGNL Injection",
+        category: "",
+    },
+    {
+        name: "CVE-2023-22527",
+        path: "/attack-vectors/CVE-2023-22527",
+        element: <CVE202322527 />,
+        description: "Unauthenticated RCE in Atlassian Confluence via OGNL injection",
         category: "",
     },
     {
