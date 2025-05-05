@@ -68,7 +68,7 @@ const Wifite = () => {
         ({ code, signal }: { code: number; signal: number | null }) => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nProcess was manually terminated.");
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
@@ -125,7 +125,7 @@ const Wifite = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="Target Network (BSSID/ESSID)"
                         required

@@ -205,7 +205,7 @@ const Goldeneye = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <TextInput
                         label={"URL of the target"}
                         placeholder={"Example: https://www.google.com"}

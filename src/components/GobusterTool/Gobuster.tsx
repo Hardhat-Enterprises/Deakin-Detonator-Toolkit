@@ -169,7 +169,7 @@ const GoBusterTool = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <TextInput label={"Target URL"} required {...form.getInputProps("url")} />
                     <TextInput label={"Wordlist File"} required {...form.getInputProps("wordlist")} />
                     <Button type={"submit"}>Start {title}</Button>
