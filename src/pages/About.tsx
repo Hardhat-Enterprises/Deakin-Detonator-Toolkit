@@ -19,7 +19,7 @@ const AboutPage = () => {
         minWidth: 400, // Ensures the image doesn't shrink below its intended width
         maxWidth: "60%", // Ensures the image scales down on smaller screens
     };
- 
+
     const textStyles = {
         width: "100%",
         maxWidth: "100%",
@@ -32,7 +32,7 @@ const AboutPage = () => {
         width: "100%",
         maxWidth: "60%",
         justifyContent: "center",
-        margin: "1% 20% 10%"
+        margin: "1% 20% 10%",
     };
 
     return (
@@ -102,7 +102,7 @@ const AboutPage = () => {
                         Tools
                     </Accordion.Control>
                     <Accordion.Panel>
-                    <Text align={"center"} style={textStyles}>
+                        <Text align={"center"} style={textStyles}>
                             The Tools page of the Deakin Detonator Toolkit provides you with a list of different tools
                             and controls for cyber security analysis. These tools can support network scanning, password
                             cracking, and much more. To explore this section of the Deakin Detonator Toolkit further,
@@ -170,7 +170,7 @@ const AboutPage = () => {
                         References
                     </Accordion.Control>
                     <Accordion.Panel>
-                    <Text align={"center"} style={textStyles}>
+                        <Text align={"center"} style={textStyles}>
                             The References page of the Deakin Detonator Toolkit provides you with a list of sources that
                             were used to help create the Deakin Detonator Toolkit and its contents. These sources may
                             provide a further understanding of the tools, attack vectors, and walkthrough videos within
