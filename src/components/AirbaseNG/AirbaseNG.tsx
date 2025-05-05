@@ -210,7 +210,7 @@ const AirbaseNG = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
 
                     {/* Advanced Mode Switch */}
                     <Tooltip label="Enable advanced settings">
