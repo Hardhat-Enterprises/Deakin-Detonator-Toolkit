@@ -562,7 +562,7 @@ const ReferencesPage = () => {
                                 />
                                 <Reference
                                     name={"CVE-2023-22527"}
-                                    description={"CVE-2023-22527 allows Remote Code Execution in Atlassian Confluence."}
+                                    description={"CVE-2023-22527 allows RCE in Atlassian Confluence."}
                                     url={"https://nvd.nist.gov/vuln/detail/CVE-2023-22527"}
                                 />
                                 <Reference
