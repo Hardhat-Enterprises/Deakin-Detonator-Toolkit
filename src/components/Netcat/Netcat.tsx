@@ -122,7 +122,7 @@ const NetcatTool = () => {
                 handleProcessData("\nProcess completed successfully.");
 
                 // If the process was terminated manually, display a termination message.
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nProcess was manually terminated.");
 
                 // If the process was terminated with an error, display the exit and signal codes.
@@ -206,7 +206,12 @@ const NetcatTool = () => {
         }
 
         try {
-            await CommandHelper.runCommandWithPkexec("nc", args, handleProcessData, handleProcessTermination);
+            await CommandHelper.runCommandWithPkexec("nc", args, handleProcessData, handleProcessTermination).then(
+                ({ output, pid }) => {
+                    setOutput(output);
+                    setPid(pid);
+                }
+            );
         } catch (error: any) {
             console.error("Error executing command:", error.message);
             setOutput(`Error: ${error.message}`);
@@ -254,7 +259,7 @@ const NetcatTool = () => {
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, netcatOptions: selectedScanOption }))}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <Checkbox
                         label={"Verbose Mode"}
                         checked={checkedVerboseMode}

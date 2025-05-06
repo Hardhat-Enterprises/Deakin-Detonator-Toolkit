@@ -299,7 +299,7 @@ function Fping() {
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <Switch
                         label="Target File"
                         checked={checkedFilePath}

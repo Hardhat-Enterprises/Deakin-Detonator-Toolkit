@@ -98,7 +98,7 @@ const NbtscanTool = () => {
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nProcess was manually terminated.");
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
@@ -202,7 +202,7 @@ const NbtscanTool = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <Switch
                         size="md"
                         label="Advanced Mode"
