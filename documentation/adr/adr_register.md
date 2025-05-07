@@ -19,7 +19,7 @@
 | 0016   | -empty-                                                                                       | -           |
 | 0017   | Remove CrackMapExec Tool                                                                      | APPROVED    |
 | 0018   | -empty-                                                                                       | -           |
-| 0019   | Replacement of Wifite with Wifite2                                                            | APPROVED    |     | -   |
+| 0019   | Replacement of Wifite with Wifite2                                                            | APPROVED    |
 | 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | APPROVED    |
 | 0021   | Removal of Amap from the Deakin Detonator Toolkit                                             | W-I-P       |
 | 0022   | -empty-                                                                                       | -           |
