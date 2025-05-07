@@ -187,7 +187,6 @@ const NetcatTool = () => {
                     setLoading(false);
                     setAllowSave(true);
                 }, 10000); // 10 seconds
-            }
         } catch (error: any) {
             setOutput(`Error: ${error.message}`);
             setLoading(false); //Stop Loading state
@@ -236,6 +235,7 @@ const NetcatTool = () => {
                     dependencies={dependencies}
                 />
             )}
+
             <form onSubmit={form.onSubmit(onSubmit)}>
                 {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                 <Stepper active={active} onStepClick={setActive} breakpoint="sm">
