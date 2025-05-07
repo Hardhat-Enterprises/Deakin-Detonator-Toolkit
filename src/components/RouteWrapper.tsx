@@ -1,4 +1,5 @@
 import AboutPage from "../pages/About";
+import HomePage from "../pages/HomePage";
 import { AttackVectors } from "../pages/AttackVectors";
 import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
@@ -74,7 +75,6 @@ import NSLookup from "./NSLookupTool/NSLookupTool";
 import ArpanameTool from "./Arpaname/arpaname";
 import Nikto from "./Nikto/Nikto";
 import Bully from "./Bully/Bully";
-import AMAP from "./Amap/Amap";
 import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
@@ -95,6 +95,8 @@ import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
+import Tcpdump from "./Tcpdump/Tcpdump";
+import CVE202322527 from "./CVE-2023-22527/CVE-2023-22527";
 
 export interface RouteProperties {
     name: string;
@@ -108,7 +110,7 @@ export const ROUTES: RouteProperties[] = [
     {
         name: "Home",
         path: "/",
-        element: <AboutPage />,
+        element: <HomePage />,
         description: "Home page",
         category: "",
     },
@@ -209,6 +211,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2022-26134",
         element: <CVE202226134 />,
         description: "Confluence Pre-Auth Remote Code Execution via OGNL Injection",
+        category: "",
+    },
+    {
+        name: "CVE-2023-22527",
+        path: "/attack-vectors/CVE-2023-22527",
+        element: <CVE202322527 />,
+        description: "Unauthenticated RCE in Atlassian Confluence via OGNL injection",
         category: "",
     },
     {
@@ -319,14 +328,6 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A wireless network auditing tool designed for analysing packets captured from Wi-Fi networks, cracking WEP and WPA-PSK passwords, and identifying vulnerabilities in wireless networks.",
         category: "Password Cracking and Authentication Testing",
-    },
-    {
-        name: "Amap",
-        path: "/tools/Amap",
-        element: <AMAP />,
-        description:
-            "A network scanning tool designed to identify and fingerprint services and applications running on open ports of targeted hosts.",
-        category: "Network Scanning and Enumeration",
     },
     {
         name: "Amass",
@@ -757,6 +758,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool that can efficiently discover subdomains associated with a given domain using various techniques, such as DNS queries, Google search, and passive DNS records.",
         category: "Web Application Testing",
+    },
+    {
+        name: "Tcpdump",
+        path: "/tools/Tcpdump",
+        element: <Tcpdump />,
+        description: "A tool used for packet capture and filtering across a network.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Testssl",

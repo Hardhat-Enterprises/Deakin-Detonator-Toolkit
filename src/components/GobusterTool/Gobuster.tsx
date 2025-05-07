@@ -6,7 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import InstallationModal from "../InstallationModal/InstallationModal";
 
 const title = "GoBuster Directory and File Brute-Forcing Tool";
@@ -126,8 +126,6 @@ const GoBusterTool = () => {
         } catch (e: any) {
             setOutput(e.message);
         }
-
-        setLoading(false);
     };
 
     /**
@@ -169,7 +167,7 @@ const GoBusterTool = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label={"Target URL"} required {...form.getInputProps("url")} />
                     <TextInput label={"Wordlist File"} required {...form.getInputProps("wordlist")} />
                     <Button type={"submit"}>Start {title}</Button>

@@ -4,12 +4,12 @@
 | 0001   | Containerising DDT                                                                            | APPROVED    |
 | 0002   | Introduction of static vulnerability and secret scanning into our Pipeline via Github Actions | IMPLEMENTED |
 | 0003   | Integrating WafW00f for Web Application Firewall Detection                                    | IMPLEMENTED |
-| 0004   | Cyber News Feed                                                                               | W-I-P git   |
+| 0004   | Cyber News Feed                                                                               | APPROVED    |
 | 0005   | RESERVED                                                                                      | -           |
 | 0006   | Implementation of TCPdump into PTGUI                                                          | W-I-P       |
 | 0007   | Integrating IP Tracing via Traceroute, Whois, and Geo IP in DDT                               | APPROVED    |
 | 0008   | Integrating Suricata for real-time network analysis                                           | REJECTED    |
-| 0009   | Removing TShark from PT-GUI                                                                   | APPROVED    |
+| 0009   | Removing TShark from PT-GUI                                                                   | IMPLEMENTED |
 | 0010   | Implementation of Fping into PT-GUI                                                           | IMPLEMENTED |
 | 0011   | Introduction of OpenAPI integration                                                           | IMPLEMENTED |
 | 0012   | Integrating Cohere for Tool Output Analysis                                                   | IMPLEMENTED |
@@ -18,11 +18,12 @@
 | 0015   | Add ethical hacking and other legal warnings to DDT                                           | PROPOSED    |
 | 0016   | -empty-                                                                                       | -           |
 | 0017   | Remove CrackMapExec Tool                                                                      | APPROVED    |
-| 0019   | -empty-                                                                                       | -           |
-| 0020   | -empty-                                                                                       | -           |
-| 0021   | -empty-                                                                                       | -           |
+| 0018   |  -empty-                                                                                      | -           |
+| 0019   | Replacement of Wifite with Wifite2                                                            | APPROVED    |                                                                                     | -           |
+| 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | APPROVED    |
+| 0021   | Removal of Amap from the Deakin Detonator Toolkit                                             | W-I-P       |
 | 0022   | -empty-                                                                                       | -           |
-| 0023   | -empty-                                                                                       | -           |
+| 0023   | Created an ADR for Anonsurf functionality                                                     | W-I-P       |
 | 0024   | -empty-                                                                                       | -           |
 | 0025   | -empty-                                                                                       | -           |
 | 0026   | -empty-                                                                                       | -           |

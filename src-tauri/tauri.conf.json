@@ -33,11 +33,6 @@
                         "args": true
                     },
                     {
-                        "name": "amap",
-                        "cmd": "amap",
-                        "args": true
-                    },
-                    {
                         "name": "amass",
                         "cmd": "amass",
                         "args": true
@@ -341,6 +336,11 @@
                     {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
+                        "args": true
+                    },
+                    {
+                        "name": "tcpdump",
+                        "cmd": "tcpdump",
                         "args": true
                     },
                     {
