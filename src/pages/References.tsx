@@ -65,14 +65,6 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/aircrack-ng/"}
                                 />
                                 <Reference
-                                    name={"Amap"}
-                                    description={
-                                        "Amap is a network scanning tool used for identifying services and applications running on open ports by performing application layer fingerprinting."
-                                    }
-                                    url={"https://www.kali.org/tools/amap/"}
-                                />
-
-                                <Reference
                                     name={"Amass"}
                                     description={
                                         "The OWASP Amass Project performs network mapping of attack surfaces and external asset discovery using open source information gathering and active reconnaissance techniques."
@@ -436,6 +428,13 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/sublist3r/"}
                                 />
                                 <Reference
+                                    name={"Tcpdump"}
+                                    description={
+                                        "Tcpdump is a powerful commmand line packet analyser with a wide variety of configurations."
+                                    }
+                                    url={"https://www.tcpdump.org/"}
+                                />
+                                <Reference
                                     name={"TheHarvester"}
                                     description={
                                         "The Harvester is a tool for gathering emails, subdomains, IPs, and URLs from public sources for reconnaissance."
@@ -560,6 +559,11 @@ const ReferencesPage = () => {
                                     name={"CVE-2022-36804"}
                                     description={"CVE-2022-36804 allows privilege escalation."}
                                     url={"https://nvd.nist.gov/vuln/detail/CVE-2022-36804"}
+                                />
+                                <Reference
+                                    name={"CVE-2023-22527"}
+                                    description={"CVE-2023-22527 allows RCE in Atlassian Confluence."}
+                                    url={"https://nvd.nist.gov/vuln/detail/CVE-2023-22527"}
                                 />
                                 <Reference
                                     name={"FindOffset"}
