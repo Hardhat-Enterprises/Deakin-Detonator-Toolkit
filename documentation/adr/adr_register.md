@@ -1,5 +1,5 @@
 | ADR ID | Description                                                                                   | Status      |
-| ------ | --------------------------------------------------------------------------------------------- | ----------- |
+| ------ | --------------------------------------------------------------------------------------------- | ----------- | --- | --- |
 | 0000   | Example entry change                                                                          | APPROVED    |
 | 0001   | Containerising DDT                                                                            | APPROVED    |
 | 0002   | Introduction of static vulnerability and secret scanning into our Pipeline via Github Actions | IMPLEMENTED |
@@ -18,8 +18,8 @@
 | 0015   | Add ethical hacking and other legal warnings to DDT                                           | PROPOSED    |
 | 0016   | -empty-                                                                                       | -           |
 | 0017   | Remove CrackMapExec Tool                                                                      | APPROVED    |
-| 0018   |  -empty-                                                                                      | -           |
-| 0019   | Replacement of Wifite with Wifite2                                                            | APPROVED    |                                                                                     | -           |
+| 0018   | -empty-                                                                                       | -           |
+| 0019   | Replacement of Wifite with Wifite2                                                            | APPROVED    |     | -   |
 | 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | APPROVED    |
 | 0021   | Removal of Amap from the Deakin Detonator Toolkit                                             | W-I-P       |
 | 0022   | -empty-                                                                                       | -           |
