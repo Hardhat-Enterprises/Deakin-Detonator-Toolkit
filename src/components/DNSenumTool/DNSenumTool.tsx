@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch, Modal, Alert } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch, Modal, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -250,6 +250,9 @@ const DnsenumTool = () => {
                     </div>
                 )}
                 <Stack>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
                             This tool is used to perform DNS enumeration, use with caution and only on targets you own
@@ -257,7 +260,6 @@ const DnsenumTool = () => {
                         </Alert>
                     )}
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
                     <Switch
                         size="md"
