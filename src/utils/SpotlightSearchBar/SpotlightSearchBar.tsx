@@ -3,7 +3,7 @@ import type { SpotlightAction } from "@mantine/spotlight";
 import { openSpotlight, SpotlightProvider } from "@mantine/spotlight";
 import { IconSearch } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
-import { RouteProperties, ROUTES } from "../RouteWrapper";
+import { RouteProperties, ROUTES } from "../../components/RouteWrapper";
 
 /**
  * SpotlightControl Component
