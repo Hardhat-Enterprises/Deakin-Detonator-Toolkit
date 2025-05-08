@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Button, Stack, TextInput, Alert } from "@mantine/core";
+import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -217,6 +217,9 @@ function Dnsrecon() {
                     {/* Render the loading overlay and cancel button */}
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Stack>
+                        <Group position="right">
+                        {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                        </Group>
                         {showAlert && (
                             <Alert title="Warning: Potential Risks" color="red">
                                 This tool is used to perform DNS enumeration, use with caution and only on targets you
@@ -224,7 +227,6 @@ function Dnsrecon() {
                             </Alert>
                         )}
 
-                        {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                         <TextInput
                             label={"Domain Name"}
                             placeholder="Enter a valid domain name, e.g., deakin.edu.au"
