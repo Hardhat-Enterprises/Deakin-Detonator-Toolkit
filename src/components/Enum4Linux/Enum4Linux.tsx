@@ -1,4 +1,4 @@
-import { Button, Stack, NativeSelect, Tooltip, TextInput, Switch, Alert } from "@mantine/core";
+import { Button, Stack, NativeSelect, Tooltip, TextInput, Switch, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -177,6 +177,15 @@ const Enum4Linux = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform information gathering, use with caution and only on targets you
+                            own or have explicit permission to test.
+                        </Alert>
+                    )}
                     <Switch
                         size="md"
                         label="Custom Configuration"
@@ -189,14 +198,7 @@ const Enum4Linux = () => {
                         checked={osinfo}
                         onChange={(e) => setInfo(e.currentTarget.checked)}
                     />
-                    {showAlert && (
-                        <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to perform information gathering, use with caution and only on targets you
-                            own or have explicit permission to test.
-                        </Alert>
-                    )}
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <Tooltip
                         label="Enter the IP address of the target system you want to enumerate."
                         position="right"
