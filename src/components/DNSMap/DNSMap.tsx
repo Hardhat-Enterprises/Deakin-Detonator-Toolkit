@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, Switch, Alert } from "@mantine/core";
+import { Button, Stack, TextInput, Switch, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -206,20 +206,22 @@ const DNSMap = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 {LoadingOverlayAndCancelButton(loading, Pid)}
                 <Stack>
-                    <Switch
-                        size="md"
-                        label="Advanced Mode"
-                        checked={checkedAdvanced}
-                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
-                    />
+                <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
                             This tool is used to perform DNS enumeration, use with caution and only on targets you own
                             or have explicit permission to test.
                         </Alert>
                     )}
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={checkedAdvanced}
+                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                    />
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
 
                     <TextInput
