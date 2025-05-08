@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, Alert } from "@mantine/core";
+import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -196,6 +196,9 @@ function Eyewitness() {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
                             This tool is used to perform website enumeration, use with caution and only on targets you
@@ -203,7 +206,6 @@ function Eyewitness() {
                         </Alert>
                     )}
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <p>{description}</p>
                     <TextInput
                         label={"Enter the file name or path containing URLs:"}
