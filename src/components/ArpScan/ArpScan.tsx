@@ -134,7 +134,7 @@ function ARPScan() {
         const args = [`--localnet`, `-I`, values.interface];
 
         CommandHelper;
-        // Execute the Masscan command via helper method and handle its output or potential errors
+        // Execute the ArpScan command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("arp-scan", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 setOutput(output);
