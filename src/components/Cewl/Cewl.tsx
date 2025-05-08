@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Checkbox, Switch, NativeSelect, Alert } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Checkbox, Switch, NativeSelect, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -268,6 +268,9 @@ const Cewl = () => {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                <Group position="right">
+                {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                </Group>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
                     {showAlert && (
@@ -277,7 +280,6 @@ const Cewl = () => {
                         </Alert>
                     )}
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                     <Switch
                         size="md"
