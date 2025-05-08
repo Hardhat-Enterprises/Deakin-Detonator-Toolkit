@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, Alert } from "@mantine/core";
+import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -188,6 +188,9 @@ const CloudBrute = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {LoadingOverlayAndCancelButton(loading, pid)}
 
                     {showAlert && (
@@ -197,7 +200,6 @@ const CloudBrute = () => {
                         </Alert>
                     )}
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                     <TextInput
                         label="Target Domain"
