@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch, Alert } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useRef, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -228,6 +228,9 @@ const Crackmapexec = () => {
                     </div>
                 )}
                 <Stack>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {UserGuide(title, descriptionUserGuide)}
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
@@ -236,7 +239,6 @@ const Crackmapexec = () => {
                         </Alert>
                     )}
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <Switch
                         size="md"
                         label="Advanced Mode"
