@@ -100,6 +100,7 @@ import Tcpdump from "./Tcpdump/Tcpdump";
 import CVE202322527 from "./CVE-2023-22527/CVE-2023-22527";
 import DigTool from "./Dig/Dig";
 import Dig from "./Dig/Dig";
+import NewsFeed from "../components/NewsFeed/NewsFeed";
 
 export interface RouteProperties {
     name: string;
@@ -322,6 +323,16 @@ export const ROUTES: RouteProperties[] = [
             "A walkthrough on Topology Hack The Box challenge which requires knowledge of network protocols, routing, and security configurations",
         category: "Network Scanning and Enumeration",
     },
+    {
+        name: "NewsFeed",
+        path: "/news",
+        element: <NewsFeed />,
+        description:
+            "Stay updated with the latest cybersecurity news and trends",
+        category: "NewsFeed",
+    },
+
+
     //TOOLS BELOW THIS COMMENT - PLEASE ADD NEW TOOLS IN ALPHABETICAL ORDER
     {
         name: "Airbase NG",
