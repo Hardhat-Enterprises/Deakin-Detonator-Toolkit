@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Button, Stack, TextInput, Alert } from "@mantine/core";
+import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -201,6 +201,9 @@ function ARPFingerprinting() {
                     ></InstallationModal>
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {/* Render the loading overlay and cancel button */}
                     {LoadingOverlayAndCancelButton(loading, pid)}
 
@@ -211,7 +214,6 @@ function ARPFingerprinting() {
                         </Alert>
                     )}
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                     <Stack>
                         <TextInput label="Target IP address" required {...form.getInputProps("targetIP")} />
