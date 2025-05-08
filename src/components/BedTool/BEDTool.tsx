@@ -1,4 +1,4 @@
-import { Button, Select, Stack, Switch, TextInput, Alert } from "@mantine/core";
+import { Button, Select, Stack, Switch, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -235,6 +235,9 @@ export function BEDTool() {
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {LoadingOverlayAndCancelButton(loading, pid)}
 
                     {showAlert && (
@@ -244,7 +247,6 @@ export function BEDTool() {
                         </Alert>
                     )}
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                     <Switch
                         size="md"
