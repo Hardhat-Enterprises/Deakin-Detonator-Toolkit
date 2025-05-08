@@ -1,4 +1,4 @@
-import { Button, LoadingOverlay, Stack, TextInput, Alert } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -210,6 +210,9 @@ const Crunch = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <LoadingOverlay visible={loading} />
                 <Stack>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <LoadingOverlay visible={loading} />
                     {showAlert && (
@@ -219,7 +222,6 @@ const Crunch = () => {
                         </Alert>
                     )}
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     {/* {UserGuide(title, description_userguide)} */}
                     <TextInput
                         label={"Minimum password length"}
