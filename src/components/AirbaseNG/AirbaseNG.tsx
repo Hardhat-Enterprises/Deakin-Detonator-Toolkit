@@ -1,4 +1,4 @@
-import { Button, Stack, Switch, TextInput, Tooltip, Alert } from "@mantine/core";
+import { Button, Stack, Switch, TextInput, Tooltip, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -233,8 +233,11 @@ const AirbaseNG = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-
+                        
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
                             This tool can create fake access points, potentially causing network disruptions and
@@ -242,9 +245,6 @@ const AirbaseNG = () => {
                             permission to test.
                         </Alert>
                     )}
-
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
-
                     {/* Advanced Mode Switch */}
                     <Tooltip label="Enable advanced settings">
                         <Switch

@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, Alert } from "@mantine/core";
+import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -207,6 +207,9 @@ const AMAP = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {LoadingOverlayAndCancelButton(loading, pid)}
 
                     {showAlert && (
@@ -215,8 +218,6 @@ const AMAP = () => {
                             explicit permission to test.
                         </Alert>
                     )}
-
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                     <TextInput label={"Target Host"} required {...form.getInputProps("target")} />
                     <TextInput label={"Port(s)"} required {...form.getInputProps("port")} />
