@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, NativeSelect, Checkbox, Alert } from "@mantine/core";
+import { Button, Stack, TextInput, NativeSelect, Checkbox, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useCallback, useState, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -240,6 +240,9 @@ const Fcrackzip = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
                             This tool is used to crack passwords, use with caution and only on files you own or have
@@ -247,7 +250,6 @@ const Fcrackzip = () => {
                         </Alert>
                     )}
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <TextInput
                         label={"Zip file"}
                         placeholder="Specify the zip file."
