@@ -244,20 +244,20 @@ const FfufTool = () => {
             <form onSubmit={form.onSubmit((values) => onSubmit({ ...values }))}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
-                    <Switch
-                        size="md"
-                        label="Advanced Mode"
-                        checked={checkedAdvanced}
-                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
-                    />
+                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
                             This tool is used to perform website enumeration, use with caution and only on targets you
                             own or have explicit permission to test.
                         </Alert>
                     )}
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={checkedAdvanced}
+                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                    />
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <TextInput
                         label={"Target URL"}
                         placeholder={"https://www.example.com"}
