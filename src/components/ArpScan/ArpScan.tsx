@@ -4,7 +4,7 @@ import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -24,6 +24,7 @@ function ARPScan() {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
@@ -132,19 +133,20 @@ function ARPScan() {
         // Construct the arguments for the ARPScan command.
         const args = [`--localnet`, `-I`, values.interface];
 
-        try {
-            // Execute the ARPScan command using the CommandHelper utility with pkexec.
-            await CommandHelper.runCommandWithPkexec("arp-scan", args, handleProcessData, handleProcessTermination);
-        } catch (error: any) {
-            // If an error occurs during command execution, display the error message.
-            setOutput(`Error: ${error.message}`);
-
-            // Set the loading state to false since the process failed.
-            setLoading(false);
-
-            // Allow saving the output (which includes the error message) to a file.
-            setAllowSave(true);
-        }
+        CommandHelper;
+        // Execute the Masscan command via helper method and handle its output or potential errors
+        CommandHelper.runCommandWithPkexec("arp-scan", args, handleProcessData, handleProcessTermination)
+            .then(({ output, pid }) => {
+                setOutput(output);
+                setPid(pid);
+            })
+            .catch((error) => {
+                // Display any errors encountered during command execution
+                setOutput(`Error: ${error.message}`);
+                // Deactivate loading state
+                setLoading(false);
+            });
+        setAllowSave(true);
     };
 
     /**
@@ -178,7 +180,7 @@ function ARPScan() {
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
                     {/* Render the loading overlay and cancel button */}
-                    {LoadingOverlayAndCancelButton(loading, "")}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <Stack>
                         <TextInput label={"Network Interface"} required {...form.getInputProps("interface")} />
                         {loading && (
