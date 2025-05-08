@@ -407,16 +407,23 @@
                 ]
             },
             "fs": {
-                "all": true,
+                "all": true,                            
+                "writeFile": true,                      
                 "scope": [
-                    "$TEMP/**",
-                    "$HOME/Deakin-Detonator-Toolkit/**",
-                    "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**"
+                  "$TEMP/**",
+                  "$HOME/Deakin-Detonator-Toolkit/**",
+                  "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**",
+                  "$HOME/**"                            
                 ]
-            },
-            "path": {
+              },
+              "dialog": {
+                "all": true,                            
+                "save": true                            
+              },
+              "path": {
                 "all": true
-            }
+              }
+              
         },
         "bundle": {
             "active": true,

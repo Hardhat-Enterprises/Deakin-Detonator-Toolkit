@@ -146,7 +146,6 @@ const Urlsnarf = () => {
         args.push(`-v`, `${values.versusMode}`);
 
         if (selectedListenerInput === "Interface") {
-            setLoading(false); // TODO - Have loading state only be true while inputting password
             CommandHelper.runCommandWithPkexec("urlsnarf", args, handleProcessData, handleProcessTermination)
                 .then(({ output, pid }) => {
                     // Update the UI with the results from the executed command
