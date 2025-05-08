@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, Alert } from "@mantine/core";
+import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -156,6 +156,9 @@ export function Amass() {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                </Group>
                 {LoadingOverlayAndCancelButton(loading, pid)}
 
                 {showAlert && (
@@ -164,8 +167,6 @@ export function Amass() {
                         explicit permission to test.
                     </Alert>
                 )}
-
-                {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
 
                 <Stack>
                     <TextInput label="Enter the domain to scan" required {...form.getInputProps("domain")} />
