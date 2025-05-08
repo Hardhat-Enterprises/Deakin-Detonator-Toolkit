@@ -1,4 +1,4 @@
-import { Button, Checkbox, Stack, TextInput, Switch, Alert } from "@mantine/core";
+import { Button, Checkbox, Stack, TextInput, Switch, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -282,6 +282,9 @@ const dmitry = () => {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
                     <Switch
@@ -297,7 +300,6 @@ const dmitry = () => {
                         </Alert>
                     )}
 
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <TextInput label={"Domain or IP"} required {...form.getInputProps("domain")} />
 
                     {checkedAdvanced && (
