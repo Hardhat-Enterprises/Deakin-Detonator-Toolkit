@@ -327,11 +327,9 @@ export const ROUTES: RouteProperties[] = [
         name: "NewsFeed",
         path: "/news",
         element: <NewsFeed />,
-        description:
-            "Stay updated with the latest cybersecurity news and trends",
+        description: "Stay updated with the latest cybersecurity news and trends",
         category: "NewsFeed",
     },
-
 
     //TOOLS BELOW THIS COMMENT - PLEASE ADD NEW TOOLS IN ALPHABETICAL ORDER
     {
