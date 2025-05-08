@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Button, Stack, TextInput, Radio, Alert } from "@mantine/core";
+import { Button, Stack, TextInput, Radio, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -211,6 +211,9 @@ const ArpanameTool = () => {
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
+                    <Group position="right">
+                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    </Group>
                     {LoadingOverlayAndCancelButton(loading, pidTarget)}
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
@@ -218,7 +221,6 @@ const ArpanameTool = () => {
                             own or have explicit permission to test.
                         </Alert>
                     )}
-                    {!showAlert && <Button onClick={handleShowAlert}>Show Alert</Button>}
                     <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")}></TextInput>
                     {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
                     <Radio.Group
