@@ -123,7 +123,7 @@ const Traceroute = () => {
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
@@ -133,8 +133,8 @@ const Traceroute = () => {
      * @param {FormValuesType} values - Contains the type of traceroute scan (ICMP, TCP, UDP, custom),
      * the destination hostname, and optional custom traceroute options.
      */
-        
-        // Patched onSubmit handler snippet for "Traceroute custom scan"
+
+    // Patched onSubmit handler snippet for "Traceroute custom scan"
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
         let args: string[] = [];
@@ -193,39 +193,33 @@ const Traceroute = () => {
                     });
 
                 break;
-	   // Traceroute custom scan allows specifying additional options        
-           case "Traceroute custom scan": {
-               args = ["/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh"];
-               // Hostname is always the first argument
-     	       args.push(values.hostname);
+            // Traceroute custom scan allows specifying additional options
+            case "Traceroute custom scan": {
+                args = ["/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh"];
+                // Hostname is always the first argument
+                args.push(values.hostname);
 
-          // Combine all custom flags into a single string for second argument
-          const rawFlags = values.traceRouteOptions.trim();
-          if (rawFlags.length > 0) {
-            args.push(rawFlags);
-          }
+                // Combine all custom flags into a single string for second argument
+                const rawFlags = values.traceRouteOptions.trim();
+                if (rawFlags.length > 0) {
+                    args.push(rawFlags);
+                }
 
-              // Execute Traceroute with all arguments
-              CommandHelper.runCommandGetPidAndOutput(
-                  "bash",
-                  args,
-                  handleProcessData,
-                  handleProcessTermination
-              )
-              .then(({ pid, output }) => {
-                  setPid(pid);
-                  setOutput(output);
-                  setAllowSave(true);
-              })
-              .catch((error: any) => {
-                  setLoading(false);
-                  setOutput(`Error: ${error.message}`);
-              });
+                // Execute Traceroute with all arguments
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                        setAllowSave(true);
+                    })
+                    .catch((error: any) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
 
-            break;
+                break;
+            }
         }
-   
-       }
     };
 
     /**
