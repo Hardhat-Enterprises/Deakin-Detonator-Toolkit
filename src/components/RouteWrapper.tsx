@@ -661,7 +661,7 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A passive and active network discovery tool to find live hosts using ARP packets without sending traditional ICMP requests. ",
         category: "Network Scanning and Enumeration",
-    },    
+    },
     {
         name: "Nikto",
         path: "/tools/Nikto",

@@ -36,19 +36,19 @@ function NetDiscover() {
         // Removes ANSI escape codes and unnecessary characters
         const cleanedData = data.replace(
             // Regex to remove ANSI escape sequences
-            /\x1B\[[0-9;]*[a-zA-Z]/g, ''
+            /\x1B\[[0-9;]*[a-zA-Z]/g,
+            ""
         );
-    
+
         // Prevent output of empty lines or random characters
         if (cleanedData.trim() !== "") {
             setOutput((prev) => prev + "\n" + cleanedData.trim());
         }
-    }, []);    
+    }, []);
 
     const handleProcessTermination = useCallback(({ code, signal }: { code: number; signal: number }) => {
-        setOutput((prev) =>
-            prev +
-            (signal === 2 ? "\nScanning stopped manually." : `\nNetDiscover exited (code ${code}).`)
+        setOutput(
+            (prev) => prev + (signal === 2 ? "\nScanning stopped manually." : `\nNetDiscover exited (code ${code}).`)
         );
         setLoading(false);
         setAllowSave(true);
@@ -82,9 +82,7 @@ function NetDiscover() {
     const cancelScan = async () => {
         if (processRef.current) {
             await CommandHelper.runCommand("pkexec", ["kill", "-9", processRef.current.pid])
-                .then(() =>
-                    setOutput((prev) => prev + `\nScanning manually stopped (PID: ${processRef.current.pid}).`)
-                )
+                .then(() => setOutput((prev) => prev + `\nScanning manually stopped (PID: ${processRef.current.pid}).`))
                 .catch((error: any) => setOutput((prev) => prev + `\nError stopping scan: ${error.message}`))
                 .finally(() => {
                     setLoading(false);
@@ -113,7 +111,7 @@ function NetDiscover() {
                     "Step 2: Click 'Start Scan' to begin scanning the network.\n" +
                     "Step 3: Wait for hosts to appear in the output.\n" +
                     "Step 4: Click 'Stop Scanning' when you've collected enough information. "
-                }                
+                }
                 tutorial="https://docs.google.com/document/d/1lREkzt3XvG6iIaxcpiMjSKxQUFGR8uKUg0PESz5DqfM/edit"
                 sourceLink="https://tools.kali.org/information-gathering/netdiscover"
             >
@@ -127,11 +125,7 @@ function NetDiscover() {
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
                     <Stack spacing="md">
-                        <TextInput
-                            label="Network Interface"
-                            required
-                            {...form.getInputProps("interface")}
-                        />
+                        <TextInput label="Network Interface" required {...form.getInputProps("interface")} />
 
                         <Group>
                             <Button type="submit" disabled={loading}>

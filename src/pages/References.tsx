@@ -316,7 +316,7 @@ const ReferencesPage = () => {
                                         "A passive and active network discovery tool to find live hosts using ARP packets without sending traditional ICMP requests"
                                     }
                                     url={"https://www.kali.org/tools/netdiscover/"}
-                                />    
+                                />
                                 <Reference
                                     name={"Nikto"}
                                     description={"Nikto is a pluggable web server and CGI scanner."}
