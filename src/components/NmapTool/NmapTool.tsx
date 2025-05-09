@@ -11,8 +11,7 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import AskChatGPT from "../AskChatGPT/AskChatGPT"; // Import the AskChatGPT component
 import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput"; // Import for displaying GPT responses
-import AskCohere from "../AskCohere/AskCohere";
-import CohereOutput from "../AskCohere/CohereOutput";
+import PentestGPT from "../PentestGPT/PentestGPT";
 
 /**
  * Represents the form values for the Nmap component.
@@ -41,6 +40,7 @@ function Nmap() {
     const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [chatGPTResponse, setChatGPTResponse] = useState(""); // State for ChatGPT response
+    const [pentestAdvice, setPentestAdvice] = useState("");
     const [hasSaved, setHasSaved] = useState(false);
     const [active, setActive] = useState(0);
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
@@ -50,7 +50,6 @@ function Nmap() {
     // Additional state variables for section visibility
     const [basicOpened, setBasicOpened] = useState(true);
     const [advancedOpened, setAdvancedOpened] = useState(false);
-    const [cohereResponse, setCohereResponse] = useState("");
 
     // Declare constants for the component
     const title = "Nmap";
@@ -354,11 +353,11 @@ function Nmap() {
                                 <ChatGPTOutput output={chatGPTResponse} />
                             </div>
                         )}
-                        <AskCohere toolName={title} output={output} setCohereResponse={setCohereResponse} />
-                        {cohereResponse && (
+                        <PentestGPT toolName={title} output={output} setAdvice={setPentestAdvice} />
+                        {pentestAdvice && (
                             <div style={{ marginTop: "20px" }}>
-                                <h3>Cohere Response:</h3>
-                                <CohereOutput output={cohereResponse} />
+                                <h3>Next Step Adviser Response:</h3>
+                                <ChatGPTOutput output={pentestAdvice} />
                             </div>
                         )}
                     </Stack>
