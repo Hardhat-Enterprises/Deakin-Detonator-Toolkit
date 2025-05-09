@@ -3,6 +3,7 @@ import HomePage from "../pages/HomePage";
 import { AttackVectors } from "../pages/AttackVectors";
 import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
+import { ScenarioTraining } from "../pages/ScenarioTraining";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
@@ -98,6 +99,8 @@ import Subjack from "./Subjack/Subjack";
 import CVE202222963 from "./CVE-2022-22963/CVE202222963";
 import Tcpdump from "./Tcpdump/Tcpdump";
 import CVE202322527 from "./CVE-2023-22527/CVE-2023-22527";
+import DigTool from "./Dig/Dig";
+import Dig from "./Dig/Dig";
 
 export interface RouteProperties {
     name: string;
@@ -141,6 +144,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs",
         element: <WalkthroughsPage />,
         description: "Walkthroughs page",
+        category: "",
+    },
+    {
+        name: "AI Training Scenario",
+        path: "/scenario-training",
+        element: <ScenarioTraining />,
+        description: "Generate AI-assisted penetration testing scenarios using GPT-4",
         category: "",
     },
     {
@@ -466,6 +476,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A Python script that systematically searches for different hosts associated with a given domain, using DNS queries to discover subdomains, IP addresses, and other relevant DNS records.",
         category: "Information Gathering and Analysis",
+    },
+    {
+        name: "Dig",
+        path: "/tools/dig",
+        element: <Dig />,
+        description:
+            "A command-line tool used for querying DNS servers to obtain domain name or IP address information.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Enum4Linux",
@@ -869,4 +887,8 @@ export function getAttackVectors() {
 
 export function getWalkthroughs() {
     return ROUTES.filter((route) => route.path.startsWith("/walkthroughs/"));
+}
+
+export function getTrainingRoutes() {
+    return ROUTES.filter((route) => route.path.startsWith("/scenario-training"));
 }
