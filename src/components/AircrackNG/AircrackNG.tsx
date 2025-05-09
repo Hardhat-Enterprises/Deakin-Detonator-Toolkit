@@ -4,10 +4,11 @@ import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
-//import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { Tooltip, ActionIcon } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons";
 
 /**
  * Represents the form values for the Aircrack-ng component.
@@ -19,17 +20,10 @@ interface FormValuesType {
     ESSID: string;
     keyFile: string;
     characters: string;
-    MACAddress: string;
-    PMKID: string;
     customConfig: string;
-    fakeHost: string;
     KoreK: string;
     quietMode: string;
     fudge: string;
-    // securityType: string;
-    // New channel: string;
-    // New replayInterface: string;
-    // New
 }
 
 const AircrackNG = () => {
@@ -37,13 +31,12 @@ const AircrackNG = () => {
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    //const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
-    //const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
     const [selectedModeOption, setSelectedModeOption] = useState("WEP");
-    const [advanceMode, setAdvanceMode] = useState(false);
+    const [selectedcharacter, setSelectedCharacter] = useState(""); // State variable to store the selected character type.
+    const [advancedMode, setAdvancedMode] = useState(false);
     const [KoreKMode, setKoreKMode] = useState(false);
     const [quietMode, setQuietMode] = useState(false);
     const [fudgeMode, setFudgeMode] = useState(false);
@@ -79,18 +72,9 @@ const AircrackNG = () => {
         "Fudge: Sets the brute-force fudge factor. A higher value increases the depth of the attack and the likelihood of success, but also increases runtime.";
     const sourceLink = "https://www.kali.org/tools/aircrack-ng/"; //link to the source component.
     const tutorial = "https://docs.google.com/document/d/1uMAojanvI4lQkJ5q9lx4HOioNbYTPbfY59RCHvQn4ow/edit?usp=sharing";
-    //const dependencies = "Aircrack-NG"; //contains the dependancies required for the component.
-
-    // AirCrack-ng specific state variables.
-    //const [selectedtype, setSelectedType] = useState(""); // State variable to store the selected security type.
-    //const [AdvancedMode, setAdvancedMode] = useState(false); // State variable to store the selected mode.
-    const [selectedcharacter, setSelectedCharacter] = useState(""); // State variable to store the selected character type.
-    //const [CustomConfig, setCustomConfig] = useState(false); // State variable to store the selected custom configuration.
 
     // Component Constants.
     const types = ["WEP", "WPA"]; // Security types supported by Aircrack-ng.
-    //const typesRequiringAdvancedWEPConfig = ["WEP"]; // Security types requiring advanced WEP configuration.
-    //const typesRequiringAdvancedWPAConfig = ["WPA"]; // Security types requiring advanced WPA configuration.
     const characters = ["Default", "Alpha-Numeric", "Binary Coded Decimal"]; // Character types supported by Aircrack-ng.
     const dependencies = ["aircrack-ng"]; // Dependencies required for the Aircrack-ng tool.
 
@@ -121,17 +105,10 @@ const AircrackNG = () => {
             ESSID: "",
             keyFile: "",
             characters: "",
-            MACAddress: "",
-            PMKID: "",
             customConfig: "",
-            fakeHost: "",
             KoreK: "",
             quietMode: "",
             fudge: "",
-            // securityType: "",
-            // New channel: "",
-            // New replayInterface: "",
-            // New
         },
     });
 
@@ -167,24 +144,11 @@ const AircrackNG = () => {
 
             // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
-
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
-
-            // Now that loading has completed, allow the user to save the output to a file.
-            //setAllowSave(true);
-            //setHasSaved(false);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
-
-    // Actions taken after saving the output
-    /*const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
-        setHasSaved(true);
-        setAllowSave(false);
-    };*/
 
     /**
      * onSubmit: Asynchronous handler for the form submission event.
@@ -194,9 +158,6 @@ const AircrackNG = () => {
      * @param {FormValuesType} values - The form values, containing the CAP file path and wordList path.
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Disallow saving until the tool's execution is complete
-        //setAllowSave(false);
-
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
@@ -205,28 +166,18 @@ const AircrackNG = () => {
         if (values.keyFile) args.push(`-l`, values.keyFile);
 
         // WEP-specific options
-        //if (selectedtype == "WEP") {
-        //if (values.securityType) args.push(`-a 1`, values.securityType);
         if (values.BSSID) args.push(`-b`, values.BSSID);
 
         // Advanced WEP options
         if (selectedcharacter === "Alpha-Numeric") args.push(`-c`);
         if (selectedcharacter === "Binary Coded Decimal") args.push(`-t`);
-        if (values.MACAddress) args.push(`-m`, values.MACAddress);
         if (KoreKMode) args.push(`-K`);
         if (quietMode) args.push(`-q`);
         if (fudgeMode) args.push(`-f`, values.fudge);
-        //}
 
         // WPA-specific options
-        //if (selectedtype == "WPA") {
-        //if (values.securityType) args.push(`-a 2`, values.securityType);
         if (values.wordList) args.push(`-w`, values.wordList);
         if (values.ESSID) args.push(`-e`, values.ESSID);
-
-        // Advanced WPA options
-        //if (values.PMKID) args.push(`-I`, values.PMKID);
-        //}
 
         // Custom Configuration section
         if (customMode) args.push(values.customConfig);
@@ -236,14 +187,12 @@ const AircrackNG = () => {
             .then(({ output, pid }) => {
                 // Update the output with the results of the command execution.
                 setOutput(output);
-
                 // Store the process ID of the executed command.
                 setPid(pid);
             })
             .catch((error) => {
                 // Display any errors encountered during command execution.
                 setOutput(error.message);
-
                 // Deactivate loading state.
                 setLoading(false);
             });
@@ -255,8 +204,6 @@ const AircrackNG = () => {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
-        //setHasSaved(false);
-        //setAllowSave(false);
     }, [setOutput]);
 
     const isWEP = selectedModeOption === "WEP";
@@ -266,6 +213,18 @@ const AircrackNG = () => {
     useEffect(() => {
         form.reset();
     }, [selectedModeOption]);
+
+    // Resets all advanced mode toggles and entered values to their default state
+    // Add any new advanced mode options here
+    const resetModes = () => {
+        setKoreKMode(false);
+        setFudgeMode(false);
+        setQuietMode(false);
+        setCustomMode(false);
+
+        form.setFieldValue("customConfig", "");
+        form.setFieldValue("fudge", "");
+    };
 
     return (
         <RenderComponent
@@ -291,11 +250,8 @@ const AircrackNG = () => {
                         onChange={(e) => {
                             setSelectedModeOption(e.target.value);
                             // Turns advanced options off when switching modes
-                            setAdvanceMode(false);
-                            setKoreKMode(false);
-                            setQuietMode(false);
-                            setFudgeMode(false);
-                            setCustomMode(false);
+                            setAdvancedMode(false);
+                            resetModes();
                         }}
                         data={types}
                         required
@@ -304,17 +260,14 @@ const AircrackNG = () => {
                     <Switch
                         size="md"
                         label="Advanced Mode"
-                        checked={advanceMode}
+                        checked={advancedMode}
                         onChange={(e) => {
                             const isChecked = e.currentTarget.checked;
-                            setAdvanceMode(isChecked);
+                            setAdvancedMode(isChecked);
                             if (!isChecked) {
                                 setSelectedCharacter("Default"); // Reset character selection when turning off Advanced Mode
                                 // Resets advanced mode toggle options
-                                setKoreKMode(false);
-                                setQuietMode(false);
-                                setFudgeMode(false);
-                                setCustomMode(false);
+                                resetModes();
                             }
                         }}
                     />
@@ -330,7 +283,6 @@ const AircrackNG = () => {
                         placeholder={"eg: xx:xx:xx:xx:xx:xx"}
                         {...form.getInputProps("BSSID")}
                     />
-                    {/*{isWPA && <TextInput label={"Set AP identifier"} {...form.getInputProps("ESSID")} />}*/}
                     <TextInput label={"Set AP identifier (ESSID)"} {...form.getInputProps("ESSID")} />
                     <TextInput
                         label={"Packet capture file (Please supply file path and filename)"}
@@ -342,7 +294,7 @@ const AircrackNG = () => {
                         label={"Save as key to output file (Please supply file path and filename)"}
                         {...form.getInputProps("keyFile")}
                     />
-                    {advanceMode && isWEP && (
+                    {advancedMode && isWEP && (
                         <NativeSelect
                             value={selectedcharacter}
                             onChange={(e) => setSelectedCharacter(e.target.value)}
@@ -350,7 +302,7 @@ const AircrackNG = () => {
                             label={"Alpha-numeric or binary-coded decimal or default"}
                         />
                     )}
-                    {advanceMode && (
+                    {advancedMode && (
                         <div style={{ display: "flex", gap: "1rem" }}>
                             <Switch
                                 size="md"
@@ -362,15 +314,26 @@ const AircrackNG = () => {
                                 }}
                             />
                             {isWEP && (
-                                <Switch
-                                    size="md"
-                                    label="Enable KoreK"
-                                    checked={KoreKMode}
-                                    onChange={(e) => {
-                                        const isChecked = e.currentTarget.checked;
-                                        setKoreKMode(isChecked);
-                                    }}
-                                />
+                                <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+                                    <Switch
+                                        size="md"
+                                        label="Enable KoreK"
+                                        checked={KoreKMode}
+                                        onChange={(e) => {
+                                            const isChecked = e.currentTarget.checked;
+                                            setKoreKMode(isChecked);
+                                        }}
+                                    />
+                                    <Tooltip
+                                        label="Only use KoreK with IVS files, as using it with other file types may cause the program to hang or break."
+                                        position="top"
+                                        withArrow
+                                    >
+                                        <ActionIcon style={{ marginLeft: "-15px", marginTop: "-3px" }}>
+                                            <IconInfoCircle size={16} />
+                                        </ActionIcon>
+                                    </Tooltip>
+                                </div>
                             )}
                             {isWEP && (
                                 <Switch
@@ -408,8 +371,6 @@ const AircrackNG = () => {
                     {customMode && (
                         <TextInput label={"Custom Parameters"} required {...form.getInputProps("customConfig")} />
                     )}
-                    {/*{customMode && <TextInput label={"Custom Configuration"} {...form.getInputProps("customConfig")} />}*/}
-                    {/* {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)} */}
                     <Button type={"submit"}>Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
