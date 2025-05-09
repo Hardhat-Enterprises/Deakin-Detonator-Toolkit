@@ -1,6 +1,6 @@
-import { Button, Stack, Switch, TextInput, Tooltip, Alert, Group } from "@mantine/core";
+import { Button, Stack, Switch, TextInput, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect, useRef } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -42,8 +42,6 @@ const AirbaseNG = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [advanceMode, setAdvanceMode] = useState(false);
     const [customMode, setCustomMode] = useState(false);
-    const [showAlert, setShowAlert] = useState(true); // Initial state is true
-    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Constants for the component's metadata.
     const title = "Airbase-ng"; // Title of the component.
@@ -87,28 +85,7 @@ const AirbaseNG = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
-
-        // Set timeout to remove alert after 5 seconds on load.
-        alertTimeout.current = setTimeout(() => {
-            setShowAlert(false);
-        }, 5000);
-
-        return () => {
-            if (alertTimeout.current) {
-                clearTimeout(alertTimeout.current);
-            }
-        };
     }, []);
-
-    const handleShowAlert = () => {
-        setShowAlert(true);
-        if (alertTimeout.current) {
-            clearTimeout(alertTimeout.current);
-        }
-        alertTimeout.current = setTimeout(() => {
-            setShowAlert(false);
-        }, 5000);
-    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -132,7 +109,7 @@ const AirbaseNG = () => {
             if (code === 0) {
                 // If the process was successful, display a success message.
                 handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 // If the process was terminated manually, display a termination message.
                 handleProcessData("\nProcess was manually terminated.");
             } else {
@@ -233,18 +210,8 @@ const AirbaseNG = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
-                    </Group>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-                        
-                    {showAlert && (
-                        <Alert title="Warning: Potential Risks" color="red">
-                            This tool can create fake access points, potentially causing network disruptions and
-                            security vulnerabilities. Use with caution and only on networks you own or have explicit
-                            permission to test.
-                        </Alert>
-                    )}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
+
                     {/* Advanced Mode Switch */}
                     <Tooltip label="Enable advanced settings">
                         <Switch
