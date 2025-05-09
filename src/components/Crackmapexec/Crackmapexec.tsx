@@ -1,6 +1,6 @@
-import { Button, LoadingOverlay, Stack, TextInput, Switch } from "@mantine/core";
+import { Button, LoadingOverlay, Stack, TextInput, Switch, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent, UserGuide } from "../UserGuide/UserGuide";
@@ -80,6 +80,9 @@ const Crackmapexec = () => {
 
     /** State to track if the output has already been saved. */
     const [hasBeenSaved, setHasBeenSaved] = useState(false);
+
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Section: Form Initialization
 
@@ -184,6 +187,29 @@ const Crackmapexec = () => {
         setIsSaveAllowed(false); // Disable save option
     }, [setOutput]);
 
+    useEffect(() => {
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
+    }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
+
     return (
         <RenderComponent
             title={title}
@@ -202,7 +228,21 @@ const Crackmapexec = () => {
                     </div>
                 )}
                 <Stack>
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
+                    </Group>
                     {UserGuide(title, descriptionUserGuide)}
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform penetration testing on Windows/Active Directory environments,
+                            use with caution and only on networks you own or have explicit permission to test.
+                        </Alert>
+                    )}
+
                     <Switch
                         size="md"
                         label="Advanced Mode"

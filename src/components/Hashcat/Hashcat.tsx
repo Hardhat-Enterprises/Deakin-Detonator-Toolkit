@@ -277,7 +277,7 @@ const Hashcat = () => {
                 </Grid>
 
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <NumberInput label="Hash Algorithm Code" {...form.getInputProps("hashAlgorithmCode")} required />
                     {!isFile && <TextInput label="Hash Value" {...form.getInputProps("hashValue")} required />}
                     {isFile && <TextInput label="Hash File Path" {...form.getInputProps("hashFilePath")} required />}

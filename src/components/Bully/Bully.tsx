@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
-import { Button, Stack, TextInput, Switch } from "@mantine/core";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -32,6 +32,8 @@ function Bully() {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants.
     const title = "Bully";
@@ -67,7 +69,27 @@ function Bully() {
                 console.error("An error occurred:", error);
                 setLoadingModal(false);
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -188,7 +210,22 @@ function Bully() {
                     ></InstallationModal>
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
+                    </Group>
                     {LoadingOverlayAndCancelButton(loading, pid)}
+
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform brute-force attacks on WPS PIN authentication, use with caution
+                            and only on networks you own or have explicit permission to test.
+                        </Alert>
+                    )}
+
                     <Stack>
                         <TextInput
                             label="Wireless Interface in Monitor Mode"

@@ -1,6 +1,9 @@
 use std::fs;
 use std::io::Write;
 use std::path::Path;
+use serde::Serialize;
+use rss::Channel;
+use reqwest;
 
 #[tauri::command]
 pub fn save_file(
@@ -50,4 +53,38 @@ pub fn save_file(
     }
 
     Ok("File saved successfully.".to_string())
+}
+
+#[derive(Serialize)]
+pub struct NewsItem {
+    pub title: String,
+    pub link: String,
+    pub description: String,
+    pub pub_date: String,
+}
+
+#[tauri::command]
+pub async fn fetch_hacker_news() -> Result<Vec<NewsItem>, String> {
+    let url = "https://feeds.feedburner.com/TheHackersNews";
+
+    let resp = reqwest::get(url)
+        .await
+        .map_err(|e| format!("Failed to fetch RSS feed: {}", e))?;
+
+    let body = resp.text().await.map_err(|e| e.to_string())?;
+
+    let channel = Channel::read_from(body.as_bytes()).map_err(|e| e.to_string())?;
+
+    let news = channel
+        .items()
+        .iter()
+        .map(|item| NewsItem {
+            title: item.title().unwrap_or("No title").to_string(),
+            link: item.link().unwrap_or("#").to_string(),
+            description: item.description().unwrap_or("").to_string(),
+            pub_date: item.pub_date().unwrap_or("Unknown").to_string(),
+        })
+        .collect();
+
+    Ok(news)
 }

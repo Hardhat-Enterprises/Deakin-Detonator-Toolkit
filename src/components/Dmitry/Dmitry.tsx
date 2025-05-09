@@ -1,6 +1,6 @@
-import { Button, Checkbox, Stack, TextInput, Switch } from "@mantine/core";
+import { Button, Checkbox, Stack, TextInput, Switch, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
@@ -40,6 +40,8 @@ const dmitry = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants.
     const title = "Deepmagic Information Gathering Tool"; // Title of the component.
@@ -73,7 +75,27 @@ const dmitry = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     //Handles the change event for the port scan checkbox.
     const handlePortscanChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -260,6 +282,13 @@ const dmitry = () => {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                <Group position="right">
+                    {!showAlert && (
+                        <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                            Show Disclaimer
+                        </Button>
+                    )}
+                </Group>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
                     <Switch
@@ -268,6 +297,13 @@ const dmitry = () => {
                         checked={checkedAdvanced}
                         onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                     />
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform information gathering, use with caution and only on targets you
+                            own or have explicit permission to test.
+                        </Alert>
+                    )}
+
                     <TextInput label={"Domain or IP"} required {...form.getInputProps("domain")} />
 
                     {checkedAdvanced && (

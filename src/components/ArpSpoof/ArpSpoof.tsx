@@ -1,6 +1,6 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -28,6 +28,8 @@ const ARPSpoofing = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants
     const title = "ARPSpoof"; // Contains the description of the component.
@@ -67,7 +69,28 @@ const ARPSpoofing = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
+
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     // Form Hook to handle form input.
     const form = useForm({
@@ -100,7 +123,7 @@ const ARPSpoofing = () => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
                 // If the process was terminated due to a signal, display the signal code.
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nProcess was manually terminated.");
                 // If the process was terminated with an error, display the exit code and signal code.
             } else {
@@ -151,25 +174,31 @@ const ARPSpoofing = () => {
         const argsGateway = [`-t`, values.ipGateway, values.ipTarget];
         const argsTarget = [`-t`, values.ipTarget, values.ipGateway];
 
-        // Execute arpspoof command for the gateway
-        const result_gateway = await CommandHelper.runCommandWithPkexec(
-            "arpspoof",
-            argsGateway,
-            handleProcessData,
-            handleProcessTermination
-        );
-        setPidGateway(result_gateway.pid);
-
-        // Execute arpspoof command for the target
-        const result_target = await CommandHelper.runCommandWithPkexec(
-            "arpspoof",
-            argsTarget,
-            handleProcessData,
-            handleProcessTermination
-        );
-        setPidTarget(result_target.pid);
-
-        setLoading(false);
+        CommandHelper;
+        // Execute the arpspoof command for the Gateway using helper method
+        CommandHelper.runCommandWithPkexec("arpspoof", argsGateway, handleProcessData, handleProcessTermination)
+            .then(({ output, pid }) => {
+                setOutput(output);
+                setPidGateway(pid);
+            })
+            .catch((error) => {
+                // Display any errors encountered during command execution
+                setOutput(`Error: ${error.message}`);
+                // Deactivate loading state
+                setLoading(false);
+            });
+        // Execute the arpspoof command for the Target using helper method
+        CommandHelper.runCommandWithPkexec("arpspoof", argsTarget, handleProcessData, handleProcessTermination)
+            .then(({ output, pid }) => {
+                setOutput(output);
+                setPidTarget(pid);
+            })
+            .catch((error) => {
+                // Display any errors encountered during command execution
+                setOutput(`Error: ${error.message}`);
+                // Deactivate loading state
+                setLoading(false);
+            });
     };
 
     return (
@@ -191,18 +220,28 @@ const ARPSpoofing = () => {
                 )}
                 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                     <Stack>
+                        <Group position="right">
+                            {!showAlert && (
+                                <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                    Show Disclaimer
+                                </Button>
+                            )}
+                        </Group>
                         {LoadingOverlayAndCancelButtonPkexec(
                             loading,
                             pidGateway,
-                            handleProcessData,
-                            handleProcessTermination
-                        )}
-                        {LoadingOverlayAndCancelButtonPkexec(
-                            loading,
                             pidTarget,
                             handleProcessData,
                             handleProcessTermination
                         )}
+
+                        {showAlert && (
+                            <Alert title="Warning: Potential Risks" color="red">
+                                This tool is used to perform ARP Spoofing, use with caution and only on networks you own
+                                or have explicit permission to test.
+                            </Alert>
+                        )}
+
                         <TextInput label={"Target one IP address"} required {...form.getInputProps("ipGateway")} />
                         <TextInput label={"Target two IP address"} required {...form.getInputProps("ipTarget")} />
                         <Button type={"submit"}>Start Spoof</Button>
