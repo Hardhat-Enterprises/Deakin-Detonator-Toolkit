@@ -133,11 +133,14 @@ const Traceroute = () => {
      * @param {FormValuesType} values - Contains the type of traceroute scan (ICMP, TCP, UDP, custom),
      * the destination hostname, and optional custom traceroute options.
      */
+<<<<<<< HEAD
 
     // Patched onSubmit handler snippet for "Traceroute custom scan"
+=======
+>>>>>>> parent of 65dcab0 (Fix for Traceroute Failing to accept multiple additional flags issue 1217)
     const onSubmit = async (values: FormValuesType) => {
-        setLoading(true);
-        let args: string[] = [];
+        setLoading(true); // Activate loading state to indicate ongoing process
+        let args = [""];
 
         // Switch case to handle different traceroute scan options based on user selection.
         switch (values.traceRouteSwitch) {
@@ -194,6 +197,7 @@ const Traceroute = () => {
 
                 break;
             // Traceroute custom scan allows specifying additional options
+<<<<<<< HEAD
             case "Traceroute custom scan": {
                 args = ["/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh"];
                 // Hostname is always the first argument
@@ -219,6 +223,25 @@ const Traceroute = () => {
 
                 break;
             }
+=======
+            // Syntax: traceroute <options> <hostname>
+            case "Traceroute custom scan":
+                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
+                args.push(`${values.traceRouteOptions}`); // Adds custom options to the arguments list.
+                args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
+                CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
+                    .then(({ pid, output }) => {
+                        setPid(pid);
+                        setOutput(output);
+                        setAllowSave(true);
+                    })
+                    .catch((error: any) => {
+                        setLoading(false);
+                        setOutput(`Error: ${error.message}`);
+                    });
+
+                break;
+>>>>>>> parent of 65dcab0 (Fix for Traceroute Failing to accept multiple additional flags issue 1217)
         }
     };
 
@@ -256,7 +279,7 @@ const Traceroute = () => {
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
-                    <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("traceRouteOptions")} />
+                    <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("tracerouteOptions")} />
                     <NativeSelect
                         value={selectedScanOption}
                         onChange={(e) => setSelectedTracerouteOption(e.target.value)}
