@@ -236,7 +236,11 @@ export function BEDTool() {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
                     <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
                     </Group>
                     {LoadingOverlayAndCancelButton(loading, pid)}
 
@@ -246,7 +250,6 @@ export function BEDTool() {
                             own or have explicit permission to test.
                         </Alert>
                     )}
-
 
                     <Switch
                         size="md"

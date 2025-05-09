@@ -211,7 +211,11 @@ function Bully() {
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
                     <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
                     </Group>
                     {LoadingOverlayAndCancelButton(loading, pid)}
 
@@ -221,7 +225,6 @@ function Bully() {
                             and only on networks you own or have explicit permission to test.
                         </Alert>
                     )}
-
 
                     <Stack>
                         <TextInput

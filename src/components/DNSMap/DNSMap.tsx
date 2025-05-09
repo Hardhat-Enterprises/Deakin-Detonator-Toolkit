@@ -206,8 +206,12 @@ const DNSMap = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 {LoadingOverlayAndCancelButton(loading, Pid)}
                 <Stack>
-                <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
                     </Group>
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">

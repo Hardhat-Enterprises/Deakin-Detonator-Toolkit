@@ -229,7 +229,11 @@ const Crackmapexec = () => {
                 )}
                 <Stack>
                     <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
                     </Group>
                     {UserGuide(title, descriptionUserGuide)}
                     {showAlert && (

@@ -215,7 +215,11 @@ const ARPSpoofing = () => {
                 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                     <Stack>
                         <Group position="right">
-                        {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                            {!showAlert && (
+                                <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                    Show Disclaimer
+                                </Button>
+                            )}
                         </Group>
                         {LoadingOverlayAndCancelButtonPkexec(
                             loading,
@@ -236,7 +240,6 @@ const ARPSpoofing = () => {
                                 or have explicit permission to test.
                             </Alert>
                         )}
-
 
                         <TextInput label={"Target one IP address"} required {...form.getInputProps("ipGateway")} />
                         <TextInput label={"Target two IP address"} required {...form.getInputProps("ipTarget")} />

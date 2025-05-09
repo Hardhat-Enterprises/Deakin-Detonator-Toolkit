@@ -202,7 +202,11 @@ function ARPFingerprinting() {
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
                     <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
                     </Group>
                     {/* Render the loading overlay and cancel button */}
                     {LoadingOverlayAndCancelButton(loading, pid)}
@@ -213,7 +217,6 @@ function ARPFingerprinting() {
                             own or have explicit permission to test.
                         </Alert>
                     )}
-
 
                     <Stack>
                         <TextInput label="Target IP address" required {...form.getInputProps("targetIP")} />

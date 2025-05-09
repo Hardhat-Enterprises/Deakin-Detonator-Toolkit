@@ -189,7 +189,11 @@ const CloudBrute = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
                     </Group>
                     {LoadingOverlayAndCancelButton(loading, pid)}
 
@@ -199,7 +203,6 @@ const CloudBrute = () => {
                             environments you own or have explicit permission to test.
                         </Alert>
                     )}
-
 
                     <TextInput
                         label="Target Domain"

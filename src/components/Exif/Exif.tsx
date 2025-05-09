@@ -10,7 +10,6 @@ import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/O
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
-
 /**
  * Represents the form values for the Exif component.
  */
@@ -221,7 +220,11 @@ const ExifTool = () => {
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
                     </Group>
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">

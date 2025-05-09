@@ -282,9 +282,13 @@ const dmitry = () => {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                    <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
-                    </Group>
+                <Group position="right">
+                    {!showAlert && (
+                        <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                            Show Disclaimer
+                        </Button>
+                    )}
+                </Group>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
                     <Switch

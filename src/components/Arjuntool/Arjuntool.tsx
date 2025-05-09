@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, Switch, Alert,Group } from "@mantine/core";
+import { Button, Stack, TextInput, Switch, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -214,7 +214,11 @@ function Arjuntool() {
                 )}
                 <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                     <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
                     </Group>
                     {LoadingOverlayAndCancelButton(loading, pid)}
 
