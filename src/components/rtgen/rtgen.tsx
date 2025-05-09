@@ -5,7 +5,7 @@ import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 //import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
@@ -113,7 +113,7 @@ const Rtgen = () => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
                 // If the process was terminated due to a signal, display the signal code.
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nProcess was manually terminated.");
                 // If the process was terminated with an error, display the exit code and signal code.
             } else {
@@ -152,11 +152,11 @@ const Rtgen = () => {
 
         // Execute the Rtgen command via helper method and handle its output or potential errors
         CommandHelper.runCommandWithPkexec("rtgen", args, handleProcessData, handleProcessTermination)
-            .then(({ output }) => {
+            .then(({ output, pid }) => {
                 // Update the output with the results of the command execution.
                 setOutput(output);
-                // Deactivate loading state
-                setLoading(false);
+                // Update the PID to pass to the cancel button
+                setPid(pid);
             })
             .catch((error) => {
                 // Display any errors encountered during command execution
@@ -204,7 +204,7 @@ const Rtgen = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="Hash Algorithm"
                         required

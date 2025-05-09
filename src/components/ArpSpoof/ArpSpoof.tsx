@@ -123,7 +123,7 @@ const ARPSpoofing = () => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
                 // If the process was terminated due to a signal, display the signal code.
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nProcess was manually terminated.");
                 // If the process was terminated with an error, display the exit code and signal code.
             } else {
@@ -174,25 +174,31 @@ const ARPSpoofing = () => {
         const argsGateway = [`-t`, values.ipGateway, values.ipTarget];
         const argsTarget = [`-t`, values.ipTarget, values.ipGateway];
 
-        // Execute arpspoof command for the gateway
-        const result_gateway = await CommandHelper.runCommandWithPkexec(
-            "arpspoof",
-            argsGateway,
-            handleProcessData,
-            handleProcessTermination
-        );
-        setPidGateway(result_gateway.pid);
-
-        // Execute arpspoof command for the target
-        const result_target = await CommandHelper.runCommandWithPkexec(
-            "arpspoof",
-            argsTarget,
-            handleProcessData,
-            handleProcessTermination
-        );
-        setPidTarget(result_target.pid);
-
-        setLoading(false);
+        CommandHelper;
+        // Execute the arpspoof command for the Gateway using helper method
+        CommandHelper.runCommandWithPkexec("arpspoof", argsGateway, handleProcessData, handleProcessTermination)
+            .then(({ output, pid }) => {
+                setOutput(output);
+                setPidGateway(pid);
+            })
+            .catch((error) => {
+                // Display any errors encountered during command execution
+                setOutput(`Error: ${error.message}`);
+                // Deactivate loading state
+                setLoading(false);
+            });
+        // Execute the arpspoof command for the Target using helper method
+        CommandHelper.runCommandWithPkexec("arpspoof", argsTarget, handleProcessData, handleProcessTermination)
+            .then(({ output, pid }) => {
+                setOutput(output);
+                setPidTarget(pid);
+            })
+            .catch((error) => {
+                // Display any errors encountered during command execution
+                setOutput(`Error: ${error.message}`);
+                // Deactivate loading state
+                setLoading(false);
+            });
     };
 
     return (
@@ -224,11 +230,6 @@ const ARPSpoofing = () => {
                         {LoadingOverlayAndCancelButtonPkexec(
                             loading,
                             pidGateway,
-                            handleProcessData,
-                            handleProcessTermination
-                        )}
-                        {LoadingOverlayAndCancelButtonPkexec(
-                            loading,
                             pidTarget,
                             handleProcessData,
                             handleProcessTermination

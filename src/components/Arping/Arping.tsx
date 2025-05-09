@@ -120,7 +120,7 @@ const Arping = () => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
                 // If the process was terminated manually, display a termination message.
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nProcess was manually terminated.");
             } else {
                 // If the process was terminated with an error, display the exit and signal codes.
@@ -218,22 +218,7 @@ const Arping = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    <Group position="right">
-                        {!showAlert && (
-                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
-                                Show Disclaimer
-                            </Button>
-                        )}
-                    </Group>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-
-                    {showAlert && (
-                        <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to send ARP requests, use with caution and only on networks you own or
-                            have explicit permission to test.
-                        </Alert>
-                    )}
-
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="Target IP Address"
                         required
