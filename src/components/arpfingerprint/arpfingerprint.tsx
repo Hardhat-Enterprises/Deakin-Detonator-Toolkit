@@ -129,24 +129,18 @@ function ARPFingerprinting() {
 
         // Construct the arguments for the ARPfingerprint command.
         const args = [`-l`, values.interface];
-        try {
-            // Execute the ARPfingerprint command using the CommandHelper utility with pkexec.
-            await CommandHelper.runCommandWithPkexec(
-                "arp-fingerprint",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
-        } catch (error: any) {
-            // If an error occurs during command execution, display the error message.
-            setOutput(`Error: ${error.message}`);
-
-            // Set the loading state to false since the process failed.
-            setLoading(false);
-
-            // Allow saving the output (which includes the error message) to a file.
-            setAllowSave(true);
-        }
+        // Execute the ARPFingerprint command via helper method and handle its output or potential errors
+        CommandHelper.runCommandWithPkexec("arp-fingerprint", args, handleProcessData, handleProcessTermination)
+            .then(({ output, pid }) => {
+                setOutput(output);
+                setPid(pid);
+            })
+            .catch((error) => {
+                // Display any errors encountered during command execution
+                setOutput(`Error: ${error.message}`);
+                // Deactivate loading state
+                setLoading(false);
+            });
     };
 
     /**
