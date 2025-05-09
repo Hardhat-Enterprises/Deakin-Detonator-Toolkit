@@ -22,7 +22,7 @@
 | 0019   | Replacement of Wifite with Wifite2                                                            | APPROVED    |
 | 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | APPROVED    |
 | 0021   | Removal of Amap from the Deakin Detonator Toolkit                                             | W-I-P       |
-| 0022   | -empty-                                                                                       | -           |
+| 0022   | Add feature to temporarily block access to broken tools                                       | REJECTED    |
 | 0023   | Created an ADR for Anonsurf functionality                                                     | W-I-P       |
 | 0024   | -empty-                                                                                       | -           |
 | 0025   | -empty-                                                                                       | -           |
