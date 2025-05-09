@@ -20,13 +20,13 @@
 | 0017   | Remove CrackMapExec Tool                                                                      | APPROVED    |
 | 0018   | -empty-                                                                                       | -           |
 | 0019   | Replacement of Wifite with Wifite2                                                            | APPROVED    |
-| 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | APPROVED    |
+| 0020   | Integration of AI-Based Scenario Training Feature in PT-GUI                                   | IMPLEMENTED |
 | 0021   | Removal of Amap from the Deakin Detonator Toolkit                                             | W-I-P       |
 | 0022   | Add feature to temporarily block access to broken tools                                       | REJECTED    |
 | 0023   | Created an ADR for Anonsurf functionality                                                     | W-I-P       |
 | 0024   | Integration of BetterCap into PT-GUI                                                          | PROPOSED    |
 | 0025   | Addition of Nuclei for Vulnerability Scanning                                                 | PROPOSED    |
-| 0026   | -empty-                                                                                       | -           |
+| 0026   | Integration of PentestGPT as a next step adviser feature in PT-GUI                            | IMPLEMENTED |
 | 0027   | -empty-                                                                                       | -           |
 | 0028   | -empty-                                                                                       | -           |
 | 0029   | -empty-                                                                                       | -           |
