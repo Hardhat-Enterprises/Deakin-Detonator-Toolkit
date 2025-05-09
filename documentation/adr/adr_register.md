@@ -24,7 +24,7 @@
 | 0021   | Removal of Amap from the Deakin Detonator Toolkit                                             | W-I-P       |
 | 0022   | Add feature to temporarily block access to broken tools                                       | REJECTED    |
 | 0023   | Created an ADR for Anonsurf functionality                                                     | W-I-P       |
-| 0024   | -empty-                                                                                       | -           |
+| 0024   | Created an ADR for BetterCap implementation                                                   | PROPOSED    |
 | 0025   | -empty-                                                                                       | -           |
 | 0026   | -empty-                                                                                       | -           |
 | 0027   | -empty-                                                                                       | -           |
