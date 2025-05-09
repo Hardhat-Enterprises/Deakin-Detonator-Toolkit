@@ -25,7 +25,7 @@
 | 0022   | Add feature to temporarily block access to broken tools                                       | REJECTED    |
 | 0023   | Created an ADR for Anonsurf functionality                                                     | W-I-P       |
 | 0024   | Integration of BetterCap into PT-GUI                                                          | PROPOSED    |
-| 0025   | -empty-                                                                                       | -           |
+| 0025   | Addition of Nuclei for Vulnerability Scanning                                                 | PROPOSED    |
 | 0026   | -empty-                                                                                       | -           |
 | 0027   | -empty-                                                                                       | -           |
 | 0028   | -empty-                                                                                       | -           |
