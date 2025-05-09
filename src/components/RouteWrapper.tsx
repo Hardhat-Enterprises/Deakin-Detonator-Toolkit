@@ -97,6 +97,7 @@ import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
 import Tcpdump from "./Tcpdump/Tcpdump";
+import NetDiscover from "./NetDiscover/NetDiscover";
 
 export interface RouteProperties {
     name: string;
@@ -619,6 +620,14 @@ export const ROUTES: RouteProperties[] = [
         description: "A tool that can create, read, and write network connections using TCP or UDP protocols.",
         category: "Network Scanning and Enumeration",
     },
+    {
+        name: "NetDiscover",
+        path: "/tools/NetDiscover",
+        element: <NetDiscover />,
+        description:
+            "A passive and active network discovery tool to find live hosts using ARP packets without sending traditional ICMP requests.",
+        category: "Network Scanning and Enumeration",
+    },    
     {
         name: "Nikto",
         path: "/tools/Nikto",
