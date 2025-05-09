@@ -6,7 +6,7 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { isNotEmpty, matches } from "@mantine/form";
 
@@ -178,7 +178,7 @@ const GoBusterTool = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label={"Target URL"} required {...form.getInputProps("url")} error={form.errors.url} />
                     <TextInput
                         label={"Wordlist File"}
