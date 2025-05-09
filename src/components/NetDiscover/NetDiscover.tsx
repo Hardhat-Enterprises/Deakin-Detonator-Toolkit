@@ -112,7 +112,7 @@ function NetDiscover() {
                     "Step 1: Enter your network interface name (e.g., eth0, wlan0).\n" +
                     "Step 2: Click 'Start Scan' to begin scanning the network.\n" +
                     "Step 3: Wait for hosts to appear in the output.\n" +
-                    "Step 4: Click 'Stop Scanning' when you've collected enough information."
+                    "Step 4: Click 'Stop Scanning' when you've collected enough information. "
                 }                
                 tutorial="https://docs.google.com/document/d/1lREkzt3XvG6iIaxcpiMjSKxQUFGR8uKUg0PESz5DqfM/edit"
                 sourceLink="https://tools.kali.org/information-gathering/netdiscover"

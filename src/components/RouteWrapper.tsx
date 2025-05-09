@@ -659,7 +659,7 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/NetDiscover",
         element: <NetDiscover />,
         description:
-            "A passive and active network discovery tool to find live hosts using ARP packets without sending traditional ICMP requests.",
+            "A passive and active network discovery tool to find live hosts using ARP packets without sending traditional ICMP requests. ",
         category: "Network Scanning and Enumeration",
     },    
     {
