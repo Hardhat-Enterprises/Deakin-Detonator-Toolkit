@@ -103,6 +103,7 @@ import CVE202322527 from "./CVE-2023-22527/CVE-2023-22527";
 import DigTool from "./Dig/Dig";
 import Dig from "./Dig/Dig";
 import NewsFeed from "../components/NewsFeed/NewsFeed";
+import NetDiscover from "./NetDiscover/NetDiscover";
 
 export interface RouteProperties {
     name: string;
@@ -659,6 +660,14 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Netcat",
         element: <NetcatTool />,
         description: "A tool that can create, read, and write network connections using TCP or UDP protocols.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "NetDiscover",
+        path: "/tools/NetDiscover",
+        element: <NetDiscover />,
+        description:
+            "A passive and active network discovery tool to find live hosts using ARP packets without sending traditional ICMP requests.",
         category: "Network Scanning and Enumeration",
     },
     {
