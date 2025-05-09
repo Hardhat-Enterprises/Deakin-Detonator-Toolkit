@@ -1,10 +1,10 @@
-import { useState, useCallback, useEffect, useRef } from "react";
-import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
+import { useState, useCallback, useEffect } from "react";
+import { Button, Stack, TextInput, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -24,13 +24,12 @@ function ARPScan() {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
-    const [showAlert, setShowAlert] = useState(true);
-    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants.
     const title = "ARP Scan Tool"; // Title of the component.
@@ -65,28 +64,7 @@ function ARPScan() {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
-
-        // Set timeout to remove alert after 5 seconds on load.
-        alertTimeout.current = setTimeout(() => {
-            setShowAlert(false);
-        }, 5000);
-
-        return () => {
-            if (alertTimeout.current) {
-                clearTimeout(alertTimeout.current);
-            }
-        };
     }, []);
-
-    const handleShowAlert = () => {
-        setShowAlert(true);
-        if (alertTimeout.current) {
-            clearTimeout(alertTimeout.current);
-        }
-        alertTimeout.current = setTimeout(() => {
-            setShowAlert(false);
-        }, 5000);
-    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -112,7 +90,7 @@ function ARPScan() {
                 handleProcessData("\nARP scan completed successfully.");
 
                 // If the process was terminated manually, display a termination message.
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nARP scan was manually terminated.");
 
                 // If the process was terminated with an error, display the exit and signal codes.
@@ -155,19 +133,20 @@ function ARPScan() {
         // Construct the arguments for the ARPScan command.
         const args = [`--localnet`, `-I`, values.interface];
 
-        try {
-            // Execute the ARPScan command using the CommandHelper utility with pkexec.
-            await CommandHelper.runCommandWithPkexec("arp-scan", args, handleProcessData, handleProcessTermination);
-        } catch (error: any) {
-            // If an error occurs during command execution, display the error message.
-            setOutput(`Error: ${error.message}`);
-
-            // Set the loading state to false since the process failed.
-            setLoading(false);
-
-            // Allow saving the output (which includes the error message) to a file.
-            setAllowSave(true);
-        }
+        CommandHelper;
+        // Execute the ArpScan command via helper method and handle its output or potential errors
+        CommandHelper.runCommandWithPkexec("arp-scan", args, handleProcessData, handleProcessTermination)
+            .then(({ output, pid }) => {
+                setOutput(output);
+                setPid(pid);
+            })
+            .catch((error) => {
+                // Display any errors encountered during command execution
+                setOutput(`Error: ${error.message}`);
+                // Deactivate loading state
+                setLoading(false);
+            });
+        setAllowSave(true);
     };
 
     /**
@@ -200,20 +179,8 @@ function ARPScan() {
                     ></InstallationModal>
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
-                    <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
-                    </Group>
                     {/* Render the loading overlay and cancel button */}
-                    {LoadingOverlayAndCancelButton(loading, "")}
-
-                    {showAlert && (
-                        <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to perform ARP Scans, use with caution and only on networks you own or
-                            have explicit permission to test.
-                        </Alert>
-                    )}
-
-
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <Stack>
                         <TextInput label={"Network Interface"} required {...form.getInputProps("interface")} />
                         {loading && (
