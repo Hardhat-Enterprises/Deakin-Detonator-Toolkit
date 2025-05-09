@@ -25,7 +25,7 @@ const BPathPage: React.FC = () => {
         }
     }
 
-    // Show lesson selection page if no specific lesson is requested
+    // Show beginners guide home page if no specific lesson is selected
     return (
         <Container fluid>
             <Stack spacing="md" p="md">

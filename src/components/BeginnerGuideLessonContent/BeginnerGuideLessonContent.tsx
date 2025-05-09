@@ -1,6 +1,9 @@
 import GoBusterTool from "../GobusterTool/Gobuster";
 import NmapTool from "../NmapTool/NmapTool";
 import SQLmap from "../SQLmap/SQLmap";
+// This file contains a js object array containing all the beginners guide lesson data
+// Currently BeginnerInformationContent should be manually modified to add, edit or delete lessons
+// Lesson hierachy is based off the position of lesson object in the array
 
 export interface BeginnerGuideLessonContentFormat {
     lessonName: string;
@@ -19,6 +22,7 @@ export interface BeginnerGuideLessonContentFormat {
 }
 [];
 
+// The attack tools are added into objects for readability (easier to track when multiple tools are present in the same lesson)
 const lesson1PracticalTools = {
     Nmap: <NmapTool />,
 };
@@ -538,80 +542,3 @@ A thorough web application penetration test incorporates all these aspects, docu
         ],
     },
 ];
-
-const attackTools = {
-    attackToolNames: [
-        "Airbase NG",
-        "Aircrack NG",
-        "Amap",
-        "Amass",
-        "Arjun",
-        "Arpaname",
-        "ARP Fingerprint",
-        "Arping",
-        "ArpScan",
-        "ARP Spoofing",
-        "BED",
-        "Bully",
-        "Cewl",
-        "CloudBrute",
-        "Crackmapexec",
-        "Crunch",
-        "Dirb",
-        "dmitry",
-        "DNSenum",
-        "DNSMap",
-        "DNSRecon",
-        "Enum4Linux",
-        "Exif",
-        "EyeWitness",
-        "Fcrackzip",
-        "FFuf",
-        "Foremost",
-        "Fping",
-        "FTPconnect",
-        "Gitleaks",
-        "GoBuster",
-        "GoldenEye",
-        "Gyoithon",
-        "Hashcat",
-        "Hping3",
-        "Hydra",
-        "JohnTheRipper",
-        "Masscan",
-        "Metagoofil",
-        "msfvenom",
-        "Nbtscan",
-        "Netcat",
-        "Nikto",
-        "Nmap",
-        "NSLookup",
-        "Parsero",
-        "Photon",
-        "Rainbowcrack",
-        "Rtgen",
-        "Rtsort",
-        "SearchSploit",
-        "Sherlock",
-        "Shodan API tool",
-        "SlowHttpTest",
-        "SMB Enumeration",
-        "SMB-Ghost Scanner",
-        "SnmpCheck",
-        "SQLmap",
-        "Sqlninja",
-        "Subjack",
-        "Sublist3r",
-        "Testssl",
-        "The Harvester",
-        "Tiger",
-        "Traceroute",
-        "Unicornscan",
-        "Urlsnarf",
-        "Wafw00f",
-        "WhatWeb",
-        "Whois",
-        "Wifite",
-        "WPScan",
-    ],
-};

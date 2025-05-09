@@ -7,23 +7,23 @@ import { useNavigate } from "react-router-dom";
 interface BGuideProps {
     lessonIndex: number;
 }
-
+// This component renders a single lesson page using the lessons index in BeginnerInformationContent
 const BGuideLesson: React.FC<BGuideProps> = ({ lessonIndex }) => {
     const navigate = useNavigate();
     const guideData = BeginnerInformationContent[lessonIndex];
+
+    // Currently there arent any exercises, so when user opens a section or all the sections its classified as a complete section or page
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
+    const [currentPageComplete, setCurrentPageComplete] = useState(false);
     const [openSection, setOpenSection] = useState<number | null>(null);
     const [viewedSections, setViewedSections] = useState(
         guideData.lessonContent.map((page) => page.pageContent.map(() => false))
     );
-    const [currentPageComplete, setCurrentPageComplete] = useState(false);
-
-    // Current page data
     const currentPageData = guideData.lessonContent[currentPageIndex];
     const isLastPage = currentPageIndex === guideData.lessonContent.length - 1;
     const isFirstPage = currentPageIndex === 0;
 
-    // Check if all sections on current page are viewed
+    // Verifies all sections on current page are viewed
     useEffect(() => {
         const allViewed = viewedSections[currentPageIndex]?.every((section) => section);
         setCurrentPageComplete(allViewed);
@@ -39,7 +39,6 @@ const BGuideLesson: React.FC<BGuideProps> = ({ lessonIndex }) => {
         setOpenSection(openSection === sectionIndex ? null : sectionIndex);
     };
 
-    // Navigation
     const goToNextPage = () => {
         if (!isLastPage) {
             setCurrentPageIndex(currentPageIndex + 1);
