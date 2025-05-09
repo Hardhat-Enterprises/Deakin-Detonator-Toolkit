@@ -219,7 +219,34 @@ function Nmap() {
                             {/* Step 1: Target */}
                             <Stepper.Step label="Target">
                                 <TextInput label="Target IP or Hostname" required {...form.getInputProps("target")} />
+
+                                {/* Quick scan option */}
+                                <Stack align="center" mt="sm">
+                                    <Button
+                                        type="submit"
+                                        disabled={loading}
+                                        onClick={() => {
+                                            setActive(2);
+                                            // Executes a barebones Nmap scan
+                                            onSubmit({
+                                                target: form.values.target,
+                                                ports: "",
+                                                scanType: "sT",
+                                                timing: "T3",
+                                                osDetection: false,
+                                                versionDetection: false,
+                                                scriptscan: "",
+                                                aggressive: false,
+                                                verbose: false,
+                                                noPortscan: false,
+                                            });
+                                        }}
+                                    >
+                                        Run Nmap
+                                    </Button>
+                                </Stack>
                             </Stepper.Step>
+
                             {/* Step 2: Scan Options */}
                             <Stepper.Step label="Scan Options">
                                 <Grid>
