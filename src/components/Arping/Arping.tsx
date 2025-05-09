@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { Button, Stack, TextInput, Checkbox, Alert, Group } from "@mantine/core";
+import { useState, useEffect, useCallback } from "react";
+import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -33,8 +33,6 @@ const Arping = () => {
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
     const [pid, setPid] = useState("");
-    const [showAlert, setShowAlert] = useState(true);
-    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants
     const title = "Arping"; // Title for the Arping component.
@@ -75,27 +73,7 @@ const Arping = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Crucial change, set to false even on errors
             });
-        // Set timeout to remove alert after 5 seconds on load.
-        alertTimeout.current = setTimeout(() => {
-            setShowAlert(false);
-        }, 5000);
-
-        return () => {
-            if (alertTimeout.current) {
-                clearTimeout(alertTimeout.current);
-            }
-        };
     }, []);
-
-    const handleShowAlert = () => {
-        setShowAlert(true);
-        if (alertTimeout.current) {
-            clearTimeout(alertTimeout.current);
-        }
-        alertTimeout.current = setTimeout(() => {
-            setShowAlert(false);
-        }, 5000);
-    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -120,7 +98,7 @@ const Arping = () => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
                 // If the process was terminated manually, display a termination message.
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nProcess was manually terminated.");
             } else {
                 // If the process was terminated with an error, display the exit and signal codes.
@@ -218,19 +196,7 @@ const Arping = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    <Group position="right">
-                    {!showAlert && <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">Show Disclaimer</Button>}
-                    </Group>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-
-                    {showAlert && (
-                        <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to send ARP requests, use with caution and only on networks you own or
-                            have explicit permission to test.
-                        </Alert>
-                    )}
-
-
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="Target IP Address"
                         required
