@@ -45,6 +45,8 @@ function MainLink({ icon, color, label, route }: MainLinkProps) {
         </UnstyledButton>
     );
 }
+
+// Home Page Data
 const homeData = {
     icon: <IconHome size={16} />,
     color: "teal",
