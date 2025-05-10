@@ -1,4 +1,16 @@
-import { Button, Stack, Table, Title, Dialog, TextInput, Text, AspectRatio, Group, NativeSelect } from "@mantine/core";
+import {
+    Button,
+    Stack,
+    Table,
+    Title,
+    Dialog,
+    TextInput,
+    Text,
+    AspectRatio,
+    Group,
+    Select,
+    useMantineColorScheme,
+} from "@mantine/core";
 import { getWalkthroughs } from "../components/RouteWrapper";
 import ToolItem from "../components/ToolItem/ToolItem";
 import { IconVideoPlus } from "@tabler/icons";
@@ -14,25 +26,18 @@ export function WalkthroughsPage() {
         URL: string;
         NAME: string;
     }
-    const rows = getWalkthroughs().map((tool) => {
-        return (
-            <ToolItem
-                title={tool.name}
-                description={tool.description}
-                route={tool.path}
-                category={tool.category}
-                key={tool.name}
-            />
-        );
-    });
+
+    const { colorScheme } = useMantineColorScheme();
+
     const [opened, { toggle, close }] = useDisclosure(false);
 
-    let form = useForm({
+    const form = useForm<FormValues>({
         initialValues: {
             URL: "",
             NAME: "",
         },
     });
+
     const onSubmit = async (values: FormValues) => {
         const args = [`exploits/AddVideo.py`, values.URL, values.NAME];
         const result = await CommandHelper.runCommand("python3", args);
@@ -57,16 +62,27 @@ export function WalkthroughsPage() {
                 "Walkthrough Videos",
                 "How to add a Walkthrough Video \nStep 1: Use the add button to create a video page \nStep 2: Register it in the RouteWrapper"
             )}
-            <NativeSelect
+
+            <Select
                 value={selectedCategory}
-                onChange={(e) => {
-                    setSelectedCategory(e.target.value);
-                }}
-                title="Filter for a Category"
+                onChange={(value) => setSelectedCategory(value || "")}
+                label="Filter for a Category"
+                placeholder="Select category"
                 data={categories}
                 required
-                //placeholder="Filter for a Category"
+                styles={(theme) => ({
+                    input: {
+                        backgroundColor: theme.colorScheme === "light" ? theme.white : theme.colors.dark[6],
+                        color: theme.colorScheme === "light" ? theme.black : theme.white,
+                        borderColor: theme.colorScheme === "light" ? theme.colors.gray[4] : theme.colors.dark[4],
+                    },
+                    dropdown: {
+                        backgroundColor: theme.colorScheme === "light" ? theme.white : theme.colors.dark[7],
+                        color: theme.colorScheme === "light" ? theme.black : theme.white,
+                    },
+                })}
             />
+
             <Table horizontalSpacing="xl" verticalSpacing="md" fontSize="md">
                 <thead>
                     <tr>
@@ -81,27 +97,27 @@ export function WalkthroughsPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    {walkthroughs.map((walkthroughs) => {
-                        // Check if the selected category matches the walkthrough's category
+                    {walkthroughs.map((walkthrough) => {
                         if (
                             !selectedCategory ||
                             selectedCategory === "All" ||
-                            walkthroughs.category === selectedCategory
+                            walkthrough.category === selectedCategory
                         ) {
                             return (
                                 <ToolItem
-                                    title={walkthroughs.name}
-                                    description={walkthroughs.description}
-                                    route={walkthroughs.path}
-                                    category={walkthroughs.category}
-                                    key={walkthroughs.name}
+                                    title={walkthrough.name}
+                                    description={walkthrough.description}
+                                    route={walkthrough.path}
+                                    category={walkthrough.category}
+                                    key={walkthrough.name}
                                 />
                             );
                         }
-                        return null; // Skip rendering if the category doesn't match
+                        return null;
                     })}
                 </tbody>
             </Table>
+
             <Dialog
                 opened={opened}
                 withCloseButton
@@ -117,7 +133,7 @@ export function WalkthroughsPage() {
                     <Group>
                         <Text>URL:</Text>
                         <TextInput
-                            styles={(theme) => ({ root: { marginBottom: 10 } })}
+                            styles={() => ({ root: { marginBottom: 10 } })}
                             required
                             {...form.getInputProps("URL")}
                             placeholder="https://www.youtube.com/embed/lMSJUkPPWEY"
@@ -127,7 +143,7 @@ export function WalkthroughsPage() {
                     <Group>
                         <Text>Name:</Text>
                         <TextInput
-                            styles={(theme) => ({ root: { marginBottom: 10 } })}
+                            styles={() => ({ root: { marginBottom: 10 } })}
                             required
                             {...form.getInputProps("NAME")}
                             placeholder="Walkthrough Example Page"
@@ -139,7 +155,7 @@ export function WalkthroughsPage() {
                         onClick={() =>
                             showNotification({
                                 title: "Done!",
-                                message: "Remember to rgister it in the RouteWrapper!",
+                                message: "Remember to register it in the RouteWrapper!",
                                 autoClose: false,
                             })
                         }
@@ -151,6 +167,7 @@ export function WalkthroughsPage() {
         </Stack>
     );
 }
+
 export function VideoPlayer(path: string, title: string) {
     return (
         <Stack>
