@@ -19,7 +19,13 @@ const ToolsPage = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const tools = getTools();
 
-    const { colorScheme } = useMantineColorScheme();
+    let colorScheme: "light" | "dark" = "light";
+    try {
+        colorScheme = useMantineColorScheme().colorScheme;
+    } catch (e) {
+        // In test or non-provider environments, fallback to light
+        colorScheme = "light";
+    }
 
     return (
         <Stack align={"center"}>
