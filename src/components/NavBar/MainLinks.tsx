@@ -7,6 +7,7 @@ import {
     IconSearch,
     IconTarget,
     IconReportAnalytics,
+    IconNews,
 } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -44,8 +45,6 @@ function MainLink({ icon, color, label, route }: MainLinkProps) {
         </UnstyledButton>
     );
 }
-
-// Home Page Data
 const homeData = {
     icon: <IconHome size={16} />,
     color: "teal",
@@ -81,18 +80,25 @@ const walkthroughsData = {
     route: "/walkthroughs",
 };
 
-const referencesData = {
-    icon: <IconSearch size={16} />,
-    color: "green",
-    label: "References",
-    route: "/references",
-};
-
 const scenarioTrainingData = {
     icon: <IconReportAnalytics size={16} />,
     color: "teal",
     label: "AI Training Scenario",
     route: "/scenario-training",
+};
+
+const newsData = {
+    icon: <IconNews size={16} />,
+    color: "cyan",
+    label: "Cyber News",
+    route: "/news",
+};
+
+const referencesData = {
+    icon: <IconSearch size={16} />,
+    color: "green",
+    label: "References",
+    route: "/references",
 };
 
 const data = [
@@ -102,6 +108,7 @@ const data = [
     attackVectorsData,
     walkthroughsData,
     scenarioTrainingData,
+    newsData,
     referencesData,
 ];
 
