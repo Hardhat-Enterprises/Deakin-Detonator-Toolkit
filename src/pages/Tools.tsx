@@ -1,4 +1,4 @@
-import { Stack, Table, Title, NativeSelect } from "@mantine/core";
+import { Stack, Table, Title, Select, useMantineColorScheme } from "@mantine/core";
 import { useState } from "react";
 import { getTools } from "../components/RouteWrapper";
 import ToolItem from "../components/ToolItem/ToolItem";
@@ -19,19 +19,32 @@ const ToolsPage = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const tools = getTools();
 
+    const { colorScheme } = useMantineColorScheme();
+
     return (
         <Stack align={"center"}>
             <Title>Tools</Title>
-            <NativeSelect
+
+            <Select
                 value={selectedCategory}
-                onChange={(e) => {
-                    setSelectedCategory(e.target.value);
-                }}
-                title="Filter for a Category"
+                onChange={(value) => setSelectedCategory(value || "")}
+                label="Filter for a Category"
+                placeholder="Select category"
                 data={categories}
                 required
-                placeholder="Filter for a Category"
+                styles={(theme) => ({
+                    input: {
+                        backgroundColor: theme.colorScheme === "light" ? theme.white : theme.colors.dark[6],
+                        color: theme.colorScheme === "light" ? theme.black : theme.white,
+                        borderColor: theme.colorScheme === "light" ? theme.colors.gray[4] : theme.colors.dark[4],
+                    },
+                    dropdown: {
+                        backgroundColor: theme.colorScheme === "light" ? theme.white : theme.colors.dark[7],
+                        color: theme.colorScheme === "light" ? theme.black : theme.white,
+                    },
+                })}
             />
+
             <Table horizontalSpacing="xl" verticalSpacing="md" fontSize="md">
                 <thead>
                     <tr>
@@ -43,7 +56,6 @@ const ToolsPage = () => {
 
                 <tbody>
                     {tools.map((tool) => {
-                        // Check if the selected category matches the tool's category
                         if (!selectedCategory || selectedCategory === "All" || tool.category === selectedCategory) {
                             return (
                                 <ToolItem
@@ -55,7 +67,7 @@ const ToolsPage = () => {
                                 />
                             );
                         }
-                        return null; // Skip rendering if the category doesn't match
+                        return null;
                     })}
                 </tbody>
             </Table>
