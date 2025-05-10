@@ -3,6 +3,7 @@ import { Button, Select, Card, Text, Group, Badge, TextInput, Transition } from 
 import { writeTextFile, readTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { showNotification } from "@mantine/notifications";
 import { invoke } from "@tauri-apps/api/tauri";
+// Main file for the news feed
 
 type NewsItem = {
     title: string;
