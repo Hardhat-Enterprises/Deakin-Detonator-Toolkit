@@ -413,7 +413,7 @@
                   "$TEMP/**",
                   "$HOME/Deakin-Detonator-Toolkit/**",
                   "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**",
-                  "$HOME/**"                            
+                  "$DESKTOP/**"                             
                 ]
               },
               "dialog": {
