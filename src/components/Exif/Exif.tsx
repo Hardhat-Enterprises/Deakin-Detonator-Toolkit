@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Button, Stack, TextInput, Checkbox, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -8,6 +8,7 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
  * Represents the form values for the Exif component.
@@ -33,6 +34,8 @@ const ExifTool = () => {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants
     const title = "ExifTool";
@@ -75,7 +78,27 @@ const ExifTool = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -195,6 +218,21 @@ const ExifTool = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
+                    </Group>
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to read and write metadata to files. Use with caution and only on files
+                            you own or have explicit permission to modify.
+                        </Alert>
+                    )}
+
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="File Path"

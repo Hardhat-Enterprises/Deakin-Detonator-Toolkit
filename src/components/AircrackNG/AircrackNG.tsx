@@ -47,23 +47,30 @@ const AircrackNG = () => {
     const description =
         "Aircrack-ng is a tool for recovering Wi-Fi encryption keys. It supports both WEP and WPA/WPA2-PSK modes for decrypting captured network traffic.";
     const steps =
-        "=== Aircrack-ng User Guide ===\n\n" +
+        "=== Aircrack-ng User Guide ===\n" +
         "=== WEP Mode ===\n" +
-        "1. WEP or WPA-PSK: Select 'WEP' from the dropdown menu.\n\n" +
-        "2. Advanced Mode (Optional): Toggle 'Advanced Mode' to enable additional configuration for output format.\n\n" +
-        "3. Set AP MAC Address (BSSID) (Optional): Provide the MAC address of the access point (e.g., XX:XX:XX:XX:XX:XX).\n\n" +
-        "4. Packet Capture File: Specify the path and filename of the packet capture file containing intercepted packets (e.g., /path/to/file.cap).\n\n" +
-        "5. Save Key to Output File (Optional): Provide the file path and name where the recovered key should be saved.\n\n" +
-        "6. Alpha-numeric or Binary-coded Decimal or Default (Advanced Mode Only): If 'Advanced Mode' is enabled, choose the format for the key.\n\n" +
-        "7. Start Aircrack-ng: Once all fields are configured, click 'Start Aircrack-ng' to begin the key recovery process.\n\n" +
+        "Step 1. WEP or WPA-PSK: Select 'WEP' from the dropdown menu.\n" +
+        "Step 2. Advanced Mode (Optional): Toggle 'Advanced Mode' to enable additional configuration options (see below for more details).\n" +
+        "Step 3. Set AP MAC Address (BSSID) (Optional): Provide the MAC address of the access point (e.g., XX:XX:XX:XX:XX:XX).\n" +
+        "Step 4. Packet Capture File: Specify the path and filename of the packet capture file containing intercepted packets (e.g., /path/to/file.cap).\n" +
+        "Step 5. Save Key to Output File (Optional): Provide the file path and name where the recovered key should be saved.\n" +
+        "Step 6. Start Aircrack-ng: Once all fields are configured, click 'Start Aircrack-ng' to begin the key recovery process.\n" +
         "=== WPA/WPA2-PSK Mode ===\n" +
-        "1. WEP or WPA-PSK: Select 'WPA' from the dropdown menu.\n\n" +
-        "2. Wordlist(s) Filename(s): Specify the file path(s) to the wordlist(s) that will be used for the dictionary attack (e.g., /path/to/wordlist.txt).\n\n" +
-        "3. Set AP Identifier (Optional): Provide the identifier for the access point you are targeting.\n\n" +
-        "4. Packet Capture File: Specify the path and filename of the packet capture file containing the WPA handshake (e.g., /path/to/file.cap).\n\n" +
-        "5. Save Key to Output File (Optional): Provide a file path and name where the recovered key will be saved.\n\n" +
-        "6. Start Aircrack-ng: Click 'Start Aircrack-ng' to initiate the dictionary attack.";
-    const sourceLink = "https://www.kali.org/tools/aircrack-ng/"; // Link to the source component.
+        "Step 1. WEP or WPA-PSK: Select 'WPA' from the dropdown menu.\n" +
+        "Step 2. Advanced Mode (Optional): Toggle 'Advanced Mode' to enable additional configuration options (see below for more details).\n" +
+        "Step 3. Wordlist(s) Filename(s): Specify the file path(s) to the wordlist(s) that will be used for the dictionary attack (e.g., /path/to/wordlist.txt).\n" +
+        "Step 4. Set AP Identifier (Optional): Provide the identifier for the access point you are targeting.\n" +
+        "Step 5. Packet Capture File: Specify the path and filename of the packet capture file containing the WPA handshake (e.g., /path/to/file.cap).\n" +
+        "Step 6. Save Key to Output File (Optional): Provide a file path and name where the recovered key will be saved.\n" +
+        "Step 7. Start Aircrack-ng: Click 'Start Aircrack-ng' to initiate the dictionary attack.\n" +
+        "=== Advanced Mode Options (WEP & WPA) ===\n" +
+        "Alpha-numeric or Binary-coded Decimal or Default: Restricts the key search space to the selected character set.\n" +
+        "Quiet Mode: Suppresses status output until the key is found, resulting in a cleaner and less cluttered display. Requires either BSSID or ESSID to function.\n" +
+        "Custom Mode: Allows additional parameters not included in the toolkit to be entered. Only use if necessary.\n" +
+        "--- Advanced Options (WEP Only) ---\n" +
+        "KoreK: Enables KoreK attack method, improving WEP key recovery using older .ivs files. Do not enable unless the capture file is in the .ivs format.\n" +
+        "Fudge: Sets the brute-force fudge factor. A higher value increases the depth of the attack and the likelihood of success, but also increases runtime.";
+    const sourceLink = "https://www.kali.org/tools/aircrack-ng/"; //link to the source component.
     const tutorial = "https://docs.google.com/document/d/1uMAojanvI4lQkJ5q9lx4HOioNbYTPbfY59RCHvQn4ow/edit?usp=sharing";
 
     // Component Constants.

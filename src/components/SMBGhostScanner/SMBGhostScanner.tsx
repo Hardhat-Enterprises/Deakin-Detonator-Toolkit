@@ -40,6 +40,7 @@ const SMBGhostScanner = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [ipError, setIpError] = useState(""); // State variable to store IP validation error message.
 
     // form hook to handle form input
     let form = useForm({
@@ -113,12 +114,34 @@ const SMBGhostScanner = () => {
     };
 
     /**
+     * Validates the IP address format.
+     * @param {string} ip - The IP address to validate.
+     * @returns {boolean} - Returns true if the IP address is valid, otherwise false.
+     */
+    const validateIpAddress = (ip: string): boolean => {
+        const ipv4Pattern =
+            /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        const ipv6Pattern =
+            /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]|[1-9]?)?[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]|[1-9]?)?[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]|[1-9]?)?[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]|[1-9]?)?[0-9]))$/;
+        return ipv4Pattern.test(ip) || ipv6Pattern.test(ip);
+    };
+
+    /**
      * Asynchronous handler for the form submission event.
      * It sets up and triggers the SMB-Ghost Scanner tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
      * @param {FormValuesType} values - The form values, containing the target IP address.
      */
     const onSubmit = async (values: FormValuesType) => {
+        // Validate IP address
+        if (!validateIpAddress(values.ip)) {
+            setIpError("Invalid IP address format. Please enter a valid IPv4 or IPv6 address.");
+            return;
+        }
+
+        // Clear previous IP error
+        setIpError("");
+
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
         // Start the Loading Overlay
@@ -178,7 +201,7 @@ const SMBGhostScanner = () => {
                             "Please turn off the firewall on target system, otherwise the detect packet might be dropped. "
                         }
                     ></Alert>
-                    <TextInput label={"Target IP address"} required {...form.getInputProps("ip")} />
+                    <TextInput label={"Target IP address"} required {...form.getInputProps("ip")} error={ipError} />
                     <Button type={"submit"}>Scan</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />

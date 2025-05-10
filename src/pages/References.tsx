@@ -561,6 +561,11 @@ const ReferencesPage = () => {
                                     url={"https://nvd.nist.gov/vuln/detail/CVE-2022-36804"}
                                 />
                                 <Reference
+                                    name={"CVE-2022-22963"}
+                                    description={"Spring Cloud Function - SpEL Injection Remote Code Execution."}
+                                    url={"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-22963"}
+                                />
+                                <Reference
                                     name={"CVE-2023-22527"}
                                     description={"CVE-2023-22527 allows RCE in Atlassian Confluence."}
                                     url={"https://nvd.nist.gov/vuln/detail/CVE-2023-22527"}
