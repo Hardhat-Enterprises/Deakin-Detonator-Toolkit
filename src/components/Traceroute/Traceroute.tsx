@@ -133,9 +133,11 @@ const Traceroute = () => {
      * @param {FormValuesType} values - Contains the type of traceroute scan (ICMP, TCP, UDP, custom),
      * the destination hostname, and optional custom traceroute options.
      */
+
+    // Patched onSubmit handler snippet for "Traceroute custom scan"
     const onSubmit = async (values: FormValuesType) => {
-        setLoading(true); // Activate loading state to indicate ongoing process
-        let args = [""];
+        setLoading(true);
+        let args: string[] = [];
 
         // Switch case to handle different traceroute scan options based on user selection.
         switch (values.traceRouteSwitch) {
@@ -192,11 +194,18 @@ const Traceroute = () => {
 
                 break;
             // Traceroute custom scan allows specifying additional options
-            // Syntax: traceroute <options> <hostname>
-            case "Traceroute custom scan":
-                args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
-                args.push(`${values.traceRouteOptions}`); // Adds custom options to the arguments list.
-                args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
+            case "Traceroute custom scan": {
+                args = ["/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh"];
+                // Hostname is always the first argument
+                args.push(values.hostname);
+
+                // Combine all custom flags into a single string for second argument
+                const rawFlags = values.traceRouteOptions.trim();
+                if (rawFlags.length > 0) {
+                    args.push(rawFlags);
+                }
+
+                // Execute Traceroute with all arguments
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
                     .then(({ pid, output }) => {
                         setPid(pid);
@@ -209,6 +218,7 @@ const Traceroute = () => {
                     });
 
                 break;
+            }
         }
     };
 
@@ -246,7 +256,7 @@ const Traceroute = () => {
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label={"Hostname/IP address"} {...form.getInputProps("hostname")} />
-                    <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("tracerouteOptions")} />
+                    <TextInput label={"Traceroute custom (optional)"} {...form.getInputProps("traceRouteOptions")} />
                     <NativeSelect
                         value={selectedScanOption}
                         onChange={(e) => setSelectedTracerouteOption(e.target.value)}
