@@ -98,6 +98,7 @@ import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
 import CVE202222963 from "./CVE-2022-22963/CVE202222963";
 import Tcpdump from "./Tcpdump/Tcpdump";
+import NetDiscover from "./NetDiscover/NetDiscover";
 import CVE202322527 from "./CVE-2023-22527/CVE-2023-22527";
 import DigTool from "./Dig/Dig";
 import Dig from "./Dig/Dig";
@@ -651,6 +652,14 @@ export const ROUTES: RouteProperties[] = [
         path: "/tools/Netcat",
         element: <NetcatTool />,
         description: "A tool that can create, read, and write network connections using TCP or UDP protocols.",
+        category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "NetDiscover",
+        path: "/tools/NetDiscover",
+        element: <NetDiscover />,
+        description:
+            "A passive and active network discovery tool to find live hosts using ARP packets without sending traditional ICMP requests. ",
         category: "Network Scanning and Enumeration",
     },
     {
