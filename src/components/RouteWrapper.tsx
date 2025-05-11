@@ -85,7 +85,7 @@ import Masscan from "./Masscan/Masscan";
 import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
-import Wifite from "./wifite/wifite";
+import Wifite from "./Wifite2/wifite";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
 import Tiger from "./tiger/tiger";
 import Unicornscan from "./Unicornscan/Unicornscan";
@@ -871,10 +871,11 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
-        name: "Wifite",
-        path: "/tools/wifite",
+        name: "Wifite2",
+        path: "/tools/Wifite2",
         element: <Wifite />,
-        description: "A tool used to audit WEP, WPA, and WPA2 encrypted networks.",
+        description:
+            "A tool for attacking WEP, WPA, WPA2, and WPS-secured Wi-Fi networks using customizable options and a user-friendly interface.",
         category: "Network Scanning and Enumeration",
     },
     {
