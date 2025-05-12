@@ -7,7 +7,6 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
-//import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 /**
  * Represents the form values for the Rtgen component.
@@ -31,8 +30,6 @@ const Rtgen = () => {
     // Component state variables
     const [loading, setLoading] = useState(false); // State variable to indicate loading state
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution
-    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving of output
-    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if output has been saved
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
@@ -164,25 +161,11 @@ const Rtgen = () => {
                 // Deactivate loading state
                 setLoading(false);
             });
-        setAllowSave(true);
     };
 
-    /**
-     * Handles the completion of output saving by updating state variables.
-     */ /*
-    const handleSaveComplete = () => {
-        setHasSaved(true); // Set hasSaved state to true
-        setAllowSave(false); // Disallow further output saving
-    };
-    */
-
-    /**
-     * Clears the command output and resets state variables related to output saving.
-     */
+    // Clears the command output and resets state variables related to output saving.
     const clearOutput = () => {
         setOutput(""); // Clear the command output
-        setHasSaved(false); // Reset hasSaved state
-        setAllowSave(false); // Disallow further output saving
     };
 
     // Render component
@@ -215,7 +198,7 @@ const Rtgen = () => {
                         label="Character set"
                         required
                         {...form.getInputProps("charset")}
-                        placeholder="e.g., alphanumeric"
+                        placeholder="e.g., alpha-numeric"
                     />
                     <TextInput
                         label="Minimum Plaintext Length"
@@ -260,7 +243,6 @@ const Rtgen = () => {
                         placeholder="e.g., 0"
                     />
                     <Button type={"submit"}>Generate {title}</Button>
-                    {/* {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)} */}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
