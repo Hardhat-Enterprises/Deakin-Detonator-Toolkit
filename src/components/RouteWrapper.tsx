@@ -3,6 +3,7 @@ import HomePage from "../pages/HomePage";
 import { AttackVectors } from "../pages/AttackVectors";
 import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
+import { ScenarioTraining } from "../pages/ScenarioTraining";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
@@ -75,7 +76,6 @@ import NSLookup from "./NSLookupTool/NSLookupTool";
 import ArpanameTool from "./Arpaname/arpaname";
 import Nikto from "./Nikto/Nikto";
 import Bully from "./Bully/Bully";
-import AMAP from "./Amap/Amap";
 import Gitleaks from "./Gitleaks/Gitleaks";
 import WhatWeb from "./WhatWeb/WhatWeb";
 import Sublist3r from "./Sublist3r/Sublist3r";
@@ -85,7 +85,7 @@ import Masscan from "./Masscan/Masscan";
 import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
-import Wifite from "./wifite/wifite";
+import Wifite from "./Wifite2/wifite";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
 import Tiger from "./tiger/tiger";
 import Unicornscan from "./Unicornscan/Unicornscan";
@@ -96,7 +96,13 @@ import CVE202226134 from "./CVE-2022-26134/CVE-2022-26134";
 import Wafw00f from "./wafw00f/wafw00f";
 import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
+import CVE202222963 from "./CVE-2022-22963/CVE202222963";
 import Tcpdump from "./Tcpdump/Tcpdump";
+import CVE202322515 from "./CVE-2023-22515/CVE-2023-22515";
+import CVE202322527 from "./CVE-2023-22527/CVE-2023-22527";
+import DigTool from "./Dig/Dig";
+import Dig from "./Dig/Dig";
+import NewsFeed from "../components/NewsFeed/NewsFeed";
 
 export interface RouteProperties {
     name: string;
@@ -140,6 +146,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/walkthroughs",
         element: <WalkthroughsPage />,
         description: "Walkthroughs page",
+        category: "",
+    },
+    {
+        name: "AI Training Scenario",
+        path: "/scenario-training",
+        element: <ScenarioTraining />,
+        description: "Generate AI-assisted penetration testing scenarios using GPT-4",
         category: "",
     },
     {
@@ -211,6 +224,27 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2022-26134",
         element: <CVE202226134 />,
         description: "Confluence Pre-Auth Remote Code Execution via OGNL Injection",
+        category: "",
+    },
+    {
+        name: "CVE-2022-22963",
+        path: "/attack-vectors/cve-2022-22963",
+        element: <CVE202222963 />,
+        description: "Spring Cloud Function SpEL injection RCE exploit.",
+        category: "",
+    },
+    {
+        name: "CVE-2023-22515",
+        path: "/attack-vectors/CVE-2023-22515",
+        element: <CVE202322515 />,
+        description: "Auth bypass to allow admin account creation in Atlassian Confluence",
+        category: "",
+    },
+    {
+        name: "CVE-2023-22527",
+        path: "/attack-vectors/CVE-2023-22527",
+        element: <CVE202322527 />,
+        description: "Unauthenticated RCE in Atlassian Confluence via OGNL injection",
         category: "",
     },
     {
@@ -305,6 +339,14 @@ export const ROUTES: RouteProperties[] = [
             "A walkthrough on Topology Hack The Box challenge which requires knowledge of network protocols, routing, and security configurations",
         category: "Network Scanning and Enumeration",
     },
+    {
+        name: "NewsFeed",
+        path: "/news",
+        element: <NewsFeed />,
+        description: "Stay updated with the latest cybersecurity news and trends",
+        category: "NewsFeed",
+    },
+
     //TOOLS BELOW THIS COMMENT - PLEASE ADD NEW TOOLS IN ALPHABETICAL ORDER
     {
         name: "Airbase NG",
@@ -321,14 +363,6 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A wireless network auditing tool designed for analysing packets captured from Wi-Fi networks, cracking WEP and WPA-PSK passwords, and identifying vulnerabilities in wireless networks.",
         category: "Password Cracking and Authentication Testing",
-    },
-    {
-        name: "Amap",
-        path: "/tools/Amap",
-        element: <AMAP />,
-        description:
-            "A network scanning tool designed to identify and fingerprint services and applications running on open ports of targeted hosts.",
-        category: "Network Scanning and Enumeration",
     },
     {
         name: "Amass",
@@ -459,6 +493,14 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A Python script that systematically searches for different hosts associated with a given domain, using DNS queries to discover subdomains, IP addresses, and other relevant DNS records.",
         category: "Information Gathering and Analysis",
+    },
+    {
+        name: "Dig",
+        path: "/tools/dig",
+        element: <Dig />,
+        description:
+            "A command-line tool used for querying DNS servers to obtain domain name or IP address information.",
+        category: "Network Scanning and Enumeration",
     },
     {
         name: "Enum4Linux",
@@ -837,10 +879,11 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
-        name: "Wifite",
-        path: "/tools/wifite",
+        name: "Wifite2",
+        path: "/tools/Wifite2",
         element: <Wifite />,
-        description: "A tool used to audit WEP, WPA, and WPA2 encrypted networks.",
+        description:
+            "A tool for attacking WEP, WPA, WPA2, and WPS-secured Wi-Fi networks using customizable options and a user-friendly interface.",
         category: "Network Scanning and Enumeration",
     },
     {
@@ -862,4 +905,8 @@ export function getAttackVectors() {
 
 export function getWalkthroughs() {
     return ROUTES.filter((route) => route.path.startsWith("/walkthroughs/"));
+}
+
+export function getTrainingRoutes() {
+    return ROUTES.filter((route) => route.path.startsWith("/scenario-training"));
 }
