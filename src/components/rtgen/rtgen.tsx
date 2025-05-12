@@ -7,7 +7,7 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
-import { Select, Group } from '@mantine/core';
+import { Select, Group } from "@mantine/core";
 
 /**
  * Represents the form values for the Rtgen component.
@@ -35,8 +35,19 @@ const Rtgen = () => {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [algorithmOptions, setAlgorithmOptions] = useState(['lm', 'ntlm', 'md5', 'sha1', 'sha256']); // State variable holding the list of selectable hash algorithms.
-    const [charsetOptions, setCharsetOptions] = useState(['numeric', 'alpha', 'alpha-numeric', 'loweralpha', 'loweralpha-numeric', 'mixalpha', 'mixalpha-numeric', 'ascii-32-95', 'ascii-32-65-123-4', 'alpha-numeric-symbol32-space']); // State variable to hold selectable character set options.
+    const [algorithmOptions, setAlgorithmOptions] = useState(["lm", "ntlm", "md5", "sha1", "sha256"]); // State variable holding the list of selectable hash algorithms.
+    const [charsetOptions, setCharsetOptions] = useState([
+        "numeric",
+        "alpha",
+        "alpha-numeric",
+        "loweralpha",
+        "loweralpha-numeric",
+        "mixalpha",
+        "mixalpha-numeric",
+        "ascii-32-95",
+        "ascii-32-65-123-4",
+        "alpha-numeric-symbol32-space",
+    ]); // State variable to hold selectable character set options.
 
     // Component Constants
     const title = "Rtgen";
@@ -191,7 +202,7 @@ const Rtgen = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
-                    <Group position="apart" style={{ width: '100%' }}>
+                    <Group position="apart" style={{ width: "100%" }}>
                         <Select
                             label="Hash Algorithm"
                             placeholder="e.g., md5"
@@ -207,11 +218,11 @@ const Rtgen = () => {
                             }}
                             {...form.getInputProps("hashAlgorithm")}
                             sx={{
-                                '.mantine-Select-item': {
-                                    padding: '5px 10px',
+                                ".mantine-Select-item": {
+                                    padding: "5px 10px",
                                 },
                             }}
-                            style={{ width: '49%' }}
+                            style={{ width: "49%" }}
                         />
                         <Select
                             label="Character Set"
@@ -227,29 +238,29 @@ const Rtgen = () => {
                             }}
                             {...form.getInputProps("charset")}
                             sx={{
-                                '.mantine-Select-item': {
-                                padding: '5px 10px',
+                                ".mantine-Select-item": {
+                                    padding: "5px 10px",
                                 },
                             }}
-                            style={{ width: '49%' }}
+                            style={{ width: "49%" }}
                         />
                     </Group>
-                    <Group position="apart" style={{ width: '100%' }}>
+                    <Group position="apart" style={{ width: "100%" }}>
                         <TextInput
                             label="Minimum Plaintext Length"
                             required
                             type="number"
                             {...form.getInputProps("plaintextLengthMin")}
                             placeholder="e.g., 1"
-                            style={{ width: '32%' }}
+                            style={{ width: "32%" }}
                         />
                         <TextInput
                             label="Maximum Plaintext Length"
                             required
                             type="number"
                             {...form.getInputProps("plaintextLengthMax")}
-                            placeholder="e.g., 7"
-                            style={{ width: '32%' }}
+                            placeholder="Maximum value is 7"
+                            style={{ width: "32%" }}
                         />
                         <TextInput
                             label="Table Index"
@@ -257,17 +268,17 @@ const Rtgen = () => {
                             type="number"
                             {...form.getInputProps("tableIndex")}
                             placeholder="e.g., 0"
-                            style={{ width: '32%' }}
+                            style={{ width: "32%" }}
                         />
                     </Group>
-                    <Group position="apart" style={{ width: '100%' }}>
+                    <Group position="apart" style={{ width: "100%" }}>
                         <TextInput
                             label="Chain Length"
                             required
                             type="number"
                             {...form.getInputProps("chainLength")}
                             placeholder="e.g., 1000"
-                            style={{ width: '32%' }}
+                            style={{ width: "32%" }}
                         />
                         <TextInput
                             label="Chain Count"
@@ -275,7 +286,7 @@ const Rtgen = () => {
                             type="number"
                             {...form.getInputProps("chainCount")}
                             placeholder="e.g., 100000"
-                            style={{ width: '32%' }}
+                            style={{ width: "32%" }}
                         />
                         <TextInput
                             label="Part Index"
@@ -283,7 +294,7 @@ const Rtgen = () => {
                             type="number"
                             {...form.getInputProps("partIndex")}
                             placeholder="e.g., 0"
-                            style={{ width: '32%' }}
+                            style={{ width: "32%" }}
                         />
                     </Group>
                     <Button type={"submit"}>Generate {title}</Button>
