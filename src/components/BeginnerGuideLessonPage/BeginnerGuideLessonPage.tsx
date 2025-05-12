@@ -3,6 +3,7 @@ import { Container, Title, Text, Card, Stack, Badge, Collapse, Button, Group, Gr
 import { BeginnerInformationContent } from "../BeginnerGuideLessonContent/BeginnerGuideLessonContent";
 import { IconCheck, IconRocket, IconArrowRight, IconArrowLeft } from "@tabler/icons";
 import { useNavigate } from "react-router-dom";
+import HintedToolGrid from "../HintGrid/HintGrid";
 
 interface BGuideProps {
     lessonIndex: number;
@@ -149,8 +150,12 @@ const BGuideLesson: React.FC<BGuideProps> = ({ lessonIndex }) => {
                                         {section.contentAttackToolClass && (
                                             <>
                                                 <Divider my="md" />
-                                                <div className="tool-component-container">
-                                                    {section.contentAttackToolClass}
+                                                <div>
+                                                    <HintedToolGrid
+                                                        tool={section.contentAttackToolClass}
+                                                        hints={section.hints}
+                                                        developmentMode={guideData.developmentMode || false}
+                                                    />
                                                 </div>
                                             </>
                                         )}

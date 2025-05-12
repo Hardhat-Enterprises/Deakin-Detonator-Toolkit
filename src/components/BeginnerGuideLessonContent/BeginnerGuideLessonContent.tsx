@@ -10,6 +10,7 @@ export interface BeginnerGuideLessonContentFormat {
     lessonDifficulty: string;
     lessonDescription: string;
     lessonCompletionStatus?: boolean;
+    developmentMode?: boolean;
     lessonContent: {
         isContentPractical: boolean;
         pageContent: {
@@ -17,6 +18,11 @@ export interface BeginnerGuideLessonContentFormat {
             content: string;
             contentAttackToolClass?: React.ReactNode;
             completionStatus: boolean;
+            hints?: {
+                position: { x: number; y: number };
+                message: string;
+                visible?: boolean;
+            }[];
         }[];
     }[];
 }
@@ -331,6 +337,7 @@ Proper documentation during this phase is crucial. Penetration testers should cr
         lessonDifficulty: "Moderate",
         lessonDescription:
             "Learn how to identify and exploit common web application vulnerabilities using industry-standard tools and techniques.",
+
         lessonContent: [
             {
                 isContentPractical: false,
@@ -536,6 +543,20 @@ A thorough web application penetration test incorporates all these aspects, docu
                             "SQLmap is one of the most powerful open-source tools for detecting and exploiting SQL injection vulnerabilities. In this practical exercise, you'll learn how to use SQLmap to test web applications for SQL injection vulnerabilities.\n\nSQLmap can automatically detect and exploit various types of SQL injection vulnerabilities across different database management systems including MySQL, Oracle, PostgreSQL, Microsoft SQL Server, and others.\n\nBelow you'll find an interactive SQLmap tool where you can practice detecting and exploiting SQL injection vulnerabilities in a simulated environment.",
                         completionStatus: false,
                         contentAttackToolClass: lesson3PracticalTools.SQLmap,
+                        hints: [
+                            {
+                                position: { x: 16, y: 27.5 },
+                                message: "Enter the target URL here",
+                            },
+                            {
+                                position: { x: 12, y: 42.5 },
+                                message: "Select Detection Level",
+                            },
+                            {
+                                position: { x: 92, y: 63.5 },
+                                message: "Select Required Risk Level",
+                            },
+                        ],
                     },
                 ],
             },
