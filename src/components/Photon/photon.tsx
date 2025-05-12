@@ -188,21 +188,21 @@ const Photon = () => {
     // Add any new advanced mode options that require user input here
     const clearAdvancedFormValues = () => {
         form.setValues({
-          crawlDepth: "",
-          cookies: "",
-          userAgent: "",
-          threads: "",
-          delay: "",
-          seeds: "",
-          timeout: "",
-          exclude: "",
-          headers: "",
+            crawlDepth: "",
+            cookies: "",
+            userAgent: "",
+            threads: "",
+            delay: "",
+            seeds: "",
+            timeout: "",
+            exclude: "",
+            headers: "",
         });
-      };
-      
+    };
+
     // Resets all advanced mode toggles and entered values to their default state
     // Add any new advanced mode options here
-      const resetAdvancedModeOptions = () => {
+    const resetAdvancedModeOptions = () => {
         setCrawlDepth(false);
         setShowCookies(false);
         setShowUserAgent(false);
@@ -215,9 +215,9 @@ const Photon = () => {
         setVerbose(false);
         setOnlyUrls(false);
         setExtractKeys(false);
-      
+
         clearAdvancedFormValues();
-      };      
+    };
 
     return (
         <RenderComponent
@@ -247,7 +247,7 @@ const Photon = () => {
                             setAdvancedMode(isChecked);
                             clearAdvancedFormValues();
                             if (!isChecked) resetAdvancedModeOptions();
-                          }}                       
+                        }}
                     />
                     <TextInput
                         label={"URL of the target"}
@@ -399,78 +399,78 @@ const Photon = () => {
                                         setExtractKeys(isChecked);
                                     }}
                                 />
-                                </SimpleGrid>
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                                    {crawlDepth && (
-                                        <TextInput
-                                            label="Crawl Depth"
-                                            placeholder="e.g., 2"
-                                            style={{ flex: 1 }}
-                                            {...form.getInputProps("crawlDepth")}
-                                        />
-                                    )}
-                                    {showThreads && (
-                                        <TextInput
-                                            label="Threads"
-                                            placeholder="e.g., 4"
-                                            style={{ flex: 1 }}
-                                            {...form.getInputProps("threads")}
-                                        />
-                                    )}
-                                    {showDelay && (
-                                        <TextInput
-                                            label="Delay (seconds)"
-                                            placeholder="e.g., 1"
-                                            style={{ flex: 1 }}
-                                            {...form.getInputProps("delay")}
-                                        />
-                                    )}
-                                    {showTimeout && (
-                                        <TextInput
-                                            label="Timeout (seconds)"
-                                            placeholder="e.g., 10"
-                                            style={{ flex: 1 }}
-                                            {...form.getInputProps("timeout")}
-                                        />
-                                    )}
-                                </div>
-                                {showCookies && (
+                            </SimpleGrid>
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+                                {crawlDepth && (
+                                    <TextInput
+                                        label="Crawl Depth"
+                                        placeholder="e.g., 2"
+                                        style={{ flex: 1 }}
+                                        {...form.getInputProps("crawlDepth")}
+                                    />
+                                )}
+                                {showThreads && (
+                                    <TextInput
+                                        label="Threads"
+                                        placeholder="e.g., 4"
+                                        style={{ flex: 1 }}
+                                        {...form.getInputProps("threads")}
+                                    />
+                                )}
+                                {showDelay && (
+                                    <TextInput
+                                        label="Delay (seconds)"
+                                        placeholder="e.g., 1"
+                                        style={{ flex: 1 }}
+                                        {...form.getInputProps("delay")}
+                                    />
+                                )}
+                                {showTimeout && (
+                                    <TextInput
+                                        label="Timeout (seconds)"
+                                        placeholder="e.g., 10"
+                                        style={{ flex: 1 }}
+                                        {...form.getInputProps("timeout")}
+                                    />
+                                )}
+                            </div>
+                            {showCookies && (
                                 <TextInput
                                     label="Cookies"
                                     placeholder="e.g., sessionid=abc123; theme=light"
                                     {...form.getInputProps("cookies")}
                                 />
-                                )}
-                                {showUserAgent && (
+                            )}
+                            {showUserAgent && (
                                 <TextInput
                                     label="User Agent"
                                     placeholder="e.g., Mozilla/5.0 (X11; Linux x86_64)"
                                     {...form.getInputProps("userAgent")}
                                 />
-                                )}
-                                {showSeeds && (
+                            )}
+                            {showSeeds && (
                                 <TextInput
                                     label="Seed URLs"
                                     placeholder="e.g., http://example.com/portals.html"
                                     {...form.getInputProps("seeds")}
                                 />
-                                )}
-                                {showExclude && (
+                            )}
+                            {showExclude && (
                                 <TextInput
                                     label="Exclude Regex"
                                     placeholder="e.g., /blog/20[17|18]"
                                     {...form.getInputProps("exclude")}
                                 />
-                                )}
-                                {showHeaders && (
+                            )}
+                            {showHeaders && (
                                 <TextInput
                                     label="HTTP Headers"
                                     placeholder='e.g., {"Authorization": "Bearer xyz"}'
                                     {...form.getInputProps("headers")}
                                 />
-                                )}
-                            </>
-                        )}
+                            )}
+                        </>
+                    )}
                     <Button type={"submit"}>Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
