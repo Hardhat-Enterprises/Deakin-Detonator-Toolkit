@@ -494,9 +494,11 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/whois/"}
                                 />
                                 <Reference
-                                    name={"Wifite"}
-                                    description={"Wifite is a tool to audit WEP or WPA encrypted wireless networks."}
-                                    url={"https://www.kali.org/tools/wifite/"}
+                                    name={"Wifite2"}
+                                    description={
+                                        "A tool for attacking WEP, WPA, WPA2, and WPS-secured Wi-Fi networks using customizable options and a user-friendly interface.."
+                                    }
+                                    url={"https://github.com/derv82/wifite2"}
                                 />
                                 <Reference
                                     name={"WPScan"}
