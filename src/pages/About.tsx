@@ -1,4 +1,3 @@
-
 import { Image, Text, Accordion, useMantineTheme, Stack, Title } from "@mantine/core";
 import { IconStepInto, IconTools, IconSearch, IconTarget } from "@tabler/icons";
 
@@ -22,8 +21,6 @@ const AboutPage = () => {
 
     return (
         <>
-
-
             <Stack align={"center"}>
                 <Title>About the Deakin Detonator Toolkit</Title>
                 <Text>In its simplest definition, Deakin Detonator Toolkit is a penetration testing toolkit.</Text>

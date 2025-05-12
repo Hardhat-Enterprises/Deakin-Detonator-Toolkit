@@ -1,4 +1,16 @@
-import { Image, Text, Stack, Title, Button, Grid, Card, CardSection, useMantineTheme, Modal, Accordion } from "@mantine/core";
+import {
+    Image,
+    Text,
+    Stack,
+    Title,
+    Button,
+    Grid,
+    Card,
+    CardSection,
+    useMantineTheme,
+    Modal,
+    Accordion,
+} from "@mantine/core";
 import { IconRocket, IconSchool } from "@tabler/icons";
 import { useState } from "react";
 
@@ -6,7 +18,6 @@ const HomePage = () => {
     const [modalOpened, setModalOpened] = useState(true);
     return (
         <>
-
             <Modal
                 opened={modalOpened}
                 onClose={() => setModalOpened(false)}
@@ -48,7 +59,6 @@ const HomePage = () => {
                     I Understand
                 </Button>
             </Modal>
-
 
             <Stack align={"center"}>
                 <Title>Welcome to the Deakin Detonator Toolkit</Title>
