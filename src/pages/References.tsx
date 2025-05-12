@@ -568,6 +568,11 @@ const ReferencesPage = () => {
                                     url={"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-22963"}
                                 />
                                 <Reference
+                                    name={"CVE-2023-22515"}
+                                    description={"Auth bypass to allow admin account creation in Atlassian Confluence"}
+                                    url={"https://nvd.nist.gov/vuln/detail/CVE-2023-22515"}
+                                />
+                                <Reference
                                     name={"CVE-2023-22527"}
                                     description={"CVE-2023-22527 allows RCE in Atlassian Confluence."}
                                     url={"https://nvd.nist.gov/vuln/detail/CVE-2023-22527"}

@@ -98,6 +98,7 @@ import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
 import CVE202222963 from "./CVE-2022-22963/CVE202222963";
 import Tcpdump from "./Tcpdump/Tcpdump";
+import CVE202322515 from "./CVE-2023-22515/CVE-2023-22515";
 import CVE202322527 from "./CVE-2023-22527/CVE-2023-22527";
 import DigTool from "./Dig/Dig";
 import Dig from "./Dig/Dig";
@@ -230,6 +231,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/cve-2022-22963",
         element: <CVE202222963 />,
         description: "Spring Cloud Function SpEL injection RCE exploit.",
+        category: "",
+    },
+    {
+        name: "CVE-2023-22515",
+        path: "/attack-vectors/CVE-2023-22515",
+        element: <CVE202322515 />,
+        description: "Auth bypass to allow admin account creation in Atlassian Confluence",
         category: "",
     },
     {
