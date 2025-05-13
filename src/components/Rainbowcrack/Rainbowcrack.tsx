@@ -2,7 +2,6 @@ import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
-import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
@@ -11,35 +10,24 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { FilePicker } from "../FileHandler/FilePicker";
 import { generateFilePath } from "../FileHandler/FileHandler";
 
-/**
- * Represents the form values for the RainbowCrack component.
- */
 interface FormValuesType {
     hashValue: string;
 }
 
-/**
- * The RainbowCrack component.
- * @returns The RainbowCrack component.
- */
 const RainbowCrack = () => {
-    // Component State Variables
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
-    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-    const [allowSave, setAllowSave] = useState(false); // State variable to enable/disable saving
-    const [hasSaved, setHasSaved] = useState(false); // State variable to track whether output has been saved
-    const [fileNames, setFileNames] = useState<string[]>([]); // State variable to store the file names.
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [pid, setPid] = useState("");
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+    const [fileNames, setFileNames] = useState<string[]>([]);
 
-    // Component Constants
-    const title = "RainbowCrack"; // Title of the component
-
+    const title = "RainbowCrack";
     const description =
-        "RainbowCrack is a command line tool that uses rainbow tables to crack password hashes. It supports multiple hash algorithms, including LM, NTLM, MD5, SHA1 and SHA256."; // Description of the component.
-
+        "RainbowCrack is a command line tool that uses rainbow tables to crack password hashes. It supports multiple hash algorithms, including LM, NTLM, MD5, SHA1 and SHA256.";
     const steps =
         "How to use RainbowCrack:\n" +
         "Step 1: Ensure that your rainbow tables (*.rt, *.rtc) are stored in a directory.\n" +
@@ -53,19 +41,17 @@ const RainbowCrack = () => {
         "   - Example: ./rcrack . -ntlm pwdump.txt\n" +
         "Step 6: Click the Crack " +
         title +
-        " button to execute the command and display the results."; // Steps to use the component.
-    const sourceLink = "http://project-rainbowcrack.com/"; // Link to the source code (or RainbowCrack documentation).
-    const tutorial = "https://docs.google.com/document/d/16j7ejucqvkNHo1p-fcUjxTYV6aAbSPT6TQDUYRgfa_0/edit?usp=sharing"; // Link to the official documentation/tutorial.
-    const dependencies = ["rainbowcrack"]; // Dependencies required by the component.
+        " button to execute the command and display the results.";
+    const sourceLink = "http://project-rainbowcrack.com/";
+    const tutorial = "https://docs.google.com/document/d/16j7ejucqvkNHo1p-fcUjxTYV6aAbSPT6TQDUYRgfa_0/edit?usp=sharing";
+    const dependencies = ["rainbowcrack"];
 
-    // Form hook to handle form input.
-    const form = useForm({
+    const form = useForm<FormValuesType>({
         initialValues: {
             hashValue: "",
         },
     });
 
-    // Check if the command is available and set state variables accordingly.
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
@@ -79,20 +65,10 @@ const RainbowCrack = () => {
             });
     }, []);
 
-    /**
-     * handleProcessData:Callback to handle and append new data from the child process to the output.
-     * @param {string} data - The data received from the child process.
-     */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+        setOutput((prev) => prev + "\n" + data);
     }, []);
 
-    /**
-     * handleProcessTermination: Callback to handle the termination of the child process.
-     * @param {object} param - An object containing information about the process termination.
-     * @param {number} param.code - The exit code of the terminated process.
-     * @param {number} param.signal - The signal code indicating how the process was terminated.
-     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
@@ -110,17 +86,11 @@ const RainbowCrack = () => {
         [handleProcessData]
     );
 
-    /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * @param {FormValuesType} values - The form values.
-     */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
         setAllowSave(false);
 
-        // Construct arguments for rainbowcrack command based on form input
         const args = ["."];
-
         if (fileNames.length === 0) {
             args.push("-h", values.hashValue);
         } else {
@@ -129,11 +99,9 @@ const RainbowCrack = () => {
             args.push("-l", dataUploadPath);
         }
 
-        // Execute the rainbowcrack command via helper method
         CommandHelper.runCommandGetPidAndOutput("rcrack", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 setOutput(output);
-                console.log(pid);
                 setPid(pid);
             })
             .catch((error) => {
@@ -142,17 +110,22 @@ const RainbowCrack = () => {
             });
     };
 
-    /**
-     * Clears the output state.
-     */
     const clearOutput = useCallback(() => {
         setOutput("");
-    }, [setOutput]);
+    }, []);
 
     const handleSaveComplete = () => {
-        // This function could handle any actions needed after saving the output
         setHasSaved(true);
     };
+
+    const resetForm = () => {
+        form.reset();
+        setOutput("");
+        setFileNames([]);
+        setAllowSave(false);
+        setHasSaved(false);
+    };
+
     return (
         <RenderComponent
             title={title}
@@ -172,28 +145,51 @@ const RainbowCrack = () => {
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput
-                        label="Hash Value"
-                        required
-                        disabled={fileNames.length > 0}
-                        value={fileNames.length > 0 ? "" : form.values.hashValue}
-                        onChange={(event) => {
-                            if (fileNames.length === 0) {
-                                form.setFieldValue("hashValue", event.currentTarget.value);
-                            }
-                        }}
-                    />
+
+                    {fileNames.length === 0 ? (
+                        <TextInput
+                            label="Hash Value"
+                            required
+                            value={form.values.hashValue}
+                            onChange={(event) => form.setFieldValue("hashValue", event.currentTarget.value)}
+                        />
+                    ) : (
+                        <div>
+                            <strong>Uploaded File:</strong> {fileNames[0]}
+                        </div>
+                    )}
+
                     <FilePicker
                         fileNames={fileNames}
                         setFileNames={setFileNames}
                         multiple={false}
                         componentName="Rainbowcrack"
-                        labelText="Hash File"
-                        placeholderText="Click to select file(s)"
+                        labelText="Upload Hash File"
                     />
+
                     <Button type="submit">Crack</Button>
+                    <Button variant="outline" color="red" onClick={resetForm}>
+                        Reset
+                    </Button>
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+
+                    <div
+                        style={{
+                            backgroundColor: "#1e1e1e",
+                            color: "#d4d4d4",
+                            padding: "1rem",
+                            marginTop: "1rem",
+                            borderRadius: "8px",
+                            fontFamily: "monospace",
+                            maxHeight: "300px",
+                            overflowY: "auto",
+                            whiteSpace: "pre-wrap",
+                            border: "1px solid #444",
+                        }}
+                    >
+                        {output || "Output will appear here after cracking."}
+                    </div>
                 </Stack>
             </form>
         </RenderComponent>
