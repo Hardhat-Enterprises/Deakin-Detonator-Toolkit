@@ -59,13 +59,23 @@ const Photon = () => {
     const description =
         "Photon is a fast crawler designed for extracting URLs, endpoints, and more from target websites.";
     const steps =
-        "Step 1: Enter a valid target URL(eg. https://www.deakin.edu.au).\n" +
-        "Step 2: Specify additional options such as output directory, cookies, and user-agent.\n" +
-        "Step 3: Specify the crawl depth.\n" +
-        "Step 4: Click Start " +
-        title +
-        " to start Photon.\n" +
-        "Step 5: View the output results below.";
+        "Step 1: Enter a valid target URL (e.g. https://www.deakin.edu.au).\n" +
+        "Step 2: Specify the output directory where results will be saved.\n" +
+        "Step 3 (Optional): Enable advanced options to refine the scan:\n" +
+        "- Crawl Depth: Limits how deep Photon traverses links on the target site.\n" +
+        "- Threads: Define the number of concurrent threads for faster processing. Can help speed up crawling, but might also trigger security mechanisms or overwhelm smaller websites.\n" +
+        "- Delay: Introduce a delay between requests to reduce server load. Must be a whole number (integer, in seconds).\n" +
+        "- Timeout: Set the maximum time (in seconds) to wait for a response.\n" +
+        "- Cookies: Provide session cookies for authenticated crawling. Can allow access content behind login pages or user-specific sessions.\n" +
+        "- User-Agent: Set a custom User-Agent string for requests. Can mimic specific browsers or devices and avoid basic bot detection.\n" +
+        "- Seeds: Provide additional seed URLs to begin scanning from.\n" +
+        "- Exclude: Use regex to exclude specific URLs from being crawled.\n" +
+        "- Headers: Add custom headers to all HTTP requests. Useful for mimicking browser behaviour, setting authentication tokens, or bypassing certain restrictions.\n" +
+        "- Verbose: Increase output detail for debugging or deeper inspection.\n" +
+        "- Only URLs: Collect and return only discovered URLs without performing further crawling.\n" +
+        "- Extract Keys: Searches for high-entropy strings that may indicate authentication tokens, API keys, or cryptographic hashes.\n" +
+        "Step 4: Click Start Photon to begin scanning.\n" +
+        "Step 5: View the output results displayed below.";
     const sourceLink = "https://www.kali.org/tools/photon/";
     const tutorial = "https://docs.google.com/document/d/1KhrGuwq3N3NHzLmxTV_7s8buNy2ykOVX3alfx_C7V8s/edit?usp=sharing";
     const dependencies = ["photon"]; // Contains the dependencies required by the component.
