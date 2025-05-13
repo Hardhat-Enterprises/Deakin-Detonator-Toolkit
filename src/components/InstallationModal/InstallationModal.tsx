@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Modal, Button, Text, Stack } from "@mantine/core";
-import { installDependencies } from "../../utils/InstallHelper";
+import { Modal, Button, Text, Stack, Loader, Center, Progress} from "@mantine/core";
+import { installDependencies} from "../../utils/InstallHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 
 /**
@@ -52,19 +52,45 @@ const InstallationModal: React.FC<InstallationModalProps> = ({
     // Define state variables for loading and output. hooks.
     let [loading, setLoading] = useState<boolean>(false);
     let [output, setOutput] = useState<string>("");
+    
+    let stageOfDownload = "Initialising..."
+    
+    if (loading !== false) {
+        stageOfDownload = "in progress..."
+    } else {
+        stageOfDownload = "Complete."
+    }
+    
+
+    function loadingIcon() {
+        return (
+          <Center inline>
+            <Loader size="md" />
+            <Text ml={10}>Download is currently {stageOfDownload}</Text>
+          </Center>
+        );
+      }
 
     return (
         <Modal
             opened={isOpen}
             onClose={() => setOpened(false)}
-            title="Component Installation"
+            title="Component Installation Menu"
             size={"auto"}
             style={{ maxWidth: "50%", margin: "auto" }}
         >
             <div>
                 {loading ? (
                     <Stack>
-                        <ConsoleWrapper output={output} hideClearButton={true} title="Installation Progress" />
+                        <text>
+                            <hr></hr> <br></br>
+                            The required dependency is currently installing.<br></br>
+                            <br></br>
+                            {loadingIcon()}
+                            <br></br> <br></br>
+                            Download may appear to freeze. Please do NOT close the window.
+                        </text>
+                        <ConsoleWrapper output={output} hideClearButton={true} title={""}/>
                     </Stack>
                 ) : (
                     <Stack>
