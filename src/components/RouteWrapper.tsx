@@ -3,6 +3,7 @@ import HomePage from "../pages/HomePage";
 import { AttackVectors } from "../pages/AttackVectors";
 import ReferencesPage from "../pages/References";
 import ToolsPage from "../pages/Tools";
+import BPathPage from "./BeginnerGuideHomePage/BeginnerGuideHomePage";
 import { ScenarioTraining } from "../pages/ScenarioTraining";
 import { CVE202141773 } from "./CVE-2021-41773/CVE-2021-41773";
 import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
@@ -137,6 +138,13 @@ export const ROUTES: RouteProperties[] = [
         category: "",
     },
     {
+        name: "Beginner Guide Lesson",
+        path: "/beginner-guides",
+        element: <BPathPage />,
+        description: "Beginner guide home page",
+        category: "",
+    },
+    {
         name: "Attack Vectors",
         path: "/attack-vectors",
         element: <AttackVectors />,
@@ -162,6 +170,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/references",
         element: <ReferencesPage />,
         description: "Attack Vectors page",
+        category: "",
+    },
+    {
+        name: "Beginner Guide Lesson",
+        path: "/beginner-guides/lesson:lessonId",
+        element: <BPathPage />,
+        description: "Dynamic lesson router",
         category: "",
     },
     {
