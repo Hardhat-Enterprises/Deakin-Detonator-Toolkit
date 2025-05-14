@@ -51,7 +51,7 @@ const AircrackNG = () => {
         "=== WEP Mode ===\n" +
         "Step 1. WEP or WPA-PSK: Select 'WEP' from the dropdown menu.\n" +
         "Step 2. Advanced Mode (Optional): Toggle 'Advanced Mode' to enable additional configuration options (see below for more details).\n" +
-        "Step 3. Set AP MAC Address (BSSID) (Optional): Provide the MAC address of the access point (e.g., XX:XX:XX:XX:XX:XX).\n" +
+        "Step 3. Set Access Point Details (Optional): Provide the MAC address (BSSID) and/or network name (ESSID) of the target access point (e.g., 12:34:56:78:90:AB, MyWiFiNetwork).\n" +
         "Step 4. Packet Capture File: Specify the path and filename of the packet capture file containing intercepted packets (e.g., /path/to/file.cap).\n" +
         "Step 5. Save Key to Output File (Optional): Provide the file path and name where the recovered key should be saved.\n" +
         "Step 6. Start Aircrack-ng: Once all fields are configured, click 'Start Aircrack-ng' to begin the key recovery process.\n" +
@@ -59,7 +59,7 @@ const AircrackNG = () => {
         "Step 1. WEP or WPA-PSK: Select 'WPA' from the dropdown menu.\n" +
         "Step 2. Advanced Mode (Optional): Toggle 'Advanced Mode' to enable additional configuration options (see below for more details).\n" +
         "Step 3. Wordlist(s) Filename(s): Specify the file path(s) to the wordlist(s) that will be used for the dictionary attack (e.g., /path/to/wordlist.txt).\n" +
-        "Step 4. Set AP Identifier (Optional): Provide the identifier for the access point you are targeting.\n" +
+        "Step 4. Set Access Point Details (Optional): Provide the MAC address (BSSID) and/or network name (ESSID) of the target access point (e.g., 12:34:56:78:90:AB, MyWiFiNetwork).\n" +
         "Step 5. Packet Capture File: Specify the path and filename of the packet capture file containing the WPA handshake (e.g., /path/to/file.cap).\n" +
         "Step 6. Save Key to Output File (Optional): Provide a file path and name where the recovered key will be saved.\n" +
         "Step 7. Start Aircrack-ng: Click 'Start Aircrack-ng' to initiate the dictionary attack.\n" +
@@ -71,7 +71,8 @@ const AircrackNG = () => {
         "KoreK: Enables KoreK attack method, improving WEP key recovery using older .ivs files. Do not enable unless the capture file is in the .ivs format.\n" +
         "Fudge: Sets the brute-force fudge factor. A higher value increases the depth of the attack and the likelihood of success, but also increases runtime.";
     const sourceLink = "https://www.kali.org/tools/aircrack-ng/"; //link to the source component.
-    const tutorial = "https://docs.google.com/document/d/1uMAojanvI4lQkJ5q9lx4HOioNbYTPbfY59RCHvQn4ow/edit?usp=sharing";
+    const tutorial = "https://docs.google.com/document/d/1UJQSVmOsA2mF0XYxnAzipqiYGfVSCUB5/edit?usp=sharing&ouid=104969582837646506925&rtpof=true&sd=true";
+
 
     // Component Constants.
     const types = ["WEP", "WPA"]; // Security types supported by Aircrack-ng.
@@ -244,7 +245,7 @@ const AircrackNG = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <NativeSelect
                         value={selectedModeOption}
                         onChange={(e) => {
