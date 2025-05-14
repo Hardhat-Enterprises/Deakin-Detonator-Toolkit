@@ -85,7 +85,7 @@ import Masscan from "./Masscan/Masscan";
 import TestSSL from "./Testssl/Testssl";
 import Hping3 from "./Hping3/Hping3";
 import SQLmap from "./SQLmap/SQLmap";
-import Wifite from "./wifite/wifite";
+import Wifite from "./Wifite2/wifite";
 import SlowHttpTest from "./slowhttptest/slowhttptest";
 import Tiger from "./tiger/tiger";
 import Unicornscan from "./Unicornscan/Unicornscan";
@@ -98,9 +98,11 @@ import Fping from "./Fping/Fping";
 import Subjack from "./Subjack/Subjack";
 import CVE202222963 from "./CVE-2022-22963/CVE202222963";
 import Tcpdump from "./Tcpdump/Tcpdump";
+import CVE202322515 from "./CVE-2023-22515/CVE-2023-22515";
 import CVE202322527 from "./CVE-2023-22527/CVE-2023-22527";
 import DigTool from "./Dig/Dig";
 import Dig from "./Dig/Dig";
+import NewsFeed from "../components/NewsFeed/NewsFeed";
 import CVE202323397 from "./CVE-2023-23397/CVE-2023-23397";
 
 export interface RouteProperties {
@@ -233,6 +235,13 @@ export const ROUTES: RouteProperties[] = [
         category: "",
     },
     {
+        name: "CVE-2023-22515",
+        path: "/attack-vectors/CVE-2023-22515",
+        element: <CVE202322515 />,
+        description: "Auth bypass to allow admin account creation in Atlassian Confluence",
+        category: "",
+    },
+    {
         name: "CVE-2023-22527",
         path: "/attack-vectors/CVE-2023-22527",
         element: <CVE202322527 />,
@@ -243,7 +252,7 @@ export const ROUTES: RouteProperties[] = [
         name: "CVE-2023-23397",
         path: "/attack-vectors/CVE-2023-23397",
         element: <CVE202323397 />,
-        description: "NTLM hash leak via malicious Outlook reminder exploiting Extended MAPI property",
+        description: "NTLM hash leak via malicious Outlook reminder exploiting extended MAPI property",
         category: "",
     },
     {
@@ -338,6 +347,14 @@ export const ROUTES: RouteProperties[] = [
             "A walkthrough on Topology Hack The Box challenge which requires knowledge of network protocols, routing, and security configurations",
         category: "Network Scanning and Enumeration",
     },
+    {
+        name: "NewsFeed",
+        path: "/news",
+        element: <NewsFeed />,
+        description: "Stay updated with the latest cybersecurity news and trends",
+        category: "NewsFeed",
+    },
+
     //TOOLS BELOW THIS COMMENT - PLEASE ADD NEW TOOLS IN ALPHABETICAL ORDER
     {
         name: "Airbase NG",
@@ -870,10 +887,11 @@ export const ROUTES: RouteProperties[] = [
         category: "Web Application Testing",
     },
     {
-        name: "Wifite",
-        path: "/tools/wifite",
+        name: "Wifite2",
+        path: "/tools/Wifite2",
         element: <Wifite />,
-        description: "A tool used to audit WEP, WPA, and WPA2 encrypted networks.",
+        description:
+            "A tool for attacking WEP, WPA, WPA2, and WPS-secured Wi-Fi networks using customizable options and a user-friendly interface.",
         category: "Network Scanning and Enumeration",
     },
     {
