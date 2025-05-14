@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { Modal, Button, Image, Text, Accordion, useMantineTheme, Stack, Title } from "@mantine/core";
+import { Image, Text, Accordion, useMantineTheme, Stack, Title } from "@mantine/core";
 import { IconStepInto, IconTools, IconSearch, IconTarget } from "@tabler/icons";
 
 const AboutPage = () => {
     const theme = useMantineTheme();
-    const [modalOpened, setModalOpened] = useState(true);
+
     const getColor = (color: string) => theme.colors[color][theme.colorScheme === "dark" ? 5 : 7];
 
     const imageContainerStyles = {
@@ -17,53 +16,26 @@ const AboutPage = () => {
 
     const imageStyles = {
         minWidth: 400, // Ensures the image doesn't shrink below its intended width
-        maxWidth: "100%", // Ensures the image scales down on smaller screens
+        maxWidth: "60%", // Ensures the image scales down on smaller screens
+    };
+
+    const textStyles = {
+        width: "100%",
+        maxWidth: "100%",
+        display: "flex",
+        justifyContent: "center",
+        paddingBottom: 20,
+    };
+
+    const accordianStyle = {
+        width: "100%",
+        maxWidth: "60%",
+        justifyContent: "center",
+        margin: "1% 20% 10%",
     };
 
     return (
         <>
-            <Modal
-                opened={modalOpened}
-                onClose={() => setModalOpened(false)}
-                title="Welcome to the Deakin Detonator Toolkit"
-                centered
-                closeOnEscape={false}
-                withCloseButton={false}
-                closeOnClickOutside={false}
-                overlayOpacity={0.7}
-                overlayBlur={3}
-                size="xl"
-                styles={{
-                    title: { fontSize: "2rem", fontWeight: "bold", textAlign: "center", width: "100%" },
-                }}
-            >
-                <Image
-                    src="src/logo/logo-dark.png"
-                    alt="logo"
-                    width={300}
-                    style={{ display: "block", margin: "0 auto" }}
-                />
-                <Text align="center" style={{ overflowWrap: "break-word", whiteSpace: "normal" }}>
-                    Hacking is a crime. This application is for <strong>Educational Purposes Only!</strong>
-                    <br />
-                    <br />
-                    Misuse of this application can lead to violation of Australian and/or International Law.
-                    <br />
-                    <br />
-                    By using this application, you confirm that you have obtained proper authorization from all relevant
-                    parties before conducting any penetration testing with this software.
-                    <br />
-                    <br />
-                    <strong>
-                        <u>You</u>
-                    </strong>{" "}
-                    are solely responsible for managing this authorization.
-                </Text>
-                <Button fullWidth onClick={() => setModalOpened(false)} mt="lg">
-                    I Understand
-                </Button>
-            </Modal>
-
             <Stack align={"center"}>
                 <Title>About the Deakin Detonator Toolkit</Title>
                 <Text>In its simplest definition, Deakin Detonator Toolkit is a penetration testing toolkit.</Text>
@@ -81,12 +53,19 @@ const AboutPage = () => {
                 <Text>Learn more about what the Deakin Detonator Toolkit provides down below:</Text>
             </Stack>
 
-            <Accordion variant="contained">
+            <Accordion variant="contained" transitionDuration={800} style={accordianStyle}>
                 <Accordion.Item value="Tools">
                     <Accordion.Control icon={<IconTools size={16} color={getColor("violet")} />}>
                         Tools
                     </Accordion.Control>
                     <Accordion.Panel>
+                        <Text align={"center"} style={textStyles}>
+                            The Tools page of the Deakin Detonator Toolkit provides you with a list of different tools
+                            and controls for cyber security analysis. These tools can support network scanning, password
+                            cracking, and much more. To explore this section of the Deakin Detonator Toolkit further,
+                            press on the "Tools" category displayed on the left-hand navigation bar.
+                        </Text>
+
                         <div style={imageContainerStyles}>
                             <Image
                                 radius="md"
@@ -95,12 +74,6 @@ const AboutPage = () => {
                                 style={imageStyles}
                             />
                         </div>
-                        <Text align={"center"}>
-                            The Tools page of the Deakin Detonator Toolkit provides you with a list of different tools
-                            and controls for cyber security analysis. These tools can support network scanning, password
-                            cracking, and much more. To explore this section of the Deakin Detonator Toolkit further,
-                            press on the "Tools" category displayed on the left-hand navigation bar.
-                        </Text>
                     </Accordion.Panel>
                 </Accordion.Item>
 
@@ -109,6 +82,12 @@ const AboutPage = () => {
                         Attack Vectors
                     </Accordion.Control>
                     <Accordion.Panel>
+                        <Text align={"center"} style={textStyles}>
+                            The Attack Vectors page of the Deakin Detonator Toolkit provides you with a list of
+                            different exploits that can be used to infiltrate various operating systems. To explore this
+                            section of the Deakin Detonator Toolkit further, press on the "Attack Vectors" category
+                            displayed on the left-hand navigation bar.
+                        </Text>
                         <div style={imageContainerStyles}>
                             <Image
                                 radius="md"
@@ -117,12 +96,6 @@ const AboutPage = () => {
                                 style={imageStyles}
                             />
                         </div>
-                        <Text align={"center"}>
-                            The Attack Vectors page of the Deakin Detonator Toolkit provides you with a list of
-                            different exploits that can be used to infiltrate various operating systems. To explore this
-                            section of the Deakin Detonator Toolkit further, press on the "Attack Vectors" category
-                            displayed on the left-hand navigation bar.
-                        </Text>
                     </Accordion.Panel>
                 </Accordion.Item>
 
@@ -131,6 +104,13 @@ const AboutPage = () => {
                         Walkthroughs
                     </Accordion.Control>
                     <Accordion.Panel>
+                        <Text align={"center"} style={textStyles}>
+                            The Walkthroughs page of the Deakin Detonator Toolkit provides you with a list of tutorial
+                            videos. These tutorial videos can provide an explanation on how to use some of the Tools and
+                            Attack Vectors listed on the Deakin Detonator Toolkit. To explore this section of the Deakin
+                            Detonator Toolkit further, press on the "Walkthroughs" category displayed on the left-hand
+                            navigation bar.
+                        </Text>
                         <div style={imageContainerStyles}>
                             <Image
                                 radius="md"
@@ -139,13 +119,6 @@ const AboutPage = () => {
                                 style={imageStyles}
                             />
                         </div>
-                        <Text align={"center"}>
-                            The Walkthroughs page of the Deakin Detonator Toolkit provides you with a list of tutorial
-                            videos. These tutorial videos can provide an explanation on how to use some of the Tools and
-                            Attack Vectors listed on the Deakin Detonator Toolkit. To explore this section of the Deakin
-                            Detonator Toolkit further, press on the "Walkthroughs" category displayed on the left-hand
-                            navigation bar.
-                        </Text>
                     </Accordion.Panel>
                 </Accordion.Item>
 
@@ -154,6 +127,13 @@ const AboutPage = () => {
                         References
                     </Accordion.Control>
                     <Accordion.Panel>
+                        <Text align={"center"} style={textStyles}>
+                            The References page of the Deakin Detonator Toolkit provides you with a list of sources that
+                            were used to help create the Deakin Detonator Toolkit and its contents. These sources may
+                            provide a further understanding of the tools, attack vectors, and walkthrough videos within
+                            the Deakin Detonator Toolkit. To explore this section of the Deakin Detonator Toolkit
+                            further, press on the "References" category displayed on the left-hand navigation bar.
+                        </Text>
                         <div style={imageContainerStyles}>
                             <Image
                                 radius="md"
@@ -162,13 +142,6 @@ const AboutPage = () => {
                                 style={imageStyles}
                             />
                         </div>
-                        <Text align={"center"}>
-                            The References page of the Deakin Detonator Toolkit provides you with a list of sources that
-                            were used to help create the Deakin Detonator Toolkit and its contents. These sources may
-                            provide a further understanding of the tools, attack vectors, and walkthrough videos within
-                            the Deakin Detonator Toolkit. To explore this section of the Deakin Detonator Toolkit
-                            further, press on the "References" category displayed on the left-hand navigation bar.
-                        </Text>
                     </Accordion.Panel>
                 </Accordion.Item>
             </Accordion>
