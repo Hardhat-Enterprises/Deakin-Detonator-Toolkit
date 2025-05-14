@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Button, Text, Stack, Loader, Center, Progress} from "@mantine/core";
+import { Modal, Button, Text, Stack, Loader, Center} from "@mantine/core";
 import { installDependencies} from "../../utils/InstallHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 
@@ -53,15 +53,14 @@ const InstallationModal: React.FC<InstallationModalProps> = ({
     let [loading, setLoading] = useState<boolean>(false);
     let [output, setOutput] = useState<string>("");
     
+    // Sets the loading screen progress value
     let stageOfDownload = "Initialising..."
-    
     if (loading !== false) {
         stageOfDownload = "in progress..."
     } else {
         stageOfDownload = "Complete."
     }
-    
-
+    // Display for the loading icon
     function loadingIcon() {
         return (
           <Center inline>
@@ -75,7 +74,7 @@ const InstallationModal: React.FC<InstallationModalProps> = ({
         <Modal
             opened={isOpen}
             onClose={() => setOpened(false)}
-            title="Component Installation Menu"
+            title={<strong>Component Installation Menu</strong>}
             size={"auto"}
             style={{ maxWidth: "50%", margin: "auto" }}
         >
@@ -95,18 +94,24 @@ const InstallationModal: React.FC<InstallationModalProps> = ({
                 ) : (
                     <Stack>
                         <Text>
-                            Not all features that the Deakin Detonator Toolkit has available to you are immediately
-                            available on installation. Some features require additional components to be installed on
+                            <hr></hr> <br></br>
+                            Not all of the features which Deakin Detonator Toolkit has to offer are available immediately
+                            upon installation. Some features require the installation of additional components on
                             your system. Please read the below description carefully to decide if you would like to
                             install the component and its dependencies.
                         </Text>
-                        <Text>Feature Description:</Text>
-                        <Text>{feature_description}</Text>
-                        <Text>Dependencies:</Text>
-
-                        {dependencies.map((dependency, index) => (
-                            <Text key={index}>{dependency}</Text>
-                        ))}
+                        <Text>
+                            <strong>Feature Description:</strong>
+                            <br></br>
+                            {feature_description}
+                        </Text>
+                        <Text>
+                            <strong>Dependencies:</strong>
+                            <br></br>
+                            {dependencies.map((dependency, index) => (
+                                <Text key={index}>{dependency}</Text>
+                            ))}
+                        </Text>
 
                         <Button onClick={() => handleInstall(dependencies, setOutput, setLoading)}>
                             Install Component
