@@ -69,7 +69,6 @@ const InstallationModal: React.FC<InstallationModalProps> = ({
             </Center>
         );
     }
-
     return (
         <Modal
             opened={isOpen}
