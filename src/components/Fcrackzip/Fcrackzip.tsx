@@ -1,6 +1,6 @@
-import { Button, Stack, TextInput, NativeSelect, Checkbox } from "@mantine/core";
+import { Button, Stack, TextInput, NativeSelect, Checkbox, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -37,7 +37,9 @@ const Fcrackzip = () => {
     const [checkedVerbose, setCheckedVerbose] = useState(false); // Indicates if verbose mode is checked
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Define the attack methods
     const methods = ["Dictionary", "BruteForce"];
@@ -88,7 +90,27 @@ const Fcrackzip = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * Callback function to handle process data.
@@ -218,6 +240,20 @@ const Fcrackzip = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
+                    </Group>
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to crack passwords, use with caution and only on files you own or have
+                            explicit permission to test.
+                        </Alert>
+                    )}
+
                     <TextInput
                         label={"Zip file"}
                         placeholder="Specify the zip file."
@@ -230,7 +266,7 @@ const Fcrackzip = () => {
                         label={"Attack Method"}
                         data={methods}
                         required
-                        placeholder={"Select attack method"}
+                        //placeholder={"Select attack method"}
                     />
 
                     {isDictionary && (
