@@ -71,8 +71,8 @@ const AircrackNG = () => {
         "KoreK: Enables KoreK attack method, improving WEP key recovery using older .ivs files. Do not enable unless the capture file is in the .ivs format.\n" +
         "Fudge: Sets the brute-force fudge factor. A higher value increases the depth of the attack and the likelihood of success, but also increases runtime.";
     const sourceLink = "https://www.kali.org/tools/aircrack-ng/"; //link to the source component.
-    const tutorial = "https://docs.google.com/document/d/1UJQSVmOsA2mF0XYxnAzipqiYGfVSCUB5/edit?usp=sharing&ouid=104969582837646506925&rtpof=true&sd=true";
-
+    const tutorial =
+        "https://docs.google.com/document/d/1UJQSVmOsA2mF0XYxnAzipqiYGfVSCUB5/edit?usp=sharing&ouid=104969582837646506925&rtpof=true&sd=true";
 
     // Component Constants.
     const types = ["WEP", "WPA"]; // Security types supported by Aircrack-ng.
