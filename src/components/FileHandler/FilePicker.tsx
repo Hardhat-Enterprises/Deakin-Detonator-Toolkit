@@ -9,9 +9,9 @@ interface FilePickerProps {
     componentName: string;
     maxFileNum?: number;
     withAsterisk?: boolean;
-    placeholderText: string;
     multiple?: boolean;
-    labelText: string;
+    labelText?: string;
+    placeholderText?: string;
 }
 
 export function FilePicker({
@@ -19,42 +19,26 @@ export function FilePicker({
     setFileNames,
     componentName,
     maxFileNum = 1,
-    withAsterisk,
-    placeholderText,
-    multiple,
-    labelText,
-    ...fileInputProps
+    withAsterisk = false,
+    multiple = false,
+    labelText = "",
+    placeholderText = "Upload a file",
 }: FilePickerProps) {
     const theme = useMantineTheme();
     const fileDataPath = generateFilePath(componentName);
     const [error, setError] = React.useState<string | null>(null);
 
-    /**
-     *  Handles the change event.
-     * @remarks
-     * This function is used to handle the onChange event and save the file(s).
-     * It exists to enable debugging and a iterative call of the save_file function.
-     *
-     * @param payload - File(s) to be saved.
-     */
-    const handleChange = async (payload: File[] | File) => {
-        console.log("handleChange called");
-
+    const handleChange = async (payload: File | File[] | null) => {
         if (!payload) {
             setFileNames([]);
             return;
         }
 
-        // Convert uploaded files to an array so its easier to handle
-        let files: File[] = [];
-        files = files.concat(payload);
+        const files = Array.isArray(payload) ? payload : [payload];
+        const fileNamesUpload = files.map((file) => generateFileName(file.name));
 
-        const fileNamesUpload = files.map((files) => generateFileName(files.name));
-
-        // Limit the number of files to allow imported
         if (multiple && fileNamesUpload.length > maxFileNum) {
             const errorText = `Only ${maxFileNum} files can be imported at a time.`;
-            console.log(`Error: ${errorText}`);
             setError(`Error: ${errorText}`);
             return;
         }
@@ -67,26 +51,14 @@ export function FilePicker({
         }
     };
 
-    /**
-     * Saves the selected file.
-     *
-     * @remarks
-     * This function is used to create a call to the backend (rust) to
-     * save a file within the allowed path.
-     *
-     * @param files - An array of files to be saved.
-     * @returns The filepath and file name tuple.
-     */
-    const saveFile = async (files: File[], fileNameUpload: String, filePathUpload: string) => {
+    const saveFile = async (files: File[], fileNameUpload: string, filePathUpload: string) => {
         try {
-            console.log("Saving file: ", files);
             const file = files[0];
             const reader = new FileReader();
 
             reader.onload = async (event) => {
                 if (event.target?.result) {
                     const fileDataUpload = Array.from(new Uint8Array(event.target.result as ArrayBuffer));
-                    console.log("saving file");
                     await invoke("save_file", {
                         fileData: fileDataUpload,
                         filePath: filePathUpload,
@@ -106,14 +78,33 @@ export function FilePicker({
     };
 
     return (
-        <FileInput
-            {...fileInputProps}
-            multiple={multiple}
-            clearable={true}
-            onChange={handleChange}
-            withAsterisk={withAsterisk}
-            label={labelText}
-            error={error}
-        ></FileInput>
+        <div style={{ textAlign: "center" }}>
+            <FileInput
+                multiple={multiple}
+                clearable
+                withAsterisk={withAsterisk}
+                label={labelText}
+                onChange={handleChange}
+                error={error}
+                styles={{
+                    input: { display: "none" }, // Hide the native input
+                }}
+            />
+            <label
+                style={{ cursor: "pointer", display: "inline-block" }}
+                onClick={() => {
+                    const fileInput = document.querySelector("input[type='file']") as HTMLInputElement;
+                    fileInput?.click(); // Using type assertion to ensure it's an HTMLInputElement
+                }}
+            >
+                <img
+                    src="https://static-00.iconduck.com/assets.00/cloud-upload-icon-2048x2048-fej4g14p.png"
+                    alt="Upload"
+                    width={80}
+                    height={80}
+                />
+                <div style={{ fontSize: "14px", color: "#666" }}>{placeholderText}</div>
+            </label>
+        </div>
     );
 }
