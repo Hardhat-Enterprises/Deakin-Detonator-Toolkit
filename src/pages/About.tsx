@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { Modal, Button, Image, Text, Accordion, useMantineTheme, Stack, Title } from "@mantine/core";
+import { Image, Text, Accordion, useMantineTheme, Stack, Title } from "@mantine/core";
 import { IconStepInto, IconTools, IconSearch, IconTarget } from "@tabler/icons";
 
 const AboutPage = () => {
     const theme = useMantineTheme();
-    const [modalOpened, setModalOpened] = useState(true);
+
     const getColor = (color: string) => theme.colors[color][theme.colorScheme === "dark" ? 5 : 7];
 
     const imageContainerStyles = {
@@ -19,7 +18,7 @@ const AboutPage = () => {
         minWidth: 400, // Ensures the image doesn't shrink below its intended width
         maxWidth: "60%", // Ensures the image scales down on smaller screens
     };
- 
+
     const textStyles = {
         width: "100%",
         maxWidth: "100%",
@@ -32,53 +31,11 @@ const AboutPage = () => {
         width: "100%",
         maxWidth: "60%",
         justifyContent: "center",
-        margin: "1% 20% 10%"
+        margin: "1% 20% 10%",
     };
 
     return (
         <>
-            <Modal
-                opened={modalOpened}
-                onClose={() => setModalOpened(false)}
-                title="Welcome to the Deakin Detonator Toolkit"
-                centered
-                closeOnEscape={false}
-                withCloseButton={false}
-                closeOnClickOutside={false}
-                overlayOpacity={0.7}
-                overlayBlur={3}
-                size="xl"
-                styles={{
-                    title: { fontSize: "2rem", fontWeight: "bold", textAlign: "center", width: "100%" },
-                }}
-            >
-                <Image
-                    src="src/logo/logo-dark.png"
-                    alt="logo"
-                    width={300}
-                    style={{ display: "block", margin: "0 auto" }}
-                />
-                <Text align="center" style={{ overflowWrap: "break-word", whiteSpace: "normal" }}>
-                    Hacking is a crime. This application is for <strong>Educational Purposes Only!</strong>
-                    <br />
-                    <br />
-                    Misuse of this application can lead to violation of Australian and/or International Law.
-                    <br />
-                    <br />
-                    By using this application, you confirm that you have obtained proper authorization from all relevant
-                    parties before conducting any penetration testing with this software.
-                    <br />
-                    <br />
-                    <strong>
-                        <u>You</u>
-                    </strong>{" "}
-                    are solely responsible for managing this authorization.
-                </Text>
-                <Button fullWidth onClick={() => setModalOpened(false)} mt="lg">
-                    I Understand
-                </Button>
-            </Modal>
-
             <Stack align={"center"}>
                 <Title>About the Deakin Detonator Toolkit</Title>
                 <Text>In its simplest definition, Deakin Detonator Toolkit is a penetration testing toolkit.</Text>
@@ -102,7 +59,7 @@ const AboutPage = () => {
                         Tools
                     </Accordion.Control>
                     <Accordion.Panel>
-                    <Text align={"center"} style={textStyles}>
+                        <Text align={"center"} style={textStyles}>
                             The Tools page of the Deakin Detonator Toolkit provides you with a list of different tools
                             and controls for cyber security analysis. These tools can support network scanning, password
                             cracking, and much more. To explore this section of the Deakin Detonator Toolkit further,
@@ -170,7 +127,7 @@ const AboutPage = () => {
                         References
                     </Accordion.Control>
                     <Accordion.Panel>
-                    <Text align={"center"} style={textStyles}>
+                        <Text align={"center"} style={textStyles}>
                             The References page of the Deakin Detonator Toolkit provides you with a list of sources that
                             were used to help create the Deakin Detonator Toolkit and its contents. These sources may
                             provide a further understanding of the tools, attack vectors, and walkthrough videos within

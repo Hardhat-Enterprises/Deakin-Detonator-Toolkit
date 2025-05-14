@@ -33,11 +33,6 @@
                         "args": true
                     },
                     {
-                        "name": "amap",
-                        "cmd": "amap",
-                        "args": true
-                    },
-                    {
                         "name": "amass",
                         "cmd": "amass",
                         "args": true
@@ -412,16 +407,23 @@
                 ]
             },
             "fs": {
-                "all": true,
+                "all": true,                            
+                "writeFile": true,                      
                 "scope": [
-                    "$TEMP/**",
-                    "$HOME/Deakin-Detonator-Toolkit/**",
-                    "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**"
+                  "$TEMP/**",
+                  "$HOME/Deakin-Detonator-Toolkit/**",
+                  "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**",
+                  "$DESKTOP/**"                             
                 ]
-            },
-            "path": {
+              },
+              "dialog": {
+                "all": true,                            
+                "save": true                            
+              },
+              "path": {
                 "all": true
-            }
+              }
+              
         },
         "bundle": {
             "active": true,

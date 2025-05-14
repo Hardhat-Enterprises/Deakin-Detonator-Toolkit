@@ -79,7 +79,7 @@ function Search() {
                 )
             }
             searchPlaceholder="Search..." // Placeholder text for the Spotlight search bar
-            shortcut={['mod + k', '/']} // Keyboard shortcut to open Spotlight (e.g., Ctrl+K)
+            shortcut={["mod + k", "/"]} // Keyboard shortcut to open Spotlight (e.g., Ctrl+K)
             nothingFoundMessage="Nothing found..." // Message displayed when no results are found
             transition={"slide-down"}
             transitionDuration={300}
