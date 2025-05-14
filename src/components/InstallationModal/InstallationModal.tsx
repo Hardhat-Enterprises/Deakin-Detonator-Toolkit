@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Modal, Button, Text, Stack, Loader, Center} from "@mantine/core";
-import { installDependencies} from "../../utils/InstallHelper";
+import { Modal, Button, Text, Stack, Loader, Center } from "@mantine/core";
+import { installDependencies } from "../../utils/InstallHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 
 /**
@@ -52,23 +52,23 @@ const InstallationModal: React.FC<InstallationModalProps> = ({
     // Define state variables for loading and output. hooks.
     let [loading, setLoading] = useState<boolean>(false);
     let [output, setOutput] = useState<string>("");
-    
+
     // Sets the loading screen progress value
-    let stageOfDownload = "Initialising..."
+    let stageOfDownload = "Initialising...";
     if (loading !== false) {
-        stageOfDownload = "in progress..."
+        stageOfDownload = "in progress...";
     } else {
-        stageOfDownload = "Complete."
+        stageOfDownload = "Complete.";
     }
     // Display for the loading icon
     function loadingIcon() {
         return (
-          <Center inline>
-            <Loader size="md" />
-            <Text ml={10}>Download is currently {stageOfDownload}</Text>
-          </Center>
+            <Center inline>
+                <Loader size="md" />
+                <Text ml={10}>Download is currently {stageOfDownload}</Text>
+            </Center>
         );
-      }
+    }
 
     return (
         <Modal
@@ -89,16 +89,16 @@ const InstallationModal: React.FC<InstallationModalProps> = ({
                             <br></br> <br></br>
                             Download may appear to freeze. Please do NOT close the window.
                         </text>
-                        <ConsoleWrapper output={output} hideClearButton={true} title={""}/>
+                        <ConsoleWrapper output={output} hideClearButton={true} title={""} />
                     </Stack>
                 ) : (
                     <Stack>
                         <Text>
                             <hr></hr> <br></br>
-                            Not all of the features which Deakin Detonator Toolkit has to offer are available immediately
-                            upon installation. Some features require the installation of additional components on
-                            your system. Please read the below description carefully to decide if you would like to
-                            install the component and its dependencies.
+                            Not all of the features which Deakin Detonator Toolkit has to offer are available
+                            immediately upon installation. Some features require the installation of additional
+                            components on your system. Please read the below description carefully to decide if you
+                            would like to install the component and its dependencies.
                         </Text>
                         <Text>
                             <strong>Feature Description:</strong>
