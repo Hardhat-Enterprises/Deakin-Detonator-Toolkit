@@ -1,6 +1,6 @@
-import GoBusterTool from "../GobusterTool/Gobuster";
-import NmapTool from "../NmapTool/NmapTool";
-import SQLmap from "../SQLmap/SQLmap";
+import GoBusterTool from "../Tools/GobusterTool/Gobuster";
+import NmapTool from "../Tools/NmapTool/NmapTool";
+import SQLmap from "../Tools/SQLmap/SQLmap";
 // This file contains a js object array containing all the beginners guide lesson data
 // Currently BeginnerInformationContent should be manually modified to add, edit or delete lessons
 // Lesson hierachy is based off the position of lesson object in the array
