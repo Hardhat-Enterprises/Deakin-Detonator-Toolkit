@@ -30,6 +30,7 @@
         "@mantine/prism": "^5.3.0",
         "@mantine/spotlight": "^5.3.0",
         "@tabler/icons": "^1.95.1",
+        "@tabler/icons-react": "^3.31.0",
         "@tauri-apps/api": "^1.5.6",
         "dotenv": "^16.4.5",
         "node-fetch": "^3.3.1",
