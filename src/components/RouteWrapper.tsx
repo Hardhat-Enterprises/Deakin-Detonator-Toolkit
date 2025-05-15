@@ -1,3 +1,4 @@
+import FeedbackPage from "../pages/FeedbackPage";
 import AboutPage from "../pages/About";
 import HomePage from "../pages/HomePage";
 import { AttackVectors } from "../pages/AttackVectors";
@@ -169,6 +170,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/references",
         element: <ReferencesPage />,
         description: "Attack Vectors page",
+        category: "",
+    },
+    {
+        name: "Feedback",
+        path: "/feedback",
+        element: <FeedbackPage />,
+        description: "Share and view user feedback for Deakin Detonator Toolkit",
         category: "",
     },
     {
