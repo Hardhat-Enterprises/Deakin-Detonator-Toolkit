@@ -104,6 +104,7 @@ import CVE202322527 from "./CVE-2023-22527/CVE-2023-22527";
 import DigTool from "./Dig/Dig";
 import Dig from "./Dig/Dig";
 import NewsFeed from "../components/NewsFeed/NewsFeed";
+import CVE202323397 from "./CVE-2023-23397/CVE-2023-23397";
 import NetDiscover from "./NetDiscover/NetDiscover";
 import Nuclei from "./Nuclei/Nuclei";
 
@@ -262,6 +263,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/CVE-2023-22527",
         element: <CVE202322527 />,
         description: "Unauthenticated RCE in Atlassian Confluence via OGNL injection",
+        category: "",
+    },
+    {
+        name: "CVE-2023-23397",
+        path: "/attack-vectors/CVE-2023-23397",
+        element: <CVE202323397 />,
+        description: "NTLM hash leak via malicious Outlook reminder exploiting extended MAPI property",
         category: "",
     },
     {
