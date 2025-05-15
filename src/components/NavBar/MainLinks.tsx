@@ -8,6 +8,7 @@ import {
     IconTarget,
     IconReportAnalytics,
     IconNews,
+    IconMessageCircle,
 } from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -45,6 +46,7 @@ function MainLink({ icon, color, label, route }: MainLinkProps) {
         </UnstyledButton>
     );
 }
+
 const homeData = {
     icon: <IconHome size={16} />,
     color: "teal",
@@ -101,6 +103,13 @@ const referencesData = {
     route: "/references",
 };
 
+const feedbackData = {
+    icon: <IconMessageCircle size={16} />,
+    color: "pink",
+    label: "Feedback",
+    route: "/feedback",
+};
+
 const data = [
     homeData,
     aboutData,
@@ -110,6 +119,7 @@ const data = [
     scenarioTrainingData,
     newsData,
     referencesData,
+    feedbackData,
 ];
 
 export function MainLinks() {
