@@ -30,6 +30,6 @@
 | 0027   | Addition of User Feedback Feature to Deakin Detonator Toolkit                                 | PROPOSED    |
 | 0028   | -empty-                                                                                       | -           |
 | 0029   | -empty-                                                                                       | -           |
-| 0030   | Remove CrackMapExec from the Toolkit                                                          | IMPLEMENTED |
+| 0030   | Remove CrackMapExec from the Toolkit                                                          | APPROVED    |
 | 0031   | -empty-                                                                                       | -           |
 | 0032   | -empty-                                                                                       | -           |
