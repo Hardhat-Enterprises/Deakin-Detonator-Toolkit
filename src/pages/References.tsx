@@ -585,6 +585,14 @@ const ReferencesPage = () => {
                                     url={"https://nvd.nist.gov/vuln/detail/CVE-2023-22527"}
                                 />
                                 <Reference
+                                    name={"CVE-2023-23397"}
+                                    description={
+                                        "NTLM hash leak via malicious Outlook reminder exploiting extended MAPI property."
+                                    }
+                                    url={"https://nvd.nist.gov/vuln/detail/CVE-2023-23397"}
+                                />
+
+                                <Reference
                                     name={"FindOffset"}
                                     description={
                                         "Find Offset identifies where a buffer overflow overwrites key memory addresses like EIP."
