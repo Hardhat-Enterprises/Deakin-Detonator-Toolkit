@@ -33,7 +33,7 @@ const Hping3 = () => {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [selectedOption, setSelectedOption] = useState("");
+    const [selectedOption, setSelectedOption] = useState("Scan a range of ports");
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [allowSave, setAllowSave] = useState(false);
@@ -120,7 +120,7 @@ const Hping3 = () => {
                 handleProcessData("\nProcess completed successfully.");
 
                 // If the process was terminated manually, display a termination message.
-            } else if (signal === 15) {
+            } else if (signal === 2) {
                 handleProcessData("\nProcess was manually terminated.");
 
                 // If the process was terminated with an error, display the exit and signal codes.
@@ -219,7 +219,7 @@ const Hping3 = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <NativeSelect
                         value={selectedOption}
                         onChange={(e) => setSelectedOption(e.target.value)}

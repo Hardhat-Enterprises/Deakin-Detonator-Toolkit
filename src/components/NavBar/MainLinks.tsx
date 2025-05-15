@@ -1,5 +1,14 @@
 import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
-import { IconQuestionMark, IconStepInto, IconTools, IconSearch, IconTarget } from "@tabler/icons";
+import {
+    IconHome,
+    IconQuestionMark,
+    IconStepInto,
+    IconTools,
+    IconSearch,
+    IconTarget,
+    IconReportAnalytics,
+    IconNews,
+} from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -36,6 +45,12 @@ function MainLink({ icon, color, label, route }: MainLinkProps) {
         </UnstyledButton>
     );
 }
+const homeData = {
+    icon: <IconHome size={16} />,
+    color: "teal",
+    label: "Home",
+    route: "/",
+};
 
 const aboutData = {
     icon: <IconQuestionMark size={16} />,
@@ -65,6 +80,20 @@ const walkthroughsData = {
     route: "/walkthroughs",
 };
 
+const scenarioTrainingData = {
+    icon: <IconReportAnalytics size={16} />,
+    color: "teal",
+    label: "AI Training Scenario",
+    route: "/scenario-training",
+};
+
+const newsData = {
+    icon: <IconNews size={16} />,
+    color: "cyan",
+    label: "Cyber News",
+    route: "/news",
+};
+
 const referencesData = {
     icon: <IconSearch size={16} />,
     color: "green",
@@ -72,7 +101,16 @@ const referencesData = {
     route: "/references",
 };
 
-const data = [aboutData, toolsData, attackVectorsData, walkthroughsData, referencesData];
+const data = [
+    homeData,
+    aboutData,
+    toolsData,
+    attackVectorsData,
+    walkthroughsData,
+    scenarioTrainingData,
+    newsData,
+    referencesData,
+];
 
 export function MainLinks() {
     const links = data.map((link) => <MainLink {...link} key={link.label} />);

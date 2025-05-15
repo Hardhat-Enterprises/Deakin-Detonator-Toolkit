@@ -1,6 +1,6 @@
 import { Navbar } from "@mantine/core";
 import { ColorSchemeToggle } from "../ColorSchemeToggle/ColorSchemeToggle";
-import Search from "../Spotlight/Spotlight";
+import Search from "../../utils/SpotlightSearchBar/SpotlightSearchBar";
 import { MainLinks } from "./MainLinks";
 
 export interface NavigationProps {

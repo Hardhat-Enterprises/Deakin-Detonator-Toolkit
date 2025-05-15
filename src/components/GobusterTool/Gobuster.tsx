@@ -6,8 +6,9 @@ import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { isNotEmpty, matches } from "@mantine/form";
 
 const title = "GoBuster Directory and File Brute-Forcing Tool";
 const description_userguide = "GoBuster is a tool used for directory and file brute-forcing on web servers.";
@@ -38,20 +39,26 @@ const GoBusterTool = () => {
     // Component Constants.
     const title = "GoBuster"; // Title of the component.
     const description =
-        "GoBuster is a tool for directory and file brute-forcing on web servers. It helps identify hidden files and directories, exposing vulnerabilities"; // Description of the component.
+        "GoBuster is a security tool that helps identify hidden files and directories on a website by attempting to access them using a list of common names." +
+        "This can reveal potential vulnerabilities, such as exposed administrative panels or sensitive data, that might be exploited by attackers."; // Description of the component.
     const steps =
-        "Step 1: Enter a target website URL (e.g., https://example.com).\n" +
+        "Step 1: Enter the target website URL (e.g., https://example.com).\n" +
         "Step 2: Specify the path to a wordlist file (e.g., /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt).\n" +
         "Step 3: Click Start GoBuster to initiate the scan."; // Steps to undertake to use the tool. // Steps to undertake to use the tool.
     const sourceLink = "https://www.kali.org/tools/gobuster/"; // Link to the source code (or Kali Tools).
     const tutorial = "https://docs.google.com/document/d/1fMANB1rlFPlWFKaRqKhWhuaw3wQ8bsY4CKJp6XQpGBw/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["gobuster"]; // Contains the dependencies required by the component.
 
-    // Form hook to handle form input.
+    // Form hook to handle form input with validation.
     const form = useForm({
         initialValues: {
             url: "",
             wordlist: "",
+        },
+        validate: {
+            url: (value) =>
+                /^https?:\/\/[^\s$.?#].[^\s]*$/.test(value) ? null : "Invalid URL format. Example: https://example.com",
+            wordlist: (value) => (isNotEmpty(value) ? null : "Wordlist file path cannot be empty."),
         },
     });
 
@@ -109,25 +116,27 @@ const GoBusterTool = () => {
      * @param {FormValuesType} values
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
-        setLoading(true);
-        const args = ["dir", "-u", values.url, "-w", values.wordlist];
+        if (!form.validate().hasErrors) {
+            // Disallow saving until the tool's execution is complete
+            setAllowSave(false);
+            setLoading(true);
+            const args = ["dir", "-u", values.url, "-w", values.wordlist];
 
-        try {
-            const result = await CommandHelper.runCommandGetPidAndOutput(
-                "gobuster",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
-            setPid(result.pid);
-            setOutput(result.output);
-        } catch (e: any) {
-            setOutput(e.message);
+            try {
+                const result = await CommandHelper.runCommandGetPidAndOutput(
+                    "gobuster",
+                    args,
+                    handleProcessData,
+                    handleProcessTermination
+                );
+                setPid(result.pid);
+                setOutput(result.output);
+            } catch (e: any) {
+                setOutput(e.message);
+            }
+
+            setLoading(false);
         }
-
-        setLoading(false);
     };
 
     /**
@@ -169,9 +178,14 @@ const GoBusterTool = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-                    <TextInput label={"Target URL"} required {...form.getInputProps("url")} />
-                    <TextInput label={"Wordlist File"} required {...form.getInputProps("wordlist")} />
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <TextInput label={"Target URL"} required {...form.getInputProps("url")} error={form.errors.url} />
+                    <TextInput
+                        label={"Wordlist File"}
+                        required
+                        {...form.getInputProps("wordlist")}
+                        error={form.errors.wordlist}
+                    />
                     <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />

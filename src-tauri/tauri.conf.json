@@ -33,11 +33,6 @@
                         "args": true
                     },
                     {
-                        "name": "amap",
-                        "cmd": "amap",
-                        "args": true
-                    },
-                    {
                         "name": "amass",
                         "cmd": "amass",
                         "args": true
@@ -257,6 +252,11 @@
                         "cmd": "nslookup",
                         "args": true
                     },
+                                        {
+                        "name": "nuclei",
+                        "cmd": "nuclei",
+                        "args": true
+                    },
                     {
                         "name": "parsero",
                         "cmd": "parsero",
@@ -344,6 +344,11 @@
                         "args": true
                     },
                     {
+                        "name": "tcpdump",
+                        "cmd": "tcpdump",
+                        "args": true
+                    },
+                    {
                         "name": "testssl",
                         "cmd": "testssl",
                         "args": true
@@ -407,16 +412,23 @@
                 ]
             },
             "fs": {
-                "all": true,
+                "all": true,                            
+                "writeFile": true,                      
                 "scope": [
-                    "$TEMP/**",
-                    "$HOME/Deakin-Detonator-Toolkit/**",
-                    "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**"
+                  "$TEMP/**",
+                  "$HOME/Deakin-Detonator-Toolkit/**",
+                  "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**",
+                  "$DESKTOP/**"                             
                 ]
-            },
-            "path": {
+              },
+              "dialog": {
+                "all": true,                            
+                "save": true                            
+              },
+              "path": {
                 "all": true
-            }
+              }
+              
         },
         "bundle": {
             "active": true,

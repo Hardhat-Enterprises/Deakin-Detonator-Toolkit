@@ -1,13 +1,14 @@
-import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Button, Stack, TextInput, Checkbox, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
  * Represents the form values for the Exif component.
@@ -33,6 +34,8 @@ const ExifTool = () => {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants
     const title = "ExifTool";
@@ -49,7 +52,7 @@ const ExifTool = () => {
     const dependencies = ["exiftool"]; // ExifTool dependency.
 
     // Form hook to handle form input
-    let form = useForm<FormValuesType>({
+    const form = useForm<FormValuesType>({
         initialValues: {
             filePath: "",
             tag: "",
@@ -58,6 +61,11 @@ const ExifTool = () => {
         },
     });
 
+    /**
+     * useEffect hook to check the availability of required commands on component mount.
+     * It updates the state variables based on the availability of the `exiftool` dependency.
+     * If the command is unavailable, it opens the installation modal.
+     */
     useEffect(() => {
         // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
@@ -70,7 +78,27 @@ const ExifTool = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -114,52 +142,65 @@ const ExifTool = () => {
      * @param {FormValuesType} values - The form values containing the target domain.
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Activate loading state to indicate ongoing process
-        setLoading(true);
+        setLoading(true); // Activate loading state
+        setAllowSave(false); // Disallow saving until the tool's execution is complete
 
         // Construct arguments for the Exif command based on form input
-        let args = [values.filePath];
-
+        const args = [values.filePath];
         if (values.actionType === "read") {
             args.push("-" + values.tag);
         } else if (values.actionType === "write") {
             args.push("-" + values.tag + "=" + values.value);
         }
 
-        // Execute the Exif command via helper method and handle its output or potential errors
-        CommandHelper.runCommandWithPkexec("exiftool", args, handleProcessData, handleProcessTermination)
-            .then(() => {
-                // Deactivate loading state
-                setLoading(false);
-            })
-            .catch((error) => {
-                // Display any errors encountered during command execution
-                setOutput(`Error: ${error.message}`);
-                // Deactivate loading state
-                setLoading(false);
-            });
-        setAllowSave(true);
+        // Attempt to execute the exiftool command with the provided arguments.
+        // If the command fails, handle the error and deactivate the loading state.
+        try {
+            const { pid, output } = await CommandHelper.runCommandWithPkexec(
+                "exiftool",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+            setPid(pid); // Set the process ID
+            setOutput(output); // Set the initial output
+        } catch (error: any) {
+            setOutput(`Error: ${error.message}`);
+            setLoading(false); // Deactivate loading state
+        }
     };
 
     /**
-     * Handles the completion of output saving by updating state variables.
+     * clearOutput: Callback to clear the output state.
+     * It resets the output state to an empty string and updates the save state.
      */
-    const handleSaveComplete = () => {
-        setHasSaved(true); //Set hasSaved state to true
-        setAllowSave(false); // Disallow further output saving
-    };
-
-    /**
-     * Clears the command output and resets state variables related to output saving.
-     */
-    const clearOutput = () => {
+    const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
         setAllowSave(false);
+    }, []);
+
+    /**
+     * handleSaveComplete: Callback to handle the completion of the save operation.
+     * It updates the state variables to indicate that the output has been saved.
+     */
+    const handleSaveComplete = () => {
+        setHasSaved(true);
+        setAllowSave(false);
     };
 
-    // Render component
+    /**
+     * handleSave: Callback to handle the save operation.
+     * It updates the state variable to allow saving of output.
+     */
     return (
+        /**
+         * RenderComponent: A wrapper component that provides a consistent layout and styling for the ExifTool component.
+         * It includes a title, description, steps, and tutorial link.
+         * The InstallationModal is conditionally rendered based on the loadingModal state.
+         * The form includes input fields for file path, metadata tag, and value (for writing).
+         * The form also includes checkboxes for read and write actions, a submit button, and a console output area.
+         */
         <RenderComponent
             title={title}
             description={description}
@@ -178,6 +219,21 @@ const ExifTool = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
+                    </Group>
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to read and write metadata to files. Use with caution and only on files
+                            you own or have explicit permission to modify.
+                        </Alert>
+                    )}
+
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="File Path"
                         required
@@ -185,8 +241,6 @@ const ExifTool = () => {
                         placeholder="e.g. /path/to/file.jpg"
                     />
                     <TextInput label="Metadata Tag" required {...form.getInputProps("tag")} placeholder="e.g. Author" />
-
-                    {/* Conditionally render the 'Value' input field based on the actionType */}
                     {form.values.actionType === "write" && (
                         <TextInput
                             label="Value (for writing)"
@@ -194,7 +248,6 @@ const ExifTool = () => {
                             placeholder="e.g. John Doe"
                         />
                     )}
-
                     <Checkbox
                         label="Read Metadata"
                         checked={form.values.actionType === "read"}
@@ -205,7 +258,7 @@ const ExifTool = () => {
                         checked={form.values.actionType === "write"}
                         onChange={() => form.setFieldValue("actionType", "write")}
                     />
-                    <Button type={"submit"}>Run {title}</Button>
+                    <Button type="submit">Run {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>

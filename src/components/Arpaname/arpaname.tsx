@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput, Radio } from "@mantine/core";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Button, Stack, TextInput, Radio, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -35,12 +35,14 @@ const ArpanameTool = () => {
     const [pidTarget, setPidTarget] = useState(""); // State variable to store the PID of the target process.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
     const [errorMessage, setErrorMessage] = useState<string>(""); // State variable to store the error message
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [chatGPTResponse, setChatGPTResponse] = useState(""); //ChatGPT response
     const [cohereResponse, setCohereResponse] = useState(""); // Cohere response
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants.
     const steps =
@@ -64,7 +66,28 @@ const ArpanameTool = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Ensure loading state is reset even if an error occurs
             });
+
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     const form = useForm<FormValuesType>({
         initialValues: {
@@ -188,7 +211,20 @@ const ArpanameTool = () => {
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
+                    </Group>
                     {LoadingOverlayAndCancelButton(loading, pidTarget)}
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform reverse DNS lookups, use with caution and only on networks you
+                            own or have explicit permission to test.
+                        </Alert>
+                    )}
                     <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")}></TextInput>
                     {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
                     <Radio.Group

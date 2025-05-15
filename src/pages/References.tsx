@@ -65,14 +65,6 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/aircrack-ng/"}
                                 />
                                 <Reference
-                                    name={"Amap"}
-                                    description={
-                                        "Amap is a network scanning tool used for identifying services and applications running on open ports by performing application layer fingerprinting."
-                                    }
-                                    url={"https://www.kali.org/tools/amap/"}
-                                />
-
-                                <Reference
                                     name={"Amass"}
                                     description={
                                         "The OWASP Amass Project performs network mapping of attack surfaces and external asset discovery using open source information gathering and active reconnaissance techniques."
@@ -160,13 +152,6 @@ const ReferencesPage = () => {
                                     name={"Crunch"}
                                     description={"Crunch is a wordlist generator."}
                                     url={"https://www.kali.org/tools/crunch/"}
-                                />
-                                <Reference
-                                    name={"Dirb"}
-                                    description={
-                                        "Dirb is a tool that can scan a website, enumerating directories and files that may be present."
-                                    }
-                                    url={"https://www.kali.org/tools/dirb/"}
                                 />
                                 <Reference
                                     name={"DMitry"}
@@ -326,6 +311,13 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/netcat/"}
                                 />
                                 <Reference
+                                    name={"NetDiscover"}
+                                    description={
+                                        "A passive and active network discovery tool to find live hosts using ARP packets without sending traditional ICMP requests"
+                                    }
+                                    url={"https://www.kali.org/tools/netdiscover/"}
+                                />
+                                <Reference
                                     name={"Nikto"}
                                     description={"Nikto is a pluggable web server and CGI scanner."}
                                     url={"https://www.kali.org/tools/nikto/"}
@@ -443,6 +435,13 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/sublist3r/"}
                                 />
                                 <Reference
+                                    name={"Tcpdump"}
+                                    description={
+                                        "Tcpdump is a powerful commmand line packet analyser with a wide variety of configurations."
+                                    }
+                                    url={"https://www.tcpdump.org/"}
+                                />
+                                <Reference
                                     name={"TheHarvester"}
                                     description={
                                         "The Harvester is a tool for gathering emails, subdomains, IPs, and URLs from public sources for reconnaissance."
@@ -502,9 +501,11 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/whois/"}
                                 />
                                 <Reference
-                                    name={"Wifite"}
-                                    description={"Wifite is a tool to audit WEP or WPA encrypted wireless networks."}
-                                    url={"https://www.kali.org/tools/wifite/"}
+                                    name={"Wifite2"}
+                                    description={
+                                        "A tool for attacking WEP, WPA, WPA2, and WPS-secured Wi-Fi networks using customizable options and a user-friendly interface.."
+                                    }
+                                    url={"https://github.com/derv82/wifite2"}
                                 />
                                 <Reference
                                     name={"WPScan"}
@@ -568,6 +569,29 @@ const ReferencesPage = () => {
                                     description={"CVE-2022-36804 allows privilege escalation."}
                                     url={"https://nvd.nist.gov/vuln/detail/CVE-2022-36804"}
                                 />
+                                <Reference
+                                    name={"CVE-2022-22963"}
+                                    description={"Spring Cloud Function - SpEL Injection Remote Code Execution."}
+                                    url={"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-22963"}
+                                />
+                                <Reference
+                                    name={"CVE-2023-22515"}
+                                    description={"Auth bypass to allow admin account creation in Atlassian Confluence"}
+                                    url={"https://nvd.nist.gov/vuln/detail/CVE-2023-22515"}
+                                />
+                                <Reference
+                                    name={"CVE-2023-22527"}
+                                    description={"CVE-2023-22527 allows RCE in Atlassian Confluence."}
+                                    url={"https://nvd.nist.gov/vuln/detail/CVE-2023-22527"}
+                                />
+                                <Reference
+                                    name={"CVE-2023-23397"}
+                                    description={
+                                        "NTLM hash leak via malicious Outlook reminder exploiting extended MAPI property."
+                                    }
+                                    url={"https://nvd.nist.gov/vuln/detail/CVE-2023-23397"}
+                                />
+
                                 <Reference
                                     name={"FindOffset"}
                                     description={
