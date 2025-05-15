@@ -27,7 +27,7 @@
 | 0024   | Integration of BetterCap into PT-GUI                                                          | PROPOSED    |
 | 0025   | Addition of Nuclei for Vulnerability Scanning                                                 | PROPOSED    |
 | 0026   | Integration of PentestGPT as a next step adviser feature in PT-GUI                            | IMPLEMENTED |
-| 0027   | -empty-                                                                                       | -           |
+| 0027   | Remove CrackMapExec from the Toolkit                                                          | IMPLEMENTED |
 | 0028   | -empty-                                                                                       | -           |
 | 0029   | -empty-                                                                                       | -           |
 | 0030   | -empty-                                                                                       | -           |
