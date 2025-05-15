@@ -56,7 +56,7 @@ function Tcpdump() {
         "produce the type of scan selected.\n" +
         "Step 3: Click start to view the output block below and see the results of the scan.\n";
     const sourceLink = "https://www.tcpdump.org/"; // Link to the source code or Kali Tools page.
-    const tutorial = "https://www.tcpdump.org/manpages/"; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1YLoVaG7AtwrxzPnyWZ6qQ3OAsTGbs8oq/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["tcpdump"]; // Usually pre-installed with most Linux distributions, but best to double check.
 
     // Form hook to handle form input.
