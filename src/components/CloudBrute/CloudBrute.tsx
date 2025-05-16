@@ -139,7 +139,16 @@ const CloudBrute = () => {
         setLoading(true);
         setAllowSave(false);
         setHasSaved(false);
-        const args = ["-d", values.domain, "-k", values.keyword, "-w", values.wordlist];
+        const args = [
+            "-d",
+            values.domain,
+            "-k",
+            values.keyword,
+            "-w",
+            values.wordlist,
+            "--configFolder",
+            "/etc/cloudbrute/config",
+        ];
         CommandHelper.runCommandGetPidAndOutput("cloudbrute", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 setPid(pid);

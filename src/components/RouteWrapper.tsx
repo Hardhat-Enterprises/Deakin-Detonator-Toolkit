@@ -104,7 +104,9 @@ import CVE202322527 from "./CVE-2023-22527/CVE-2023-22527";
 import DigTool from "./Dig/Dig";
 import Dig from "./Dig/Dig";
 import NewsFeed from "../components/NewsFeed/NewsFeed";
+import CVE202323397 from "./CVE-2023-23397/CVE-2023-23397";
 import NetDiscover from "./NetDiscover/NetDiscover";
+import Nuclei from "./Nuclei/Nuclei";
 
 export interface RouteProperties {
     name: string;
@@ -261,6 +263,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/CVE-2023-22527",
         element: <CVE202322527 />,
         description: "Unauthenticated RCE in Atlassian Confluence via OGNL injection",
+        category: "",
+    },
+    {
+        name: "CVE-2023-23397",
+        path: "/attack-vectors/CVE-2023-23397",
+        element: <CVE202323397 />,
+        description: "NTLM hash leak via malicious Outlook reminder exploiting extended MAPI property",
         category: "",
     },
     {
@@ -706,6 +715,14 @@ export const ROUTES: RouteProperties[] = [
         element: <NSLookup />,
         description: "A command-line tool used for querying DNS to obtain domain name or IP address information.",
         category: "Network Scanning and Enumeration",
+    },
+    {
+        name: "Nuclei",
+        path: "/tools/nuclei",
+        element: <Nuclei />,
+        description:
+            "A vulnerability scanner that automates security checks using template-based scanning to detect vulnerabilities and misconfigurations across network services and web applications.",
+        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Parsero",
