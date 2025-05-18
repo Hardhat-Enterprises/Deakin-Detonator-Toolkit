@@ -13,8 +13,15 @@ import {
 } from "@mantine/core";
 import { IconRocket, IconSchool } from "@tabler/icons";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+    const navigate = useNavigate();
+
+    const handleBeginnerGuideBtnClick = () => {
+        navigate("/beginner-guides");
+    };
+
     const [modalOpened, setModalOpened] = useState(true);
     return (
         <>
@@ -83,7 +90,13 @@ const HomePage = () => {
                             Perfect for those starting their journey in penetration testing. Learn the basics through
                             guided walkthroughs and simple tools.
                         </Text>
-                        <Button fullWidth color="blue" mt="md" leftIcon={<IconSchool size={18} />} disabled>
+                        <Button
+                            fullWidth
+                            color="blue"
+                            mt="md"
+                            leftIcon={<IconSchool size={18} />}
+                            onClick={handleBeginnerGuideBtnClick}
+                        >
                             Explore Beginner
                         </Button>
                     </Card>
