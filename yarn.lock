@@ -538,10 +538,10 @@
     "@radix-ui/react-scroll-area" "1.0.2"
     react-textarea-autosize "8.3.4"
 
-"@mantine/form@^7.17.7":
-  version "7.17.7"
-  resolved "https://registry.yarnpkg.com/@mantine/form/-/form-7.17.7.tgz#bb86baa72f7c2db0a2493c7969f72b494a071637"
-  integrity sha512-BloLbPLbSKyQ+crkwcREiaF22v1y8CvgAbS9tcrWdZvA3SwUvkmsEoX8QYui82eTLKrqFEvlqp0rYVQ+y2cjIQ==
+"@mantine/form@^8.1.3":
+  version "8.1.3"
+  resolved "https://registry.yarnpkg.com/@mantine/form/-/form-8.1.3.tgz#8da837a884e72ab69c61b8110098f0e2e376ecb9"
+  integrity sha512-OoSVv2cyjKRZ+C4Rw63VsnO3qjKGZHJkd6DSJTVRQHXfDr10hxmC5yXgxGKsxGQ+xFd4ZCdtzPUU2BoWbHfZAA==
   dependencies:
     fast-deep-equal "^3.1.3"
     klona "^2.0.6"
