@@ -226,12 +226,7 @@ const CloudBrute = () => {
                         {...form.getInputProps("domain")}
                     />
                     <TextInput label="Keyword" required placeholder="e.g., test" {...form.getInputProps("keyword")} />
-                    <TextInput
-                        label="Provider"
-                        required
-                        placeholder="google"
-                        {...form.getInputProps("provider")}
-                    />
+                    <TextInput label="Provider" required placeholder="google" {...form.getInputProps("provider")} />
                     <TextInput
                         label="Output fill (full path)"
                         required
