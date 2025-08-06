@@ -15,6 +15,8 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     domain: string;
     keyword: string;
+    provider: string;
+    output: string;
     wordlist: string;
 }
 
@@ -56,6 +58,8 @@ const CloudBrute = () => {
         initialValues: {
             domain: "",
             keyword: "",
+            provider: "",
+            output: "/home/kali/Deakin-Detonator-Toolkit/OutputFiles/output.txt",
             wordlist: "/usr/share/dirb/wordlists/common.txt",
         },
     });
@@ -144,10 +148,12 @@ const CloudBrute = () => {
             values.domain,
             "-k",
             values.keyword,
+            "-c",
+            values.provider,
+            "-o",
+            values.output,
             "-w",
             values.wordlist,
-            "--configFolder",
-            "/etc/cloudbrute/config",
         ];
         CommandHelper.runCommandGetPidAndOutput("cloudbrute", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
@@ -220,6 +226,18 @@ const CloudBrute = () => {
                         {...form.getInputProps("domain")}
                     />
                     <TextInput label="Keyword" required placeholder="e.g., test" {...form.getInputProps("keyword")} />
+                    <TextInput
+                        label="Provider"
+                        required
+                        placeholder="google"
+                        {...form.getInputProps("provider")}
+                    />
+                    <TextInput
+                        label="Output fill (full path)"
+                        required
+                        placeholder="/home/{YOUR USER NAME}/Deakin-Detonator-Toolkit/OutputFiles/output.txt"
+                        {...form.getInputProps("output")}
+                    />
                     <TextInput
                         label="Path to Wordlist"
                         required
