@@ -221,6 +221,7 @@ const CloudBrute = () => {
                     />
                     <TextInput label="Keyword" required placeholder="e.g., test" {...form.getInputProps("keyword")} />
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <TextInput label="Provider" required placeholder="google" {...form.getInputProps("provider")} />
                     <TextInput
                         label="Output fill (full path)"
@@ -228,6 +229,8 @@ const CloudBrute = () => {
                         placeholder="/home/{YOUR USER NAME}/Deakin-Detonator-Toolkit/OutputFiles/output.txt"
                         {...form.getInputProps("output")}
                     />
+=======
+>>>>>>> parent of ec9267b (fix bug#1243 cloudbrute provider flag)
 =======
 >>>>>>> parent of ec9267b (fix bug#1243 cloudbrute provider flag)
                     <TextInput
