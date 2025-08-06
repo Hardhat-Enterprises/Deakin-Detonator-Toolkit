@@ -62,13 +62,13 @@ export function SaveOutputToTextFile_v2(
             setShowError(true);
             return;
         }
-        
+
         if (outputToSave && filename && allowSave) {
             try {
                 // Ensure filename has .txt extension
                 let finalFilename = filename.trim();
-                if (!finalFilename.toLowerCase().endsWith('.txt')) {
-                    finalFilename += '.txt';
+                if (!finalFilename.toLowerCase().endsWith(".txt")) {
+                    finalFilename += ".txt";
                 }
 
                 // Open save dialog with default filename
@@ -76,10 +76,10 @@ export function SaveOutputToTextFile_v2(
                     defaultPath: finalFilename,
                     filters: [
                         {
-                            name: 'Text Files',
-                            extensions: ['txt']
-                        }
-                    ]
+                            name: "Text Files",
+                            extensions: ["txt"],
+                        },
+                    ],
                 });
 
                 // If user didn't cancel the dialog
@@ -90,7 +90,7 @@ export function SaveOutputToTextFile_v2(
                     onSave(); // Call the onSave callback to perform post save actions in caller
                 }
             } catch (error) {
-                console.error('Error saving file:', error);
+                console.error("Error saving file:", error);
                 setShowError(true);
             }
         }
