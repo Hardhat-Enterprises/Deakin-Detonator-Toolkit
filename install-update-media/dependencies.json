@@ -9,6 +9,7 @@
         "libgtk-3-dev",
         "libayatana-appindicator3-dev",
         "librsvg2-dev",
+        "libpcap-dev",
         "dsniff",
         "dnsmap",
         "goldeneye",
@@ -16,6 +17,8 @@
         "parsero",
         "sherlock",
         "foremost",
-        "rainbowcrack"
+        "rainbowcrack",
+        "pkg-config",
+        "bettercap"
     ]
 }

@@ -107,6 +107,7 @@ import NewsFeed from "../components/NewsFeed/NewsFeed";
 import CVE202323397 from "./CVE-2023-23397/CVE-2023-23397";
 import NetDiscover from "./NetDiscover/NetDiscover";
 import Nuclei from "./Nuclei/Nuclei";
+import Bettercap from "./BetterCap/BetterCap";
 
 export interface RouteProperties {
     name: string;
@@ -449,6 +450,13 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A program designed to check network services (daemons) for potential vulnerabilities like buffer overflows and format string exploits.",
         category: "Information Gathering and Analysis",
+    },
+    {
+    	name: "BetterCap",
+    	path: "/tools/bettercap",
+    	element: <Bettercap />,
+    	description: "A module library for various network pentesting features.",
+    	category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Bully",
