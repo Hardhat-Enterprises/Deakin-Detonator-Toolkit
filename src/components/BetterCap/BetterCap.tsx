@@ -34,8 +34,7 @@ function Arjuntool() {
     // Component constants.
     const title = "BlueToothLowEnergy";
     const dependencies = ["bettercap"]; // Contains the dependencies required for the component.
-    const description =
-        "Bluetooth Low Energy scans the network for low energy bluetooth connections."; // Contains the description of the component.
+    const description = "Bluetooth Low Energy scans the network for low energy bluetooth connections."; // Contains the description of the component.
     const steps =
         "Step 1: Start the Bluetooth Low Energy Device discovery phase\n" +
         "Step 2: Switch on stability mode if you need stability over speed.\n" +

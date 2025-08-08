@@ -452,11 +452,11 @@ export const ROUTES: RouteProperties[] = [
         category: "Information Gathering and Analysis",
     },
     {
-    	name: "BetterCap",
-    	path: "/tools/bettercap",
-    	element: <Bettercap />,
-    	description: "A module library for various network pentesting features.",
-    	category: "Vulnerability Assessment and Exploitation",
+        name: "BetterCap",
+        path: "/tools/bettercap",
+        element: <Bettercap />,
+        description: "A module library for various network pentesting features.",
+        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Bully",
