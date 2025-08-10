@@ -43,11 +43,7 @@ const ToolsPage = () => {
 
             {/* Search + Category filter in a single row */}
             <Group spacing="sm" style={{ width: "100%" }} grow>
-                <SearchInput
-                    placeholder="Search tools (name, description, category)…"
-                    ariaLabel="Search tools"
-                    onChange={setQ}
-                />
+                <SearchInput placeholder="Search tools (name, description)…" ariaLabel="Search tools" onChange={setQ} />
 
                 <Select
                     value={selectedCategory}

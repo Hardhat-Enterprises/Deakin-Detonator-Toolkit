@@ -70,7 +70,7 @@ export function WalkthroughsPage() {
             {/* Search + Category side-by-side */}
             <Group spacing="sm" style={{ width: "100%" }} grow>
                 <SearchInput
-                    placeholder="Search walkthroughs (name, description, category)…"
+                    placeholder="Search walkthroughs (name, description)…"
                     ariaLabel="Search walkthroughs"
                     onChange={setQ}
                 />
