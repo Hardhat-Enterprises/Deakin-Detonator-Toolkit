@@ -1,3 +1,4 @@
+import TutorialTab from "../pages/TutorialTab";
 import AboutPage from "../pages/About";
 import HomePage from "../pages/HomePage";
 import { AttackVectors } from "../pages/AttackVectors";
@@ -215,7 +216,16 @@ export const ROUTES: RouteProperties[] = [
         description: "Pre-Auth RCE in Atlassian Bitbucket Server Vulnerability",
         category: "",
     },
+    
     {
+	name: "Tutorial",
+	 path: "/tutorial",
+	 element: <TutorialTab />,
+	description: "Tutorial page for guided learning",
+	category: "",
+    },
+
+	{
         name: "Find offset",
         path: "/attack-vectors/find-offset",
         element: <FindOffset />,

@@ -1,3 +1,4 @@
+import { IconBook } from "@tabler/icons-react";
 import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
 import {
     IconHome,
@@ -59,6 +60,13 @@ const aboutData = {
     route: "/about",
 };
 
+const tutorialData = {
+  icon: <IconBook size={16} />,
+  color: "yellow",
+  label: "Tutorial",
+  route: "/tutorial",
+};
+
 const toolsData = {
     icon: <IconTools size={16} />,
     color: "violet",
@@ -104,6 +112,7 @@ const referencesData = {
 const data = [
     homeData,
     aboutData,
+    tutorialData,
     toolsData,
     attackVectorsData,
     walkthroughsData,
