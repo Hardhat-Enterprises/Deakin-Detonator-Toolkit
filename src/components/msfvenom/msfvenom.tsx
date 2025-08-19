@@ -34,8 +34,9 @@ interface FormValuesType {
     custom: string;
 }
 
-const architectures = ["windows/x86", "windows/x64", "linux/x86", "Mac/x64", "Android ARM"];
+const architectures = ["Select Architecture", "windows/x86", "windows/x64", "linux/x86", "Mac/x64", "Android ARM"];
 const payloadOptions = [
+    ["Select Payload"],
     [
         "windows/meterpreter/reverse_tcp",
         "windows/shell_reverse_tcp",
@@ -90,7 +91,7 @@ const payloadOptions = [
     ],
 ];
 
-const payloadFormats = ["exe", "elf", "raw", "psh", "asp", "aspx", "jsp", "war", "jar"];
+const payloadFormats = ["Select Payload Format", "exe", "elf", "raw", "psh", "asp", "aspx", "jsp", "war", "jar"];
 
 const payloadRequiredVariables = [
     // windows x86 payload variables
@@ -141,8 +142,8 @@ const PayloadGenerator = () => {
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
     const [isCustomMode, setIsCustomMode] = useState(false);
-    const [selectedArchitecture, setSelectedArchitecture] = useState("");
-    const [selectedPayload, setSelectedPayload] = useState("");
+    const [selectedArchitecture, setSelectedArchitecture] = useState("Select Architecture");
+    const [selectedPayload, setSelectedPayload] = useState("Select Payload");
     const [selectedFormat, setSelectedFormat] = useState("");
     const [payloadIndex, setPayloadIndex] = useState<number | null>(null);
     const [requiredVariables, setRequiredVariables] = useState<string[]>([]);
@@ -342,8 +343,17 @@ const PayloadGenerator = () => {
                             <NativeSelect
                                 value={selectedArchitecture}
                                 onChange={(e) => {
-                                    setSelectedArchitecture(e.target.value);
-                                    setSelectedPayload("");
+                                    const newArchitecture = e.target.value;
+                                    setSelectedArchitecture(newArchitecture);
+
+                                    const archIndex = architectures.indexOf(newArchitecture);
+                                    const newPayload = payloadOptions[archIndex]?.[0] || "";
+                                    setSelectedPayload(newPayload);
+
+                                    const payloadIndex = payloadOptions[archIndex]?.indexOf(newPayload) || 0;
+                                    setPayloadIndex(payloadIndex);
+
+                                    setRequiredVariables(payloadRequiredVariables[archIndex]?.[payloadIndex] || []);
                                 }}
                                 title="Select Architecture"
                                 data={architectures}
