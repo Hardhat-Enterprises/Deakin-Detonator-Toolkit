@@ -1,16 +1,4 @@
-import {
-    Button,
-    Stack,
-    Table,
-    Title,
-    Dialog,
-    TextInput,
-    Text,
-    AspectRatio,
-    Group,
-    Select,
-    useMantineColorScheme,
-} from "@mantine/core";
+import { Button, Stack, Table, Dialog, TextInput, Text, AspectRatio, Group, Select } from "@mantine/core";
 import { getWalkthroughs } from "../components/RouteWrapper";
 import ToolItem from "../components/ToolItem/ToolItem";
 import { IconVideoPlus } from "@tabler/icons";
@@ -19,15 +7,14 @@ import { useForm } from "@mantine/form";
 import { CommandHelper } from "../utils/CommandHelper";
 import { showNotification } from "@mantine/notifications";
 import { UserGuide } from "../components/UserGuide/UserGuide";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import SearchInput from "../components/SearchInput";
 
 export function WalkthroughsPage() {
     interface FormValues {
         URL: string;
         NAME: string;
     }
-
-    const { colorScheme } = useMantineColorScheme();
 
     const [opened, { toggle, close }] = useDisclosure(false);
 
@@ -54,36 +41,60 @@ export function WalkthroughsPage() {
     ];
 
     const [selectedCategory, setSelectedCategory] = useState("");
+    const [q, setQ] = useState("");
     const walkthroughs = getWalkthroughs();
 
+    // Combine category filter + search
+    const filtered = useMemo(() => {
+        const query = q.trim().toLowerCase();
+
+        return walkthroughs.filter((w) => {
+            const categoryOk = !selectedCategory || selectedCategory === "All" || w.category === selectedCategory;
+
+            if (!categoryOk) return false;
+            if (!query) return true;
+
+            const haystack = [w.name, w.description, w.category].filter(Boolean).join(" ").toLowerCase();
+
+            return haystack.includes(query);
+        });
+    }, [walkthroughs, q, selectedCategory]);
+
     return (
-        <Stack align={"center"}>
+        <Stack align="center" spacing="sm" style={{ width: "100%" }}>
             {UserGuide(
                 "Walkthrough Videos",
                 "How to add a Walkthrough Video \nStep 1: Use the add button to create a video page \nStep 2: Register it in the RouteWrapper"
             )}
 
-            <Select
-                value={selectedCategory}
-                onChange={(value) => setSelectedCategory(value || "")}
-                label="Filter for a Category"
-                placeholder="Select category"
-                data={categories}
-                required
-                styles={(theme) => ({
-                    input: {
-                        backgroundColor: theme.colorScheme === "light" ? theme.white : theme.colors.dark[6],
-                        color: theme.colorScheme === "light" ? theme.black : theme.white,
-                        borderColor: theme.colorScheme === "light" ? theme.colors.gray[4] : theme.colors.dark[4],
-                    },
-                    dropdown: {
-                        backgroundColor: theme.colorScheme === "light" ? theme.white : theme.colors.dark[7],
-                        color: theme.colorScheme === "light" ? theme.black : theme.white,
-                    },
-                })}
-            />
+            {/* Search + Category side-by-side */}
+            <Group spacing="sm" style={{ width: "100%" }} grow>
+                <SearchInput
+                    placeholder="Search walkthroughs (name, description)…"
+                    ariaLabel="Search walkthroughs"
+                    onChange={setQ}
+                />
+                <Select
+                    value={selectedCategory}
+                    onChange={(value) => setSelectedCategory(value || "")}
+                    placeholder="Select category"
+                    data={categories}
+                    required
+                    styles={(theme) => ({
+                        input: {
+                            backgroundColor: theme.colorScheme === "light" ? theme.white : theme.colors.dark[6],
+                            color: theme.colorScheme === "light" ? theme.black : theme.white,
+                            borderColor: theme.colorScheme === "light" ? theme.colors.gray[4] : theme.colors.dark[4],
+                        },
+                        dropdown: {
+                            backgroundColor: theme.colorScheme === "light" ? theme.white : theme.colors.dark[7],
+                            color: theme.colorScheme === "light" ? theme.black : theme.white,
+                        },
+                    })}
+                />
+            </Group>
 
-            <Table horizontalSpacing="xl" verticalSpacing="md" fontSize="md">
+            <Table horizontalSpacing="xl" verticalSpacing="md" fontSize="md" style={{ width: "100%" }}>
                 <thead>
                     <tr>
                         <th>Walkthrough name</th>
@@ -97,24 +108,25 @@ export function WalkthroughsPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    {walkthroughs.map((walkthrough) => {
-                        if (
-                            !selectedCategory ||
-                            selectedCategory === "All" ||
-                            walkthrough.category === selectedCategory
-                        ) {
-                            return (
-                                <ToolItem
-                                    title={walkthrough.name}
-                                    description={walkthrough.description}
-                                    route={walkthrough.path}
-                                    category={walkthrough.category}
-                                    key={walkthrough.name}
-                                />
-                            );
-                        }
-                        return null;
-                    })}
+                    {filtered.length === 0 ? (
+                        <tr>
+                            <td colSpan={4}>
+                                <Text c="dimmed" size="sm">
+                                    No walkthroughs match “{q || selectedCategory || "your filters"}”.
+                                </Text>
+                            </td>
+                        </tr>
+                    ) : (
+                        filtered.map((walkthrough) => (
+                            <ToolItem
+                                title={walkthrough.name}
+                                description={walkthrough.description}
+                                route={walkthrough.path}
+                                category={walkthrough.category}
+                                key={walkthrough.name}
+                            />
+                        ))
+                    )}
                 </tbody>
             </Table>
 
@@ -151,7 +163,7 @@ export function WalkthroughsPage() {
                         />
                     </Group>
                     <Button
-                        type={"submit"}
+                        type="submit"
                         onClick={() =>
                             showNotification({
                                 title: "Done!",
@@ -171,7 +183,9 @@ export function WalkthroughsPage() {
 export function VideoPlayer(path: string, title: string) {
     return (
         <Stack>
-            <Title>{title}</Title>
+            <Text weight={600} size="lg">
+                {title}
+            </Text>
             <AspectRatio ratio={16 / 9}>
                 <iframe
                     src={path}
