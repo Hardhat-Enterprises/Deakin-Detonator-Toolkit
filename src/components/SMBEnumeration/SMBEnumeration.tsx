@@ -7,19 +7,11 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import { useEffect } from "react";
 
-const title = "SMB Enumeration";
-const steps = "";
-const description = "";
-const tutorial = "https://docs.google.com/document/d/1bFpB8Vo8osE4SBKme5wJcgLbp7wgmjnw76SCPeF3CoU/edit?usp=sharing";
-const sourcelink = "";
 
-// Description for the tooltip. Contents of this variable are displayed to the user when
-// hovering over the info option.
-const description_userguide =
-    "SMB (Server Message Block) represents a network protocol widely used to " +
-    "provide shared access across files, printers, and serial ports within a network. " +
-    "This tool aims to enumerate an SMB server to find potential vulnerabilities. \n\n" +
+
+const steps =
     "How to use SMB Enumeration:\n\n" +
     "Step 1: Enter an IP address or hostname.\n" +
     "       E.g. 127.0.0.1\n\n" +
@@ -33,6 +25,8 @@ const description_userguide =
     "Step 5: Click Start SMB Enumeration to commence the SMB enumeration operation.\n\n" +
     "Step 6: View the output block below to view the results of the scan.";
 
+const tutorial = "https://docs.google.com/document/d/1bFpB8Vo8osE4SBKme5wJcgLbp7wgmjnw76SCPeF3CoU/edit?usp=sharing";
+
 // Represents the form values for the SMBEnumeration component.
 interface FormValuesType {
     ip: string; // The IP address or hostname.
@@ -41,48 +35,54 @@ interface FormValuesType {
     scripts: string; // The selected SMB enumeration script.
 }
 
-const speeds = ["T0", "T1", "T2", "T3", "T4", "T5"]; // The scan speeds.
-
-// The list of SMB enumeration scripts.
-const scripts = [
-    "smb2-capabilities.nse",
-    "smb2-security-mode.nse",
-    "smb2-time.nse",
-    "smb2-vuln-uptime.nse",
-    "smb-brute.nse",
-    "smb-double-pulsar-backdoor.nse",
-    "smb-enum-domains.nse",
-    "smb-enum-groups.nse",
-    "smb-enum-processes.nse",
-    "smb-enum-services.nse",
-    "smb-enum-sessions.nse",
-    "smb-enum-shares.nse",
-    "smb-enum-users.nse",
-    "smb-flood.nse",
-    "smb-ls.nse",
-    "smb-mbenum.nse",
-    "smb-os-discovery.nse",
-    "smb-print-text.nse",
-    "smb-protocols.nse",
-    "smb-psexec.nse",
-    "smb-security-mode.nse",
-    "smb-server-stats.nse",
-    "smb-system-info.nse",
-    "smb-vuln-conficker.nse",
-    "smb-vuln-cve2009-3103.nse",
-    "smb-vuln-cve-2017-7494.nse",
-    "smb-vuln-ms06-025.nse",
-    "smb-vuln-ms07-029.nse",
-    "smb-vuln-ms08-067.nse",
-    "smb-vuln-ms10-054.nse",
-    "smb-vuln-ms10-061.nse",
-    "smb-vuln-ms17-010.nse",
-    "smb-vuln-regsvc-dos.nse",
-    "smb-vuln-webexec.nse",
-    "smb-webexec-exploit.nse",
-];
-
 const SMBEnumeration = () => {
+    const title = "SMB Enumeration";
+    // Description for the tooltip. Contents of this variable are displayed to the user when
+    // hovering over the info option.
+    const description =
+        "SMB (Server Message Block) represents a network protocol widely used to " +
+        "provide shared access across files, printers, and serial ports within a network. " +
+        "This tool aims to enumerate an SMB server to find potential vulnerabilities. \n\n";
+    const sourcelink = "";
+    const speeds = ["T0", "T1", "T2", "T3", "T4", "T5"]; // The scan speeds.
+    // The list of SMB enumeration scripts.
+    const scripts = [
+        "smb2-capabilities.nse",
+        "smb2-security-mode.nse",
+        "smb2-time.nse",
+        "smb2-vuln-uptime.nse",
+        "smb-brute.nse",
+        "smb-double-pulsar-backdoor.nse",
+        "smb-enum-domains.nse",
+        "smb-enum-groups.nse",
+        "smb-enum-processes.nse",
+        "smb-enum-services.nse",
+        "smb-enum-sessions.nse",
+        "smb-enum-shares.nse",
+        "smb-enum-users.nse",
+        "smb-flood.nse",
+        "smb-ls.nse",
+        "smb-mbenum.nse",
+        "smb-os-discovery.nse",
+        "smb-print-text.nse",
+        "smb-protocols.nse",
+        "smb-psexec.nse",
+        "smb-security-mode.nse",
+        "smb-server-stats.nse",
+        "smb-system-info.nse",
+        "smb-vuln-conficker.nse",
+        "smb-vuln-cve2009-3103.nse",
+        "smb-vuln-cve-2017-7494.nse",
+        "smb-vuln-ms06-025.nse",
+        "smb-vuln-ms07-029.nse",
+        "smb-vuln-ms08-067.nse",
+        "smb-vuln-ms10-054.nse",
+        "smb-vuln-ms10-061.nse",
+        "smb-vuln-ms17-010.nse",
+        "smb-vuln-regsvc-dos.nse",
+        "smb-vuln-webexec.nse",
+        "smb-webexec-exploit.nse",
+    ];
     const [loading, setLoading] = useState(false); // Represents the loading state of the component.
     const [output, setOutput] = useState(""); // Maintain the state (output) of the component.
     const [allowSave, setAllowSave] = useState(false);
@@ -91,6 +91,17 @@ const SMBEnumeration = () => {
     const [selectedScriptOption, setSelectedScriptOption] = useState("smb-enum-users"); // Default value for script
     const [pid, setPid] = useState(""); // Maintain the state of the process id.
     const [opened, setOpened] = useState(false); // Modal state
+
+    // Basic dependency check: ensure required commands (like nmap) are installed.
+    // If not, open the InstallationModal so the user can install them.
+    useEffect(() => {
+    const verifyDependencies = async () => {
+        const ok = await CommandHelper.checkAllCommandsAvailability(["nmap"]);
+        if (!ok) setOpened(true); // opens InstallationModal if missing
+    };
+
+        verifyDependencies();
+    }, []);
 
     // useForm is a hook that provides a state object and a set of functions to handle form data.
     // The state object contains the current value of the form, and the set of functions contains
@@ -204,7 +215,7 @@ const SMBEnumeration = () => {
                     <InstallationModal
                         isOpen={opened}
                         setOpened={setOpened}
-                        feature_description={description_userguide}
+                        feature_description={description}
                         dependencies={[]} // Add dependencies if needed
                     />
                 )}
@@ -228,7 +239,7 @@ const SMBEnumeration = () => {
 
                     {/* SMB Script dropdown */}
                     <NativeSelect
-                        label={"SMB Enumeration Script"}
+                        label={"SMB script"}
                         value={selectedScriptOption}
                         onChange={(e) => setSelectedScriptOption(e.target.value)}
                         title={"SMB Enumeration Script"}
@@ -238,7 +249,7 @@ const SMBEnumeration = () => {
                     />
 
                     {/* Submit button */}
-                    <Button type={"submit"}>Scan</Button>
+                    <Button type={"submit"}>Start {title}</Button>
 
                     {/* Save Output to Text File component */}
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
