@@ -9,8 +9,6 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { useEffect } from "react";
 
-
-
 const steps =
     "How to use SMB Enumeration:\n\n" +
     "Step 1: Enter an IP address or hostname.\n" +
@@ -95,10 +93,10 @@ const SMBEnumeration = () => {
     // Basic dependency check: ensure required commands (like nmap) are installed.
     // If not, open the InstallationModal so the user can install them.
     useEffect(() => {
-    const verifyDependencies = async () => {
-        const ok = await CommandHelper.checkAllCommandsAvailability(["nmap"]);
-        if (!ok) setOpened(true); // opens InstallationModal if missing
-    };
+        const verifyDependencies = async () => {
+            const ok = await CommandHelper.checkAllCommandsAvailability(["nmap"]);
+            if (!ok) setOpened(true); // opens InstallationModal if missing
+        };
 
         verifyDependencies();
     }, []);
