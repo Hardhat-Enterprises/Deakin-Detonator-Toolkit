@@ -200,7 +200,7 @@ ${item.description}
                                 withBorder
                                 p="md"
                                 mb="sm"
-                                style={{ backgroundColor: "#1f1f1f", ...styles }}
+                                style={styles}
                             >
                                 <Group position="apart" style={{ marginBottom: "0.5rem" }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
