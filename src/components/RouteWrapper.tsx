@@ -39,13 +39,11 @@ import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
-import Crackmapexec from "./Crackmapexec/Crackmapexec";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
 import Pentesting from "./WalkthroughPages/Pentesting";
 import Traceroute from "./Traceroute/Traceroute";
-import Crunch from "./Crunch/Crunch";
 import Meow from "./WalkthroughPages/Meow";
 import FTPconnect from "./FTP/FTPconnect";
 import GoldenEye from "./Goldeneye/Goldeneye";
@@ -471,22 +469,6 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used for discovering cloud-based infrastructure and services across various cloud providers through enumeration techniques.",
         category: "Cloud Security and Reconnaissance",
-    },
-    {
-        name: "Crackmapexec",
-        path: "/tools/Crackmapexec",
-        element: <Crackmapexec />,
-        description:
-            "A post-exploitation tool used for automating the assessment and exploitation of large Active Directory networks.",
-        category: "Vulnerability Assessment and Exploitation",
-    },
-    {
-        name: "Crunch",
-        path: "/tools/Crunch",
-        element: <Crunch />,
-        description:
-            "A tool used to generate custom wordlists based on specified patterns, character sets, and lengths.",
-        category: "Password Cracking and Authentication Testing",
     },
     {
         name: "dmitry",
