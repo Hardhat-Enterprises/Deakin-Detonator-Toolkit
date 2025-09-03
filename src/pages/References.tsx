@@ -328,6 +328,11 @@ const ReferencesPage = () => {
                                     url={"https://www.nmap.org"}
                                 />
                                 <Reference
+                                    name="Nuclei"
+                                    description="Nuclei is a fast vulnerability scanner powered by community and custom templates."
+                                    url={"https://www.kali.org/tools/nuclei/"}
+                                />
+                                <Reference
                                     name={"NSLookup"}
                                     description={"NSlookup  is  a program to query Internet domain name servers."}
                                     url={"https://www.kali.org/tools/bind9/#nslookup"}
