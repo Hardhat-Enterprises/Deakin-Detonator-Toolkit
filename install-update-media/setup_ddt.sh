@@ -3,14 +3,13 @@
 set -e
 
 # Add Debian security updates and main repository to sources.list if not already added
-# NOTE: ^ indicates string pattern starts on a new line. Avoids matching with hash version, e.g.: #deb
-#grep -q "^deb http://security.debian.org/debian-security buster/updates main" "/etc/apt/sources.list" && echo 'Already added Debian security to sources.list.' || sudo sh -c 'echo "deb http://security.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list'
-#grep -q "^deb http://ftp.au.debian.org/debian buster main" "/etc/apt/sources.list" && echo 'Already added Debian to sources.list.' || sudo sh -c 'echo "deb http://ftp.au.debian.org/debian buster main" >> /etc/apt/sources.list'
 sources_file="/etc/apt/sources.list"
 
-# Lines to add
-security_line="deb http://security.debian.org/debian-security buster/updates main"
-main_line="deb http://ftp.au.debian.org/debian buster main"
+# Please regularly check that the debian repostiories in use are still supported otherwise installation will fail and Kali will fail to update.
+# Caution must be taken when adjusting the following repositories as the will be added to the critical system file "etc/apt/sources.list" 
+security_line="deb http://deb.debian.org/debian-security/ bookworm-security main contrib non-free non-free-firmware"
+main_line="deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware"
+
 
 # Function to add a line (skipping commented-out lines during the existence check)
 add_line_if_not_exists() {
