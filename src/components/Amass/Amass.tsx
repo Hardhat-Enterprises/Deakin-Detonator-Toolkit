@@ -119,9 +119,21 @@ export function Amass() {
     };
 
     const onSubmit = (values: FormValuesType) => {
+        const domain = values.domain.trim();
+
+        // Validate domain with using regex, this ensures Amass will not initiate a scan or hang because of incorrect user input.
+        const domainRegex = /^(?!-)(?:[a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}$/;
+        if (!domainRegex.test(domain)) {
+            setOutput(
+                "Error: Invalid domain format. Please enter a valid domain that you are authorized to scan! Such as www.example.org"
+            );
+            return;
+        }
+
         setAllowSave(false);
         setLoading(true);
         const args = ["enum", "-d", values.domain];
+
         CommandHelper.runCommandGetPidAndOutput("amass", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 setPid(pid);
