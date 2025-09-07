@@ -567,12 +567,17 @@
     "@mantine/utils" "5.10.5"
     prism-react-renderer "^1.2.1"
 
-"@mantine/spotlight@^5.3.0":
-  version "5.10.5"
-  resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-5.10.5.tgz#b7747593a6b5762faa87bc9cf05c093fb2570be4"
-  integrity sha512-OQkuHxswrapRPcKDVSjE3li9oYYMq1Nwg2zlZzHlpzP7oW1qUhbDIVRc1dOzuT+IO7ifY/zeSuYknli7T29pDA==
+"@mantine/spotlight@^8.2.8":
+  version "8.2.8"
+  resolved "https://registry.yarnpkg.com/@mantine/spotlight/-/spotlight-8.2.8.tgz#d854937c627821c91c9c7553b3481f9c47dcc406"
+  integrity sha512-wZ4TMKC6LldI31DFOB89iat+4eyM29URN1uwklWUeigqR9/vywqXcKdzaSjpmbDxYelHFEp4AjgHzeG/8C915A==
   dependencies:
-    "@mantine/utils" "5.10.5"
+    "@mantine/store" "8.2.8"
+
+"@mantine/store@8.2.8":
+  version "8.2.8"
+  resolved "https://registry.yarnpkg.com/@mantine/store/-/store-8.2.8.tgz#ffa43a39110da7ad0957311f109975af793c0b34"
+  integrity sha512-xma5vcJlcR2UN6NZj0Rhskfppmz6wUTY/52EBU9sKZw60e1iiuTX2Bk/sfUa34VKZF4cRS46VLz2qstyCJne4Q==
 
 "@mantine/styles@5.10.5":
   version "5.10.5"
