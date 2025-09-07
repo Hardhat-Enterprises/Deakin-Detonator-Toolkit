@@ -60,7 +60,7 @@ export default function NewsFeed() {
             );
             showNotification({
                 title: "News Refreshed",
-                message: "Latest news loaded successfully ✅",
+                message: "Latest news loaded successfully",
                 color: "green",
             });
         } catch (err) {
@@ -72,7 +72,7 @@ export default function NewsFeed() {
                 setError("Offline Mode: Showing cached news");
                 showNotification({
                     title: "Offline Mode",
-                    message: "Loaded cached news from Desktop 📂",
+                    message: "Loaded cached news from Desktop",
                     color: "yellow",
                 });
             } catch (cacheError) {
@@ -112,16 +112,16 @@ export default function NewsFeed() {
         const safeTitle = item.title.replace(/[<>:"/\\|?*]+/g, "").slice(0, 50);
         const content = `
 ===========================
-📰 CYBERSECURITY ARTICLE
+CYBERSECURITY ARTICLE
 ===========================
 
 Title: ${item.title}
 Date: ${item.pub_date}
 
-🔗 Link to Full Article:
+Link to Full Article:
 ${item.link}
 
-📄 Summary:
+Summary:
 ${item.description}
 
 (Click the above link to read the full article.)
@@ -136,13 +136,13 @@ ${item.description}
             );
             showNotification({
                 title: "Article Saved",
-                message: `Saved as ${safeTitle}.txt on Desktop 📂`,
+                message: `Saved as ${safeTitle}.txt on Desktop`,
                 color: "green",
             });
         } catch (error) {
             showNotification({
                 title: "Save Failed",
-                message: "Could not save the article ❌",
+                message: "Could not save the article",
                 color: "red",
             });
         }
@@ -151,9 +151,9 @@ ${item.description}
     return (
         <div style={{ padding: "1rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>📰 Cybersecurity News</h2>
+                <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}> Cybersecurity News</h2>
                 <Button size="xs" variant="light" onClick={fetchNews} loading={refreshing}>
-                    🔄 Refresh
+                    Refresh
                 </Button>
             </div>
 
@@ -194,14 +194,7 @@ ${item.description}
                 return (
                     <Transition key={index} mounted transition="fade" duration={400} timingFunction="ease">
                         {(styles) => (
-                            <Card
-                                shadow="xs"
-                                radius="md"
-                                withBorder
-                                p="md"
-                                mb="sm"
-                                style={{ backgroundColor: "#1f1f1f", ...styles }}
-                            >
+                            <Card shadow="xs" radius="md" withBorder p="md" mb="sm" style={styles}>
                                 <Group position="apart" style={{ marginBottom: "0.5rem" }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                                         <a
@@ -224,7 +217,7 @@ ${item.description}
                                         )}
                                     </div>
                                     <Button size="xs" variant="outline" color="green" onClick={() => saveArticle(item)}>
-                                        💾 Save
+                                        Save
                                     </Button>
                                 </Group>
                                 <Text size="xs" color="dimmed" mt="xs">
@@ -241,7 +234,7 @@ ${item.description}
 
             {visibleCount < filteredNews.length && (
                 <Button fullWidth mt="md" variant="light" onClick={() => setVisibleCount((prev) => prev + 5)}>
-                    🔽 Load More
+                    Load More
                 </Button>
             )}
         </div>
