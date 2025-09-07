@@ -5,10 +5,10 @@ const AboutPage = () => {
     const theme = useMantineTheme();
 
     const getColor = (color: string) => theme.colors[color][theme.colorScheme === "dark" ? 5 : 7];
-    
+
     const getScreenshot = (baseName: string) => {
         const isDarkMode = theme.colorScheme === "dark";
-        
+
         // Handle different page screenshots based on theme
         switch (baseName) {
             case "tools":
@@ -71,10 +71,12 @@ const AboutPage = () => {
                         Made by university students, DDT is our capstone project, completed over successive trimesters.
                     </Text>
                     <Text size="lg" style={{ marginBottom: "1rem" }}>
-                        The toolkit allows you to make use of a variety of tools, without needing the "know-how" of each command.
+                        The toolkit allows you to make use of a variety of tools, without needing the "know-how" of each
+                        command.
                     </Text>
                     <Text size="lg" style={{ marginBottom: "1rem" }}>
-                        We have simplified the penetration testing experience for both newcomers who are still learning and those who have been hacking for years.
+                        We have simplified the penetration testing experience for both newcomers who are still learning
+                        and those who have been hacking for years.
                     </Text>
                     <Text size="lg" weight={500}>
                         Learn more about what the Deakin Detonator Toolkit provides down below:
@@ -127,7 +129,6 @@ const AboutPage = () => {
                     </Accordion.Panel>
                 </Accordion.Item>
 
-
                 <Accordion.Item value="Walkthroughs">
                     <Accordion.Control icon={<IconStepInto size={16} color={getColor("blue")} />}>
                         Walkthroughs
@@ -151,18 +152,17 @@ const AboutPage = () => {
                     </Accordion.Panel>
                 </Accordion.Item>
 
-
                 <Accordion.Item value="AITraining">
                     <Accordion.Control icon={<IconReportAnalytics size={16} color={getColor("teal")} />}>
                         AI Training Scenarios
                     </Accordion.Control>
                     <Accordion.Panel style={{ padding: "2rem" }}>
                         <Text style={textStyles}>
-                            The AI Training Scenarios page of the Deakin Detonator Toolkit provides you with GPT-4 powered
-                            penetration testing scenarios tailored to your skill level. These dynamic scenarios help you
-                            practice attack methodologies and develop strategies in a guided environment. To explore this
-                            section of the Deakin Detonator Toolkit further, press on the "AI Training Scenarios" category
-                            displayed on the left-hand navigation bar.
+                            The AI Training Scenarios page of the Deakin Detonator Toolkit provides you with GPT-4
+                            powered penetration testing scenarios tailored to your skill level. These dynamic scenarios
+                            help you practice attack methodologies and develop strategies in a guided environment. To
+                            explore this section of the Deakin Detonator Toolkit further, press on the "AI Training
+                            Scenarios" category displayed on the left-hand navigation bar.
                         </Text>
                         <div style={imageContainerStyles}>
                             <Image
@@ -181,12 +181,12 @@ const AboutPage = () => {
                     </Accordion.Control>
                     <Accordion.Panel style={{ padding: "2rem" }}>
                         <Text style={textStyles}>
-                            The Cyber News page of the Deakin Detonator Toolkit provides you with the latest cybersecurity
-                            news, vulnerability reports, and industry updates. Stay informed about emerging threats, new
-                            attack vectors, security patches, and trending topics in the cybersecurity community. This
-                            section helps you stay up-to-date with the rapidly evolving cybersecurity landscape. To explore
-                            this section of the Deakin Detonator Toolkit further, press on the "Cyber News" category
-                            displayed on the left-hand navigation bar.
+                            The Cyber News page of the Deakin Detonator Toolkit provides you with the latest
+                            cybersecurity news, vulnerability reports, and industry updates. Stay informed about
+                            emerging threats, new attack vectors, security patches, and trending topics in the
+                            cybersecurity community. This section helps you stay up-to-date with the rapidly evolving
+                            cybersecurity landscape. To explore this section of the Deakin Detonator Toolkit further,
+                            press on the "Cyber News" category displayed on the left-hand navigation bar.
                         </Text>
                         <div style={imageContainerStyles}>
                             <Image
