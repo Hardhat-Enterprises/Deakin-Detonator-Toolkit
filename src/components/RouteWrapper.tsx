@@ -455,7 +455,7 @@ export const ROUTES: RouteProperties[] = [
         name: "BetterCap",
         path: "/tools/bettercap",
         element: <Bettercap />,
-        description: "A module library for various network pentesting features.",
+        description: "A module library for various network penetration testing features.",
         category: "Vulnerability Assessment and Exploitation",
     },
     {

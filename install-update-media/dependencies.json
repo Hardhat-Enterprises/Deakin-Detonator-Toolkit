@@ -19,6 +19,8 @@
         "foremost",
         "rainbowcrack",
         "pkg-config",
-        "bettercap"
+        "bettercap",
+        "bettercap-caplets",
+        "bettercap-ui"
     ]
 }

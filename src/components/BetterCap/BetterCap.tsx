@@ -1,24 +1,26 @@
-import { Button, Stack, TextInput, Switch, Alert, Group } from "@mantine/core";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
 /**
- * Represents the form values for the Arjun component.
+ * Represents the form values for the BetterCap component.
  */
 interface FormValuesType {
-    url: string;
-    outputFileName: string;
-    stability: boolean;
+    hostaddress: string;
 }
 
-function Arjuntool() {
+/**
+ * The Bettercap component.
+ * @returns the Bettercap component.
+ */
+function BetterCap() {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
@@ -26,25 +28,27 @@ function Arjuntool() {
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
     const [showAlert, setShowAlert] = useState(true);
     const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
-    // Component constants.
-    const title = "BlueToothLowEnergy";
-    const dependencies = ["bettercap"]; // Contains the dependencies required for the component.
-    const description = "Bluetooth Low Energy scans the network for low energy bluetooth connections."; // Contains the description of the component.
+    // Component Constants.
+    const title = "BetterCap"; // Title of the component.
+    const description = "BetterCap is a module multitool with an array of network penetration techniques.\n"; // Description of the component.
     const steps =
-        "Step 1: Start the Bluetooth Low Energy Device discovery phase\n" +
-        "Step 2: Switch on stability mode if you need stability over speed.\n" +
-        "Step 3: Click the scan button to commence scanning.\n" +
-        "Step 4: View the output block below to see the results.";
-    +"Step 5: Enter an optional JSON output filename, e.g. arjunoutput.json.\n";
-    const sourceLink = "https://www.bettercap.org/modules/ble/"; // Link to the source code (or Kali Tools).
-    const tutorial = "https://docs.google.com/document/d/1zIsHBJPQDL9KLkZK0ztg1DuMoumwwWwV3lJdwjVRJ-c/edit?usp=sharing"; // Link to the official documentation/tutorial.
+        "Step 1: Start the Bettercap tool on the domain of your choosing (default is 127.0.0.1)\n" +
+        "Step 2: Click to access the BetterCap server\n";
+    const sourceLink = "https://www.kali.org/tools/bettercap/"; // Link to the source code or Kali Tools page.
+    const dependencies = ["bettercap"]; // Dependencies required for the Bettercap tool.
+    // Form hook to handle form input.
+    const form = useForm<FormValuesType>({
+        initialValues: {
+            domain: "127.0.0.1",
+        },
+    });
 
-    // Check if the command is available and set the state variables accordingly.
+    // Check the availability of all commands in the dependencies array.
     useEffect(() => {
         // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
@@ -57,7 +61,6 @@ function Arjuntool() {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
-
         // Set timeout to remove alert after 5 seconds on load.
         alertTimeout.current = setTimeout(() => {
             setShowAlert(false);
@@ -80,22 +83,13 @@ function Arjuntool() {
         }, 5000);
     };
 
-    // Form Hook to handle form input.
-    let form = useForm({
-        initialValues: {
-            url: "",
-            outputFileName: "",
-            stability: false,
-        },
-    });
-
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
      * It updates the state by appending the new data received to the existing output.
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+        setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
     /**
@@ -108,13 +102,15 @@ function Arjuntool() {
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            // If the process was terminated successfully, display a success message.
+            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-                // If the process was terminated due to a signal, display the signal code.
+
+                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-                // If the process was terminated with an error, display the exit code and signal code.
+
+                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
@@ -132,56 +128,54 @@ function Arjuntool() {
         [handleProcessData] // Dependency on the handleProcessData callback
     );
 
-    // Actions taken after saving the output
+    /**
+     * handleSaveComplete: Recognizes that the output file has been saved.
+     * Passes the saved status back to SaveOutputToTextFile_v2.
+     */
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
         setHasSaved(true);
         setAllowSave(false);
     };
 
     /**
      * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the Arjun tool with the given parameters.
+     * It sets up and triggers the Dnsrecon tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
-     *
-     * @param {FormValuesType} values - The form values, containing the URL, output file name and stability value.
+     * @param {FormValuesType} values - The form values, containing the URL.
      */
-
     const onSubmit = async (values: FormValuesType) => {
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
-
-        // Activate loading state to indicate ongoing process
+        // Set the loading state to true to indicate that the process is starting.
         setLoading(true);
 
-        // Construct arguments for the aircrack-ng command based on form input
-        const args = ["-u", values.url];
+        // Disable saving the output to a file while the process is running.
+        setAllowSave(false);
 
-        // Conditional. If the user has specified stability, add the --stable option to the command.
-        if (values.stability) {
-            args.push("--stable");
+        // Construct the arguments for the Bettercap UI command.
+        const args = ["-eval", "'http-ui'"];
+
+        try {
+            // Execute the BetterCap command using the CommandHelper utility.
+            // Pass the command name, arguments, and callback functions for handling process data and termination.
+            const { pid, output } = await CommandHelper.runCommandWithPkexec(
+                "bettercap",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+
+            // Update the state with the process ID and initial output.
+            setPid(pid);
+            setOutput(output);
+        } catch (error: any) {
+            // If an error occurs during command execution, display the error message.
+            setOutput(`Error: ${error.message}`);
+
+            // Set the loading state to false since the process failed.
+            setLoading(false);
+
+            // Allow saving the output (which includes the error message) to a file.
+            setAllowSave(true);
         }
-        if (values.outputFileName) {
-            args.push("-o", values.outputFileName);
-        }
-
-        // Execute the arjun command via helper method and handle its output or potential errors
-        CommandHelper.runCommandGetPidAndOutput("arjun", args, handleProcessData, handleProcessTermination)
-            .then(({ pid, output }) => {
-                // Update the output with the results of the command execution.
-                setOutput(output);
-
-                // Store the process ID of the executed command.
-                setPid(pid);
-            })
-            .catch((error) => {
-                // Display any errors encountered during command execution.
-                setOutput(error.message);
-
-                // Deactivate loading state.
-                setLoading(false);
-            });
     };
 
     /**
@@ -192,17 +186,13 @@ function Arjuntool() {
         setOutput("");
         setHasSaved(false);
         setAllowSave(false);
-    }, [setOutput]);
+    }, []);
 
     return (
         <>
-            <RenderComponent
-                title={title}
-                description={description}
-                steps={steps}
-                tutorial={tutorial}
-                sourceLink={sourceLink}
-            >
+            {/* Render the UserGuide component with component details */}
+            <RenderComponent title={title} description={description} steps={steps}>
+                {/* Render the installation modal if the command is not available */}
                 {!loadingModal && (
                     <InstallationModal
                         isOpen={opened}
@@ -211,32 +201,27 @@ function Arjuntool() {
                         dependencies={dependencies}
                     ></InstallationModal>
                 )}
-                <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                    <Group position="right">
-                        {!showAlert && (
-                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
-                                Show Disclaimer
-                            </Button>
-                        )}
-                    </Group>
+                <form onSubmit={form.onSubmit(onSubmit)}>
+                    {/* Render the loading overlay and cancel button */}
                     {LoadingOverlayAndCancelButton(loading, pid)}
-
-                    {showAlert && (
-                        <Alert title="Warning: Potential Risks" color="red">
-                            This tool is used to find URL parameters, use with caution and only on websites you own or
-                            have explicit permission to test.
-                        </Alert>
-                    )}
-
                     <Stack>
-                        <TextInput label={"URL"} required {...form.getInputProps("url")} />
-                        <Switch
-                            size="md"
-                            label="Stability mode"
-                            {...form.getInputProps("stability" as keyof FormValuesType)}
-                        />
-                        <Button type={"submit"}>Scan</Button>
-                        {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                        <Group position="right">
+                            {!showAlert && (
+                                <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                    Show Disclaimer
+                                </Button>
+                            )}
+                        </Group>
+                        {showAlert && (
+                            <Alert title="Warning: Potential Risks" color="red">
+                                This tool is used to perform explicit penetration testing on a wide variety of network
+                                types, ensure you have permission from the network administrator or device owner before
+                                you proceed.
+                            </Alert>
+                        )}
+
+                        <Button type={"submit"}>Start Bettercap</Button>
+                        {/* Render the console wrapper component */}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                     </Stack>
                 </form>
@@ -245,4 +230,4 @@ function Arjuntool() {
     );
 }
 
-export default Arjuntool;
+export default BetterCap;
