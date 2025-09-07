@@ -220,7 +220,7 @@ function BetterCap() {
                             </Alert>
                         )}
 
-                        <Button type={"submit"}>Start Bettercap</Button>
+                        <Button type={"submit"}>Start Bettercap (Give it some time to start!)</Button>
                         {/* Render the console wrapper component */}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                     </Stack>
