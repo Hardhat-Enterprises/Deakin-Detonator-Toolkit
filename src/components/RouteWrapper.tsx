@@ -11,6 +11,7 @@ import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
 import CVE20221388 from "./CVE-2022-1388/CVE-2022-1388";
 import CVE202227925 from "./CVE-2022-27925/CVE-2022-27925";
 import FindOffset from "./FindOffset/FindOffset";
+import Crunch from "./Crunch/Crunch";
 import Hashcat from "./Hashcat/Hashcat";
 import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
 import NmapTool from "./NmapTool/NmapTool";
@@ -268,6 +269,13 @@ export const ROUTES: RouteProperties[] = [
         path: "/attack-vectors/CVE-2023-23397",
         element: <CVE202323397 />,
         description: "NTLM hash leak via malicious Outlook reminder exploiting extended MAPI property",
+        category: "",
+    },
+    {
+        name: "Crunch",
+        path: "/tools/crunch",
+        element: <Crunch />,
+        description: "",
         category: "",
     },
     {
