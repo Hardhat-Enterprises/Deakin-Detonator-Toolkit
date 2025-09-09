@@ -1,6 +1,7 @@
-import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
+import { Button, Stack, TextInput, Alert, Group, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
+import { showNotification } from "@mantine/notifications";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -18,10 +19,6 @@ interface FormValuesType {
     domain: string;
 }
 
-/**
- * The Amass component.
- * @returns The Amass component.
- */
 export function Amass() {
     // Component State Variables.
     const [loading, setLoading] = useState(false);
@@ -50,10 +47,31 @@ export function Amass() {
     const tutorial = "https://docs.google.com/document/d/1t7YrU1qMx9agtTsxorAkk__OZ88UIq9V4M3CVkDqmxE/edit?usp=sharing";
     const dependencies = ["amass"];
 
-    // Form hook to handle form input.
+    // Pattern implemented for validation process.
+    const domainPatternString = "^(?!-)(?:[a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}$";
+    const domainRegex = new RegExp(domainPatternString);
+
+    // Form hook to handle form input with validation.
     let form = useForm<FormValuesType>({
         initialValues: {
             domain: "",
+        },
+        validate: {
+            domain: (value) => {
+                const raw = String(value ?? "");
+                const trimmed = raw.trim().toLowerCase();
+
+                // Checks for internal whitespace and throws error when detected.
+                if (/\s/.test(trimmed)) {
+                    return "Error: Domain contains spaces! Remove all internal spaces and try again!";
+                }
+                // Checks trimmed trimmed input against the designated pattern.
+                if (!domainRegex.test(trimmed)) {
+                    return "Error: Invalid domain format! Please enter a valid domain!";
+                }
+
+                return null;
+            },
         },
     });
 
@@ -118,21 +136,22 @@ export function Amass() {
         setAllowSave(false);
     };
 
+    // Removes whitespace and forces lowercase.
+    const normalize = (s?: string) =>
+        String(s ?? "")
+            .trim()
+            .toLowerCase();
+
+    // Rebuilt with input validation in place.
     const onSubmit = (values: FormValuesType) => {
-        const domain = values.domain.trim();
+        // In place as a secondary check to ensure no invalid input passes from the input form.
+        const raw = String(values.domain ?? "");
+        const domain = raw.trim().toLowerCase();
 
-        // Validate domain with using regex, this ensures Amass will not initiate a scan or hang because of incorrect user input.
-        const domainRegex = /^(?!-)(?:[a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}$/;
-        if (!domainRegex.test(domain)) {
-            setOutput(
-                "Error: Invalid domain format. Please enter a valid domain that you are authorized to scan! Such as www.example.org"
-            );
-            return;
-        }
-
+        // Runs Amass if the validation process is successful.
         setAllowSave(false);
         setLoading(true);
-        const args = ["enum", "-d", values.domain];
+        const args = ["enum", "-d", domain];
 
         CommandHelper.runCommandGetPidAndOutput("amass", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
@@ -151,6 +170,9 @@ export function Amass() {
         setAllowSave(false);
     }, [setOutput]);
 
+    // Notes the domain props for input handling.
+    const domainProps = form.getInputProps("domain");
+
     return (
         <RenderComponent
             title={title}
@@ -165,7 +187,7 @@ export function Amass() {
                     setOpened={setOpened}
                     feature_description={description}
                     dependencies={dependencies}
-                ></InstallationModal>
+                />
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Group position="right">
@@ -185,7 +207,16 @@ export function Amass() {
                 )}
 
                 <Stack>
-                    <TextInput label="Enter the domain to scan" required {...form.getInputProps("domain")} />
+                    <TextInput
+                        label="Enter the domain to scan"
+                        required
+                        {...domainProps}
+                        placeholder="example.com"
+                        inputProps={{
+                            pattern: domainPatternString,
+                            title: "Please enter a valid domain!",
+                        }}
+                    />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit">Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
