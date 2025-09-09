@@ -51,22 +51,28 @@ export function Amass() {
     const domainPatternString = "^(?!-)(?:[a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}$";
     const domainRegex = new RegExp(domainPatternString);
 
-    // Form hook to handle form input with validation.
+    // Normalizing domain input.
+    function normalizeDomain(value: unknown): string {
+        const raw = String(value ?? "");
+        return raw.trim().toLowerCase();
+    }
+
+    // Form hook to handle input with validation.
     let form = useForm<FormValuesType>({
         initialValues: {
             domain: "",
         },
         validate: {
             domain: (value) => {
-                const raw = String(value ?? "");
-                const trimmed = raw.trim().toLowerCase();
+                const normalized = normalizeDomain(value);
 
                 // Checks for internal whitespace and throws error when detected.
-                if (/\s/.test(trimmed)) {
+                if (/\s/.test(normalized)) {
                     return "Error: Domain contains spaces! Remove all internal spaces and try again!";
                 }
-                // Checks trimmed trimmed input against the designated pattern.
-                if (!domainRegex.test(trimmed)) {
+
+                // Checks trimmed input against the designated pattern.
+                if (!domainRegex.test(normalized)) {
                     return "Error: Invalid domain format! Please enter a valid domain!";
                 }
 
@@ -136,17 +142,9 @@ export function Amass() {
         setAllowSave(false);
     };
 
-    // Removes whitespace and forces lowercase.
-    const normalize = (s?: string) =>
-        String(s ?? "")
-            .trim()
-            .toLowerCase();
-
-    // Rebuilt with input validation in place.
+    // Rebuilt with input validation supported by input form.
     const onSubmit = (values: FormValuesType) => {
-        // In place as a secondary check to ensure no invalid input passes from the input form.
-        const raw = String(values.domain ?? "");
-        const domain = raw.trim().toLowerCase();
+        const domain = normalizeDomain(values.domain);
 
         // Runs Amass if the validation process is successful.
         setAllowSave(false);
