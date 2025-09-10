@@ -358,7 +358,6 @@ const PayloadGenerator = () => {
                                 title="Select Architecture"
                                 data={architectures}
                                 required
-                                placeholder="Select Architecture"
                             />
 
                             <NativeSelect
@@ -372,7 +371,6 @@ const PayloadGenerator = () => {
                                 title="Select Payload"
                                 data={payloadOptions[architectureIndex] || []}
                                 required
-                                placeholder="Select Payload"
                             />
 
                             {/* Render other inputs based on requiredVariables */}
@@ -473,7 +471,6 @@ const PayloadGenerator = () => {
                                 title="Select Format"
                                 data={payloadFormats}
                                 required
-                                placeholder="Select Format"
                             />
                         </>
                     )}
