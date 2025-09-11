@@ -1,7 +1,6 @@
 import { Button, Stack, TextInput, Alert, Group, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
-import { showNotification } from "@mantine/notifications";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -31,7 +30,7 @@ export function Amass() {
     const [loadingModal, setLoadingModal] = useState(true);
     const [chatGPTResponse, setChatGPTResponse] = useState("");
     const [showAlert, setShowAlert] = useState(true);
-    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
+    const alertTimeout = useRef<number | null>(null);
 
     // Component Constants.
     const title = "Amass";
@@ -142,7 +141,7 @@ export function Amass() {
         setAllowSave(false);
     };
 
-    // Rebuilt with input validation supported by input form.
+    // Rebuilt with input validation supporting the input form.
     const onSubmit = (values: FormValuesType) => {
         const domain = normalizeDomain(values.domain);
 
@@ -167,9 +166,6 @@ export function Amass() {
         setHasSaved(false);
         setAllowSave(false);
     }, [setOutput]);
-
-    // Notes the domain props for input handling.
-    const domainProps = form.getInputProps("domain");
 
     return (
         <RenderComponent
@@ -205,16 +201,7 @@ export function Amass() {
                 )}
 
                 <Stack>
-                    <TextInput
-                        label="Enter the domain to scan"
-                        required
-                        {...domainProps}
-                        placeholder="example.com"
-                        inputProps={{
-                            pattern: domainPatternString,
-                            title: "Please enter a valid domain!",
-                        }}
-                    />
+                    <TextInput label="Enter the domain to scan" required {...form.getInputProps("domain")} />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit">Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
