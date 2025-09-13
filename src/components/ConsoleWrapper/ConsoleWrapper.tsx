@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { Button, Title } from "@mantine/core";
+import { useEffect, useRef, useState } from "react";
+import { Button, Group, Modal, Title } from "@mantine/core";
 import { Prism } from "@mantine/prism";
 
 interface ConsoleWrapperProps {
@@ -10,34 +10,69 @@ interface ConsoleWrapperProps {
 }
 
 const ConsoleWrapper = ({ output, clearOutputCallback, hideClearButton, title = "Output" }: ConsoleWrapperProps) => {
-    // Use ref to refer to the output container
     const outputContainerRef = useRef<HTMLDivElement>(null);
+    const [fullscreen, setFullscreen] = useState(false);
 
-    // Scroll to the bottom of the output container whenever the output updates
+    // NEW: scroll to TOP (first line) on output change
     useEffect(() => {
-        if (outputContainerRef.current) {
-            const element = outputContainerRef.current;
-            element.scrollTop = element.scrollHeight;
-        }
+        const el = outputContainerRef.current;
+        if (el) el.scrollTop = 0;
     }, [output]);
 
-    if (output) {
-        return (
-            <>
-                <Title>{title}</Title>
-                <div ref={outputContainerRef} style={{ maxHeight: "250px", overflowY: "auto" }}>
-                    <Prism language={"bash"}>{output}</Prism>
+    if (!output) return null;
+
+    const ConsoleBox = (
+        <div
+            ref={outputContainerRef}
+            style={{
+                // NEW: bigger by default + user-resizable
+                height: "55vh",
+                minHeight: 240,
+                overflowY: "auto",
+                resize: "vertical",
+                border: "1px solid var(--mantine-color-default-border)",
+                borderRadius: 8,
+                padding: 12,
+                background: "var(--mantine-color-body)",
+            }}
+        >
+            <Prism language="bash">{output}</Prism>
+        </div>
+    );
+
+    return (
+        <>
+            <Group justify="space-between" mb="xs">
+                <Title order={5} style={{ margin: 0 }}>
+                    {title}
+                </Title>
+                <Button variant="light" onClick={() => setFullscreen(true)}>
+                    Fullscreen
+                </Button>
+            </Group>
+
+            {ConsoleBox}
+
+            {!hideClearButton && (
+                <Button color="red" onClick={clearOutputCallback} mt="md">
+                    Clear output
+                </Button>
+            )}
+
+            <Modal
+                opened={fullscreen}
+                onClose={() => setFullscreen(false)}
+                fullScreen
+                withCloseButton
+                size="100%"
+                title={title}
+            >
+                <div style={{ height: "80vh", overflow: "auto" }}>
+                    <Prism language="bash">{output}</Prism>
                 </div>
-                {!hideClearButton && (
-                    <Button color={"red"} onClick={clearOutputCallback}>
-                        Clear output
-                    </Button>
-                )}
-            </>
-        );
-    } else {
-        return null;
-    }
+            </Modal>
+        </>
+    );
 };
 
 export default ConsoleWrapper;
