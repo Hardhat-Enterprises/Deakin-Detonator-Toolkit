@@ -245,7 +245,7 @@ const TheHarvester = () => {
                             <option value="dnsdumpster">DNSdumpster</option>
                             <option value="duckduckgo">DuckDuckGo</option>
                             <option value="exalead">Exalead</option>
-                            <option value="google">Google</option>
+                            {/* Removed Google because it is not supported */}
                             <option value="hackertarget">Hackertarget</option>
                             <option value="hunter">Hunter</option>
                             <option value="intelx">Intelx</option>
