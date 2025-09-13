@@ -78,6 +78,11 @@
                         "args": true
                     },
                     {
+                    	"name": "bettercap",
+                    	"cmd": "bettercap",
+                    	"args": true
+                    },
+                    {
                         "name": "bully",
                         "cmd": "bully",
                         "args": true
