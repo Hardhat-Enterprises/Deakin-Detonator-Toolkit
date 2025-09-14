@@ -259,7 +259,8 @@ export function BEDTool() {
                     />
                     {customConfig && (
                         <Alert title="Custom Configuration" color="blue" variant="light">
-                            Custom IP address and port can now be specified for this scan. Leave these fields blank to use default settings.
+                            Custom IP address and port can now be specified for this scan. Leave these fields blank to
+                            use default settings.
                         </Alert>
                     )}
                     <Select
@@ -279,31 +280,32 @@ export function BEDTool() {
                                 required
                                 {...form.getInputProps("username")}
                             />
-                            <TextInput 
-                                label="Password" 
-                                type="password" 
+                            <TextInput
+                                label="Password"
+                                type="password"
                                 placeholder="Enter the password for authentication"
                                 description="Must be at least 8 characters"
-                                required 
-                                {...form.getInputProps("password")} 
+                                required
+                                {...form.getInputProps("password")}
                             />
                         </>
                     )}
-                    {pluginsRequiringUsername.includes(selectedPlugin) && !pluginsRequiringAuth.includes(selectedPlugin) && (
-                        <TextInput 
-                            label="Username"
-                            placeholder="e.g. user123"
-                            description = "Enter the username required for this scan"
-                            required 
-                            {...form.getInputProps("username")} 
-                        />
-                    )}
+                    {pluginsRequiringUsername.includes(selectedPlugin) &&
+                        !pluginsRequiringAuth.includes(selectedPlugin) && (
+                            <TextInput
+                                label="Username"
+                                placeholder="e.g. user123"
+                                description="Enter the username required for this scan"
+                                required
+                                {...form.getInputProps("username")}
+                            />
+                        )}
                     {selectedPlugin === "SMTP" && (
-                        <TextInput 
+                        <TextInput
                             label="Email Address (used as sender in test)"
                             placeholder="e.g. test@example.com"
-                            required 
-                            {...form.getInputProps("email")} 
+                            required
+                            {...form.getInputProps("email")}
                         />
                     )}
                     {customConfig && (
