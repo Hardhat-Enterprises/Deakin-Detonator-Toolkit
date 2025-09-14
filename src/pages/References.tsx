@@ -142,13 +142,6 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/cloudbrute/"}
                                 />
                                 <Reference
-                                    name={"CrackMapExec"}
-                                    description={
-                                        "CrackMapExec is a post-exploitation tool used for pentesting Windows/Active Directory environments."
-                                    }
-                                    url={"https://www.kali.org/tools/crackmapexec/"}
-                                />
-                                <Reference
                                     name={"Crunch"}
                                     description={"Crunch is a wordlist generator."}
                                     url={"https://www.kali.org/tools/crunch/"}
