@@ -7,6 +7,7 @@ const ToolsPage = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const tools = getTools();
 
+    // Generate categories using tools data
     const categories = useMemo(() => {
         const uniqueCategories = new Set(tools.map((tool) => tool.category));
         return ["All", ...Array.from(uniqueCategories).sort()];
