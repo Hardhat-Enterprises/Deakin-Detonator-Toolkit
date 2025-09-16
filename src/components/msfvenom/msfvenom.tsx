@@ -121,7 +121,7 @@ const payloadRequiredVariables = [
         ["LHOST", "LPORT"],
     ],
     //MAC x64 payload variables
-    [["LHOST", "LPORT"], ["LPORT"], ["CMD"], ["TEXT"], [], [], [], ["LHOST", "LPORT"]],
+    [["LHOST", "LPORT"], ["LPORT"], ["CMD"], ["TEXT"], ["LHOST", "LPORT"], [], ["LHOST", "LPORT"]],
     //Android ARM payload variables
     [
         ["LHOST", "LPORT"],
@@ -141,9 +141,9 @@ const PayloadGenerator = () => {
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
     const [isCustomMode, setIsCustomMode] = useState(false);
-    const [selectedArchitecture, setSelectedArchitecture] = useState("");
+    const [selectedArchitecture, setSelectedArchitecture] = useState("windows/x86");
     const [selectedPayload, setSelectedPayload] = useState("");
-    const [selectedFormat, setSelectedFormat] = useState("");
+    const [selectedFormat, setSelectedFormat] = useState(payloadFormats[0]);
     const [payloadIndex, setPayloadIndex] = useState<number | null>(null);
     const [requiredVariables, setRequiredVariables] = useState<string[]>([]);
     const [pid, setPid] = useState("");
@@ -355,14 +355,25 @@ const PayloadGenerator = () => {
                                 value={selectedPayload}
                                 onChange={(e) => {
                                     setSelectedPayload(e.target.value);
+
+                                    if (architectureIndex < 0 || !payloadOptions[architectureIndex]) {
+                                        setPayloadIndex(null);
+                                        setRequiredVariables([]);
+                                        return;
+                                    }
+
                                     const newIndex = payloadOptions[architectureIndex].indexOf(e.target.value);
+
+                                    if (newIndex < 0 || !payloadRequiredVariables[architectureIndex]) {
+                                        setPayloadIndex(null);
+                                        setRequiredVariables([]);
+                                        return;
+                                    }
+
                                     setPayloadIndex(newIndex);
                                     setRequiredVariables(payloadRequiredVariables[architectureIndex][newIndex] || []);
                                 }}
-                                title="Select Payload"
                                 data={payloadOptions[architectureIndex] || []}
-                                required
-                                placeholder="Select Payload"
                             />
 
                             {/* Render other inputs based on requiredVariables */}
