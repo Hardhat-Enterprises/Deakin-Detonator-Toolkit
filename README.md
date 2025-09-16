@@ -118,7 +118,7 @@ Once you have successfully implemented either method one or two, the application
 
 # 📷 Release
 
-1. Change the version number in src-tauri/tauri.conf.json larger than current version
+1. Change the version number in scr-tauri/tauri.conf.json larger than current version
 
 2. Merge the main branch into release branch, it will trigger the CD pipeline to update the repo release info
 
