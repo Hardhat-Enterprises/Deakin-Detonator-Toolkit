@@ -10,35 +10,32 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
 // --- minimal target validator for host/URL/IP (with localhost + IPv6 support) ---
-const ipv4RE =
-  /^(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)$/;
+const ipv4RE = /^(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)$/;
 
 const hostnameLabel = "(?!-)[A-Za-z0-9-]{1,63}(?<!-)";
 const hostnameRE = new RegExp(`^${hostnameLabel}(?:\\.${hostnameLabel})*$`);
 
 function wrapIPv6IfNeeded(s: string): string {
-  if (!s.includes("://") && s.includes(":") && !s.startsWith("[") && !s.endsWith("]")) {
-    return `http://[${s}]`;
-  }
-  return s.includes("://") ? s : `http://${s}`;
+    if (!s.includes("://") && s.includes(":") && !s.startsWith("[") && !s.endsWith("]")) {
+        return `http://[${s}]`;
+    }
+    return s.includes("://") ? s : `http://${s}`;
 }
 
 function isValidTarget(input: string): boolean {
-  if (!input) return false;
-  const s = input.trim();
-  if (!s || /\s/.test(s)) return false;  // whitespace
-  if (s.includes("..")) return false;    // double dots
-  try {
-    const url = new URL(wrapIPv6IfNeeded(s));
-    const host = url.hostname; // brackets removed for IPv6
-    if (!host) return false;
-    return ipv4RE.test(host) || host.includes(":") || hostnameRE.test(host);
-  } catch {
-    return false;
-  }
+    if (!input) return false;
+    const s = input.trim();
+    if (!s || /\s/.test(s)) return false; // whitespace
+    if (s.includes("..")) return false; // double dots
+    try {
+        const url = new URL(wrapIPv6IfNeeded(s));
+        const host = url.hostname; // brackets removed for IPv6
+        if (!host) return false;
+        return ipv4RE.test(host) || host.includes(":") || hostnameRE.test(host);
+    } catch {
+        return false;
+    }
 }
-
-
 
 /**
  * Represents the form values for the Nikto component.
@@ -125,8 +122,8 @@ function Nikto() {
         },
         validate: {
             host: (value) =>
-              isValidTarget(value) ? null : "Enter a valid host/IP or URL (no spaces, no double dots).",
-          },
+                isValidTarget(value) ? null : "Enter a valid host/IP or URL (no spaces, no double dots).",
+        },
     });
 
     // Check the availability of commands in the dependencies array
