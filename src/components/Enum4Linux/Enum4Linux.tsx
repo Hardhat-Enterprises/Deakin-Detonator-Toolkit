@@ -69,30 +69,30 @@ const Enum4Linux = () => {
     // Valid enum4linux parameters for validation
     const validParams = [
         // Basic enumeration options
-        'U', // get userlist
-        'M', // get machine list
-        'S', // get sharelist  
-        'P', // get password policy information
-        'G', // get group and member list
-        'd', // be detailed, applies to -U and -S
-        'u', // specify username to use
-        'p', // specify password to use
-        
+        "U", // get userlist
+        "M", // get machine list
+        "S", // get sharelist
+        "P", // get password policy information
+        "G", // get group and member list
+        "d", // be detailed, applies to -U and -S
+        "u", // specify username to use
+        "p", // specify password to use
+
         // Additional options
-        'a', // Do all simple enumeration (-U -S -G -P -r -o -n -i)
-        'h', // Display help message and exit
-        'r', // enumerate users via RID cycling
-        'R', // RID ranges to enumerate (default: 500-550,1000-1050, implies -r)
-        'K', // Keep searching RIDs until n consecutive RIDs don't correspond to a username
-        'l', // Get some (limited) info via LDAP 389/TCP (for DCs only)
-        's', // brute force guessing for share names
-        'k', // User(s) that exists on remote system
-        'o', // Get OS information
-        'i', // Get printer information
-        'w', // Specify workgroup manually
-        'n', // Do an nmblookup (similar to nbtstat)
-        'v', // Verbose. Shows full commands being run
-        'A'  // Aggressive. Do write checks on shares etc
+        "a", // Do all simple enumeration (-U -S -G -P -r -o -n -i)
+        "h", // Display help message and exit
+        "r", // enumerate users via RID cycling
+        "R", // RID ranges to enumerate (default: 500-550,1000-1050, implies -r)
+        "K", // Keep searching RIDs until n consecutive RIDs don't correspond to a username
+        "l", // Get some (limited) info via LDAP 389/TCP (for DCs only)
+        "s", // brute force guessing for share names
+        "k", // User(s) that exists on remote system
+        "o", // Get OS information
+        "i", // Get printer information
+        "w", // Specify workgroup manually
+        "n", // Do an nmblookup (similar to nbtstat)
+        "v", // Verbose. Shows full commands being run
+        "A", // Aggressive. Do write checks on shares etc
     ];
 
     const form = useForm({
@@ -106,7 +106,7 @@ const Enum4Linux = () => {
         validate: {
             ipAddress: (value) => {
                 const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$|^([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+$/;
-                return !ipRegex.test(value) ? 'Please enter a valid IP address or hostname' : null;
+                return !ipRegex.test(value) ? "Please enter a valid IP address or hostname" : null;
             },
         },
     });
@@ -150,8 +150,8 @@ const Enum4Linux = () => {
         }
 
         // Remove any existing dashes and spaces
-        const cleanParam = param.replace(/^-+/, '').trim();
-        
+        const cleanParam = param.replace(/^-+/, "").trim();
+
         // Check for multiple parameters (like "u username p password")
         const parts = cleanParam.split(/\s+/);
         let formattedParams = [];
@@ -159,7 +159,7 @@ const Enum4Linux = () => {
 
         for (let i = 0; i < parts.length; i++) {
             const part = parts[i];
-            
+
             // If it's a single letter parameter
             if (part.length === 1 && validParams.includes(part)) {
                 formattedParams.push(`-${part}`);
@@ -180,14 +180,14 @@ const Enum4Linux = () => {
             return {
                 isValid: false,
                 formatted: "",
-                error: `Invalid parameter(s): ${invalidParams.join(', ')}. Valid options: ${validParams.join(', ')}`
+                error: `Invalid parameter(s): ${invalidParams.join(", ")}. Valid options: ${validParams.join(", ")}`,
             };
         }
 
         return {
             isValid: true,
-            formatted: formattedParams.join(' '),
-            error: ""
+            formatted: formattedParams.join(" "),
+            error: "",
         };
     };
 
@@ -235,7 +235,7 @@ const Enum4Linux = () => {
 
         setLoading(true);
         setAllowSave(false);
-        
+
         // Build options string
         let options = `-${selectedOption}`;
         if (osinfo) options = options.concat(" -o");
@@ -310,7 +310,7 @@ const Enum4Linux = () => {
                             own or have explicit permission to test.
                         </Alert>
                     )}
-                    
+
                     {paramError && (
                         <Alert title="Parameter Error" color="yellow">
                             {paramError}
@@ -372,7 +372,7 @@ const Enum4Linux = () => {
                             description="Valid options: U (userlist), S (sharelist), G (groups), P (password policy), d (detailed), v (verbose), r (RID cycling), etc."
                         />
                     </Tooltip>
-                    
+
                     {customMode && (
                         <>
                             <Tooltip
@@ -389,7 +389,7 @@ const Enum4Linux = () => {
                             </Tooltip>
                         </>
                     )}
-                    
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit">Start {title}</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
