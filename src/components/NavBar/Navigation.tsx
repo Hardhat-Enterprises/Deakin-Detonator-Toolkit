@@ -11,9 +11,9 @@ export interface NavigationProps {
 export default function Navigation({ hidden, onNavBarClickCallback }: NavigationProps) {
     return (
         <Navbar p="xs" width={{ sm: 300 }} hidden={hidden} hiddenBreakpoint="sm" onClick={onNavBarClickCallback}>
-            <Navbar.Section>
+            {/* <Navbar.Section>
                 <Search />
-            </Navbar.Section>
+            </Navbar.Section> */}
             <Navbar.Section grow mt="md">
                 <MainLinks />
             </Navbar.Section>
