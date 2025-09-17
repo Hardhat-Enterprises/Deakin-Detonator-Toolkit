@@ -224,7 +224,7 @@ const NetcatTool = () => {
     };
 
     /**
-     * Submit: unchanged command behavior; just blocked if inputs invalid.
+     * Submit: unchanged command behavior; just blocked if inputs invalid .
      */
     const onSubmit = async (values: FormValuesType) => {
         if (!validateForOption(values)) {
