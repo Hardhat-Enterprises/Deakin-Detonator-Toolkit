@@ -25,7 +25,7 @@ interface FormValuesType {
    Validators (domains / IPv4 / IPv6 + ports)
    ------------------------- */
 
-// Domain: must include at least one dot; labels 1–63; total <=253; no leading/trailing hyphen .
+// Domain: must include at least one dot; labels 1–63; total <=253; no leading/trailing hyphen.
 const isValidDomain = (host: string) => {
     if (!host) return false;
     const s = host.trim();
