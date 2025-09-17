@@ -1,6 +1,6 @@
 // Import necessary hooks and components from React and other libraries
 import { useState, useCallback, useEffect } from "react";
-import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid } from "@mantine/core";
+import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -43,24 +43,30 @@ function WhatWeb() {
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
 
-    // Additional state variables for section visibility
+    // UI state
     const [basicOpened, setBasicOpened] = useState(true);
     const [advancedOpened, setAdvancedOpened] = useState(false);
     const [authOpened, setAuthOpened] = useState(false);
+    const [fullscreen, setFullscreen] = useState(false);
 
-    // Declare constants for the component
+    // Declare constants
     const title = "WhatWeb";
     const description =
         "WhatWeb identifies websites. It recognises web technologies including content management systems, blogging platforms, statistic/analytics packages, JavaScript libraries, web servers, and embedded devices.";
     const steps =
         "Step 1: Enter the target URL or IP address.\n" +
         "Step 2: Configure scan options.\n" +
-        "Step 3: Run WhatWeb and review results.";
+        "   - Aggression: Controls scan intensity (1=stealthy, 4=heavy).\n" +
+        "   - Plugins: Specify WhatWeb plugins.\n" +
+        "   - User Agent: Set custom browser identifier.\n" +
+        "   - Max Threads: Adjust concurrency.\n" +
+        "   - Redirects/Cookies/Auth: Control advanced behaviors.\n" +
+        "Step 3: Run WhatWeb and review results. Output can be expanded to fullscreen and saved.";
     const sourceLink = "https://github.com/urbanadventurer/WhatWeb";
     const tutorial = "https://docs.google.com/document/d/1IUrB6sX_Ykk5hyrcelRSwi4l7QMqc_YxpyEPCmUarzc/edit?usp=sharing";
     const dependencies = ["whatweb"];
 
-    // Initialize the form hook with initial values
+    // Form hook
     const form = useForm<FormValuesType>({
         initialValues: {
             target: "",
@@ -77,7 +83,7 @@ function WhatWeb() {
         },
     });
 
-    // Check the availability of commands in the dependencies array
+    // Check command availability
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
@@ -91,22 +97,11 @@ function WhatWeb() {
             });
     }, []);
 
-    /**
-     * handleProcessData: Callback to handle and append new data from the child process to the output.
-     * It updates the state by appending the new data received to the existing output.
-     * @param {string} data - The data received from the child process.
-     */
+    // Process handlers
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
-    /**
-     * handleProcessTermination: Callback to handle the termination of the child process.
-     * Once the process termination is handled, it deactivates the loading overlay.
-     * @param {object} param - An object containing information about the process termination.
-     * @param {number} param.code - The exit code of the terminated process.
-     * @param {number} param.signal - The signal code indicating how the process was terminated.
-     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
@@ -116,7 +111,6 @@ function WhatWeb() {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-
             setLoading(false);
             setAllowSave(true);
             setHasSaved(false);
@@ -124,26 +118,17 @@ function WhatWeb() {
         [handleProcessData]
     );
 
-    /**
-     * handSaveComplete: Recognises that the output file has been saved.
-     * Passes the saved status back to SaveOutputToTextFile_v2
-     */
     const handleSaveComplete = () => {
         setHasSaved(true);
         setAllowSave(false);
     };
 
-    /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the WhatWeb tool with the given parameters.
-     * Once the command is executed, the results or errors are displayed in the output.
-     */
+    // Submit handler
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
         setAllowSave(false);
 
         const args: string[] = [];
-
         if (values.inputFile) args.push(`-i ${values.inputFile}`);
         if (values.aggression) args.push(`-a ${values.aggression}`);
         if (values.userAgent) args.push(`-U "${values.userAgent}"`);
@@ -154,7 +139,6 @@ function WhatWeb() {
         if (values.verbose) args.push("-v");
         if (values.logFormat) args.push(`--log-${values.logFormat}=-`);
         if (values.maxThreads > 0) args.push(`-t ${values.maxThreads}`);
-
         args.push(values.target);
 
         try {
@@ -173,25 +157,30 @@ function WhatWeb() {
         }
     };
 
-    /**
-     * clearOutput: Callback function to clear the console output.
-     * It resets the state variable holding the output, thereby clearing the display.
-     */
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
         setAllowSave(false);
     }, []);
 
-    // Function to handle the next step in the Stepper.
-    const nextStep = () => setActive((current) => (current < 2 ? current + 1 : current));
+    // Navigation
+    const nextStep = () => setActive((c) => (c < 2 ? c + 1 : c));
+    const prevStep = () => setActive((c) => (c > 0 ? c - 1 : c));
 
-    // Function to handle the previous step in the Stepper.
-    const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+    // Simple structured output parsing
+    const formatOutput = (text: string) => {
+        if (!text) return "";
+        const sections = ["Redirect", "Header", "Cookie", "Plugin"];
+        return sections
+            .map((s) => {
+                const lines = text.split("\n").filter((l) => l.toLowerCase().includes(s.toLowerCase()));
+                return lines.length ? `\n=== ${s}s ===\n${lines.join("\n")}` : "";
+            })
+            .join("\n");
+    };
 
     return (
         <>
-            {/* Render the component with its title, description, steps, and tutorial */}
             <RenderComponent
                 title={title}
                 description={description}
@@ -199,27 +188,28 @@ function WhatWeb() {
                 tutorial={tutorial}
                 sourceLink={sourceLink}
             >
-                {/* Render the installation modal if commands are not available */}
                 {!loadingModal && (
                     <InstallationModal
                         isOpen={opened}
                         setOpened={setOpened}
                         feature_description={description}
                         dependencies={dependencies}
-                    ></InstallationModal>
+                    />
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
-                    {/* Render the loading overlay and cancel button */}
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Stack>
-                        {/* Render the Stepper component with steps */}
                         <Stepper active={active} onStepClick={setActive} breakpoint="sm">
-                            {/* Step 1: Target */}
+                            {/* Step 1 */}
                             <Stepper.Step label="Target">
                                 <TextInput label="Target URL or IP" required {...form.getInputProps("target")} />
                                 <TextInput label="Input File" {...form.getInputProps("inputFile")} />
+                                <Group mt={20} position="right">
+                                    <Button onClick={nextStep}>Next</Button>
+                                </Group>
                             </Stepper.Step>
-                            {/* Step 2: Scan Options */}
+
+                            {/* Step 2 */}
                             <Stepper.Step label="Scan Options">
                                 <Grid>
                                     <Grid.Col span={4}>
@@ -247,11 +237,11 @@ function WhatWeb() {
                                     </Grid.Col>
                                 </Grid>
 
-                                {/* Render Basic Options */}
                                 {basicOpened && (
                                     <Stack mt={10}>
                                         <Select
                                             label="Aggression Level"
+                                            title="Controls scan intensity (1=stealthy, 4=heavy)"
                                             data={[
                                                 { value: "", label: "Default" },
                                                 { value: "1", label: "Stealthy" },
@@ -260,20 +250,29 @@ function WhatWeb() {
                                             ]}
                                             {...form.getInputProps("aggression")}
                                         />
-                                        <TextInput label="Plugins" {...form.getInputProps("plugins")} />
+                                        <TextInput
+                                            label="Plugins"
+                                            title="Specify WhatWeb plugins"
+                                            {...form.getInputProps("plugins")}
+                                        />
                                         <Switch
                                             label="Verbose Output"
+                                            title="Enable detailed results"
                                             {...form.getInputProps("verbose", { type: "checkbox" })}
                                         />
                                     </Stack>
                                 )}
 
-                                {/* Render Advanced Options */}
                                 {advancedOpened && (
                                     <Stack mt={10}>
-                                        <TextInput label="User Agent" {...form.getInputProps("userAgent")} />
+                                        <TextInput
+                                            label="User Agent"
+                                            title="Set custom browser identifier"
+                                            {...form.getInputProps("userAgent")}
+                                        />
                                         <Select
                                             label="Follow Redirect"
+                                            title="Control how redirects are followed"
                                             data={[
                                                 { value: "", label: "Default" },
                                                 { value: "never", label: "Never" },
@@ -286,11 +285,13 @@ function WhatWeb() {
                                         />
                                         <NumberInput
                                             label="Max Threads"
+                                            title="Adjust concurrency level"
                                             min={0}
                                             {...form.getInputProps("maxThreads")}
                                         />
                                         <Select
                                             label="Log Format"
+                                            title="Choose output format"
                                             data={[
                                                 { value: "", label: "Default" },
                                                 { value: "brief", label: "Brief" },
@@ -303,27 +304,49 @@ function WhatWeb() {
                                     </Stack>
                                 )}
 
-                                {/* Render Authentication Options */}
                                 {authOpened && (
                                     <Stack mt={10}>
-                                        <TextInput label="User (user:password)" {...form.getInputProps("user")} />
-                                        <TextInput label="Cookie" {...form.getInputProps("cookie")} />
+                                        <TextInput
+                                            label="User (user:password)"
+                                            title="Provide credentials for authenticated scans"
+                                            {...form.getInputProps("user")}
+                                        />
+                                        <TextInput
+                                            label="Cookie"
+                                            title="Add cookies for session-based scanning"
+                                            {...form.getInputProps("cookie")}
+                                        />
                                     </Stack>
                                 )}
+                                <Group mt={20} position="apart">
+                                    <Button variant="default" onClick={prevStep}>
+                                        Back
+                                    </Button>
+                                    <Button onClick={nextStep}>Next</Button>
+                                </Group>
                             </Stepper.Step>
-                            {/* Step 3: Run */}
+
+                            {/* Step 3 */}
                             <Stepper.Step label="Run">
                                 <Stack align="center" mt={20}>
-                                    <Button type="submit" disabled={loading} style={{ alignSelf: "center" }}>
+                                    <Button type="submit" disabled={loading}>
                                         Run WhatWeb
                                     </Button>
                                 </Stack>
                             </Stepper.Step>
                         </Stepper>
-                        {/* Render the SaveOutputToTextFile component */}
+
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                        {/* Render the ConsoleWrapper component */}
-                        <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+
+                        <Group position="right" mb={5}>
+                            <Button size="xs" onClick={() => setFullscreen((f) => !f)}>
+                                {fullscreen ? "Exit Fullscreen" : "Expand Results"}
+                            </Button>
+                        </Group>
+
+                        <div style={{ height: fullscreen ? "80vh" : "300px" }}>
+                            <ConsoleWrapper output={formatOutput(output)} clearOutputCallback={clearOutput} />
+                        </div>
                     </Stack>
                 </form>
             </RenderComponent>

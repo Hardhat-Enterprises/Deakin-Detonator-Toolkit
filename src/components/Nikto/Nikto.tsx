@@ -9,6 +9,37 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
+// --- minimal target validator for host/URL/IP (with localhost + IPv6 support) ---
+const ipv4RE =
+  /^(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)$/;
+
+const hostnameLabel = "(?!-)[A-Za-z0-9-]{1,63}(?<!-)";
+const hostnameRE = new RegExp(`^${hostnameLabel}(?:\\.${hostnameLabel})*$`);
+
+function wrapIPv6IfNeeded(s: string): string {
+  if (!s.includes("://") && s.includes(":") && !s.startsWith("[") && !s.endsWith("]")) {
+    return `http://[${s}]`;
+  }
+  return s.includes("://") ? s : `http://${s}`;
+}
+
+function isValidTarget(input: string): boolean {
+  if (!input) return false;
+  const s = input.trim();
+  if (!s || /\s/.test(s)) return false;  // whitespace
+  if (s.includes("..")) return false;    // double dots
+  try {
+    const url = new URL(wrapIPv6IfNeeded(s));
+    const host = url.hostname; // brackets removed for IPv6
+    if (!host) return false;
+    return ipv4RE.test(host) || host.includes(":") || hostnameRE.test(host);
+  } catch {
+    return false;
+  }
+}
+
+
+
 /**
  * Represents the form values for the Nikto component.
  */
@@ -92,6 +123,10 @@ function Nikto() {
             noLookup: false,
             followRedirects: false,
         },
+        validate: {
+            host: (value) =>
+              isValidTarget(value) ? null : "Enter a valid host/IP or URL (no spaces, no double dots).",
+          },
     });
 
     // Check the availability of commands in the dependencies array
@@ -156,10 +191,17 @@ function Nikto() {
      * Once the command is executed, the results or errors are displayed in the output.
      */
     const onSubmit = async () => {
-        setLoading(true);
-        setAllowSave(false);
+        const { hasErrors } = form.validate();
+  if (hasErrors) {
+    setOutput("✖ Invalid target: please fix the Host field and try again.");
+    return;
+  }
 
-        const args = ["-h", form.values.host];
+  setLoading(true);
+  setAllowSave(false);
+
+  const host = form.values.host.trim();
+  const args = ["-h", host];
 
         if (form.values.port !== 80) {
             args.push("-port", form.values.port.toString());
