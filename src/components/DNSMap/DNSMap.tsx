@@ -24,204 +24,41 @@ interface FormValuesType {
  * The DNSMap component.
  * @returns The DNSMap component.
  */
+
 const DNSMap = () => {
-    // Components state variables
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
-    const [Pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
-    const [opened, setOpened] = useState(!isCommandAvailable);
-    const [loadingModal, setLoadingModal] = useState(true);
+    //Componenets state Variable
+    const [loading, setLoading] = useState(false); // State variable that represents loading state of the component
+    const [output, setOutput] = useState(""); // State variable that represents the output text from the DNS mapping process
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false); //State variable that represents the state of advanced mode switch
+    const [Pid, setPid] = useState(""); //State variable that represents the process ID of the DNS mapping process
+    const [allowSave, setAllowSave] = useState(false); //State variable that represents whether saving the output is allowed
+    const [hasSaved, setHasSaved] = useState(false); //State variable that represents whether the output has been saved
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
+    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [showAlert, setShowAlert] = useState(true);
-
-    // Validation/correction messages
-    const [errorMsg, setErrorMsg] = useState<string | null>(null);
-    const [correctionMsg, setCorrectionMsg] = useState<string | null>(null);
-
     const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
-    // Components Constant Variables
+    //Components Constant Variables
     const title = "Dnsmap";
     const description_userguide =
         "DNSMap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
         "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall services and smtp. " +
         "So it will be possible to search for smtp.example.com inside example.com automatically.\n\n";
-
     const steps =
         "Step 1: Enter a valid domain to be mapped.\n" +
-        " Eg: google.com\n\n" +
+        "       Eg: google.com\n\n" +
         "Step 2: Enter a delay between requests. Default is 10 (milliseconds). Can be left blank.\n" +
-        " Eg: 10\n\n" +
+        "       Eg: 10\n\n" +
         "Step 3: Click 'Start Mapping' to commence the DNSMap tool's operation.\n\n" +
         "Step 4: View the Output block below to view the results of the tool's execution.\n\n" +
         "Switch to Advanced Mode for further options.";
+    const sourceLink = "https://www.kali.org/tools/dnsmap/"; // Link to the source code (or Kali Tools).
+    const tutorial = "https://docs.google.com/document/d/15iZ-USnXOVe-zLBLC_ROp0OTqXO_Nh7WtGO6YHfqQsc/edit?usp=sharing"; // Link to the official documentation/tutorial.
+    const dependencies = ["dnsmap"]; // Contains the dependencies required by the component.
 
-    const sourceLink = "https://www.kali.org/tools/dnsmap/";
-    const tutorial = "https://docs.google.com/document/d/15iZ-USnXOVe-zLBLC_ROp0OTqXO_Nh7WtGO6YHfqQsc/edit?usp=sharing";
-    const dependencies = ["dnsmap"];
-
-    // ---------- Domain sanitising / validation / correction ----------
-    const COMMON_TLDS = [
-        "com",
-        "net",
-        "org",
-        "edu",
-        "gov",
-        "io",
-        "co",
-        "au",
-        "uk",
-        "de",
-        "fr",
-        "in",
-        "us",
-        "ca",
-        "nz",
-        "info",
-        "biz",
-        "dev",
-        "app",
-        "ai",
-        "me",
-        "tv",
-        "xyz",
-        "site",
-        "online",
-        "shop",
-        "store",
-        "tech",
-        "cloud",
-        "systems",
-        "solutions",
-    ];
-
-    const TLD_FIXES: Record<string, string> = {
-        con: "com",
-        cpm: "com",
-        ocm: "com",
-        cim: "com",
-        comm: "com",
-        coom: "com",
-        xom: "com",
-    };
-
-    const KNOWN_DOMAINS = [
-        "google.com",
-        "youtube.com",
-        "facebook.com",
-        "github.com",
-        "kali.org",
-        "wikipedia.org",
-        "reddit.com",
-        "instagram.com",
-        "linkedin.com",
-        "amazon.com",
-        "apple.com",
-        "microsoft.com",
-        "netflix.com",
-        "deakin.edu.au",
-        "twitter.com",
-        "x.com",
-    ];
-
-    const sanitiseDomain = (raw: string): string => {
-        let d = raw.trim().toLowerCase();
-        d = d.replace(/^https?:\/\//, ""); // remove protocol
-        d = d.split("/")[0]; // drop path/query
-        d = d.replace(/[\s\u200B-\u200D\uFEFF]/g, ""); // strip zero-width/whitespace
-        return d;
-    };
-
-    const isValidDomainSyntax = (domain: string): boolean => {
-        if (!domain || domain.length > 253) return false;
-        const parts = domain.split(".");
-        if (parts.length < 2) return false;
-
-        const tld = parts[parts.length - 1];
-        if (!/^[a-z]{2,24}$/.test(tld)) return false;
-
-        for (const label of parts) {
-            if (label.length < 1 || label.length > 63) return false;
-            if (!/^[a-z0-9-]+$/.test(label)) return false;
-            if (label.startsWith("-") || label.endsWith("-")) return false;
-        }
-        return true;
-    };
-
-    const levenshtein = (a: string, b: string): number => {
-        const m = a.length,
-            n = b.length;
-        const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
-        for (let i = 0; i <= m; i++) dp[i][0] = i;
-        for (let j = 0; j <= n; j++) dp[0][j] = j;
-        for (let i = 1; i <= m; i++) {
-            for (let j = 1; j <= n; j++) {
-                const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-                dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
-            }
-        }
-        return dp[m][n];
-    };
-
-    const correctDomainIfObvious = (domain: string): { corrected?: string; reason?: string } => {
-        let d = domain;
-        const parts = d.split(".");
-
-        // Fix obvious TLD mistakes
-        if (parts.length >= 2) {
-            const tld = parts[parts.length - 1];
-            if (TLD_FIXES[tld]) {
-                const fixed = [...parts.slice(0, -1), TLD_FIXES[tld]].join(".");
-                return { corrected: fixed, reason: `Replaced ".${tld}" with ".${TLD_FIXES[tld]}"` };
-            }
-            if (tld.endsWith(",")) {
-                const fixed = [...parts.slice(0, -1), tld.replace(/,+$/, "")].join(".");
-                if (isValidDomainSyntax(fixed)) {
-                    return { corrected: fixed, reason: "Removed trailing comma from TLD" };
-                }
-            }
-        }
-
-        // If TLD is one edit away from a common TLD, fix
-        if (parts.length >= 2) {
-            const tld = parts[parts.length - 1];
-            let bestTld = tld;
-            let bestDist = 99;
-            for (const ct of COMMON_TLDS) {
-                const dist = levenshtein(tld, ct);
-                if (dist < bestDist) {
-                    bestDist = dist;
-                    bestTld = ct;
-                }
-            }
-            if (bestDist > 0 && bestDist <= 1) {
-                const fixed = [...parts.slice(0, -1), bestTld].join(".");
-                return { corrected: fixed, reason: `Did you mean ".${bestTld}"?` };
-            }
-        }
-
-        // Known popular domains by distance (<=2 edits)
-        let best = d;
-        let bestDist = 99;
-        for (const kd of KNOWN_DOMAINS) {
-            const dist = levenshtein(d, kd);
-            if (dist < bestDist) {
-                bestDist = dist;
-                best = kd;
-            }
-        }
-        if (bestDist <= 2 && best !== d) {
-            return { corrected: best, reason: `Corrected to popular domain "${best}"` };
-        }
-
-        return {};
-    };
-
-    // Form Hook with validation
-    const form = useForm<FormValuesType>({
+    //Form Hook to handle input
+    let form = useForm({
         initialValues: {
             domain: "",
             delay: 10,
@@ -229,52 +66,21 @@ const DNSMap = () => {
             csvResultsFile: "",
             ipsToIgnore: "",
         },
-        validate: {
-            domain: (value) => {
-                const raw = value ?? "";
-                const s = sanitiseDomain(raw);
-
-                if (!s) return "Please enter a domain (e.g., example.com).";
-
-                if (!isValidDomainSyntax(s)) {
-                    const { corrected } = correctDomainIfObvious(s);
-                    if (corrected && isValidDomainSyntax(corrected)) {
-                        return null; // soft-pass; we'll set corrected on submit and stop
-                    }
-                    return "That doesn't look like a valid domain (e.g., deakin.edu.au, google.com).";
-                }
-                return null;
-            },
-            delay: (v) => (v !== undefined && v !== null && v < 0 ? "Delay must be 0 or greater." : null),
-            ipsToIgnore: (v) => {
-                if (!v) return null;
-                const ips = v
-                    .split(",")
-                    .map((x) => x.trim())
-                    .filter(Boolean);
-                if (ips.length > 5) return "Maximum 5 IPs allowed.";
-                const ipRegex = /^(25[0-5]|2[0-4]\d|[01]?\d?\d)(\.(25[0-5]|2[0-4]\d|[01]?\d?\d)){3}$/;
-                for (const ip of ips) {
-                    if (!ipRegex.test(ip)) return `Invalid IP address: ${ip}`;
-                }
-                return null;
-            },
-        },
     });
-
-    // Command availability + disclaimer timer
+    // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
+        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable);
-                setOpened(!isAvailable);
-                setLoadingModal(false);
+                setIsCommandAvailable(isAvailable); // Set the command availability state
+                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
+                setLoadingModal(false); // Set loading to false after the check is done
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false);
+                setLoadingModal(false); // Also set loading to false in case of error
             });
-
+        // Set timeout to remove alert after 5 seconds on load.
         alertTimeout.current = setTimeout(() => {
             setShowAlert(false);
         }, 5000);
@@ -296,12 +102,24 @@ const DNSMap = () => {
         }, 5000);
     };
 
-    // Append new data to output
+    /**
+     * handleProcessData: Callback to handle and append new data from the child process to the output.
+     * It updates the state by appending the new data received to the existing output.
+     *
+     * @param {string} data - The data received from the child process.
+     */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => (prevOutput ? prevOutput + "\n" + data : data));
+        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
 
-    // Process termination handler
+    /**
+     * handleProcessTermination: Callback to handle the termination of the child process.
+     * Once the process termination is handled, it clears the process PID reference and
+     * deactivates the loading overlay.
+     * @param {object} param0 - An object containing information about the process termination.
+     * @param {number} param0.code - The exit code of the terminated process.
+     * @param {number} param0.signal - The signal code indicating how the process was terminated.
+     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
@@ -311,106 +129,63 @@ const DNSMap = () => {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
+            // Clear the child process pid reference
             setPid("");
+            // Cancel the Loading Overlay
             setLoading(false);
+
+            // Allow Saving as the output is finalised
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData] // Dependency on the handleProcessData callback
     );
 
-    // Saving complete
+    /**
+     * onSubmit: Handler function that is triggered when the form is submitted.
+     * It prepares the arguments and initiates the execution of the `dnsmap` command.
+     * Upon successful execution, it updates the state with the process PID and output.
+     * If an error occurs during the command execution, it updates the output with the error message.
+     * @param {FormValues} values - An object containing the form input values.
+     */
+
+    // Actions taken after saving the output
     const handleSaveComplete = () => {
+        // Indicating that the file has saved which is passed
+        // back into SaveOutputToTextFile to inform the user
         setHasSaved(true);
         setAllowSave(false);
     };
 
+    const onSubmit = async (values: FormValuesType) => {
+        // Disallow saving until the tool's execution is complete
+        setAllowSave(false);
+
+        setLoading(true);
+        const args = [values.domain, "-d", `${values.delay}`];
+
+        values.wordlistPath ? args.push(`-w`, values.wordlistPath) : undefined;
+
+        values.csvResultsFile ? args.push(`-c`, values.csvResultsFile) : undefined;
+
+        values.ipsToIgnore ? args.push(`-i`, values.ipsToIgnore) : undefined;
+
+        const filteredArgs = args.filter((arg) => arg !== "");
+        CommandHelper.runCommandGetPidAndOutput("dnsmap", filteredArgs, handleProcessData, handleProcessTermination)
+            .then(({ pid, output }) => {
+                setPid(pid);
+                setOutput(output);
+            })
+            .catch((error) => {
+                setLoading(false);
+                setOutput(`Error: ${error.message}`);
+            });
+    };
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
         setAllowSave(false);
-    }, []);
-
-    /**
-     * onSubmit with "stop after autocorrect":
-     * - If we autocorrect, we set the corrected value, show yellow note, and RETURN (no run).
-     * - Only run dnsmap when no correction occurred in this submit.
-     */
-    const onSubmit = async (values: FormValuesType) => {
-        setErrorMsg(null);
-        setCorrectionMsg(null);
-
-        const rawDomain = values.domain ?? "";
-        const sanitised = sanitiseDomain(rawDomain);
-
-        const tryAutocorrect = () => {
-            const { corrected, reason } = correctDomainIfObvious(sanitised);
-            if (corrected && isValidDomainSyntax(corrected)) {
-                form.setFieldValue("domain", corrected);
-                setCorrectionMsg(`Auto-corrected domain: "${sanitised}" → "${corrected}". ${reason ?? ""}`);
-                return true;
-            }
-            return false;
-        };
-
-        // Invalid syntax → attempt correction then stop; else error
-        if (!isValidDomainSyntax(sanitised)) {
-            if (tryAutocorrect()) return;
-            setErrorMsg(
-                `Invalid domain "${rawDomain}". Please enter a valid domain like "example.com" or "deakin.edu.au".`
-            );
-            return;
-        }
-
-        // Valid syntax → maybe fix trivial typo; if corrected, stop this submit
-        {
-            const { corrected, reason } = correctDomainIfObvious(sanitised);
-            if (corrected && corrected !== sanitised && isValidDomainSyntax(corrected)) {
-                form.setFieldValue("domain", corrected);
-                setCorrectionMsg(`Auto-corrected domain: "${sanitised}" → "${corrected}". ${reason ?? ""}`);
-                return;
-            } else if (sanitised !== rawDomain) {
-                // normalise (strip protocol/paths). This isn't a semantic correction; allow run.
-                form.setFieldValue("domain", sanitised);
-            }
-        }
-
-        // Final guard
-        const finalDomain = sanitiseDomain(form.values.domain);
-        if (!isValidDomainSyntax(finalDomain)) {
-            setErrorMsg(`Invalid domain "${form.values.domain}". Please enter a valid domain like "example.com".`);
-            return;
-        }
-
-        // Build args & run
-        setAllowSave(false);
-        setLoading(true);
-        setOutput("");
-
-        const args: string[] = [finalDomain, "-d", String(values.delay ?? 10)];
-        if (values.wordlistPath) args.push("-w", values.wordlistPath);
-        if (values.csvResultsFile) args.push("-c", values.csvResultsFile);
-        if (values.ipsToIgnore) {
-            const ips = values.ipsToIgnore
-                .split(",")
-                .map((x) => x.trim())
-                .filter(Boolean)
-                .slice(0, 5);
-            if (ips.length > 0) args.push("-i", ips.join(","));
-        }
-
-        const filteredArgs = args.filter((a) => a !== "");
-
-        CommandHelper.runCommandGetPidAndOutput("dnsmap", filteredArgs, handleProcessData, handleProcessTermination)
-            .then(({ pid, output }) => {
-                setPid(pid);
-                if (output) setOutput(output);
-            })
-            .catch((error: any) => {
-                setLoading(false);
-                setOutput(`Error: ${error?.message ?? String(error)}`);
-            });
-    };
+    }, [setOutput]);
 
     return (
         <RenderComponent
@@ -426,12 +201,10 @@ const DNSMap = () => {
                     setOpened={setOpened}
                     feature_description={description_userguide}
                     dependencies={dependencies}
-                />
+                ></InstallationModal>
             )}
-
             <form onSubmit={form.onSubmit(onSubmit)}>
                 {LoadingOverlayAndCancelButton(loading, Pid)}
-
                 <Stack>
                     <Group position="right">
                         {!showAlert && (
@@ -440,26 +213,12 @@ const DNSMap = () => {
                             </Button>
                         )}
                     </Group>
-
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
                             This tool is used to perform DNS enumeration, use with caution and only on targets you own
                             or have explicit permission to test.
                         </Alert>
                     )}
-
-                    {correctionMsg && (
-                        <Alert title="Note" color="yellow">
-                            {correctionMsg}
-                        </Alert>
-                    )}
-
-                    {errorMsg && (
-                        <Alert title="Invalid domain" color="red">
-                            {errorMsg}
-                        </Alert>
-                    )}
-
                     <Switch
                         size="md"
                         label="Advanced Mode"
@@ -467,47 +226,31 @@ const DNSMap = () => {
                         onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                     />
 
-                    <TextInput
-                        label={"Domain"}
-                        required
-                        placeholder="example.com"
-                        {...form.getInputProps("domain")}
-                        onBlur={(e) => {
-                            const s = sanitiseDomain(e.currentTarget.value || "");
-                            if (s && s !== e.currentTarget.value) form.setFieldValue("domain", s);
-                        }}
-                    />
+                    <TextInput label={"Domain"} required {...form.getInputProps("domain")} />
 
                     <TextInput
-                        label={"Random delay between requests (default 10) (milliseconds)"}
+                        label={"Random delay between requests (default 10)(milliseconds)"}
                         type="number"
                         {...form.getInputProps("delay")}
                     />
-
                     {checkedAdvanced && (
                         <>
                             <TextInput
                                 label={"Path to external wordlist file"}
-                                placeholder="/usr/share/wordlists/dnsmap.txt"
                                 {...form.getInputProps("wordlistPath")}
                             />
                             <TextInput
                                 label={"CSV results file name (optional)"}
-                                placeholder="results.csv"
                                 {...form.getInputProps("csvResultsFile")}
                             />
                             <TextInput
                                 label={"IP addresses to ignore (comma-separated, up to 5 IPs)"}
-                                placeholder="1.2.3.4, 5.6.7.8"
                                 {...form.getInputProps("ipsToIgnore")}
                             />
                         </>
                     )}
-
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-
                     <Button type={"submit"}>Start Mapping</Button>
-
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
