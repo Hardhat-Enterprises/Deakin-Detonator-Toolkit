@@ -1,5 +1,5 @@
 // Import necessary hooks and components from React and other libraries
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -49,6 +49,10 @@ function WhatWeb() {
     const [authOpened, setAuthOpened] = useState(false);
     const [fullscreen, setFullscreen] = useState(false);
 
+    // NEW: auto-cancel guard for long runs (10 minutes)
+    const AUTO_CANCEL_MIN = 10;
+    const autoCancelTimerRef = useRef<number | null>(null);
+
     // Declare constants
     const title = "WhatWeb";
     const description =
@@ -95,6 +99,13 @@ function WhatWeb() {
                 console.error("An error occurred:", error);
                 setLoadingModal(false);
             });
+
+        return () => {
+            if (autoCancelTimerRef.current) {
+                clearTimeout(autoCancelTimerRef.current);
+                autoCancelTimerRef.current = null;
+            }
+        };
     }, []);
 
     // Process handlers
@@ -104,18 +115,41 @@ function WhatWeb() {
 
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 15) {
+            // clear auto-cancel timer
+            if (autoCancelTimerRef.current) {
+                clearTimeout(autoCancelTimerRef.current);
+                autoCancelTimerRef.current = null;
+            }
+
+            // Friendly mapping using the accumulated raw output
+            const raw = (output || "").toLowerCase();
+            const friendlyMsgs: string[] = [];
+            if (/execution expired|timed out|timeout/.test(raw)) {
+                friendlyMsgs.push("Target did not respond on HTTP within the timeout window.");
+            }
+            if (/no plugins selected/.test(raw)) {
+                friendlyMsgs.push("No plugins selected. Please specify valid plugins or leave empty.");
+            }
+            if (/plugins? were not found|the following plugins were not found|plugin .* not found/.test(raw)) {
+                friendlyMsgs.push("One or more specified plugins were not found.");
+            }
+
+            if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+            } else if (code === 0 && friendlyMsgs.length === 0) {
+                handleProcessData("\nProcess completed successfully.");
+            } else if (friendlyMsgs.length > 0) {
+                handleProcessData("\n" + friendlyMsgs.join(" "));
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
+
             setLoading(false);
             setAllowSave(true);
             setHasSaved(false);
+            setPid(""); // NEW: clear pid at end
         },
-        [handleProcessData]
+        [handleProcessData, output]
     );
 
     const handleSaveComplete = () => {
@@ -127,18 +161,25 @@ function WhatWeb() {
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
         setAllowSave(false);
+        setOutput("");
 
+        // NEW: build args as separate tokens (fixes plugins/user-agent/cookie passing)
         const args: string[] = [];
-        if (values.inputFile) args.push(`-i ${values.inputFile}`);
-        if (values.aggression) args.push(`-a ${values.aggression}`);
-        if (values.userAgent) args.push(`-U "${values.userAgent}"`);
+        if (values.inputFile) args.push("-i", values.inputFile);
+        if (values.aggression) args.push("-a", values.aggression);
+        if (values.userAgent) args.push("-U", values.userAgent);
         if (values.followRedirect) args.push(`--follow-redirect=${values.followRedirect}`);
-        if (values.user) args.push(`-u ${values.user}`);
-        if (values.cookie) args.push(`-c "${values.cookie}"`);
-        if (values.plugins) args.push(`-p ${values.plugins}`);
+        if (values.user) args.push("-u", values.user);
+        if (values.cookie) args.push("-c", values.cookie);
+        if (values.plugins) args.push("-p", values.plugins); // comma-separated list is OK
         if (values.verbose) args.push("-v");
         if (values.logFormat) args.push(`--log-${values.logFormat}=-`);
-        if (values.maxThreads > 0) args.push(`-t ${values.maxThreads}`);
+        if (values.maxThreads > 0) args.push("-t", String(values.maxThreads));
+
+        // NEW: default network timeout to reduce hangs
+        args.push("--timeout=30");
+
+        // Target at the end
         args.push(values.target);
 
         try {
@@ -150,6 +191,15 @@ function WhatWeb() {
             );
             setPid(pid);
             setOutput(output);
+
+            // NEW: schedule auto-cancel after 10 minutes to prevent indefinite hangs
+            if (autoCancelTimerRef.current) clearTimeout(autoCancelTimerRef.current);
+            autoCancelTimerRef.current = window.setTimeout(() => {
+                if (pid) {
+                    CommandHelper.runCommand("kill", ["-15", pid]);
+                    handleProcessData("\nAuto-cancel: run exceeded 10 minutes and was terminated.");
+                }
+            }, AUTO_CANCEL_MIN * 60 * 1000);
         } catch (error: any) {
             setOutput(`Error: ${error.message}`);
             setLoading(false);
