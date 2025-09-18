@@ -22,21 +22,8 @@ interface FormValuesType {
 }
 
 /* -------------------------
-   Validators (domains / IPv4 / IPv6 + ports)
+   Minimal validators (non-invasive)
    ------------------------- */
-
-// Domain: must include at least one dot; labels 1–63; total <=253; no leading/trailing hyphen.
-const isValidDomain = (host: string) => {
-    if (!host) return false;
-    const s = host.trim();
-    // reject schemes or paths
-    if (/^[a-z]+:\/\//i.test(s) || /[\/?#]/.test(s)) return false;
-    // localhost is not a domain with a dot; allow it only if you want — here we reject it for WHOIS-like checks
-    const re = /^(?=.{1,253}$)(?!-)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i;
-    return re.test(s);
-};
-
-// IPv4: dotted-quad, each 0–255
 const isValidIPv4 = (ip: string) => {
     if (!ip) return false;
     const m = ip.trim().match(/^(\d{1,3}\.){3}\d{1,3}$/);
@@ -46,37 +33,6 @@ const isValidIPv4 = (ip: string) => {
         return o === String(n) && n >= 0 && n <= 255;
     });
 };
-
-// IPv6: reasonably complete regex covering full, shortened, and with embedded IPv4
-const isValidIPv6 = (ip: string) => {
-    if (!ip) return false;
-    const s = ip.trim();
-    const re = new RegExp(
-        "^(" +
-            "([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}|" + // 1:2:3:4:5:6:7:8
-            "([0-9A-Fa-f]{1,4}:){1,7}:|" + // 1:: 1:2:3:4:5:6:7::
-            ":[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{1,4}){0,6}|" + // ::2  ::2:3  ... ::2:3:4:5:6:7
-            "([0-9A-Fa-f]{1,4}:){1,6}:[0-9A-Fa-f]{1,4}|" + // 1:2:3:4:5:6::8
-            "([0-9A-Fa-f]{1,4}:){1,5}(:[0-9A-Fa-f]{1,4}){1,2}|" + // 1:2:3:4:5::7:8
-            "([0-9A-Fa-f]{1,4}:){1,4}(:[0-9A-Fa-f]{1,4}){1,3}|" + // 1:2:3:4::6:7:8
-            "([0-9A-Fa-f]{1,4}:){1,3}(:[0-9A-Fa-f]{1,4}){1,4}|" + // 1:2:3::5:6:7:8
-            "([0-9A-Fa-f]{1,4}:){1,2}(:[0-9A-Fa-f]{1,4}){1,5}|" + // 1:2::4:5:6:7:8
-            "[0-9A-Fa-f]{1,4}:(:[0-9A-Fa-f]{1,4}){1,6}|" + // 1::3:4:5:6:7:8
-            ":(:[0-9A-Fa-f]{1,4}){1,7}|" + // ::2:3:4:5:6:7:8  or ::8
-            // IPv6 with embedded IPv4
-            "([0-9A-Fa-f]{1,4}:){6}(\\d{1,3}\\.){3}\\d{1,3}|" +
-            "([0-9A-Fa-f]{1,4}:){0,5}:[0-9A-Fa-f]{1,4}:(\\d{1,3}\\.){3}\\d{1,3}|" +
-            "::(ffff(?::0{1,4}){0,1}:)?(\\d{1,3}\\.){3}\\d{1,3}" +
-            ")$"
-    );
-    if (!re.test(s)) return false;
-    // If embedded IPv4 exists, ensure each quad <=255
-    const v4 = s.match(/(\d{1,3}\.){3}\d{1,3}$/);
-    if (v4) return isValidIPv4(v4[0]);
-    return true;
-};
-
-const isHost = (v: string) => isValidDomain(v) || isValidIPv4(v) || isValidIPv6(v);
 
 const isValidPort = (p: string) => {
     if (!p) return false;
@@ -169,8 +125,8 @@ const NetcatTool = () => {
     );
 
     /**
-     * Per-option validation (now: domain/IPv4/IPv6 for host-like inputs).
-     * This only guards navigation/submit; command behavior is unchanged.
+     * Per-option validation used only for guarding navigation and preventing empty/invalid submits.
+     * Intentionally conservative: mirrors original behaviour but enforces required fields and simple format checks.
      */
     const validateForOption = (values: FormValuesType) => {
         const errors: Partial<Record<keyof FormValuesType, string>> = {};
@@ -184,30 +140,27 @@ const NetcatTool = () => {
         }
 
         if (opt === "Connect") {
-            if (!values.ipAddress) errors.ipAddress = "Host is required";
-            else if (!(isValidIPv4(values.ipAddress) || isValidIPv6(values.ipAddress)))
-                errors.ipAddress = "Enter a valid IPv4 or IPv6";
+            if (!values.ipAddress) errors.ipAddress = "IP address is required";
+            else if (!isValidIPv4(values.ipAddress)) errors.ipAddress = "Enter a valid IPv4 address";
             if (!values.portNumber) errors.portNumber = "Port is required";
             else if (!isValidPort(values.portNumber)) errors.portNumber = "Enter a valid port (1–65535)";
         }
 
         if (opt === "Port Scan") {
-            if (!values.ipAddress) errors.ipAddress = "Host is required";
-            else if (!isHost(values.ipAddress)) errors.ipAddress = "Enter a valid domain or IP";
+            if (!values.ipAddress) errors.ipAddress = "IP address is required";
+            else if (!isValidIPv4(values.ipAddress)) errors.ipAddress = "Enter a valid IPv4 address";
             if (!values.portNumber) errors.portNumber = "Port/Range is required";
-            // (range parsing intentionally left alone to avoid runtime changes)
+            // kept flexible for port-range formats to avoid changing original scanning behavior
         }
 
         if (opt === "Website Port Scan") {
             if (!values.portNumber) errors.portNumber = "Port/Range is required";
-            if (!values.websiteUrl) errors.websiteUrl = "Host is required";
-            else if (!isHost(values.websiteUrl)) errors.websiteUrl = "Enter a valid domain or IP";
+            if (!values.websiteUrl) errors.websiteUrl = "Domain is required";
         }
 
         if (opt === "Send File") {
-            if (!values.ipAddress) errors.ipAddress = "Host is required";
-            else if (!(isValidIPv4(values.ipAddress) || isValidIPv6(values.ipAddress)))
-                errors.ipAddress = "Enter a valid IPv4 or IPv6";
+            if (!values.ipAddress) errors.ipAddress = "IP address is required";
+            else if (!isValidIPv4(values.ipAddress)) errors.ipAddress = "Enter a valid IPv4 address";
             if (!values.portNumber) errors.portNumber = "Port is required";
             else if (!isValidPort(values.portNumber)) errors.portNumber = "Enter a valid port (1–65535)";
             if (fileNames.length === 0) errors.filePath = "Please select a file to send";
@@ -224,9 +177,11 @@ const NetcatTool = () => {
     };
 
     /**
-     * Submit: unchanged command behavior; just blocked if inputs invalid .
+     * Handles the submission of the form and executes the appropriate netcat command based on the selected options.
+     * Keeps all original runtime/command behavior unchanged.
      */
     const onSubmit = async (values: FormValuesType) => {
+        // block submit if invalid inputs for the chosen option
         if (!validateForOption(values)) {
             setLoading(false);
             return;
@@ -254,6 +209,7 @@ const NetcatTool = () => {
                 args = ["-z", verboseFlag, "-w", "5", values.websiteUrl, values.portNumber];
                 break;
             case "Send File":
+                // confirm file presence again, but keep same execution behaviour
                 if (fileNames.length === 0) {
                     form.setFieldError("filePath", "Please select a file to send");
                     setLoading(false);
@@ -294,6 +250,7 @@ const NetcatTool = () => {
                 handleProcessData(
                     "\nNote: This operation may keep running. The loading overlay will stop in 10 seconds."
                 );
+                // preserve existing safety timeout behavior
                 setTimeout(() => {
                     console.log("Safety timeout triggered - stopping loading overlay");
                     setLoading(false);
@@ -318,9 +275,10 @@ const NetcatTool = () => {
         setAllowSave(false);
     };
 
-    // Guarded stepper next that enforces per-step validation
+    // Guarded stepper next that enforces per-step validation (does NOT alter command flow)
     const guardedNextStep = () => {
         if (active === 0) {
+            // must choose option
             if (!form.values.netcatOptions) {
                 form.setFieldError("netcatOptions", "Please select an option");
                 return;
@@ -359,7 +317,9 @@ const NetcatTool = () => {
                 <Stepper
                     active={active}
                     onStepClick={(s) => {
+                        // allow going backwards freely
                         if (s <= active) return setActive(s);
+                        // guard forward navigation same as Next
                         if (active === 0 && form.values.netcatOptions) return setActive(1);
                         if (active === 1 && validateForOption(form.values)) return setActive(2);
                     }}
@@ -404,11 +364,10 @@ const NetcatTool = () => {
                             {form.values.netcatOptions === "Connect" && (
                                 <>
                                     <TextInput
-                                        label={"Host (IPv4 / IPv6)"}
+                                        label={"IP address"}
                                         required
                                         {...form.getInputProps("ipAddress")}
                                         error={form.errors.ipAddress}
-                                        placeholder="93.184.216.34 or 2001:db8::1"
                                     />
                                     <TextInput
                                         label={"Port number"}
@@ -422,11 +381,10 @@ const NetcatTool = () => {
                             {form.values.netcatOptions === "Port Scan" && (
                                 <>
                                     <TextInput
-                                        label={"Host (domain or IP)"}
+                                        label={"IP address"}
                                         required
                                         {...form.getInputProps("ipAddress")}
                                         error={form.errors.ipAddress}
-                                        placeholder="example.com / 93.184.216.34 / 2001:db8::1"
                                     />
                                     <TextInput
                                         label={"Port number/Port range"}
@@ -441,11 +399,10 @@ const NetcatTool = () => {
                             {form.values.netcatOptions === "Send File" && (
                                 <>
                                     <TextInput
-                                        label={"Host (IPv4 / IPv6)"}
+                                        label={"IP address"}
                                         required
                                         {...form.getInputProps("ipAddress")}
                                         error={form.errors.ipAddress}
-                                        placeholder="93.184.216.34 or 2001:db8::1"
                                     />
                                     <TextInput
                                         label={"Port number"}
@@ -461,6 +418,7 @@ const NetcatTool = () => {
                                         labelText="File"
                                         placeholderText="Click to select file"
                                     />
+                                    {/* Show selected filename(s) to resolve the UI confusion after upload */}
                                     {fileNames.length > 0 ? (
                                         <Group spacing="xs" style={{ marginTop: 8 }}>
                                             <Text size="sm">Selected file:</Text>
@@ -507,11 +465,10 @@ const NetcatTool = () => {
                                         error={form.errors.portNumber}
                                     />
                                     <TextInput
-                                        label={"Host (domain or IP)"}
+                                        label={"Domain name"}
                                         required
                                         {...form.getInputProps("websiteUrl")}
                                         error={form.errors.websiteUrl}
-                                        placeholder="example.com / 93.184.216.34 / 2001:db8::1"
                                     />
                                 </>
                             )}
