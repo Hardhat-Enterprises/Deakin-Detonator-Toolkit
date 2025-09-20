@@ -36,9 +36,9 @@ function Whois() {
     const description =
         "Whois is a query and response protocol that is used for querying databases that store an internet resource's registered users or assignees.";
     const steps =
-        "Step 1: Provide the target URL or IP address to scan.\n" +
-        "Step 2: Start the scan to gather information about potential vulnerabilities and misconfigurations.\n" +
-        "Step 3: Review the scan output to identify any security issues.\n";
+        "Step 1: Provide the domain name or IP address to look up (e.g., example.com or 93.184.216.34).\n" +
+        "Step 2: Start the lookup to gather registration information.\n" +
+        "Step 3: Review the output.\n";
     const sourceLink = "https://github.com/weppos/whois"; // Link to the source code
     const tutorial = "https://docs.google.com/document/d/1n-QxEXGDOdOlYZ13OGQPV7QdnOEsJF4vPtObGy0vYbs/edit?usp=sharing"; // Link to the official documentation/tutorial
     const dependencies = ["whois"]; // Contains the dependencies required by the component.
@@ -111,13 +111,24 @@ function Whois() {
      * @param {FormValuesType} values - The form values containing the target URL option.
      */
     const onSubmit = async (values: FormValuesType) => {
+        // Validate first (don’t start loading spinner if we already know it's wrong)
+        const raw = (values.targetURL || "").trim();
+
+        // If they pasted a URL or added path/query/fragment, block and instruct.
+        if (/^https?:\/\//i.test(raw) || /[\/?#]/.test(raw)) {
+            setOutput(
+                "Enter only a domain or IP address (no http/https, no paths). Examples: example.com, 93.184.216.34, [2001:db8::1]"
+            );
+            return;
+        }
+
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
         // Construct arguments for the Whois command based on form input
-        const args = [values.targetURL];
+        const args = [raw];
 
-        // Execute the Nikto command via helper method and handle its output or potential errors
+        // Execute the whois command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("whois", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 // Update the UI with the results from the executed command
@@ -169,7 +180,7 @@ function Whois() {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput label="Target URL" required {...form.getInputProps("targetURL")} />
+                    <TextInput label="Domain or IP address" required {...form.getInputProps("targetURL")} />
                     <Button type={"submit"}>Start {title}</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
