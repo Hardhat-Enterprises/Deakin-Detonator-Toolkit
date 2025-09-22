@@ -1,137 +1,268 @@
-import { Button, NativeSelect, Stack, TextInput, Stepper, Switch, Group, Badge, Text } from "@mantine/core";
+import { Button, Stack, TextInput, Switch, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
-import { FilePicker } from "../FileHandler/FilePicker";
+import InstallationModal from "../InstallationModal/InstallationModal";
 
 /**
- * Represents the form values for the Netcat component.
+ * Represents the form values for the DNSMap component.
  */
 interface FormValuesType {
-    ipAddress: string;
-    portNumber: string;
-    netcatOptions: string;
-    websiteUrl: string;
-    filePath: string;
+    domain: string;
+    delay: number;
+    wordlistPath: string;
+    csvResultsFile: string;
+    ipsToIgnore: string;
 }
 
-/* -------------------------
-   Validators (domains / IPv4 / IPv6 + ports)
-   ------------------------- */
-
-// Domain: must include at least one dot; labels 1–63; total <=253; no leading/trailing hyphen.
-const isValidDomain = (host: string) => {
-    if (!host) return false;
-    const s = host.trim();
-    // reject schemes or paths
-    if (/^[a-z]+:\/\//i.test(s) || /[\/?#]/.test(s)) return false;
-    // localhost is not a domain with a dot; allow it only if you want — here we reject it for WHOIS-like checks
-    const re = /^(?=.{1,253}$)(?!-)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i;
-    return re.test(s);
-};
-
-// IPv4: dotted-quad, each 0–255
-const isValidIPv4 = (ip: string) => {
-    if (!ip) return false;
-    const m = ip.trim().match(/^(\d{1,3}\.){3}\d{1,3}$/);
-    if (!m) return false;
-    return ip.split(".").every((o) => {
-        const n = Number(o);
-        return o === String(n) && n >= 0 && n <= 255;
-    });
-};
-
-// IPv6: reasonably complete regex covering full, shortened, and with embedded IPv4
-const isValidIPv6 = (ip: string) => {
-    if (!ip) return false;
-    const s = ip.trim();
-    const re = new RegExp(
-        "^(" +
-            "([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}|" + // 1:2:3:4:5:6:7:8
-            "([0-9A-Fa-f]{1,4}:){1,7}:|" + // 1:: 1:2:3:4:5:6:7::
-            ":[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{1,4}){0,6}|" + // ::2  ::2:3  ... ::2:3:4:5:6:7
-            "([0-9A-Fa-f]{1,4}:){1,6}:[0-9A-Fa-f]{1,4}|" + // 1:2:3:4:5:6::8
-            "([0-9A-Fa-f]{1,4}:){1,5}(:[0-9A-Fa-f]{1,4}){1,2}|" + // 1:2:3:4:5::7:8
-            "([0-9A-Fa-f]{1,4}:){1,4}(:[0-9A-Fa-f]{1,4}){1,3}|" + // 1:2:3:4::6:7:8
-            "([0-9A-Fa-f]{1,4}:){1,3}(:[0-9A-Fa-f]{1,4}){1,4}|" + // 1:2:3::5:6:7:8
-            "([0-9A-Fa-f]{1,4}:){1,2}(:[0-9A-Fa-f]{1,4}){1,5}|" + // 1:2::4:5:6:7:8
-            "[0-9A-Fa-f]{1,4}:(:[0-9A-Fa-f]{1,4}){1,6}|" + // 1::3:4:5:6:7:8
-            ":(:[0-9A-Fa-f]{1,4}){1,7}|" + // ::2:3:4:5:6:7:8  or ::8
-            // IPv6 with embedded IPv4
-            "([0-9A-Fa-f]{1,4}:){6}(\\d{1,3}\\.){3}\\d{1,3}|" +
-            "([0-9A-Fa-f]{1,4}:){0,5}:[0-9A-Fa-f]{1,4}:(\\d{1,3}\\.){3}\\d{1,3}|" +
-            "::(ffff(?::0{1,4}){0,1}:)?(\\d{1,3}\\.){3}\\d{1,3}" +
-            ")$"
-    );
-    if (!re.test(s)) return false;
-    // If embedded IPv4 exists, ensure each quad <=255
-    const v4 = s.match(/(\d{1,3}\.){3}\d{1,3}$/);
-    if (v4) return isValidIPv4(v4[0]);
-    return true;
-};
-
-const isHost = (v: string) => isValidDomain(v) || isValidIPv4(v) || isValidIPv6(v);
-
-const isValidPort = (p: string) => {
-    if (!p) return false;
-    const s = p.trim();
-    if (!/^\d+$/.test(s)) return false;
-    const n = Number(s);
-    return n >= 1 && n <= 65535;
-};
-
-/* -------------------------
-   Component
-   ------------------------- */
-const NetcatTool = () => {
-    // Component State Variables
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+/**
+ * The DNSMap component.
+ * @returns The DNSMap component.
+ */
+const DNSMap = () => {
+    // Components state variables
     const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [checkedAdvanced, setCheckedAdvanced] = useState(false);
+    const [Pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
-    const [checkedVerboseMode, setCheckedVerboseMode] = useState(false);
-    const [loadingModal, setLoadingModal] = useState(true);
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [opened, setOpened] = useState(!isCommandAvailable);
-    const [fileNames, setFileNames] = useState<string[]>([]);
-    const [active, setActive] = useState(0);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const [showAlert, setShowAlert] = useState(true);
 
-    // Component Constants
-    const title = "Netcat";
-    const description =
-        "A simple Unix utility which reads and writes data across network connections using TCP or UDP protocol.";
+    // Validation/correction messages
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [correctionMsg, setCorrectionMsg] = useState<string | null>(null);
+
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
+
+    // Components Constant Variables
+    const title = "Dnsmap";
+    const description_userguide =
+        "DNSMap scans a domain for common subdomains using a built-in or an external wordlist (if specified using -w option). " +
+        "The internal wordlist has around 1000 words in English and Spanish as ns1, firewall services and smtp. " +
+        "So it will be possible to search for smtp.example.com inside example.com automatically.\n\n";
+
     const steps =
-        "Step 1: Select the Netcat option.\n" +
-        "Step 2: Provide the required inputs based on the selected option.\n" +
-        "Step 3: Run the Netcat command and review results.";
-    const sourceLink = "https://www.kali.org/tools/netcat/";
-    const tutorial = "https://docs.google.com/document/d/1NQ-hy8NBuTTUJzHebST5UF42JPjJ3yfIvNgWbM7FPLE/edit?usp=sharing";
-    const dependencies = ["nc"];
+        "Step 1: Enter a valid domain to be mapped.\n" +
+        " Eg: google.com\n\n" +
+        "Step 2: Enter a delay between requests. Default is 10 (milliseconds). Can be left blank.\n" +
+        " Eg: 10\n\n" +
+        "Step 3: Click 'Start Mapping' to commence the DNSMap tool's operation.\n\n" +
+        "Step 4: View the Output block below to view the results of the tool's execution.\n\n" +
+        "Switch to Advanced Mode for further options.";
 
-    // Form hook to handle form input.
+    const sourceLink = "https://www.kali.org/tools/dnsmap/";
+    const tutorial = "https://docs.google.com/document/d/15iZ-USnXOVe-zLBLC_ROp0OTqXO_Nh7WtGO6YHfqQsc/edit?usp=sharing";
+    const dependencies = ["dnsmap"];
+
+    // ---------- Domain sanitising / validation / correction ----------
+    const COMMON_TLDS = [
+        "com",
+        "net",
+        "org",
+        "edu",
+        "gov",
+        "io",
+        "co",
+        "au",
+        "uk",
+        "de",
+        "fr",
+        "in",
+        "us",
+        "ca",
+        "nz",
+        "info",
+        "biz",
+        "dev",
+        "app",
+        "ai",
+        "me",
+        "tv",
+        "xyz",
+        "site",
+        "online",
+        "shop",
+        "store",
+        "tech",
+        "cloud",
+        "systems",
+        "solutions",
+    ];
+
+    const TLD_FIXES: Record<string, string> = {
+        con: "com",
+        cpm: "com",
+        ocm: "com",
+        cim: "com",
+        comm: "com",
+        coom: "com",
+        xom: "com",
+    };
+
+    const KNOWN_DOMAINS = [
+        "google.com",
+        "youtube.com",
+        "facebook.com",
+        "github.com",
+        "kali.org",
+        "wikipedia.org",
+        "reddit.com",
+        "instagram.com",
+        "linkedin.com",
+        "amazon.com",
+        "apple.com",
+        "microsoft.com",
+        "netflix.com",
+        "deakin.edu.au",
+        "twitter.com",
+        "x.com",
+    ];
+
+    const sanitiseDomain = (raw: string): string => {
+        let d = raw.trim().toLowerCase();
+        d = d.replace(/^https?:\/\//, ""); // remove protocol
+        d = d.split("/")[0]; // drop path/query
+        d = d.replace(/[\s\u200B-\u200D\uFEFF]/g, ""); // strip zero-width/whitespace
+        return d;
+    };
+
+    const isValidDomainSyntax = (domain: string): boolean => {
+        if (!domain || domain.length > 253) return false;
+        const parts = domain.split(".");
+        if (parts.length < 2) return false;
+
+        const tld = parts[parts.length - 1];
+        if (!/^[a-z]{2,24}$/.test(tld)) return false;
+
+        for (const label of parts) {
+            if (label.length < 1 || label.length > 63) return false;
+            if (!/^[a-z0-9-]+$/.test(label)) return false;
+            if (label.startsWith("-") || label.endsWith("-")) return false;
+        }
+        return true;
+    };
+
+    const levenshtein = (a: string, b: string): number => {
+        const m = a.length,
+            n = b.length;
+        const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+        for (let i = 0; i <= m; i++) dp[i][0] = i;
+        for (let j = 0; j <= n; j++) dp[0][j] = j;
+        for (let i = 1; i <= m; i++) {
+            for (let j = 1; j <= n; j++) {
+                const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+                dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+            }
+        }
+        return dp[m][n];
+    };
+
+    const correctDomainIfObvious = (domain: string): { corrected?: string; reason?: string } => {
+        let d = domain;
+        const parts = d.split(".");
+
+        // Fix obvious TLD mistakes
+        if (parts.length >= 2) {
+            const tld = parts[parts.length - 1];
+            if (TLD_FIXES[tld]) {
+                const fixed = [...parts.slice(0, -1), TLD_FIXES[tld]].join(".");
+                return { corrected: fixed, reason: `Replaced ".${tld}" with ".${TLD_FIXES[tld]}"` };
+            }
+            if (tld.endsWith(",")) {
+                const fixed = [...parts.slice(0, -1), tld.replace(/,+$/, "")].join(".");
+                if (isValidDomainSyntax(fixed)) {
+                    return { corrected: fixed, reason: "Removed trailing comma from TLD" };
+                }
+            }
+        }
+
+        // If TLD is one edit away from a common TLD, fix
+        if (parts.length >= 2) {
+            const tld = parts[parts.length - 1];
+            let bestTld = tld;
+            let bestDist = 99;
+            for (const ct of COMMON_TLDS) {
+                const dist = levenshtein(tld, ct);
+                if (dist < bestDist) {
+                    bestDist = dist;
+                    bestTld = ct;
+                }
+            }
+            if (bestDist > 0 && bestDist <= 1) {
+                const fixed = [...parts.slice(0, -1), bestTld].join(".");
+                return { corrected: fixed, reason: `Did you mean ".${bestTld}"?` };
+            }
+        }
+
+        // Known popular domains by distance (<=2 edits)
+        let best = d;
+        let bestDist = 99;
+        for (const kd of KNOWN_DOMAINS) {
+            const dist = levenshtein(d, kd);
+            if (dist < bestDist) {
+                bestDist = dist;
+                best = kd;
+            }
+        }
+        if (bestDist <= 2 && best !== d) {
+            return { corrected: best, reason: `Corrected to popular domain "${best}"` };
+        }
+
+        return {};
+    };
+
+    // Form Hook with validation
     const form = useForm<FormValuesType>({
         initialValues: {
-            ipAddress: "",
-            portNumber: "",
-            netcatOptions: "",
-            websiteUrl: "",
-            filePath: "",
+            domain: "",
+            delay: 10,
+            wordlistPath: "",
+            csvResultsFile: "",
+            ipsToIgnore: "",
         },
-        validateInputOnChange: true,
-        validateInputOnBlur: true,
         validate: {
-            netcatOptions: (v) => (v ? null : "Please select an option"),
+            domain: (value) => {
+                const raw = value ?? "";
+                const s = sanitiseDomain(raw);
+
+                if (!s) return "Please enter a domain (e.g., example.com).";
+
+                if (!isValidDomainSyntax(s)) {
+                    const { corrected } = correctDomainIfObvious(s);
+                    if (corrected && isValidDomainSyntax(corrected)) {
+                        return null; // soft-pass; we'll set corrected on submit and stop
+                    }
+                    return "That doesn't look like a valid domain (e.g., deakin.edu.au, google.com).";
+                }
+                return null;
+            },
+            delay: (v) => (v !== undefined && v !== null && v < 0 ? "Delay must be 0 or greater." : null),
+            ipsToIgnore: (v) => {
+                if (!v) return null;
+                const ips = v
+                    .split(",")
+                    .map((x) => x.trim())
+                    .filter(Boolean);
+                if (ips.length > 5) return "Maximum 5 IPs allowed.";
+                const ipRegex = /^(25[0-5]|2[0-4]\d|[01]?\d?\d)(\.(25[0-5]|2[0-4]\d|[01]?\d?\d)){3}$/;
+                for (const ip of ips) {
+                    if (!ipRegex.test(ip)) return `Invalid IP address: ${ip}`;
+                }
+                return null;
+            },
         },
     });
 
-    // Check command availability
+    // Command availability + disclaimer timer
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
@@ -143,15 +274,36 @@ const NetcatTool = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false);
             });
+
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
 
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
+
+    // Append new data to output
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data);
+        setOutput((prevOutput) => (prevOutput ? prevOutput + "\n" + data : data));
     }, []);
 
+    // Process termination handler
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            console.log("handleProcessTermination called with code:", code, "signal:", signal);
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
             } else if (signal === 15) {
@@ -159,7 +311,6 @@ const NetcatTool = () => {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-
             setPid("");
             setLoading(false);
             setAllowSave(true);
@@ -168,143 +319,10 @@ const NetcatTool = () => {
         [handleProcessData]
     );
 
-    /**
-     * Per-option validation (now: domain/IPv4/IPv6 for host-like inputs).
-     * This only guards navigation/submit; command behavior is unchanged.
-     */
-    const validateForOption = (values: FormValuesType) => {
-        const errors: Partial<Record<keyof FormValuesType, string>> = {};
-        const opt = values.netcatOptions;
-
-        if (!opt) errors.netcatOptions = "Please select an option";
-
-        if (opt === "Listen") {
-            if (!values.portNumber) errors.portNumber = "Port is required";
-            else if (!isValidPort(values.portNumber)) errors.portNumber = "Enter a valid port (1–65535)";
-        }
-
-        if (opt === "Connect") {
-            if (!values.ipAddress) errors.ipAddress = "Host is required";
-            else if (!(isValidIPv4(values.ipAddress) || isValidIPv6(values.ipAddress)))
-                errors.ipAddress = "Enter a valid IPv4 or IPv6";
-            if (!values.portNumber) errors.portNumber = "Port is required";
-            else if (!isValidPort(values.portNumber)) errors.portNumber = "Enter a valid port (1–65535)";
-        }
-
-        if (opt === "Port Scan") {
-            if (!values.ipAddress) errors.ipAddress = "Host is required";
-            else if (!isHost(values.ipAddress)) errors.ipAddress = "Enter a valid domain or IP";
-            if (!values.portNumber) errors.portNumber = "Port/Range is required";
-            // (range parsing intentionally left alone to avoid runtime changes)
-        }
-
-        if (opt === "Website Port Scan") {
-            if (!values.portNumber) errors.portNumber = "Port/Range is required";
-            if (!values.websiteUrl) errors.websiteUrl = "Host is required";
-            else if (!isHost(values.websiteUrl)) errors.websiteUrl = "Enter a valid domain or IP";
-        }
-
-        if (opt === "Send File") {
-            if (!values.ipAddress) errors.ipAddress = "Host is required";
-            else if (!(isValidIPv4(values.ipAddress) || isValidIPv6(values.ipAddress)))
-                errors.ipAddress = "Enter a valid IPv4 or IPv6";
-            if (!values.portNumber) errors.portNumber = "Port is required";
-            else if (!isValidPort(values.portNumber)) errors.portNumber = "Enter a valid port (1–65535)";
-            if (fileNames.length === 0) errors.filePath = "Please select a file to send";
-        }
-
-        if (opt === "Receive File") {
-            if (!values.portNumber) errors.portNumber = "Port is required";
-            else if (!isValidPort(values.portNumber)) errors.portNumber = "Enter a valid port (1–65535)";
-            if (!values.filePath) errors.filePath = "Output file path is required";
-        }
-
-        form.setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-
-    /**
-     * Submit: unchanged command behavior; just blocked if inputs invalid.
-     */
-    const onSubmit = async (values: FormValuesType) => {
-        if (!validateForOption(values)) {
-            setLoading(false);
-            return;
-        }
-
-        setLoading(true);
+    // Saving complete
+    const handleSaveComplete = () => {
+        setHasSaved(true);
         setAllowSave(false);
-
-        let command = "nc";
-        let args: string[] = [];
-        const verboseFlag = checkedVerboseMode ? "-vn" : "-n";
-        const verboseFlagWithSpaceAndDash = checkedVerboseMode ? " -v" : "";
-
-        switch (values.netcatOptions) {
-            case "Listen":
-                args = ["-l", verboseFlag, "-w", "60", "-p", values.portNumber];
-                break;
-            case "Connect":
-                args = [verboseFlag, "-w", "30", values.ipAddress, values.portNumber];
-                break;
-            case "Port Scan":
-                args = ["-z", verboseFlag, "-w", "5", values.ipAddress, values.portNumber];
-                break;
-            case "Website Port Scan":
-                args = ["-z", verboseFlag, "-w", "5", values.websiteUrl, values.portNumber];
-                break;
-            case "Send File":
-                if (fileNames.length === 0) {
-                    form.setFieldError("filePath", "Please select a file to send");
-                    setLoading(false);
-                    return;
-                }
-                command = "bash";
-                args = [
-                    "-c",
-                    `nc -w 10${verboseFlagWithSpaceAndDash} -n ${values.ipAddress} ${values.portNumber} < "${fileNames[0]}"`,
-                ];
-                break;
-            case "Receive File":
-                command = "bash";
-                args = [
-                    "-c",
-                    `nc -l${verboseFlagWithSpaceAndDash} -n -w 60 -p ${values.portNumber} > "${values.filePath}"`,
-                ];
-                break;
-            default:
-                setOutput("Invalid Netcat option selected.");
-                setLoading(false);
-                return;
-        }
-
-        console.log(`Executing command: ${command} ${args.join(" ")}`);
-
-        try {
-            const { pid, output } = await CommandHelper.runCommandWithPkexec(
-                command,
-                args.filter(Boolean),
-                handleProcessData,
-                handleProcessTermination
-            );
-            setPid(pid);
-            setOutput(output);
-
-            if (values.netcatOptions === "Listen" || values.netcatOptions === "Connect") {
-                handleProcessData(
-                    "\nNote: This operation may keep running. The loading overlay will stop in 10 seconds."
-                );
-                setTimeout(() => {
-                    console.log("Safety timeout triggered - stopping loading overlay");
-                    setLoading(false);
-                    setAllowSave(true);
-                }, 10000);
-            }
-        } catch (error: any) {
-            setOutput(`Error: ${error.message}`);
-            setLoading(false);
-            setAllowSave(true);
-        }
     };
 
     const clearOutput = useCallback(() => {
@@ -313,35 +331,91 @@ const NetcatTool = () => {
         setAllowSave(false);
     }, []);
 
-    const handleSaveComplete = () => {
-        setHasSaved(true);
-        setAllowSave(false);
-    };
+    /**
+     * onSubmit with "stop after autocorrect":
+     * - If we autocorrect, we set the corrected value, show yellow note, and RETURN (no run).
+     * - Only run dnsmap when no correction occurred in this submit.
+     */
+    const onSubmit = async (values: FormValuesType) => {
+        setErrorMsg(null);
+        setCorrectionMsg(null);
 
-    // Guarded stepper next that enforces per-step validation
-    const guardedNextStep = () => {
-        if (active === 0) {
-            if (!form.values.netcatOptions) {
-                form.setFieldError("netcatOptions", "Please select an option");
-                return;
+        const rawDomain = values.domain ?? "";
+        const sanitised = sanitiseDomain(rawDomain);
+
+        const tryAutocorrect = () => {
+            const { corrected, reason } = correctDomainIfObvious(sanitised);
+            if (corrected && isValidDomainSyntax(corrected)) {
+                form.setFieldValue("domain", corrected);
+                setCorrectionMsg(`Auto-corrected domain: "${sanitised}" → "${corrected}". ${reason ?? ""}`);
+                return true;
             }
-            setActive(1);
-            return;
-        }
-        if (active === 1) {
-            if (!validateForOption(form.values)) return;
-            setActive(2);
-            return;
-        }
-        if (active < 2) setActive((c) => c + 1);
-    };
+            return false;
+        };
 
-    const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+        // Invalid syntax → attempt correction then stop; else error
+        if (!isValidDomainSyntax(sanitised)) {
+            if (tryAutocorrect()) return;
+            setErrorMsg(
+                `Invalid domain "${rawDomain}". Please enter a valid domain like "example.com" or "deakin.edu.au".`
+            );
+            return;
+        }
+
+        // Valid syntax → maybe fix trivial typo; if corrected, stop this submit
+        {
+            const { corrected, reason } = correctDomainIfObvious(sanitised);
+            if (corrected && corrected !== sanitised && isValidDomainSyntax(corrected)) {
+                form.setFieldValue("domain", corrected);
+                setCorrectionMsg(`Auto-corrected domain: "${sanitised}" → "${corrected}". ${reason ?? ""}`);
+                return;
+            } else if (sanitised !== rawDomain) {
+                // normalise (strip protocol/paths). This isn't a semantic correction; allow run.
+                form.setFieldValue("domain", sanitised);
+            }
+        }
+
+        // Final guard
+        const finalDomain = sanitiseDomain(form.values.domain);
+        if (!isValidDomainSyntax(finalDomain)) {
+            setErrorMsg(`Invalid domain "${form.values.domain}". Please enter a valid domain like "example.com".`);
+            return;
+        }
+
+        // Build args & run
+        setAllowSave(false);
+        setLoading(true);
+        setOutput("");
+
+        const args: string[] = [finalDomain, "-d", String(values.delay ?? 10)];
+        if (values.wordlistPath) args.push("-w", values.wordlistPath);
+        if (values.csvResultsFile) args.push("-c", values.csvResultsFile);
+        if (values.ipsToIgnore) {
+            const ips = values.ipsToIgnore
+                .split(",")
+                .map((x) => x.trim())
+                .filter(Boolean)
+                .slice(0, 5);
+            if (ips.length > 0) args.push("-i", ips.join(","));
+        }
+
+        const filteredArgs = args.filter((a) => a !== "");
+
+        CommandHelper.runCommandGetPidAndOutput("dnsmap", filteredArgs, handleProcessData, handleProcessTermination)
+            .then(({ pid, output }) => {
+                setPid(pid);
+                if (output) setOutput(output);
+            })
+            .catch((error: any) => {
+                setLoading(false);
+                setOutput(`Error: ${error?.message ?? String(error)}`);
+            });
+    };
 
     return (
         <RenderComponent
             title={title}
-            description={description}
+            description={description_userguide}
             steps={steps}
             tutorial={tutorial}
             sourceLink={sourceLink}
@@ -350,198 +424,95 @@ const NetcatTool = () => {
                 <InstallationModal
                     isOpen={opened}
                     setOpened={setOpened}
-                    feature_description={description}
+                    feature_description={description_userguide}
                     dependencies={dependencies}
                 />
             )}
+
             <form onSubmit={form.onSubmit(onSubmit)}>
-                {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
-                <Stepper
-                    active={active}
-                    onStepClick={(s) => {
-                        if (s <= active) return setActive(s);
-                        if (active === 0 && form.values.netcatOptions) return setActive(1);
-                        if (active === 1 && validateForOption(form.values)) return setActive(2);
-                    }}
-                    breakpoint="sm"
-                >
-                    <Stepper.Step label="Select Option">
-                        <NativeSelect
-                            value={form.values.netcatOptions}
-                            onChange={(e) => form.setFieldValue("netcatOptions", e.target.value)}
-                            title={"Netcat option"}
-                            data={[
-                                { value: "", label: "Pick a Netcat option", disabled: true },
-                                { value: "Listen", label: "Listen" },
-                                { value: "Connect", label: "Connect" },
-                                { value: "Port Scan", label: "Port Scan" },
-                                { value: "Send File", label: "Send File" },
-                                { value: "Receive File", label: "Receive File" },
-                                { value: "Website Port Scan", label: "Website Port Scan" },
-                            ]}
-                            required
-                            error={form.errors.netcatOptions}
-                        />
-                    </Stepper.Step>
+                {LoadingOverlayAndCancelButton(loading, Pid)}
 
-                    <Stepper.Step label="Provide Inputs">
-                        <Stack>
-                            <Switch
-                                label="Enable Verbose Mode"
-                                checked={checkedVerboseMode}
-                                onChange={(event) => setCheckedVerboseMode(event.currentTarget.checked)}
-                            />
-
-                            {form.values.netcatOptions === "Listen" && (
-                                <TextInput
-                                    label={"Port number"}
-                                    required
-                                    {...form.getInputProps("portNumber")}
-                                    error={form.errors.portNumber}
-                                />
-                            )}
-
-                            {form.values.netcatOptions === "Connect" && (
-                                <>
-                                    <TextInput
-                                        label={"Host (IPv4 / IPv6)"}
-                                        required
-                                        {...form.getInputProps("ipAddress")}
-                                        error={form.errors.ipAddress}
-                                        placeholder="93.184.216.34 or 2001:db8::1"
-                                    />
-                                    <TextInput
-                                        label={"Port number"}
-                                        required
-                                        {...form.getInputProps("portNumber")}
-                                        error={form.errors.portNumber}
-                                    />
-                                </>
-                            )}
-
-                            {form.values.netcatOptions === "Port Scan" && (
-                                <>
-                                    <TextInput
-                                        label={"Host (domain or IP)"}
-                                        required
-                                        {...form.getInputProps("ipAddress")}
-                                        error={form.errors.ipAddress}
-                                        placeholder="example.com / 93.184.216.34 / 2001:db8::1"
-                                    />
-                                    <TextInput
-                                        label={"Port number/Port range"}
-                                        required
-                                        placeholder="80 or 1-1024"
-                                        {...form.getInputProps("portNumber")}
-                                        error={form.errors.portNumber}
-                                    />
-                                </>
-                            )}
-
-                            {form.values.netcatOptions === "Send File" && (
-                                <>
-                                    <TextInput
-                                        label={"Host (IPv4 / IPv6)"}
-                                        required
-                                        {...form.getInputProps("ipAddress")}
-                                        error={form.errors.ipAddress}
-                                        placeholder="93.184.216.34 or 2001:db8::1"
-                                    />
-                                    <TextInput
-                                        label={"Port number"}
-                                        required
-                                        {...form.getInputProps("portNumber")}
-                                        error={form.errors.portNumber}
-                                    />
-                                    <FilePicker
-                                        fileNames={fileNames}
-                                        setFileNames={setFileNames}
-                                        multiple={false}
-                                        componentName="Netcat"
-                                        labelText="File"
-                                        placeholderText="Click to select file"
-                                    />
-                                    {fileNames.length > 0 ? (
-                                        <Group spacing="xs" style={{ marginTop: 8 }}>
-                                            <Text size="sm">Selected file:</Text>
-                                            {fileNames.map((n) => (
-                                                <Badge key={n} variant="outline">
-                                                    {n}
-                                                </Badge>
-                                            ))}
-                                        </Group>
-                                    ) : (
-                                        form.errors.filePath && (
-                                            <Text size="sm" color="red" style={{ marginTop: 8 }}>
-                                                {form.errors.filePath}
-                                            </Text>
-                                        )
-                                    )}
-                                </>
-                            )}
-
-                            {form.values.netcatOptions === "Receive File" && (
-                                <>
-                                    <TextInput
-                                        label={"Port number"}
-                                        required
-                                        {...form.getInputProps("portNumber")}
-                                        error={form.errors.portNumber}
-                                    />
-                                    <TextInput
-                                        label={"File path"}
-                                        required
-                                        {...form.getInputProps("filePath")}
-                                        error={form.errors.filePath}
-                                    />
-                                </>
-                            )}
-
-                            {form.values.netcatOptions === "Website Port Scan" && (
-                                <>
-                                    <TextInput
-                                        label={"Port number/Port range"}
-                                        required
-                                        placeholder="80 or 1-1024"
-                                        {...form.getInputProps("portNumber")}
-                                        error={form.errors.portNumber}
-                                    />
-                                    <TextInput
-                                        label={"Host (domain or IP)"}
-                                        required
-                                        {...form.getInputProps("websiteUrl")}
-                                        error={form.errors.websiteUrl}
-                                        placeholder="example.com / 93.184.216.34 / 2001:db8::1"
-                                    />
-                                </>
-                            )}
-                        </Stack>
-                    </Stepper.Step>
-
-                    <Stepper.Step label="Run">
-                        <Stack align="center" mt={20}>
-                            <Button type="submit" disabled={loading} style={{ alignSelf: "center" }}>
-                                Run Netcat
+                <Stack>
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
                             </Button>
-                        </Stack>
-                    </Stepper.Step>
-                </Stepper>
+                        )}
+                    </Group>
 
-                {/* Navigation buttons */}
-                <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-between" }}>
-                    <Button onClick={prevStep} disabled={active === 0}>
-                        Previous
-                    </Button>
-                    <Button onClick={guardedNextStep} disabled={active === 2}>
-                        Next
-                    </Button>
-                </div>
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform DNS enumeration, use with caution and only on targets you own
+                            or have explicit permission to test.
+                        </Alert>
+                    )}
 
-                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                    {correctionMsg && (
+                        <Alert title="Note" color="yellow">
+                            {correctionMsg}
+                        </Alert>
+                    )}
+
+                    {errorMsg && (
+                        <Alert title="Invalid domain" color="red">
+                            {errorMsg}
+                        </Alert>
+                    )}
+
+                    <Switch
+                        size="md"
+                        label="Advanced Mode"
+                        checked={checkedAdvanced}
+                        onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
+                    />
+
+                    <TextInput
+                        label={"Domain"}
+                        required
+                        placeholder="example.com"
+                        {...form.getInputProps("domain")}
+                        onBlur={(e) => {
+                            const s = sanitiseDomain(e.currentTarget.value || "");
+                            if (s && s !== e.currentTarget.value) form.setFieldValue("domain", s);
+                        }}
+                    />
+
+                    <TextInput
+                        label={"Random delay between requests (default 10) (milliseconds)"}
+                        type="number"
+                        {...form.getInputProps("delay")}
+                    />
+
+                    {checkedAdvanced && (
+                        <>
+                            <TextInput
+                                label={"Path to external wordlist file"}
+                                placeholder="/usr/share/wordlists/dnsmap.txt"
+                                {...form.getInputProps("wordlistPath")}
+                            />
+                            <TextInput
+                                label={"CSV results file name (optional)"}
+                                placeholder="results.csv"
+                                {...form.getInputProps("csvResultsFile")}
+                            />
+                            <TextInput
+                                label={"IP addresses to ignore (comma-separated, up to 5 IPs)"}
+                                placeholder="1.2.3.4, 5.6.7.8"
+                                {...form.getInputProps("ipsToIgnore")}
+                            />
+                        </>
+                    )}
+
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
+                    <Button type={"submit"}>Start Mapping</Button>
+
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                </Stack>
             </form>
         </RenderComponent>
     );
 };
 
-export default NetcatTool;
+export default DNSMap;
