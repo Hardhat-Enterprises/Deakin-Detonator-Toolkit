@@ -20,12 +20,14 @@ import "./App.css";
 import Navigation from "./components/NavBar/Navigation";
 import { ROUTES } from "./components/RouteWrapper";
 import { NotificationsProvider } from "@mantine/notifications";
+import DisclaimerModal from "./pages/DisclaimerModal";
 
 export default function App() {
     const theme = useMantineTheme();
     const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
     const [opened, setOpened] = useState(false);
     const [imageSrc, setImageSrc] = useState<string>("");
+    const [disclaimerOpened, setDisclaimerOpened] = useState(false);
 
     const toggleColorScheme = (value?: ColorScheme) => {
         const nextColorScheme = value || (colorScheme === "dark" ? "light" : "dark");
@@ -42,10 +44,17 @@ export default function App() {
         document.body.className = colorScheme + "-mode";
         const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
         setImageSrc(prefersDarkScheme ? "/src/logo/logo-dark.png" : "/src/logo/logo-light.png");
+
+        // Check if disclaimer has been shown in this session
+        const disclaimerAccepted = sessionStorage.getItem("disclaimerAccepted");
+        if (!disclaimerAccepted) {
+            setDisclaimerOpened(true);
+        }
     }, [colorScheme]);
 
     return (
         <div className="App">
+            <DisclaimerModal opened={disclaimerOpened} onClose={() => setDisclaimerOpened(false)} />
             <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
                 <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
                     <AppShell
