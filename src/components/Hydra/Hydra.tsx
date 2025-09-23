@@ -1,4 +1,4 @@
-import { Button, NativeSelect, NumberInput, Stack, TextInput, Grid } from "@mantine/core";
+import { Button, NativeSelect, NumberInput, Stack, TextInput, Grid, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -28,37 +28,28 @@ interface FormValuesType {
 
 //Deals with the generatedfilepath unique identifier that is added at the end of a file
 const cleanFileName = (filePath: string): string => {
-    // Split the file name by the underscore (_) and keep the first part (before the timestamp/ID)
     const parts = filePath.split("_");
-
-    // Keep only the base file name (before the timestamp and unique identifier)
     const baseFileName = parts[0];
     return baseFileName;
 };
 
-/**
- * The Hydra component.
- * @returns The Hydra component.
- */
 const Hydra = () => {
-    //Component State Variables.
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
-    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [selectedPasswordInput, setSelectedPasswordInput] = useState(""); //State variable to store selected password input
-    const [selectedLoginInput, setSelectedLoginInput] = useState(""); // State variable to store selected login input
-    const [selectedService, setSelectedService] = useState(""); //State variable to store selected service
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable that indicates if the modal is opened.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable to indicate loading state of the modal.
-    const [allowSave, setAllowSave] = useState(false); // State variable to indicate if saving is allowed
-    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved
-    const [fileNames, setFileNames] = useState<string[]>([]); // State variable to store the file names.
+    // Component State Variables.
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [pid, setPid] = useState("");
+    const [selectedService, setSelectedService] = useState("");
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+    const [fileNames, setFileNames] = useState<string[]>([]);
 
     // Component Constants.
-    const title = "Hydra"; // Title of the component.
+    const title = "Hydra";
     const description =
-        "Hydra is a parallelized login cracker which supports numerous protocols to attack. It is very fast and flexible, and new modules are easy to add."; // Description of the component.
+        "Hydra is a parallelized login cracker which supports numerous protocols to attack. It is very fast and flexible, and new modules are easy to add.";
     const steps =
         "Step 1: Select the Login settings\n" +
         "Step 2: Specify the Username for the Login\n" +
@@ -67,12 +58,12 @@ const Hydra = () => {
         "Step 5: Select the number of Threads and Service Type\n" +
         "Step 6: Enter an IP address and Port number.\n" +
         "Step 7: Click Crack to commence Hydra's operation.\n" +
-        "Step 8: View the Output block below to view the results"; //Steps to run the component
-    const sourceLink = "https://www.kali.org/tools/hydra/"; // Link to the source code (or Kali Tools).
-    const tutorial = "https://docs.google.com/document/d/14h62IT7RE86O0-15vUZekNV5IaIWcFy6deNageIJ9J0/edit?usp=sharing"; // Link to the official documentation/tutorial.
-    const dependencies = ["hydra"]; // Contains the dependencies required by the component.
-    const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic", "No Password"]; //Contain options for password input types
-    const loginInputTypes = ["Single Login", "File", "No Username"]; // Contain options for login input types
+        "Step 8: View the Output block below to view the results";
+    const sourceLink = "https://www.kali.org/tools/hydra/";
+    const tutorial = "https://docs.google.com/document/d/14h62IT7RE86O0-15vUZekNV5IaIWcFy6deNageIJ9J0/edit?usp=sharing";
+    const dependencies = ["hydra"];
+    const passwordInputTypes = ["Single Password", "File", "Character Set", "Basic"];
+    const loginInputTypes = ["Single Login", "File"];
     const serviceType = [
         "FTP",
         "FTPS",
@@ -92,7 +83,7 @@ const Hydra = () => {
         "SOCKS5",
         "SSH",
         "Telnet",
-    ]; //Contain options for service type
+    ];
     const serviceTypeRequiringConfig = [
         "HTTP-Head",
         "HTTP-Get",
@@ -103,20 +94,14 @@ const Hydra = () => {
         "HTTPS-Get-Form",
         "HTTPS-Post-Form",
         "Telnet",
-    ]; // Contain list of service types that require configuration
-    const isLoginSingle = selectedLoginInput === "Single Login"; //Set isLoginSingle to true when single login is selected
-    const isLoginFile = selectedLoginInput === "File"; //Set isLoginFile to true when file is selected
-    const isPasswordSingle = selectedPasswordInput === "Single Password"; //Set isPasswordSignle to true when single password is selected
-    const isPasswordFile = selectedPasswordInput === "File"; //Set isPasswordFile to true when file is selected
-    const isPasswordSet = selectedPasswordInput === "Character Set"; // Set isPasswordSet to true when character set is selected
-    const isPasswordBasic = selectedPasswordInput === "Basic"; //Set isPasswordBasic to true when basic is selected
+    ];
 
-    // Form hook to handle form input.
+    // Form hook to handle form input. Use form as the single source of truth for selects.
     let form = useForm({
         initialValues: {
-            loginInputType: "",
+            loginInputType: "Single Login",
             loginArgs: "",
-            passwordInputType: "",
+            passwordInputType: "Single Password",
             passwordArgs: "",
             threads: "6",
             service: "",
@@ -127,157 +112,244 @@ const Hydra = () => {
         },
     });
 
-    // Check if the command is available and set the state variables accordingly.
+    // Defensive trimmed comparisons based on form values
+    const currentLoginType = (form.values.loginInputType || "").trim();
+    const currentPasswordType = (form.values.passwordInputType || "").trim();
+
+    const isLoginSingle = currentLoginType === "Single Login";
+    const isLoginFile = currentLoginType === "File";
+    const isPasswordSingle = currentPasswordType === "Single Password";
+    const isPasswordFile = currentPasswordType === "File";
+    const isPasswordSet = currentPasswordType === "Character Set";
+    const isPasswordBasic = currentPasswordType === "Basic";
+
+    // Combined mount-time behavior: check availability + basic sanity
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
-        checkAllCommandsAvailability(dependencies)
-            .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-                setLoadingModal(false); // Set loading to false after the check is done
-            })
-            .catch((error) => {
+        // 1) Check command availability
+        const checkCommands = async () => {
+            try {
+                const isAvailable = await checkAllCommandsAvailability(dependencies);
+                setIsCommandAvailable(isAvailable);
+                setOpened(!isAvailable);
+            } catch (error) {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+            } finally {
+                setLoadingModal(false);
+            }
+        };
+        checkCommands();
+
+        // 2) Mount-time sanity check: ensure there will be a username and password source
+        const trim = (s?: string) => (s || "").trim();
+
+        const hasLoginSource =
+            (form.values.loginInputType === "Single Login" && trim(form.values.loginArgs) !== "") ||
+            (form.values.loginInputType === "File" && fileNames.length > 0);
+
+        const hasPasswordSource =
+            (form.values.passwordInputType === "Single Password" && trim(form.values.passwordArgs) !== "") ||
+            (form.values.passwordInputType === "File" && fileNames.length > 0) ||
+            (form.values.passwordInputType === "Character Set" && trim(form.values.passwordArgs) !== "") ||
+            form.values.passwordInputType === "Basic";
+
+        if (!hasLoginSource) {
+            setOutput(
+                (prev) =>
+                    prev +
+                    "\nNote: Hydra requires at least one username (-l or -L). Please provide a username (Single Login) or select a login file."
+            );
+            form.setErrors({ loginArgs: "Provide username or select a login file." });
+        }
+
+        if (!hasPasswordSource) {
+            setOutput(
+                (prev) =>
+                    prev +
+                    "\nNote: Hydra requires at least one password (-p, -P, or -e). Please provide a password (Single Password), select a password file, use Character Set, or choose Basic."
+            );
+            form.setErrors({
+                passwordArgs: "Provide password, select a password file, or choose Basic/Character Set.",
             });
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    /**
-     * handleProcessData: Callback to handle and append new data from the child process to the output.
-     * It updates the state by appending the new data received to the existing output.
-     * @param {string} data - The data received from the child process.
-     */
+    // Helper: authoritative validation used by button and onSubmit
+    const validateSubmission = (values: FormValuesType) => {
+        const trim = (s?: string) => (s || "").trim();
+
+        const loginType = (values.loginInputType || "").trim();
+        const passwordType = (values.passwordInputType || "").trim();
+
+        // login checks
+        if (loginType === "") {
+            return { valid: false, message: "Select a login input type (Single Login or File)." };
+        }
+        if (loginType === "Single Login" && trim(values.loginArgs) === "") {
+            return { valid: false, message: "Specify a username for 'Single Login'." };
+        }
+        if (loginType === "File" && (!fileNames || fileNames.length === 0)) {
+            return { valid: false, message: "Select a login file when 'File' is chosen." };
+        }
+
+        // password checks
+        if (passwordType === "") {
+            return { valid: false, message: "Select a password input type." };
+        }
+        if (passwordType === "Single Password" && trim(values.passwordArgs) === "") {
+            return { valid: false, message: "Specify a password for 'Single Password'." };
+        }
+        if (passwordType === "File" && (!fileNames || fileNames.length === 0)) {
+            return { valid: false, message: "Select a password file when 'File' is chosen." };
+        }
+        if (passwordType === "Character Set" && trim(values.passwordArgs) === "") {
+            return { valid: false, message: "Provide character set options for 'Character Set'." };
+        }
+
+        // service config check
+        if (
+            serviceTypeRequiringConfig.includes((selectedService || "").trim()) &&
+            (!values.config || trim(values.config) === "")
+        ) {
+            return {
+                valid: false,
+                message: "This service requires a custom configuration in the 'Custom Configuration' field.",
+            };
+        }
+
+        return { valid: true, message: "" };
+    };
+
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+        setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
-    /**
-     * handleProcessTermination: Callback to handle the termination of the child process.
-     * Once the process termination is handled, it clears the process PID reference and
-     * deactivates the loading overlay.
-     * @param {object} param - An object containing information about the process termination.
-     * @param {number} param.code - The exit code of the terminated process.
-     * @param {number} param.signal - The signal code indicating how the process was terminated.
-     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            // If the process was successful, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
-
-                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-
-                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-
-            // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
-
-            // Cancel the loading overlay. The process has completed.
             setLoading(false);
-
-            // Allow Saving as the output is finalised
             setAllowSave(true);
             setHasSaved(false);
         },
         [handleProcessData]
     );
 
-    /**
-     * handleSaveComplete: handle state changes when saves are completed
-     * Once the output is saved, prevent duplicate saves
-     */
     const handleSaveComplete = () => {
-        //Disallow saving once the output is saved
         setHasSaved(true);
         setAllowSave(false);
     };
 
-    /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the goldeneye tool with the given parameters.
-     * Once the command is executed, the results or errors are displayed in the output.
-     *
-     * @param {FormValuesType} values - The form values, containing the loginInputType, loginArgs, passwordInputType, passwordArgs, threads, service, serviceArgs, nsr, config, optionalconfig
-     */
     const onSubmit = async (values: FormValuesType) => {
-        // Activate loading state to indicate ongoing process
-        setLoading(true);
+        // run authoritative validation
+        const validation = validateSubmission(values);
+        if (!validation.valid) {
+            // show friendly text near form + in console output
+            form.setErrors({
+                loginArgs:
+                    values.loginInputType === "Single Login" && values.loginArgs.trim() === ""
+                        ? "Provide username."
+                        : undefined,
+                passwordArgs:
+                    values.passwordInputType === "Single Password" && values.passwordArgs.trim() === ""
+                        ? "Provide password."
+                        : undefined,
+            } as any);
+            setOutput((prev) => prev + `\nError: ${validation.message}`);
+            setAllowSave(true);
+            return;
+        }
 
-        // Disallow saving until the tool's execution is complete
+        setLoading(true);
         setAllowSave(false);
 
         const baseFilePath = "/home/kali";
+        const args: string[] = [];
 
-        // Construct arguments for the  Hydra command based on form input
-        const args = [];
-        if (selectedLoginInput === "Single Login") {
-            args.push(`-l`, `${values.loginArgs}`);
-        } else if (selectedLoginInput === "File") {
-            const fileToSend = fileNames[0]; // Take the first file from the file picker
-            const cleanName = cleanFileName(fileToSend); // Clean the file name (strip unique identifier)
+        // login args
+        if (values.loginInputType === "Single Login") {
+            args.push("-l", `${values.loginArgs}`);
+        } else if (values.loginInputType === "File") {
+            const fileToSend = fileNames[0];
+            const cleanName = cleanFileName(fileToSend);
             const dataUploadPath = `${baseFilePath}/${cleanName}`;
-            args.push("-l", dataUploadPath);
+            args.push("-L", dataUploadPath); // -L for username list file
         }
-        if (selectedPasswordInput === "Single Password") {
-            args.push(`-p`, `${values.passwordArgs}`);
-        } else if (selectedPasswordInput === "File") {
-            const fileToSend = fileNames[0]; // Take the first file for passwords
+
+        // password args
+        if (values.passwordInputType === "Single Password") {
+            args.push("-p", `${values.passwordArgs}`);
+        } else if (values.passwordInputType === "File") {
+            const fileToSend = fileNames[0];
             const cleanName = cleanFileName(fileToSend);
             const dataUploadPath = `${baseFilePath}/${cleanName}`;
             args.push("-P", dataUploadPath);
-        } else if (selectedPasswordInput === "Character Set") {
-            args.push(`-x`, `${values.passwordArgs}`);
-        } else if (selectedPasswordInput === "Basic") {
-            args.push(`-e`, `${values.nsr}`);
+        } else if (values.passwordInputType === "Character Set") {
+            args.push("-x", `${values.passwordArgs}`);
+        } else if (values.passwordInputType === "Basic") {
+            args.push("-e", `${values.nsr}`);
         }
+
+        // threads
         if (values.threads) {
-            args.push(`-t ${values.threads}`);
+            args.push("-t", `${values.threads}`);
         }
-        if (serviceTypeRequiringConfig.includes(selectedService)) {
-            args.push(`${values.serviceArgs}`, `${values.service.toLowerCase()}`, `${values.config}`);
+
+        // service / service args
+        if (serviceTypeRequiringConfig.includes((selectedService || "").trim())) {
+            args.push(`${values.serviceArgs}`, `${(selectedService || "").toLowerCase()}`, `${values.config}`);
         } else {
-            args.push(`${values.service.toLowerCase()}://${values.serviceArgs}`);
+            args.push(`${(selectedService || "").toLowerCase()}://${values.serviceArgs}`);
         }
-        if (values.optionalConfig.length != 0) {
+
+        if (values.optionalConfig && values.optionalConfig.length !== 0) {
             args.push(`${values.optionalConfig}`);
         }
 
         try {
-            // Execute the Hydra command via helper method and handle its output or potential errors
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "hydra",
                 args,
                 handleProcessData,
                 handleProcessTermination
             );
-            // Update the UI with the results from the executed command
             setPid(result.pid);
             setOutput(result.output);
-            console.log(pid);
         } catch (e: any) {
-            // Display any errors encountered during command execution
-            setOutput(e.message);
-            // Deactivate loading state
+            setOutput((e && e.message) || String(e));
             setLoading(false);
             setAllowSave(true);
         }
     };
 
-    /**
-     * Clears the output state.
-     */
     const clearOutput = useCallback(() => {
         setOutput("");
-
-        //Disallow saving when output is cleared
         setHasSaved(false);
         setAllowSave(false);
     }, [setOutput]);
+
+    // lightweight derived disabled state for the submit button
+    const isSubmitDisabled =
+        loading ||
+        !validateSubmission({
+            loginInputType: form.values.loginInputType,
+            loginArgs: form.values.loginArgs,
+            passwordInputType: form.values.passwordInputType,
+            passwordArgs: form.values.passwordArgs,
+            threads: form.values.threads,
+            service: form.values.service,
+            serviceArgs: form.values.serviceArgs,
+            nsr: form.values.nsr,
+            config: form.values.config,
+            optionalConfig: form.values.optionalConfig,
+        } as FormValuesType).valid;
 
     return (
         <RenderComponent
@@ -299,9 +371,6 @@ const Hydra = () => {
                 onSubmit={form.onSubmit((values) =>
                     onSubmit({
                         ...values,
-                        passwordInputType: selectedPasswordInput,
-                        loginInputType: selectedLoginInput,
-                        service: selectedService,
                     })
                 )}
             >
@@ -310,13 +379,18 @@ const Hydra = () => {
                     <Grid>
                         <Grid.Col span={12}>
                             <NativeSelect
-                                value={selectedLoginInput}
-                                onChange={(e) => setSelectedLoginInput(e.target.value)}
+                                {...form.getInputProps("loginInputType")}
                                 label={"Login settings"}
                                 data={loginInputTypes}
                                 required
                                 placeholder={"Select a setting"}
                             />
+
+                            <Text size="sm" color="dimmed">
+                                Hydra requires at least one username and password source. If you need to try an empty
+                                username/password, create a list file containing an empty line or use a placeholder such
+                                as <code>anonymous</code>.
+                            </Text>
                         </Grid.Col>
                         <Grid.Col span={12}>
                             {isLoginSingle && (
@@ -339,11 +413,11 @@ const Hydra = () => {
                             )}
                         </Grid.Col>
                     </Grid>
+
                     <Grid>
                         <Grid.Col span={12}>
                             <NativeSelect
-                                value={selectedPasswordInput}
-                                onChange={(e) => setSelectedPasswordInput(e.target.value)}
+                                {...form.getInputProps("passwordInputType")}
                                 label={"Password settings"}
                                 data={passwordInputTypes}
                                 placeholder={"Select a setting"}
@@ -374,6 +448,7 @@ const Hydra = () => {
                             )}
                         </Grid.Col>
                     </Grid>
+
                     <Grid>
                         <Grid.Col span={6}>
                             <NumberInput
@@ -386,7 +461,10 @@ const Hydra = () => {
                         <Grid.Col span={6}>
                             <NativeSelect
                                 value={selectedService}
-                                onChange={(e) => setSelectedService(e.target.value)}
+                                onChange={(e) => {
+                                    const v = (e.target as HTMLSelectElement).value;
+                                    setSelectedService(v);
+                                }}
                                 label={"Service Type"}
                                 data={serviceType}
                                 required
@@ -394,7 +472,7 @@ const Hydra = () => {
                             />
                         </Grid.Col>
                         <Grid.Col span={12}>
-                            {serviceTypeRequiringConfig.includes(selectedService) && (
+                            {serviceTypeRequiringConfig.includes((selectedService || "").trim()) && (
                                 <>
                                     <TextInput
                                         label={"Custom Configuration"}
@@ -421,9 +499,10 @@ const Hydra = () => {
                         </Grid.Col>
                     </Grid>
 
-                    <Button type={"submit"} color="cyan">
+                    <Button type={"submit"} color="cyan" disabled={isSubmitDisabled}>
                         Crack
                     </Button>
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
