@@ -1,80 +1,260 @@
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Container, Title, Text, Card, Stack, Badge, Button, Group } from "@mantine/core";
-import {
-    BeginnerGuideLessonContentFormat,
-    BeginnerInformationContent,
-} from "../BeginnerGuideLessonContent/BeginnerGuideLessonContent";
-import { IconBook, IconArrowRight, IconCheck } from "@tabler/icons";
-import BGuideLesson from "../BeginnerGuideLessonPage/BeginnerGuideLessonPage";
+import React, { useState } from "react";
+import { Container, Title, Text, Card, SimpleGrid, Button, Center, Modal, Group } from "@mantine/core";
 
-const BPathPage: React.FC = () => {
-    const navigate = useNavigate();
-    const params = useParams<{ lessonId?: string }>();
+interface Lesson {
+<<<<<<< HEAD
+  title: string;
+  folder: string;      // folder name for slideshow images
+  slideCount: number;  // number of slides in slideshow
+  image: string;       // tile image location
+}
 
-    // Handle navigation to specific lesson
-    const navigateToLesson = (lessonIndex: number): void => {
-        navigate(`/beginner-guides/lesson${lessonIndex + 1}`);
+const lessons: Lesson[] = [
+  { title: "Introduction to Pentesting", folder: "intro", slideCount: 9, image: "resources/images/introimg.png" },
+  { title: "Lesson 1: Scanning", folder: "scanning", slideCount: 6, image: "resources/images/lesson1img.png" },
+  { title: "Lesson 2: Enumeration", folder: "enumeration", slideCount: 6, image: "resources/images/lesson2img.png" },
+  { title: "Lesson 3: Exploitation", folder: "exploitation", slideCount: 6, image: "resources/images/lesson3img.png" },
+];
+
+const BeginnerSection: React.FC = () => {
+  const [slideshowOpen, setSlideshowOpen] = useState(false);
+  const [activeLessonIndex, setActiveLessonIndex] = useState(0);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);``
+
+  const openSlideshow = (lessonIndex: number) => {
+    console.log("Opening slideshow for lesson:", lessons[lessonIndex].title);
+    setActiveLessonIndex(lessonIndex);
+    setActiveSlideIndex(0);
+    setSlideshowOpen(true);
+  };
+
+  const nextSlide = () => {
+    setActiveSlideIndex(idx => Math.min(idx + 1, lessons[activeLessonIndex].slideCount - 1));
+  };
+
+  const prevSlide = () => {
+    setActiveSlideIndex(idx => Math.max(idx - 1, 0));
+  };
+
+  const currentSlideUrl = `/lessons/${lessons[activeLessonIndex].folder}/Slide${activeSlideIndex + 1}.PNG`;
+
+  console.log("Current slide URL:", currentSlideUrl);
+
+  return (
+    <Container fluid>
+      <Center mb="md">
+        <Title order={2}>Beginner Section</Title>
+      </Center>
+      <Text align="center" mb="lg">
+        Click a lesson's button to open its slideshow.
+      </Text>
+      <SimpleGrid cols={4} spacing="lg">
+        {lessons.map((lesson, idx) => (
+          <Card key={lesson.title} shadow="md" p="lg" radius="md" withBorder>
+            <Center>
+              <img
+                src={lesson.image}
+                alt={`${lesson.title} preview`}
+                style={{
+                  width: 500,
+                  height: 320,
+                  objectFit: "cover",
+                  borderRadius: 8,
+                  marginBottom: 16,
+                }}
+              />
+            </Center>
+            <Center>
+              <Text weight={600} mb="sm" align="center">{lesson.title}</Text>
+            </Center>
+            <Center>
+              <Button variant="outline" color="blue" onClick={() => openSlideshow(idx)}>
+                Open {lesson.title} Slideshow
+              </Button>
+            </Center>
+          </Card>
+        ))}
+      </SimpleGrid>
+
+      <Modal
+        opened={slideshowOpen}
+        onClose={() => setSlideshowOpen(false)}
+        centered
+        size="auto"
+        title={`${lessons[activeLessonIndex].title} — Slide ${activeSlideIndex + 1}`}
+      >
+        <Center>
+        <img
+            src={currentSlideUrl}
+            alt={`Slide ${activeSlideIndex + 1}`}
+            style={{
+              maxWidth: "90vw",   // take up 90% of the viewport width
+              maxHeight: "80vh",  // take up 80% of the viewport height
+              objectFit: "contain",
+            }}
+            onError={(e) => {
+              console.error(`Failed to load slide image: ${currentSlideUrl}`);
+              (e.target as HTMLImageElement).src = "/images/image-missing.png";
+            }}
+          />
+
+        </Center>
+        <Group position="center" mt="lg" spacing="md">
+          <Button onClick={prevSlide} disabled={activeSlideIndex === 0} variant="subtle">
+            Previous
+          </Button>
+          <Button onClick={nextSlide} disabled={activeSlideIndex === lessons[activeLessonIndex].slideCount - 1} variant="subtle">
+            Next
+          </Button>
+        </Group>
+        <Center mt="lg">
+          <Button variant="light" onClick={() => setSlideshowOpen(false)}>
+            Close
+          </Button>
+        </Center>
+      </Modal>
+    </Container>
+  );
+=======
+    title: string;
+    folder: string; // folder name for slideshow images
+    slideCount: number; // number of slides in slideshow
+    image: string; // tile image location
+}
+
+const lessons: Lesson[] = [
+    {
+        title: "Introduction to Pentesting",
+        folder: "intro",
+        slideCount: 9,
+        image: "resources/images/introimg.png",
+    },
+    {
+        title: "Lesson 1: Scanning",
+        folder: "scanning",
+        slideCount: 6,
+        image: "resources/images/lesson1img.png",
+    },
+    {
+        title: "Lesson 2: Enumeration",
+        folder: "enumeration",
+        slideCount: 6,
+        image: "resources/images/lesson2img.png",
+    },
+    {
+        title: "Lesson 3: Exploitation",
+        folder: "exploitation",
+        slideCount: 6,
+        image: "resources/images/lesson3img.png",
+    },
+];
+
+const BeginnerSection: React.FC = () => {
+    const [slideshowOpen, setSlideshowOpen] = useState(false);
+    const [activeLessonIndex, setActiveLessonIndex] = useState(0);
+    const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+    ``;
+
+    const openSlideshow = (lessonIndex: number) => {
+        console.log("Opening slideshow for lesson:", lessons[lessonIndex].title);
+        setActiveLessonIndex(lessonIndex);
+        setActiveSlideIndex(0);
+        setSlideshowOpen(true);
     };
 
-    // Check if we're on a specific lesson page using URL params
-    if (params.lessonId) {
-        const lessonIndex = parseInt(params.lessonId, 10) - 1;
-        if (lessonIndex >= 0 && lessonIndex < BeginnerInformationContent.length) {
-            return <BGuideLesson lessonIndex={lessonIndex} />;
-        }
-    }
+    const nextSlide = () => {
+        setActiveSlideIndex((idx) => Math.min(idx + 1, lessons[activeLessonIndex].slideCount - 1));
+    };
 
-    // Show beginners guide home page if no specific lesson is selected
+    const prevSlide = () => {
+        setActiveSlideIndex((idx) => Math.max(idx - 1, 0));
+    };
+
+    const currentSlideUrl = `/lessons/${lessons[activeLessonIndex].folder}/Slide${activeSlideIndex + 1}.PNG`;
+
+    console.log("Current slide URL:", currentSlideUrl);
+
     return (
         <Container fluid>
-            <Stack spacing="md" p="md">
-                <Title order={2}>Beginner Guide Home Page</Title>
-                <Text>Select a lesson to begin your penetration testing journey.</Text>
+            <Center mb="md">
+                <Title order={2}>Beginner Section</Title>
+            </Center>
+            <Text align="center" mb="lg">
+                Click a lesson's button to open its slideshow.
+            </Text>
+            <SimpleGrid cols={4} spacing="lg">
+                {lessons.map((lesson, idx) => (
+                    <Card key={lesson.title} shadow="md" p="lg" radius="md" withBorder>
+                        <Center>
+                            <img
+                                src={lesson.image}
+                                alt={`${lesson.title} preview`}
+                                style={{
+                                    width: 500,
+                                    height: 320,
+                                    objectFit: "cover",
+                                    borderRadius: 8,
+                                    marginBottom: 16,
+                                }}
+                            />
+                        </Center>
+                        <Center>
+                            <Text weight={600} mb="sm" align="center">
+                                {lesson.title}
+                            </Text>
+                        </Center>
+                        <Center>
+                            <Button variant="outline" color="blue" onClick={() => openSlideshow(idx)}>
+                                Open {lesson.title} Slideshow
+                            </Button>
+                        </Center>
+                    </Card>
+                ))}
+            </SimpleGrid>
 
-                <Stack spacing="sm">
-                    {BeginnerInformationContent.map((lesson: BeginnerGuideLessonContentFormat, index: number) => (
-                        <Card key={index} withBorder shadow="sm" radius="md" p="md">
-                            <Stack spacing="xs">
-                                <Group position="apart">
-                                    <Group spacing="xs">
-                                        <IconBook size={20} />
-                                        <Title order={4}>{lesson.lessonName}</Title>
-                                        <Badge color="blue" size="sm" variant="filled">
-                                            {lesson.lessonDifficulty}
-                                        </Badge>
-                                        {lesson.lessonCompletionStatus && (
-                                            <Badge color="green" size="sm" variant="filled">
-                                                <Group spacing="xs">
-                                                    <IconCheck size={14} />
-                                                    <Text size="xs">Completed</Text>
-                                                </Group>
-                                            </Badge>
-                                        )}
-                                    </Group>
-                                    <Button
-                                        rightIcon={<IconArrowRight size={16} />}
-                                        onClick={() => navigateToLesson(index)}
-                                        color={lesson.lessonCompletionStatus ? "green" : "blue"}
-                                    >
-                                        {lesson.lessonCompletionStatus ? "Review" : "Start"} Lesson
-                                    </Button>
-                                </Group>
-                                <Text color="dimmed">{lesson.lessonDescription}</Text>
-                                <Text size="sm">
-                                    {lesson.lessonContent.reduce(
-                                        (total, section) => total + section.pageContent.length,
-                                        0
-                                    )}{" "}
-                                    sections
-                                </Text>
-                            </Stack>
-                        </Card>
-                    ))}
-                </Stack>
-            </Stack>
+            <Modal
+                opened={slideshowOpen}
+                onClose={() => setSlideshowOpen(false)}
+                centered
+                size="auto"
+                title={`${lessons[activeLessonIndex].title} — Slide ${activeSlideIndex + 1}`}
+            >
+                <Center>
+                    <img
+                        src={currentSlideUrl}
+                        alt={`Slide ${activeSlideIndex + 1}`}
+                        style={{
+                            maxWidth: "90vw", // take up 90% of the viewport width
+                            maxHeight: "80vh", // take up 80% of the viewport height
+                            objectFit: "contain",
+                        }}
+                        onError={(e) => {
+                            console.error(`Failed to load slide image: ${currentSlideUrl}`);
+                            (e.target as HTMLImageElement).src = "/images/image-missing.png";
+                        }}
+                    />
+                </Center>
+                <Group position="center" mt="lg" spacing="md">
+                    <Button onClick={prevSlide} disabled={activeSlideIndex === 0} variant="subtle">
+                        Previous
+                    </Button>
+                    <Button
+                        onClick={nextSlide}
+                        disabled={activeSlideIndex === lessons[activeLessonIndex].slideCount - 1}
+                        variant="subtle"
+                    >
+                        Next
+                    </Button>
+                </Group>
+                <Center mt="lg">
+                    <Button variant="light" onClick={() => setSlideshowOpen(false)}>
+                        Close
+                    </Button>
+                </Center>
+            </Modal>
         </Container>
     );
+>>>>>>> 3378cb1 (Yarn prettier run)
 };
 
-export default BPathPage;
+export default BeginnerSection;
