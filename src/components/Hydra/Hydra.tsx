@@ -10,9 +10,6 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { FilePicker } from "../FileHandler/FilePicker";
 
-/**
- * Represents the form values for the Hydra component.
- */
 interface FormValuesType {
     loginInputType: string;
     loginArgs: string;
@@ -26,7 +23,6 @@ interface FormValuesType {
     optionalConfig: string;
 }
 
-//Deals with the generatedfilepath unique identifier that is added at the end of a file
 const cleanFileName = (filePath: string): string => {
     const parts = filePath.split("_");
     const baseFileName = parts[0];
@@ -34,7 +30,6 @@ const cleanFileName = (filePath: string): string => {
 };
 
 const Hydra = () => {
-    // Component State Variables.
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState("");
     const [pid, setPid] = useState("");
@@ -46,7 +41,6 @@ const Hydra = () => {
     const [hasSaved, setHasSaved] = useState(false);
     const [fileNames, setFileNames] = useState<string[]>([]);
 
-    // Component Constants.
     const title = "Hydra";
     const description =
         "Hydra is a parallelized login cracker which supports numerous protocols to attack. It is very fast and flexible, and new modules are easy to add.";
@@ -96,7 +90,6 @@ const Hydra = () => {
         "Telnet",
     ];
 
-    // Form hook to handle form input. Use form as the single source of truth for selects.
     let form = useForm({
         initialValues: {
             loginInputType: "Single Login",
@@ -112,7 +105,6 @@ const Hydra = () => {
         },
     });
 
-    // Defensive trimmed comparisons based on form values
     const currentLoginType = (form.values.loginInputType || "").trim();
     const currentPasswordType = (form.values.passwordInputType || "").trim();
 
@@ -123,9 +115,7 @@ const Hydra = () => {
     const isPasswordSet = currentPasswordType === "Character Set";
     const isPasswordBasic = currentPasswordType === "Basic";
 
-    // Combined mount-time behavior: check availability + basic sanity
     useEffect(() => {
-        // 1) Check command availability
         const checkCommands = async () => {
             try {
                 const isAvailable = await checkAllCommandsAvailability(dependencies);
@@ -139,50 +129,15 @@ const Hydra = () => {
         };
         checkCommands();
 
-        // 2) Mount-time sanity check: ensure there will be a username and password source
-        const trim = (s?: string) => (s || "").trim();
-
-        const hasLoginSource =
-            (form.values.loginInputType === "Single Login" && trim(form.values.loginArgs) !== "") ||
-            (form.values.loginInputType === "File" && fileNames.length > 0);
-
-        const hasPasswordSource =
-            (form.values.passwordInputType === "Single Password" && trim(form.values.passwordArgs) !== "") ||
-            (form.values.passwordInputType === "File" && fileNames.length > 0) ||
-            (form.values.passwordInputType === "Character Set" && trim(form.values.passwordArgs) !== "") ||
-            form.values.passwordInputType === "Basic";
-
-        if (!hasLoginSource) {
-            setOutput(
-                (prev) =>
-                    prev +
-                    "\nNote: Hydra requires at least one username (-l or -L). Please provide a username (Single Login) or select a login file."
-            );
-            form.setErrors({ loginArgs: "Provide username or select a login file." });
-        }
-
-        if (!hasPasswordSource) {
-            setOutput(
-                (prev) =>
-                    prev +
-                    "\nNote: Hydra requires at least one password (-p, -P, or -e). Please provide a password (Single Password), select a password file, use Character Set, or choose Basic."
-            );
-            form.setErrors({
-                passwordArgs: "Provide password, select a password file, or choose Basic/Character Set.",
-            });
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        // ✂️ Removed writing validation warnings into console on mount
+        // Now only show inline hints + error messages on submit
     }, []);
 
-    // Helper: authoritative validation used by button and onSubmit
     const validateSubmission = (values: FormValuesType) => {
         const trim = (s?: string) => (s || "").trim();
-
         const loginType = (values.loginInputType || "").trim();
         const passwordType = (values.passwordInputType || "").trim();
 
-        // login checks
         if (loginType === "") {
             return { valid: false, message: "Select a login input type (Single Login or File)." };
         }
@@ -193,7 +148,6 @@ const Hydra = () => {
             return { valid: false, message: "Select a login file when 'File' is chosen." };
         }
 
-        // password checks
         if (passwordType === "") {
             return { valid: false, message: "Select a password input type." };
         }
@@ -207,7 +161,6 @@ const Hydra = () => {
             return { valid: false, message: "Provide character set options for 'Character Set'." };
         }
 
-        // service config check
         if (
             serviceTypeRequiringConfig.includes((selectedService || "").trim()) &&
             (!values.config || trim(values.config) === "")
@@ -248,10 +201,8 @@ const Hydra = () => {
     };
 
     const onSubmit = async (values: FormValuesType) => {
-        // run authoritative validation
         const validation = validateSubmission(values);
         if (!validation.valid) {
-            // show friendly text near form + in console output
             form.setErrors({
                 loginArgs:
                     values.loginInputType === "Single Login" && values.loginArgs.trim() === ""
@@ -262,6 +213,8 @@ const Hydra = () => {
                         ? "Provide password."
                         : undefined,
             } as any);
+
+            // ✅ Only log to console on invalid submit
             setOutput((prev) => prev + `\nError: ${validation.message}`);
             setAllowSave(true);
             return;
@@ -273,17 +226,15 @@ const Hydra = () => {
         const baseFilePath = "/home/kali";
         const args: string[] = [];
 
-        // login args
         if (values.loginInputType === "Single Login") {
             args.push("-l", `${values.loginArgs}`);
         } else if (values.loginInputType === "File") {
             const fileToSend = fileNames[0];
             const cleanName = cleanFileName(fileToSend);
             const dataUploadPath = `${baseFilePath}/${cleanName}`;
-            args.push("-L", dataUploadPath); // -L for username list file
+            args.push("-L", dataUploadPath);
         }
 
-        // password args
         if (values.passwordInputType === "Single Password") {
             args.push("-p", `${values.passwordArgs}`);
         } else if (values.passwordInputType === "File") {
@@ -297,12 +248,10 @@ const Hydra = () => {
             args.push("-e", `${values.nsr}`);
         }
 
-        // threads
         if (values.threads) {
             args.push("-t", `${values.threads}`);
         }
 
-        // service / service args
         if (serviceTypeRequiringConfig.includes((selectedService || "").trim())) {
             args.push(`${values.serviceArgs}`, `${(selectedService || "").toLowerCase()}`, `${values.config}`);
         } else {
@@ -335,7 +284,6 @@ const Hydra = () => {
         setAllowSave(false);
     }, [setOutput]);
 
-    // lightweight derived disabled state for the submit button
     const isSubmitDisabled =
         loading ||
         !validateSubmission({
@@ -367,31 +315,23 @@ const Hydra = () => {
                     dependencies={dependencies}
                 ></InstallationModal>
             )}
-            <form
-                onSubmit={form.onSubmit((values) =>
-                    onSubmit({
-                        ...values,
-                    })
-                )}
-            >
+            <form onSubmit={form.onSubmit((values) => onSubmit({ ...values }))}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Grid>
                         <Grid.Col span={12}>
+                            {/* 🔧 Removed placeholder prop, added empty option instead */}
                             <NativeSelect
                                 {...form.getInputProps("loginInputType")}
                                 label={"Login settings"}
-                                data={loginInputTypes}
+                                data={["", ...loginInputTypes]}
                                 required
-                                placeholder={"Select a setting"}
                             />
-
                             <Text size="sm" color="dimmed">
-                                Hydra requires at least one username and password source. If you need to try an empty
-                                username/password, create a list file containing an empty line or use a placeholder such
-                                as <code>anonymous</code>.
+                                Hydra requires at least one username and password source.
                             </Text>
                         </Grid.Col>
+
                         <Grid.Col span={12}>
                             {isLoginSingle && (
                                 <TextInput
@@ -416,11 +356,11 @@ const Hydra = () => {
 
                     <Grid>
                         <Grid.Col span={12}>
+                            {/* 🔧 Removed placeholder prop, added empty option */}
                             <NativeSelect
                                 {...form.getInputProps("passwordInputType")}
                                 label={"Password settings"}
-                                data={passwordInputTypes}
-                                placeholder={"Select a setting"}
+                                data={["", ...passwordInputTypes]}
                                 required
                             />
                         </Grid.Col>
@@ -466,20 +406,13 @@ const Hydra = () => {
                                     setSelectedService(v);
                                 }}
                                 label={"Service Type"}
-                                data={serviceType}
+                                data={["", ...serviceType]} // 🔧 added empty option
                                 required
-                                placeholder={"Select a service"}
                             />
                         </Grid.Col>
                         <Grid.Col span={12}>
                             {serviceTypeRequiringConfig.includes((selectedService || "").trim()) && (
-                                <>
-                                    <TextInput
-                                        label={"Custom Configuration"}
-                                        required
-                                        {...form.getInputProps("config")}
-                                    />
-                                </>
+                                <TextInput label={"Custom Configuration"} required {...form.getInputProps("config")} />
                             )}
                         </Grid.Col>
                         <Grid.Col span={12}>
