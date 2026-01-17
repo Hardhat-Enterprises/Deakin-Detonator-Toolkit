@@ -46,7 +46,7 @@ const Arping = () => {
         "Step 3: Specify the network interface to use for sending ARP requests.\n" +
         "Step 4: Check the verbose mode to get detailed output.\n"; // Description providing information about the Arping component.
     const sourceLink = "http://github.com/ThomasHabets/arping"; // Link to the source code
-    const tutorial = "https://www.kali.org/tools/arping/"; // Link to the official documentation/tutorial
+    const tutorial = "https://hackmd.io/@zee-10/HkLGaIdBZe"; // Link to the official documentation/tutorial
     const dependencies = ["arping"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input
