@@ -49,7 +49,8 @@ function Whois() {
         "Step 2: Start the lookup to gather registration information.\n" +
         "Step 3: Review the output.\n";
     const sourceLink = "https://github.com/weppos/whois";
-    const tutorial = "https://docs.google.com/document/d/1n-QxEXGDOdOlYZ13OGQPV7QdnOEsJF4vPtObGy0vYbs/edit?usp=sharing";
+    const tutorial = "https://docs.google.com/document/d/1-T5fjGvZ_QcYBboZtgCfDj5fDdWj0vwaM15-Hb-O_ks/preview";
+
     const dependencies = ["whois"];
 
     // Form hook to handle form input — validation ONLY here
