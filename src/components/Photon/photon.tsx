@@ -77,7 +77,7 @@ const Photon = () => {
         "Step 4: Click Start Photon to begin scanning.\n" +
         "Step 5: View the output results displayed below.";
     const sourceLink = "https://www.kali.org/tools/photon/";
-    const tutorial = "https://docs.google.com/document/d/1KhrGuwq3N3NHzLmxTV_7s8buNy2ykOVX3alfx_C7V8s/edit?usp=sharing";
+    const tutorial = "https://docs.google.com/document/d/1PYtWtrtTsXpjh12qIFdHksNUF4e27L-_WP-Xka44Y4M/edit?usp=sharing";
     const dependencies = ["photon"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
