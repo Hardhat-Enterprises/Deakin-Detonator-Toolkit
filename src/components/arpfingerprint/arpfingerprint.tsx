@@ -36,7 +36,7 @@ function ARPFingerprinting() {
         "Step 2: Click Scan to start ARP fingerprinting.\n" +
         "Step 3: View the Output block below to see the fingerprinting results.";
     const sourceLink = "https://www.kali.org/tools/arp-scan/#arp-fingerprint";
-    const tutorial = "https://docs.google.com/document/d/1PLMdKlXsbzYI9rF25Fo_Gv8aDJvtai0s09hPjM7NA6w/edit?usp=sharing";
+    const tutorial = "https://docs.google.com/document/d/1f38zDXstBs1qoOpcWYj7tpLk5B7AfL00/edit"; // Link to the official documentation/tutorial
 
     // Check for the exact binary we call
     const dependencies = ["arp-fingerprint"];
