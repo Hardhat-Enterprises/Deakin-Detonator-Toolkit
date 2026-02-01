@@ -209,6 +209,15 @@ const PayloadGenerator = () => {
     const onSubmit = async () => {
         setLoading(true);
         setAllowSave(true);
+if (form.values.lport) {
+        const port = Number(form.values.lport);
+
+        if (!Number.isInteger(port) || port < 1 || port > 65535) {
+            setLoading(false);
+            setOutput("Error: LPORT must be a valid number between 1 and 65535.");
+            return;
+        }
+    }
         const args = [];
 
         if (isCustomMode) {
