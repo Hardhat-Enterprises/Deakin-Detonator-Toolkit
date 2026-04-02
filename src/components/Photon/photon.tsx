@@ -153,6 +153,11 @@ const Photon = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+	if (values.threads && (!/^\d+$/.test(values.threads.trim()) || parseInt(values.threads) < 1)) {
+    setOutput("Error: Threads must be a positive whole number (e.g. 4)");
+    setLoading(false);
+    return;
+}
 
         // Create the arguments array for the command
         const args = [];
