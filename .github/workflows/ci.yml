@@ -114,7 +114,7 @@ jobs:
                   rm javadb.tar.gz
 
             - name: Run Trivy vulnerability scanner in repo mode
-              uses: aquasecurity/trivy-action@0.28.0
+              uses: aquasecurity/trivy-action@0.33.1
               with:
                   scan-type: "fs"
                   ignore-unfixed: true
