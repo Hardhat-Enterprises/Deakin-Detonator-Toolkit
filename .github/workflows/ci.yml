@@ -33,17 +33,14 @@ jobs:
         needs: dependencies
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+            - uses: actions/checkout@v4
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
+            - uses: actions/setup-node@v4
               with:
                   node-version: 20
                   cache: npm
 
-            - name: Install dependencies
-              run: npm install
+            - run: npm install
 
             - name: Run style check
               run: npm run style
@@ -53,17 +50,14 @@ jobs:
         needs: dependencies
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+            - uses: actions/checkout@v4
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
+            - uses: actions/setup-node@v4
               with:
                   node-version: 20
                   cache: npm
 
-            - name: Install dependencies
-              run: npm install
+            - run: npm install
 
             - name: Run tests
               run: npm run test
@@ -73,64 +67,16 @@ jobs:
         needs: dependencies
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+            - uses: actions/checkout@v4
 
-            - name: Set current date
-              id: date
-              run: echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
-
-            - name: Restore Trivy Cache
-              id: cache
-              uses: actions/cache@v4
+            - name: Run Trivy scanner
+              uses: aquasecurity/trivy-action@v0.33.1
               with:
-                  path: ${{ github.workspace }}/.cache/trivy
-                  key: cache-trivy-${{ steps.date.outputs.date }}
-                  restore-keys: |
-                      cache-trivy-${{ steps.date.outputs.date }}
-
-            - name: Set TRIVY_SKIP_DB_UPDATE environment variable
-              if: steps.cache.outputs.cache-hit == 'true'
-              run: echo "TRIVY_SKIP_DB_UPDATE=true" >> $GITHUB_ENV
-
-            - name: Set TRIVY_SKIP_JAVA_DB_UPDATE environment variable
-              if: steps.cache.outputs.cache-hit == 'true'
-              run: echo "TRIVY_SKIP_JAVA_DB_UPDATE=true" >> $GITHUB_ENV
-
-            - name: Download and Extract Trivy DB (on cache miss)
-              if: steps.cache.outputs.cache-hit != 'true'
-              run: |
-                  mkdir -p $GITHUB_WORKSPACE/.cache/trivy/db
-                  oras pull ghcr.io/aquasecurity/trivy-db:2
-                  tar -xzf db.tar.gz -C $GITHUB_WORKSPACE/.cache/trivy/db
-                  rm db.tar.gz
-
-            - name: Download and Extract Java DB (on cache miss)
-              if: steps.cache.outputs.cache-hit != 'true'
-              run: |
-                  mkdir -p $GITHUB_WORKSPACE/.cache/trivy/java-db
-                  oras pull ghcr.io/aquasecurity/trivy-java-db:1
-                  tar -xzf javadb.tar.gz -C $GITHUB_WORKSPACE/.cache/trivy/java-db
-                  rm javadb.tar.gz
-
-            - name: Run Trivy vulnerability scanner in repo mode
-              uses: aquasecurity/trivy-action@0.33.1
-              with:
-                  scan-type: "fs"
+                  scan-type: fs
                   ignore-unfixed: true
-                  format: "table"
-                  severity: "HIGH,CRITICAL"
+                  format: table
+                  severity: HIGH,CRITICAL
                   exit-code: 1
-              env:
-                  TRIVY_SKIP_DB_UPDATE: ${{ env.TRIVY_SKIP_DB_UPDATE }}
-                  TRIVY_SKIP_JAVA_DB_UPDATE: ${{ env.TRIVY_SKIP_JAVA_DB_UPDATE }}
-
-            - name: Save updated Trivy Cache (on cache miss)
-              if: steps.cache.outputs.cache-hit != 'true'
-              uses: actions/cache/save@v4
-              with:
-                  path: ${{ github.workspace }}/.cache/trivy
-                  key: cache-trivy-${{ steps.date.outputs.date }}
 
             - name: Run TruffleHog scan
               run: |
@@ -143,17 +89,14 @@ jobs:
         needs: dependencies
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+            - uses: actions/checkout@v4
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
+            - uses: actions/setup-node@v4
               with:
                   node-version: 20
                   cache: npm
 
-            - name: Install dependencies
-              run: npm install
+            - run: npm install
 
             - name: Build project
               run: npm run build
