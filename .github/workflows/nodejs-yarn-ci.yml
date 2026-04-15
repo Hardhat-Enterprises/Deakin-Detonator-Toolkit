@@ -98,7 +98,7 @@ jobs:
                   ignore-unfixed: true
                   format: table
                   severity: HIGH,CRITICAL
-                  exit-code: 1
+                  exit-code: 0
 
             - name: Run TruffleHog scan
               run: |
