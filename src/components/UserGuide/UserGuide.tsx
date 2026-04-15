@@ -1,23 +1,20 @@
-import { Title, HoverCard, Text, Tabs } from "@mantine/core";
+import { Title, HoverCard, Text, Tabs, Anchor } from "@mantine/core";
 import { IconAbacus, IconBuildingLighthouse, IconQuestionMark, IconSettings } from "@tabler/icons";
 import styles from "./UserGuide.module.css";
 import React from "react";
 
 interface ComponentProps {
-    title: string; // Title of the component. This should be strictly limited to the title.
-    description: string; // Description of the component. This should not include steps.
-    steps: string; // Steps to use the component. This should be strictly limited to the steps.
-    tutorial: string; // Tutorial for the component.
-    sourceLink: string; // Source link for the component.
-    children: React.ReactNode; // Children of the component. Used to render the configuration.
+    title: string;
+    description: string;
+    steps: string;
+    tutorial: string;
+    sourceLink: string;
+    children: React.ReactNode;
 }
 
 /**
  * Renders a user guide component with a title and description.
  * @deprecated
- * @param title - The title of the user guide.
- * @param description - The description of the user guide.
- * @returns The rendered user guide component.
  */
 export function UserGuide(title: string, description: string) {
     return (
@@ -40,8 +37,6 @@ export function UserGuide(title: string, description: string) {
 /**
  * Renders a user guide component with a hover card that displays a description.
  * @deprecated
- * @param description - The description to be displayed in the hover card.
- * @returns The rendered user guide component.
  */
 export function UserGuide2(description: string) {
     return (
@@ -60,11 +55,10 @@ export function UserGuide2(description: string) {
 
 /**
  * Renders a component with tabs for user guide, configuration, and tutorial.
- *
- * @param component - The component props.
- * @returns The rendered component.
  */
 export function RenderComponent(component: ComponentProps) {
+    const hasTutorial = component.tutorial && component.tutorial.trim() !== "";
+
     return (
         <>
             <Title align="center" style={{ paddingBottom: "10px" }}>
@@ -96,21 +90,41 @@ export function RenderComponent(component: ComponentProps) {
                     <Title>Configure {component.title}</Title>
                     {component.children}
                 </Tabs.Panel>
+
                 <Tabs.Panel value="tutorial">
                     <div className={styles.tutorialContainer}>
-                        <iframe
-                            src={component.tutorial}
-                            style={{
-                                width: "100%",
-                                height: "800px",
-                                border: "none",
-                                borderRadius: "8px",
-                                display: "block",
-                            }}
-                            title={`${component.title} Tutorial`}
-                            allowFullScreen
-                            scrolling="yes"
-                        />
+                        {hasTutorial ? (
+                            <iframe
+                                src={component.tutorial}
+                                style={{
+                                    width: "100%",
+                                    height: "800px",
+                                    border: "none",
+                                    borderRadius: "8px",
+                                    display: "block",
+                                }}
+                                title={`${component.title} Tutorial`}
+                                allowFullScreen
+                                scrolling="yes"
+                            />
+                        ) : (
+                            <div
+                                style={{
+                                    padding: "20px",
+                                    border: "1px solid #444",
+                                    borderRadius: "8px",
+                                }}
+                            >
+                                <Title order={3} mb="md">
+                                    Tutorial not available in embedded view
+                                </Title>
+                                <Text mb="sm">This tutorial cannot be displayed inside the toolkit.</Text>
+                                <Text mb="sm">Please use the source link below for more information.</Text>
+                                <Anchor href={component.sourceLink} target="_blank" rel="noopener noreferrer">
+                                    Open source/reference link
+                                </Anchor>
+                            </div>
+                        )}
                     </div>
                 </Tabs.Panel>
             </Tabs>
