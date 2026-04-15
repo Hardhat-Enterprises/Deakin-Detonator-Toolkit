@@ -92,7 +92,7 @@ jobs:
               run: corepack enable
 
             - name: Run Trivy scanner
-              uses: aquasecurity/trivy-action@v0.33.1
+              uses: aquasecurity/trivy-action@0.33.1
               with:
                   scan-type: fs
                   ignore-unfixed: true
