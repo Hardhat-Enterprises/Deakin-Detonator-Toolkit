@@ -147,11 +147,6 @@ const CloudBrute = () => {
     return;
 }
 
-.catch(() => {
-    setLoading(false);
-    setOutput("Error: Please provide a path to a correct wordlist file.");
-    setAllowSave(true);
-});
         setAllowSave(false);
         setHasSaved(false);
         const args = [
