@@ -140,7 +140,7 @@ const RTSort = () => {
         const dataUploadPath = `${baseFilePath}/${cleanName}`;
 
         // Construct arguments for the RTsort command based on form input
-        const args = [values.path];
+        const args = [fileNames[0]];
         const filteredArgs = args.filter((arg) => arg !== ""); // Variable to store non empty string as argument
 
         // Please note this command should not be cancelled as this will cause the rainbow table to be corrupted
