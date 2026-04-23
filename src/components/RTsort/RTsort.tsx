@@ -17,14 +17,10 @@ interface FormValuesType {
     path: string;
 }
 
-//Deals with the generatedfilepath unique identifier that is added at the end of a file
-const cleanFileName = (filePath: string): string => {
-    // Split the file name by the underscore (_) and keep the first part (before the timestamp/ID)
-    const parts = filePath.split("_");
 
-    // Keep only the base file name (before the timestamp and unique identifier)
-    const baseFileName = parts[0];
-    return baseFileName;
+// NEW - strips the timestamp/UUID suffix added by FilePicker
+const cleanFileName = (filePath: string): string => {
+    return filePath.replace(/_\d{8}T\d{9}Z_[a-f0-9-]{36}$/, "");
 };
 
 // Function for implementing RTSort as GUI component
@@ -140,7 +136,7 @@ const RTSort = () => {
         const dataUploadPath = `${baseFilePath}/${cleanName}`;
 
         // Construct arguments for the RTsort command based on form input
-        const args = [values.path];
+        const args = [cleanFileName(fileNames[0])];
         const filteredArgs = args.filter((arg) => arg !== ""); // Variable to store non empty string as argument
 
         // Please note this command should not be cancelled as this will cause the rainbow table to be corrupted
