@@ -115,11 +115,7 @@ const SearchSploit = () => {
         const hasNonSearch = values.nonSearch.trim() !== "";
 
         const areAllFieldsEmpty =
-            trimmedSearchTerm === "" &&
-            trimmedEbdId === "" &&
-            !hasSearchOption &&
-            !hasOutputType &&
-            !hasNonSearch;
+            trimmedSearchTerm === "" && trimmedEbdId === "" && !hasSearchOption && !hasOutputType && !hasNonSearch;
 
         if (areAllFieldsEmpty) {
             setValidationError("Please enter a search term or at least one filter before scanning.");
@@ -226,25 +222,25 @@ const SearchSploit = () => {
                     <TextInput label={"Search Term"} {...form.getInputProps("searchTerm")} />
 
                     <NativeSelect
-    {...form.getInputProps("searchOption")}
-    label={"Search Option"}
-    data={["", ...searchOptions]}
-    defaultValue=""
-/>
+                        {...form.getInputProps("searchOption")}
+                        label={"Search Option"}
+                        data={["", ...searchOptions]}
+                        defaultValue=""
+                    />
 
-<NativeSelect
-    {...form.getInputProps("outputType")}
-    label={"Output"}
-    data={["", ...outputTypes]}
-    defaultValue=""
-/>
+                    <NativeSelect
+                        {...form.getInputProps("outputType")}
+                        label={"Output"}
+                        data={["", ...outputTypes]}
+                        defaultValue=""
+                    />
 
-<NativeSelect
-    {...form.getInputProps("nonSearch")}
-    label={"Non-Searching"}
-    data={["", ...nonSearchOptions]}
-    defaultValue=""
-/>
+                    <NativeSelect
+                        {...form.getInputProps("nonSearch")}
+                        label={"Non-Searching"}
+                        data={["", ...nonSearchOptions]}
+                        defaultValue=""
+                    />
 
                     <TextInput
                         label={"EBD-ID"}
