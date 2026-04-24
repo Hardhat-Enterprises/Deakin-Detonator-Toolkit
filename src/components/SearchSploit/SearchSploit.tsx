@@ -125,6 +125,19 @@ const SearchSploit = () => {
             return;
         }
 
+        if (
+            trimmedEbdId !== "" &&
+            values.outputType !== "Path" &&
+            values.nonSearch !== "Mirror" &&
+            values.nonSearch !== "Examine"
+        ) {
+            setValidationError("EDB-ID can only be used with Path, Mirror, or Examine options.");
+            setOutput("");
+            setAllowSave(false);
+            setHasSaved(false);
+            return;
+        }
+
         setValidationError("");
         setOutput("");
         setAllowSave(false);
