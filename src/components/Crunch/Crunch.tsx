@@ -54,7 +54,7 @@ const Crunch = () => {
 
     const sourceLink = "https://www.kali.org/tools/crunch/"; // Link to the source code (or Kali Tools).
     const tutorial = "https://docs.google.com/document/d/1NoYLod8jyXOLAIUGU-d7Zeq_-_XDzXO-XzADKLPk72I/edit?usp=sharing"; // Link to the official documentation/tutorial.
-    const dependencies = ["Crunch"]; // Contains the dependencies required by the component.
+    const dependencies = ["crunch"]; // Contains the dependencies required by the component.
 
     //initial form values
     //Update initial value for minLength = 3, maxLength = 4, charset = abcde
@@ -127,6 +127,11 @@ const Crunch = () => {
         setAllowSave(false);
 
         setLoading(true);
+	if (values.minLength > values.maxLength) {
+    setOutput("Error: Minimum length cannot be greater than maximum length.");
+    setLoading(false);
+    return;
+}
 
         const args = [`${values.minLength}`, `${values.maxLength}`, `${values.charset}`];
 
