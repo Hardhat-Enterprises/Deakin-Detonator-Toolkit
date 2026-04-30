@@ -12,6 +12,8 @@ import { generateFilePath } from "../FileHandler/FileHandler";
 
 interface FormValuesType {
     hashValue: string;
+    tablePath: string;
+
 }
 
 const RainbowCrack = () => {
@@ -49,6 +51,7 @@ const RainbowCrack = () => {
     const form = useForm<FormValuesType>({
         initialValues: {
             hashValue: "",
+	    tablePath: "/tmp/ddt/Rainbowcrack/",
         },
     });
 
@@ -90,7 +93,7 @@ const RainbowCrack = () => {
         setLoading(true);
         setAllowSave(false);
 
-        const args = ["."];
+        const args = [values.tablePath || "."];
         if (fileNames.length === 0) {
             args.push("-h", values.hashValue);
         } else {
@@ -148,10 +151,9 @@ const RainbowCrack = () => {
 
                     {fileNames.length === 0 ? (
                         <TextInput
-                            label="Hash Value"
-                            required
-                            value={form.values.hashValue}
-                            onChange={(event) => form.setFieldValue("hashValue", event.currentTarget.value)}
+                            label="Path to Rainbow Tables directory"
+			    placeholder="e.g. /tmp/ddt/Rainbowcrack/"
+    {...form.getInputProps("tablePath")}
                         />
                     ) : (
                         <div>
