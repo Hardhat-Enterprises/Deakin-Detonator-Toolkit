@@ -53,6 +53,25 @@ const RainbowCrack = () => {
             hashValue: "",
 	    tablePath: "/tmp/ddt/Rainbowcrack/",
         },
+        validate: {
+            hashValue: (value) => {
+                if (fileNames.length > 0) return null; // skip validation when file is used
+                const normalized = value.trim().toLowerCase();
+
+                const isHex = /^[a-f0-9]+$/.test(normalized);
+
+                if (!isHex) return "Hash must be hexadecimal.";
+
+                const length = normalized.length;
+
+                const validLengths = [32, 40, 64]; // MD5/NTLM/LM, SHA1, SHA256
+                if (!validLengths.includes(length)) {
+                    return "Unsupported hash length. Must be 32, 40, or 64 characters.";
+                }
+
+                return null;
+            },
+        },
     });
 
     useEffect(() => {
@@ -151,9 +170,17 @@ const RainbowCrack = () => {
 
                     {fileNames.length === 0 ? (
                         <TextInput
+
                             label="Path to Rainbow Tables directory"
 			    placeholder="e.g. /tmp/ddt/Rainbowcrack/"
     {...form.getInputProps("tablePath")}
+
+                            label="Hash Value"
+                            required
+                            value={form.values.hashValue}
+                            onChange={(event) => form.setFieldValue("hashValue", event.currentTarget.value)}
+                            error={form.errors.hashValue}
+
                         />
                     ) : (
                         <div>
