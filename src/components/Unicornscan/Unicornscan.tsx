@@ -33,7 +33,7 @@ const Unicornscan = () => {
     const [pid, setPid] = useState("");
 
     // New state for dropdown selection
-    const [selectedScanType, setSelectedScanType] = useState("");
+    const [selectedScanType, setSelectedScanType] = useState("TCP Scan (-mT)");
     const [rate, setRate] = useState("");
     const [sourcePort, setSourcePort] = useState("");
     const [sourceIP, setSourceIP] = useState("");
@@ -117,34 +117,44 @@ const Unicornscan = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-        let args = [values.targetIP];
 
-        // Add the selected scan type to the arguments
-        if (selectedScanType === "TCP Scan (-mT)") {
-            args.push("-mT");
-        } else if (selectedScanType === "UDP Scan (-mU)") {
-            args.push("-mU");
+        let args: string[] = [];
+
+        // Add interface first
+        if (interfaceName) {
+            args.push("-i", interfaceName);
+        } else {
+            args.push("-i", "eth0");
         }
 
-        // Include additional flags if they are set
-        if (rate) args.push(`-r ${rate}`);
-        if (sourcePort) args.push(`-e ${sourcePort}`);
-        if (sourceIP) args.push(`-g ${sourceIP}`);
-        if (interfaceName) args.push(`-i ${interfaceName}`);
-        if (ports) args.push(`-p ${ports}`);
+        // Add scan type
+        if (selectedScanType === "UDP Scan (-mU)") {
+            args.push("-mU");
+        } else {
+            args.push("-mT");
+        }
 
-        CommandHelper.runCommandWithPkexec("unicornscan", [...args, "-Iv"], handleProcessData, handleProcessTermination)
+        // Add optional flags as separate args
+        if (rate) args.push("-r", rate);
+        if (sourcePort) args.push("-s", sourcePort);
+        if (sourceIP) args.push("-g", sourceIP);
+
+        // Add target IP with optional ports at the end
+        const target = ports ? `${values.targetIP}:${ports}` : values.targetIP;
+        args.push(target);
+
+        // Add verbose flag last
+        args.push("-Iv");
+
+        CommandHelper.runCommandWithPkexec("unicornscan", args, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
-                // Update the UI with the results from the executed command
                 setOutput(output);
                 setAllowSave(true);
                 console.log(pid);
                 setPid(pid);
             })
             .catch((error) => {
-                // Display any errors encountered during command execution
                 setOutput(error.message);
-                // Deactivate loading state
                 setLoading(false);
                 setAllowSave(true);
             });
