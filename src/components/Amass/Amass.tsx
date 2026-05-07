@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
+import { Button, Stack, TextInput, Alert, Group, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -18,10 +18,6 @@ interface FormValuesType {
     domain: string;
 }
 
-/**
- * The Amass component.
- * @returns The Amass component.
- */
 export function Amass() {
     // Component State Variables.
     const [loading, setLoading] = useState(false);
@@ -34,7 +30,7 @@ export function Amass() {
     const [loadingModal, setLoadingModal] = useState(true);
     const [chatGPTResponse, setChatGPTResponse] = useState("");
     const [showAlert, setShowAlert] = useState(true);
-    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
+    const alertTimeout = useRef<number | null>(null);
 
     // Component Constants.
     const title = "Amass";
@@ -50,10 +46,37 @@ export function Amass() {
     const tutorial = "https://docs.google.com/document/d/1t7YrU1qMx9agtTsxorAkk__OZ88UIq9V4M3CVkDqmxE/edit?usp=sharing";
     const dependencies = ["amass"];
 
-    // Form hook to handle form input.
+    // Pattern implemented for validation process.
+    const domainPatternString = "^(?!-)(?:[a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,}$";
+    const domainRegex = new RegExp(domainPatternString);
+
+    // Normalizing domain input.
+    function normalizeDomain(value: unknown): string {
+        const raw = String(value ?? "");
+        return raw.trim().toLowerCase();
+    }
+
+    // Form hook to handle input with validation.
     let form = useForm<FormValuesType>({
         initialValues: {
             domain: "",
+        },
+        validate: {
+            domain: (value) => {
+                const normalized = normalizeDomain(value);
+
+                // Checks for internal whitespace and throws error when detected.
+                if (/\s/.test(normalized)) {
+                    return "Error: Domain contains spaces! Remove all internal spaces and try again!";
+                }
+
+                // Checks trimmed input against the designated pattern.
+                if (!domainRegex.test(normalized)) {
+                    return "Error: Invalid domain format! Please enter a valid domain!";
+                }
+
+                return null;
+            },
         },
     });
 
@@ -118,10 +141,15 @@ export function Amass() {
         setAllowSave(false);
     };
 
+    // Rebuilt with input validation supporting the input form.
     const onSubmit = (values: FormValuesType) => {
+        const domain = normalizeDomain(values.domain);
+
+        // Runs Amass if the validation process is successful.
         setAllowSave(false);
         setLoading(true);
-        const args = ["enum", "-d", values.domain];
+        const args = ["enum", "-d", domain];
+
         CommandHelper.runCommandGetPidAndOutput("amass", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 setPid(pid);
@@ -153,7 +181,7 @@ export function Amass() {
                     setOpened={setOpened}
                     feature_description={description}
                     dependencies={dependencies}
-                ></InstallationModal>
+                />
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Group position="right">
