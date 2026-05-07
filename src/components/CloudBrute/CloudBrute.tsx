@@ -141,6 +141,11 @@ const CloudBrute = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+	if (!values.wordlist.trim() || !/^(\/[^\s]+)+$/.test(values.wordlist.trim())) {
+    setOutput("Error: Please provide a valid absolute path to a wordlist file (e.g. /usr/share/dirb/wordlists/common.txt)");
+    setLoading(false);
+    return;
+}
         setAllowSave(false);
         setHasSaved(false);
         const args = [
