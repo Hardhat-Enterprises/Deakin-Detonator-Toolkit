@@ -90,18 +90,21 @@ export function FilePicker({
                     input: { display: "none" }, // Hide the native input
                 }}
             />
-            {fileNames.length === 0 && ( //Only show upload icon when no file is selected
-                <label
-                    style={{ cursor: "pointer", display: "inline-block" }}
-                    onClick={() => {
-                        const fileInput = document.querySelector("input[type='file']") as HTMLInputElement;
-                        fileInput?.click(); // Using type assertion to ensure it's an HTMLInputElement
-                    }}
-                >
-                    <img src="https://www.svgrepo.com/show/499790/upload.svg" alt="Upload" width={80} height={80} />
-                    <div style={{ fontSize: "14px", color: "#666" }}>{placeholderText}</div>
-                </label>
-            )}
+            <label
+                style={{ cursor: "pointer", display: "inline-block" }}
+                onClick={() => {
+                    const fileInput = document.querySelector("input[type='file']") as HTMLInputElement;
+                    fileInput?.click(); // Using type assertion to ensure it's an HTMLInputElement
+                }}
+            >
+                <img
+                    src="https://static-00.iconduck.com/assets.00/cloud-upload-icon-2048x2048-fej4g14p.png"
+                    alt="Upload"
+                    width={80}
+                    height={80}
+                />
+                <div style={{ fontSize: "14px", color: "#666" }}>{placeholderText}</div>
+            </label>
         </div>
     );
 }
