@@ -176,6 +176,12 @@ const JohnTheRipper = () => {
      * @param {FormValuesType} values - The form values, containing the filepath, hash, crack mode, and other options.
      */
     const onSubmit = async (values: FormValuesType) => {
+        // Validate that a file has been selected before proceeding.
+        if (!fileNames || fileNames.length === 0) {
+            setOutput("Error: No input file selected. Please select a file before attempting to crack.");
+            return;
+        }
+
         // Activate loading state to indicate ongoing process.
         setLoading(true);
 
@@ -307,6 +313,11 @@ const JohnTheRipper = () => {
                         labelText="File (Can only select files in /home/kali)"
                         placeholderText="Click to select file(s)"
                     />
+                    {fileNames.length > 0 && (
+                        <div style={{ fontSize: "16px", color: "#aaa", marginTop: "8px", textAlign: "center" }}>
+                            <strong>Uploaded File:</strong> {cleanFileName(fileNames[0])}
+                        </div>
+                    )}
                     <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
                     <NativeSelect
                         value={selectedModeOption}
