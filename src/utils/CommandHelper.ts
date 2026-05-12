@@ -167,4 +167,28 @@ export const CommandHelper = {
             }
         });
     },
+    /**
+     * Checks whether the given commands are available on the system.
+     * Runs each command with a version flag and considers it unavailable
+     * if it produces an error or stderr output.
+     *
+     * @param commands Array of command names to verify (e.g., ["nmap"])
+     * @returns Promise resolving to true if all commands are available, false otherwise
+     */
+    async checkAllCommandsAvailability(commands: string[]): Promise<boolean> {
+        try {
+            for (const cmd of commands) {
+                const command = new Command(cmd, ["--version"]); // or ["-v"]
+                const handle = await command.execute();
+
+                // if it fails, stderr will probably have something
+                if (handle.stderr && handle.stderr.trim().length > 0) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (err) {
+            return false;
+        }
+    },
 };
