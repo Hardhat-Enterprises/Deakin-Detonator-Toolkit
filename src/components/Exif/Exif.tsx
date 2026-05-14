@@ -142,7 +142,14 @@ const ExifTool = () => {
      * @param {FormValuesType} values - The form values containing the target domain.
      */
     const onSubmit = async (values: FormValuesType) => {
-        setLoading(true); // Activate loading state
+       if (!fs.existsSync(values.filePath)) {
+        setOutput(
+            `Error: File not found at path "${values.filePath}".\nPlease verify the file path and try again.`
+        );
+        return;
+    }
+
+	 setLoading(true); // Activate loading state
         setAllowSave(false); // Disallow saving until the tool's execution is complete
 
         // Construct arguments for the Exif command based on form input
