@@ -130,12 +130,12 @@ function WhatWeb() {
 
         const args: string[] = [];
         if (values.inputFile) args.push(`-i ${values.inputFile}`);
-        if (values.aggression) args.push(`-a ${values.aggression}`);
+        if (values.aggression) args.push("-a", values.aggression);
         if (values.userAgent) args.push(`-U "${values.userAgent}"`);
         if (values.followRedirect) args.push(`--follow-redirect=${values.followRedirect}`);
         if (values.user) args.push(`-u ${values.user}`);
         if (values.cookie) args.push(`-c "${values.cookie}"`);
-        if (values.plugins) args.push(`-p ${values.plugins}`);
+        if (values.plugins) args.push("-p", values.plugins);
         if (values.verbose) args.push("-v");
         if (values.logFormat) args.push(`--log-${values.logFormat}=-`);
         if (values.maxThreads > 0) args.push(`-t ${values.maxThreads}`);
@@ -345,7 +345,7 @@ function WhatWeb() {
                         </Group>
 
                         <div style={{ height: fullscreen ? "80vh" : "300px" }}>
-                            <ConsoleWrapper output={formatOutput(output)} clearOutputCallback={clearOutput} />
+			<ConsoleWrapper output={formatOutput(output)} clearOutputCallback={clearOutput} />                            
                         </div>
                     </Stack>
                 </form>
