@@ -180,9 +180,9 @@ export function BEDTool() {
         const baseArgs = ["-s", values.plugin];
         const conditionalArgs: string[][] = [
             customConfig ? ["-t", values.target, "-p", values.port] : [],
-            pluginsRequiringAuth.includes(selectedPlugin) || selectedPlugin === "SMTP"
-                ? ["-u", selectedPlugin === "SMTP" ? values.email : values.username]
-                : [],
+            pluginsRequiringAuth.includes(selectedPlugin) ? ["-u", values.username] : [],
+            pluginsRequiringUsername.includes(selectedPlugin) ? ["-u", values.username] : [],
+            selectedPlugin === "SMTP" ? ["-u", values.email] : [],
             pluginsRequiringAuth.includes(selectedPlugin) ? ["-v", values.password] : [],
         ];
 
@@ -257,6 +257,12 @@ export function BEDTool() {
                         checked={customConfig}
                         onChange={(e) => setCustomConfig(e.currentTarget.checked)}
                     />
+                    {customConfig && (
+                        <Alert title="Custom Configuration" color="blue" variant="light">
+                            Custom IP address and port can now be specified for this scan. Leave these fields blank to
+                            use default settings.
+                        </Alert>
+                    )}
                     <Select
                         label="Plugin Type"
                         placeholder="Select a plugin to test"
@@ -268,28 +274,53 @@ export function BEDTool() {
                     {pluginsRequiringAuth.includes(selectedPlugin) && (
                         <>
                             <TextInput
-                                label="Username (default user is the same as your Kali Linux login)"
+                                label="Username"
+                                placeholder="Enter username for authentication"
+                                description="Default user is the same as your Kali Linux login"
                                 required
                                 {...form.getInputProps("username")}
                             />
-                            <TextInput label="Password" type="password" required {...form.getInputProps("password")} />
+                            <TextInput
+                                label="Password"
+                                type="password"
+                                placeholder="Enter the password for authentication"
+                                description="Must be at least 8 characters"
+                                required
+                                {...form.getInputProps("password")}
+                            />
                         </>
                     )}
-                    {pluginsRequiringUsername.includes(selectedPlugin) && (
-                        <TextInput label={"username"} required {...form.getInputProps("username")} />
-                    )}
-                    {pluginRequiringEmail.includes(selectedPlugin) && (
-                        <TextInput label="Email Address" required {...form.getInputProps("email")} />
+                    {pluginsRequiringUsername.includes(selectedPlugin) &&
+                        !pluginsRequiringAuth.includes(selectedPlugin) && (
+                            <TextInput
+                                label="Username"
+                                placeholder="e.g. user123"
+                                description="Enter the username required for this scan"
+                                required
+                                {...form.getInputProps("username")}
+                            />
+                        )}
+                    {selectedPlugin === "SMTP" && (
+                        <TextInput
+                            label="Email Address (used as sender in test)"
+                            placeholder="e.g. test@example.com"
+                            required
+                            {...form.getInputProps("email")}
+                        />
                     )}
                     {customConfig && (
                         <>
                             <TextInput
-                                label="Custom IP Address (default: localhost)"
+                                label="Target IP Address"
+                                placeholder="e.g. 192.168.1.1"
+                                description="Specify the IP address of the target"
                                 required
                                 {...form.getInputProps("target")}
                             />
                             <TextInput
-                                label="Port Number (default: service-specific standard port)"
+                                label="Target Port Number"
+                                placeholder="e.g. 80"
+                                description="Specify the port number of the target"
                                 required
                                 {...form.getInputProps("port")}
                             />

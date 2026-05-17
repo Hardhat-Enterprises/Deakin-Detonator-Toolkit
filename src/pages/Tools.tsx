@@ -1,23 +1,17 @@
 import { Stack, Table, Title, Select, useMantineColorScheme } from "@mantine/core";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getTools } from "../components/RouteWrapper";
 import ToolItem from "../components/ToolItem/ToolItem";
 
 const ToolsPage = () => {
-    const categories = [
-        "All",
-        "Attack Tools",
-        "File Analysis and Recovery",
-        "Information Gathering and Analysis",
-        "Miscellaneous",
-        "Network Scanning and Enumeration",
-        "Password Cracking and Authentication Testing",
-        "Vulnerability Assessment and Exploitation",
-        "Web Application Testing",
-    ];
-
     const [selectedCategory, setSelectedCategory] = useState("");
     const tools = getTools();
+
+    // Generate categories using tools data
+    const categories = useMemo(() => {
+        const uniqueCategories = new Set(tools.map((tool) => tool.category));
+        return ["All", ...Array.from(uniqueCategories).sort()];
+    }, [tools]);
 
     let colorScheme: "light" | "dark" = "light";
     try {
