@@ -39,7 +39,7 @@ const Tiger = () => {
         "Step 3: Check the results displayed in the output block or the saved report file at the specified location. ";
     const sourceLink = "https://www.kali.org/tools/tiger/";
     const dependencies = ["tiger"];
-    const tutorial = "https://docs.google.com/document/d/1bkG-s9h6bpsCWq2IW1pOJbxpCPc_ZcqNwswup_iSB5k/edit?usp=sharing";
+    const tutorial = "https://docs.google.com/document/d/1dE_S5HIlWfSedTMu0_m0YngNYASxmw0RUL0pnCblH8A/edit?usp=sharing";
 
     let form = useForm({
         initialValues: {
