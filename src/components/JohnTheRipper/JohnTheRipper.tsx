@@ -333,7 +333,7 @@ const JohnTheRipper = () => {
                     />
                     {modeRequiringWordList.includes(selectedModeOption) && (
                         <>
-                            <TextInput label={"Dictionary File Path"} required {...form.getInputProps("wordlist")} />
+                            <TextInput label={"Dictionary File Path"} required {...form.getInputProps("wordList")} />
                         </>
                     )}
                     {modeRequiringIncrementOrder.includes(selectedModeOption) && (
