@@ -48,7 +48,7 @@ const JohnTheRipper = () => {
     const [allowSave, setAllowSave] = useState(false); //   State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [selectedFileTypeOption, setSelectedFileTypeOption] = useState(""); // State variable to store the selected file type.
-    const [selectedModeOption, setSelectedModeOption] = useState(""); // State variable to store the selected crack mode.
+    const [selectedModeOption, setSelectedModeOption] = useState("incremental"); // State variable to store the selected crack mode.
     const [selectedIncrementOption, setSelectedIncrementOption] = useState(""); // State variable to store the selected increment order.
     const [fileNames, setFileNames] = useState<string[]>([]); // State variable to store the file names.
 
