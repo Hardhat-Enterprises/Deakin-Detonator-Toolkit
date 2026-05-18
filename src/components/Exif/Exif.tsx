@@ -142,34 +142,36 @@ const ExifTool = () => {
      * Handles form submission for the Exif component.
      * @param {FormValuesType} values - The form values containing the target domain.
      */
-    const onSubmit = async (values: FormValuesType) => {
-        setLoading(true); // Activate loading state
-        setAllowSave(false); // Disallow saving until the tool's execution is complete
+  const onSubmit = async (values: FormValuesType) => {
+    setLoading(true);
+    setAllowSave(false);
 
-        // Construct arguments for the Exif command based on form input
-        const args = [values.filePath];
-        if (values.actionType === "read") {
-            args.push("-" + values.tag);
-        } else if (values.actionType === "write") {
-            args.push("-" + values.tag + "=" + values.value);
-        }
+    const args = [values.filePath];
+    if (values.actionType === "read") {
+        args.push("-" + values.tag);
+    } else if (values.actionType === "write") {
+        args.push("-" + values.tag + "=" + values.value);
+    }
 
-        // Attempt to execute the exiftool command with the provided arguments.
-        // If the command fails, handle the error and deactivate the loading state.
-        try {
-            const { pid, output } = await CommandHelper.runCommandWithPkexec(
-                "exiftool",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
-            setPid(pid); // Set the process ID
-            setOutput(output); // Set the initial output
-        } catch (error: any) {
-            setOutput(`Error: ${error.message}`);
-            setLoading(false); // Deactivate loading state
+    try {
+        const { pid, output } = await CommandHelper.runCommandWithPkexec(
+            "exiftool",
+            args,
+            handleProcessData,
+            handleProcessTermination
+        );
+        setPid(pid);
+        if (!output || output.trim() === "") {
+            setOutput(`Error: File not found at path "${values.filePath}".\nPlease verify the file path and try again.`);
+            setLoading(false);
+            return;
         }
-    };
+        setOutput(output);
+    } catch (error: any) {
+        setOutput(`Error: ${error.message}`);
+        setLoading(false);
+    }
+};
 
     /**
      * clearOutput: Callback to clear the output state.
