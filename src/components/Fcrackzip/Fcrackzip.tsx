@@ -55,7 +55,7 @@ const Fcrackzip = () => {
         "Step 3: You can save output by checking 'Save Output to File'\n" +
         "Step 4: Click start cracking!";
     // Link to the tutorial
-    const tutorial = "https://docs.google.com/document/d/1VGIv2XtJWxURo35ey8PdNza4otn-SxG7ZJaHmQ7xmIs/edit?usp=sharing";
+    const tutorial = "https://docs.google.com/document/d/1m8kmNbdI3uq5Qzxaw7K3bg9b1lfOXpWC_z4_jR_rG7M/edit?tab=t.0";
     // Link to the source code
     const sourceLink = "https://www.kali.org/tools/fcrackzip/";
 
