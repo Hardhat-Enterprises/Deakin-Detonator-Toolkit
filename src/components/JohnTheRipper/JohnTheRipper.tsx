@@ -176,6 +176,12 @@ const JohnTheRipper = () => {
      * @param {FormValuesType} values - The form values, containing the filepath, hash, crack mode, and other options.
      */
     const onSubmit = async (values: FormValuesType) => {
+        // Validate that a file has been selected before proceeding.
+        if (!fileNames || fileNames.length === 0) {
+            setOutput("Error: No input file selected. Please select a file before attempting to crack.");
+            return;
+        }
+
         // Activate loading state to indicate ongoing process.
         setLoading(true);
 
