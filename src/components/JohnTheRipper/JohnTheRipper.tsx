@@ -307,6 +307,11 @@ const JohnTheRipper = () => {
                         labelText="File (Can only select files in /home/kali)"
                         placeholderText="Click to select file(s)"
                     />
+                    {fileNames.length > 0 && (
+                        <div style={{ fontSize: "16px", color: "#aaa", marginTop: "8px", textAlign: "center" }}>
+                            <strong>Uploaded File:</strong> {cleanFileName(fileNames[0])}
+                        </div>
+                    )}
                     <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
                     <NativeSelect
                         value={selectedModeOption}
