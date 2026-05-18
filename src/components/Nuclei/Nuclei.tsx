@@ -24,7 +24,7 @@ function Nuclei() {
 
     const title = "Nuclei";
     const description = "Nuclei is a fast and customizable vulnerability scanner based on simple YAML-based templates.";
-    const tutorial = "https://nuclei.projectdiscovery.io/";
+    const tutorial = "https://docs.google.com/document/d/1Blzt6KZLcI1J0CtPu6cZwU_P3HgEaRe1RQ1E-okEGTY/edit?usp=sharing";
     const sourceLink = "https://github.com/projectdiscovery/nuclei";
     const dependencies = ["nuclei"];
 
