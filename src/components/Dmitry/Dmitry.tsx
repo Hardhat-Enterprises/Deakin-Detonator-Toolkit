@@ -182,78 +182,99 @@ const dmitry = () => {
      * @param {FormValuesType} values - The values from the form input.
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
+    // Disallow saving until the tool's execution is complete
+    setAllowSave(false);
 
-        // Activate loading state to indicate ongoing process
-        setLoading(true);
+    const cleanDomain = values.domain.trim();
 
-        // Construct arguments for the dmitry command based on form input
-        const args = [];
+    if (!cleanDomain) {
+        setOutput("Error: Please enter a domain or IP address.");
+        setLoading(false);
+        return;
+    }
 
-        // Split the domain input into individual arguments
-        args.push(...values.domain.split(" "));
+    if (cleanDomain === ".") {
+        setOutput("Error: Invalid host. Please enter a valid domain or IP address.");
+        setLoading(false);
+        return;
+    }
 
-        // Add the -i flag if IP address checking is enabled
-        if (checkedIPAddress) {
-            args.push("-i");
+    if (cleanDomain.includes(" ")) {
+        setOutput("Error: Please enter a single domain or IP address without spaces.");
+        setLoading(false);
+        return;
+    }
+
+    // Activate loading state to indicate ongoing process
+    setLoading(true);
+
+    // Construct arguments for the dmitry command based on form input
+    const args = [];
+
+    // Pass the domain as a single argument
+    args.push(cleanDomain);
+
+    // Add the -i flag if IP address checking is enabled
+    if (checkedIPAddress) {
+        args.push("-i");
+    }
+
+    // Add the -w flag if domain name checking is enabled
+    if (checkedDomainname) {
+        args.push("-w");
+    }
+
+    // Add the -n flag if Netcraft information is requested
+    if (checkedNetcraft) {
+        args.push("-n");
+    }
+
+    // Add the -s flag if subdomain enumeration is enabled
+    if (checkedSubdomains) {
+        args.push("-s");
+    }
+
+    // Add the -e flag if email address enumeration is enabled
+    if (checkedEmailaddress) {
+        args.push("-e");
+    }
+
+    // Add the -p flag if port scanning is enabled
+    if (checkedPortscan) {
+        args.push("-p");
+
+        // Add the -f flag if filtered port scanning is enabled
+        if (checkedFiltered) {
+            args.push("-f");
         }
 
-        // Add the -w flag if domain name checking is enabled
-        if (checkedDomainname) {
-            args.push("-w");
+        // Add the -b flag if banner grabbing is enabled
+        if (checkedBanner) {
+            args.push("-b");
         }
 
-        // Add the -n flag if Netcraft information is requested
-        if (checkedNetcraft) {
-            args.push("-n");
+        // Add the -t flag with the specified delay if delay
+        if (delay) {
+            args.push("-t", delay.toString());
         }
+    }
 
-        // Add the -s flag if subdomain enumeration is enabled
-        if (checkedSubdomains) {
-            args.push("-s");
-        }
-
-        // Add the -e flag if email address enumeration is enabled
-        if (checkedEmailaddress) {
-            args.push("-e");
-        }
-
-        // Add the -p flag if port scanning is enabled
-        if (checkedPortscan) {
-            args.push("-p");
-
-            // Add the -f flag if filtered port scanning is enabled
-            if (checkedFiltered) {
-                args.push("-f");
-            }
-
-            // Add the -b flag if banner grabbing is enabled
-            if (checkedBanner) {
-                args.push("-b");
-            }
-
-            // Add the -t flag with the specified delay if delay
-            if (delay) {
-                args.push("-t", delay.toString());
-            }
-        }
-
-        try {
-            // Execute the dmitry command and handle the result
-            const result = await CommandHelper.runCommandGetPidAndOutput(
-                "dmitry",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
-            setPid(result.pid);
-            setOutput(result.output);
-        } catch (e: any) {
-            // Handle any errors that occur during command execution
-            setOutput(e.message);
-        }
-    };
+    try {
+        // Execute the dmitry command and handle the result
+        const result = await CommandHelper.runCommandGetPidAndOutput(
+            "dmitry",
+            args,
+            handleProcessData,
+            handleProcessTermination
+        );
+        setPid(result.pid);
+        setOutput(result.output);
+    } catch (e: any) {
+        // Handle any errors that occur during command execution
+        setOutput(e.message);
+        setLoading(false);
+    }
+};
 
     /**
      * clearOutput: Callback function to clear the console output.
