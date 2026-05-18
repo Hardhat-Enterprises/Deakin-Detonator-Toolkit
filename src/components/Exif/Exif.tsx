@@ -133,6 +133,7 @@ const ExifTool = () => {
 
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
+            setAllowSave(true);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
