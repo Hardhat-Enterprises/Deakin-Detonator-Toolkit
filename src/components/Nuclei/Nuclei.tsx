@@ -55,6 +55,10 @@ function Nuclei() {
         setLoading(false);
     }, []);
 
+    const clearOutput = useCallback(() => {
+        setOutput("");
+    }, []);
+
     const onSubmit = async () => {
         setLoading(true);
         const args = ["-u", form.values.target];
@@ -104,7 +108,7 @@ function Nuclei() {
                     </Button>
                 </Stack>
             </form>
-            <ConsoleWrapper output={output} />
+            <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
         </RenderComponent>
     );
 }
