@@ -212,7 +212,7 @@ export function ShodanAPITool() {
                         data={[
                             { value: "host", label: "host" },
                             { value: "count", label: "count" },
-                            { value: "search", label: "earch" },
+                            { value: "search", label: "search" },
                         ]}
                         required
                         {...form.getInputProps("endpoint")}
