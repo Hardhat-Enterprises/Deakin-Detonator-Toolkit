@@ -25,7 +25,6 @@ function Nuclei() {
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
 
-
     const title = "Nuclei";
     const description = "Nuclei is a fast and customizable vulnerability scanner based on simple YAML-based templates.";
     const tutorial = "https://docs.google.com/document/d/1Blzt6KZLcI1J0CtPu6cZwU_P3HgEaRe1RQ1E-okEGTY/edit?usp=sharing";
@@ -83,10 +82,10 @@ function Nuclei() {
             setLoading(false);
         }
     };
-    
+
     const handleSaveComplete = () => {
-    	setHasSaved(true);
-    	setAllowSave(false);
+        setHasSaved(true);
+        setAllowSave(false);
     };
 
     return (

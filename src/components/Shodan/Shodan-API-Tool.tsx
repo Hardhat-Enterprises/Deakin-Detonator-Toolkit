@@ -39,7 +39,7 @@ export function ShodanAPITool() {
         "The Shodan API is a powerful tool that allows external network scans to be performed with use of a valid API key."; // Description of the component.
     const steps =
         "How to use Shodan API:\n" +
-        "Step 1: Obtain a valid API key by creating an account at https://account.shodan.io; once signed in, the API should be within the account's overview\n" + 
+        "Step 1: Obtain a valid API key by creating an account at https://account.shodan.io; once signed in, the API should be within the account's overview\n" +
         "Step 2: Enter the obtained API Key\n" +
         "Step 3: Select the desired Shodan API endpoint.\n" +
         "Step 4: Depending on the endpoint, enter a Host IP or a Search Query.\n" +
@@ -159,7 +159,7 @@ export function ShodanAPITool() {
 
         try {
             // Execute the Shodan command via helper method and handle its output or potential errors.
-            CommandHelper.runCommand("shodan", values.shodanKey) //initialises the Shodan CLI with the obtained API key
+            CommandHelper.runCommand("shodan", values.shodanKey); //initialises the Shodan CLI with the obtained API key
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "shodan",
                 args,
