@@ -25,7 +25,7 @@ const ConsoleWrapper = ({ output, clearOutputCallback, hideClearButton, title = 
         return (
             <>
                 <Title>{title}</Title>
-                <div ref={outputContainerRef} style={{ maxHeight: "250px", overflowY: "auto" }}>
+                <div ref={outputContainerRef} style={{ maxHeight: "500px", overflowY: "auto" }}>
                     <Prism language={"bash"}>{output}</Prism>
                 </div>
                 {!hideClearButton && (
