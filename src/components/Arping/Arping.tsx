@@ -48,7 +48,7 @@ const Arping = () => {
     const sourceLink = "http://github.com/ThomasHabets/arping"; // Link to the source code
     const tutorial = "https://www.kali.org/tools/arping/"; // Link to the official documentation/tutorial
     const dependencies = ["arping"]; // Contains the dependencies required by the component.
-
+    const tutorial = "https://docs.google.com/document/d/1gw0-mXC_Bl6SeIBN3IPw4va49fA3HKK6/edit"; // Link to the official documentation/tutorial
     // Form hook to handle form input
     const form = useForm<FormValuesType>({
         initialValues: {
