@@ -46,9 +46,9 @@ const Arping = () => {
         "Step 3: Specify the network interface to use for sending ARP requests.\n" +
         "Step 4: Check the verbose mode to get detailed output.\n"; // Description providing information about the Arping component.
     const sourceLink = "http://github.com/ThomasHabets/arping"; // Link to the source code
-    const tutorial = "https://www.kali.org/tools/arping/"; // Link to the official documentation/tutorial
+    const tutorial = "https://hackmd.io/@zee-10/HkLGaIdBZe"; // Link to the official documentation/tutorial
     const dependencies = ["arping"]; // Contains the dependencies required by the component.
-
+    const tutorial = "https://docs.google.com/document/d/1gw0-mXC_Bl6SeIBN3IPw4va49fA3HKK6/edit"; // Link to the official documentation/tutorial
     // Form hook to handle form input
     const form = useForm<FormValuesType>({
         initialValues: {
@@ -145,6 +145,13 @@ const Arping = () => {
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process.
         setLoading(true);
+	if (
+  !/^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/.test(values.targetIP.trim())
+) {
+  setOutput("Error: Enter a valid IP address");
+  setLoading(false);
+  return;
+}
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
         // Construct arguments for the Arping component command based on form input.
