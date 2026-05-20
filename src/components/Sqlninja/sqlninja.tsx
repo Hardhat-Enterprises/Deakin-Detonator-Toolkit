@@ -32,7 +32,7 @@ function Sqlninja() {
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-    const [selectedMode, setSelectedMode] = useState(""); //State variable to store the mode selected
+    const [selectedMode, setSelectedMode] = useState("test"); //State variable to store the mode selected. Defaulting to the "test" mode
     const [checkedVerbose, setCheckedVerbose] = useState(false); //State variable to indicate if verbose mode is enabled
 
     // Component Constants.
@@ -126,6 +126,18 @@ function Sqlninja() {
         setAllowSave(false);
     };
 
+    /** 
+     * Function to expand the home directory symbol (~).
+     * Currently just replaces the tilde with a hard-coded path (/home/kali).
+     * v1 - 08/05/2026
+     */
+    function expandHomeDir(path: string) {
+        if (path.startsWith("~")) {
+            return path.replace("~", "/home/kali");
+        }
+            return path;
+    }
+    
     /**
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the Sqlninja tool with the given parameter.
@@ -146,7 +158,8 @@ function Sqlninja() {
         selectedMode ? args.push(`-m`, selectedMode) : undefined;
         // Adds the file argument if a filepath is input.
         if (values.filePath) {
-            args.push("-f", values.filePath);
+            // Check for starting tilde in filePath and replace with '/home/kali' path
+            args.push("-f", expandHomeDir(values.filePath));
         }
         // Adds verbose output argument if switch is on.
         if (checkedVerbose) {
