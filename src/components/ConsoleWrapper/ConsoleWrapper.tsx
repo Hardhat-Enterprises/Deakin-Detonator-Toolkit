@@ -10,14 +10,12 @@ interface ConsoleWrapperProps {
 }
 
 const ConsoleWrapper = ({ output, clearOutputCallback, hideClearButton, title = "Output" }: ConsoleWrapperProps) => {
-    // Use ref to refer to the output container
     const outputContainerRef = useRef<HTMLDivElement>(null);
 
-    // Scroll to the bottom of the output container whenever the output updates
     useEffect(() => {
         if (outputContainerRef.current) {
             const element = outputContainerRef.current;
-            element.scrollTop = element.scrollHeight;
+            element.scrollTop = 0;
         }
     }, [output]);
 
@@ -25,7 +23,17 @@ const ConsoleWrapper = ({ output, clearOutputCallback, hideClearButton, title = 
         return (
             <>
                 <Title>{title}</Title>
-                <div ref={outputContainerRef} style={{ maxHeight: "500px", overflowY: "auto" }}>
+                <div
+                    ref={outputContainerRef}
+                    style={{
+                        maxHeight: "500px",
+                        minHeight: "350px",
+                        overflowY: "auto",
+                        resize: "vertical",
+                        border: "1px solid #333",
+                        borderRadius: "6px",
+                    }}
+                >
                     <Prism language={"bash"}>{output}</Prism>
                 </div>
                 {!hideClearButton && (
