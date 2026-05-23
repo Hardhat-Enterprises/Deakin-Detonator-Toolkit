@@ -48,7 +48,7 @@ const JohnTheRipper = () => {
     const [allowSave, setAllowSave] = useState(false); //   State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [selectedFileTypeOption, setSelectedFileTypeOption] = useState(""); // State variable to store the selected file type.
-    const [selectedModeOption, setSelectedModeOption] = useState(""); // State variable to store the selected crack mode.
+    const [selectedModeOption, setSelectedModeOption] = useState("incremental"); // State variable to store the selected crack mode.
     const [selectedIncrementOption, setSelectedIncrementOption] = useState(""); // State variable to store the selected increment order.
     const [fileNames, setFileNames] = useState<string[]>([]); // State variable to store the file names.
 
@@ -176,6 +176,12 @@ const JohnTheRipper = () => {
      * @param {FormValuesType} values - The form values, containing the filepath, hash, crack mode, and other options.
      */
     const onSubmit = async (values: FormValuesType) => {
+        // Validate that a file has been selected before proceeding.
+        if (!fileNames || fileNames.length === 0) {
+            setOutput("Error: No input file selected. Please select a file before attempting to crack.");
+            return;
+        }
+
         // Activate loading state to indicate ongoing process.
         setLoading(true);
 
@@ -307,6 +313,11 @@ const JohnTheRipper = () => {
                         labelText="File (Can only select files in /home/kali)"
                         placeholderText="Click to select file(s)"
                     />
+                    {fileNames.length > 0 && (
+                        <div style={{ fontSize: "16px", color: "#aaa", marginTop: "8px", textAlign: "center" }}>
+                            <strong>Uploaded File:</strong> {cleanFileName(fileNames[0])}
+                        </div>
+                    )}
                     <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
                     <NativeSelect
                         value={selectedModeOption}
@@ -328,7 +339,7 @@ const JohnTheRipper = () => {
                     />
                     {modeRequiringWordList.includes(selectedModeOption) && (
                         <>
-                            <TextInput label={"Dictionary File Path"} required {...form.getInputProps("wordlist")} />
+                            <TextInput label={"Dictionary File Path"} required {...form.getInputProps("wordList")} />
                         </>
                     )}
                     {modeRequiringIncrementOrder.includes(selectedModeOption) && (
