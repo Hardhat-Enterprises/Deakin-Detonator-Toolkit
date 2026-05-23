@@ -29,7 +29,7 @@ Step 3: Select a Non-Searching option.
 Step 4: Enter an Exploit Database ID.
 Step 5: Click Scan to commence SearchSploit's operation.
 Step 6: View the Output block below to view the results of the tool's execution.`;
-const sourceLink = "https://www.kali.org/tools/searchsploit"; // Corrected sourceLink
+const sourceLink = "https://www.kali.org/tools/searchsploit";
 const tutorial = "https://docs.google.com/document/d/1lpQN_77zpZQftxqqTaw_DtYbRLH-rqh0COLEsBkBBhk/edit?usp=sharing";
 const dependencies = ["searchsploit"];
 const searchOptions = ["Case", "Exact", "Strict", "Title"];
@@ -46,6 +46,7 @@ const SearchSploit = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
+    const [validationError, setValidationError] = useState("");
 
     const form = useForm<FormValues>({
         initialValues: {
@@ -107,13 +108,35 @@ const SearchSploit = () => {
 
     // Handle form submission
     const onSubmit = async (values: FormValues) => {
+        const trimmedSearchTerm = values.searchTerm.trim();
+        const trimmedEbdId = values.ebdId.trim();
+        const hasSearchOption = values.searchOption.trim() !== "";
+        const hasOutputType = values.outputType.trim() !== "";
+        const hasNonSearch = values.nonSearch.trim() !== "";
+
+        const areAllFieldsEmpty =
+            trimmedSearchTerm === "" && trimmedEbdId === "" && !hasSearchOption && !hasOutputType && !hasNonSearch;
+
+        if (areAllFieldsEmpty) {
+            setValidationError("Please enter a search term or at least one filter before scanning.");
+            setOutput("");
+            setAllowSave(false);
+            setHasSaved(false);
+            return;
+        }
+
+        setValidationError("");
+        setOutput("");
+        setAllowSave(false);
+        setHasSaved(false);
         setLoading(true);
+
         const args = [
             ...getSearchOptionArgs(values.searchOption),
             ...getOutputTypeArgs(values.outputType),
             ...getNonSearchArgs(values.nonSearch),
-            values.searchTerm,
-            values.ebdId,
+            ...(trimmedSearchTerm ? [trimmedSearchTerm] : []),
+            ...(trimmedEbdId ? [trimmedEbdId] : []),
         ];
 
         try {
@@ -173,6 +196,7 @@ const SearchSploit = () => {
         setOutput("");
         setAllowSave(false);
         setHasSaved(false);
+        setValidationError("");
     }, []);
 
     return (
@@ -194,49 +218,62 @@ const SearchSploit = () => {
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleCancel, handleProcessTermination)}
+
                     <TextInput label={"Search Term"} {...form.getInputProps("searchTerm")} />
+
                     <NativeSelect
                         {...form.getInputProps("searchOption")}
                         label={"Search Option"}
-                        data={searchOptions}
-                        placeholder={"Pick a Search option"}
+                        data={["", ...searchOptions]}
+                        defaultValue=""
                     />
+
                     <NativeSelect
                         {...form.getInputProps("outputType")}
                         label={"Output"}
-                        data={outputTypes}
-                        placeholder={"Select an Output"}
+                        data={["", ...outputTypes]}
+                        defaultValue=""
                     />
+
                     <NativeSelect
                         {...form.getInputProps("nonSearch")}
                         label={"Non-Searching"}
-                        data={nonSearchOptions}
-                        placeholder={"Select an option"}
+                        data={["", ...nonSearchOptions]}
+                        defaultValue=""
                     />
+
                     <TextInput
                         label={"EBD-ID"}
                         description="Exploit Database ID: Required when using the 'Path' output or Non-Search options."
                         {...form.getInputProps("ebdId")}
                     />
-                    <Button type={"submit"}>Start {title}</Button> {/* Button text updated */}
+
+                    {validationError && (
+                        <Text c="red" size="sm">
+                            {validationError}
+                        </Text>
+                    )}
+
+                    <Button type={"submit"}>Scan</Button>
+
                     <Accordion>
                         <Accordion.Item value="item-1">
                             <Accordion.Control>Help:</Accordion.Control>
                             <Accordion.Panel>
                                 <List>
-                                    <Text weight={700}>Search Options:</Text>
+                                    <Text fw={700}>Search Options:</Text>
                                     {searchOptions.map((option) => (
                                         <List.Item key={option}>{option}</List.Item>
                                     ))}
                                 </List>
                                 <List>
-                                    <Text weight={700}>Output:</Text>
+                                    <Text fw={700}>Output:</Text>
                                     {outputTypes.map((type) => (
                                         <List.Item key={type}>{type}</List.Item>
                                     ))}
                                 </List>
                                 <List>
-                                    <Text weight={700}>Non-Searching:</Text>
+                                    <Text fw={700}>Non-Searching:</Text>
                                     {nonSearchOptions.map((option) => (
                                         <List.Item key={option}>{option}</List.Item>
                                     ))}
@@ -244,6 +281,7 @@ const SearchSploit = () => {
                             </Accordion.Panel>
                         </Accordion.Item>
                     </Accordion>
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
