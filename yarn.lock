@@ -1244,10 +1244,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tauri-apps/api@npm:^2.9.0":
-  version: 2.11.0
-  resolution: "@tauri-apps/api@npm:2.11.0"
-  checksum: fe825b626a64a77ea8e110638d0f72a90d0bf02ea7219c28696f074df616f55460bddf9f4432ec81ca04169e4e7da36f8c75a93522dc98104bf8adc702d7a550
+"@tauri-apps/api@npm:^1.5.6":
+  version: 1.6.0
+  resolution: "@tauri-apps/api@npm:1.6.0"
+  checksum: f99cdb6c7ed01b78995cb936a31dde09f04b34a2317a1c6833969f6cc2f7de577ab1464f9cdecf9e96aab070c16a5526a3a0efcda04fa35960e487eb20653ee0
   languageName: node
   linkType: hard
 
@@ -2006,7 +2006,7 @@ __metadata:
     "@mantine/prism": ^5.3.0
     "@mantine/spotlight": ^5.3.0
     "@tabler/icons": ^1.95.1
-    "@tauri-apps/api": ^2.9.0
+    "@tauri-apps/api": ^1.5.6
     "@tauri-apps/cli": ^1.5.6
     "@testing-library/jest-dom": ^6.6.3
     "@testing-library/react": ^13.4.0
