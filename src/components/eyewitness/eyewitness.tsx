@@ -321,12 +321,26 @@ function Eyewitness() {
         setResultsPath(null);
         setOutput("");
 
+
         // final preflight validation
         await validatePaths();
         if (!canRun) {
             setLoading(false);
             return;
         }
+	
+	if (!values.filePath.startsWith("/")) {
+    setLoading(false);
+    setOutput("Error: File path must be an absolute path (start with /).");
+    return;
+}
+if (!values.directory.startsWith("/")) {
+    setLoading(false);
+    setOutput("Error: Output directory must be an absolute path (start with /).");
+    return;
+}
+
+
 
         const args = [
             "-f",
