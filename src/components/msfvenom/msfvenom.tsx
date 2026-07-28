@@ -91,7 +91,7 @@ const payloadOptions = [
     ],
 ];
 
-const payloadFormats = ["Select Payload Format", "exe", "elf", "raw", "psh", "asp", "aspx", "jsp", "war", "jar"];
+const payloadFormats = ["Select Payload Format", "exe", "elf", "raw", "psh", "asp", "aspx", "jsp", "war", "jar","apk"];
 
 const payloadRequiredVariables = [
     // windows x86 payload variables
@@ -273,7 +273,8 @@ const PayloadGenerator = () => {
                 args.push(`MODE=${form.values.mode}`);
             }
 
-            args.push("-f", selectedFormat);
+            const actualFormat = selectedFormat === "apk" ? "raw" : selectedFormat;
+            args.push("-f", actualFormat);
         }
 
         args.push("-o", form.values.outputPath);
