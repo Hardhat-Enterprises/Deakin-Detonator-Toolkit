@@ -10,6 +10,7 @@ import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
 import CVE20221388 from "./CVE-2022-1388/CVE-2022-1388";
 import CVE202227925 from "./CVE-2022-27925/CVE-2022-27925";
+import CVE202222954 from "./CVE-2022-22954/CVE-2022-22954";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
 import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
@@ -263,6 +264,13 @@ export const ROUTES: RouteProperties[] = [
         element: <CVE202322527 />,
         description: "Unauthenticated RCE in Atlassian Confluence via OGNL injection",
         category: "",
+    },
+    {
+    	name: "CVE-2022-22954",
+	path: "/attack-vectors/cve-2022-22954",
+	element: <CVE202222954 />,
+	description: "VMware Workspace ONE Access and Identity Manager Server-Side Template Injection Vulnerability",
+	category: "",
     },
     {
         name: "CVE-2023-23397",
