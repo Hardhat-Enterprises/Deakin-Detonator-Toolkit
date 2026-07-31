@@ -136,7 +136,12 @@ const TheHarvester = () => {
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
 
-        const args = ["-d", values.domain, "-l", String(values.resultLimit), "-b", values.source];
+const args = ["-d", values.domain, "-b", values.source];
+
+const limit = Number(values.resultLimit);
+if (Number.isFinite(limit) && limit > 0) {
+    args.push("-l", String(limit));
+}
 
         if (checkedAdvanced) {
             if (values.startresult) {
