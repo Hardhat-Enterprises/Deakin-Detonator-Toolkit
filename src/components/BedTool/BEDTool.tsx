@@ -1,6 +1,6 @@
-import { Button, Select, Stack, Switch, TextInput } from "@mantine/core";
+import { Button, Select, Stack, Switch, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapperWithBuiltinOverlay";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -37,6 +37,8 @@ export function BEDTool() {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants.
     const title = "BEDTool"; // Title of the component.
@@ -48,7 +50,7 @@ export function BEDTool() {
         "3. Custom Configuration (Optional): Activate 'Custom Configuration' to enter a specific target IP address and port number. If this is not enabled, the tool will default to scanning the local machine.\n" +
         "4. Start Scan: Click the 'Scan' button to begin the evaluation.";
     const sourceLink = "https://www.kali.org/tools/bed/"; // Link to the source documentation.
-    const tutorial = "https://docs.google.com/document/d/1BPzqMP5b9C9OjsJuIKXfxPyMxDd6oqUhrTvwi29fOKo/edit?usp=sharing"; // Link to the official documentation/tutorial.
+    const tutorial = "https://hackmd.io/@zee-10/ryfv2IOSWl"; // Link to the official documentation/tutorial.
     const dependencies = ["bed"]; // Contains the dependencies required by the component.
 
     // Plugin-related constants
@@ -101,7 +103,27 @@ export function BEDTool() {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -158,9 +180,9 @@ export function BEDTool() {
         const baseArgs = ["-s", values.plugin];
         const conditionalArgs: string[][] = [
             customConfig ? ["-t", values.target, "-p", values.port] : [],
-            pluginsRequiringAuth.includes(selectedPlugin) || selectedPlugin === "SMTP"
-                ? ["-u", selectedPlugin === "SMTP" ? values.email : values.username]
-                : [],
+            pluginsRequiringAuth.includes(selectedPlugin) ? ["-u", values.username] : [],
+            pluginsRequiringUsername.includes(selectedPlugin) ? ["-u", values.username] : [],
+            selectedPlugin === "SMTP" ? ["-u", values.email] : [],
             pluginsRequiringAuth.includes(selectedPlugin) ? ["-v", values.password] : [],
         ];
 
@@ -213,13 +235,34 @@ export function BEDTool() {
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
+                    </Group>
                     {LoadingOverlayAndCancelButton(loading, pid)}
+
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform vulnerability scans, use with caution and only on networks you
+                            own or have explicit permission to test.
+                        </Alert>
+                    )}
+
                     <Switch
                         size="md"
                         label="Manual Network Configuration"
                         checked={customConfig}
                         onChange={(e) => setCustomConfig(e.currentTarget.checked)}
                     />
+                    {customConfig && (
+                        <Alert title="Custom Configuration" color="blue" variant="light">
+                            Custom IP address and port can now be specified for this scan. Leave these fields blank to
+                            use default settings.
+                        </Alert>
+                    )}
                     <Select
                         label="Plugin Type"
                         placeholder="Select a plugin to test"
@@ -231,28 +274,53 @@ export function BEDTool() {
                     {pluginsRequiringAuth.includes(selectedPlugin) && (
                         <>
                             <TextInput
-                                label="Username (default user is the same as your Kali Linux login)"
+                                label="Username"
+                                placeholder="Enter username for authentication"
+                                description="Default user is the same as your Kali Linux login"
                                 required
                                 {...form.getInputProps("username")}
                             />
-                            <TextInput label="Password" type="password" required {...form.getInputProps("password")} />
+                            <TextInput
+                                label="Password"
+                                type="password"
+                                placeholder="Enter the password for authentication"
+                                description="Must be at least 8 characters"
+                                required
+                                {...form.getInputProps("password")}
+                            />
                         </>
                     )}
-                    {pluginsRequiringUsername.includes(selectedPlugin) && (
-                        <TextInput label={"username"} required {...form.getInputProps("username")} />
-                    )}
-                    {pluginRequiringEmail.includes(selectedPlugin) && (
-                        <TextInput label="Email Address" required {...form.getInputProps("email")} />
+                    {pluginsRequiringUsername.includes(selectedPlugin) &&
+                        !pluginsRequiringAuth.includes(selectedPlugin) && (
+                            <TextInput
+                                label="Username"
+                                placeholder="e.g. user123"
+                                description="Enter the username required for this scan"
+                                required
+                                {...form.getInputProps("username")}
+                            />
+                        )}
+                    {selectedPlugin === "SMTP" && (
+                        <TextInput
+                            label="Email Address (used as sender in test)"
+                            placeholder="e.g. test@example.com"
+                            required
+                            {...form.getInputProps("email")}
+                        />
                     )}
                     {customConfig && (
                         <>
                             <TextInput
-                                label="Custom IP Address (default: localhost)"
+                                label="Target IP Address"
+                                placeholder="e.g. 192.168.1.1"
+                                description="Specify the IP address of the target"
                                 required
                                 {...form.getInputProps("target")}
                             />
                             <TextInput
-                                label="Port Number (default: service-specific standard port)"
+                                label="Target Port Number"
+                                placeholder="e.g. 80"
+                                description="Specify the port number of the target"
                                 required
                                 {...form.getInputProps("port")}
                             />
