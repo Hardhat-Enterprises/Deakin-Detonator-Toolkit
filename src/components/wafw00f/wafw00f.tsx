@@ -22,6 +22,7 @@ const Wafw00f = () => {
         "Step 3: Click 'Run WafW00f' to execute.\n" +
         "Step 4: View the results in the output section.";
     const sourceLink = "https://github.com/EnableSecurity/wafw00f";
+    const tutorial = "https://docs.google.com/document/d/1oC6Z4M3i5bLAh3vRs5B28DFA4rOqahVjF9g2HznTCvs/edit?usp=sharing"
     const dependencies = ["wafw00f"];
 
     // State variables to manage tool behavior
@@ -169,7 +170,7 @@ const Wafw00f = () => {
     };
 
     return (
-        <RenderComponent title={title} description={description} steps={steps} sourceLink={sourceLink}>
+        <RenderComponent title={title} description={description} steps={steps} tutorial={tutorial} sourceLink={sourceLink}>
             {!loadingModal && (
                 <InstallationModal
                     isOpen={opened}
