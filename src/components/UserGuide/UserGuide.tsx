@@ -97,9 +97,21 @@ export function RenderComponent(component: ComponentProps) {
                     {component.children}
                 </Tabs.Panel>
                 <Tabs.Panel value="tutorial">
-                    <Text className={styles.text} size="md">
-                        <iframe src={component.tutorial} width={3000} height={1000} />
-                    </Text>
+                    <div className={styles.tutorialContainer}>
+                        <iframe
+                            src={component.tutorial}
+                            style={{
+                                width: "100%",
+                                height: "800px",
+                                border: "none",
+                                borderRadius: "8px",
+                                display: "block",
+                            }}
+                            title={`${component.title} Tutorial`}
+                            allowFullScreen
+                            scrolling="yes"
+                        />
+                    </div>
                 </Tabs.Panel>
             </Tabs>
         </>

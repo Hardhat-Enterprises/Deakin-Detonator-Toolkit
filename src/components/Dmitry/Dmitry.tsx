@@ -1,6 +1,6 @@
-import { Button, Checkbox, Stack, TextInput, Switch } from "@mantine/core";
+import { Button, Checkbox, Stack, TextInput, Switch, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
@@ -40,6 +40,8 @@ const dmitry = () => {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants.
     const title = "Deepmagic Information Gathering Tool"; // Title of the component.
@@ -57,7 +59,7 @@ const dmitry = () => {
         "Note: For more advanced options, enable the Advanced Mode switch to access additional features.\n\n" +
         "Note 2: If you perform TCP port scanning, you can specify a delay between requests. Default is 2 (milliseconds).\n";
     const sourceLink = "https://www.kali.org/tools/dmitry/"; // Link to the source code (or Kali Tools).
-    const tutorial = "https://docs.google.com/document/d/1vVv0IjxTD5Knd3kQpi-zs9P4SNNDIj5Ew7I0iGcNE1c/edit?usp=sharing"; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1Hqn8onZmLfYWjwKZrYVEmnePw1MW75oI/edit"; // Link to the official documentation/tutorial
     const dependencies = ["dmitry"]; // Contains the dependencies required by the component.
 
     // Check if the command is available and set the state variables accordingly.
@@ -73,7 +75,27 @@ const dmitry = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     //Handles the change event for the port scan checkbox.
     const handlePortscanChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,78 +182,99 @@ const dmitry = () => {
      * @param {FormValuesType} values - The values from the form input.
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Disallow saving until the tool's execution is complete
-        setAllowSave(false);
+    // Disallow saving until the tool's execution is complete
+    setAllowSave(false);
 
-        // Activate loading state to indicate ongoing process
-        setLoading(true);
+    const cleanDomain = values.domain.trim();
 
-        // Construct arguments for the dmitry command based on form input
-        const args = [];
+    if (!cleanDomain) {
+        setOutput("Error: Please enter a domain or IP address.");
+        setLoading(false);
+        return;
+    }
 
-        // Split the domain input into individual arguments
-        args.push(...values.domain.split(" "));
+    if (cleanDomain === ".") {
+        setOutput("Error: Invalid host. Please enter a valid domain or IP address.");
+        setLoading(false);
+        return;
+    }
 
-        // Add the -i flag if IP address checking is enabled
-        if (checkedIPAddress) {
-            args.push("-i");
+    if (cleanDomain.includes(" ")) {
+        setOutput("Error: Please enter a single domain or IP address without spaces.");
+        setLoading(false);
+        return;
+    }
+
+    // Activate loading state to indicate ongoing process
+    setLoading(true);
+
+    // Construct arguments for the dmitry command based on form input
+    const args = [];
+
+    // Pass the domain as a single argument
+    args.push(cleanDomain);
+
+    // Add the -i flag if IP address checking is enabled
+    if (checkedIPAddress) {
+        args.push("-i");
+    }
+
+    // Add the -w flag if domain name checking is enabled
+    if (checkedDomainname) {
+        args.push("-w");
+    }
+
+    // Add the -n flag if Netcraft information is requested
+    if (checkedNetcraft) {
+        args.push("-n");
+    }
+
+    // Add the -s flag if subdomain enumeration is enabled
+    if (checkedSubdomains) {
+        args.push("-s");
+    }
+
+    // Add the -e flag if email address enumeration is enabled
+    if (checkedEmailaddress) {
+        args.push("-e");
+    }
+
+    // Add the -p flag if port scanning is enabled
+    if (checkedPortscan) {
+        args.push("-p");
+
+        // Add the -f flag if filtered port scanning is enabled
+        if (checkedFiltered) {
+            args.push("-f");
         }
 
-        // Add the -w flag if domain name checking is enabled
-        if (checkedDomainname) {
-            args.push("-w");
+        // Add the -b flag if banner grabbing is enabled
+        if (checkedBanner) {
+            args.push("-b");
         }
 
-        // Add the -n flag if Netcraft information is requested
-        if (checkedNetcraft) {
-            args.push("-n");
+        // Add the -t flag with the specified delay if delay
+        if (delay) {
+            args.push("-t", delay.toString());
         }
+    }
 
-        // Add the -s flag if subdomain enumeration is enabled
-        if (checkedSubdomains) {
-            args.push("-s");
-        }
-
-        // Add the -e flag if email address enumeration is enabled
-        if (checkedEmailaddress) {
-            args.push("-e");
-        }
-
-        // Add the -p flag if port scanning is enabled
-        if (checkedPortscan) {
-            args.push("-p");
-
-            // Add the -f flag if filtered port scanning is enabled
-            if (checkedFiltered) {
-                args.push("-f");
-            }
-
-            // Add the -b flag if banner grabbing is enabled
-            if (checkedBanner) {
-                args.push("-b");
-            }
-
-            // Add the -t flag with the specified delay if delay
-            if (delay) {
-                args.push("-t", delay.toString());
-            }
-        }
-
-        try {
-            // Execute the dmitry command and handle the result
-            const result = await CommandHelper.runCommandGetPidAndOutput(
-                "dmitry",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
-            setPid(result.pid);
-            setOutput(result.output);
-        } catch (e: any) {
-            // Handle any errors that occur during command execution
-            setOutput(e.message);
-        }
-    };
+    try {
+        // Execute the dmitry command and handle the result
+        const result = await CommandHelper.runCommandGetPidAndOutput(
+            "dmitry",
+            args,
+            handleProcessData,
+            handleProcessTermination
+        );
+        setPid(result.pid);
+        setOutput(result.output);
+    } catch (e: any) {
+        // Handle any errors that occur during command execution
+        setOutput(e.message);
+        setLoading(false);
+    }
+};
 
     /**
      * clearOutput: Callback function to clear the console output.
@@ -260,6 +303,13 @@ const dmitry = () => {
                 ></InstallationModal>
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+                <Group position="right">
+                    {!showAlert && (
+                        <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                            Show Disclaimer
+                        </Button>
+                    )}
+                </Group>
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
                     <Switch
@@ -268,6 +318,13 @@ const dmitry = () => {
                         checked={checkedAdvanced}
                         onChange={(e) => setCheckedAdvanced(e.currentTarget.checked)}
                     />
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform information gathering, use with caution and only on targets you
+                            own or have explicit permission to test.
+                        </Alert>
+                    )}
+
                     <TextInput label={"Domain or IP"} required {...form.getInputProps("domain")} />
 
                     {checkedAdvanced && (

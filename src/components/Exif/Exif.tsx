@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Button, Stack, TextInput, Checkbox, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -8,6 +8,7 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
+import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
 /**
  * Represents the form values for the Exif component.
@@ -33,6 +34,8 @@ const ExifTool = () => {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants
     const title = "ExifTool";
@@ -45,7 +48,7 @@ const ExifTool = () => {
         "Step 4: Input a value to write to the specified metadata field.\n" +
         "Step 5: Run the tool!";
     const sourceLink = ""; // Link to the source code
-    const tutorial = "https://docs.google.com/document/d/1g4RFhVeMK3CRXRlGfSR5LMNiS4Xb5HuHcoq1K2i2J3c/edit?usp=sharing"; // Link to the official documentation/tutorial
+    const tutorial = "https://docs.google.com/document/d/16OaJNwkv2vVGVDZBNL1rORVkVOj6mqflVmByk0s1zbM/edit?tab=t.0"; // Link to the official documentation/tutorial
     const dependencies = ["exiftool"]; // ExifTool dependency.
 
     // Form hook to handle form input
@@ -75,7 +78,27 @@ const ExifTool = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Also set loading to false in case of error
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -110,6 +133,7 @@ const ExifTool = () => {
 
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
+            setAllowSave(true);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
@@ -118,34 +142,36 @@ const ExifTool = () => {
      * Handles form submission for the Exif component.
      * @param {FormValuesType} values - The form values containing the target domain.
      */
-    const onSubmit = async (values: FormValuesType) => {
-        setLoading(true); // Activate loading state
-        setAllowSave(false); // Disallow saving until the tool's execution is complete
+  const onSubmit = async (values: FormValuesType) => {
+    setLoading(true);
+    setAllowSave(false);
 
-        // Construct arguments for the Exif command based on form input
-        const args = [values.filePath];
-        if (values.actionType === "read") {
-            args.push("-" + values.tag);
-        } else if (values.actionType === "write") {
-            args.push("-" + values.tag + "=" + values.value);
-        }
+    const args = [values.filePath];
+    if (values.actionType === "read") {
+        args.push("-" + values.tag);
+    } else if (values.actionType === "write") {
+        args.push("-" + values.tag + "=" + values.value);
+    }
 
-        // Attempt to execute the exiftool command with the provided arguments.
-        // If the command fails, handle the error and deactivate the loading state.
-        try {
-            const { pid, output } = await CommandHelper.runCommandWithPkexec(
-                "exiftool",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
-            setPid(pid); // Set the process ID
-            setOutput(output); // Set the initial output
-        } catch (error: any) {
-            setOutput(`Error: ${error.message}`);
-            setLoading(false); // Deactivate loading state
+    try {
+        const { pid, output } = await CommandHelper.runCommandWithPkexec(
+            "exiftool",
+            args,
+            handleProcessData,
+            handleProcessTermination
+        );
+        setPid(pid);
+        if (!output || output.trim() === "") {
+            setOutput(`Error: File not found at path "${values.filePath}".\nPlease verify the file path and try again.`);
+            setLoading(false);
+            return;
         }
-    };
+        setOutput(output);
+    } catch (error: any) {
+        setOutput(`Error: ${error.message}`);
+        setLoading(false);
+    }
+};
 
     /**
      * clearOutput: Callback to clear the output state.
@@ -195,6 +221,21 @@ const ExifTool = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
+                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
+                    </Group>
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to read and write metadata to files. Use with caution and only on files
+                            you own or have explicit permission to modify.
+                        </Alert>
+                    )}
+
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                     <TextInput
                         label="File Path"
