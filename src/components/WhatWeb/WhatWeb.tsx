@@ -1,6 +1,6 @@
 // Import necessary hooks and components from React and other libraries
 import { useState, useCallback, useEffect } from "react";
-import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid, Group } from "@mantine/core";
+import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid, Group, Text, Card, Badge } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -81,6 +81,16 @@ function WhatWeb() {
             logFormat: "",
             maxThreads: 0,
         },
+        
+        validate: {
+        target: (value, values) => {
+            if (!value.trim() && !values.inputFile.trim()) {
+                return "Please enter a target URL or IP address, or provide an input file.";
+        	    }
+
+        	    return null;
+        	},
+    	},
     });
 
     // Check command availability
@@ -125,6 +135,15 @@ function WhatWeb() {
 
     // Submit handler
     const onSubmit = async (values: FormValuesType) => {
+    	if (!values.target.trim() && !values.inputFile.trim()) {
+   	 form.setFieldError(
+   	     "target",
+   	     "Please enter a target URL or IP address, or provide an input file."
+  	  );
+   	 setActive(0);
+    	return;
+	}
+	
         setLoading(true);
         setAllowSave(false);
 
@@ -164,8 +183,42 @@ function WhatWeb() {
     }, []);
 
     // Navigation
-    const nextStep = () => setActive((c) => (c < 2 ? c + 1 : c));
-    const prevStep = () => setActive((c) => (c > 0 ? c - 1 : c));
+    const nextStep = () => {
+    if (active === 0) {
+        const validation = form.validateField("target");
+
+        if (validation.hasError) {
+            return;
+        }
+    }
+
+    setActive((currentStep) => (currentStep < 2 ? currentStep + 1 : currentStep));
+    };
+    
+    const prevStep = () =>
+    setActive((currentStep) =>
+        currentStep > 0 ? currentStep - 1 : currentStep
+    );
+
+    const handleStepClick = (step: number) => {
+    // Allow the user to return to a previous step
+    if (step <= active) {
+        setActive(step);
+        return;
+    }
+
+    // Validate the required target before moving forward
+    if (!form.values.target.trim() && !form.values.inputFile.trim()) {
+        form.setFieldError(
+            "target",
+            "Please enter a target URL or IP address, or provide an input file."
+        );
+        setActive(0);
+        return;
+  	  }
+
+    	setActive(step);
+	};
 
     // Simple structured output parsing
     const formatOutput = (text: string) => {
@@ -178,6 +231,24 @@ function WhatWeb() {
             })
             .join("\n");
     };
+    
+    const extractSummary = (text: string) => {
+    const targetMatch = text.match(/https?:\/\/[^\s\[]+/i);
+    const statusMatch = text.match(/\[(\d{3}\s+[^\]]+)\]/);
+    const titleMatch = text.match(/Title\[([^\]]+)\]/i);
+    const ipMatch = text.match(/IP\[([^\]]+)\]/i);
+    const serverMatch = text.match(/HTTPServer\[([^\]]+)\]/i);
+
+    return {
+        target: targetMatch?.[0] || "Not detected",
+        status: statusMatch?.[1] || "Not detected",
+        title: titleMatch?.[1] || "Not detected",
+        ip: ipMatch?.[1] || "Not detected",
+        server: serverMatch?.[1] || "Not detected",
+    	};
+	};
+
+    const summary = extractSummary(output);
 
     return (
         <>
@@ -199,7 +270,7 @@ function WhatWeb() {
                 <form onSubmit={form.onSubmit(onSubmit)}>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Stack>
-                        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
+                        <Stepper active={active} onStepClick={handleStepClick} breakpoint="sm">
                             {/* Step 1 */}
                             <Stepper.Step label="Target">
                                 <TextInput label="Target URL or IP" required {...form.getInputProps("target")} />
@@ -250,16 +321,28 @@ function WhatWeb() {
                                             ]}
                                             {...form.getInputProps("aggression")}
                                         />
+                                            <Text size="sm" c="gray.4">
+   						 Controls how intensive the scan will be. Higher levels perform deeper analysis but may take longer.
+					    </Text>
+					    
                                         <TextInput
                                             label="Plugins"
                                             title="Specify WhatWeb plugins"
                                             {...form.getInputProps("plugins")}
                                         />
+                                        <Text size="sm" c="gray.4">
+    						Specify one or more WhatWeb plugins to focus the scan on particular technologies.
+					</Text>
+                                        
                                         <Switch
                                             label="Verbose Output"
                                             title="Enable detailed results"
                                             {...form.getInputProps("verbose", { type: "checkbox" })}
                                         />
+                                        <Text size="sm" c="gray.4">
+  						  Displays additional scan details for troubleshooting and analysis.
+					</Text>
+                                    
                                     </Stack>
                                 )}
 
@@ -338,14 +421,57 @@ function WhatWeb() {
 
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
 
-                        <Group position="right" mb={5}>
-                            <Button size="xs" onClick={() => setFullscreen((f) => !f)}>
-                                {fullscreen ? "Exit Fullscreen" : "Expand Results"}
-                            </Button>
-                        </Group>
+                        {active === 2 && output.trim() && (
+    				<Group position="right" mb={5}>
+        				<Button size="xs" onClick={() => setFullscreen((f) => !f)}>
+            					{fullscreen ? "Exit Fullscreen" : "Expand Results"}
+        				</Button>
+    				</Group>
+			)}
 
                         <div style={{ height: fullscreen ? "80vh" : "300px" }}>
-                            <ConsoleWrapper output={formatOutput(output)} clearOutputCallback={clearOutput} />
+                       
+                       {active === 2 && output.trim() !== "" && (
+    				<Card withBorder shadow="sm" mb="md">
+        			<Stack gap="xs">
+            			<Text size="lg" fw={700}>🔍 Scan Summary</Text>
+
+            			<Group>
+                			<Text fw={700}>Target:</Text>
+                			<Text>{summary.target}</Text>
+            			</Group>
+
+            			<Group>
+                			<Text fw={700}>Status:</Text>
+                			<Badge
+   						 color={summary.status.startsWith("200") ? "green" : "red"}
+						>
+    						{summary.status}
+					</Badge>
+            			</Group>
+
+            			<Group>
+                			<Text fw={700}>Title:</Text>
+                			<Text>{summary.title}</Text>
+            			</Group>
+
+            			<Group>
+                			<Text fw={700}>Server:</Text>
+                			<Text>{summary.server}</Text>
+            			</Group>
+
+            			<Group>
+                			<Text fw={700}>IP:</Text>
+                			<Text>{summary.ip}</Text>
+            			</Group>
+        			</Stack>
+    				</Card>
+			)}
+			
+                        <ConsoleWrapper
+   				 output={formatOutput(output)}
+   				 clearOutputCallback={clearOutput}
+			/>
                         </div>
                     </Stack>
                 </form>
