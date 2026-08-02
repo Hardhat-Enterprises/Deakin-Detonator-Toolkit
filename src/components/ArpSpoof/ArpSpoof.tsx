@@ -173,8 +173,7 @@ const ARPSpoofing = () => {
         setLoading(true);
 
         // -r performs bidirectional ARP spoofing using one process
-        const args = ["-r", "-t", values.ipGateway, values.ipTarget];
-
+        const args = ["-r", "-t", values.ipTarget, values.ipGateway];
         CommandHelper.runCommandWithPkexec("arpspoof", args, handleProcessData, handleProcessTermination, setPid)
             .then(({ output }) => {
                 setOutput(output);
