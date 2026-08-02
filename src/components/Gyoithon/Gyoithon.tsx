@@ -121,7 +121,7 @@ const Gyoithon = () => {
     const Install = async () => {
         setLoading(true);
         const args = [`install`, `-r`, `/usr/share/ddt/GyoiThon/requirements.txt`];
-        const output = await CommandHelper.runCommand("pip3", args);
+        const output = await CommandHelper.runCommand("/usr/share/ddt/GyoiThon/venv/bin/pip", args);
         setOutput(output);
         setLoading(false);
         setValue("configure");
@@ -130,7 +130,7 @@ const Gyoithon = () => {
     // Returns a text file with the target address to the Gyoithon directory on the host device.
     const ShowTarget = async () => {
         setLoading(true);
-        const args = [`/home/kali/Desktop/Deakin-Detonator-Toolkit/src/components/Gyoithon/host.txt`];
+        const args = [`/usr/share/ddt/GyoiThon/host.txt`];
         const output = await CommandHelper.runCommand("cat", args);
         setOutput(output);
         setLoading(false);
@@ -139,8 +139,8 @@ const Gyoithon = () => {
     // Locates and clears the generated target address text file at the Gyoithon directory on the host device.
     const ClearTarget = async () => {
         setLoading(true);
-        const args = [`/usr/share/ddt/GyoiThon/configure.py`, `-clear`, `/home/kali/Desktop/Deakin-Detonator-Toolkit/src/components/Gyoithon/host.txt`];
-        const output = await CommandHelper.runCommand("python3", args);
+        const args = [`/usr/share/ddt/GyoiThon/configure.py`, `-clear`, `/usr/share/ddt/GyoiThon/host.txt`];
+        const output = await CommandHelper.runCommand("/usr/share/ddt/GyoiThon/venv/bin/python", args);
         setOutput(output);
         setLoading(false);
     };
@@ -157,13 +157,13 @@ const Gyoithon = () => {
         const args = [
             `/usr/share/ddt/GyoiThon/configure.py`,
             `-add`,
-            `/home/kali/Desktop/Deakin-Detonator-Toolkit/src/components/Gyoithon/host.txt`,
+            `/usr/share/ddt/GyoiThon/host.txt`,
             values.protocol,
             values.ip,
             values.port,
         ];
         // Displays the output results and state.
-        const output = await CommandHelper.runCommand("python3", args);
+        const output = await CommandHelper.runCommand("/usr/share/ddt/GyoiThon/venv/bin/python", args);
         setOutput(output);
         setLoading(false);
         setAllowSave(true);
@@ -176,11 +176,11 @@ const Gyoithon = () => {
         const args = [
             `/usr/share/ddt/GyoiThon/configure.py`,
             `-import`,
-            `/home/kali/Desktop/Deakin-Detonator-Toolkit/src/components/Gyoithon/host.txt`,
+            `/usr/share/ddt/GyoiThon/host.txt`,
             values.importFile,
         ];
         // Displays the output results and state.
-        const output = await CommandHelper.runCommand("python3", args);
+        const output = await CommandHelper.runCommand("/usr/share/ddt/GyoiThon/venv/bin/python", args);
         setOutput(output);
         setLoading(false);
         setValue("run");
@@ -190,7 +190,7 @@ const Gyoithon = () => {
     const GridSearch = async () => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/modules/Deep_Neural_Network.py`, `-grid`];
-        const output = await CommandHelper.runCommand("python3", args);
+        const output = await CommandHelper.runCommand("/usr/share/ddt/GyoiThon/venv/bin/python", args);
         setOutput(output);
         setLoading(false);
     };
@@ -200,7 +200,7 @@ const Gyoithon = () => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/gyoithon.py`, `-m`];
         const result = await CommandHelper.runCommandGetPidAndOutput(
-            "python3",
+            "/usr/share/ddt/GyoiThon/venv/bin/python",
             args,
             handleProcessData,
             handleProcessTermination
