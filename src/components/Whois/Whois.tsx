@@ -96,7 +96,7 @@ function Whois() {
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
             } else {
-                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+                handleProcessData("\nWHOIS lookup failed. Please verify the domain or IP address and try again.");
             }
             setPid("");
             setLoading(false);
@@ -125,7 +125,7 @@ function Whois() {
                 setAllowSave(true);
             })
             .catch((error) => {
-                setOutput(error.message);
+                setOutput("WHOIS lookup failed. Please check the domain or IP address and try again.");
                 setLoading(false);
             });
     };
