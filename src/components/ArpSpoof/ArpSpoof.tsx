@@ -21,8 +21,7 @@ const ARPSpoofing = () => {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate if the process is loading.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pidGateway, setPidGateway] = useState(""); // State variable to store the PID of the gateway process.
-    const [pidTarget, setPidTarget] = useState(""); // State variable to store the PID of the target process.
+    const [pid, setPid] = useState("");
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
@@ -130,10 +129,8 @@ const ARPSpoofing = () => {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
 
-            // Clear the child process pid reference. There is no longer a valid process running.
-            // We complete this process for both gateway and target processes.
-            setPidGateway("");
-            setPidTarget("");
+            // Clear the process PID because there is no longer an active process.
+            setPid("");
 
             // Cancel the Loading Overlay
             setLoading(false);
@@ -164,39 +161,29 @@ const ARPSpoofing = () => {
     }, [setOutput]);
 
     const onSubmit = async (values: FormValuesType) => {
-        // Disallow saving until the tool's execution is complete
+        // Disallow saving until the tool execution is complete
         setAllowSave(false);
+        setHasSaved(false);
 
-        // Activate loading state to indicate ongoing process
+        // Clear previous output and PID
+        setOutput("");
+        setPid("");
+
+        // Activate loading state
         setLoading(true);
 
-        // Construct arguments for the ARPSpoof command based on form input
-        const argsGateway = [`-t`, values.ipGateway, values.ipTarget];
-        const argsTarget = [`-t`, values.ipTarget, values.ipGateway];
+        // -r performs bidirectional ARP spoofing using one process
+        const args = ["-r", "-t", values.ipGateway, values.ipTarget];
 
-        CommandHelper;
-        // Execute the arpspoof command for the Gateway using helper method
-        CommandHelper.runCommandWithPkexec("arpspoof", argsGateway, handleProcessData, handleProcessTermination)
-            .then(({ output, pid }) => {
+        CommandHelper.runCommandWithPkexec("arpspoof", args, handleProcessData, handleProcessTermination, setPid)
+            .then(({ output }) => {
                 setOutput(output);
-                setPidGateway(pid);
             })
-            .catch((error) => {
-                // Display any errors encountered during command execution
-                setOutput(`Error: ${error.message}`);
-                // Deactivate loading state
-                setLoading(false);
-            });
-        // Execute the arpspoof command for the Target using helper method
-        CommandHelper.runCommandWithPkexec("arpspoof", argsTarget, handleProcessData, handleProcessTermination)
-            .then(({ output, pid }) => {
-                setOutput(output);
-                setPidTarget(pid);
-            })
-            .catch((error) => {
-                // Display any errors encountered during command execution
-                setOutput(`Error: ${error.message}`);
-                // Deactivate loading state
+            .catch((error: unknown) => {
+                const message = error instanceof Error ? error.message : String(error);
+
+                setOutput(`Error: ${message}`);
+                setPid("");
                 setLoading(false);
             });
     };
@@ -229,8 +216,8 @@ const ARPSpoofing = () => {
                         </Group>
                         {LoadingOverlayAndCancelButtonPkexec(
                             loading,
-                            pidGateway,
-                            pidTarget,
+                            pid,
+                            "",
                             handleProcessData,
                             handleProcessTermination
                         )}

@@ -72,23 +72,34 @@ export function LoadingOverlayAndCancelButtonPkexec(
     onTermination: ({ code, signal }: { code: number; signal: number }) => void
 ) {
     // Sends a SIGINT signal to gracefully terminate the active process passed as an argument
-    const handleCancel = () => {
+    const handleCancel = async () => {
+        const processIds = [pid, pid2]
+            .map((processId) => processId.trim())
+            .filter((processId): processId is string => processId.length > 0 && /^\d+$/.test(processId));
+
+        if (processIds.length === 0) {
+            onData("\nUnable to cancel: no valid running process PID was found.");
+            return;
+        }
+
+        onData("\nStopping the running process...");
+
         try {
-            //Run termination command if pid is found
-            if (pid !== null) {
-                const args = [`-2`, pid];
-                CommandHelper.runCommand("kill", args);
+            for (const processId of processIds) {
+                // Try to interrupt a child process started by pkexec.
+                try {
+                    await CommandHelper.runCommand("pkexec", ["pkill", "-INT", "-P", processId]);
+                } catch {
+                    // The tracked PID may already belong directly to arpspoof.
+                }
+
+                // Interrupt the tracked root-owned process.
+                await CommandHelper.runCommand("pkexec", ["kill", "-INT", processId]);
             }
-            if (pid2 !== null) {
-                const args = ["-2", pid2];
-                CommandHelper.runCommand("kill", args);
-            } else {
-                //Throws error if failed to get process ID for termination
-                throw new Error("Error: Failed to get process ID ");
-            }
-        } catch (e) {
-            //Throws an error if exception happens in the cancel process
-            throw e;
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : String(error);
+
+            onData(`\nFailed to stop the process: ${message}`);
         }
     };
 

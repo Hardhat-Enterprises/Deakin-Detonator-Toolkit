@@ -126,11 +126,13 @@ export const CommandHelper = {
         commandString: string,
         args: string[],
         onData: (data: string) => void,
-        onTermination: ({ code, signal }: { code: number; signal: number }) => void
+        onTermination: ({ code, signal }: { code: number; signal: number }) => void,
+        onSpawn?: (pid: string) => void
     ): Promise<{ pid: string; output: string }> {
         const command = new Command("pkexec", [commandString, ...args]);
         const handle: Child = await command.spawn();
         const pid = handle.pid.toString();
+        onSpawn?.(pid);
         console.log(pid);
 
         let stdout = "";
