@@ -121,7 +121,7 @@ const Gyoithon = () => {
     const Install = async () => {
         setLoading(true);
         const args = [`install`, `-r`, `/usr/share/ddt/GyoiThon/requirements.txt`];
-        const output = await CommandHelper.runCommand("pip3", args);
+        const output = await CommandHelper.runCommand("/usr/share/ddt/GyoiThon/venv/bin/pip", args);
         setOutput(output);
         setLoading(false);
         setValue("configure");
@@ -140,7 +140,7 @@ const Gyoithon = () => {
     const ClearTarget = async () => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/configure.py`, `-clear`, `/usr/share/ddt/GyoiThon/host.txt`];
-        const output = await CommandHelper.runCommand("python3", args);
+        const output = await CommandHelper.runCommand("/usr/share/ddt/GyoiThon/venv/bin/python", args);
         setOutput(output);
         setLoading(false);
     };
@@ -163,7 +163,7 @@ const Gyoithon = () => {
             values.port,
         ];
         // Displays the output results and state.
-        const output = await CommandHelper.runCommand("python3", args);
+        const output = await CommandHelper.runCommand("/usr/share/ddt/GyoiThon/venv/bin/python", args);
         setOutput(output);
         setLoading(false);
         setAllowSave(true);
@@ -180,7 +180,7 @@ const Gyoithon = () => {
             values.importFile,
         ];
         // Displays the output results and state.
-        const output = await CommandHelper.runCommand("python3", args);
+        const output = await CommandHelper.runCommand("/usr/share/ddt/GyoiThon/venv/bin/python", args);
         setOutput(output);
         setLoading(false);
         setValue("run");
@@ -190,7 +190,7 @@ const Gyoithon = () => {
     const GridSearch = async () => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/modules/Deep_Neural_Network.py`, `-grid`];
-        const output = await CommandHelper.runCommand("python3", args);
+        const output = await CommandHelper.runCommand("/usr/share/ddt/GyoiThon/venv/bin/python", args);
         setOutput(output);
         setLoading(false);
     };
@@ -200,7 +200,7 @@ const Gyoithon = () => {
         setLoading(true);
         const args = [`/usr/share/ddt/GyoiThon/gyoithon.py`, `-m`];
         const result = await CommandHelper.runCommandGetPidAndOutput(
-            "python3",
+            "/usr/share/ddt/GyoiThon/venv/bin/python",
             args,
             handleProcessData,
             handleProcessTermination
