@@ -53,14 +53,20 @@ const TheHarvester = () => {
     const steps =
         "Step 1: Enter a valid domain to be harvested.\n" +
         "       Example: kali.org\n" +
-        "Step 2: Enter the result limit. The default is 500.\n" +
-        "Step 3: Select a supported source.\n" +
-        "Step 4: Click Start The Harvester.\n" +
-        "Step 5: Review or save the command output below.\n" +
+        "Step 2: Enter the result limit. The default is 500 and it can be left blank.\n" +
+        "       Example: 500\n" +
+        "Step 3: Select a supported source from the available search engines.\n" +
+        "       Example: baidu\n" +
+        "Step 4: Click Start The Harvester to begin the operation.\n" +
+        "Step 5: Review or save the results displayed in the Output section below.\n" +
         "Switch to Advanced Mode for additional options.";
-    const sourceLink = "https://gitlab.com/kalilinux/packages/theharvester";
+
+    const sourceLink =
+        "https://gitlab.com/kalilinux/packages/theharvester";
+
     const tutorial =
         "https://docs.google.com/document/d/1LPb5otKZQK-hx8dy2f_isR0iTcdjbqGS/edit?usp=sharing&ouid=110009021884912956761&rtpof=true&sd=true";
+
     const dependencies = ["theHarvester"];
 
     const form = useForm<FormValuesType>({
