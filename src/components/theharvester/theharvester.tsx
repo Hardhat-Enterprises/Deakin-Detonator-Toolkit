@@ -61,8 +61,7 @@ const TheHarvester = () => {
         "Step 5: Review or save the results displayed in the Output section below.\n" +
         "Switch to Advanced Mode for additional options.";
 
-    const sourceLink =
-        "https://gitlab.com/kalilinux/packages/theharvester";
+    const sourceLink = "https://gitlab.com/kalilinux/packages/theharvester";
 
     const tutorial =
         "https://docs.google.com/document/d/1LPb5otKZQK-hx8dy2f_isR0iTcdjbqGS/edit?usp=sharing&ouid=110009021884912956761&rtpof=true&sd=true";
