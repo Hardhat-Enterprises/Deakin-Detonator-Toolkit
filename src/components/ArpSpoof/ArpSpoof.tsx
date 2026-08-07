@@ -216,7 +216,13 @@ const ARPSpoofing = () => {
                                 </Button>
                             )}
                         </Group>
-                        {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
+                        {LoadingOverlayAndCancelButtonPkexec(
+                            loading,
+                            pid,
+                            "",
+                            handleProcessData,
+                            handleProcessTermination
+                        )}
 
                         {showAlert && (
                             <Alert title="Warning: Potential Risks" color="red">
