@@ -277,6 +277,23 @@ function Eyewitness() {
             `${values.timeout}`,
             "--no-prompt",
         ];
+        if (!values.filePath.startsWith("/")) {
+            setLoading(false);
+            setOutput("Error: File path must be an absolute path (start with /).");
+            return;
+        }
+
+        if (!values.directory.startsWith("/")) {
+            setLoading(false);
+            setOutput("Error: Output directory must be an absolute path (start with /).");
+            return;
+        }
+
+        const args = [`-f`, `${values.filePath}`];
+        args.push(`--web`);
+        args.push(`-d`, `${values.directory}`);
+        args.push(`--timeout`, `${values.timeout}`);
+        args.push(`--no-prompt`);
 
         CommandHelper.runCommandGetPidAndOutput("eyewitness", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {

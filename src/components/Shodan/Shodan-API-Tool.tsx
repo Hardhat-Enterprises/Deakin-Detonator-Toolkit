@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -15,6 +15,8 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     hostIP: string;
     shodanKey: string;
+    endpoint: string; // Added endpoint field
+    searchQuery: string; // Added search query field
 }
 
 /**
@@ -37,23 +39,31 @@ export function ShodanAPITool() {
         "The Shodan API is a powerful tool that allows external network scans to be performed with use of a valid API key."; // Description of the component.
     const steps =
         "How to use Shodan API:\n" +
-        "Step 1: Install shodkey.py to /usr/share/ddt by running install_exploits.sh script or manually transfer shodkey.py to /usr/share/ddt/\n" +
-        "Step 2: Enter a valid API Key\n" +
-        "Step 3: Enter a host IP: E.g. 127.0.0.1\n" +
-        "Step 4: Click Scan button to commence the Shodan API operation. Or click Cancel Scan to terminate scan\n" +
-        "Step 5: View the Output block below to view the results of the tool's execution.\n" +
-        "Step 6: Optional: to save scan results enter filename and click on the save output to file button";
+        "Step 1: Obtain a valid API key by creating an account at https://account.shodan.io; once signed in, the API should be within the account's overview\n" +
+        "Step 2: Enter the obtained API Key\n" +
+        "Step 3: Select the desired Shodan API endpoint.\n" +
+        "Step 4: Depending on the endpoint, enter a Host IP or a Search Query.\n" +
+        "Step 5: Click Scan button to commence the Shodan API operation. Or click Cancel Scan to terminate scan\n" +
+        "Step 6: View the Output block below to view the results of the tool's execution.\n" +
+        "Step 7: Optional: to save scan results enter filename and click on the save output to file button";
     const sourceLink = "https://developer.shodan.io/api"; // Link to the source code.
-    const tutorial = "https://docs.google.com/document/d/1ClC_WmlK8ua6rdpYUE4LsQDOmUQJQf1PFVWVW7uu2jM/edit?usp=sharing"; // Link to the official documentation/tutorial.
-    const dependencies = ["python3"]; // Contains the dependencies required by the component.
+    const tutorial = "https://docs.google.com/document/d/1doC-ru2Ivvqx925en0SzU5E-ROQRufdi0MftiozhKgo/edit?usp=sharing"; // Link to the official documentation/tutorial.
+    const dependencies = ["shodan"]; // Contains the dependencies required by the component.
 
     // Form Hook to handle form input.
     let form = useForm({
         initialValues: {
             hostIP: "",
             shodanKey: "",
+            endpoint: "", // Default endpoint
+            searchQuery: "",
         },
     });
+
+    // Determine if the selected endpoint requires a search query
+    const requiresQuery = form.values.endpoint !== "host";
+    // Determine if the selected endpoint requires an IP address
+    const requiresIP = form.values.endpoint === "host";
 
     useEffect(() => {
         // Check if the command is available and set the state variables accordingly.
@@ -136,12 +146,22 @@ export function ShodanAPITool() {
         // Enable the loading overlay while the tool executes.
         setLoading(true);
 
-        const args = ["/usr/share/ddt/shodkey.py", "-i", values.hostIP, "-k", values.shodanKey];
+        // Construct the arguments array dynamically based on the selected endpoint
+        const args = [values.endpoint];
+
+        if (requiresIP) {
+            args.push(values.hostIP);
+        }
+
+        if (requiresQuery) {
+            args.push(values.searchQuery);
+        }
 
         try {
             // Execute the Shodan command via helper method and handle its output or potential errors.
+            CommandHelper.runCommand("shodan", values.shodanKey); //initialises the Shodan CLI with the obtained API key
             const result = await CommandHelper.runCommandGetPidAndOutput(
-                "python3",
+                "shodan",
                 args,
                 handleProcessData,
                 handleProcessTermination
@@ -185,7 +205,27 @@ export function ShodanAPITool() {
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <TextInput label={"Valid API Key"} required {...form.getInputProps("shodanKey")} />
-                    <TextInput label={"Host IP"} required {...form.getInputProps("hostIP")} />
+
+                    <Select
+                        label="Select Shodan API Endpoint"
+                        placeholder="Choose endpoint"
+                        data={[
+                            { value: "host", label: "host" },
+                            { value: "count", label: "count" },
+                            { value: "search", label: "search" },
+                        ]}
+                        required
+                        {...form.getInputProps("endpoint")}
+                    />
+
+                    {/* Conditionally render IP address input */}
+                    {requiresIP && <TextInput label={"Host IP"} required {...form.getInputProps("hostIP")} />}
+
+                    {/* Conditionally render Search Query input */}
+                    {requiresQuery && (
+                        <TextInput label={"Search Query"} required {...form.getInputProps("searchQuery")} />
+                    )}
+
                     <Button type={"submit"}>Scan</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
