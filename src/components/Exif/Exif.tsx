@@ -142,36 +142,38 @@ const ExifTool = () => {
      * Handles form submission for the Exif component.
      * @param {FormValuesType} values - The form values containing the target domain.
      */
-  const onSubmit = async (values: FormValuesType) => {
-    setLoading(true);
-    setAllowSave(false);
+    const onSubmit = async (values: FormValuesType) => {
+        setLoading(true);
+        setAllowSave(false);
 
-    const args = [values.filePath];
-    if (values.actionType === "read") {
-        args.push("-" + values.tag);
-    } else if (values.actionType === "write") {
-        args.push("-" + values.tag + "=" + values.value);
-    }
-
-    try {
-        const { pid, output } = await CommandHelper.runCommandWithPkexec(
-            "exiftool",
-            args,
-            handleProcessData,
-            handleProcessTermination
-        );
-        setPid(pid);
-        if (!output || output.trim() === "") {
-            setOutput(`Error: File not found at path "${values.filePath}".\nPlease verify the file path and try again.`);
-            setLoading(false);
-            return;
+        const args = [values.filePath];
+        if (values.actionType === "read") {
+            args.push("-" + values.tag);
+        } else if (values.actionType === "write") {
+            args.push("-" + values.tag + "=" + values.value);
         }
-        setOutput(output);
-    } catch (error: any) {
-        setOutput(`Error: ${error.message}`);
-        setLoading(false);
-    }
-};
+
+        try {
+            const { pid, output } = await CommandHelper.runCommandWithPkexec(
+                "exiftool",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+            setPid(pid);
+            if (!output || output.trim() === "") {
+                setOutput(
+                    `Error: File not found at path "${values.filePath}".\nPlease verify the file path and try again.`
+                );
+                setLoading(false);
+                return;
+            }
+            setOutput(output);
+        } catch (error: any) {
+            setOutput(`Error: ${error.message}`);
+            setLoading(false);
+        }
+    };
 
     /**
      * clearOutput: Callback to clear the output state.
