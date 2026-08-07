@@ -289,12 +289,7 @@ function Eyewitness() {
             return;
         }
 
-        const args = [`-f`, `${values.filePath}`];
-        args.push(`--web`);
-        args.push(`-d`, `${values.directory}`);
-        args.push(`--timeout`, `${values.timeout}`);
-        args.push(`--no-prompt`);
-
+        
         CommandHelper.runCommandGetPidAndOutput("eyewitness", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 setPid(pid);
