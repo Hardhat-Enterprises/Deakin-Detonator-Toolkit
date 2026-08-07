@@ -9,24 +9,9 @@ interface Lesson {
 }
 
 const lessons: Lesson[] = [
-    {
-        title: "Introduction to Pentesting",
-        folder: "intro",
-        slideCount: 9,
-        image: "resources/images/introimg.png",
-    },
-    {
-        title: "Lesson 1: Scanning",
-        folder: "scanning",
-        slideCount: 6,
-        image: "resources/images/lesson1img.png",
-    },
-    {
-        title: "Lesson 2: Enumeration",
-        folder: "enumeration",
-        slideCount: 6,
-        image: "resources/images/lesson2img.png",
-    },
+    { title: "Introduction to Pentesting", folder: "intro", slideCount: 9, image: "resources/images/introimg.png" },
+    { title: "Lesson 1: Scanning", folder: "scanning", slideCount: 6, image: "resources/images/lesson1img.png" },
+    { title: "Lesson 2: Enumeration", folder: "enumeration", slideCount: 6, image: "resources/images/lesson2img.png" },
     {
         title: "Lesson 3: Exploitation",
         folder: "exploitation",
