@@ -15,14 +15,13 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     ipGateway: string;
     ipTarget: string;
-    networkInterface: string;
 }
 
 const ARPSpoofing = () => {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate if the process is loading.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pid, setPid] = useState("");
+    const [pid, setPid] = useState(""); // State variable to store the PID of the running arpspoof process.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
@@ -97,7 +96,6 @@ const ARPSpoofing = () => {
         initialValues: {
             ipGateway: "",
             ipTarget: "",
-            networkInterface: "",
         },
     });
 
@@ -131,7 +129,7 @@ const ARPSpoofing = () => {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
 
-            // Clear the process PID because there is no longer an active process.
+            // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
 
             // Cancel the Loading Overlay
@@ -163,28 +161,31 @@ const ARPSpoofing = () => {
     }, [setOutput]);
 
     const onSubmit = async (values: FormValuesType) => {
-        // Disallow saving until the tool execution is complete
+        // Disallow saving until the tool's execution is complete
         setAllowSave(false);
-        setHasSaved(false);
 
-        // Clear previous output and PID
-        setOutput("");
-        setPid("");
-
-        // Activate loading state
+        // Activate loading state to indicate ongoing process
         setLoading(true);
 
-        // -r performs bidirectional ARP spoofing using one process
+        // Construct arguments for the ARPSpoof command based on form input.
+        // -r performs bidirectional ARP spoofing using a single process, so only
+        // one pkexec/arpspoof process needs to be tracked and cancelled.
         const args = ["-r", "-t", values.ipTarget, values.ipGateway];
-        CommandHelper.runCommandWithPkexec("arpspoof", args, handleProcessData, handleProcessTermination, setPid)
+
+        CommandHelper.runCommandWithPkexec(
+            "arpspoof",
+            args,
+            handleProcessData,
+            handleProcessTermination,
+            (spawnedPid) => setPid(spawnedPid)
+        )
             .then(({ output }) => {
                 setOutput(output);
             })
-            .catch((error: unknown) => {
-                const message = error instanceof Error ? error.message : String(error);
-
-                setOutput(`Error: ${message}`);
-                setPid("");
+            .catch((error) => {
+                // Display any errors encountered during command execution
+                setOutput(`Error: ${error.message}`);
+                // Deactivate loading state
                 setLoading(false);
             });
     };
@@ -215,13 +216,7 @@ const ARPSpoofing = () => {
                                 </Button>
                             )}
                         </Group>
-                        {LoadingOverlayAndCancelButtonPkexec(
-                            loading,
-                            pid,
-                            "",
-                            handleProcessData,
-                            handleProcessTermination
-                        )}
+                        {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
 
                         {showAlert && (
                             <Alert title="Warning: Potential Risks" color="red">
@@ -232,7 +227,6 @@ const ARPSpoofing = () => {
 
                         <TextInput label={"Target one IP address"} required {...form.getInputProps("ipGateway")} />
                         <TextInput label={"Target two IP address"} required {...form.getInputProps("ipTarget")} />
-                        <TextInput label={"Network interface"} required {...form.getInputProps("networkInterface")} />
                         <Button type={"submit"}>Start Spoof</Button>
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />

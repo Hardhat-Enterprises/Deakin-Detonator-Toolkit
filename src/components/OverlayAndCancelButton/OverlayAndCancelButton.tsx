@@ -71,35 +71,22 @@ export function LoadingOverlayAndCancelButtonPkexec(
     onData: (data: string) => void,
     onTermination: ({ code, signal }: { code: number; signal: number }) => void
 ) {
-    // Sends a SIGINT signal to gracefully terminate the active process passed as an argument
-    const handleCancel = async () => {
-        const processIds = [pid, pid2]
-            .map((processId) => processId.trim())
-            .filter((processId): processId is string => processId.length > 0 && /^\d+$/.test(processId));
+    // Sends a privileged SIGINT signal to gracefully terminate the active root-owned process.
+    // arpspoof is spawned via pkexec, so it is owned by root - an unprivileged `kill` here
+    // silently fails and leaves the process running, so `kill` itself must also go through pkexec.
+    const isValidPid = (value: string) => value !== null && value !== undefined && value.trim() !== "";
 
-        if (processIds.length === 0) {
-            onData("\nUnable to cancel: no valid running process PID was found.");
-            return;
+    const handleCancel = () => {
+        if (isValidPid(pid)) {
+            CommandHelper.runCommand("pkexec", ["kill", "-2", pid]).catch((e) => {
+                console.error("Failed to terminate process:", e);
+            });
         }
 
-        onData("\nStopping the running process...");
-
-        try {
-            for (const processId of processIds) {
-                // Try to interrupt a child process started by pkexec.
-                try {
-                    await CommandHelper.runCommand("pkexec", ["pkill", "-INT", "-P", processId]);
-                } catch {
-                    // The tracked PID may already belong directly to arpspoof.
-                }
-
-                // Interrupt the tracked root-owned process.
-                await CommandHelper.runCommand("pkexec", ["kill", "-INT", processId]);
-            }
-        } catch (error: unknown) {
-            const message = error instanceof Error ? error.message : String(error);
-
-            onData(`\nFailed to stop the process: ${message}`);
+        if (isValidPid(pid2)) {
+            CommandHelper.runCommand("pkexec", ["kill", "-2", pid2]).catch((e) => {
+                console.error("Failed to terminate process:", e);
+            });
         }
     };
 
