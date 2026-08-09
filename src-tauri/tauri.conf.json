@@ -158,6 +158,11 @@
                         "args": true
                     },
                     {
+                        "name": "foremost",
+                        "cmd": "/usr/bin/foremost",
+                        "args": true
+                    },
+                    {
                         "name": "fping",
                         "cmd": "fping",
                         "args": true
