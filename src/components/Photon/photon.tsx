@@ -77,7 +77,7 @@ const Photon = () => {
         "Step 4: Click Start Photon to begin scanning.\n" +
         "Step 5: View the output results displayed below.";
     const sourceLink = "https://www.kali.org/tools/photon/";
-    const tutorial = "https://docs.google.com/document/d/1KhrGuwq3N3NHzLmxTV_7s8buNy2ykOVX3alfx_C7V8s/edit?usp=sharing";
+    const tutorial = "https://docs.google.com/document/d/1aQJ3MDEhpuoqYPW9YpwIau_YOGso8YiL8fWndcQ2o4g/edit?tab=t.0";
     const dependencies = ["photon"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
@@ -153,6 +153,13 @@ const Photon = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+        const threads = Number(values.threads);
+
+        if (values.threads && (!Number.isInteger(threads) || threads <= 0)) {
+            setOutput("Error: Threads must be a positive integer greater than 0");
+            setLoading(false);
+            return;
+        }
 
         // Create the arguments array for the command
         const args = [];
