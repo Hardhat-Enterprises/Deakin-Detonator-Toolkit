@@ -1,4 +1,4 @@
-import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
+import { Group, Text, ThemeIcon, UnstyledButton, useMantineTheme } from "@mantine/core";
 import {
     IconHome,
     IconQuestionMark,
@@ -20,21 +20,23 @@ interface MainLinkProps {
 }
 
 function MainLink({ icon, color, label, route }: MainLinkProps) {
+    const theme = useMantineTheme();
     return (
         <UnstyledButton
             sx={(theme) => ({
                 display: "block",
                 width: "100%",
-                padding: theme.spacing.xs,
                 borderRadius: theme.radius.sm,
                 color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
-
                 "&:hover": {
                     backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
                 },
             })}
         >
-            <Link to={route} style={{ textDecoration: "none", color: "inherit" }}>
+            <Link
+                to={route}
+                style={{ textDecoration: "none", color: "inherit", padding: theme.spacing.xs, display: "block" }}
+            >
                 <Group>
                     <ThemeIcon color={color} variant="light">
                         {icon}
