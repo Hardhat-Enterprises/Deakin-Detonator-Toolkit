@@ -2,6 +2,7 @@
     "name": "deakin-detonator-toolkit",
     "private": true,
     "version": "0.1.1",
+    "packageManager": "yarn@3.8.7",
     "scripts": {
         "dev": "node --max-old-space-size=4096 node_modules/vite/bin/vite.js",
         "build": "node --max-old-space-size=4096 node_modules/vite/bin/vite.js build",
@@ -21,7 +22,7 @@
         ]
     },
     "dependencies": {
-        "@actions/github": "^6.0.0",
+        "@actions/github": "8.0.1",
         "@emotion/react": "^11.10.4",
         "@mantine/core": "^5.3.0",
         "@mantine/form": "^7.17.7",
@@ -35,8 +36,8 @@
         "node-fetch": "^3.3.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-router-dom": "6.30.1",
-        "uuid": "^11.1.0"
+        "react-router-dom": "6.30.3",
+        "uuid": "^14.0.0"
     },
     "devDependencies": {
         "@tauri-apps/cli": "^1.5.6",
