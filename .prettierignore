@@ -3,3 +3,4 @@ coverage/
 out/
 .idea/
 src-tauri/
+dist/
