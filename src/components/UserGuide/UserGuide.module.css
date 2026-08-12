@@ -3,3 +3,12 @@
 .text {
     white-space: normal;
 }
+
+.tutorialContainer {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    border-radius: 8px;
+    overflow: auto;
+}
