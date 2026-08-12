@@ -43,7 +43,7 @@ function Arjuntool() {
         "Step 4: View the output block below to see the results.";
     +"Step 5: Enter an optional JSON output filename, e.g. arjunoutput.json.\n";
     const sourceLink = "https://github.com/s0md3v/Arjun"; // Link to the source code (or Kali Tools).
-    const tutorial = "https://docs.google.com/document/d/1zIsHBJPQDL9KLkZK0ztg1DuMoumwwWwV3lJdwjVRJ-c/edit?usp=sharing"; // Link to the official documentation/tutorial.
+    const tutorial = "https://hackmd.io/@zee-10/Skjln8dHZe"; // Link to the official documentation/tutorial.
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
