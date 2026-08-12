@@ -1,5 +1,14 @@
-import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
-import { IconHome, IconQuestionMark, IconStepInto, IconTools, IconSearch, IconTarget } from "@tabler/icons";
+import { Group, Text, ThemeIcon, UnstyledButton, useMantineTheme } from "@mantine/core";
+import {
+    IconHome,
+    IconQuestionMark,
+    IconStepInto,
+    IconTools,
+    IconSearch,
+    IconTarget,
+    IconReportAnalytics,
+    IconNews,
+} from "@tabler/icons";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -11,21 +20,23 @@ interface MainLinkProps {
 }
 
 function MainLink({ icon, color, label, route }: MainLinkProps) {
+    const theme = useMantineTheme();
     return (
         <UnstyledButton
             sx={(theme) => ({
                 display: "block",
                 width: "100%",
-                padding: theme.spacing.xs,
                 borderRadius: theme.radius.sm,
                 color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
-
                 "&:hover": {
                     backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0],
                 },
             })}
         >
-            <Link to={route} style={{ textDecoration: "none", color: "inherit" }}>
+            <Link
+                to={route}
+                style={{ textDecoration: "none", color: "inherit", padding: theme.spacing.xs, display: "block" }}
+            >
                 <Group>
                     <ThemeIcon color={color} variant="light">
                         {icon}
@@ -36,8 +47,6 @@ function MainLink({ icon, color, label, route }: MainLinkProps) {
         </UnstyledButton>
     );
 }
-
-// Home Page Data
 const homeData = {
     icon: <IconHome size={16} />,
     color: "teal",
@@ -73,6 +82,20 @@ const walkthroughsData = {
     route: "/walkthroughs",
 };
 
+const scenarioTrainingData = {
+    icon: <IconReportAnalytics size={16} />,
+    color: "teal",
+    label: "AI Training Scenario",
+    route: "/scenario-training",
+};
+
+const newsData = {
+    icon: <IconNews size={16} />,
+    color: "cyan",
+    label: "Cyber News",
+    route: "/news",
+};
+
 const referencesData = {
     icon: <IconSearch size={16} />,
     color: "green",
@@ -80,7 +103,16 @@ const referencesData = {
     route: "/references",
 };
 
-const data = [homeData, aboutData, toolsData, attackVectorsData, walkthroughsData, referencesData];
+const data = [
+    homeData,
+    aboutData,
+    toolsData,
+    attackVectorsData,
+    walkthroughsData,
+    scenarioTrainingData,
+    newsData,
+    referencesData,
+];
 
 export function MainLinks() {
     const links = data.map((link) => <MainLink {...link} key={link.label} />);

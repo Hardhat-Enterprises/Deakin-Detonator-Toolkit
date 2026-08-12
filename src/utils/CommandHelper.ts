@@ -128,7 +128,6 @@ export const CommandHelper = {
         onData: (data: string) => void,
         onTermination: ({ code, signal }: { code: number; signal: number }) => void
     ): Promise<{ pid: string; output: string }> {
-        // Modify how the command is prepared with 'pkexec'
         const command = new Command("pkexec", [commandString, ...args]);
         const handle: Child = await command.spawn();
         const pid = handle.pid.toString();
@@ -151,20 +150,43 @@ export const CommandHelper = {
             });
         }
 
+        // Only resolve once when the process actually closes
         return new Promise<{ pid: string; output: string }>((resolve, reject) => {
             command.on("close", ({ code, signal }: { code: number; signal: number }) => {
                 if (pid !== undefined) {
                     onTermination({ code, signal });
-                    resolve({ pid: pid, output: `${stdout}\n${stderr}` });
+                    resolve({
+                        pid: pid,
+                        output: `$ pkexec ${commandString} ${args.join(" ")}\n\n${stdout}\n${stderr}`,
+                    });
                 } else {
                     reject(new Error("Failed to get process PID."));
                 }
             });
-            if (pid !== undefined) {
-                resolve({ pid: pid, output: `$ pkexec ${commandString} ${args.join(" ")}\n\n${stdout}\n${stderr}` });
-            } else {
-                reject(new Error("Failed to get process PID."));
-            }
         });
+    },
+    /**
+     * Checks whether the given commands are available on the system.
+     * Runs each command with a version flag and considers it unavailable
+     * if it produces an error or stderr output.
+     *
+     * @param commands Array of command names to verify (e.g., ["nmap"])
+     * @returns Promise resolving to true if all commands are available, false otherwise
+     */
+    async checkAllCommandsAvailability(commands: string[]): Promise<boolean> {
+        try {
+            for (const cmd of commands) {
+                const command = new Command(cmd, ["--version"]); // or ["-v"]
+                const handle = await command.execute();
+
+                // if it fails, stderr will probably have something
+                if (handle.stderr && handle.stderr.trim().length > 0) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (err) {
+            return false;
+        }
     },
 };

@@ -18,10 +18,10 @@
                 "sidecar": true,
                 "scope": [
                     {
-    			"name": "nmap",
-   			"cmd": "/usr/bin/nmap",
-    			"args": true
-		    },
+                        "name": "nmap",
+                        "cmd": "/usr/bin/nmap",
+                        "args": true
+                    },
                     {
                         "name": "airbase-ng",
                         "cmd": "airbase-ng",
@@ -30,11 +30,6 @@
                     {
                         "name": "aircrack-ng",
                         "cmd": "aircrack-ng",
-                        "args": true
-                    },
-                    {
-                        "name": "amap",
-                        "cmd": "amap",
                         "args": true
                     },
                     {
@@ -108,11 +103,6 @@
                         "args": true
                     },
                     {
-                        "name": "crackmapexec",
-                        "cmd": "crackmapexec",
-                        "args": true
-                    },
-                    {
                         "name": "crunch",
                         "cmd": "crunch",
                         "args": true
@@ -155,6 +145,11 @@
                     {
                         "name": "fcrackzip",
                         "cmd": "fcrackzip",
+                        "args": true
+                    },
+                    {
+                        "name": "ffuf",
+                        "cmd": "ffuf",
                         "args": true
                     },
                     {
@@ -258,6 +253,11 @@
                         "args": true
                     },
                     {
+                        "name": "nuclei",
+                        "cmd": "nuclei",
+                        "args": true
+                    },
+                    {
                         "name": "parsero",
                         "cmd": "parsero",
                         "args": true
@@ -308,6 +308,11 @@
                         "args": true
                     },
                     {
+                        "name": "shodan",
+                        "cmd": "shodan",
+                        "args": true
+                    },
+                    {
                         "name": "sherlock",
                         "cmd": "sherlock",
                         "args": true
@@ -337,7 +342,7 @@
                         "cmd": "subjack",
                         "args": true
                     },
-                      
+
                     {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
@@ -398,7 +403,7 @@
                         "cmd": "whois",
                         "args": true
                     },
-                  
+
                     {
                         "name": "wpscan",
                         "cmd": "wpscan",
@@ -413,11 +418,17 @@
             },
             "fs": {
                 "all": true,
+                "writeFile": true,
                 "scope": [
                     "$TEMP/**",
                     "$HOME/Deakin-Detonator-Toolkit/**",
-                    "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**"
+                    "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**",
+                    "$DESKTOP/**"
                 ]
+            },
+            "dialog": {
+                "all": true,
+                "save": true
             },
             "path": {
                 "all": true

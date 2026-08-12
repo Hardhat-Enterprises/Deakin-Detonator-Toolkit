@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
-import { Button, Stack, TextInput, Alert } from "@mantine/core";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -9,150 +9,124 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
 
-/**
- * Represents the form values for the ARPfingerprint component.
- */
+/** Form values */
 interface FormValuesType {
-    interface: string;
+    targetIP: string;
 }
 
-/**
- * The ARPfingerprint component.
- * @returns The ARPfingerprint component.
- */
 function ARPFingerprinting() {
-    // Component State Variables.
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
-    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
-    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable to check if the installation modal is open.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state for the installation modal.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
+    // State
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const [pid, setPid] = useState("");
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // Component Constants.
-    const title = "ARP fingerprint Tool"; // Title of the component.
+    // UI copy
+    const title = "ARP fingerprint Tool";
     const description =
-        "ARP fingerprinting is a network reconnaissance technique used to detect the operating systems and devices in a network."; // Description of the component.
-    const steps = "Step 1: Enter the IP address of the target device.\n";
-    ("Step 2: Click Scan to start ARP fingerprinting.\n");
-    ("Step 3: View the Output block below to see the fingerprinting results.");
-    const sourceLink = "https://www.kali.org/tools/arp-scan/#arp-fingerprint"; // Link to the source code or Kali Tools page.
-    const tutorial = "https://docs.google.com/document/d/1PLMdKlXsbzYI9rF25Fo_Gv8aDJvtai0s09hPjM7NA6w/edit?usp=sharing"; // Link to the official documentation/tutorial.
-    const dependencies = ["arp-scan"]; // Dependencies required for the ARPfingerprint tool.
+        "ARP fingerprinting is a network reconnaissance technique used to detect the operating systems and devices in a network.";
+    const steps =
+        "Step 1: Enter the IP address of the target device.\n" +
+        "Step 2: Click Scan to start ARP fingerprinting.\n" +
+        "Step 3: View the Output block below to see the fingerprinting results.";
+    const sourceLink = "https://www.kali.org/tools/arp-scan/#arp-fingerprint";
+    const tutorial = "https://docs.google.com/document/d/1NXhDeGZk8K1kqBXBHdQdq0yBUcBCxq6n/edit";
 
-    // Form hook to handle form input.
+    // Check for the exact binary we call
+    const dependencies = ["arp-fingerprint"];
+
+    // IPv4-only regex (blocks hostnames, text, CIDR)
+    const ipv4Regex = /^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/;
+
+    // Form
     const form = useForm<FormValuesType>({
-        initialValues: {
-            interface: "",
+        initialValues: { targetIP: "" },
+        validate: {
+            targetIP: (value) =>
+                ipv4Regex.test(value.trim()) ? null : "Enter a valid IPv4 address, e.g., 192.168.1.1",
         },
     });
 
-    // Check the availability of all commands in the dependencies array.
+    // Dependency check + disclaimer auto-hide
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-                setLoadingModal(false); // Set loading to false after the check is done
+                setIsCommandAvailable(isAvailable);
+                setOpened(!isAvailable);
+                setLoadingModal(false);
             })
-            .catch((error) => {
-                console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+            .catch((err) => {
+                console.error("Command availability check failed:", err);
+                setLoadingModal(false);
             });
+
+        alertTimeout.current = setTimeout(() => setShowAlert(false), 5000);
+        return () => {
+            if (alertTimeout.current) clearTimeout(alertTimeout.current);
+        };
     }, []);
 
-    /**
-     * handleProcessData: Callback to handle and append new data from the child process to the output.
-     * It updates the state by appending the new data received to the existing output.
-     * @param {string} data - The data received from the child process.
-     */
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) clearTimeout(alertTimeout.current);
+        alertTimeout.current = setTimeout(() => setShowAlert(false), 5000);
+    };
+
+    // Append process output
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data);
+        setOutput((prev) => (prev ? prev + "\n" + data : data));
     }, []);
 
-    /**
-     * handleProcessTermination: Callback to handle the termination of the child process.
-     * Once the process termination is handled, it clears the process PID reference and
-     * deactivates the loading overlay.
-     * @param {object} param - An object containing information about the process termination.
-     * @param {number} param.code - The exit code of the terminated process.
-     * @param {number} param.signal - The signal code indicating how the process was terminated.
-     */
+    // Process termination
     const handleProcessTermination = useCallback(
-        ({ code, signal }: { code: number; signal: number }) => {
-            // If the process was successful, display a success message.
+        ({ code, signal }: { code: number; signal: number | null }) => {
             if (code === 0) {
                 handleProcessData("\nARP fingerprinting completed successfully.");
-
-                // If the process was terminated manually, display a termination message.
             } else if (signal === 15) {
                 handleProcessData("\nARP fingerprinting was manually terminated.");
-
-                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nARP fingerprinting terminated with exit code: ${code} and signal code: ${signal}`);
             }
-
-            // Cancel the loading overlay. The process has completed.
             setLoading(false);
-
-            // Now that loading has completed, allow the user to save the output to a file.
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData]
     );
 
-    /**
-     * handleSaveComplete: Recognizes that the output file has been saved.
-     * Passes the saved status back to SaveOutputToTextFile_v2.
-     */
     const handleSaveComplete = () => {
         setHasSaved(true);
         setAllowSave(false);
     };
 
-    /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the ARPfingerprint tool with the given parameters.
-     * Once the command is executed, the results or errors are displayed in the output.
-     *@param {FormValuesType} values - The form values, containing target IP.     */
+    // Submit handler — single-host run (correct argv order)
     const onSubmit = async (values: FormValuesType) => {
-        // Set the loading state to true to indicate that the process is starting.
+        const { hasErrors } = form.validate();
+        if (hasErrors) return;
+
         setLoading(true);
-
-        // Disable saving the output to a file while the process is running.
         setAllowSave(false);
+        setOutput(""); // clear console (optional)
 
-        // Construct the arguments for the ARPfingerprint command.
-        const args = [`-l`, values.interface];
-        try {
-            // Execute the ARPfingerprint command using the CommandHelper utility with pkexec.
-            await CommandHelper.runCommandWithPkexec(
-                "arp-fingerprint",
-                args,
-                handleProcessData,
-                handleProcessTermination
-            );
-        } catch (error: any) {
-            // If an error occurs during command execution, display the error message.
-            setOutput(`Error: ${error.message}`);
+        const args = [values.targetIP.trim()];
 
-            // Set the loading state to false since the process failed.
-            setLoading(false);
-
-            // Allow saving the output (which includes the error message) to a file.
-            setAllowSave(true);
-        }
+        CommandHelper.runCommandWithPkexec("arp-fingerprint", args, handleProcessData, handleProcessTermination)
+            .then(({ output, pid }) => {
+                setOutput(output);
+                setPid(pid);
+            })
+            .catch((error) => {
+                setOutput(`Error: ${error.message}`);
+                setLoading(false);
+            });
     };
 
-    /**
-     * clearOutput: Callback function to clear the console output.
-     * It resets the state variable holding the output, thereby clearing the display.
-     */
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
@@ -161,7 +135,6 @@ function ARPFingerprinting() {
 
     return (
         <>
-            {/* Render the UserGuide component with component details */}
             <RenderComponent
                 title={title}
                 description={description}
@@ -169,27 +142,46 @@ function ARPFingerprinting() {
                 tutorial={tutorial}
                 sourceLink={sourceLink}
             >
-                {/* Render the installation modal if the command is not available */}
                 {!loadingModal && (
                     <InstallationModal
                         isOpen={opened}
                         setOpened={setOpened}
                         feature_description={description}
                         dependencies={dependencies}
-                    ></InstallationModal>
+                    />
                 )}
+
                 <form onSubmit={form.onSubmit(onSubmit)}>
-                    {/* Render the loading overlay and cancel button */}
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
+                    </Group>
+
                     {LoadingOverlayAndCancelButton(loading, pid)}
+
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            Use this tool only on networks you own or have explicit permission to test.
+                        </Alert>
+                    )}
+
                     <Stack>
-                        <TextInput label="Target IP address" required {...form.getInputProps("targetIP")} />
+                        <TextInput
+                            label="Target IP address"
+                            placeholder="e.g., 192.168.1.1"
+                            required
+                            {...form.getInputProps("targetIP")}
+                        />
+
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
 
-                        <Button type={"submit"} disabled={loading}>
+                        <Button type="submit" disabled={loading}>
                             Start {title}
                         </Button>
 
-                        {/* Render the console wrapper component */}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                     </Stack>
                 </form>

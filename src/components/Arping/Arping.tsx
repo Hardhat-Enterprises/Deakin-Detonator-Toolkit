@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput, Checkbox } from "@mantine/core";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Button, Stack, TextInput, Checkbox, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -33,6 +33,8 @@ const Arping = () => {
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
     const [pid, setPid] = useState("");
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants
     const title = "Arping"; // Title for the Arping component.
@@ -44,9 +46,8 @@ const Arping = () => {
         "Step 3: Specify the network interface to use for sending ARP requests.\n" +
         "Step 4: Check the verbose mode to get detailed output.\n"; // Description providing information about the Arping component.
     const sourceLink = "http://github.com/ThomasHabets/arping"; // Link to the source code
-    const tutorial = "https://www.kali.org/tools/arping/"; // Link to the official documentation/tutorial
+    const tutorial = "https://docs.google.com/document/d/1gw0-mXC_Bl6SeIBN3IPw4va49fA3HKK6/edit"; // Link to the official documentation/tutorial
     const dependencies = ["arping"]; // Contains the dependencies required by the component.
-
     // Form hook to handle form input
     const form = useForm<FormValuesType>({
         initialValues: {
@@ -73,7 +74,27 @@ const Arping = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false); // Crucial change, set to false even on errors
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -123,6 +144,13 @@ const Arping = () => {
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process.
         setLoading(true);
+        if (
+            !/^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/.test(values.targetIP.trim())
+        ) {
+            setOutput("Error: Enter a valid IP address");
+            setLoading(false);
+            return;
+        }
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
         // Construct arguments for the Arping component command based on form input.

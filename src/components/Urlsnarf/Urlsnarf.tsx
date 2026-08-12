@@ -35,7 +35,6 @@ const Urlsnarf = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
 
     // Component constants.
-    const listeners = ["Interface", "Packet capture file"]; // List of listener settings.
     const isListenerInterface = selectedListenerInput === "Interface"; // Check if the selected listener input is an interface.
     const isListenerFile = selectedListenerInput === "Packet capture file"; // Check if the selected listener input is a file.
     const title = "Urlsnarf"; // Title of the component.
@@ -48,7 +47,7 @@ const Urlsnarf = () => {
         "Step 4: Click the start Urlsnarf button.\n" +
         "Step 5: View the Output block to see the results.";
     const sourceLink = "https://linux.die.net/man/8/urlsnarf"; // Link to the source code (or Kali Tools).
-    const tutorial = "https://docs.google.com/document/d/1TT3NcGul1FzKHdh18FIvOsQ9sDSLCnIlcDPVXc9Jmas/edit?usp=sharing"; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1fXIoSA0NjcL0Ai-zH-7hc1-K4uW5BcV84QjJ-GY8rHo/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["dsniff"]; // Contains the dependencies required by the component.
 
     // Form hook to handle form input.
@@ -146,17 +145,21 @@ const Urlsnarf = () => {
         args.push(`-v`, `${values.versusMode}`);
 
         if (selectedListenerInput === "Interface") {
-            setLoading(false); // TODO - Have loading state only be true while inputting password
             CommandHelper.runCommandWithPkexec("urlsnarf", args, handleProcessData, handleProcessTermination)
                 .then(({ output, pid }) => {
                     // Update the UI with the results from the executed command
                     setOutput(output);
                     setPid(pid);
+                    setTimeout(() => {
+                        setLoading(false);
+                        setAllowSave(true);
+                    }, 77500);
                 })
                 .catch((error) => {
                     // Display any errors encountered during command execution
                     setOutput(error.message);
                     // Deactivate loading state
+                    setLoading(false);
                 });
         } else if (selectedListenerInput === "Packet capture file") {
             CommandHelper.runCommandGetPidAndOutput("urlsnarf", args, handleProcessData, handleProcessTermination)
@@ -213,9 +216,12 @@ const Urlsnarf = () => {
                         value={selectedListenerInput}
                         onChange={(e) => setSelectedListenerInput(e.target.value)}
                         label={"listener settings"}
-                        data={listeners}
+                        data={[
+                            { value: "", label: "Select URL-Snarf Mode", disabled: true },
+                            { value: "Interface", label: "Interface" },
+                            { value: "Packet capture file", label: "Packet Capture File" },
+                        ]}
                         required
-                        placeholder={"Interface or PCAP file"}
                     />
                     {isListenerInterface && (
                         <TextInput

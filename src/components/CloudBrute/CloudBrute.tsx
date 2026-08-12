@@ -1,6 +1,6 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, Stack, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -15,6 +15,8 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     domain: string;
     keyword: string;
+    provider: string;
+    output: string;
     wordlist: string;
 }
 
@@ -32,6 +34,8 @@ const CloudBrute = () => {
     const [loadingModal, setLoadingModal] = useState(true);
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Component Constants.
     const title = "CloudBrute";
@@ -54,6 +58,8 @@ const CloudBrute = () => {
         initialValues: {
             domain: "",
             keyword: "",
+            provider: "",
+            output: "/home/kali/Deakin-Detonator-Toolkit/OutputFiles/output.txt",
             wordlist: "/usr/share/dirb/wordlists/common.txt",
         },
     });
@@ -70,7 +76,27 @@ const CloudBrute = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false);
             });
+        // Set timeout to remove alert after 5 seconds on load.
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -115,9 +141,26 @@ const CloudBrute = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
+        if (!values.wordlist.trim()) {
+            setOutput("Error: Please provide a path to a correct wordlist file.");
+            setLoading(false);
+            return;
+        }
+
         setAllowSave(false);
         setHasSaved(false);
-        const args = ["-d", values.domain, "-k", values.keyword, "-w", values.wordlist];
+        const args = [
+            "-d",
+            values.domain,
+            "-k",
+            values.keyword,
+            "-c",
+            values.provider,
+            "-o",
+            values.output,
+            "-w",
+            values.wordlist,
+        ];
         CommandHelper.runCommandGetPidAndOutput("cloudbrute", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
                 setPid(pid);
@@ -166,7 +209,22 @@ const CloudBrute = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
+                    <Group position="right">
+                        {!showAlert && (
+                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                Show Disclaimer
+                            </Button>
+                        )}
+                    </Group>
                     {LoadingOverlayAndCancelButton(loading, pid)}
+
+                    {showAlert && (
+                        <Alert title="Warning: Potential Risks" color="red">
+                            This tool is used to perform cloud enumeration, use with caution and only on cloud
+                            environments you own or have explicit permission to test.
+                        </Alert>
+                    )}
+
                     <TextInput
                         label="Target Domain"
                         required
@@ -174,6 +232,13 @@ const CloudBrute = () => {
                         {...form.getInputProps("domain")}
                     />
                     <TextInput label="Keyword" required placeholder="e.g., test" {...form.getInputProps("keyword")} />
+                    <TextInput label="Provider" required placeholder="google" {...form.getInputProps("provider")} />
+                    <TextInput
+                        label="Output fill (full path)"
+                        required
+                        placeholder="/home/{YOUR USER NAME}/Deakin-Detonator-Toolkit/OutputFiles/output.txt"
+                        {...form.getInputProps("output")}
+                    />
                     <TextInput
                         label="Path to Wordlist"
                         required
