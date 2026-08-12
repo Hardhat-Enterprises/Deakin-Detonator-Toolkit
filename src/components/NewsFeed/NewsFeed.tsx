@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Select, Card, Text, Group, Badge, TextInput, Transition } from "@mantine/core";
+import { Button, Select, Card, Text, Group, Badge, TextInput, Transition, Alert } from "@mantine/core";
 import { writeTextFile, readTextFile, BaseDirectory } from "@tauri-apps/api/fs";
 import { showNotification } from "@mantine/notifications";
 import { invoke } from "@tauri-apps/api/tauri";
@@ -32,6 +32,11 @@ function detectCategory(item: NewsItem): string | null {
     return null;
 }
 
+// Check if running in browser mode
+const isBrowserMode = () => {
+    return typeof window !== "undefined" && !window.__TAURI__;
+};
+
 export default function NewsFeed() {
     const [news, setNews] = useState<NewsItem[]>([]);
     const [filteredNews, setFilteredNews] = useState<NewsItem[]>([]);
@@ -42,8 +47,16 @@ export default function NewsFeed() {
     const [refreshing, setRefreshing] = useState(false);
     const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
     const [visibleCount, setVisibleCount] = useState<number>(5);
+    const [isBrowser] = useState(isBrowserMode());
 
     const fetchNews = async () => {
+        if (isBrowser) {
+            setError("News feature requires the toolkit's desktop version to work because of CORS limitations");
+            setLoading(false);
+            setRefreshing(false);
+            return;
+        }
+
         setRefreshing(true);
         try {
             const result = await invoke<NewsItem[]>("fetch_hacker_news");
@@ -158,7 +171,7 @@ ${item.description}
             </div>
 
             {lastUpdated && (
-                <Text size="xs" color="dimmed" mb="md">
+                <Text size="sm" weight={500} mb="md" style={{ opacity: 0.8 }}>
                     Last updated: {lastUpdated.toLocaleTimeString("en-AU", { timeZone: "Australia/Melbourne" })}
                 </Text>
             )}
@@ -186,22 +199,23 @@ ${item.description}
                 mb="md"
             />
 
-            {loading && <Text>Loading news...</Text>}
-            {error && <Text color={error.startsWith("Offline") ? "yellow" : "red"}>{error}</Text>}
+            {loading && (
+                <Text size="sm" weight={500}>
+                    Loading news...
+                </Text>
+            )}
+            {error && (
+                <Text color={error.startsWith("Offline") ? "yellow" : "red"} size="sm" weight={500}>
+                    {error}
+                </Text>
+            )}
 
             {filteredNews.slice(0, visibleCount).map((item, index) => {
                 const category = detectCategory(item);
                 return (
                     <Transition key={index} mounted transition="fade" duration={400} timingFunction="ease">
                         {(styles) => (
-                            <Card
-                                shadow="xs"
-                                radius="md"
-                                withBorder
-                                p="md"
-                                mb="sm"
-                                style={{ backgroundColor: "#1f1f1f", ...styles }}
-                            >
+                            <Card shadow="xs" radius="md" withBorder p="md" mb="sm" style={styles}>
                                 <Group position="apart" style={{ marginBottom: "0.5rem" }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                                         <a
@@ -209,8 +223,8 @@ ${item.description}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             style={{
-                                                color: "#4dabf7",
-                                                fontWeight: "bold",
+                                                color: "#339af0",
+                                                fontWeight: "600",
                                                 fontSize: "1rem",
                                                 textDecoration: "none",
                                             }}
@@ -227,10 +241,10 @@ ${item.description}
                                         Save
                                     </Button>
                                 </Group>
-                                <Text size="xs" color="dimmed" mt="xs">
+                                <Text size="sm" weight={500} mt="xs" style={{ opacity: 0.7 }}>
                                     {item.pub_date}
                                 </Text>
-                                <Text size="sm" mt="xs" color="gray">
+                                <Text size="sm" mt="xs" weight={400} style={{ opacity: 0.9, lineHeight: 1.5 }}>
                                     {item.description}
                                 </Text>
                             </Card>
