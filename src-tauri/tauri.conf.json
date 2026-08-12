@@ -103,11 +103,6 @@
                         "args": true
                     },
                     {
-                        "name": "crackmapexec",
-                        "cmd": "crackmapexec",
-                        "args": true
-                    },
-                    {
                         "name": "crunch",
                         "cmd": "crunch",
                         "args": true
@@ -310,6 +305,11 @@
                     {
                         "name": "searchsploit",
                         "cmd": "searchsploit",
+                        "args": true
+                    },
+                    {
+                        "name": "shodan",
+                        "cmd": "shodan",
                         "args": true
                     },
                     {
