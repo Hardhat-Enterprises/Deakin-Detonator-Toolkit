@@ -31,13 +31,9 @@ const GoBusterTool = () => {
     // ================== INFO ==================
     const title = "GoBuster";
 
-    const description =
-        "GoBuster helps find hidden files and directories on a website using a wordlist.";
+    const description = "GoBuster helps find hidden files and directories on a website using a wordlist.";
 
-    const steps =
-        "Step 1: Enter a valid URL.\n" +
-        "Step 2: Enter a valid wordlist path.\n" +
-        "Step 3: Click Start.";
+    const steps = "Step 1: Enter a valid URL.\n" + "Step 2: Enter a valid wordlist path.\n" + "Step 3: Click Start.";
 
     const sourceLink = "https://www.kali.org/tools/gobuster/";
 
@@ -59,10 +55,7 @@ const GoBusterTool = () => {
                     ? null
                     : "Invalid URL format (example: https://example.com)",
 
-            wordlist: (value) =>
-                isNotEmpty(value)
-                    ? null
-                    : "Wordlist path cannot be empty",
+            wordlist: (value) => (isNotEmpty(value) ? null : "Wordlist path cannot be empty"),
         },
     });
 
@@ -94,9 +87,7 @@ const GoBusterTool = () => {
                 handleProcessData("\nProcess was manually terminated.");
             } else {
                 // FIX 2: Correct template string syntax
-                handleProcessData(
-                    `\nProcess terminated with exit code: ${code} and signal: ${signal}`
-                );
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal: ${signal}`);
             }
 
             setPid("");
@@ -173,11 +164,7 @@ const GoBusterTool = () => {
                     {LoadingOverlayAndCancelButton(loading, pid)}
 
                     {/* URL INPUT */}
-                    <TextInput
-                        label="Target URL"
-                        required
-                        {...form.getInputProps("url")}
-                    />
+                    <TextInput label="Target URL" required {...form.getInputProps("url")} />
 
                     {/* FEATURE 3: WORDLIST HELP */}
                     <TextInput
@@ -195,27 +182,16 @@ const GoBusterTool = () => {
                         </Button>
 
                         {/* FEATURE 5: OPEN TUTORIAL BUTTON */}
-                        <Button
-                            variant="outline"
-                            onClick={() => window.open(tutorial, "_blank")}
-                        >
+                        <Button variant="outline" onClick={() => window.open(tutorial, "_blank")}>
                             Open Tutorial
                         </Button>
                     </Group>
 
                     {/* SAVE OUTPUT */}
-                    {SaveOutputToTextFile_v2(
-                        output,
-                        allowSave,
-                        hasSaved,
-                        handleSaveComplete
-                    )}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
 
                     {/* OUTPUT CONSOLE */}
-                    <ConsoleWrapper
-                        output={output}
-                        clearOutputCallback={clearOutput}
-                    />
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
         </RenderComponent>
