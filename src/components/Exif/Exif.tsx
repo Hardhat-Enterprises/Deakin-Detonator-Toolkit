@@ -48,7 +48,7 @@ const ExifTool = () => {
         "Step 4: Input a value to write to the specified metadata field.\n" +
         "Step 5: Run the tool!";
     const sourceLink = ""; // Link to the source code
-    const tutorial = "https://docs.google.com/document/d/1g4RFhVeMK3CRXRlGfSR5LMNiS4Xb5HuHcoq1K2i2J3c/edit?usp=sharing"; // Link to the official documentation/tutorial
+    const tutorial = "https://docs.google.com/document/d/16OaJNwkv2vVGVDZBNL1rORVkVOj6mqflVmByk0s1zbM/edit?tab=t.0"; // Link to the official documentation/tutorial
     const dependencies = ["exiftool"]; // ExifTool dependency.
 
     // Form hook to handle form input
@@ -133,6 +133,7 @@ const ExifTool = () => {
 
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
+            setAllowSave(true);
         },
         [handleProcessData] // Dependency on the handleProcessData callback
     );
@@ -142,10 +143,9 @@ const ExifTool = () => {
      * @param {FormValuesType} values - The form values containing the target domain.
      */
     const onSubmit = async (values: FormValuesType) => {
-        setLoading(true); // Activate loading state
-        setAllowSave(false); // Disallow saving until the tool's execution is complete
+        setLoading(true);
+        setAllowSave(false);
 
-        // Construct arguments for the Exif command based on form input
         const args = [values.filePath];
         if (values.actionType === "read") {
             args.push("-" + values.tag);
@@ -153,8 +153,6 @@ const ExifTool = () => {
             args.push("-" + values.tag + "=" + values.value);
         }
 
-        // Attempt to execute the exiftool command with the provided arguments.
-        // If the command fails, handle the error and deactivate the loading state.
         try {
             const { pid, output } = await CommandHelper.runCommandWithPkexec(
                 "exiftool",
@@ -162,11 +160,18 @@ const ExifTool = () => {
                 handleProcessData,
                 handleProcessTermination
             );
-            setPid(pid); // Set the process ID
-            setOutput(output); // Set the initial output
+            setPid(pid);
+            if (!output || output.trim() === "") {
+                setOutput(
+                    `Error: File not found at path "${values.filePath}".\nPlease verify the file path and try again.`
+                );
+                setLoading(false);
+                return;
+            }
+            setOutput(output);
         } catch (error: any) {
             setOutput(`Error: ${error.message}`);
-            setLoading(false); // Deactivate loading state
+            setLoading(false);
         }
     };
 
