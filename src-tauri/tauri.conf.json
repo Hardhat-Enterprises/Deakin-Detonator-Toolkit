@@ -308,6 +308,11 @@
                         "args": true
                     },
                     {
+                        "name": "shodan",
+                        "cmd": "shodan",
+                        "args": true
+                    },
+                    {
                         "name": "sherlock",
                         "cmd": "sherlock",
                         "args": true
