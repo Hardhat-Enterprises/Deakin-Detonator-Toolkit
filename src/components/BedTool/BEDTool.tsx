@@ -286,8 +286,8 @@ export function BEDTool() {
                     )}
                     {["SMTP", "POP", "IMAP"].includes(selectedPlugin) && (
                         <Alert title="No TLS Support" color="yellow" variant="light">
-                            BED does not support TLS. Only test this protocol against plain (non-TLS)
-                            local or lab services — not production or TLS-only endpoints.
+                            BED does not support TLS. Only test this protocol against plain (non-TLS) local or lab
+                            services — not production or TLS-only endpoints.
                         </Alert>
                     )}
                     <Select
