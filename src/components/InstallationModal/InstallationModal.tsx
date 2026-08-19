@@ -74,8 +74,17 @@ const InstallationModal: React.FC<InstallationModalProps> = ({
             opened={isOpen}
             onClose={() => setOpened(false)}
             title={<strong>Component Installation Menu</strong>}
-            size={"auto"}
-            style={{ maxWidth: "50%", margin: "auto" }}
+            size={"70%"}
+            styles={{ 
+            	content: {
+            	    maxWidth: "90vw",
+            	    maxHeight: "90vh",
+        	},
+        	body: {
+            	    maxHeight: "70vh",
+            	    overflowY: "auto",
+        	}, 
+        }}
         >
             <div>
                 {loading ? (
