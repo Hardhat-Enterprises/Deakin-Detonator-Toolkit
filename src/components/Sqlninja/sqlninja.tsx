@@ -126,7 +126,7 @@ function Sqlninja() {
         setAllowSave(false);
     };
 
-    /** 
+    /**
      * Function to expand the home directory symbol (~).
      * Currently just replaces the tilde with a hard-coded path (/home/kali).
      * v1 - 08/05/2026
@@ -135,9 +135,9 @@ function Sqlninja() {
         if (path.startsWith("~")) {
             return path.replace("~", "/home/kali");
         }
-            return path;
+        return path;
     }
-    
+
     /**
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the Sqlninja tool with the given parameter.
