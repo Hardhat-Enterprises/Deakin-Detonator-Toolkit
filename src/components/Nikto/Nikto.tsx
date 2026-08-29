@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from "react";
-import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid } from "@mantine/core";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Stepper, Button, TextInput, Alert, Group, NumberInput, Select, Switch, Stack, Grid, Collapse, ActionIcon, Text} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -49,22 +49,46 @@ function Nikto() {
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
+    const [showAlert, setShowAlert] = useState(true);
+    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     // Additional state variables for section visibility
     const [basicOpened, setBasicOpened] = useState(true);
     const [advancedOpened, setAdvancedOpened] = useState(false);
     const [authOpened, setAuthOpened] = useState(false);
     const [additionalOpened, setAdditionalOpened] = useState(false);
+    const [tuningCodesOpened, setTuningCodesOpened] = useState(false);
+    const [evasionCodesOpened, setEvasionCodesOpened] = useState(false);
 
     // Declare constants for the component
     const title = "Nikto";
     const description =
         "Nikto is a powerful web server scanner that performs comprehensive tests against web servers for multiple items, including dangerous files/CGIs, outdated software, and other problems.";
     const steps =
-        "Step 1: Enter the target host/URL.\n" +
-        "Step 2: Select the desired parameters for the Nikto scan.\n" +
-        "Step 3: Click the 'Run Nikto' button to initiate the scanning process.\n" +
-        "Step 4: Review the output in the console to identify potential vulnerabilities and misconfigurations.\n";
+        "=== Nikto User Guide ===\n" +
+    	"=== Basic Scan ===\n" +
+        "Step 1. Target Host/URL and Port: Enter the address to scan, e.g., scanme.nmap.org or 45.33.32.156 and the port the scan is targeting.\n" +
+        "Step 2. Basic Options (Optional): Set SSL mode (required for HTTPS services), output file name, and output format under 'Show Basic Options'.\n" +
+        "Step 3. Start Nikto: Click 'Run Nikto' to begin scanning.\n" +
+        "Step 4. Review Output: Check the console and output for vulnerabilities and misconfigurations found.\n" +
+        "=== Advanced Options ===\n" +
+        "Tuning: Focus the scan on one category of tests instead of everything, e.g., '9' for SQL injection only, or 'x6' to skip denial-of-service checks.\n"+
+        "Plugins: Choose which plugin script to run, separate from test categories. Find all available plugins by running 'nikto -list-plugins'.\n"+
+        "Database Check: Enable if you've edited the scan database and want syntax errors caught before scanning starts. With this enabled, Nikto will NOT scan. Only use for diagnostic  and maintenance purposes. Safe to run offline.\n" +
+        "Evasion: Use to deploy evasion techniques against IDS/IPS-protected targets to reduce the chance the scan is detected or blocked.\n" +
+        "Pause: Delay between HTTP requests. Use to go slower on a rate-limited target, increasing scan time.\n" +
+        "=== Authentication ===\n" +
+        "Authentication: Only needed for targets behind HTTP Basic/NTLM login. Enter 'id:pass', or 'id:pass:realm' if a realm is required.\n" +
+        "=== Additional Options ===\n" +
+        "User Agent: Set if the target blocks or behaves differently for Nikto's default agent, or to mimic a specific browser.\n" +
+        "Virtual Host: Required when the target shares an IP with other domains. Use the hostname you want tested.\n" +
+        "Display Options: Adds console detail, e.g. 'V' verbose, 'P' live progress, 'S' scrub IPs/hostnames before sharing results.\n" +
+        "Timeout (seconds): Determines how long Nikto waits for a response before moving on.\n" +
+        "Max Time: Caps total time on a host, so the scan moves on rather than running indefinitely. Suffix 'h' for hours, 'm' for minutes and no suffix for seconds, e.g., 1h for an hour, 30m for 30 minutes and 120 for 120 seconds.\n" +
+        "No DNS Lookup: Avoids reverse DNS lookup to circumvent DNS-based monitoring, at the cost of hostnames in the report.\n" +
+        "Follow Redirects: Enable so testing continues at a redirected URL instead of stopping at the redirect.\n" +
+        "=== Notes ===\n" +
+        "Runtime: Scans can take a long time. Larger targets and poor network connection may result in a longer scan time, so avoid cancelling prematurely.";
     const sourceLink = "https://github.com/sullo/nikto";
     const tutorial = "https://docs.google.com/document/d/136gID61GZYxOugoVPH0KhT-jfe5-ELKPyFJL_UXLE3c/edit?usp=sharing";
     const dependencies = ["nikto"];
@@ -106,7 +130,25 @@ function Nikto() {
                 console.error("An error occurred:", error);
                 setLoadingModal(false);
             });
+         alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 5000);
+        return () => {
+            if (alertTimeout.current) {
+                clearTimeout(alertTimeout.current);
+            }
+        };
     }, []);
+
+    const handleShowAlert = () => {
+        setShowAlert(true);
+        if (alertTimeout.current) {
+            clearTimeout(alertTimeout.current);
+        }
+        alertTimeout.current = setTimeout(() => {
+            setShowAlert(false);
+        }, 18000);
+    };
 
     /**
      * handleProcessData: Callback to handle and append new data from the child process to the output.
@@ -288,6 +330,24 @@ function Nikto() {
                     {/* Render the loading overlay and cancel button */}
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Stack>
+                        <Group position="right">
+                            {!showAlert && (
+                                <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                                    Show Disclaimer
+                                </Button>
+                            )}
+                        </Group>
+                        {showAlert && (
+                            <Alert title="Warning: Potential Risks & Runtime" color="red">
+                            This tool is used to perform vulnerability scans, use with caution and only on networks you own or have explicit permission to test.
+                            <br />
+                            <br />
+                            <strong>Note:</strong> Targets can take a long time to finish scanning depending on the size of the site and
+                                the options selected. For example, a default scan of scanme.nmap.org took roughly 30 to 40 minutes
+                                to complete. Please be patient and avoid cancelling the scan prematurely. Scan time can be shorten by using 
+                                Tuning or Plugins settings to selectively run fewer tests.
+                            </Alert>
+                        )}
                         {/* Render the Stepper component with steps */}
                         <Stepper active={active} onStepClick={setActive} breakpoint="sm">
                             {/* Step 1: Target */}
@@ -356,11 +416,61 @@ function Nikto() {
                                     <Stack mt={10}>
                                         <TextInput label="Tuning" {...form.getInputProps("tuning")} />
                                         <TextInput label="Plugins" {...form.getInputProps("plugins")} />
+                                        <Group spacing="xs">
+                                            <ActionIcon
+                        						onClick={() => setTuningCodesOpened((o) => !o)}
+                        						variant="outline"
+                        						aria-label={tuningCodesOpened ? "Collapse code reference" : "Expand code reference"}
+                    					    >
+                    						    {tuningCodesOpened ? "−" : "+"}
+                    					    </ActionIcon>
+                    					    <Text size="sm" c="dimmed">
+                    						    Tuning &amp; Plugin codes
+                    					    </Text>
+					                    </Group>
+					                <Collapse in={tuningCodesOpened}>
+                					    <Stack spacing={4} mt={4}>
+                						<Text size="sm">
+                						    <strong>Tuning:</strong> 0 - File Upload, 1 - Interesting File, 2 - Misconfig/Default File,
+                						    3 - Info Disclosure, 4 - Injection (XSS/HTML), 5 - Remote File Retrieval-web root,
+                						    6 - Denial of Service, 7 - Remote File Retrieval-server wide, 8 - Command Execution,
+                						    9 - SQL Injection, a - Auth Bypass, b - Software ID, c - Remote Source Inclusion,
+                						    d - WebService, e - Admin Console, f - XML Injection, x - Reverse (exclude instead of include).
+                						</Text>
+                						<Text size="sm">
+                						    <strong>Plugins:</strong> Macros like '@@NONE' can be used for a report with no scanning, 
+                						    '@@DEFAULT' for the plugins in the default set, or '@@ALL' to run every plugins loaded. 
+                						    A plugin name, e.g., sitefiles, for just that check.
+                						</Text>
+                					    </Stack>
+                					</Collapse>
                                         <Switch
                                             label="Database Check"
                                             {...form.getInputProps("dbcheck", { type: "checkbox" })}
                                         />
                                         <TextInput label="Evasion" {...form.getInputProps("evasion")} />
+                                         <Group spacing="xs">
+                    					    <ActionIcon
+                        						onClick={() => setEvasionCodesOpened((o) => !o)}
+                        						variant="outline"
+                        						aria-label={evasionCodesOpened ? "Collapse evasion code reference" : "Expand evasion code reference"}
+                    					    >
+                        						{evasionCodesOpened ? "−" : "+"}
+                    					    </ActionIcon>
+                    					    <Text size="sm" c="dimmed">
+                        						Evasion codes
+                    					    </Text>
+                    					</Group>
+                    					<Collapse in={evasionCodesOpened}>
+                    					    <Stack spacing={4} mt={4}>
+                                            <Text size="sm">
+                                                <strong>Evasion:</strong> 1 - Random URI encoding (non-UTF8), 2 - Directory self-reference (/./),
+                                                3 - Premature URL ending, 4 - Prepend long random string, 5 - Fake parameter, 6 - TAB as request spacer,
+                                                7 - Change the case of the URL, 8 - Use Windows directory separator (\),
+                                                A - Use a carriage return (0x0d) as a request spacer, B - Use binary value 0x0b as a request spacer.
+                                            </Text>
+                    					    </Stack>
+                    					</Collapse>
                                         <NumberInput label="Pause (seconds)" {...form.getInputProps("pause")} />
                                     </Stack>
                                 )}
