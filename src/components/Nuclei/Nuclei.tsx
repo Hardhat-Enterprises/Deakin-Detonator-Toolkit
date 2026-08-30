@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, TextInput, Stack } from "@mantine/core";
+import { Button, TextInput, Stack, Alert, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -7,7 +7,6 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 // Form type definition
@@ -26,6 +25,9 @@ function Nuclei() {
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
 
+    const [executionStatus, setExecutionStatus] = useState<"idle" | "running" | "success" | "failed" | "cancelled">(
+        "idle"
+    );
 
     const title = "Nuclei";
     const description = "Nuclei is a fast and customizable vulnerability scanner based on simple YAML-based templates.";
@@ -56,7 +58,18 @@ function Nuclei() {
         setOutput((prev) => prev + "\n" + data);
     }, []);
 
-    const handleProcessTermination = useCallback(() => {
+    const handleProcessTermination = useCallback(({ code, signal }: { code: number; signal: number }) => {
+        if (signal === 15) {
+            setOutput((prev) => prev + "\nProcess was manually terminated.");
+            setExecutionStatus("cancelled");
+        } else if (code === 0) {
+            setExecutionStatus("success");
+        } else {
+            setOutput((prev) => prev + `\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+            setExecutionStatus("failed");
+        }
+
+        setPid("");
         setLoading(false);
         setAllowSave(true);
         setHasSaved(false);
@@ -64,12 +77,17 @@ function Nuclei() {
 
     const clearOutput = useCallback(() => {
         setOutput("");
-        setAllowSave(true);
+        setExecutionStatus("idle");
+        setAllowSave(false);
         setHasSaved(false);
     }, []);
 
     const onSubmit = async () => {
+        setOutput("");
+        setAllowSave(false);
+        setExecutionStatus("running");
         setLoading(true);
+
         const args = ["-u", form.values.target];
 
         try {
@@ -79,17 +97,20 @@ function Nuclei() {
                 handleProcessData,
                 handleProcessTermination
             );
+
             setPid(pid);
             setOutput(output);
         } catch (error: any) {
             setOutput(`Error: ${error.message}`);
+            setExecutionStatus("failed");
             setLoading(false);
+            setAllowSave(true);
         }
     };
-    
+
     const handleSaveComplete = () => {
-    	setHasSaved(true);
-    	setAllowSave(false);
+        setHasSaved(true);
+        setAllowSave(false);
     };
 
     return (
@@ -108,25 +129,50 @@ function Nuclei() {
                     dependencies={dependencies}
                 />
             )}
+
             {LoadingOverlayAndCancelButton(loading, pid)}
+
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
+                    {executionStatus !== "idle" && (
+                        <Alert
+                            color={
+                                executionStatus === "running"
+                                    ? "blue"
+                                    : executionStatus === "success"
+                                    ? "green"
+                                    : executionStatus === "cancelled"
+                                    ? "gray"
+                                    : "red"
+                            }
+                            radius="md"
+                        >
+                            {executionStatus === "running" && <Text>Running Nuclei scan...</Text>}
+
+                            {executionStatus === "success" && <Text>Scan completed successfully.</Text>}
+
+                            {executionStatus === "failed" && <Text>Scan failed.</Text>}
+
+                            {executionStatus === "cancelled" && <Text>Scan cancelled.</Text>}
+                        </Alert>
+                    )}
+
                     <TextInput
                         label="Target URL"
                         placeholder="https://example.com"
                         required
                         {...form.getInputProps("target")}
                     />
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
                     <Button type="submit" disabled={loading}>
                         Run Nuclei
                     </Button>
-                    <ConsoleWrapper output={output} />
-                    <ConsoleWrapper output={output} />
+
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
-            
         </RenderComponent>
     );
 }
