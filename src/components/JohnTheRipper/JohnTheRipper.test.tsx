@@ -104,6 +104,8 @@ describe("<JohnTheRipper/> component tests", () => {
             externalMode: "",
             markovLevel: "",
             potFile: "",
+            useRules: false,
+            sessionName: "",
         };
 
         it("builds incremental mode args correctly (default and specific charset)", () => {
@@ -123,6 +125,14 @@ describe("<JohnTheRipper/> component tests", () => {
                     wordList: "/usr/share/wordlists/rockyou.txt",
                 })
             ).toEqual(["--wordlist=/usr/share/wordlists/rockyou.txt"]);
+
+            expect(
+                buildAttackModeArgs("dictionary", {
+                    ...baseValues,
+                    wordList: "/usr/share/wordlists/rockyou.txt",
+                    useRules: true,
+                })
+            ).toEqual(["--wordlist=/usr/share/wordlists/rockyou.txt", "--rules"]);
         });
 
         it("builds single crack mode args correctly", () => {
