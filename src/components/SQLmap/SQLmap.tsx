@@ -53,8 +53,7 @@ function SQLmap() {
 
     const sourceLink = "https://github.com/sqlmapproject/sqlmap";
 
-    const tutorial =
-        "https://docs.google.com/document/d/1O0yp3_vazO2UsnUBcbSyeuYJXq9x7Vcsjjsfw_LLhEc/edit?usp=sharing";
+    const tutorial = "https://docs.google.com/document/d/1O0yp3_vazO2UsnUBcbSyeuYJXq9x7Vcsjjsfw_LLhEc/edit?usp=sharing";
 
     const dependencies = ["sqlmap"];
 
@@ -106,9 +105,7 @@ function SQLmap() {
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
             } else {
-                handleProcessData(
-                    `\nProcess terminated with exit code: ${code} and signal code: ${signal}`
-                );
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
 
             setPid("");
@@ -124,12 +121,7 @@ function SQLmap() {
         setLoading(true);
 
         // Base SQLMap arguments
-        const args = [
-            "-u",
-            values.targetURL,
-            `--level=${values.detectionLevel}`,
-            `--risk=${values.riskLevel}`,
-        ];
+        const args = ["-u", values.targetURL, `--level=${values.detectionLevel}`, `--risk=${values.riskLevel}`];
 
         // NEW:
         // If a cookie was supplied, pass it to SQLMap.
@@ -150,12 +142,7 @@ function SQLmap() {
             args.push("--passwords");
         }
 
-        CommandHelper.runCommandGetPidAndOutput(
-            "sqlmap",
-            [...args],
-            handleProcessData,
-            handleProcessTermination
-        )
+        CommandHelper.runCommandGetPidAndOutput("sqlmap", [...args], handleProcessData, handleProcessTermination)
             .then(() => {
                 setLoading(false);
             })
@@ -203,11 +190,7 @@ function SQLmap() {
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
 
-                    <TextInput
-                        label="Target database URL"
-                        required
-                        {...form.getInputProps("targetURL")}
-                    />
+                    <TextInput label="Target database URL" required {...form.getInputProps("targetURL")} />
 
                     {/* NEW:
                         Visible session cookie field requested in
@@ -269,17 +252,9 @@ function SQLmap() {
 
                     <Button type="submit">Start {title}</Button>
 
-                    {SaveOutputToTextFile_v2(
-                        output,
-                        allowSave,
-                        hasSaved,
-                        handleSaveComplete
-                    )}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
 
-                    <ConsoleWrapper
-                        output={output}
-                        clearOutputCallback={clearOutput}
-                    />
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
         </RenderComponent>
