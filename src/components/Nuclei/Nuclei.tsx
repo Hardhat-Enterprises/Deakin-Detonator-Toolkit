@@ -8,6 +8,7 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 // Form type definition
 interface FormValuesType {
@@ -62,6 +63,8 @@ function Nuclei() {
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setAllowSave(true);
+        setHasSaved(false);
     }, []);
 
     const onSubmit = async () => {
@@ -114,13 +117,14 @@ function Nuclei() {
                         {...form.getInputProps("target")}
                     />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type="submit" disabled={loading}>
                         Run Nuclei
                     </Button>
                     <ConsoleWrapper output={output} />
+                    <ConsoleWrapper output={output} />
                 </Stack>
             </form>
-            <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
         </RenderComponent>
     );
 }
