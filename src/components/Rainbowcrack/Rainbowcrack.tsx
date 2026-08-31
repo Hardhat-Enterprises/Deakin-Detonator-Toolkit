@@ -82,7 +82,7 @@ const RainbowCrack = () => {
                 console.error("An error occurred:", error);
                 setLoadingModal(false);
             });
-    }, []); 
+    }, []);
 
     const handleProcessData = useCallback((data: string) => {
         setOutput((prev) => prev + "\n" + data);
@@ -105,10 +105,10 @@ const RainbowCrack = () => {
         },
         [handleProcessData]
     );
-    
+
     const pickRainbowTable = async () => {
         const selected = await open({
-            defaultPath: "/usr/share/rainbowcrack", 
+            defaultPath: "/usr/share/rainbowcrack",
             filters: [{ name: "Rainbow Table", extensions: ["rt"] }],
             multiple: false,
         });
@@ -122,8 +122,7 @@ const RainbowCrack = () => {
         setLoading(true);
         setAllowSave(false);
 
-
-	const args = [rainbowTablePath || "."];
+        const args = [rainbowTablePath || "."];
         if (fileNames.length === 0) {
             args.push("-h", values.hashValue);
         } else {
@@ -201,24 +200,24 @@ const RainbowCrack = () => {
                         componentName="Rainbowcrack"
                         labelText="Upload Hash File"
                     />
-		
-		    <div style={{ textAlign: "center" }}>
-		       <div style={{ textAlign: "center", fontSize: "14px", fontWeight: 500, marginBottom: "4px" }}>
-		       		Select Rainbow Table
-		       </div>
-		       <label style={{ cursor: "pointer", display: "inline-block" }} onClick={pickRainbowTable}>
-				<img
-				    src="https://static-00.iconduck.com/assets.00/cloud-upload-icon-2048x2048-fej4g14p.png"
-				    alt="Upload"
-				    width={80}
-				    height={80}
-				/>
-				<div style={{ fontSize: "14px", color: "#666" }}>
-				    {rainbowTablePath ? rainbowTablePath : "Select path for .rt files"}
-				</div>
-			</label>
-		    </div>                    
-                    
+
+                    <div style={{ textAlign: "center" }}>
+                        <div style={{ textAlign: "center", fontSize: "14px", fontWeight: 500, marginBottom: "4px" }}>
+                            Select Rainbow Table
+                        </div>
+                        <label style={{ cursor: "pointer", display: "inline-block" }} onClick={pickRainbowTable}>
+                            <img
+                                src="https://static-00.iconduck.com/assets.00/cloud-upload-icon-2048x2048-fej4g14p.png"
+                                alt="Upload"
+                                width={80}
+                                height={80}
+                            />
+                            <div style={{ fontSize: "14px", color: "#666" }}>
+                                {rainbowTablePath ? rainbowTablePath : "Select path for .rt files"}
+                            </div>
+                        </label>
+                    </div>
+
                     <Button type="submit">Crack</Button>
                     <Button variant="outline" color="red" onClick={resetForm}>
                         Reset
