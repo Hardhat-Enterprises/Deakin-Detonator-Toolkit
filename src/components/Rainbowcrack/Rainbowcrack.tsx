@@ -1,5 +1,6 @@
 import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { open } from "@tauri-apps/api/dialog";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -24,27 +25,26 @@ const RainbowCrack = () => {
     const [allowSave, setAllowSave] = useState(false);
     const [hasSaved, setHasSaved] = useState(false);
     const [fileNames, setFileNames] = useState<string[]>([]);
+    const [rainbowTablePath, setRainbowTablePath] = useState<string>("");
 
     const title = "RainbowCrack";
     const description =
         "RainbowCrack is a command line tool that uses rainbow tables to crack password hashes. It supports multiple hash algorithms, including LM, NTLM, MD5, SHA1 and SHA256.";
     const steps =
         "How to use RainbowCrack:\n" +
-        "Step 1: Ensure that your rainbow tables (*.rt, *.rtc) are stored in a directory.\n" +
-        "Step 2: Enter the hash value you want to crack in the input field. For a single hash, use the format: ./rcrack [path to tables] -h [hash].\n" +
-        "   - Example: ./rcrack . -h 5d41402abc4b2a76b9719d911017c592\n" +
-        "Step 3: To crack multiple hashes from a file, use the format: ./rcrack [path to tables] -l [hash_list_file].\n" +
-        "   - Example: ./rcrack . -l hash.txt\n" +
-        "Step 4: If you have LM hashes in a pwdump file, use the format: ./rcrack [path to tables] -lm [pwdump_file].\n" +
-        "   - Example: ./rcrack . -lm pwdump.txt\n" +
-        "Step 5: For NTLM hashes in a pwdump file, use the format: ./rcrack [path to tables] -ntlm [pwdump_file].\n" +
-        "   - Example: ./rcrack . -ntlm pwdump.txt\n" +
-        "Step 6: Click the Crack " +
+        "Step 1: Ensure that your rainbow tables (*.rt, *.rtc) are stored in the /usr/share/rainbowcrack directory. \n" +
+        "Step 2: To select a rainbow table, use the rainbow table picker. \n" +
+        "Step 3: Enter the hash value you want to crack in the input field.\n" +
+        "Step 4: To crack multiple hashes from a file, use the hash file picker.\n" +
+        "Step 5: If you have LM hashes in a pwdump file, use the hash file picker.\n" +
+        "Step 6: For NTLM hashes in a pwdump file, use the hash file picker.\n" +
+        "Step 7: Click the Crack " +
         title +
         " button to execute the command and display the results.";
     const sourceLink = "http://project-rainbowcrack.com/";
     const tutorial = "https://docs.google.com/document/d/16j7ejucqvkNHo1p-fcUjxTYV6aAbSPT6TQDUYRgfa_0/edit?usp=sharing";
-    const dependencies = ["rainbowcrack"];
+    const binaryDependencies = ["rcrack"];
+    const packageDependencies = ["rainbowcrack"];
 
     const form = useForm<FormValuesType>({
         initialValues: {
@@ -72,7 +72,7 @@ const RainbowCrack = () => {
     });
 
     useEffect(() => {
-        checkAllCommandsAvailability(dependencies)
+        checkAllCommandsAvailability(binaryDependencies)
             .then((isAvailable) => {
                 setIsCommandAvailable(isAvailable);
                 setOpened(!isAvailable);
@@ -99,17 +99,30 @@ const RainbowCrack = () => {
             }
             setPid("");
             setLoading(false);
+            setRainbowTablePath("");
             setAllowSave(true);
             setHasSaved(false);
         },
         [handleProcessData]
     );
 
+    const pickRainbowTable = async () => {
+        const selected = await open({
+            defaultPath: "/usr/share/rainbowcrack",
+            filters: [{ name: "Rainbow Table", extensions: ["rt"] }],
+            multiple: false,
+        });
+        if (typeof selected === "string") {
+            const dir = selected.substring(0, selected.lastIndexOf("/"));
+            setRainbowTablePath(dir);
+        }
+    };
+
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
         setAllowSave(false);
 
-        const args = ["."];
+        const args = [rainbowTablePath || "."];
         if (fileNames.length === 0) {
             args.push("-h", values.hashValue);
         } else {
@@ -141,6 +154,7 @@ const RainbowCrack = () => {
         form.reset();
         setOutput("");
         setFileNames([]);
+        setRainbowTablePath("");
         setAllowSave(false);
         setHasSaved(false);
     };
@@ -158,7 +172,7 @@ const RainbowCrack = () => {
                     isOpen={opened}
                     setOpened={setOpened}
                     feature_description={description}
-                    dependencies={dependencies}
+                    dependencies={packageDependencies}
                 />
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
@@ -186,6 +200,23 @@ const RainbowCrack = () => {
                         componentName="Rainbowcrack"
                         labelText="Upload Hash File"
                     />
+
+                    <div style={{ textAlign: "center" }}>
+                        <div style={{ textAlign: "center", fontSize: "14px", fontWeight: 500, marginBottom: "4px" }}>
+                            Select Rainbow Table
+                        </div>
+                        <label style={{ cursor: "pointer", display: "inline-block" }} onClick={pickRainbowTable}>
+                            <img
+                                src="https://static-00.iconduck.com/assets.00/cloud-upload-icon-2048x2048-fej4g14p.png"
+                                alt="Upload"
+                                width={80}
+                                height={80}
+                            />
+                            <div style={{ fontSize: "14px", color: "#666" }}>
+                                {rainbowTablePath ? rainbowTablePath : "Select path for .rt files"}
+                            </div>
+                        </label>
+                    </div>
 
                     <Button type="submit">Crack</Button>
                     <Button variant="outline" color="red" onClick={resetForm}>
