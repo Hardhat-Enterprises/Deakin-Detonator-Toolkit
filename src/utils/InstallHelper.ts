@@ -13,7 +13,7 @@ import { CommandHelper } from "./CommandHelper";
  */
 export const installDependencies = async (
     dependencies: string[],
-    setOutput: (updater: (prevOutput: string) => string) => void,
+    setOutput: (updater: (prevOutput: string) => string) => void
 ): Promise<boolean[]> => {
     /**
      * Add process information to the installation console.
