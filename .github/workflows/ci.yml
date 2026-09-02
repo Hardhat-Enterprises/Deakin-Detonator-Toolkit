@@ -151,6 +151,9 @@ jobs:
 
             # Backup mechanism - Trivy can cause a fatal error if the cache is missing when attempting to skip DB update.
             # If the cache is not found, the required databases will be manually downloaded and extracted to prevent errors.
+            - name: Setup ORAS
+              if: steps.cache.outputs.cache-hit != 'true'
+              uses: oras-project/setup-oras@v2
 
             - name: Download and Extract Trivy DB (on cache miss)
               if: steps.cache.outputs.cache-hit != 'true'
