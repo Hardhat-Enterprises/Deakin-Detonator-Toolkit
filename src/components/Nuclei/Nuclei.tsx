@@ -62,6 +62,8 @@ function Nuclei() {
 
     const clearOutput = useCallback(() => {
         setOutput("");
+        setAllowSave(true);
+        setHasSaved(false);
     }, []);
 
     const onSubmit = async () => {
@@ -120,7 +122,6 @@ function Nuclei() {
                     <ConsoleWrapper output={output} />
                 </Stack>
             </form>
-            <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
         </RenderComponent>
     );
 }
