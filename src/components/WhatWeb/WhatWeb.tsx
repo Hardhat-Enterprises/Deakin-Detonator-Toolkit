@@ -82,6 +82,28 @@ function WhatWeb() {
             logFormat: "",
             maxThreads: 0,
         },
+
+        validate: {
+            target: (value, values) => {
+                const target = value.trim();
+
+                if (!target && !values.inputFile.trim()) {
+                    return "Please enter a target URL or IP address, or provide an input file.";
+                }
+
+                if (target) {
+                    const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
+
+                    const ipPattern = /^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/;
+
+                    if (!urlPattern.test(target) && !ipPattern.test(target)) {
+                        return "Please enter a valid URL or IP address.";
+                    }
+                }
+
+                return null;
+            },
+        },
     });
 
     // Check command availability
