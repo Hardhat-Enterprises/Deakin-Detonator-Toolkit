@@ -49,7 +49,7 @@ const Crunch = () => {
         "Step 6: View the Output block below to view the results of the tools execution.";
     const sourceLink = "https://www.kali.org/tools/crunch/";
     const tutorial = "https://docs.google.com/document/d/1NoYLod8jyXOLAIUGU-d7Zeq_-_XDzXO-XzADKLPk72I/edit?usp=sharing";
-    const dependencies = ["Crunch"];
+    const dependencies = ["crunch"];
 
     const form = useForm<FormValuesType>({
         initialValues: {
@@ -173,13 +173,13 @@ const Crunch = () => {
                     dependencies={dependencies}
                 />
             )}
-    
+
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <LoadingOverlay visible={loading} />
                 <Stack>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <LoadingOverlay visible={loading} />
-    
+
                     <TextInput
                         label="Minimum password length"
                         type="number"
@@ -187,7 +187,7 @@ const Crunch = () => {
                         required
                         {...form.getInputProps("minLength")}
                     />
-    
+
                     <TextInput
                         label="Maximum password length"
                         type="number"
@@ -195,33 +195,30 @@ const Crunch = () => {
                         required
                         {...form.getInputProps("maxLength")}
                     />
-    
+
                     <TextInput
                         label="Character set (e.g. abcdefghijklmnopqrstuvwxyz0123456789)"
                         required
                         {...form.getInputProps("charset")}
                     />
-    
-                    <TextInput
-                        label="Output file (optional)"
-                        {...form.getInputProps("outputFile")}
-                    />
-    
+
+                    <TextInput label="Output file (optional)" {...form.getInputProps("outputFile")} />
+
                     <Text color="yellow" size="sm">
                         Note: Maximum password length above 10 is restricted to prevent the application from freezing.
                     </Text>
-    
+
                     <Button type="submit" disabled={loading}>
                         {loading ? "Generating..." : "Generate Password List"}
                     </Button>
-    
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-    
+
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
         </RenderComponent>
     );
-    };
-    
-    export default Crunch;
+};
+
+export default Crunch;

@@ -33,7 +33,7 @@ export function BEDTool() {
     const [selectedPlugin, setSelectedPlugin] = useState(""); // State variable to store the selected plugin.
     const [allowSave, setAllowSave] = useState(false); // State variable boolean to indicate save state.
     const [hasSaved, setHasSaved] = useState(false); // State variable boolean to indicate if the save has been saved.
-    const [customConfig, setCustomConfig] = useState(false); // State variable to toggle custom configuration.
+    const [customConfig, setCustomConfig] = useState(false); // State variable to toggle manual network configuration.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
@@ -47,7 +47,7 @@ export function BEDTool() {
     const steps =
         '1. Select a Service: Choose the service to test from the dropdown menu, for instance, "HTTP" to test a web server.\n' +
         '2. Input Required Fields: Fill in the fields that appear based on the selected service. For example, choosing "FTP" will prompt for additional required fields, such as username and password.\n' +
-        "3. Custom Configuration (Optional): Activate 'Custom Configuration' to enter a specific target IP address and port number. If this is not enabled, the tool will default to scanning the local machine.\n" +
+        "3. Manual Network Configuration (Optional): Activate 'Manual Network Configuration' to enter a specific target IP address and port number. If this is not enabled, the tool will default to scanning the local machine.\n" +
         "4. Start Scan: Click the 'Scan' button to begin the evaluation.";
     const sourceLink = "https://www.kali.org/tools/bed/"; // Link to the source documentation.
     const tutorial = "https://hackmd.io/@zee-10/ryfv2IOSWl"; // Link to the official documentation/tutorial.
@@ -258,7 +258,7 @@ export function BEDTool() {
                         onChange={(e) => setCustomConfig(e.currentTarget.checked)}
                     />
                     {customConfig && (
-                        <Alert title="Custom Configuration" color="blue" variant="light">
+                        <Alert title="Manual Network Configuration" color="blue" variant="light">
                             Custom IP address and port can now be specified for this scan. Leave these fields blank to
                             use default settings.
                         </Alert>
