@@ -1,6 +1,6 @@
-import { Button, NativeSelect, Stack, TextInput, Switch } from "@mantine/core";
+import { Alert, Button, Loader, NativeSelect, Stack, Switch, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
@@ -19,38 +19,52 @@ interface FormValuesType {
 }
 
 /**
+ * Represents the user-facing execution state.
+ */
+type ExecutionStatus = "idle" | "running" | "success" | "failed" | "cancelled";
+
+/**
  * The Sqlninja component.
  * @returns The Sqlninja component.
  */
 function Sqlninja() {
     // Component State Variables
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
-    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
-    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-    const [selectedMode, setSelectedMode] = useState("test"); //State variable to store the mode selected. Defaulting to the "test" mode
-    const [checkedVerbose, setCheckedVerbose] = useState(false); //State variable to indicate if verbose mode is enabled
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [pid, setPid] = useState("");
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const [selectedMode, setSelectedMode] = useState("test");
+    const [checkedVerbose, setCheckedVerbose] = useState(false);
+
+    // User-facing execution status.
+    const [executionStatus, setExecutionStatus] = useState<ExecutionStatus>("idle");
 
     // Component Constants.
-    const title = "Sqlninja"; // Title of the component.
+    const title = "Sqlninja";
+
     const description =
-        "Exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end."; // Description of the component.
+        "Exploit SQL injection vulnerabilities on web applications that use Microsoft SQL Server as back end.";
+
     const steps =
         "Step 1: Select which Attack mode to use.\n" +
         "Step 2: Enter the file path for sqlninja configuration file, if no file path is input default sqlninja.conf is used.\n" +
         "Step 3: Select if you want verbose output.\n" +
         "Step 4: Click on the Start button to initiate sqlninja.";
-    const sourceLink = "https://www.kali.org/tools/sqlninja/"; // Link to the source code (or Kali Tools).
-    const tutorial = "https://docs.google.com/document/d/1EaiwnltxhPL5TenUhU-ux9-WzP85BP7dLMfGNNv5ns8/edit?usp=sharing"; // Link to the official documentation/tutorial.
-    const dependencies = ["sqlninja"]; // Constains the dependencies required for the component.
-    const attackMode = ["test", "escalation", "upload", "backscan"]; //Contains the attack modes that are available.
+
+    const sourceLink = "https://www.kali.org/tools/sqlninja/";
+
+    const tutorial = "https://docs.google.com/document/d/1EaiwnltxhPL5TenUhU-ux9-WzP85BP7dLMfGNNv5ns8/edit?usp=sharing";
+
+    const dependencies = ["sqlninja"];
+
+    const attackMode = ["test", "escalation", "upload", "backscan"];
 
     // Form hook to handle form input.
-    const form = useForm({
+    const form = useForm<FormValuesType>({
         initialValues: {
             filePath: "",
             mode: "",
@@ -58,135 +72,141 @@ function Sqlninja() {
         },
     });
 
-    // Check if the command is available and set the state variables accordingly.
+    /**
+     * Check if the required command is available.
+     */
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state.
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available.
-                setLoadingModal(false); // Set loading to false after the check is done.
+                setIsCommandAvailable(isAvailable);
+                setOpened(!isAvailable);
+                setLoadingModal(false);
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error.
+                setLoadingModal(false);
             });
     }, []);
 
     /**
-     * handleProcessData: Callback to handle and append new data from the child process to the output.
-     * It updates the state by appending the new data received to the existing output.
-     * @param {string} data - The data received from the child process.
+     * Handles and appends data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
+        setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
     /**
-     * handleProcessTermination: Callback to handle the termination of the child process.
-     * Once the process termination is handled, it clears the process PID reference and
-     * deactivates the loading overlay.
-     * @param {object} param - An object containing information about the process termination.
-     * @param {number} param.code - The exit code of the terminated process.
-     * @param {number} param.signal - The signal code indicating how the process was terminated.
+     * Handles process termination and updates the user-facing status.
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            // If the process was successful, display a success message.
-            if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
-
-                // If the process was terminated manually, display a termination message.
-            } else if (signal === 15) {
+            if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-
-                // If the process was terminated with an error, display the exit and signal codes.
+                setExecutionStatus("cancelled");
+            } else if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+                setExecutionStatus("success");
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+                setExecutionStatus("failed");
             }
 
-            // Clear the child process pid reference. There is no longer a valid process running.
+            // Process has ended, so remove the PID.
             setPid("");
 
-            // Cancel the loading overlay. The process has completed.
+            // Stop the loading state.
             setLoading(false);
 
-            // Allow Saving as the output is finalised.
+            // Output is now final and can be saved.
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback.
+        [handleProcessData]
     );
 
-    // Actions taken after saving the output.
+    /**
+     * Actions taken after saving the output.
+     */
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user.
         setHasSaved(true);
         setAllowSave(false);
     };
 
     /**
-     * Function to expand the home directory symbol (~).
-     * Currently just replaces the tilde with a hard-coded path (/home/kali).
-     * v1 - 08/05/2026
+     * Expand the home directory symbol (~).
      */
     function expandHomeDir(path: string) {
         if (path.startsWith("~")) {
             return path.replace("~", "/home/kali");
         }
+
         return path;
     }
 
     /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the Sqlninja tool with the given parameter.
-     * Once the command is executed, the results or errors are displayed in the output.
-     *
-     * @param {FormValuesType} values - The form value containing the file path of the sqlninja configuration file, and mode selected.
+     * Handles form submission.
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Activate loading state to indicate ongoing process.
+        // Clear previous output/status.
+        setOutput("");
+        setExecutionStatus("running");
+
+        // Activate loading state.
         setLoading(true);
 
-        // Disallow saving until the tool's execution is complete.
+        // Reset save state while the process is running.
         setAllowSave(false);
+        setHasSaved(false);
 
-        // Construct the argmentss for the sqlninja command based on form input.
-        const args = [];
-        // Adds the argument for mode.
-        selectedMode ? args.push(`-m`, selectedMode) : undefined;
-        // Adds the file argument if a filepath is input.
+        // Construct arguments.
+        const args: string[] = [];
+
+        if (selectedMode) {
+            args.push("-m", selectedMode);
+        }
+
         if (values.filePath) {
-            // Check for starting tilde in filePath and replace with '/home/kali' path
             args.push("-f", expandHomeDir(values.filePath));
         }
-        // Adds verbose output argument if switch is on.
+
         if (checkedVerbose) {
-            args.push(`-v`);
+            args.push("-v");
         }
 
-        // Execute the bash command via helper method and handle its output or potential errors.
-        CommandHelper.runCommandGetPidAndOutput("sqlninja", args, handleProcessData, handleProcessTermination)
-            .then(({ pid, output }) => {
-                setPid(pid);
-                setOutput(output);
-            })
-            .catch((error) => {
-                setLoading(false);
+        try {
+            const result = await CommandHelper.runCommandGetPidAndOutput(
+                "sqlninja",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+
+            setPid(result.pid);
+            setOutput(result.output);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
                 setOutput(`Error: ${error.message}`);
-            });
+            } else {
+                setOutput("An unknown error occurred.");
+            }
+
+            setExecutionStatus("failed");
+            setLoading(false);
+            setPid("");
+            setAllowSave(true);
+            setHasSaved(false);
+        }
     };
 
     /**
-     * clearOutput: Callback function to clear the console output.
-     * It resets the state variable holding the output, thereby clearing the display.
+     * Clears the console output and resets the execution status.
      */
     const clearOutput = useCallback(() => {
         setOutput("");
+        setExecutionStatus("idle");
         setHasSaved(false);
         setAllowSave(false);
-    }, [setOutput]);
+    }, []);
 
     return (
         <RenderComponent
@@ -202,32 +222,74 @@ function Sqlninja() {
                     setOpened={setOpened}
                     feature_description={description}
                     dependencies={dependencies}
-                ></InstallationModal>
+                />
             )}
+
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-                {LoadingOverlayAndCancelButtonPkexec(loading, pid, handleProcessData, handleProcessTermination)}
                 <Stack>
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
+
+                    {executionStatus !== "idle" && (
+                        <Alert
+                            color={
+                                executionStatus === "running"
+                                    ? "blue"
+                                    : executionStatus === "success"
+                                    ? "green"
+                                    : executionStatus === "cancelled"
+                                    ? "gray"
+                                    : "red"
+                            }
+                            radius="md"
+                        >
+                            {executionStatus === "running" && (
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                    }}
+                                >
+                                    <Loader size="sm" />
+                                    <Text>Running...</Text>
+                                </div>
+                            )}
+
+                            {executionStatus === "success" && <Text>Process completed successfully.</Text>}
+
+                            {executionStatus === "failed" && <Text>Process failed.</Text>}
+
+                            {executionStatus === "cancelled" && <Text>Process cancelled.</Text>}
+                        </Alert>
+                    )}
+
                     <NativeSelect
+                        label="Attack Mode"
                         value={selectedMode}
-                        onChange={(e) => setSelectedMode(e.target.value)}
-                        title={"Attack Mode"}
+                        onChange={(event) => setSelectedMode(event.currentTarget.value)}
                         data={attackMode}
-                        placeholder={"Attack Mode"}
-                        description={"Please select attack mode"}
+                        description="Please select attack mode"
                         required
                     />
+
                     <TextInput
-                        label={"Configuration File Path"}
+                        label="Configuration File Path"
                         placeholder="default: sqlninja.conf"
                         {...form.getInputProps("filePath")}
                     />
+
                     <Switch
                         label="Verbose Mode"
                         checked={checkedVerbose}
-                        onChange={(e) => setCheckedVerbose(e.currentTarget.checked)}
+                        onChange={(event) => setCheckedVerbose(event.currentTarget.checked)}
                     />
-                    <Button type={"submit"}>Start {title}</Button>
+
+                    <Button type="submit" disabled={loading}>
+                        Start {title}
+                    </Button>
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
