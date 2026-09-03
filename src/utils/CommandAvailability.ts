@@ -1,4 +1,4 @@
-import { Command } from "@tauri-apps/api/shell";
+import { Command } from "@tauri-apps/plugin-shell";
 
 /**
  * Checks the availability of a command in the system.
