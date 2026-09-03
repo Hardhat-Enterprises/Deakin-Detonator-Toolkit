@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button, Select, Card, Text, Group, Badge, TextInput, Transition, Alert } from "@mantine/core";
-import { writeTextFile, readTextFile, BaseDirectory } from "@tauri-apps/api/fs";
+import { writeTextFile, readTextFile, BaseDirectory } from "@tauri-apps/plugin-fs";
 import { showNotification } from "@mantine/notifications";
-import { invoke } from "@tauri-apps/api/tauri";
+import { invoke, isTauri } from "@tauri-apps/api/core";
 
 type NewsItem = {
     title: string;
@@ -34,7 +34,7 @@ function detectCategory(item: NewsItem): string | null {
 
 // Check if running in browser mode
 const isBrowserMode = () => {
-    return typeof window !== "undefined" && !window.__TAURI__;
+    return !isTauri;
 };
 
 export default function NewsFeed() {
