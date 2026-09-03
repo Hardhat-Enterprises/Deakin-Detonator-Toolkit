@@ -1,6 +1,6 @@
 import { LoadingOverlay, Button, Modal } from "@mantine/core";
 import { CommandHelper } from "../../utils/CommandHelper";
-import { Command } from "@tauri-apps/api/shell";
+import { Command } from "@tauri-apps/plugin-shell";
 
 /**
  * Overlay to successfully terminate processes for tools not requiring pkexec
@@ -74,17 +74,16 @@ export function LoadingOverlayAndCancelButtonPkexec(
     // Sends a SIGINT signal to gracefully terminate the active process passed as an argument
     const handleCancel = () => {
         try {
-            //Run termination command if pid is found
-            if (pid !== null) {
-                const args = [`-2`, pid];
-                CommandHelper.runCommand("kill", args);
-            }
-            if (pid2 !== null) {
-                const args = ["-2", pid2];
-                CommandHelper.runCommand("kill", args);
+            //Run termination command with elevated privileges since the target process runs as root via pkexec
+            if (pid) {
+                const args = ["kill", "-2", pid];
+                CommandHelper.runCommand("pkexec", args);
             } else {
-                //Throws error if failed to get process ID for termination
                 throw new Error("Error: Failed to get process ID ");
+            }
+            if (pid2) {
+                const args2 = ["kill", "-2", pid2];
+                CommandHelper.runCommand("pkexec", args2);
             }
         } catch (e) {
             //Throws an error if exception happens in the cancel process

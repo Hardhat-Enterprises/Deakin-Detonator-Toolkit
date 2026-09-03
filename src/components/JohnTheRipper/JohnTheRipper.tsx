@@ -1,9 +1,9 @@
-import { Button, NativeSelect, Stack, TextInput } from "@mantine/core";
+import { Button, Checkbox, NativeSelect, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
-import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
+import { writeTextFile, BaseDirectory } from "@tauri-apps/plugin-fs";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
@@ -21,6 +21,8 @@ interface FormValuesType {
     mode: string;
     wordList: string;
     incrementOrder: string;
+    useRules: boolean;
+    sessionName: string;
 }
 
 //Deals with the generatedfilepath unique identifier that is added at the end of a file created by the FilePicker component
@@ -48,7 +50,7 @@ const JohnTheRipper = () => {
     const [allowSave, setAllowSave] = useState(false); //   State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [selectedFileTypeOption, setSelectedFileTypeOption] = useState(""); // State variable to store the selected file type.
-    const [selectedModeOption, setSelectedModeOption] = useState(""); // State variable to store the selected crack mode.
+    const [selectedModeOption, setSelectedModeOption] = useState("incremental"); // State variable to store the selected crack mode.
     const [selectedIncrementOption, setSelectedIncrementOption] = useState(""); // State variable to store the selected increment order.
     const [fileNames, setFileNames] = useState<string[]>([]); // State variable to store the file names.
 
@@ -94,6 +96,8 @@ const JohnTheRipper = () => {
             wordList: "",
             mode: "",
             incrementOrder: "",
+            useRules: false,
+            sessionName: "",
         },
     });
 
@@ -169,6 +173,138 @@ const JohnTheRipper = () => {
     };
 
     /**
+     * handleRestoreSession: Restores a previously named John the Ripper session.
+     * It validates that a session name has been entered, then runs John with
+     * the --restore option. The command output, process ID, loading state,
+     * and any errors are displayed through the existing component handlers.
+     */
+    const handleRestoreSession = async () => {
+        const sessionName = form.values.sessionName.trim();
+
+        if (!sessionName) {
+            setOutput("Error: Enter a session name before attempting to restore a session.");
+            return;
+        }
+
+        setLoading(true);
+        setAllowSave(false);
+        setOutput("");
+
+        const args = [`--restore=${sessionName}`];
+
+        try {
+            const { output, pid } = await CommandHelper.runCommandGetPidAndOutput(
+                "john",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+
+            setOutput(output);
+            setPid(pid);
+        } catch (error: any) {
+            setOutput(error.message);
+            setLoading(false);
+            setAllowSave(true);
+        }
+    };
+
+    /**
+     * handleClearPotFile: Clears John the Ripper's stored pot file after
+     * receiving confirmation from the user. The pot file path is fixed
+     * so this action cannot be used to modify other files.
+     */
+    const handleClearPotFile = async () => {
+        const confirmed = window.confirm(
+            "Are you sure you want to clear all passwords stored in the John the Ripper pot file?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        setLoading(true);
+        setAllowSave(false);
+
+        try {
+            await CommandHelper.runCommand("bash", ["-c", ": > /home/kali/.john/john.pot"]);
+
+            setOutput("John the Ripper pot file was cleared successfully.");
+            setAllowSave(true);
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "An unknown error occurred.";
+
+            setOutput(`Failed to clear the pot file: ${message}`);
+            setAllowSave(true);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    /**
+     * handleShowRecoveredPasswords: Displays passwords that John the Ripper
+     * has already recovered and stored in its pot file.
+     *
+     * For raw files, the selected file is passed directly to John. For ZIP
+     * and RAR files, the password hash is first extracted into a temporary
+     * hash file before running John with the --show option.
+     */
+    const handleShowRecoveredPasswords = async () => {
+        if (!fileNames || fileNames.length === 0) {
+            setOutput("Error: Select a file before attempting to show recovered passwords.");
+            return;
+        }
+
+        setLoading(true);
+        setAllowSave(false);
+        setOutput("");
+
+        const fileToProcess = fileNames[0];
+        const cleanName = cleanFileName(fileToProcess);
+        const filePathToUse = `/home/kali/${cleanName}`;
+
+        let hashFilePath = filePathToUse;
+
+        try {
+            // ZIP and RAR files must first have their hashes extracted.
+            if (selectedFileTypeOption === "zip" || selectedFileTypeOption === "rar") {
+                const extractedHash = await CommandHelper.runCommand(`${selectedFileTypeOption}2john`, [filePathToUse]);
+
+                await writeTextFile("hash.txt", extractedHash, {
+                    dir: BaseDirectory.Temp,
+                });
+
+                hashFilePath = "/tmp/hash.txt";
+            }
+
+            const args = [hashFilePath, "--show"];
+
+            if (form.values.hash.trim()) {
+                args.push(`--format=${form.values.hash.trim()}`);
+            }
+
+            const result = await CommandHelper.runCommandGetPidAndOutput(
+                "john",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+
+            setOutput(result.output);
+            setPid(result.pid);
+        } catch (error: unknown) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : "An unknown error occurred while retrieving recovered passwords.";
+
+            setOutput(message);
+            setLoading(false);
+            setAllowSave(true);
+        }
+    };
+
+    /**
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the JohnTheRipper tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
@@ -176,6 +312,12 @@ const JohnTheRipper = () => {
      * @param {FormValuesType} values - The form values, containing the filepath, hash, crack mode, and other options.
      */
     const onSubmit = async (values: FormValuesType) => {
+        // Validate that a file has been selected before proceeding.
+        if (!fileNames || fileNames.length === 0) {
+            setOutput("Error: No input file selected. Please select a file before attempting to crack.");
+            return;
+        }
+
         // Activate loading state to indicate ongoing process.
         setLoading(true);
 
@@ -195,8 +337,16 @@ const JohnTheRipper = () => {
             selectedModeOption === "dictionary"
                 ? args.push(`--wordlist=${values.wordList}`)
                 : selectedModeOption === "incremental"
-                ? args.push(`-incremental:${values.incrementOrder}`)
+                ? args.push(`--incremental=${selectedIncrementOption}`)
                 : args.push(`--single`);
+
+            if (selectedModeOption === "dictionary" && values.useRules) {
+                args.push("--rules");
+            }
+
+            if (values.sessionName.trim()) {
+                args.push(`--session=${values.sessionName.trim()}`);
+            }
 
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 `john`,
@@ -234,8 +384,16 @@ const JohnTheRipper = () => {
             selectedModeOption === "dictionary"
                 ? argsCrack.push(`--wordlist=${values.wordList}`)
                 : selectedModeOption === "incremental"
-                ? argsCrack.push(`-incremental:${values.incrementOrder}`)
+                ? argsCrack.push(`--incremental=${selectedIncrementOption}`)
                 : argsCrack.push(`--single`);
+
+            if (selectedModeOption === "dictionary" && values.useRules) {
+                argsCrack.push("--rules");
+            }
+
+            if (values.sessionName.trim()) {
+                argsCrack.push(`--session=${values.sessionName.trim()}`);
+            }
 
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 `john`,
@@ -307,6 +465,11 @@ const JohnTheRipper = () => {
                         labelText="File (Can only select files in /home/kali)"
                         placeholderText="Click to select file(s)"
                     />
+                    {fileNames.length > 0 && (
+                        <div style={{ fontSize: "16px", color: "#aaa", marginTop: "8px", textAlign: "center" }}>
+                            <strong>Uploaded File:</strong> {cleanFileName(fileNames[0])}
+                        </div>
+                    )}
                     <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
                     <NativeSelect
                         value={selectedModeOption}
@@ -314,7 +477,6 @@ const JohnTheRipper = () => {
                         title={"Crack Mode"}
                         data={mode}
                         required
-                        placeholder={"Crack Mode"}
                         description={"Please select a crack mode"}
                     />
                     <NativeSelect
@@ -323,26 +485,50 @@ const JohnTheRipper = () => {
                         title={"File Type"}
                         data={fileTypes}
                         required
-                        placeholder={"File Type"}
                         description={"Please select the type of file you want to crack"}
                     />
+
+                    <TextInput
+                        label="Session Name (optional)"
+                        description="Give this cracking session a name so it can be restored later"
+                        placeholder="Example: john-test-session"
+                        {...form.getInputProps("sessionName")}
+                    />
+
+                    <Button type="button" variant="outline" onClick={handleRestoreSession}>
+                        Restore Session
+                    </Button>
+
+                    <Button type="button" color="red" variant="outline" onClick={handleClearPotFile}>
+                        Clear Pot File
+                    </Button>
+
+                    <Button type="button" variant="outline" onClick={handleShowRecoveredPasswords}>
+                        Show Recovered Passwords
+                    </Button>
+
                     {modeRequiringWordList.includes(selectedModeOption) && (
                         <>
-                            <TextInput label={"Dictionary File Path"} required {...form.getInputProps("wordlist")} />
-                        </>
-                    )}
-                    {modeRequiringIncrementOrder.includes(selectedModeOption) && (
-                        <>
-                            <NativeSelect
-                                value={selectedIncrementOption}
-                                onChange={(e) => setSelectedIncrementOption(e.target.value)}
-                                title={"Increment Order"}
-                                data={incrementOrder}
-                                required
-                                placeholder={"Increment Order"}
-                                description={"Please select a Increment Order"}
+                            <TextInput label={"Dictionary File Path"} required {...form.getInputProps("wordList")} />
+                            <Checkbox
+                                label="Apply John wordlist rules"
+                                {...form.getInputProps("useRules", { type: "checkbox" })}
                             />
                         </>
+                    )}
+
+                    {modeRequiringIncrementOrder.includes(selectedModeOption) && (
+                        <Select
+                            value={selectedIncrementOption}
+                            onChange={(value) => setSelectedIncrementOption(value || "")}
+                            label="Increment Order"
+                            data={incrementOrder}
+                            required
+                            searchable
+                            maxDropdownHeight={220}
+                            placeholder="Select an increment order"
+                            description="Please select an increment order"
+                        />
                     )}
 
                     <Button type={"submit"}>Crack</Button>

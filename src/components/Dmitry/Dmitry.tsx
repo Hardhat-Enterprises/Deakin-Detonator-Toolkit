@@ -59,7 +59,7 @@ const dmitry = () => {
         "Note: For more advanced options, enable the Advanced Mode switch to access additional features.\n\n" +
         "Note 2: If you perform TCP port scanning, you can specify a delay between requests. Default is 2 (milliseconds).\n";
     const sourceLink = "https://www.kali.org/tools/dmitry/"; // Link to the source code (or Kali Tools).
-    const tutorial = "https://docs.google.com/document/d/1vVv0IjxTD5Knd3kQpi-zs9P4SNNDIj5Ew7I0iGcNE1c/edit?usp=sharing"; // Link to the official documentation/tutorial.
+    const tutorial = "https://docs.google.com/document/d/1Hqn8onZmLfYWjwKZrYVEmnePw1MW75oI/edit"; // Link to the official documentation/tutorial
     const dependencies = ["dmitry"]; // Contains the dependencies required by the component.
 
     // Check if the command is available and set the state variables accordingly.
@@ -185,14 +185,34 @@ const dmitry = () => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
 
+        const cleanDomain = values.domain.trim();
+
+        if (!cleanDomain) {
+            setOutput("Error: Please enter a domain or IP address.");
+            setLoading(false);
+            return;
+        }
+
+        if (cleanDomain === ".") {
+            setOutput("Error: Invalid host. Please enter a valid domain or IP address.");
+            setLoading(false);
+            return;
+        }
+
+        if (cleanDomain.includes(" ")) {
+            setOutput("Error: Please enter a single domain or IP address without spaces.");
+            setLoading(false);
+            return;
+        }
+
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
         // Construct arguments for the dmitry command based on form input
         const args = [];
 
-        // Split the domain input into individual arguments
-        args.push(...values.domain.split(" "));
+        // Pass the domain as a single argument
+        args.push(cleanDomain);
 
         // Add the -i flag if IP address checking is enabled
         if (checkedIPAddress) {
@@ -252,6 +272,7 @@ const dmitry = () => {
         } catch (e: any) {
             // Handle any errors that occur during command execution
             setOutput(e.message);
+            setLoading(false);
         }
     };
 
