@@ -141,11 +141,11 @@ const CloudBrute = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-	if (!values.wordlist.trim()) {
-    setOutput("Error: Please provide a path to a correct wordlist file.");
-    setLoading(false);
-    return;
-}
+        if (!values.wordlist.trim()) {
+            setOutput("Error: Please provide a path to a correct wordlist file.");
+            setLoading(false);
+            return;
+        }
 
         setAllowSave(false);
         setHasSaved(false);
