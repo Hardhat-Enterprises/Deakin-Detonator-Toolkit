@@ -1,4 +1,4 @@
-import { Button, NativeSelect, Stack, TextInput, Text, List, Accordion } from "@mantine/core";
+import { Button, NativeSelect, Stack, TextInput, Text, List, Accordion, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -23,15 +23,19 @@ interface FormValues {
 // Component Constants
 const title = "SearchSploit";
 const description = "SearchSploit is a command-line tool used for searching through Exploit-DB.";
+
 const steps = `Step 1: Enter a Search Term followed by selecting a Search Option.
 Step 2: Select an Output type.
 Step 3: Select a Non-Searching option.
 Step 4: Enter an Exploit Database ID.
 Step 5: Click Scan to commence SearchSploit's operation.
 Step 6: View the Output block below to view the results of the tool's execution.`;
-const sourceLink = "https://www.kali.org/tools/searchsploit"; // Corrected sourceLink
+
+const sourceLink = "https://www.kali.org/tools/searchsploit";
 const tutorial = "https://docs.google.com/document/d/1lpQN_77zpZQftxqqTaw_DtYbRLH-rqh0COLEsBkBBhk/edit?usp=sharing";
+
 const dependencies = ["searchsploit"];
+
 const searchOptions = ["Case", "Exact", "Strict", "Title"];
 const outputTypes = ["json", "Overflow", "Path", "Verbose", "www"];
 const nonSearchOptions = ["Mirror", "Examine"];
@@ -47,6 +51,11 @@ const SearchSploit = () => {
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
 
+    // Tracks the user-facing execution state.
+    const [executionStatus, setExecutionStatus] = useState<"idle" | "running" | "success" | "failed" | "cancelled">(
+        "idle"
+    );
+
     const form = useForm<FormValues>({
         initialValues: {
             searchTerm: "",
@@ -57,7 +66,7 @@ const SearchSploit = () => {
         },
     });
 
-    // Check if the command is available and set the state variables accordingly
+    // Check if the command is available.
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
@@ -71,19 +80,25 @@ const SearchSploit = () => {
             });
     }, []);
 
-    // Handle process data
+    // Handle process data.
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
-    // Handle process termination
+    // Handle process termination and update the execution status.
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            const message =
-                code === 0
-                    ? "\nProcess completed successfully."
-                    : `\nProcess terminated with exit code: ${code} and signal code: ${signal}`;
-            handleProcessData(message);
+            if (signal === 15) {
+                handleProcessData("\nProcess was manually terminated.");
+                setExecutionStatus("cancelled");
+            } else if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+                setExecutionStatus("success");
+            } else {
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+                setExecutionStatus("failed");
+            }
+
             setPid("");
             setLoading(false);
             setAllowSave(true);
@@ -92,22 +107,27 @@ const SearchSploit = () => {
         [handleProcessData]
     );
 
-    // Handle process cancellation
+    // Handle process cancellation.
     const handleCancel = () => {
         if (pid) {
             CommandHelper.runCommand("kill", ["-15", pid]);
         }
     };
 
-    // Handle save completion
+    // Handle save completion.
     const handleSaveComplete = useCallback(() => {
         setHasSaved(true);
         setAllowSave(false);
     }, []);
 
-    // Handle form submission
+    // Handle form submission.
     const onSubmit = async (values: FormValues) => {
+        // Reset previous execution state.
+        setOutput("");
+        setAllowSave(false);
+        setExecutionStatus("running");
         setLoading(true);
+
         const args = [
             ...getSearchOptionArgs(values.searchOption),
             ...getOutputTypeArgs(values.outputType),
@@ -123,6 +143,7 @@ const SearchSploit = () => {
                 handleProcessData,
                 handleProcessTermination
             );
+
             setPid(result.pid);
             setOutput(result.output);
         } catch (e: unknown) {
@@ -131,12 +152,14 @@ const SearchSploit = () => {
             } else {
                 setOutput("An unknown error occurred.");
             }
-        } finally {
+
+            setExecutionStatus("failed");
             setLoading(false);
+            setAllowSave(true);
         }
     };
 
-    // Get search option arguments
+    // Get search option arguments.
     const getSearchOptionArgs = (searchOption: string): string[] => {
         const optionMap: Record<string, string> = {
             Case: "-c",
@@ -144,10 +167,11 @@ const SearchSploit = () => {
             Strict: "-s",
             Title: "-t",
         };
+
         return [optionMap[searchOption]].filter(Boolean);
     };
 
-    // Get output type arguments
+    // Get output type arguments.
     const getOutputTypeArgs = (outputType: string): string[] => {
         const typeMap: Record<string, string> = {
             json: "-j",
@@ -156,21 +180,24 @@ const SearchSploit = () => {
             Verbose: "-v",
             www: "-w",
         };
+
         return [typeMap[outputType]].filter(Boolean);
     };
 
-    // Get non-search arguments
+    // Get non-search arguments.
     const getNonSearchArgs = (nonSearch: string): string[] => {
         const nonSearchMap: Record<string, string> = {
             Mirror: "-m",
             Examine: "-x",
         };
+
         return [nonSearchMap[nonSearch]].filter(Boolean);
     };
 
-    // Clear output
+    // Clear output and execution status.
     const clearOutput = useCallback(() => {
         setOutput("");
+        setExecutionStatus("idle");
         setAllowSave(false);
         setHasSaved(false);
     }, []);
@@ -191,37 +218,71 @@ const SearchSploit = () => {
                     dependencies={dependencies}
                 />
             )}
+
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleCancel, handleProcessTermination)}
-                    <TextInput label={"Search Term"} {...form.getInputProps("searchTerm")} />
+
+                    {executionStatus !== "idle" && (
+                        <Alert
+                            color={
+                                executionStatus === "running"
+                                    ? "blue"
+                                    : executionStatus === "success"
+                                    ? "green"
+                                    : executionStatus === "cancelled"
+                                    ? "gray"
+                                    : "red"
+                            }
+                            radius="md"
+                        >
+                            {executionStatus === "running" && <Text>Running SearchSploit...</Text>}
+
+                            {executionStatus === "success" && <Text>Search completed successfully.</Text>}
+
+                            {executionStatus === "failed" && <Text>Search failed.</Text>}
+
+                            {executionStatus === "cancelled" && <Text>Search cancelled.</Text>}
+                        </Alert>
+                    )}
+
+                    <TextInput label="Search Term" {...form.getInputProps("searchTerm")} />
+
                     <NativeSelect
                         {...form.getInputProps("searchOption")}
-                        label={"Search Option"}
+                        label="Search Option"
                         data={searchOptions}
-                        placeholder={"Pick a Search option"}
+                        placeholder="Pick a Search option"
                     />
+
                     <NativeSelect
                         {...form.getInputProps("outputType")}
-                        label={"Output"}
+                        label="Output"
                         data={outputTypes}
-                        placeholder={"Select an Output"}
+                        placeholder="Select an Output"
                     />
+
                     <NativeSelect
                         {...form.getInputProps("nonSearch")}
-                        label={"Non-Searching"}
+                        label="Non-Searching"
                         data={nonSearchOptions}
-                        placeholder={"Select an option"}
+                        placeholder="Select an option"
                     />
+
                     <TextInput
-                        label={"EBD-ID"}
+                        label="EBD-ID"
                         description="Exploit Database ID: Required when using the 'Path' output or Non-Search options."
                         {...form.getInputProps("ebdId")}
                     />
-                    <Button type={"submit"}>Start {title}</Button> {/* Button text updated */}
+
+                    <Button type="submit" disabled={loading}>
+                        Start {title}
+                    </Button>
+
                     <Accordion>
                         <Accordion.Item value="item-1">
                             <Accordion.Control>Help:</Accordion.Control>
+
                             <Accordion.Panel>
                                 <List>
                                     <Text weight={700}>Search Options:</Text>
@@ -229,12 +290,14 @@ const SearchSploit = () => {
                                         <List.Item key={option}>{option}</List.Item>
                                     ))}
                                 </List>
+
                                 <List>
                                     <Text weight={700}>Output:</Text>
                                     {outputTypes.map((type) => (
                                         <List.Item key={type}>{type}</List.Item>
                                     ))}
                                 </List>
+
                                 <List>
                                     <Text weight={700}>Non-Searching:</Text>
                                     {nonSearchOptions.map((option) => (
@@ -244,7 +307,9 @@ const SearchSploit = () => {
                             </Accordion.Panel>
                         </Accordion.Item>
                     </Accordion>
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
