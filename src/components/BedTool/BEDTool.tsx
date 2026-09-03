@@ -30,6 +30,7 @@ export function BEDTool() {
     const [loading, setLoading] = useState(false); // State variable to indicate loading state.
     const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
+    const [summary, setSummary] = useState("");
     const [selectedPlugin, setSelectedPlugin] = useState(""); // State variable to store the selected plugin.
     const [allowSave, setAllowSave] = useState(false); // State variable boolean to indicate save state.
     const [hasSaved, setHasSaved] = useState(false); // State variable boolean to indicate if the save has been saved.
@@ -39,6 +40,7 @@ export function BEDTool() {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [showAlert, setShowAlert] = useState(true);
     const alertTimeout = useRef<NodeJS.Timeout | null>(null);
+    const outputRef = useRef("");
 
     // Component Constants.
     const title = "BEDTool"; // Title of the component.
@@ -131,8 +133,36 @@ export function BEDTool() {
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
+        outputRef.current += "\n" + data;
         setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
     }, []);
+
+    const getTestCategories = () => {
+        const scanOutput = outputRef.current;
+        const categories: string[] = [];
+
+        if (scanOutput.includes("Buffer overflow testing")) {
+            categories.push("Buffer overflow");
+        }
+
+        if (scanOutput.includes("Formatstring testing")) {
+            categories.push("Format string");
+        }
+
+        if (scanOutput.includes("Unicode testing")) {
+            categories.push("Unicode");
+        }
+
+        if (scanOutput.includes("random number testing")) {
+            categories.push("Random number");
+        }
+
+        if (scanOutput.includes("testing misc strings")) {
+            categories.push("Misc strings");
+        }
+
+        return categories.length > 0 ? categories.join(", ") : `${selectedPlugin} security tests`;
+    };
 
     /**
      * handleProcessTermination: Callback to handle the termination of the child process.
@@ -142,11 +172,29 @@ export function BEDTool() {
      * @param {number} param.code - The exit code of the terminated process.
      * @param {number} param.signal - The signal code indicating how the process was terminated.
      */
+
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
+                setSummary(
+                    `Scan Status: Completed
+		Target Connection: Successful
+		Tests Completed: ${getTestCategories()}
+		Potential Vulnerabilities Detected: Not confirmed
+		Findings Count: Not available
+		Full Results: Available in the output panel and exported file`
+                );
+
                 handleProcessData("\nProcess completed successfully.");
             } else if (signal === 15) {
+                setSummary(
+                    `Scan Status: Partially Completed
+		Target Connection: Successful
+		Test Categories Observed: ${getTestCategories()}
+		Potential Vulnerabilities Detected: Not confirmed
+		Findings Count: Not available
+		Full Results: Available in the output panel`
+                );
                 handleProcessData("\nProcess was manually terminated.");
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
@@ -156,7 +204,7 @@ export function BEDTool() {
             setAllowSave(true); // Allow Saving as the output is finalised.
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData, selectedPlugin, getTestCategories]
     );
 
     /**
@@ -176,6 +224,8 @@ export function BEDTool() {
     const onSubmit = (values: FormValuesType) => {
         setAllowSave(false);
         setLoading(true);
+        setSummary("");
+        outputRef.current = "";
 
         const baseArgs = ["-s", values.plugin];
         const conditionalArgs: string[][] = [
@@ -328,6 +378,11 @@ export function BEDTool() {
                     )}
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type={"submit"}>Scan</Button>
+                    {summary && (
+                        <Alert title="Vulnerability Summary" color="blue">
+                            <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{summary}</pre>
+                        </Alert>
+                    )}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} pid={pid} loading={loading} />
                 </Stack>
             </form>
