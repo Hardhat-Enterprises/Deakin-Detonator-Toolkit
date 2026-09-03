@@ -49,7 +49,7 @@ const Foremost = () => {
         "Foremost is a forensic program to recover lost files based on their headers, footers, and internal data structures."; // Description of the component.
     const steps =
         "Step 1: Enter a valid file path to the subject file.\n" +
-        "Step 2: Enter a valid file path to the output results.\n";
+        "Step 2: Enter a valid file path to the output results.\n" +  
     "Step 3: Enter any additional options for the scan.\n" +
         "Step 4: Enter any additional parameters for the scan.\n" +
         "Step 5: Click Run Foremost to commence Foremost's operation.\n" +
