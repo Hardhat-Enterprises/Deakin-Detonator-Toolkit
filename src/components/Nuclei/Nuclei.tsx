@@ -66,7 +66,25 @@ function Nuclei() {
 
     const onSubmit = async () => {
         setLoading(true);
-        const args = ["-u", form.values.target];
+        const args = [
+            "-u",
+            form.values.target,
+            "-c",
+            "150",
+            "-rl",
+            "300",
+            "-timeout",
+            "3",
+            "-retries",
+            "0",
+            "mhe",
+            "10",
+            "-hm",
+            "-it",
+            "5",
+            "et",
+            "fuzz,headless,dos",
+        ];
 
         try {
             const { pid, output } = await CommandHelper.runCommandGetPidAndOutput(
@@ -120,7 +138,6 @@ function Nuclei() {
                     <ConsoleWrapper output={output} />
                 </Stack>
             </form>
-            <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
         </RenderComponent>
     );
 }
