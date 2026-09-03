@@ -1,6 +1,6 @@
 import { LoadingOverlay, Button, Modal } from "@mantine/core";
 import { CommandHelper } from "../../utils/CommandHelper";
-import { Command } from "@tauri-apps/api/shell";
+import { Command } from "@tauri-apps/plugin-shell";
 
 /**
  * Overlay to successfully terminate processes for tools not requiring pkexec
