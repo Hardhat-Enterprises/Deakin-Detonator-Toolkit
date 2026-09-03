@@ -221,12 +221,12 @@ function Fping() {
             if (checkedElapsed) {
                 args.push("-e");
             }
-           //Show the accumulated outage time.
-           if (checkedOutage) {
+            //Show the accumulated outage time.
+            if (checkedOutage) {
                 args.push("-o");
                 if (!values.count) {
-                args.push("-c", "1");
-            }
+                    args.push("-c", "1");
+                }
             }
             //Show quiet output.
             if (checkedQuiet) {

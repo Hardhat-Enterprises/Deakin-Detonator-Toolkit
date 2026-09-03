@@ -15,6 +15,7 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     ipGateway: string;
     ipTarget: string;
+    networkInterface: string;
 }
 
 const ARPSpoofing = () => {
@@ -97,6 +98,7 @@ const ARPSpoofing = () => {
         initialValues: {
             ipGateway: "",
             ipTarget: "",
+            networkInterface: "",
         },
     });
 
@@ -171,8 +173,8 @@ const ARPSpoofing = () => {
         setLoading(true);
 
         // Construct arguments for the ARPSpoof command based on form input
-        const argsGateway = [`-t`, values.ipGateway, values.ipTarget];
-        const argsTarget = [`-t`, values.ipTarget, values.ipGateway];
+        const argsGateway = [`-i`, values.networkInterface, `-t`, values.ipGateway, values.ipTarget];
+        const argsTarget = [`-i`, values.networkInterface, `-t`, values.ipTarget, values.ipGateway];
 
         CommandHelper;
         // Execute the arpspoof command for the Gateway using helper method
@@ -244,6 +246,7 @@ const ARPSpoofing = () => {
 
                         <TextInput label={"Target one IP address"} required {...form.getInputProps("ipGateway")} />
                         <TextInput label={"Target two IP address"} required {...form.getInputProps("ipTarget")} />
+                        <TextInput label={"Network interface"} required {...form.getInputProps("networkInterface")} />
                         <Button type={"submit"}>Start Spoof</Button>
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
