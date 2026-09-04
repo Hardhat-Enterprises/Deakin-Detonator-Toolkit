@@ -118,7 +118,7 @@ const ZeroLogon = () => {
         setLoading(true);
         setAllowSave(false);
 
-        const args = ["/usr/share/ddt/zerologon_tester.py", values.dcName, values.targetIP];
+        const args = ["/usr/share/ddt/cve-2020-1472.py", values.dcName, values.targetIP];
         const result = await CommandHelper.runCommandGetPidAndOutput(
             "python3",
             args,
