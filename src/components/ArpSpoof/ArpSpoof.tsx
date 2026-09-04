@@ -15,15 +15,13 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     ipGateway: string;
     ipTarget: string;
-    networkInterface: string;
 }
 
 const ARPSpoofing = () => {
     // Component State Variables.
     const [loading, setLoading] = useState(false); // State variable to indicate if the process is loading.
     const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pidGateway, setPidGateway] = useState(""); // State variable to store the PID of the gateway process.
-    const [pidTarget, setPidTarget] = useState(""); // State variable to store the PID of the target process.
+    const [pid, setPid] = useState(""); // State variable to store the PID of the running arpspoof process.
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
@@ -98,7 +96,6 @@ const ARPSpoofing = () => {
         initialValues: {
             ipGateway: "",
             ipTarget: "",
-            networkInterface: "",
         },
     });
 
@@ -133,9 +130,7 @@ const ARPSpoofing = () => {
             }
 
             // Clear the child process pid reference. There is no longer a valid process running.
-            // We complete this process for both gateway and target processes.
-            setPidGateway("");
-            setPidTarget("");
+            setPid("");
 
             // Cancel the Loading Overlay
             setLoading(false);
@@ -172,28 +167,20 @@ const ARPSpoofing = () => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
 
-        // Construct arguments for the ARPSpoof command based on form input
-        const argsGateway = [`-i`, values.networkInterface, `-t`, values.ipGateway, values.ipTarget];
-        const argsTarget = [`-i`, values.networkInterface, `-t`, values.ipTarget, values.ipGateway];
+        // Construct arguments for the ARPSpoof command based on form input.
+        // -r performs bidirectional ARP spoofing using a single process, so only
+        // one pkexec/arpspoof process needs to be tracked and cancelled.
+        const args = ["-r", "-t", values.ipTarget, values.ipGateway];
 
-        CommandHelper;
-        // Execute the arpspoof command for the Gateway using helper method
-        CommandHelper.runCommandWithPkexec("arpspoof", argsGateway, handleProcessData, handleProcessTermination)
-            .then(({ output, pid }) => {
+        CommandHelper.runCommandWithPkexec(
+            "arpspoof",
+            args,
+            handleProcessData,
+            handleProcessTermination,
+            (spawnedPid) => setPid(spawnedPid)
+        )
+            .then(({ output }) => {
                 setOutput(output);
-                setPidGateway(pid);
-            })
-            .catch((error) => {
-                // Display any errors encountered during command execution
-                setOutput(`Error: ${error.message}`);
-                // Deactivate loading state
-                setLoading(false);
-            });
-        // Execute the arpspoof command for the Target using helper method
-        CommandHelper.runCommandWithPkexec("arpspoof", argsTarget, handleProcessData, handleProcessTermination)
-            .then(({ output, pid }) => {
-                setOutput(output);
-                setPidTarget(pid);
             })
             .catch((error) => {
                 // Display any errors encountered during command execution
@@ -231,8 +218,8 @@ const ARPSpoofing = () => {
                         </Group>
                         {LoadingOverlayAndCancelButtonPkexec(
                             loading,
-                            pidGateway,
-                            pidTarget,
+                            pid,
+                            "",
                             handleProcessData,
                             handleProcessTermination
                         )}
@@ -246,7 +233,6 @@ const ARPSpoofing = () => {
 
                         <TextInput label={"Target one IP address"} required {...form.getInputProps("ipGateway")} />
                         <TextInput label={"Target two IP address"} required {...form.getInputProps("ipTarget")} />
-                        <TextInput label={"Network interface"} required {...form.getInputProps("networkInterface")} />
                         <Button type={"submit"}>Start Spoof</Button>
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                         <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
