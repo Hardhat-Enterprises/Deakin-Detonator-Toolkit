@@ -19,8 +19,8 @@ import {
 } from "@mantine/core";
 import { IconDeviceFloppy } from "@tabler/icons";
 import { getAttackVectors, getTools } from "../components/RouteWrapper";
-import { writeTextFile } from "@tauri-apps/api/fs";
-import { save } from "@tauri-apps/api/dialog";
+import { writeTextFile } from "@tauri-apps/plugin-fs";
+import { save } from "@tauri-apps/plugin-dialog";
 import { RenderComponent } from "../components/UserGuide/UserGuide";
 
 // Title and description for the User Guide tab

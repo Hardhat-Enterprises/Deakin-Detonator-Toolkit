@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput, Select } from "@mantine/core";
+import { Button, Stack, TextInput, Select, Alert, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -15,8 +15,8 @@ import InstallationModal from "../InstallationModal/InstallationModal";
 interface FormValuesType {
     hostIP: string;
     shodanKey: string;
-    endpoint: string; // Added endpoint field
-    searchQuery: string; // Added search query field
+    endpoint: string;
+    searchQuery: string;
 }
 
 /**
@@ -24,19 +24,25 @@ interface FormValuesType {
  * @returns The Shodan component.
  */
 export function ShodanAPITool() {
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
-    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
-    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [pid, setPid] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+
+    // Tracks the user-facing execution state.
+    const [executionStatus, setExecutionStatus] = useState<"idle" | "running" | "success" | "failed" | "cancelled">(
+        "idle"
+    );
 
     // Component Constants.
-    const title = "Shodan API Tool"; // Title of the component.
+    const title = "Shodan API Tool";
     const description =
-        "The Shodan API is a powerful tool that allows external network scans to be performed with use of a valid API key."; // Description of the component.
+        "The Shodan API is a powerful tool that allows external network scans to be performed with use of a valid API key.";
+
     const steps =
         "How to use Shodan API:\n" +
         "Step 1: Obtain a valid API key by creating an account at https://account.shodan.io; once signed in, the API should be within the account's overview\n" +
@@ -46,75 +52,66 @@ export function ShodanAPITool() {
         "Step 5: Click Scan button to commence the Shodan API operation. Or click Cancel Scan to terminate scan\n" +
         "Step 6: View the Output block below to view the results of the tool's execution.\n" +
         "Step 7: Optional: to save scan results enter filename and click on the save output to file button";
-    const sourceLink = "https://developer.shodan.io/api"; // Link to the source code.
-    const tutorial = "https://docs.google.com/document/d/1doC-ru2Ivvqx925en0SzU5E-ROQRufdi0MftiozhKgo/edit?usp=sharing"; // Link to the official documentation/tutorial.
-    const dependencies = ["shodan"]; // Contains the dependencies required by the component.
+
+    const sourceLink = "https://developer.shodan.io/api";
+    const tutorial = "https://docs.google.com/document/d/1doC-ru2Ivvqx925en0SzU5E-ROQRufdi0MftiozhKgo/edit?usp=sharing";
+
+    const dependencies = ["shodan"];
 
     // Form Hook to handle form input.
-    let form = useForm({
+    const form = useForm<FormValuesType>({
         initialValues: {
             hostIP: "",
             shodanKey: "",
-            endpoint: "", // Default endpoint
+            endpoint: "",
             searchQuery: "",
         },
     });
 
-    // Determine if the selected endpoint requires a search query
+    // Determine if the selected endpoint requires a search query.
     const requiresQuery = form.values.endpoint !== "host";
-    // Determine if the selected endpoint requires an IP address
+
+    // Determine if the selected endpoint requires an IP address.
     const requiresIP = form.values.endpoint === "host";
 
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                // Set the command availability state.
                 setIsCommandAvailable(isAvailable);
-                // Set the modal state to opened if the command is not available.
                 setOpened(!isAvailable);
-                // Set loading to false after the check is done.
-                setLoadingModal(false); // Ensure this is set to false even if successful
+                setLoadingModal(false);
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                // Also set loading to false in case of error.
-                setLoadingModal(false); // Crucial change, set to false even on errors
+                setLoadingModal(false);
             });
     }, []);
 
     /**
-     * handleProcessData: Callback to handle and append new data from the child process to the output.
-     * It updates the state by appending the new data received to the existing output.
-     * @param {string} data - The data received from the child process.
+     * Callback to handle and append new data from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Update output.
+        setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
     /**
-     * handleProcessTermination: Callback to handle the termination of the child process.
-     * Once the process termination is handled, it clears the process PID reference and
-     * deactivates the loading overlay.
-     * @param {object} param - An object containing information about the process termination.
-     * @param {number} param.code - The exit code of the terminated process.
-     * @param {number} param.signal - The signal code indicating how the process was terminated.
+     * Handle process termination and update the execution status.
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 15) {
+            if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+                setExecutionStatus("cancelled");
+            } else if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+                setExecutionStatus("success");
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+                setExecutionStatus("failed");
             }
-            // Clear the child process pid reference.
-            setPid("");
-            // Cancel the Loading Overlay.
-            setLoading(false);
 
-            // Allow Saving as the output is finalised.
+            setPid("");
+            setLoading(false);
             setAllowSave(true);
             setHasSaved(false);
         },
@@ -122,31 +119,24 @@ export function ShodanAPITool() {
     );
 
     /**
-     * handleSaveComplete: Callback to handle the completion of the file saving process.
-     * It updates the state by indicating that the file has been saved and deactivates the save button.
+     * Handle save completion.
      */
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user.
         setHasSaved(true);
         setAllowSave(false);
     };
 
     /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the Shodan API tool with the given parameters.
-     * Once the command is executed, the results or errors are displayed in the output.
-     *
-     * @param {FormValuesType} values - The form values, containing the filepath, hash, crack mode, and other options.
+     * Handle form submission.
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Disallow saving until the tool's execution is complete.
+        // Reset previous execution state.
+        setOutput("");
         setAllowSave(false);
-
-        // Enable the loading overlay while the tool executes.
+        setExecutionStatus("running");
         setLoading(true);
 
-        // Construct the arguments array dynamically based on the selected endpoint
+        // Construct arguments based on selected endpoint.
         const args = [values.endpoint];
 
         if (requiresIP) {
@@ -158,32 +148,35 @@ export function ShodanAPITool() {
         }
 
         try {
-            // Execute the Shodan command via helper method and handle its output or potential errors.
-            CommandHelper.runCommand("shodan", values.shodanKey); //initialises the Shodan CLI with the obtained API key
+            // Initialise the Shodan CLI with the API key.
+            CommandHelper.runCommand("shodan", values.shodanKey);
+
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "shodan",
                 args,
                 handleProcessData,
                 handleProcessTermination
             );
-            //Update command with the result.
+
             setPid(result.pid);
             setOutput(result.output);
         } catch (e: any) {
-            //Display output error messages.
             setOutput(e.message);
+            setExecutionStatus("failed");
+            setLoading(false);
+            setAllowSave(true);
         }
     };
 
     /**
-     * clearOutput: Callback function to clear the console output.
-     * It resets the state variable holding the output, thereby clearing the display.
+     * Clear output and reset execution state.
      */
     const clearOutput = useCallback(() => {
         setOutput("");
+        setExecutionStatus("idle");
         setHasSaved(false);
         setAllowSave(false);
-    }, [setOutput]);
+    }, []);
 
     return (
         <RenderComponent
@@ -199,12 +192,37 @@ export function ShodanAPITool() {
                     setOpened={setOpened}
                     feature_description={description}
                     dependencies={dependencies}
-                ></InstallationModal>
+                />
             )}
+
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
-                    <TextInput label={"Valid API Key"} required {...form.getInputProps("shodanKey")} />
+
+                    {executionStatus !== "idle" && (
+                        <Alert
+                            color={
+                                executionStatus === "running"
+                                    ? "blue"
+                                    : executionStatus === "success"
+                                    ? "green"
+                                    : executionStatus === "cancelled"
+                                    ? "gray"
+                                    : "red"
+                            }
+                            radius="md"
+                        >
+                            {executionStatus === "running" && <Text>Running Shodan request...</Text>}
+
+                            {executionStatus === "success" && <Text>Request completed successfully.</Text>}
+
+                            {executionStatus === "failed" && <Text>Request failed.</Text>}
+
+                            {executionStatus === "cancelled" && <Text>Request cancelled.</Text>}
+                        </Alert>
+                    )}
+
+                    <TextInput label="Valid API Key" required {...form.getInputProps("shodanKey")} />
 
                     <Select
                         label="Select Shodan API Endpoint"
@@ -218,16 +236,18 @@ export function ShodanAPITool() {
                         {...form.getInputProps("endpoint")}
                     />
 
-                    {/* Conditionally render IP address input */}
-                    {requiresIP && <TextInput label={"Host IP"} required {...form.getInputProps("hostIP")} />}
+                    {requiresIP && <TextInput label="Host IP" required {...form.getInputProps("hostIP")} />}
 
-                    {/* Conditionally render Search Query input */}
                     {requiresQuery && (
-                        <TextInput label={"Search Query"} required {...form.getInputProps("searchQuery")} />
+                        <TextInput label="Search Query" required {...form.getInputProps("searchQuery")} />
                     )}
 
-                    <Button type={"submit"}>Scan</Button>
+                    <Button type="submit" disabled={loading}>
+                        Scan
+                    </Button>
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
