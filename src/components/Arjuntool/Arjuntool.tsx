@@ -30,6 +30,7 @@ function Arjuntool() {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
     const [showAlert, setShowAlert] = useState(true);
     const alertTimeout = useRef<NodeJS.Timeout | null>(null);
+    const scanStartTime = useRef<number | null>(null);
 
     // Component constants.
     const title = "Arjun";
@@ -43,7 +44,7 @@ function Arjuntool() {
         "Step 4: View the output block below to see the results.";
     +"Step 5: Enter an optional JSON output filename, e.g. arjunoutput.json.\n";
     const sourceLink = "https://github.com/s0md3v/Arjun"; // Link to the source code (or Kali Tools).
-    const tutorial = "https://docs.google.com/document/d/1zIsHBJPQDL9KLkZK0ztg1DuMoumwwWwV3lJdwjVRJ-c/edit?usp=sharing"; // Link to the official documentation/tutorial.
+    const tutorial = "https://hackmd.io/@zee-10/Skjln8dHZe"; // Link to the official documentation/tutorial.
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
@@ -100,6 +101,20 @@ function Arjuntool() {
     }, []);
 
     /**
+     * Calculates the elapsed time for the current scan and resets the timer.
+     */
+    const getElapsedTime = useCallback(() => {
+        if (scanStartTime.current === null) {
+            return "0.00";
+        }
+
+        const elapsedSeconds = (performance.now() - scanStartTime.current) / 1000;
+        scanStartTime.current = null;
+
+        return elapsedSeconds.toFixed(2);
+    }, []);
+
+    /**
      * handleProcessTermination: Callback to handle the termination of the child process.
      * Once the process termination is handled, it clears the process PID reference and
      * deactivates the loading overlay.
@@ -109,6 +124,7 @@ function Arjuntool() {
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            const elapsedTime = getElapsedTime();
             // If the process was terminated successfully, display a success message.
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
@@ -119,6 +135,7 @@ function Arjuntool() {
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
+            handleProcessData(`Total execution time: ${elapsedTime} seconds`);
 
             // Clear the child process pid reference. There is no longer a valid process running.
             setPid("");
@@ -130,7 +147,7 @@ function Arjuntool() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [getElapsedTime, handleProcessData] // Dependency on the handleProcessData callback
     );
 
     // Actions taken after saving the output
@@ -152,6 +169,8 @@ function Arjuntool() {
     const onSubmit = async (values: FormValuesType) => {
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
+        setHasSaved(false);
+        setOutput("");
 
         // Activate loading state to indicate ongoing process
         setLoading(true);
@@ -167,6 +186,9 @@ function Arjuntool() {
             args.push("-o", values.outputFileName);
         }
 
+        // Start a new timer immediately before launching the Arjun process.
+        scanStartTime.current = performance.now();
+
         // Execute the arjun command via helper method and handle its output or potential errors
         CommandHelper.runCommandGetPidAndOutput("arjun", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
@@ -177,11 +199,14 @@ function Arjuntool() {
                 setPid(pid);
             })
             .catch((error) => {
+                const elapsedTime = getElapsedTime();
                 // Display any errors encountered during command execution.
-                setOutput(error.message);
+                setOutput(`${error.message}\nProcess failed to start.\nTotal execution time: ${elapsedTime} seconds`);
 
                 // Deactivate loading state.
                 setLoading(false);
+                setAllowSave(true);
+                setHasSaved(false);
             });
     };
 

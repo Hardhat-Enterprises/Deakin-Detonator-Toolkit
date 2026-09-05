@@ -224,6 +224,9 @@ function Fping() {
             //Show the accumulated outage time.
             if (checkedOutage) {
                 args.push("-o");
+                if (!values.count) {
+                    args.push("-c", "1");
+                }
             }
             //Show quiet output.
             if (checkedQuiet) {
