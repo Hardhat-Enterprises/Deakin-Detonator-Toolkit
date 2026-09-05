@@ -266,11 +266,11 @@ export const ROUTES: RouteProperties[] = [
         category: "",
     },
     {
-    	name: "CVE-2022-22954",
-	path: "/attack-vectors/cve-2022-22954",
-	element: <CVE202222954 />,
-	description: "VMware Workspace ONE Access and Identity Manager Server-Side Template Injection Vulnerability",
-	category: "",
+        name: "CVE-2022-22954",
+        path: "/attack-vectors/cve-2022-22954",
+        element: <CVE202222954 />,
+        description: "VMware Workspace ONE Access and Identity Manager Server-Side Template Injection Vulnerability",
+        category: "",
     },
     {
         name: "CVE-2023-23397",
