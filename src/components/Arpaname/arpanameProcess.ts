@@ -1,4 +1,4 @@
-import { Child, Command } from "@tauri-apps/api/shell";
+import { Child, Command } from "@tauri-apps/plugin-shell";
 
 export const ARPANAME_EXECUTABLE = "arpaname";
 export const ARPANAME_PACKAGE = "bind9";
@@ -56,7 +56,7 @@ export const spawnArpanameProcess = (
     onData: (data: string) => void = () => {},
     timeoutMs: number
 ): RunningArpanameProcess => {
-    const command = new Command(program, args);
+    const command = Command.create(program, args);
     let child: Child | null = null;
     let stdout = "";
     let stderr = "";
