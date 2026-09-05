@@ -22,7 +22,7 @@ const Wafw00f = () => {
         "Step 3: Click 'Run WafW00f' to execute.\n" +
         "Step 4: View the results in the output section.";
     const sourceLink = "https://github.com/EnableSecurity/wafw00f";
-    const tutorial = "https://docs.google.com/document/d/1oC6Z4M3i5bLAh3vRs5B28DFA4rOqahVjF9g2HznTCvs/edit?usp=sharing"
+    const tutorial = "https://docs.google.com/document/d/1oC6Z4M3i5bLAh3vRs5B28DFA4rOqahVjF9g2HznTCvs/edit?usp=sharing";
     const dependencies = ["wafw00f"];
 
     // State variables to manage tool behavior
@@ -74,8 +74,16 @@ const Wafw00f = () => {
                 const target = line.match(/Checking (.+)/)?.[1]?.trim() || "Unknown Target";
                 return `[+] Target: ${target}`;
             }
-            if (line.includes("is behind") && !line.includes("[+]")) {
-                return `[+] ${line.trim()}`;
+
+            if (line.includes("is behind") && line.includes("WAF")) {
+                const wafName = line.match(/is behind (.+?) WAF/)?.[1]?.trim() || "Detected WAF";
+
+                return `[+] WAF Status: Detected
+		[+] WAF Name: ${wafName}
+		[i] Detection Method: Signature-based detection matched a known WAF signature.`;
+            }
+            if (line.includes("Generic Detection results")) {
+                return "[i] Generic Detection: Behaviour-based detection based on the website response.";
             }
             if (line.includes("Reason:")) {
                 return `[~] Reason: ${line.split("Reason:")[1].trim()}`;
@@ -83,13 +91,37 @@ const Wafw00f = () => {
             if (line.includes("Number of requests")) {
                 return `[~] Number of Requests: ${line.split(":")[1].trim()}`;
             }
+            if (line.includes("NameResolutionError") || line.includes("Failed to resolve")) {
+                return "[!] Domain could not be resolved. Please check the URL.";
+            }
+
+            if (line.includes("SSLError") || line.includes("certificate verify failed")) {
+                return "[!] SSL/TLS connection failed.";
+            }
+
+            if (line.includes("ConnectTimeout") || line.includes("ReadTimeout") || line.includes("timed out")) {
+                return "[!] Connection timed out. Please try again.";
+            }
+
+            if (line.includes("HTTPConnectionPool") || line.includes("HTTPSConnectionPool")) {
+                return "[!] Unable to connect to the website.";
+            }
+            if (line.includes("appears to be down")) {
+                return "";
+            }
             if (line.includes("ERROR:wafw00f")) {
                 return `[!] Error: ${line.split("ERROR:wafw00f:")[1].trim()}`;
             }
-            if (line.includes("HTTPConnectionPool") || line.includes("HTTPSConnectionPool")) {
-                return `[!] Connection Error: ${line}`;
+
+            if (
+                line.includes("WAFW00F") ||
+                line.includes("Sniffing Web Application Firewalls") ||
+                line.includes("Web Application Firewall Fingerprinting Toolkit")
+            ) {
+                return "";
             }
-            return line;
+
+            return "";
         });
 
         return formattedLines.filter((line) => line.trim() !== "").join("\n");
@@ -98,32 +130,34 @@ const Wafw00f = () => {
     // Process data returned from the tool and update output
     const handleProcessData = useCallback((data: string) => {
         const formattedData = cleanAndFormatOutput(data);
-        setOutput((prevOutput) => `${prevOutput}\n${formattedData}`);
+
+        if (formattedData.trim()) {
+            setOutput((prevOutput) => (prevOutput ? `${prevOutput}\n${formattedData}` : formattedData));
+        }
     }, []);
 
     // Handle process termination
-    const handleProcessTermination = useCallback(
-        ({ code, signal }: { code: number; signal: number }) => {
-            if (code === 0 && !output.includes("[!] Error")) {
-                setOutput((prevOutput) => `${prevOutput}\nScanning complete!\nProcess completed successfully.`);
-            } else if (signal === 15) {
-                setOutput((prevOutput) => `${prevOutput}\nScanning stopped.\nProcess was manually terminated.`);
-            } else if (output.includes("[!] Error")) {
-                setOutput(
-                    (prevOutput) => `${prevOutput}\nScanning failed due to an error.\nCheck the error details above.`
-                );
-            } else {
-                setOutput(
-                    (prevOutput) =>
-                        `${prevOutput}\nScanning failed.\nProcess terminated with exit code: ${code} and signal code: ${signal}`
-                );
+    const handleProcessTermination = useCallback(({ code, signal }: { code: number; signal: number }) => {
+        setOutput((prevOutput) => {
+            if (signal === 15) {
+                return `${prevOutput}\nScanning stopped.\nProcess was manually terminated.`;
             }
-            setPid("");
-            setLoading(false);
-            setAllowSave(true);
-        },
-        [output]
-    );
+
+            if (code === 0 && !prevOutput.includes("[!]")) {
+                return `${prevOutput}\nScanning complete!\nProcess completed successfully.`;
+            }
+
+            if (prevOutput.includes("[!]")) {
+                return `${prevOutput}\nScanning failed due to an error.\nCheck the error details above.`;
+            }
+
+            return `${prevOutput}\nScanning failed.\nProcess terminated with exit code: ${code} and signal code: ${signal}`;
+        });
+
+        setPid("");
+        setLoading(false);
+        setAllowSave(true);
+    }, []);
 
     // Handle form submission and run 'wafw00f' command
     const onSubmit = async (values: { targetUrl: string }) => {
@@ -170,7 +204,13 @@ const Wafw00f = () => {
     };
 
     return (
-        <RenderComponent title={title} description={description} steps={steps} tutorial={tutorial} sourceLink={sourceLink}>
+        <RenderComponent
+            title={title}
+            description={description}
+            steps={steps}
+            tutorial={tutorial}
+            sourceLink={sourceLink}
+        >
             {!loadingModal && (
                 <InstallationModal
                     isOpen={opened}
@@ -188,6 +228,9 @@ const Wafw00f = () => {
                         required
                         {...form.getInputProps("targetUrl")}
                     />
+                    <div style={{ fontSize: "13px", color: "gray" }}>
+                        Example: https://example.com. Results may vary for domains, subdomains, and IP addresses.
+                    </div>
                     <Switch
                         label="Find All WAFs"
                         checked={findAllWAFs}

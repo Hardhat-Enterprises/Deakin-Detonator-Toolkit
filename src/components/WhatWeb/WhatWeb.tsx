@@ -82,6 +82,28 @@ function WhatWeb() {
             logFormat: "",
             maxThreads: 0,
         },
+
+        validate: {
+            target: (value, values) => {
+                const target = value.trim();
+
+                if (!target && !values.inputFile.trim()) {
+                    return "Please enter a target URL or IP address, or provide an input file.";
+                }
+
+                if (target) {
+                    const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
+
+                    const ipPattern = /^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/;
+
+                    if (!urlPattern.test(target) && !ipPattern.test(target)) {
+                        return "Please enter a valid URL or IP address.";
+                    }
+                }
+
+                return null;
+            },
+        },
     });
 
     // Check command availability
@@ -103,12 +125,11 @@ function WhatWeb() {
         setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
-    const handleProcessTermination = useCallback(
-      ({ code, signal }: { code: number; signal: number }) => {
-	if (timeoutId) {
-	    clearTimeout(timeoutId);
+    const handleProcessTermination = useCallback(({ code, signal }: { code: number; signal: number }) => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
             setTimeoutId(null);
-	}
+        }
         setOutput((prevOutput) => {
             const hasError =
                 prevOutput.includes("ERROR") ||
@@ -130,9 +151,7 @@ function WhatWeb() {
         setLoading(false);
         setAllowSave(true);
         setHasSaved(false);
-    },
-    []
-);
+    }, []);
 
     const handleSaveComplete = () => {
         setHasSaved(true);
@@ -141,21 +160,21 @@ function WhatWeb() {
 
     // Submit handler
     const onSubmit = async (values: FormValuesType) => {
-	setOutput("");
+        setOutput("");
         setLoading(true);
         setAllowSave(false);
 
         const args: string[] = [];
         if (values.inputFile) args.push("-i", values.inputFile);
-	if (values.aggression) args.push("-a", values.aggression);
-	if (values.userAgent) args.push("-U", values.userAgent);
-	if (values.followRedirect) args.push(`--follow-redirect=${values.followRedirect}`);
-	if (values.user) args.push("-u", values.user);
-	if (values.cookie) args.push("-c", values.cookie);
-	if (values.plugins) args.push("-p", values.plugins);
-	if (values.verbose) args.push("-v");
-	if (values.logFormat) args.push(`--log-${values.logFormat}=-`);
-	if (values.maxThreads > 0) args.push("-t", String(values.maxThreads));
+        if (values.aggression) args.push("-a", values.aggression);
+        if (values.userAgent) args.push("-U", values.userAgent);
+        if (values.followRedirect) args.push(`--follow-redirect=${values.followRedirect}`);
+        if (values.user) args.push("-u", values.user);
+        if (values.cookie) args.push("-c", values.cookie);
+        if (values.plugins) args.push("-p", values.plugins);
+        if (values.verbose) args.push("-v");
+        if (values.logFormat) args.push(`--log-${values.logFormat}=-`);
+        if (values.maxThreads > 0) args.push("-t", String(values.maxThreads));
         args.push(values.target);
 
         try {
@@ -168,7 +187,7 @@ function WhatWeb() {
             setPid(pid);
             setOutput(output);
 
-	    const timer = setTimeout(() => {
+            const timer = setTimeout(() => {
                 if (pid) {
                     CommandHelper.runCommand("kill", ["-15", pid]);
                     setOutput((prevOutput) => prevOutput + "\nScan timed out after 120 seconds.");
@@ -177,7 +196,7 @@ function WhatWeb() {
                     setHasSaved(false);
                 }
             }, 120000);
-	    setTimeoutId(timer);
+            setTimeoutId(timer);
         } catch (error: any) {
             setOutput(`Error: ${error.message}`);
             setLoading(false);
@@ -373,7 +392,7 @@ function WhatWeb() {
                         </Group>
 
                         <div style={{ height: fullscreen ? "80vh" : "300px" }}>
-			<ConsoleWrapper output={output} clearOutputCallback={clearOutput} />                            
+                            <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                         </div>
                     </Stack>
                 </form>

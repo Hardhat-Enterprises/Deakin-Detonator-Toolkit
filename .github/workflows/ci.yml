@@ -1,5 +1,6 @@
 # GitHub Actions Workflow for CI/CD Pipeline
 # This workflow is triggered on pushes and pull requests to the 'main' and 'dev' branches.
+# This project uses Yarn 3 through Corepack. Each Node.js enables Corepack before installing dependencies so the Yarn version declared in package.json is used consistently in development and CI.
 
 name: CI
 
@@ -9,67 +10,119 @@ on:
     pull_request:
         branches: [main, dev] # Triggers the workflow on PULL REQUESTS targeting 'main' and 'dev'
 
+# Jobs only require read access to repository contents
+permissions:
+    contents: read
+
 jobs:
+    # Verify that the dependency manifest and lockfiles are valid before allowing style, test, security and build jobs to begin
     # Dependency setup job
     dependencies:
+        name: dependencies
         runs-on: ubuntu-latest
         timeout-minutes: 30 # Stop job if it runs longer than 30 minutes
 
-        # Strategy to run jobs in parallel with different Node.js versions
-        strategy:
-            matrix:
-                node-version: [20] # Tests against alternating Node.js version(s) specified
+        steps:
+            - name: checkout code
+              uses: actions/checkout@v6
+
+            # Set up the Node.js environment with the specified version
+            # DDT currently uses Node.js 20
+            - name: node environment setup
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 20
+
+            # Enable the package manager included in Node.js. Corepack selects the Yarn version declared in package.json
+            - name: enable corepack
+              run: corepack enable
+
+            # Record the version of yarn used
+            - name: confirm yarn version
+              run: yarn --version
+
+            # Do not modify yarn.lock during CI, install project dependencies, upgraded frozen-lockfile to immutable
+            - name: install dependencies
+              run: yarn install --immutable
+
+    # Style check job (linting)
+    # Check that the source files follow the projects formatting and style rules
+    style:
+        name: style
+        runs-on: ubuntu-latest
+        needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
 
         steps:
             - name: checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v6
 
             # Set up the Node.js environment with the specified version
+            # DDT currently uses Node.js 20
             - name: node environment setup
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v6
               with:
-                  node-version: ${{ matrix.node-version }} # Use the current matrix version of Node.js
+                  node-version: 20
 
-            # Cache Node.js modules to speed up subsequent runs
-            - name: Cache Node.js modules
-              uses: actions/cache@v3
-              with:
-                  path: ~/.npm
-                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }} # Cache key based on OS and package-lock.json hash
-                  restore-keys: |
-                      ${{ runner.os }}-node- # Restore cache with a partial match if the exact key isn't found
-            # Install Yarn globally to manage dependencies
-            - run: npm install --global yarn
+            # Enable the package manager included in Node.js. Corepack selects the Yarn version declared in package.json
+            - name: enable corepack
+              run: corepack enable
 
-            # Install project dependencies using Yarn and ensure they match the lockfile
-            - run: yarn install --frozen-lockfile
+            # Record the version of yarn used
+            - name: confirm yarn version
+              run: yarn --version
 
-    # Style check job (linting)
-    style:
-        runs-on: ubuntu-latest
-        needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
-        steps:
-            - name: style check
-              uses: actions/checkout@v3
-            - run: yarn install --frozen-lockfile
-            - run: yarn run style # Run the style check
+            # Do not modify yarn.lock during CI, install project dependencies, upgraded frozen-lockfile to immutable
+            - name: install dependencies
+              run: yarn install --immutable
+
+            # Run the style check
+            - name: run style check
+              run: yarn run style
 
     # General tests
+    # Run the automated test suite after dependency validation
     test:
+        name: test
         runs-on: ubuntu-latest
         needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
+
         steps:
-            - uses: actions/checkout@v3
-            - run: yarn install --frozen-lockfile
-            - run: yarn run test
+            - name: checkout code
+              uses: actions/checkout@v6
+
+            # Set up the Node.js environment with the specified version
+            # DDT currently uses Node.js 20
+            - name: node environment setup
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 20
+
+            # Enable the package manager included in Node.js. Corepack selects the Yarn version declared in package.json
+            - name: enable corepack
+              run: corepack enable
+
+            # Record the version of yarn used
+            - name: confirm yarn version
+              run: yarn --version
+
+            # Do not modify yarn.lock during CI, install project dependencies, upgraded frozen-lockfile to immutable
+            - name: install dependencies
+              run: yarn install --immutable
+
+            # Run the general test
+            - name: run test
+              run: yarn run test
 
     # Security tests
+    # Scan the repository and its dependencies for known vulnerabilities and verified secrets
     security_test:
+        name: security_test
         runs-on: ubuntu-latest
         needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
+
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
+            - name: checkout code
+              uses: actions/checkout@v6
 
             # Set the current date to match the pre-existing cache key generated by trivy-update.yml
             - name: Set current date
@@ -79,12 +132,12 @@ jobs:
             # Attempt to restore the Trivy cache
             - name: Restore Trivy Cache
               id: cache
-              uses: actions/cache@v3
+              uses: actions/cache@v5
               with:
                   path: ${{ github.workspace }}/.cache/trivy
                   key: cache-trivy-${{ steps.date.outputs.date }}
                   restore-keys: |
-                      cache-trivy-${{ steps.date.outputs.date }}
+                      cache-trivy-
 
             # Set environment to skip database updates if the cache is restored
             - name: Set TRIVY_SKIP_DB_UPDATE environment variable
@@ -98,6 +151,9 @@ jobs:
 
             # Backup mechanism - Trivy can cause a fatal error if the cache is missing when attempting to skip DB update.
             # If the cache is not found, the required databases will be manually downloaded and extracted to prevent errors.
+            - name: Setup ORAS
+              if: steps.cache.outputs.cache-hit != 'true'
+              uses: oras-project/setup-oras@v2
 
             - name: Download and Extract Trivy DB (on cache miss)
               if: steps.cache.outputs.cache-hit != 'true'
@@ -117,7 +173,7 @@ jobs:
 
             # Vulnerability scanning
             - name: Run Trivy vulnerability scanner in repo mode
-              uses: aquasecurity/trivy-action@0.28.0
+              uses: aquasecurity/trivy-action@v0.36.0
               with:
                   scan-type: "fs"
                   ignore-unfixed: true
@@ -130,7 +186,7 @@ jobs:
 
             - name: Save updated Trivy Cache (on cache miss)
               if: steps.cache.outputs.cache-hit != 'true'
-              uses: actions/cache/save@v3
+              uses: actions/cache/save@v5
               with:
                   path: ${{ github.workspace }}/.cache/trivy
                   key: cache-trivy-${{ steps.date.outputs.date }} # Cache key based on the current date
@@ -141,11 +197,36 @@ jobs:
                   docker run --rm -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github \
                   --repo https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit \
                   --only-verified
+
     # Application build job
     build:
+        name: build
         runs-on: ubuntu-latest
         needs: dependencies # Ensure this job only runs after the 'dependencies' job is successful
+
         steps:
-            - uses: actions/checkout@v3
-            - run: yarn install --frozen-lockfile
-            - run: yarn run build # Build the project
+            - name: checkout code
+              uses: actions/checkout@v6
+
+            # Set up the Node.js environment with the specified version
+            # DDT currently uses Node.js 20
+            - name: node environment setup
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 20
+
+            # Enable the package manager included in Node.js. Corepack selects the Yarn version declared in package.json
+            - name: enable corepack
+              run: corepack enable
+
+            # Record the version of yarn used
+            - name: confirm yarn version
+              run: yarn --version
+
+            # Do not modify yarn.lock during CI, install project dependencies, upgraded frozen-lockfile to immutable
+            - name: install dependencies
+              run: yarn install --immutable
+
+            # Build the project
+            - name: build project
+              run: yarn run build

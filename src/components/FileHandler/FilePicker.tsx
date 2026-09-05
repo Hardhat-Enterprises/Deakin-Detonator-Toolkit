@@ -1,5 +1,5 @@
 import { useMantineTheme, FileInput } from "@mantine/core";
-import { invoke } from "@tauri-apps/api";
+import { invoke } from "@tauri-apps/api/core";
 import { generateFileName, generateFilePath } from "./FileHandler";
 import React from "react";
 

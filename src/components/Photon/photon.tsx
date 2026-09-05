@@ -153,13 +153,13 @@ const Photon = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-const threads = Number(values.threads);
+        const threads = Number(values.threads);
 
-if (values.threads && (!Number.isInteger(threads) || threads <= 0)) {
-    setOutput("Error: Threads must be a positive integer greater than 0");
-    setLoading(false);
-    return;
-}
+        if (values.threads && (!Number.isInteger(threads) || threads <= 0)) {
+            setOutput("Error: Threads must be a positive integer greater than 0");
+            setLoading(false);
+            return;
+        }
 
         // Create the arguments array for the command
         const args = [];
