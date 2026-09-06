@@ -49,7 +49,7 @@ const Crunch = () => {
         "Step 6: View the Output block below to view the results of the tools execution.";
     const sourceLink = "https://www.kali.org/tools/crunch/";
     const tutorial = "https://docs.google.com/document/d/1NoYLod8jyXOLAIUGU-d7Zeq_-_XDzXO-XzADKLPk72I/edit?usp=sharing";
-    const dependencies = ["Crunch"];
+    const dependencies = ["crunch"];
 
     const form = useForm<FormValuesType>({
         initialValues: {
