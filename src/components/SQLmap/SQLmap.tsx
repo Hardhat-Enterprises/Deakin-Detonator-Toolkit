@@ -27,6 +27,53 @@ interface FormValuesType {
 }
 
 /**
+ * Validates the session cookie string for SQLMap.
+ * Accepts an empty string (optional field) or valid cookie format:
+ * one or more name=value pairs separated by semicolons.
+ *
+ * @param {string} cookie - The session cookie string to validate.
+ * @returns {string | null} Error message if invalid, null if valid.
+ */
+export const validateSessionCookie = (cookie: string): string | null => {
+    const trimmed = (cookie || "").trim();
+    if (!trimmed) {
+        return null;
+    }
+
+    // Must not start or end with a semicolon
+    if (trimmed.startsWith(";") || trimmed.endsWith(";")) {
+        return "Invalid cookie format. Expected name=value pairs separated by semicolons (e.g., PHPSESSID=abc123; security=low)";
+    }
+
+    // Split into individual cookie pairs separated by ';'
+    const pairs = trimmed.split(";");
+
+    for (const rawPair of pairs) {
+        const pair = rawPair.trim();
+        // Empty pair (e.g. consecutive semicolons like 'a=b;;c=d')
+        if (!pair) {
+            return "Invalid cookie format. Expected name=value pairs separated by semicolons (e.g., PHPSESSID=abc123; security=low)";
+        }
+
+        const equalIndex = pair.indexOf("=");
+        // Must contain '=' and name must not be empty
+        if (equalIndex <= 0) {
+            return "Invalid cookie format. Expected name=value pairs separated by semicolons (e.g., PHPSESSID=abc123; security=low)";
+        }
+
+        const name = pair.slice(0, equalIndex).trim();
+        const value = pair.slice(equalIndex + 1).trim();
+
+        // Name and value must not be empty, and name must not contain whitespace
+        if (!name || !value || /\s/.test(name)) {
+            return "Invalid cookie format. Expected name=value pairs separated by semicolons (e.g., PHPSESSID=abc123; security=low)";
+        }
+    }
+
+    return null;
+};
+
+/**
  * The SQLmap component.
  * @returns The SQLmap component.
  */
@@ -58,7 +105,7 @@ function SQLmap() {
     const dependencies = ["sqlmap"];
 
     // Form hook to handle form input
-    const form = useForm({
+    const form = useForm<FormValuesType>({
         initialValues: {
             targetURL: "",
             detectionLevel: "1",
@@ -72,6 +119,9 @@ function SQLmap() {
             banner: false,
             dbs: false,
             passwords: false,
+        },
+        validate: {
+            sessionCookie: validateSessionCookie,
         },
     });
 
@@ -118,6 +168,10 @@ function SQLmap() {
      * Handles form submission for SQLMap.
      */
     const onSubmit = async (values: FormValuesType) => {
+        if (form.validate().hasErrors) {
+            return;
+        }
+
         setLoading(true);
 
         // Base SQLMap arguments
@@ -127,7 +181,7 @@ function SQLmap() {
         // If a cookie was supplied, pass it to SQLMap.
         // This enables testing authenticated targets.
         if (values.sessionCookie.trim() !== "") {
-            args.push(`--cookie=${values.sessionCookie}`);
+            args.push(`--cookie=${values.sessionCookie.trim()}`);
         }
 
         if (values.banner) {
