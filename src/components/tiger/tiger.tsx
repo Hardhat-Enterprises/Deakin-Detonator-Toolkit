@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Alert, Button, Loader, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -7,7 +7,7 @@ import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/O
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
-import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile"; //v2
+import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 
 /**
  * Represents the form values for the Tiger component.
@@ -15,6 +15,11 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 interface FormValuesType {
     reportFile: string;
 }
+
+/**
+ * Represents the user-facing execution state.
+ */
+type ExecutionStatus = "idle" | "running" | "success" | "failed" | "cancelled";
 
 /**
  * The Tiger component.
@@ -30,23 +35,34 @@ const Tiger = () => {
     const [loadingModal, setLoadingModal] = useState(true);
     const [pid, setPid] = useState("");
 
+    // User-facing execution status.
+    const [executionStatus, setExecutionStatus] = useState<ExecutionStatus>("idle");
+
     const title = "Tiger";
+
     const description =
         "Tiger is a security audit tool for Unix-based systems. It scans for vulnerabilities, such as misconfigured file permissions and weak passwords, to enhance system security.";
+
     const steps =
         "Step 1: Enter the path to save the audit report in the Report File field (e.g., `/home/user/tiger_audit_report.txt`).\n" +
         "Step 2: Click the Start Tiger button to begin the scan.\n" +
-        "Step 3: Check the results displayed in the output block or the saved report file at the specified location. ";
-    const sourceLink = "https://www.kali.org/tools/tiger/";
-    const dependencies = ["tiger"];
-    const tutorial = "https://docs.google.com/document/d/1bkG-s9h6bpsCWq2IW1pOJbxpCPc_ZcqNwswup_iSB5k/edit?usp=sharing";
+        "Step 3: Check the results displayed in the output block or the saved report file at the specified location.";
 
-    let form = useForm({
+    const sourceLink = "https://www.kali.org/tools/tiger/";
+
+    const dependencies = ["tiger"];
+
+    const tutorial = "https://docs.google.com/document/d/1dE_S5HIlWfSedTMu0_m0YngNYASxmw0RUL0pnCblH8A/edit?usp=sharing";
+
+    const form = useForm<FormValuesType>({
         initialValues: {
             reportFile: "",
         },
     });
 
+    /**
+     * Check if Tiger is available.
+     */
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
@@ -60,49 +76,96 @@ const Tiger = () => {
             });
     }, []);
 
+    /**
+     * Handle process output.
+     */
     const handleProcessData = useCallback((data: string) => {
         setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
+    /**
+     * Handle process termination and update execution status.
+     */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number | null }) => {
-            if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 2) {
+            if (signal === 2 || signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+                setExecutionStatus("cancelled");
+            } else if (code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+                setExecutionStatus("success");
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+                setExecutionStatus("failed");
             }
+
+            // Process has ended.
             setPid("");
             setLoading(false);
+
+            // Output can now be saved.
+            setAllowSave(true);
+            setHasSaved(false);
         },
         [handleProcessData]
     );
 
+    /**
+     * Start Tiger.
+     */
     const onSubmit = async (values: FormValuesType) => {
+        // Clear previous execution output/status.
+        setOutput("");
+        setExecutionStatus("running");
+
+        // Activate loading state.
         setLoading(true);
 
-        let args = ["-l", values.reportFile];
+        // Disable saving while running.
+        setAllowSave(false);
+        setHasSaved(false);
 
-        CommandHelper.runCommandWithPkexec("tiger", args, handleProcessData, handleProcessTermination)
-            .then(({ output, pid }) => {
-                setOutput(output);
-                setAllowSave(true);
-                setPid(pid);
-            })
-            .catch((error) => {
+        const args = ["-l", values.reportFile];
+
+        try {
+            const result = await CommandHelper.runCommandWithPkexec(
+                "tiger",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+
+            setPid(result.pid);
+            setOutput(result.output);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
                 setOutput(`Error: ${error.message}`);
-                setLoading(false);
-            });
+            } else {
+                setOutput("An unknown error occurred.");
+            }
+
+            setExecutionStatus("failed");
+            setLoading(false);
+            setPid("");
+            setAllowSave(true);
+            setHasSaved(false);
+        }
     };
 
+    /**
+     * Handle save completion.
+     */
     const handleSaveComplete = () => {
         setHasSaved(true);
         setAllowSave(false);
     };
 
+    /**
+     * Clear console and reset status.
+     */
     const clearOutput = () => {
         setOutput("");
+        setExecutionStatus("idle");
         setHasSaved(false);
         setAllowSave(false);
     };
@@ -123,17 +186,58 @@ const Tiger = () => {
                     dependencies={dependencies}
                 />
             )}
+
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
+
+                    {executionStatus !== "idle" && (
+                        <Alert
+                            color={
+                                executionStatus === "running"
+                                    ? "blue"
+                                    : executionStatus === "success"
+                                    ? "green"
+                                    : executionStatus === "cancelled"
+                                    ? "gray"
+                                    : "red"
+                            }
+                            radius="md"
+                        >
+                            {executionStatus === "running" && (
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                    }}
+                                >
+                                    <Loader size="sm" />
+                                    <Text>Running...</Text>
+                                </div>
+                            )}
+
+                            {executionStatus === "success" && <Text>Process completed successfully.</Text>}
+
+                            {executionStatus === "failed" && <Text>Process failed.</Text>}
+
+                            {executionStatus === "cancelled" && <Text>Process cancelled.</Text>}
+                        </Alert>
+                    )}
+
                     <TextInput
                         label="Report File"
                         required
                         {...form.getInputProps("reportFile")}
                         placeholder="e.g. /path/to/report.txt"
                     />
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type="submit">Start {title}</Button>
+
+                    <Button type="submit" disabled={loading}>
+                        Start {title}
+                    </Button>
+
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>

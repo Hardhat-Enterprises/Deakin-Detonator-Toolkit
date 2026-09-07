@@ -50,7 +50,7 @@ const ArpanameTool = () => {
         "Step 2: Click lookup to run Arpaname.\n" +
         "Step 3: View the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/bind9/#arpaname"; // Link to the source code (or Kali Tools).
-    const tutorial = "https://docs.google.com/document/d/1dwLjkG_kFi2shSGeDVQByz64j-93ghUAElsPE9T3YLU/edit?usp=sharing"; // Link to the official documentation/tutorial.
+    const tutorial = "https://hackmd.io/@zee-10/BkFVqUdHbe"; // Link to the official documentation/tutorial.
     const dependencies = ["arpaname"];
 
     // Check for command availability on component mount

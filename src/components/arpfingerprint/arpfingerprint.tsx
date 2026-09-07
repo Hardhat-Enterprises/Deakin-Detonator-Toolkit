@@ -4,7 +4,7 @@ import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -36,7 +36,7 @@ function ARPFingerprinting() {
         "Step 2: Click Scan to start ARP fingerprinting.\n" +
         "Step 3: View the Output block below to see the fingerprinting results.";
     const sourceLink = "https://www.kali.org/tools/arp-scan/#arp-fingerprint";
-    const tutorial = "https://docs.google.com/document/d/1PLMdKlXsbzYI9rF25Fo_Gv8aDJvtai0s09hPjM7NA6w/edit?usp=sharing";
+    const tutorial = "https://docs.google.com/document/d/1NXhDeGZk8K1kqBXBHdQdq0yBUcBCxq6n/edit";
 
     // Check for the exact binary we call
     const dependencies = ["arp-fingerprint"];
@@ -160,7 +160,7 @@ function ARPFingerprinting() {
                         )}
                     </Group>
 
-                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
 
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
