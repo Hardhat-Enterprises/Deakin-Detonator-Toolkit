@@ -85,11 +85,6 @@ export const CommandHelper = {
      * it was not possible to test code segments that demanded 'sudo'. With the incorporation of 'pkexec', we can now invoke commands
      * with elevated privileges, thereby enabling more comprehensive testing.
      *
-     * Current Bug:
-     * One of the limitations of this current implementation is that it doesn't keep track of the Child PID once the command starts.
-     * This essentially means that, as of now, there's no way to cancel or interrupt the command once it has been initiated.
-     * We are aware of this limitation and there are plans to address this in the future. However, for the time being, the bug persists.
-     *
      * Implementation Limitation:
      * When using this function, every command executed in the current component (e.g., functions like nmap or airbase-ng) will be run
      * with root privileges. This means users will be prompted for the password every single time, leading to a potential user-experience
@@ -119,6 +114,9 @@ export const CommandHelper = {
      * @param args Array of arguments to pass to the command.
      * @param onData Callback function invoked upon receiving data from the command's output.
      * @param onTermination Callback function invoked when the command process terminates.
+     * @param onSpawn Optional callback invoked immediately once the process has spawned, with its PID.
+     * This allows the caller to store/use the PID right away, instead of waiting for the promise to
+     * resolve (which only happens once the process has already terminated).
      * @returns A promise resolving to an object containing the PID and combined output of the command, or rejecting with an error message.
      */
 
@@ -126,12 +124,18 @@ export const CommandHelper = {
         commandString: string,
         args: string[],
         onData: (data: string) => void,
-        onTermination: ({ code, signal }: { code: number; signal: number }) => void
+        onTermination: ({ code, signal }: { code: number; signal: number }) => void,
+        onSpawn?: (pid: string) => void
     ): Promise<{ pid: string; output: string }> {
         const command = new Command("pkexec", [commandString, ...args]);
         const handle: Child = await command.spawn();
         const pid = handle.pid.toString();
-        console.log(pid);
+
+        // Hand the PID to the caller immediately, so it can be stored/used while the
+        // process is still running (needed for the Cancel button to work).
+        if (onSpawn) {
+            onSpawn(pid);
+        }
 
         let stdout = "";
         let stderr = "";
