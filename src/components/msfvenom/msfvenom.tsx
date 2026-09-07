@@ -91,7 +91,7 @@ const payloadOptions = [
     ],
 ];
 
-const payloadFormats = ["Select Payload Format", "exe", "elf", "raw", "psh", "asp", "aspx", "jsp", "war", "jar","apk"];
+const payloadFormats = ["Select Payload Format", "exe", "elf", "raw", "psh", "asp", "aspx", "jsp", "war", "jar", "apk"];
 
 const payloadRequiredVariables = [
     // windows x86 payload variables
@@ -210,15 +210,15 @@ const PayloadGenerator = () => {
     const onSubmit = async () => {
         setLoading(true);
         setAllowSave(true);
-if (form.values.lport) {
-        const port = Number(form.values.lport);
+        if (form.values.lport) {
+            const port = Number(form.values.lport);
 
-        if (!Number.isInteger(port) || port < 1 || port > 65535) {
-            setLoading(false);
-            setOutput("Error: LPORT must be a valid number between 1 and 65535.");
-            return;
+            if (!Number.isInteger(port) || port < 1 || port > 65535) {
+                setLoading(false);
+                setOutput("Error: LPORT must be a valid number between 1 and 65535.");
+                return;
+            }
         }
-    }
         const args = [];
 
         if (isCustomMode) {
