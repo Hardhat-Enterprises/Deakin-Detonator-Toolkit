@@ -4,10 +4,10 @@
 
 Security updates and fixes are currently supported for the active development version of the Deakin Detonator Toolkit (DDT) repository.
 
-| Version | Supported |
-| ------- | ---------- |
-| Active Development Branch | ✅ |
-| Older/Archived Versions | ❌ |
+| Version                   | Supported |
+| ------------------------- | --------- |
+| Active Development Branch | ✅        |
+| Older/Archived Versions   | ❌        |
 
 ---
 
@@ -23,11 +23,11 @@ Please avoid publicly disclosing vulnerabilities until they have been reviewed b
 
 When reporting an issue, try to include:
 
-- Description of the vulnerability
-- Steps to reproduce the issue
-- Affected files, tools, or features
-- Possible impact
-- Suggested fix (if available)
+-   Description of the vulnerability
+-   Steps to reproduce the issue
+-   Affected files, tools, or features
+-   Possible impact
+-   Suggested fix (if available)
 
 ---
 

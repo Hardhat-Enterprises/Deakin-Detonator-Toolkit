@@ -139,7 +139,11 @@ const Gyoithon = () => {
     // Locates and clears the generated target address text file at the Gyoithon directory on the host device.
     const ClearTarget = async () => {
         setLoading(true);
-        const args = [`/usr/share/ddt/GyoiThon/configure.py`, `-clear`, `/home/kali/Desktop/Deakin-Detonator-Toolkit/src/components/Gyoithon/host.txt`];
+        const args = [
+            `/usr/share/ddt/GyoiThon/configure.py`,
+            `-clear`,
+            `/home/kali/Desktop/Deakin-Detonator-Toolkit/src/components/Gyoithon/host.txt`,
+        ];
         const output = await CommandHelper.runCommand("python3", args);
         setOutput(output);
         setLoading(false);
