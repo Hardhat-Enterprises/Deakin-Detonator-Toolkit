@@ -1,14 +1,36 @@
 {
-    "$schema": "../node_modules/@tauri-apps/cli/schema.json",
-    "build": {
-        "beforeBuildCommand": "npm run build",
-        "beforeDevCommand": "npm run dev",
-        "devPath": "http://localhost:5173",
-        "distDir": "../dist"
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173"
+  },
+  "bundle": {
+    "active": true,
+    "category": "DeveloperTool",
+    "copyright": "",
+    "targets": "all",
+    "externalBin": [],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": ""
     },
-    "package": {
-        "productName": "Deakin-Detonator-Toolkit",
-        "version": "0.1.2"
+    "longDescription": "Deakin Detonator Toolkit",
+    "macOS": {
+      "entitlements": null,
+      "exceptionDomain": "",
+      "frameworks": [],
+      "providerShortName": null,
+      "signingIdentity": null
     },
     "tauri": {
         "allowlist": {
@@ -18,10 +40,10 @@
                 "sidecar": true,
                 "scope": [
                     {
-    			"name": "nmap",
-   			"cmd": "/usr/bin/nmap",
-    			"args": true
-		    },
+                        "name": "nmap",
+                        "cmd": "/usr/bin/nmap",
+                        "args": true
+                    },
                     {
                         "name": "airbase-ng",
                         "cmd": "airbase-ng",
@@ -103,11 +125,6 @@
                         "args": true
                     },
                     {
-                        "name": "crackmapexec",
-                        "cmd": "crackmapexec",
-                        "args": true
-                    },
-                    {
                         "name": "crunch",
                         "cmd": "crunch",
                         "args": true
@@ -150,6 +167,16 @@
                     {
                         "name": "fcrackzip",
                         "cmd": "fcrackzip",
+                        "args": true
+                    },
+                    {
+                        "name": "foremost",
+                        "cmd": "/usr/bin/foremost",
+                        "args": true
+                    },
+                    {
+                        "name": "ffuf",
+                        "cmd": "ffuf",
                         "args": true
                     },
                     {
@@ -252,7 +279,7 @@
                         "cmd": "nslookup",
                         "args": true
                     },
-                                        {
+                    {
                         "name": "nuclei",
                         "cmd": "nuclei",
                         "args": true
@@ -308,6 +335,11 @@
                         "args": true
                     },
                     {
+                        "name": "shodan",
+                        "cmd": "shodan",
+                        "args": true
+                    },
+                    {
                         "name": "sherlock",
                         "cmd": "sherlock",
                         "args": true
@@ -337,7 +369,7 @@
                         "cmd": "subjack",
                         "args": true
                     },
-                      
+
                     {
                         "name": "sublist3r",
                         "cmd": "sublist3r",
@@ -398,7 +430,7 @@
                         "cmd": "whois",
                         "args": true
                     },
-                  
+
                     {
                         "name": "wpscan",
                         "cmd": "wpscan",
@@ -412,23 +444,22 @@
                 ]
             },
             "fs": {
-                "all": true,                            
-                "writeFile": true,                      
+                "all": true,
+                "writeFile": true,
                 "scope": [
-                  "$TEMP/**",
-                  "$HOME/Deakin-Detonator-Toolkit/**",
-                  "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**",
-                  "$DESKTOP/**"                             
+                    "$TEMP/**",
+                    "$HOME/Deakin-Detonator-Toolkit/**",
+                    "$HOME/Deakin-Detonator-Toolkit/OutputFiles/**",
+                    "$DESKTOP/**"
                 ]
-              },
-              "dialog": {
-                "all": true,                            
-                "save": true                            
-              },
-              "path": {
+            },
+            "dialog": {
+                "all": true,
+                "save": true
+            },
+            "path": {
                 "all": true
-              }
-              
+            }
         },
         "bundle": {
             "active": true,
@@ -488,5 +519,49 @@
                 "title": "Deakin Detonator Toolkit"
             }
         ]
+    "resources": [],
+    "shortDescription": "",
+    "linux": {
+      "deb": {
+        "depends": [
+          "openjdk-11-jdk",
+          "python3-impacket",
+          "dsniff"
+        ],
+        "files": {
+          "/usr/share/ddt": "exploits/",
+          "/usr/share/doc/ddt/README.md": "../README.md"
+        }
+      }
+    },
+    "createUpdaterArtifacts": "v1Compatible"
+  },
+  "productName": "Deakin-Detonator-Toolkit",
+  "mainBinaryName": "Deakin-Detonator-Toolkit",
+  "version": "0.1.2",
+  "identifier": "com.deakin.ddt",
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/releases/download/updater/update.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDcyNEQ4Njk4MjNDNkJGRTQKUldUa3Y4WWptSVpOY2dTZkY4dThjSlY0eXJpUS8zUUZhNnV0eTZ4TlpkeEd3cVRNMStyNm00d0oK"
     }
+  },
+  "app": {
+    "windows": [
+      {
+        "fullscreen": false,
+        "width": 800,
+        "height": 600,
+        "maximized": true,
+        "resizable": true,
+        "title": "Deakin Detonator Toolkit",
+        "useHttpsScheme": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  }
 }

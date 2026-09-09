@@ -142,13 +142,6 @@ const ReferencesPage = () => {
                                     url={"https://www.kali.org/tools/cloudbrute/"}
                                 />
                                 <Reference
-                                    name={"CrackMapExec"}
-                                    description={
-                                        "CrackMapExec is a post-exploitation tool used for pentesting Windows/Active Directory environments."
-                                    }
-                                    url={"https://www.kali.org/tools/crackmapexec/"}
-                                />
-                                <Reference
                                     name={"Crunch"}
                                     description={"Crunch is a wordlist generator."}
                                     url={"https://www.kali.org/tools/crunch/"}
@@ -326,6 +319,11 @@ const ReferencesPage = () => {
                                     name={"Nmap"}
                                     description={"Nmap a network scanning tool."}
                                     url={"https://www.nmap.org"}
+                                />
+                                <Reference
+                                    name="Nuclei"
+                                    description="Nuclei is a fast vulnerability scanner powered by community and custom templates."
+                                    url={"https://www.kali.org/tools/nuclei/"}
                                 />
                                 <Reference
                                     name={"NSLookup"}
@@ -547,11 +545,6 @@ const ReferencesPage = () => {
                                 <Reference
                                     name={"CVE-2022-24112"}
                                     description={"Apache APISIX - Remote Code Execution."}
-                                    url={"https://github.com/M4xSec/Apache-APISIX-CVE-2022-24112"}
-                                />
-                                <Reference
-                                    name={"CVE-2022-27925"}
-                                    description={"Zimbra Collaboration Suite - Remote Code Execution."}
                                     url={"https://github.com/M4xSec/Apache-APISIX-CVE-2022-24112"}
                                 />
                                 <Reference

@@ -130,7 +130,7 @@ const Gyoithon = () => {
     // Returns a text file with the target address to the Gyoithon directory on the host device.
     const ShowTarget = async () => {
         setLoading(true);
-        const args = [`/usr/share/ddt/GyoiThon/host.txt`];
+        const args = [`/home/kali/Desktop/Deakin-Detonator-Toolkit/src/components/Gyoithon/host.txt`];
         const output = await CommandHelper.runCommand("cat", args);
         setOutput(output);
         setLoading(false);
@@ -139,7 +139,11 @@ const Gyoithon = () => {
     // Locates and clears the generated target address text file at the Gyoithon directory on the host device.
     const ClearTarget = async () => {
         setLoading(true);
-        const args = [`/usr/share/ddt/GyoiThon/configure.py`, `-clear`, `/usr/share/ddt/GyoiThon/host.txt`];
+        const args = [
+            `/usr/share/ddt/GyoiThon/configure.py`,
+            `-clear`,
+            `/home/kali/Desktop/Deakin-Detonator-Toolkit/src/components/Gyoithon/host.txt`,
+        ];
         const output = await CommandHelper.runCommand("python3", args);
         setOutput(output);
         setLoading(false);
@@ -157,7 +161,7 @@ const Gyoithon = () => {
         const args = [
             `/usr/share/ddt/GyoiThon/configure.py`,
             `-add`,
-            `/usr/share/ddt/GyoiThon/host.txt`,
+            `/home/kali/Desktop/Deakin-Detonator-Toolkit/src/components/Gyoithon/host.txt`,
             values.protocol,
             values.ip,
             values.port,
@@ -176,7 +180,7 @@ const Gyoithon = () => {
         const args = [
             `/usr/share/ddt/GyoiThon/configure.py`,
             `-import`,
-            `/usr/share/ddt/GyoiThon/host.txt`,
+            `/home/kali/Desktop/Deakin-Detonator-Toolkit/src/components/Gyoithon/host.txt`,
             values.importFile,
         ];
         // Displays the output results and state.
