@@ -1,17 +1,20 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Button, Stack, TextInput, Radio, Alert, Group } from "@mantine/core";
+import { Alert, Button, Group, Modal, Radio, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
-import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
-import InstallationModal from "../InstallationModal/InstallationModal";
-import { CommandHelper } from "../../utils/CommandHelper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import AskChatGPT from "../AskChatGPT/AskChatGPT";
 import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
 import AskCohere from "../AskCohere/AskCohere";
 import CohereOutput from "../AskCohere/CohereOutput";
+import ArpanameInstallationModal from "./ArpanameInstallationModal";
+import {
+    ArpanameProcessError,
+    checkArpanameAvailability,
+    RunningArpanameProcess,
+    startArpanameLookup,
+} from "./arpanameProcess";
 
 /**
  * Represents the form values for the Arpaname component.
@@ -20,6 +23,14 @@ interface FormValuesType {
     ipAddress: string;
     ipType: "IPv4" | "IPv6";
 }
+
+const processErrorMessage = (error: unknown) => {
+    if (error instanceof ArpanameProcessError && error.kind === "timeout") {
+        return "Arpaname timed out and was terminated.";
+    }
+    if (error instanceof Error) return error.message;
+    return String(error);
+};
 
 /**
  * ArpanameTool component for performing reverse DNS lookups on IP addresses.
@@ -32,17 +43,23 @@ const ArpanameTool = () => {
     const description = "Perform reverse DNS lookups for IP addresses."; // Brief description of the tool's functionality
     const [loading, setLoading] = useState(false); // State variable to track if the process is currently loading
     const [output, setOutput] = useState(""); // State variable to store the output of the process
-    const [pidTarget, setPidTarget] = useState(""); // State variable to store the PID of the target process.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
+    const [opened, setOpened] = useState(false); // State variable that indicates if the modal is opened.
+    const [checkingAvailability, setCheckingAvailability] = useState(true);
     const [errorMessage, setErrorMessage] = useState<string>(""); // State variable to store the error message
     const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
     const [chatGPTResponse, setChatGPTResponse] = useState(""); //ChatGPT response
     const [cohereResponse, setCohereResponse] = useState(""); // Cohere response
     const [showAlert, setShowAlert] = useState(true);
-    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
+    const [canCancel, setCanCancel] = useState(false);
+    const [cancelling, setCancelling] = useState(false);
+    const alertTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const activeLookup = useRef<RunningArpanameProcess | null>(null);
+    const activeAvailabilityCheck = useRef<RunningArpanameProcess | null>(null);
+    const lookupInProgress = useRef(false);
+    const cancelRequested = useRef(false);
+    const mounted = useRef(true);
 
     // Component Constants.
     const steps =
@@ -51,31 +68,58 @@ const ArpanameTool = () => {
         "Step 3: View the output block to see the results. ";
     const sourceLink = "https://www.kali.org/tools/bind9/#arpaname"; // Link to the source code (or Kali Tools).
     const tutorial = "https://hackmd.io/@zee-10/BkFVqUdHbe"; // Link to the official documentation/tutorial.
-    const dependencies = ["arpaname"];
 
-    // Check for command availability on component mount
+    // Check for the executable (not the package name) on component mount.
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
-        checkAllCommandsAvailability(dependencies)
+        mounted.current = true;
+        let effectActive = true;
+        let availabilityProcess: RunningArpanameProcess | null = null;
+
+        void checkArpanameAvailability((process) => {
+            availabilityProcess = process;
+            if (!effectActive) {
+                process.dispose();
+                return;
+            }
+            activeAvailabilityCheck.current = process;
+        })
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-                setLoadingModal(false); // Set loading to false after the check is done
+                if (!effectActive) return;
+                setIsCommandAvailable(isAvailable);
+                setOpened(!isAvailable);
             })
             .catch((error) => {
-                console.error("An error occurred:", error);
-                setLoadingModal(false); // Ensure loading state is reset even if an error occurs
+                if (!effectActive) return;
+                console.error("Unable to check arpaname availability:", error);
+                setIsCommandAvailable(false);
+                setOpened(true);
+            })
+            .finally(() => {
+                if (activeAvailabilityCheck.current === availabilityProcess) {
+                    activeAvailabilityCheck.current = null;
+                }
+                if (effectActive) setCheckingAvailability(false);
             });
 
         // Set timeout to remove alert after 5 seconds on load.
         alertTimeout.current = setTimeout(() => {
-            setShowAlert(false);
+            if (effectActive) setShowAlert(false);
         }, 5000);
 
         return () => {
-            if (alertTimeout.current) {
-                clearTimeout(alertTimeout.current);
-            }
+            effectActive = false;
+            mounted.current = false;
+            if (alertTimeout.current) clearTimeout(alertTimeout.current);
+
+            const availabilityCheck = activeAvailabilityCheck.current;
+            activeAvailabilityCheck.current = null;
+            availabilityCheck?.dispose();
+
+            const lookup = activeLookup.current;
+            activeLookup.current = null;
+            lookup?.dispose();
+            lookupInProgress.current = false;
+            cancelRequested.current = false;
         };
     }, []);
 
@@ -85,7 +129,7 @@ const ArpanameTool = () => {
             clearTimeout(alertTimeout.current);
         }
         alertTimeout.current = setTimeout(() => {
-            setShowAlert(false);
+            if (mounted.current) setShowAlert(false);
         }, 5000);
     };
 
@@ -96,49 +140,18 @@ const ArpanameTool = () => {
         },
     });
 
-    /**
-    handleProcessData: Callback to handle and append new data from the child process to the output.
-    It updates the state by appending the new data received to the existing output.
-    @param {string} data - The data received from the child process.
-    */
+    /** Append new child-process data to the output. */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data);
+        if (mounted.current) setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
-
-    /**
-    handleProcessTermination: Callback to handle the termination of the child process.
-    Once the process termination is handled, it clears the process PID reference and
-    deactivates the loading overlay.
-    @param {object} param - An object containing information about the process termination.
-    @param {number} param.code - The exit code of the terminated process.
-    @param {number} param.signal - The signal code indicating how the process was terminated.
-    */
-    const handleProcessTermination = useCallback(
-        ({ code, signal }: { code: number; signal: number }) => {
-            if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 15) {
-                handleProcessData("\nProcess was manually terminated.");
-            } else {
-                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
-            }
-            setLoading(false); // Indicate that the process is no longer running
-            // Allow the user to save the output to a file.
-            setAllowSave(true); // Enable the save option now that the process has completed
-            setHasSaved(false); // Reset the saved state for the new output
-        },
-        [handleProcessData]
-    );
 
     /**
      * Handles the completion of the save operation.
      * Updates state to reflect that the output has been saved and disables further saving.
      */
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
-        setHasSaved(true); // Update state to indicate the output has been saved
-        setAllowSave(false); // Disable the save option after successful save
+        setHasSaved(true);
+        setAllowSave(false);
     };
 
     /**
@@ -153,45 +166,97 @@ const ArpanameTool = () => {
         return type === "IPv4" ? ipv4Pattern.test(ip) : ipv6Pattern.test(ip);
     };
 
-    /**
-     * Async function to handle form submission and execute the arpaname command.
-     * @param {FormValuesType} values - The form values containing the IP address.
-     */
+    /** Execute arpaname and wait for its actual close event. */
     const onSubmit = async (values: FormValuesType) => {
-        if (!validateIPAddress(values.ipAddress, values.ipType)) {
-            setErrorMessage(`Please enter a valid ${values.ipType} address.`); // Set error message for invalid IP
+        if (lookupInProgress.current) return;
+        if (!isCommandAvailable) {
+            setErrorMessage("Arpaname is not installed.");
+            setOpened(true);
             return;
         }
-        // Disallow saving until the tool's execution is complete
+        if (!validateIPAddress(values.ipAddress, values.ipType)) {
+            setErrorMessage(`Please enter a valid ${values.ipType} address.`);
+            return;
+        }
+
+        lookupInProgress.current = true;
         setAllowSave(false);
-        // Reset the error message state when validation succeeds
+        setHasSaved(false);
         setErrorMessage("");
-        // Activate loading state to indicate ongoing process
         setLoading(true);
+        setCanCancel(false);
+        setCancelling(false);
+        cancelRequested.current = false;
 
-        const argsIP = [values.ipAddress]; // Prepare arguments for the arpaname command
+        let process: RunningArpanameProcess | null = null;
+        try {
+            process = startArpanameLookup(values.ipAddress, handleProcessData);
+            activeLookup.current = process;
+            setCanCancel(true);
 
-        // Execute arpaname command for the target
-        const result_target = await CommandHelper.runCommandGetPidAndOutput(
-            "arpaname",
-            argsIP,
-            handleProcessData, // Pass handleProcessData as callback for handling process data
-            handleProcessTermination
-        );
-        setPidTarget(result_target.pid); // Store the process ID for potential termination
+            if (!mounted.current) {
+                process.dispose();
+                return;
+            }
 
-        setLoading(false); // Hide loading indicator after command completion
+            const result = await process.completion;
+
+            if (result.cancelled) {
+                handleProcessData("\nProcess was manually terminated.");
+            } else if (result.code === 0) {
+                handleProcessData("\nProcess completed successfully.");
+            } else {
+                handleProcessData(
+                    `\nProcess terminated with exit code: ${String(result.code)} and signal code: ${String(
+                        result.signal
+                    )}`
+                );
+            }
+        } catch (error) {
+            if (mounted.current) {
+                handleProcessData(`\nError: ${processErrorMessage(error)}`);
+                if (error instanceof ArpanameProcessError && error.kind === "spawn") {
+                    setIsCommandAvailable(false);
+                    setOpened(true);
+                }
+            }
+        } finally {
+            if (activeLookup.current === process) activeLookup.current = null;
+            process?.dispose();
+            lookupInProgress.current = false;
+            cancelRequested.current = false;
+            if (mounted.current) {
+                setLoading(false);
+                setCanCancel(false);
+                setCancelling(false);
+                setAllowSave(true);
+                setHasSaved(false);
+            }
+        }
     };
 
-    /**
-     * Callback function to clear the output state.
-     * This function is memoized using the `useCallback` hook to prevent unnecessary re-renders.
-     */
+    const cancelLookup = async () => {
+        const process = activeLookup.current;
+        if (!process || cancelRequested.current) return;
+        cancelRequested.current = true;
+        setCancelling(true);
+        await process.cancel();
+    };
+
+    const handleAvailabilityChange = useCallback((isAvailable: boolean) => {
+        if (!mounted.current) return;
+        setIsCommandAvailable(isAvailable);
+        if (isAvailable) setOpened(false);
+    }, []);
+
+    /** Clear command output and save state. */
     const clearOutput = useCallback(() => {
-        setOutput(""); // Clear the command output text
-        setHasSaved(false); // Reset the saved state as there's no output to save
-        setAllowSave(false); // Disable the save option as there's no output to save
-    }, [setOutput]);
+        setOutput("");
+        setHasSaved(false);
+        setAllowSave(false);
+    }, []);
+
+    const lookupDisabled = checkingAvailability || !isCommandAvailable || loading;
 
     return (
         <RenderComponent
@@ -201,32 +266,58 @@ const ArpanameTool = () => {
             tutorial={tutorial}
             sourceLink={sourceLink}
         >
-            {!loadingModal && (
-                <InstallationModal
+            {!checkingAvailability && (
+                <ArpanameInstallationModal
                     isOpen={opened}
                     setOpened={setOpened}
-                    feature_description={description}
-                    dependencies={dependencies}
-                ></InstallationModal>
+                    onAvailabilityChange={handleAvailabilityChange}
+                />
             )}
             <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
                 <Stack>
                     <Group position="right">
                         {!showAlert && (
-                            <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
+                            <Button type="button" onClick={handleShowAlert} size="xs" variant="outline" color="gray">
                                 Show Disclaimer
                             </Button>
                         )}
                     </Group>
-                    {LoadingOverlayAndCancelButton(loading, pidTarget)}
+                    {loading && (
+                        <Modal
+                            opened={loading}
+                            onClose={() => {}}
+                            centered
+                            withCloseButton={false}
+                            overlayOpacity={0.5}
+                            overlayBlur={3}
+                            zIndex={2000}
+                            size="lg"
+                        >
+                            <p style={{ fontSize: "18px", textAlign: "center" }}>
+                                The process is running. You can cancel it below:
+                            </p>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                color="red"
+                                onClick={cancelLookup}
+                                disabled={!canCancel || cancelling}
+                                size="xl"
+                                fullWidth
+                                style={{ marginTop: "20px" }}
+                            >
+                                {cancelling ? "Cancelling..." : "Cancel Process"}
+                            </Button>
+                        </Modal>
+                    )}
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
                             This tool is used to perform reverse DNS lookups, use with caution and only on networks you
                             own or have explicit permission to test.
                         </Alert>
                     )}
-                    <TextInput label={"IP address"} required {...form.getInputProps("ipAddress")}></TextInput>
-                    {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
+                    <TextInput label="IP address" required {...form.getInputProps("ipAddress")} />
+                    {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
                     <Radio.Group
                         value={form.values.ipType}
                         onChange={(value) => form.setFieldValue("ipType", value as "IPv4" | "IPv6")}
@@ -236,9 +327,14 @@ const ArpanameTool = () => {
                         <Radio value="IPv4" label="IPv4" />
                         <Radio value="IPv6" label="IPv6" />
                     </Radio.Group>
-                    {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
-                    {/* Render error message if present */}
-                    <Button type={"submit"}>Lookup</Button>
+                    {!checkingAvailability && !isCommandAvailable && !opened && (
+                        <Button type="button" variant="outline" onClick={() => setOpened(true)} disabled={loading}>
+                            Install Component
+                        </Button>
+                    )}
+                    <Button type="submit" disabled={lookupDisabled}>
+                        Lookup
+                    </Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                     <AskChatGPT toolName={title} output={output} setChatGPTResponse={setChatGPTResponse} />
