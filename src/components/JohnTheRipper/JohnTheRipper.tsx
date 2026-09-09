@@ -1,4 +1,4 @@
-import { Button, Checkbox, NativeSelect, Select, Stack, TextInput } from "@mantine/core";
+import { Button, Checkbox, NativeSelect, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
@@ -14,18 +14,23 @@ import { FilePicker } from "../FileHandler/FilePicker";
 /**
  * Represents the form values for the JohnTheRipper component.
  */
-interface FormValuesType {
+export interface FormValuesType {
     filePath: string;
     hash: string;
     fileType: string;
     mode: string;
     wordList: string;
     incrementOrder: string;
+    maskPattern: string;
+    ruleSet: string;
+    externalMode: string;
+    markovLevel: string;
+    potFile: string;
     useRules: boolean;
     sessionName: string;
 }
 
-//Deals with the generatedfilepath unique identifier that is added at the end of a file created by the FilePicker component
+// Deals with the generatedfilepath unique identifier that is added at the end of a file created by the FilePicker component
 const cleanFileName = (filePath: string): string => {
     // Split the file name by the underscore (_) and keep the first part (before the timestamp/ID)
     const parts = filePath.split("_");
@@ -33,6 +38,103 @@ const cleanFileName = (filePath: string): string => {
     // Keep only the base file name (before the timestamp and unique identifier)
     const baseFileName = parts[0];
     return baseFileName;
+};
+
+/**
+ * Helper to build command-line arguments for John the Ripper attack modes.
+ * @param selectedMode - The selected attack mode.
+ * @param values - Form values containing mode-specific parameters.
+ * @returns Array of command-line argument strings.
+ */
+export const buildAttackModeArgs = (selectedMode: string, values: FormValuesType): string[] => {
+    const modeArgs: string[] = [];
+
+    switch (selectedMode) {
+        case "incremental":
+            if (values.incrementOrder && values.incrementOrder.trim() !== "") {
+                modeArgs.push(`-incremental:${values.incrementOrder.trim()}`);
+            } else {
+                modeArgs.push("--incremental");
+            }
+            break;
+
+        case "dictionary":
+            if (values.wordList && values.wordList.trim() !== "") {
+                modeArgs.push(`--wordlist=${values.wordList.trim()}`);
+            }
+            if (values.useRules) {
+                modeArgs.push("--rules");
+            }
+            break;
+
+        case "single":
+            modeArgs.push("--single");
+            break;
+
+        case "mask":
+            if (values.maskPattern && values.maskPattern.trim() !== "") {
+                modeArgs.push(`--mask=${values.maskPattern.trim()}`);
+            } else {
+                modeArgs.push("--mask");
+            }
+            if (values.wordList && values.wordList.trim() !== "") {
+                modeArgs.push(`--wordlist=${values.wordList.trim()}`);
+            }
+            break;
+
+        case "rules":
+            if (values.wordList && values.wordList.trim() !== "") {
+                modeArgs.push(`--wordlist=${values.wordList.trim()}`);
+            }
+            if (values.ruleSet && values.ruleSet.trim() !== "") {
+                modeArgs.push(`--rules=${values.ruleSet.trim()}`);
+            } else {
+                modeArgs.push("--rules");
+            }
+            break;
+
+        case "external":
+            if (values.externalMode && values.externalMode.trim() !== "") {
+                modeArgs.push(`--external=${values.externalMode.trim()}`);
+            } else {
+                modeArgs.push("--external");
+            }
+            break;
+
+        case "markov":
+            if (values.markovLevel && values.markovLevel.trim() !== "") {
+                modeArgs.push(`--markov=${values.markovLevel.trim()}`);
+            } else {
+                modeArgs.push("--markov");
+            }
+            break;
+
+        case "loopback":
+            if (values.potFile && values.potFile.trim() !== "") {
+                modeArgs.push(`--loopback=${values.potFile.trim()}`);
+            } else {
+                modeArgs.push("--loopback");
+            }
+            break;
+
+        case "prince":
+            if (values.wordList && values.wordList.trim() !== "") {
+                modeArgs.push(`--prince=${values.wordList.trim()}`);
+            } else {
+                modeArgs.push("--prince");
+            }
+            break;
+
+        case "stdin":
+            modeArgs.push("--stdin");
+            break;
+
+        default:
+            modeArgs.push("--incremental");
+            break;
+    }
+
+    return modeArgs;
 };
 
 /**
@@ -47,55 +149,75 @@ const JohnTheRipper = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [allowSave, setAllowSave] = useState(false); //   State variable to allow saving the output to a file.
+    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
     const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
-    const [selectedFileTypeOption, setSelectedFileTypeOption] = useState(""); // State variable to store the selected file type.
+    const [selectedFileTypeOption, setSelectedFileTypeOption] = useState("raw"); // State variable to store the selected file type.
     const [selectedModeOption, setSelectedModeOption] = useState("incremental"); // State variable to store the selected crack mode.
-    const [selectedIncrementOption, setSelectedIncrementOption] = useState(""); // State variable to store the selected increment order.
     const [fileNames, setFileNames] = useState<string[]>([]); // State variable to store the file names.
 
     // Component constants
-    const modeRequiringWordList = ["dictionary"]; // Crack modes that require a wordlist
-    const modeRequiringIncrementOrder = ["incremental"]; // Crack modes that require an increment order
-    const fileTypes = ["zip", "rar", "raw"]; // File types supported by the tool
-    const mode = ["incremental", "dictionary", "single"]; // Crack modes supported by the tool
-    const incrementOrder = [
-        "ASCII",
-        "LM_ASCII",
-        "AlNum",
-        "Alpha",
-        "LowerNum",
-        "UpperNum",
-        "LowerSpace",
-        "Lower",
-        "Upper",
-        "Digits",
-        "LM_ASCII",
+    const modeOptions = [
+        { value: "incremental", label: "Incremental (Brute-force)" },
+        { value: "dictionary", label: "Dictionary / Wordlist" },
+        { value: "single", label: "Single Crack" },
+        { value: "mask", label: "Mask Attack" },
+        { value: "rules", label: "Rules-based Dictionary" },
+        { value: "external", label: "External Mode" },
+        { value: "markov", label: "Markov Mode" },
+        { value: "loopback", label: "Loopback (Potfile)" },
+        { value: "prince", label: "PRINCE Mode" },
+        { value: "stdin", label: "Standard Input (Stdin)" },
     ];
+
+    const fileTypes = [
+        { value: "raw", label: "Raw Hash / Text File" },
+        { value: "zip", label: "ZIP Archive (.zip)" },
+        { value: "rar", label: "RAR Archive (.rar)" },
+    ];
+
+    const incrementOrderOptions = [
+        { value: "", label: "Default (Full Charset)" },
+        { value: "ASCII", label: "ASCII (All Printable ASCII)" },
+        { value: "LM_ASCII", label: "LM_ASCII (LAN Manager ASCII)" },
+        { value: "AlNum", label: "AlNum (Alphanumeric)" },
+        { value: "Alpha", label: "Alpha (Letters only)" },
+        { value: "LowerNum", label: "LowerNum (Lowercase & Digits)" },
+        { value: "UpperNum", label: "UpperNum (Uppercase & Digits)" },
+        { value: "LowerSpace", label: "LowerSpace (Lowercase & Space)" },
+        { value: "Lower", label: "Lower (Lowercase only)" },
+        { value: "Upper", label: "Upper (Uppercase only)" },
+        { value: "Digits", label: "Digits (Digits only)" },
+    ];
+
     const title = "John the Ripper"; // Title of the component.
     const description =
-        "John the Ripper is a fast password cracker, its primary purpose is to detect weak Unix passwords."; // Description of the component.
+        "John the Ripper is a fast password cracker, its primary purpose is to detect weak Unix passwords. It supports multiple attack modes including Incremental, Dictionary, Single Crack, Mask attack, Rules-based dictionary, External mode, Markov mode, Loopback, PRINCE, and Standard Input."; // Description of the component.
     const steps =
         "Step 1: Specify the filepath to the password file that you wish to crack (e.g ~/passwords.txt).\n" +
         "Step 2: Specify the hashing algorithm used by the password you are trying to crack (e.g md5).\n" +
-        "Step 3: Specify the cracking mode to use.\n" +
-        "Step 4: Select the file type.\n" +
-        "Step 5: If you selected the Incremental or Dictionary cracking type, an additional option will appear to select a character set or specify a filepath for a wordlist respectively." +
+        "Step 3: Specify the cracking mode to use (e.g. Incremental, Dictionary, Single Crack, Mask, Rules, External, Markov, Loopback, PRINCE, Stdin).\n" +
+        "Step 4: Select the file type (raw, zip, rar).\n" +
+        "Step 5: Fill in any mode-specific parameters (e.g. wordlist path, mask pattern, rule set, increment character set, etc.).\n" +
         "Step 6: Click 'Start John the Ripper'.\n" +
-        "Step 7: View the output block to view the results of the tools execution.\n";
+        "Step 7: View the output block to view the results of the tool execution.\n";
     const sourceLink = "https://github.com/openwall/john"; // Link to the source code.
     const tutorial = "https://docs.google.com/document/d/1aRE9aSsaxEm_joT4-1w3ow5fZo2iILD8UJA87cdz9T0/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["john"]; // Contains the dependencies required by the component
 
     // Form hook to handle form input.
-    const form = useForm({
+    const form = useForm<FormValuesType>({
         initialValues: {
             filePath: "",
             hash: "",
-            fileType: "",
+            fileType: "raw",
             wordList: "",
-            mode: "",
+            mode: "incremental",
             incrementOrder: "",
+            maskPattern: "",
+            ruleSet: "",
+            externalMode: "",
+            markovLevel: "",
+            potFile: "",
             useRules: false,
             sessionName: "",
         },
@@ -103,7 +225,6 @@ const JohnTheRipper = () => {
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
                 setIsCommandAvailable(isAvailable); // Set the command availability state
@@ -162,11 +283,10 @@ const JohnTheRipper = () => {
     );
 
     /**
-     * handleProcessError: Callback to handle any errors that occur during the child process execution.
-     * It updates the state by appending the error message to the existing output.
+     * handleCancel: Callback to handle cancelling the active running command process.
      */
     const handleCancel = () => {
-        if (pid !== null) {
+        if (pid !== "") {
             const args = [`-15`, pid];
             CommandHelper.runCommand("kill", args);
         }
@@ -329,41 +449,33 @@ const JohnTheRipper = () => {
         const baseFilePath = "/home/kali";
         const filePathToUse = `${baseFilePath}/${cleanName}`;
 
+        const targetFileType = values.fileType || selectedFileTypeOption;
+        const targetMode = selectedModeOption || values.mode;
+        const modeArgs = buildAttackModeArgs(targetMode, values);
+
         // If hash is stored in a text file
-        if (values.fileType === "raw") {
+        if (targetFileType === "raw") {
             const args = [filePathToUse];
-            values.hash ? args.push(`--format=${values.hash}`) : undefined;
-
-            selectedModeOption === "dictionary"
-                ? args.push(`--wordlist=${values.wordList}`)
-                : selectedModeOption === "incremental"
-                ? args.push(`--incremental=${selectedIncrementOption}`)
-                : args.push(`--single`);
-
-            if (selectedModeOption === "dictionary" && values.useRules) {
-                args.push("--rules");
+            if (values.hash && values.hash.trim() !== "") {
+                args.push(`--format=${values.hash.trim()}`);
             }
+            args.push(...modeArgs);
 
-            if (values.sessionName.trim()) {
+            if (values.sessionName && values.sessionName.trim() !== "") {
                 args.push(`--session=${values.sessionName.trim()}`);
             }
 
-            const result = await CommandHelper.runCommandGetPidAndOutput(
-                `john`,
-                args,
-                handleProcessData,
-                handleProcessTermination
-            )
+            await CommandHelper.runCommandGetPidAndOutput(`john`, args, handleProcessData, handleProcessTermination)
                 .then(({ output, pid }) => {
                     // Update the UI with the results from the executed command
                     setOutput(output);
-                    console.log(pid);
                     setPid(pid);
                 })
                 .catch((error) => {
                     // Display any errors encountered during command execution
                     setOutput(error.message);
-                    // Deactivate loading state
+                    setLoading(false);
+                    setAllowSave(true);
                 });
         } else {
             // If hash is stored in a zip/rar file
@@ -372,7 +484,7 @@ const JohnTheRipper = () => {
 
             // Extract password hash from zip/rar files
             try {
-                const result = await CommandHelper.runCommand(`${values.fileType}2john`, argsExtract);
+                const result = await CommandHelper.runCommand(`${targetFileType}2john`, argsExtract);
                 await writeTextFile("hash.txt", result, { dir: BaseDirectory.Temp });
                 setOutput(result);
             } catch (e: any) {
@@ -380,22 +492,16 @@ const JohnTheRipper = () => {
             }
 
             // Crack the extracted hash
-            values.hash ? argsCrack.push(`--format=${values.hash}`) : undefined;
-            selectedModeOption === "dictionary"
-                ? argsCrack.push(`--wordlist=${values.wordList}`)
-                : selectedModeOption === "incremental"
-                ? argsCrack.push(`--incremental=${selectedIncrementOption}`)
-                : argsCrack.push(`--single`);
-
-            if (selectedModeOption === "dictionary" && values.useRules) {
-                argsCrack.push("--rules");
+            if (values.hash && values.hash.trim() !== "") {
+                argsCrack.push(`--format=${values.hash.trim()}`);
             }
+            argsCrack.push(...modeArgs);
 
-            if (values.sessionName.trim()) {
+            if (values.sessionName && values.sessionName.trim() !== "") {
                 argsCrack.push(`--session=${values.sessionName.trim()}`);
             }
 
-            const result = await CommandHelper.runCommandGetPidAndOutput(
+            await CommandHelper.runCommandGetPidAndOutput(
                 `john`,
                 argsCrack,
                 handleProcessData,
@@ -409,9 +515,6 @@ const JohnTheRipper = () => {
                 .catch((error) => {
                     // Display any errors encountered during command execution
                     setOutput(error.message);
-                    // Deactivate loading state
-
-                    // Activate setAllowSave
                     setLoading(false);
                     setAllowSave(true);
                 });
@@ -454,7 +557,11 @@ const JohnTheRipper = () => {
                     dependencies={dependencies}
                 ></InstallationModal>
             )}
-            <form onSubmit={form.onSubmit((values) => onSubmit({ ...values, fileType: selectedFileTypeOption }))}>
+            <form
+                onSubmit={form.onSubmit((values) =>
+                    onSubmit({ ...values, mode: selectedModeOption, fileType: selectedFileTypeOption })
+                )}
+            >
                 {LoadingOverlayAndCancelButton(loading, pid)}
                 <Stack>
                     <FilePicker
@@ -470,19 +577,23 @@ const JohnTheRipper = () => {
                             <strong>Uploaded File:</strong> {cleanFileName(fileNames[0])}
                         </div>
                     )}
-                    <TextInput label={"Hash Type (if known)"} {...form.getInputProps("hash")} />
+                    <TextInput
+                        label={"Hash Type (if known)"}
+                        placeholder="e.g. md5, sha256crypt"
+                        {...form.getInputProps("hash")}
+                    />
                     <NativeSelect
                         value={selectedModeOption}
                         onChange={(e) => setSelectedModeOption(e.target.value)}
-                        title={"Crack Mode"}
-                        data={mode}
+                        label={"Crack Mode"}
+                        data={modeOptions}
                         required
                         description={"Please select a crack mode"}
                     />
                     <NativeSelect
                         value={selectedFileTypeOption}
                         onChange={(e) => setSelectedFileTypeOption(e.target.value)}
-                        title={"File Type"}
+                        label={"File Type"}
                         data={fileTypes}
                         required
                         description={"Please select the type of file you want to crack"}
@@ -507,9 +618,23 @@ const JohnTheRipper = () => {
                         Show Recovered Passwords
                     </Button>
 
-                    {modeRequiringWordList.includes(selectedModeOption) && (
+                    {selectedModeOption === "incremental" && (
+                        <NativeSelect
+                            label={"Increment Order (Character Set)"}
+                            data={incrementOrderOptions}
+                            description={"Select a character set or leave as default"}
+                            {...form.getInputProps("incrementOrder")}
+                        />
+                    )}
+
+                    {selectedModeOption === "dictionary" && (
                         <>
-                            <TextInput label={"Dictionary File Path"} required {...form.getInputProps("wordList")} />
+                            <TextInput
+                                label={"Dictionary / Wordlist File Path"}
+                                placeholder={"/usr/share/wordlists/rockyou.txt"}
+                                required
+                                {...form.getInputProps("wordList")}
+                            />
                             <Checkbox
                                 label="Apply John wordlist rules"
                                 {...form.getInputProps("useRules", { type: "checkbox" })}
@@ -517,17 +642,68 @@ const JohnTheRipper = () => {
                         </>
                     )}
 
-                    {modeRequiringIncrementOrder.includes(selectedModeOption) && (
-                        <Select
-                            value={selectedIncrementOption}
-                            onChange={(value) => setSelectedIncrementOption(value || "")}
-                            label="Increment Order"
-                            data={incrementOrder}
+                    {selectedModeOption === "mask" && (
+                        <>
+                            <TextInput
+                                label={"Mask Pattern"}
+                                placeholder={"e.g. ?u?l?l?l?d?d (?l=lower, ?u=upper, ?d=digit, ?s=special, ?a=all)"}
+                                required
+                                {...form.getInputProps("maskPattern")}
+                            />
+                            <TextInput
+                                label={"Wordlist File Path (Optional for hybrid mask)"}
+                                placeholder={"/usr/share/wordlists/rockyou.txt"}
+                                {...form.getInputProps("wordList")}
+                            />
+                        </>
+                    )}
+
+                    {selectedModeOption === "rules" && (
+                        <>
+                            <TextInput
+                                label={"Dictionary / Wordlist File Path"}
+                                placeholder={"/usr/share/wordlists/rockyou.txt"}
+                                required
+                                {...form.getInputProps("wordList")}
+                            />
+                            <TextInput
+                                label={"Rule Set (Optional)"}
+                                placeholder={"e.g. Wordlist, Jumbo, KoreLogic (leave blank for default rules)"}
+                                {...form.getInputProps("ruleSet")}
+                            />
+                        </>
+                    )}
+
+                    {selectedModeOption === "external" && (
+                        <TextInput
+                            label={"External Mode Name"}
+                            placeholder={"e.g. Parallel, DateTime, Keyboard, Filter_Lower"}
                             required
-                            searchable
-                            maxDropdownHeight={220}
-                            placeholder="Select an increment order"
-                            description="Please select an increment order"
+                            {...form.getInputProps("externalMode")}
+                        />
+                    )}
+
+                    {selectedModeOption === "markov" && (
+                        <TextInput
+                            label={"Markov Level / Threshold (Optional)"}
+                            placeholder={"e.g. 100, 200 (leave blank for default)"}
+                            {...form.getInputProps("markovLevel")}
+                        />
+                    )}
+
+                    {selectedModeOption === "loopback" && (
+                        <TextInput
+                            label={"Potfile Path (Optional)"}
+                            placeholder={"e.g. /home/kali/.john/john.pot (leave blank for default)"}
+                            {...form.getInputProps("potFile")}
+                        />
+                    )}
+
+                    {selectedModeOption === "prince" && (
+                        <TextInput
+                            label={"Wordlist File Path (Optional)"}
+                            placeholder={"e.g. /usr/share/wordlists/rockyou.txt (leave blank for default)"}
+                            {...form.getInputProps("wordList")}
                         />
                     )}
 
