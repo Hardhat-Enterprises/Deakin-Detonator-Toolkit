@@ -187,6 +187,12 @@
         },
         {
           "args": true,
+          "cmd": "foremost",
+          "name": "foremost",
+          "sidecar": false
+        },
+        {
+          "args": true,
           "cmd": "ffuf",
           "name": "ffuf",
           "sidecar": false
@@ -662,6 +668,12 @@
           "args": true,
           "cmd": "fcrackzip",
           "name": "fcrackzip",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "foremost",
+          "name": "foremost",
           "sidecar": false
         },
         {
