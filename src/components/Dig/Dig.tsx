@@ -48,6 +48,7 @@ function Dig() {
     const [loadingModal, setLoadingModal] = useState(true);
     const [cohereResponse, setCohereResponse] = useState("");
     const [advancedOpened, setAdvancedOpened] = useState(false);
+    const [validationError, setValidationError] = useState("");
 
     // Declare constants for the component
     const title = "Dig";
@@ -135,7 +136,15 @@ function Dig() {
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
+                if (output.includes("NXDOMAIN")) {
+                    handleProcessData("\nQuery completed: Domain does not exist (NXDOMAIN). No DNS records found.");
+                } else if (output.includes("SERVFAIL")) {
+                    handleProcessData("\nQuery completed: DNS server returned SERVFAIL. The server could not complete the query.");
+                } else if (output.includes("REFUSED")) {
+                    handleProcessData("\nQuery completed: DNS server refused the query.");
+                } else {
+                    handleProcessData("\nQuery completed successfully. DNS records retrieved.");
+                }
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
             } else {
@@ -159,6 +168,51 @@ function Dig() {
     };
 
     /**
+     * isValidIPv4: Returns true if the string is a valid IPv4 address.
+     */
+    const isValidIPv4 = (value: string): boolean => {
+        const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/;
+        return ipv4Regex.test(value.trim());
+    };
+
+    /**
+     * isValidIPv6: Returns true if the string is a valid IPv6 address.
+     */
+    const isValidIPv6 = (value: string): boolean => {
+        const ipv6Regex = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$|^::$|^::1$|^([0-9a-fA-F]{1,4}::?){1,7}[0-9a-fA-F]{0,4}$/;
+        return ipv6Regex.test(value.trim());
+    };
+
+    /**
+     * isValidDomain: Returns true if the string looks like a valid domain name.
+     */
+    const isValidDomain = (value: string): boolean => {
+        const domainRegex = /^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))*\.?$/;
+        return domainRegex.test(value.trim());
+    };
+
+    /**
+     * validateTarget: Validates the domain/IP field before submission.
+     * Returns an error message string, or empty string if valid.
+     */
+    const validateTarget = (domain: string, reverseMode: boolean): string => {
+        const trimmed = domain.trim();
+        if (!trimmed) {
+            return "Target cannot be empty or whitespace only.";
+        }
+        if (reverseMode) {
+            if (!isValidIPv4(trimmed) && !isValidIPv6(trimmed)) {
+                return "Reverse Lookup requires a valid IPv4 or IPv6 address (e.g. 8.8.8.8 or 2001:4860:4860::8888).";
+            }
+        } else {
+            if (!isValidDomain(trimmed) && !isValidIPv4(trimmed) && !isValidIPv6(trimmed)) {
+                return "Invalid target. Enter a valid domain name (e.g. example.com) or IP address (e.g. 8.8.8.8).";
+            }
+        }
+        return "";
+    };
+
+    /**
      * onSubmit: Asynchronous handler for the form submission event.
      * It sets up and triggers the Dig tool with the given parameters.
      * Once the command is executed, the results or errors are displayed in the output.
@@ -166,6 +220,14 @@ function Dig() {
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
         setAllowSave(false);
+
+        const targetError = validateTarget(values.domain, values.reverseMode);
+        if (targetError) {
+            setValidationError(targetError);
+            setLoading(false);
+            return;
+        }
+        setValidationError("");
 
         const args: string[] = [];
 
@@ -263,7 +325,12 @@ function Dig() {
                 <form onSubmit={form.onSubmit(onSubmit)}>
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <Stack>
-                        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
+                        {validationError && (
+                        <div style={{ color: "red", marginBottom: "10px", fontWeight: 500 }}>
+                            {validationError}
+                        </div>
+                    )}
+                    <Stepper active={active} onStepClick={setActive} breakpoint="sm">
                             {/* Step 1: Domain */}
                             <Stepper.Step label="Domain">
                                 <Stack>
