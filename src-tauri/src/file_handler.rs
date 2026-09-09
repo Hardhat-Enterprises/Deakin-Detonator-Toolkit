@@ -1,9 +1,9 @@
+use reqwest;
+use rss::Channel;
+use serde::Serialize;
 use std::fs;
 use std::io::Write;
 use std::path::Path;
-use serde::Serialize;
-use rss::Channel;
-use reqwest;
 
 #[tauri::command]
 pub fn save_file(

@@ -56,6 +56,7 @@ const Traceroute = () => {
     const sourceLink = "https://www.kali.org/tools/traceroute/"; // Link to the source code(or kali tools).
     const tutorial = "https://docs.google.com/document/d/1ouILL7EQVS03Cu5pdMsksybJZmuFcPzzQ9xDhBNJgtk/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["traceroute"]; // Contains the dependencies required by the component.
+    const tracerouteTimeoutOptions = ["-w", "5", "-q", "1", "-m", "30"];
 
     // Traceroute Options - Types of traceroute scans available.
     const traceRouteSwitch = [
@@ -136,15 +137,34 @@ const Traceroute = () => {
 
     // Patched onSubmit handler snippet for "Traceroute custom scan"
     const onSubmit = async (values: FormValuesType) => {
+        const hostname = values.hostname.trim();
+
+        if (!hostname) {
+            setOutput("Error: Please enter a valid Hostname/IP address.");
+            setLoading(false);
+            setAllowSave(false);
+            return;
+        }
+
+        if (loading) {
+            setOutput("Traceroute is already running. Please cancel the current process first.");
+            return;
+        }
+
         setLoading(true);
+        setOutput("");
+        setAllowSave(false);
+        setHasSaved(false);
+
         let args: string[] = [];
 
-        // Switch case to handle different traceroute scan options based on user selection.
         switch (values.traceRouteSwitch) {
             case "Traceroute ICMP scan":
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-I`);
-                args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
+                args.push(...tracerouteTimeoutOptions);
+                args.push(hostname);
+
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
                     .then(({ pid, output }) => {
                         setPid(pid);
@@ -152,17 +172,19 @@ const Traceroute = () => {
                         setAllowSave(true);
                     })
                     .catch((error: any) => {
+                        setPid("");
                         setLoading(false);
                         setOutput(`Error: ${error.message}`);
                     });
 
                 break;
-            // Traceroute TCP scan uses the '-T' option.
-            // Syntax: traceroute -T <hostname>
+
             case "Traceroute TCP scan":
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-T`);
-                args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
+                args.push(...tracerouteTimeoutOptions);
+                args.push(hostname);
+
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
                     .then(({ pid, output }) => {
                         setPid(pid);
@@ -170,17 +192,19 @@ const Traceroute = () => {
                         setAllowSave(true);
                     })
                     .catch((error: any) => {
+                        setPid("");
                         setLoading(false);
                         setOutput(`Error: ${error.message}`);
                     });
 
                 break;
-            // Traceroute UDP scan uses the '-U' option.
-            // Syntax: traceroute -U <hostname>
+
             case "Traceroute UDP scan":
                 args = [`/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh`];
                 args.push(`-U`);
-                args.push(`${values.hostname}`); // Adds the hostname to the arguments list.
+                args.push(...tracerouteTimeoutOptions);
+                args.push(hostname);
+
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
                     .then(({ pid, output }) => {
                         setPid(pid);
@@ -188,24 +212,25 @@ const Traceroute = () => {
                         setAllowSave(true);
                     })
                     .catch((error: any) => {
+                        setPid("");
                         setLoading(false);
                         setOutput(`Error: ${error.message}`);
                     });
 
                 break;
-            // Traceroute custom scan allows specifying additional options
+
             case "Traceroute custom scan": {
                 args = ["/usr/share/ddt/Bash-Scripts/Tracerouteshell.sh"];
-                // Hostname is always the first argument
-                args.push(values.hostname);
 
-                // Combine all custom flags into a single string for second argument
                 const rawFlags = values.traceRouteOptions.trim();
+
                 if (rawFlags.length > 0) {
                     args.push(rawFlags);
                 }
 
-                // Execute Traceroute with all arguments
+                args.push(...tracerouteTimeoutOptions);
+                args.push(hostname);
+
                 CommandHelper.runCommandGetPidAndOutput("bash", args, handleProcessData, handleProcessTermination)
                     .then(({ pid, output }) => {
                         setPid(pid);
@@ -213,6 +238,7 @@ const Traceroute = () => {
                         setAllowSave(true);
                     })
                     .catch((error: any) => {
+                        setPid("");
                         setLoading(false);
                         setOutput(`Error: ${error.message}`);
                     });
@@ -263,13 +289,13 @@ const Traceroute = () => {
                         title={"Traceroute option"}
                         data={traceRouteSwitch}
                         required
-                        placeholder={"Pick a scan option"}
+                        //    placeholder={"Pick a scan option"}
                         description={"Type of scan to perform"}
                     />
                     <Button type={"submit"}>start traceroute</Button>
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                    <AskChatGPT toolInput={title} output={output} setChatGPTResponse={setChatGPTResponse} />
+                    <AskChatGPT toolName={title} output={output} setChatGPTResponse={setChatGPTResponse} />
                     {chatGPTResponse && (
                         <div style={{ marginTop: "20px" }}>
                             <h3>ChatGPT Response:</h3>

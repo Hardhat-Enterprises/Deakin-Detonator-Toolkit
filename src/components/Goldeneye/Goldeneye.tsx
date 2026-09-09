@@ -51,6 +51,7 @@ const Goldeneye = () => {
     const sourceLink = "https://www.kali.org/tools/goldeneye/"; // Link to the source code (or Kali Tools).
     const tutorial = "https://docs.google.com/document/d/1ZJzgzzECVu2s2T4SrH-e-Xiqon08LJq3amBwjPrD5ww/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["python3"]; // Contains the dependencies required by the component.
+    const scriptPath = "src-tauri/exploits/Goldeneye/goldeneye.py";
     const dosHttpMethod = ["get", "post", "random"]; //Contains types of dosHttpMethod available
     const sslCheckStatus = ["Yes", "No"]; //Contains selection for form value sslCheckStatus
 
@@ -148,7 +149,7 @@ const Goldeneye = () => {
         setLoading(true);
 
         // Construct arguments for the goldeneye command based on form input
-        const args = [`/home/kali/Deakin-Detonator-Toolkit/src-tauri/exploits/Goldeneye/goldeneye.py`, `${values.url}`];
+        const args = [scriptPath, `${values.url}`];
         values.userAgent ? args.push(`-u`, `${values.userAgent}`) : undefined;
         values.worker ? args.push(`-w`, `${values.worker}`) : undefined;
         values.sockets ? args.push(`-s`, `${values.sockets}`) : undefined;
@@ -167,7 +168,7 @@ const Goldeneye = () => {
             // Update the UI with the results from the executed command
             setPid(result.pid);
             setOutput(result.output);
-            console.log(pid);
+            console.log(result.pid);
         } catch (e: any) {
             // Display any errors encountered during command execution
             setOutput(e.message);

@@ -1,6 +1,19 @@
 // Import necessary hooks and components from React and other libraries
 import { useState, useCallback, useEffect } from "react";
-import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid, Group } from "@mantine/core";
+import {
+    Stepper,
+    Button,
+    TextInput,
+    NumberInput,
+    Select,
+    Switch,
+    Stack,
+    Grid,
+    Group,
+    Text,
+    Card,
+    Badge,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -9,6 +22,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import { open } from "@tauri-apps/plugin-dialog";
 
 /**
  * Represents the form values for the WhatWeb component.
@@ -48,6 +62,7 @@ function WhatWeb() {
     const [advancedOpened, setAdvancedOpened] = useState(false);
     const [authOpened, setAuthOpened] = useState(false);
     const [fullscreen, setFullscreen] = useState(false);
+    const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
 
     // Declare constants
     const title = "WhatWeb";
@@ -81,6 +96,28 @@ function WhatWeb() {
             logFormat: "",
             maxThreads: 0,
         },
+
+        validate: {
+            target: (value, values) => {
+                const target = value.trim();
+
+                if (!target && !values.inputFile.trim()) {
+                    return "Please enter a target URL or IP address, or provide an input file.";
+                }
+
+                if (target) {
+                    const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
+
+                    const ipPattern = /^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/;
+
+                    if (!urlPattern.test(target) && !ipPattern.test(target)) {
+                        return "Please enter a valid URL or IP address.";
+                    }
+                }
+
+                return null;
+            },
+        },
     });
 
     // Check command availability
@@ -102,44 +139,78 @@ function WhatWeb() {
         setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
-    const handleProcessTermination = useCallback(
-        ({ code, signal }: { code: number; signal: number }) => {
-            if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
+    const handleProcessTermination = useCallback(({ code, signal }: { code: number; signal: number }) => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+            setTimeoutId(null);
+        }
+        setOutput((prevOutput) => {
+            const hasError =
+                prevOutput.includes("ERROR") ||
+                prevOutput.includes("execution expired") ||
+                prevOutput.includes("No plugins selected") ||
+                prevOutput.includes("not found");
+
+            if (code === 0 && !hasError) {
+                return prevOutput + "\nProcess completed successfully.";
             } else if (signal === 15) {
-                handleProcessData("\nProcess was manually terminated.");
+                return prevOutput + "\nProcess was manually terminated.";
+            } else if (code === 0 && hasError) {
+                return prevOutput + "\nProcess finished with errors.";
             } else {
-                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+                return prevOutput + `\nProcess terminated with exit code: ${code} and signal code: ${signal}`;
             }
-            setLoading(false);
-            setAllowSave(true);
-            setHasSaved(false);
-        },
-        [handleProcessData]
-    );
+        });
+
+        setLoading(false);
+        setAllowSave(true);
+        setHasSaved(false);
+    }, []);
 
     const handleSaveComplete = () => {
         setHasSaved(true);
         setAllowSave(false);
     };
 
+    const pickInputFile = async () => {
+        const selected = await open({
+            filters: [{ name: "Text File", extensions: ["txt"] }],
+            multiple: false,
+        });
+
+        if (typeof selected === "string") {
+            form.setFieldValue("inputFile", selected);
+        }
+    };
+
     // Submit handler
     const onSubmit = async (values: FormValuesType) => {
+        if (!values.target.trim() && !values.inputFile.trim()) {
+            form.setFieldError("target", "Please enter a target URL or IP address, or provide an input file.");
+            setActive(0);
+            return;
+        }
+
+        setOutput("");
         setLoading(true);
         setAllowSave(false);
 
         const args: string[] = [];
-        if (values.inputFile) args.push(`-i ${values.inputFile}`);
-        if (values.aggression) args.push(`-a ${values.aggression}`);
-        if (values.userAgent) args.push(`-U "${values.userAgent}"`);
+        if (values.inputFile) args.push("-i", values.inputFile);
+
+        if (values.aggression) args.push("-a", values.aggression);
+        if (values.userAgent) args.push("-U", values.userAgent);
         if (values.followRedirect) args.push(`--follow-redirect=${values.followRedirect}`);
-        if (values.user) args.push(`-u ${values.user}`);
-        if (values.cookie) args.push(`-c "${values.cookie}"`);
-        if (values.plugins) args.push(`-p ${values.plugins}`);
+        if (values.user) args.push("-u", values.user);
+        if (values.cookie) args.push("-c", values.cookie);
+        if (values.plugins) args.push("-p", values.plugins);
         if (values.verbose) args.push("-v");
         if (values.logFormat) args.push(`--log-${values.logFormat}=-`);
-        if (values.maxThreads > 0) args.push(`-t ${values.maxThreads}`);
-        args.push(values.target);
+        if (values.maxThreads > 0) args.push("-t", String(values.maxThreads));
+
+        if (values.target.trim()) {
+            args.push(values.target.trim());
+        }
 
         try {
             const { pid, output } = await CommandHelper.runCommandGetPidAndOutput(
@@ -150,6 +221,17 @@ function WhatWeb() {
             );
             setPid(pid);
             setOutput(output);
+
+            const timer = setTimeout(() => {
+                if (pid) {
+                    CommandHelper.runCommand("kill", ["-15", pid]);
+                    setOutput((prevOutput) => prevOutput + "\nScan timed out after 120 seconds.");
+                    setLoading(false);
+                    setAllowSave(true);
+                    setHasSaved(false);
+                }
+            }, 120000);
+            setTimeoutId(timer);
         } catch (error: any) {
             setOutput(`Error: ${error.message}`);
             setLoading(false);
@@ -164,8 +246,36 @@ function WhatWeb() {
     }, []);
 
     // Navigation
-    const nextStep = () => setActive((c) => (c < 2 ? c + 1 : c));
-    const prevStep = () => setActive((c) => (c > 0 ? c - 1 : c));
+    const nextStep = () => {
+        if (active === 0) {
+            const validation = form.validateField("target");
+
+            if (validation.hasError) {
+                return;
+            }
+        }
+
+        setActive((currentStep) => (currentStep < 2 ? currentStep + 1 : currentStep));
+    };
+
+    const prevStep = () => setActive((currentStep) => (currentStep > 0 ? currentStep - 1 : currentStep));
+
+    const handleStepClick = (step: number) => {
+        // Allow the user to return to a previous step
+        if (step <= active) {
+            setActive(step);
+            return;
+        }
+
+        // Validate the required target before moving forward
+        if (!form.values.target.trim() && !form.values.inputFile.trim()) {
+            form.setFieldError("target", "Please enter a target URL or IP address, or provide an input file.");
+            setActive(0);
+            return;
+        }
+
+        setActive(step);
+    };
 
     // Simple structured output parsing
     const formatOutput = (text: string) => {
@@ -178,6 +288,24 @@ function WhatWeb() {
             })
             .join("\n");
     };
+
+    const extractSummary = (text: string) => {
+        const targetMatch = text.match(/https?:\/\/[^\s\[]+/i);
+        const statusMatch = text.match(/\[(\d{3}\s+[^\]]+)\]/);
+        const titleMatch = text.match(/Title\[([^\]]+)\]/i);
+        const ipMatch = text.match(/IP\[([^\]]+)\]/i);
+        const serverMatch = text.match(/HTTPServer\[([^\]]+)\]/i);
+
+        return {
+            target: targetMatch?.[0] || "Not detected",
+            status: statusMatch?.[1] || "Not detected",
+            title: titleMatch?.[1] || "Not detected",
+            ip: ipMatch?.[1] || "Not detected",
+            server: serverMatch?.[1] || "Not detected",
+        };
+    };
+
+    const summary = extractSummary(output);
 
     return (
         <>
@@ -199,11 +327,18 @@ function WhatWeb() {
                 <form onSubmit={form.onSubmit(onSubmit)}>
                     {LoadingOverlayAndCancelButton(loading, pid)}
                     <Stack>
-                        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
+                        <Stepper active={active} onStepClick={handleStepClick} breakpoint="sm">
                             {/* Step 1 */}
                             <Stepper.Step label="Target">
                                 <TextInput label="Target URL or IP" required {...form.getInputProps("target")} />
-                                <TextInput label="Input File" {...form.getInputProps("inputFile")} />
+                                <Group align="end">
+                                    <TextInput
+                                        label="Input File"
+                                        style={{ flex: 1 }}
+                                        {...form.getInputProps("inputFile")}
+                                    />
+                                    <Button onClick={pickInputFile}>Browse</Button>
+                                </Group>
                                 <Group mt={20} position="right">
                                     <Button onClick={nextStep}>Next</Button>
                                 </Group>
@@ -250,16 +385,29 @@ function WhatWeb() {
                                             ]}
                                             {...form.getInputProps("aggression")}
                                         />
+                                        <Text size="sm" c="gray.4">
+                                            Controls how intensive the scan will be. Higher levels perform deeper
+                                            analysis but may take longer.
+                                        </Text>
+
                                         <TextInput
                                             label="Plugins"
                                             title="Specify WhatWeb plugins"
                                             {...form.getInputProps("plugins")}
                                         />
+                                        <Text size="sm" c="gray.4">
+                                            Specify one or more WhatWeb plugins to focus the scan on particular
+                                            technologies.
+                                        </Text>
+
                                         <Switch
                                             label="Verbose Output"
                                             title="Enable detailed results"
                                             {...form.getInputProps("verbose", { type: "checkbox" })}
                                         />
+                                        <Text size="sm" c="gray.4">
+                                            Displays additional scan details for troubleshooting and analysis.
+                                        </Text>
                                     </Stack>
                                 )}
 
@@ -338,13 +486,52 @@ function WhatWeb() {
 
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
 
-                        <Group position="right" mb={5}>
-                            <Button size="xs" onClick={() => setFullscreen((f) => !f)}>
-                                {fullscreen ? "Exit Fullscreen" : "Expand Results"}
-                            </Button>
-                        </Group>
+                        {active === 2 && output.trim() && (
+                            <Group position="right" mb={5}>
+                                <Button size="xs" onClick={() => setFullscreen((f) => !f)}>
+                                    {fullscreen ? "Exit Fullscreen" : "Expand Results"}
+                                </Button>
+                            </Group>
+                        )}
 
                         <div style={{ height: fullscreen ? "80vh" : "300px" }}>
+                            {active === 2 && output.trim() !== "" && (
+                                <Card withBorder shadow="sm" mb="md">
+                                    <Stack gap="xs">
+                                        <Text size="lg" fw={700}>
+                                            🔍 Scan Summary
+                                        </Text>
+
+                                        <Group>
+                                            <Text fw={700}>Target:</Text>
+                                            <Text>{summary.target}</Text>
+                                        </Group>
+
+                                        <Group>
+                                            <Text fw={700}>Status:</Text>
+                                            <Badge color={summary.status.startsWith("200") ? "green" : "red"}>
+                                                {summary.status}
+                                            </Badge>
+                                        </Group>
+
+                                        <Group>
+                                            <Text fw={700}>Title:</Text>
+                                            <Text>{summary.title}</Text>
+                                        </Group>
+
+                                        <Group>
+                                            <Text fw={700}>Server:</Text>
+                                            <Text>{summary.server}</Text>
+                                        </Group>
+
+                                        <Group>
+                                            <Text fw={700}>IP:</Text>
+                                            <Text>{summary.ip}</Text>
+                                        </Group>
+                                    </Stack>
+                                </Card>
+                            )}
+
                             <ConsoleWrapper output={formatOutput(output)} clearOutputCallback={clearOutput} />
                         </div>
                     </Stack>
