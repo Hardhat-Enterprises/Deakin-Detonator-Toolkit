@@ -22,6 +22,18 @@ interface FormValuesType {
     paramAlt: string;
 }
 
+// Remove a duplicate of the dropdown-selected flag from a params string.
+// Treat "U" and "-U" as the same; case-insensitive; preserves all other tokens.
+function stripDuplicateSelectedFlag(selected: string, params: string): string {
+    if (!params) return params;
+    const sel = (selected || "").toLowerCase();
+    return params
+        .split(/\s+/)
+        .filter(Boolean)
+        .filter((tok) => tok.replace(/^-+/, "").toLowerCase() !== sel)
+        .join(" ");
+}
+
 /**
  * The Enum4Linux component.
  */
@@ -240,17 +252,16 @@ const Enum4Linux = () => {
         let options = `-${selectedOption}`;
         if (osinfo) options = options.concat(" -o");
 
-        let args = [];
+        //sanitize params so the selected flag isn't duplicated
+        const safeParamMain = stripDuplicateSelectedFlag(selectedOption, values.paramMain);
+        const safeParamAlt = stripDuplicateSelectedFlag(selectedOption, values.paramAlt);
+
+        let args = []; //Making args mutable, need to check if parameters are provided.
+
         args.push(options);
 
-        // Add formatted parameters
-        if (mainParamResult.formatted) {
-            args.push(mainParamResult.formatted);
-        }
-
-        if (customMode && altParamResult.formatted) {
-            args.push(altParamResult.formatted);
-        }
+        if (safeParamMain) args.push(safeParamMain);
+        if (safeParamAlt) args.push(safeParamAlt);
 
         args.push(values.ipAddress);
 
