@@ -10,6 +10,7 @@ import CVE202144228 from "./CVE-2021-44228/CVE-2021-44228";
 import CVE202236804 from "./CVE-2022-36804/CVE-2022-36804";
 import CVE20221388 from "./CVE-2022-1388/CVE-2022-1388";
 import CVE202227925 from "./CVE-2022-27925/CVE-2022-27925";
+import CVE202222954 from "./CVE-2022-22954/CVE-2022-22954";
 import FindOffset from "./FindOffset/FindOffset";
 import Hashcat from "./Hashcat/Hashcat";
 import JohnTheRipper from "./JohnTheRipper/JohnTheRipper";
@@ -39,7 +40,6 @@ import NetcatTool from "./Netcat/Netcat";
 import Sherlock from "./Sherlock/Sherlock";
 import BEDTool from "./BedTool/BEDTool";
 import Dnsrecon from "./Dnsrecon/Dnsrecon";
-import Crackmapexec from "./Crackmapexec/Crackmapexec";
 import FfufTool from "./Ffuf/FfufTool";
 import Redeemer from "./WalkthroughPages/Redeemer";
 import Fawn from "./WalkthroughPages/Fawn";
@@ -266,6 +266,13 @@ export const ROUTES: RouteProperties[] = [
         category: "",
     },
     {
+        name: "CVE-2022-22954",
+        path: "/attack-vectors/cve-2022-22954",
+        element: <CVE202222954 />,
+        description: "VMware Workspace ONE Access and Identity Manager Server-Side Template Injection Vulnerability",
+        category: "",
+    },
+    {
         name: "CVE-2023-23397",
         path: "/attack-vectors/CVE-2023-23397",
         element: <CVE202323397 />,
@@ -471,14 +478,6 @@ export const ROUTES: RouteProperties[] = [
         description:
             "A tool used for discovering cloud-based infrastructure and services across various cloud providers through enumeration techniques.",
         category: "Cloud Security and Reconnaissance",
-    },
-    {
-        name: "Crackmapexec",
-        path: "/tools/Crackmapexec",
-        element: <Crackmapexec />,
-        description:
-            "A post-exploitation tool used for automating the assessment and exploitation of large Active Directory networks.",
-        category: "Vulnerability Assessment and Exploitation",
     },
     {
         name: "Crunch",
