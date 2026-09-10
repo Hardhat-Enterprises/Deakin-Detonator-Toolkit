@@ -3,6 +3,8 @@ import { IconSearch } from "@tabler/icons";
 import { useMemo, useState } from "react";
 import { getTools } from "../components/RouteWrapper";
 import ToolItem from "../components/ToolItem/ToolItem";
+// adjust this import if your path differs
+import SearchInput from "../components/SearchInput";
 
 type Tool = {
     name: string;
