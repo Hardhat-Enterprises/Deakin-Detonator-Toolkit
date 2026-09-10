@@ -57,15 +57,31 @@ const Goldeneye = () => {
 
     // Form hook to handle form input.
     let form = useForm({
-        initialValues: {
-            url: "",
-            userAgent: "",
-            worker: 0,
-            sockets: 0,
-            method: "",
-            sslCheck: "",
+    initialValues: {
+        url: "",
+        userAgent: "",
+        worker: "",
+        sockets: "",
+        method: "",
+        sslCheck: "",
+    },
+    validate: {
+        worker: (value) => {
+            const str = String(value).trim();
+            if (str === "") return "Number of workers is required";
+            if (!/^\d+$/.test(str)) return "Workers must be a positive whole number";
+            if (parseInt(str, 10) < 1) return "Workers must be at least 1";
+            return null;
         },
-    });
+        sockets: (value) => {
+            const str = String(value).trim();
+            if (str === "") return "Number of sockets is required";
+            if (!/^\d+$/.test(str)) return "Sockets must be a positive whole number";
+            if (parseInt(str, 10) < 1) return "Sockets must be at least 1";
+            return null;
+        },
+    },
+});
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
@@ -151,8 +167,8 @@ const Goldeneye = () => {
         // Construct arguments for the goldeneye command based on form input
         const args = [scriptPath, `${values.url}`];
         values.userAgent ? args.push(`-u`, `${values.userAgent}`) : undefined;
-        values.worker ? args.push(`-w`, `${values.worker}`) : undefined;
-        values.sockets ? args.push(`-s`, `${values.sockets}`) : undefined;
+        args.push(`-w`, `${values.worker}`);
+        args.push(`-s`, `${values.sockets}`);
         selectedMethod ? args.push(`-m`, selectedMethod) : undefined;
         selectedSslCheck === "No" ? args.push(`-n`) : undefined;
 
