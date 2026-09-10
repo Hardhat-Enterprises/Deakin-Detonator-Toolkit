@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { Button, Checkbox, Stack, TextInput } from "@mantine/core";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { Alert, Button, Card, Group, Stack, Table, Text, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -8,6 +8,31 @@ import { RenderComponent } from "../UserGuide/UserGuide";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+
+/** Parse common fields from raw whois */
+function parseWhois(raw: string) {
+    const lines = raw.split(/\r?\n/);
+    const get = (rx: RegExp) => (lines.find((l) => rx.test(l)) || "").split(":").slice(1).join(":").trim();
+
+    const data: Record<string, string | string[]> = {
+        Domain: get(/^Domain(Name)?\s*:/i),
+        Registrar: get(/^Registrar\s*:/i) || get(/^Sponsoring Registrar\s*:/i),
+        Registrant: get(/^Registrant(?: Name)?\s*:/i),
+        "Creation Date": get(/^(Creation Date|Registered On)\s*:/i),
+        "Updated Date": get(/^(Updated Date|Last Updated On)\s*:/i),
+        "Expiry Date": get(/^(Registry Expiry Date|Expiration Date|Expires On)\s*:/i),
+        Status: lines.filter((l) => /Status\s*:/i.test(l)).map((l) => l.split(":").slice(1).join(":").trim()),
+        "Name Servers": lines
+            .filter((l) => /Name Server\s*:/i.test(l))
+            .map((l) => l.split(":").slice(1).join(":").trim()),
+        DNSSEC: get(/^DNSSEC\s*:/i),
+        Country: get(/^Country\s*:/i),
+    };
+
+    const notFound = /no match|not found|status:\s*free|no entries found/i.test(raw);
+    const invalid = /invalid|malformed|bad request/i.test(raw);
+    return { data, notFound, invalid };
+}
 
 /**
  * Represents the form values for the Whois component.
@@ -39,6 +64,7 @@ function Whois() {
     const [opened, setOpened] = useState(!isCommandAvailable);
     const [loadingModal, setLoadingModal] = useState(true);
     const [pid, setPid] = useState("");
+    const [friendlyError, setFriendlyError] = useState<string | null>(null);
 
     // Component Constants
     const title = "Whois";
@@ -69,7 +95,7 @@ function Whois() {
         },
     });
 
-    // Check if the command is available and set the state variables accordingly.
+    // Check command availability
     useEffect(() => {
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
@@ -83,36 +109,47 @@ function Whois() {
             });
     }, []);
 
-    /** Append process output */
+    /** Append process data to output */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data);
+        setOutput((prevOutput) => (prevOutput ? prevOutput + "\n" : "") + data);
     }, []);
 
-    /** Handle process termination */
+    /** Handle termination: friendly errors instead of codes */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
+            let raw = output ?? "";
+            const lowered = raw.toLowerCase();
+
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully.");
+                setFriendlyError(null);
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
+                setFriendlyError(null);
             } else {
-                handleProcessData("\nWHOIS lookup failed. Please verify the domain or IP address and try again.");
+                // Friendly mapping
+                if (/no match|not found|status:\s*free|no entries found/.test(lowered)) {
+                    setFriendlyError("Not found");
+                } else if (/invalid|malformed|bad request/.test(lowered)) {
+                    setFriendlyError("Invalid input");
+                } else {
+                    setFriendlyError("Lookup failed. Please try again.");
+                }
             }
+
             setPid("");
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData, output]
     );
 
-    /**
-     * Handles form submission for the Whois component.
-     * ONLY runs when inputs are valid (form.onSubmit handles validation).
-     */
+    /** Submit */
     const onSubmit = async (values: FormValuesType) => {
-        setAllowSave(false);
+        setAllowSave()false;
         setHasSaved(false);
-        setOutput("");
         setLoading(true);
+        setOutput("");
+        setFriendlyError(null);
 
         // Build args for whois
         const arg = values.targetURL.trim().replace(/^\[|\]$/g, ""); // strip [] for IPv6 when passing to whois
@@ -125,7 +162,9 @@ function Whois() {
                 setAllowSave(true);
             })
             .catch((error) => {
-                setOutput("WHOIS lookup failed. Please check the domain or IP address and try again.");
+                // Friendly catch-all
+                setFriendlyError("Lookup failed. Please try again.");
+                setOutput(error?.message || "");
                 setLoading(false);
             });
     };
@@ -141,7 +180,11 @@ function Whois() {
         setOutput("");
         setHasSaved(false);
         setAllowSave(false);
+        setFriendlyError(null);
     };
+
+    // Parse for clean summary
+    const parsed = useMemo(() => parseWhois(output), [output]);
 
     // Render component
     return (
@@ -170,8 +213,47 @@ function Whois() {
                         {...form.getInputProps("targetURL")}
                     />
                     <Button type={"submit"}>Start {title}</Button>
+
+                    {/* Friendly error */}
+                    {friendlyError && (
+                        <Alert color="red" title="Whois">
+                            {friendlyError}
+                        </Alert>
+                    )}
+
+                    {/* Clean, structured summary (only if we have output and no error) */}
+                    {!friendlyError && output && (
+                        <Card withBorder padding="md" radius="md">
+                            <Title order={5} mb="sm">
+                                Summary
+                            </Title>
+                            <Table withTableBorder withColumnBorders>
+                                <Table.Tbody>
+                                    {Object.entries(parsed.data).map(([k, v]) => {
+                                        const val = Array.isArray(v)
+                                            ? (v as string[]).filter(Boolean).join("\n")
+                                            : (v as string);
+                                        if (!val) return null;
+                                        return (
+                                            <Table.Tr key={k}>
+                                                <Table.Td width="30%">
+                                                    <Text fw={600}>{k}</Text>
+                                                </Table.Td>
+                                                <Table.Td>
+                                                    <Text style={{ whiteSpace: "pre-wrap" }}>{val}</Text>
+                                                </Table.Td>
+                                            </Table.Tr>
+                                        );
+                                    })}
+                                </Table.Tbody>
+                            </Table>
+                        </Card>
+                    )}
+
+                    {/* Raw output (bigger, resizable, fullscreen; starts at top) */}
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} title="Raw output" />
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
         </RenderComponent>
