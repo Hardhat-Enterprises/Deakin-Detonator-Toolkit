@@ -29,7 +29,7 @@
         "@mantine/hooks": "^5.3.0",
         "@mantine/notifications": "5.3.0",
         "@mantine/prism": "^5.3.0",
-        "@mantine/spotlight": "^5.3.0",
+        "@mantine/spotlight": "^9.6.0",
         "@tabler/icons": "^1.95.1",
         "@tauri-apps/api": "^2.0.0",
         "@tauri-apps/plugin-dialog": "~2",
