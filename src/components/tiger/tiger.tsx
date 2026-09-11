@@ -107,7 +107,7 @@ const Tiger = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -132,7 +132,7 @@ const Tiger = () => {
                 "tiger",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(result.pid);
@@ -197,10 +197,10 @@ const Tiger = () => {
                                 executionStatus === "running"
                                     ? "blue"
                                     : executionStatus === "success"
-                                    ? "green"
-                                    : executionStatus === "cancelled"
-                                    ? "gray"
-                                    : "red"
+                                      ? "green"
+                                      : executionStatus === "cancelled"
+                                        ? "gray"
+                                        : "red"
                             }
                             radius="md"
                         >

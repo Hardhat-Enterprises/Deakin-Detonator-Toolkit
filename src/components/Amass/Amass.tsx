@@ -133,7 +133,7 @@ export function Amass() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     const handleSaveComplete = () => {

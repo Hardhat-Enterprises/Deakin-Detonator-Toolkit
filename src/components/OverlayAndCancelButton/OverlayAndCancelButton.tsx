@@ -69,7 +69,7 @@ export function LoadingOverlayAndCancelButtonPkexec(
     // function, you will get a warning, but the function will still work. To avoid getting a warning, simply include emtpy quotation marks in pid2's place. Example:
     // {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
     onData: (data: string) => void,
-    onTermination: ({ code, signal }: { code: number; signal: number }) => void
+    onTermination: ({ code, signal }: { code: number; signal: number }) => void,
 ) {
     // Sends a privileged SIGINT signal to gracefully terminate the active root-owned process.
     // arpspoof is spawned via pkexec, so it is owned by root - an unprivileged `kill` here

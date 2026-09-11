@@ -161,7 +161,7 @@ function SQLmap() {
             setPid("");
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**

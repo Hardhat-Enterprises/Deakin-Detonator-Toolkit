@@ -116,7 +116,7 @@ const RTSort = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
@@ -151,7 +151,7 @@ const RTSort = () => {
                 "rtsort",
                 filteredArgs,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             // Update the UI with the results from the executed command
             setPid(result.pid);

@@ -95,7 +95,7 @@ const GoBusterTool = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // ================== SUBMIT ==================
@@ -114,7 +114,7 @@ const GoBusterTool = () => {
                     "gobuster",
                     args,
                     handleProcessData,
-                    handleProcessTermination
+                    handleProcessTermination,
                 );
 
                 setPid(result.pid);
