@@ -2,9 +2,9 @@
 
 This repo houses the new version of the Deakin Detonator Toolkit application built with Modern Web technologies, shipping as a native desktop application.
 
--   UI built with [Mantine](https://mantine.dev), [ReactJS](https://reactjs.org/) and [TypeScript](https://www.typescriptlang.org/).
--   Shipped as desktop client via [Tauri](https://tauri.app/).
--   GUI exhibition will be available here: http://34.129.77.178:8080 (Deakin Intranet Only)
+- UI built with [Mantine](https://mantine.dev), [ReactJS](https://reactjs.org/) and [TypeScript](https://www.typescriptlang.org/).
+- Shipped as desktop client via [Tauri](https://tauri.app/).
+- GUI exhibition will be available here: http://34.129.77.178:8080 (Deakin Intranet Only)
 
 `src/` contains the source code for the UI.
 `src-tauri` contains the source code and configuration for the Tauri application.
@@ -43,9 +43,9 @@ The `.deb` that Tauri builds will automatically do this for us for actual toolki
 
 # 🖥️ System requirements
 
--   4GB RAM
--   2 CPU cores
--   Recommended Kali 2024.1 or later
+- 4GB RAM
+- 2 CPU cores
+- Recommended Kali 2024.1 or later
 
 # 🔧 Setup
 

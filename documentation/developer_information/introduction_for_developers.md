@@ -1,17 +1,17 @@
 ## Dependencies not installed in Kali by default
 
--   pkgconf (install via apt)
--   libgtk-3-dev (install via apt)
--   libsoup2.4-dev (install via apt)
--   webkit2gtk-4.0 (install via apt)
--   nodejs (install via apt)
--   npm (install via apt)
--   yarn (install via npm)
+- pkgconf (install via apt)
+- libgtk-3-dev (install via apt)
+- libsoup2.4-dev (install via apt)
+- webkit2gtk-4.0 (install via apt)
+- nodejs (install via apt)
+- npm (install via apt)
+- yarn (install via npm)
 
 ### Additional apt repos required
 
--   http://security.debian.org/debian-security
--   http://ftp.au.debian.org/debian
+- http://security.debian.org/debian-security
+- http://ftp.au.debian.org/debian
 
 Add them using: `echo "deb http://security.debian.org/debian-security buster/updates main" >> /etc/apt/sources.list && echo "deb http://ftp.au.debian.org/debian buster main" >> /etc/apt/sources.list` then run `sudo apt-get update` to update the list of available packages and their versions
 

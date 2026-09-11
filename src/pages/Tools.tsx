@@ -46,7 +46,7 @@ const ToolsPage = () => {
         if (!q) return categoryFiltered;
 
         return categoryFiltered.filter((t) =>
-            [t.name, t.description, t.category].some((v) => v?.toLowerCase().includes(q))
+            [t.name, t.description, t.category].some((v) => v?.toLowerCase().includes(q)),
         );
     }, [tools, selectedCategory, query]);
 

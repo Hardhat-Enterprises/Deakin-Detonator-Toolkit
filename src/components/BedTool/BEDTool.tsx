@@ -182,7 +182,7 @@ export function BEDTool() {
 		Tests Completed: ${getTestCategories()}
 		Potential Vulnerabilities Detected: Not confirmed
 		Findings Count: Not available
-		Full Results: Available in the output panel and exported file`
+		Full Results: Available in the output panel and exported file`,
                 );
 
                 handleProcessData("\nProcess completed successfully.");
@@ -193,7 +193,7 @@ export function BEDTool() {
 		Test Categories Observed: ${getTestCategories()}
 		Potential Vulnerabilities Detected: Not confirmed
 		Findings Count: Not available
-		Full Results: Available in the output panel`
+		Full Results: Available in the output panel`,
                 );
                 handleProcessData("\nProcess was manually terminated.");
             } else {
@@ -204,7 +204,7 @@ export function BEDTool() {
             setAllowSave(true); // Allow Saving as the output is finalised.
             setHasSaved(false);
         },
-        [handleProcessData, selectedPlugin, getTestCategories]
+        [handleProcessData, selectedPlugin, getTestCategories],
     );
 
     /**

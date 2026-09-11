@@ -68,7 +68,7 @@ const AskChatGPT = ({ toolName, output, setChatGPTResponse }: AskChatGPT) => {
         try {
             const response = await sendToChatGPT(
                 `The following ouput is from the use of the ${toolName}. Provide a concise explanation of the tool and what the output shows for someone new to the cybersecurity world:`, //TODO: find most effective prompt starter
-                output
+                output,
             );
             setChatGPTResponse(response);
         } catch (error) {
