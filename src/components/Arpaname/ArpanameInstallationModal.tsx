@@ -97,7 +97,7 @@ const ArpanameInstallationModal = ({ isOpen, setOpened, onAvailabilityChange }: 
             if (activeProcess.current === process) activeProcess.current = null;
             if (!isAvailable) {
                 throw new Error(
-                    `${ARPANAME_PACKAGE} finished installing, but the arpaname executable could not be found.`
+                    `${ARPANAME_PACKAGE} finished installing, but the arpaname executable could not be found.`,
                 );
             }
 

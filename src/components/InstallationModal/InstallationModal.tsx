@@ -23,7 +23,7 @@ type InstallationModalProps = {
 const handleInstall = async (
     dependencies: string[],
     setOutput: React.Dispatch<React.SetStateAction<string>>,
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
     // Set the loading state to true. This will display the console output.
     setLoading(true);

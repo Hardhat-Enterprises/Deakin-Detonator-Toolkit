@@ -3,6 +3,8 @@ import { IconSearch } from "@tabler/icons";
 import { useMemo, useState } from "react";
 import { getTools } from "../components/RouteWrapper";
 import ToolItem from "../components/ToolItem/ToolItem";
+// adjust this import if your path differs
+import SearchInput from "../components/SearchInput";
 
 type Tool = {
     name: string;
@@ -44,7 +46,7 @@ const ToolsPage = () => {
         if (!q) return categoryFiltered;
 
         return categoryFiltered.filter((t) =>
-            [t.name, t.description, t.category].some((v) => v?.toLowerCase().includes(q))
+            [t.name, t.description, t.category].some((v) => v?.toLowerCase().includes(q)),
         );
     }, [tools, selectedCategory, query]);
 

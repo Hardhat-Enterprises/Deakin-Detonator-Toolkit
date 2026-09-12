@@ -174,7 +174,7 @@ const Wafw00f = () => {
         const timeout = 20000; // 20 seconds timeout
 
         const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("The operation timed out after 20 seconds.")), timeout)
+            setTimeout(() => reject(new Error("The operation timed out after 20 seconds.")), timeout),
         );
 
         try {
@@ -182,7 +182,7 @@ const Wafw00f = () => {
                 "wafw00f",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             await Promise.race([executionPromise, timeoutPromise]);
         } catch (error: any) {

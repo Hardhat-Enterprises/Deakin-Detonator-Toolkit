@@ -243,7 +243,7 @@ function Metagoofil() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -336,7 +336,7 @@ function Metagoofil() {
                 "metagoofil",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             // Store process ID so the process can be cancelled.
