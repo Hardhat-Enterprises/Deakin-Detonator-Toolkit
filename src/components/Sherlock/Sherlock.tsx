@@ -127,7 +127,16 @@ const Sherlock = () => {
         if (values.timeout) {
             args.push("--timeout", `${values.timeout}`);
         }
-        args.push(...values.username.split(" "));
+        const usernames = values.username.trim().split(/\s+/);
+        const tempOutput = `/tmp/sherlock-${Date.now()}`;
+
+        if (usernames.length === 1) {
+            args.push("--output", `${tempOutput}.txt`);
+        } else {
+            args.push("--folderoutput", tempOutput);
+        }
+
+        args.push(...usernames);
 
         // Run the Sherlock tool using the helper method
         try {
