@@ -103,7 +103,7 @@ const SnmpCheck = () => {
             setLoading(false);
             setAllowSave(true);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -122,7 +122,7 @@ const SnmpCheck = () => {
                 "snmp-check",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             // Update the UI with the results from the executed command

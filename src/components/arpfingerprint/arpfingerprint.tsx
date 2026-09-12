@@ -97,7 +97,7 @@ function ARPFingerprinting() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     const handleSaveComplete = () => {

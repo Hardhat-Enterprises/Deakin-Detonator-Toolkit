@@ -131,7 +131,7 @@ const Foremost = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -183,7 +183,7 @@ const Foremost = () => {
                 "foremost",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             // Update the UI with the results from the executed command
