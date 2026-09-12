@@ -109,6 +109,7 @@ const Sherlock = () => {
         // Disallow saving until tool execution is complete
         setAllowSave(false);
 
+
         // Run the Sherlock tool using the helper method
         try {
             const outputDirectory = await appCacheDir();
