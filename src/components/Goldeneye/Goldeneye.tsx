@@ -60,10 +60,26 @@ const Goldeneye = () => {
         initialValues: {
             url: "",
             userAgent: "",
-            worker: 0,
-            sockets: 0,
+            worker: "",
+            sockets: "",
             method: "",
             sslCheck: "",
+        },
+        validate: {
+            worker: (value) => {
+                const str = String(value).trim();
+                if (str === "") return "Number of workers is required";
+                if (!/^\d+$/.test(str)) return "Workers must be a positive whole number";
+                if (parseInt(str, 10) < 1) return "Workers must be at least 1";
+                return null;
+            },
+            sockets: (value) => {
+                const str = String(value).trim();
+                if (str === "") return "Number of sockets is required";
+                if (!/^\d+$/.test(str)) return "Sockets must be a positive whole number";
+                if (parseInt(str, 10) < 1) return "Sockets must be at least 1";
+                return null;
+            },
         },
     });
 
@@ -124,7 +140,7 @@ const Goldeneye = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -170,8 +186,8 @@ if (!/^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(targetUrl)) {
         // Construct arguments for the goldeneye command based on form input
         const args = [scriptPath, targetUrl];
         values.userAgent ? args.push(`-u`, `${values.userAgent}`) : undefined;
-        values.worker ? args.push(`-w`, `${values.worker}`) : undefined;
-        values.sockets ? args.push(`-s`, `${values.sockets}`) : undefined;
+        args.push(`-w`, `${values.worker}`);
+        args.push(`-s`, `${values.sockets}`);
         selectedMethod ? args.push(`-m`, selectedMethod) : undefined;
         selectedSslCheck === "No" ? args.push(`-n`) : undefined;
 
@@ -181,7 +197,7 @@ if (!/^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(targetUrl)) {
                 "python3",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             // Update the UI with the results from the executed command

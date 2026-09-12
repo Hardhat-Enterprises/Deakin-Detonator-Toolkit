@@ -121,7 +121,7 @@ const NetcatTool = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -241,14 +241,14 @@ const NetcatTool = () => {
                 command,
                 args.filter(Boolean),
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(pid);
             setOutput(output);
 
             if (values.netcatOptions === "Listen" || values.netcatOptions === "Connect") {
                 handleProcessData(
-                    "\nNote: This operation may keep running. The loading overlay will stop in 10 seconds."
+                    "\nNote: This operation may keep running. The loading overlay will stop in 10 seconds.",
                 );
                 // preserve existing safety timeout behavior
                 setTimeout(() => {
