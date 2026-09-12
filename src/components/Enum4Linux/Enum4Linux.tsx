@@ -221,7 +221,7 @@ const Enum4Linux = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     const onSubmit = async (values: FormValuesType) => {

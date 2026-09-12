@@ -16,8 +16,8 @@ An architecture decision record (ADR) is a document that captures an important a
 
 ### When?
 
--   Making major changes to the architecture
--   Making major changes to the operation of the application
+- Making major changes to the architecture
+- Making major changes to the operation of the application
 
 ### How?
 
@@ -37,8 +37,8 @@ An architecture decision record (ADR) is a document that captures an important a
 
 8. **Post-Review Actions:**
 
--   If your ADR is accepted, update the status in the table to `ACCEPTED`.
--   If your ADR is rejected, update the status to `REJECTED`.
+- If your ADR is accepted, update the status in the table to `ACCEPTED`.
+- If your ADR is rejected, update the status to `REJECTED`.
 
 9. **Submit a Pull Request:** Follow the standard pull request (PR) process to submit your ADR document for review, the message a team leader.
 

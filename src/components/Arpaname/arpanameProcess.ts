@@ -54,7 +54,7 @@ export const spawnArpanameProcess = (
     program: string,
     args: string[],
     onData: (data: string) => void = () => {},
-    timeoutMs: number
+    timeoutMs: number,
 ): RunningArpanameProcess => {
     const command = Command.create(program, args);
     let child: Child | null = null;
@@ -153,7 +153,7 @@ export const spawnArpanameProcess = (
 
         terminationFallback = setTimeout(
             () => rejectOnce(request.kind, `${request.message} ${program} did not close after termination.`),
-            TERMINATION_GRACE_PERIOD_MS
+            TERMINATION_GRACE_PERIOD_MS,
         );
         killOnce(child);
     };
@@ -191,7 +191,7 @@ export const spawnArpanameProcess = (
     // This timer starts before spawn, so it limits the complete operation.
     operationTimeout = setTimeout(
         () => requestTermination({ kind: "timeout", message: `${program} timed out after ${timeoutMs} ms.` }),
-        timeoutMs
+        timeoutMs,
     );
 
     try {
@@ -231,7 +231,7 @@ export const spawnArpanameProcess = (
 
 export const checkArpanameAvailability = async (
     onStarted: (process: RunningArpanameProcess) => void = () => {},
-    timeoutMs: number = AVAILABILITY_TIMEOUT_MS
+    timeoutMs: number = AVAILABILITY_TIMEOUT_MS,
 ): Promise<boolean> => {
     const process = spawnArpanameProcess("which", [ARPANAME_EXECUTABLE], () => {}, timeoutMs);
     try {
@@ -248,11 +248,11 @@ export const startBind9Installation = (onData: (data: string) => void, timeoutMs
         "pkexec",
         ["apt-get", "install", "--no-install-recommends", "-y", ARPANAME_PACKAGE],
         onData,
-        timeoutMs
+        timeoutMs,
     );
 
 export const startArpanameLookup = (
     ipAddress: string,
     onData: (data: string) => void,
-    timeoutMs: number = LOOKUP_TIMEOUT_MS
+    timeoutMs: number = LOOKUP_TIMEOUT_MS,
 ) => spawnArpanameProcess(ARPANAME_EXECUTABLE, [ipAddress], onData, timeoutMs);

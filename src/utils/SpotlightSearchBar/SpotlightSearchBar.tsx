@@ -75,7 +75,7 @@ function Search() {
              */
             filter={(query, actions) =>
                 actions.filter((action) =>
-                    (action.title.toLowerCase() + action.description?.toLowerCase()).includes(query.toLowerCase())
+                    (action.title.toLowerCase() + action.description?.toLowerCase()).includes(query.toLowerCase()),
                 )
             }
             searchPlaceholder="Search..." // Placeholder text for the Spotlight search bar

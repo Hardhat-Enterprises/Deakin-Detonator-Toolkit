@@ -244,7 +244,7 @@ function Nmap() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -278,7 +278,7 @@ function Nmap() {
             setOutput(
                 enableIPv6
                     ? "Error: Invalid target! Enter an IPv4 address, IPv6 address, or hostname!"
-                    : "Error: Invalid target! Enter an IPv4 address or hostname or enable IPv6 in advanced options!"
+                    : "Error: Invalid target! Enter an IPv4 address or hostname or enable IPv6 in advanced options!",
             );
             return;
         }
@@ -314,7 +314,7 @@ function Nmap() {
                 "nmap",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(startedPid);
             setOutput(initialOutput);
