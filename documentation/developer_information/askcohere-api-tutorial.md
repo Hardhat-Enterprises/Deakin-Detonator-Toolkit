@@ -6,7 +6,7 @@ To use AskCohere for tool output analysis, an API key from Cohere is required.
 
 ### **1. Create a Cohere Account**
 
--   Visit [Cohere's official website](https://cohere.ai/) to create an account.
+- Visit [Cohere's official website](https://cohere.ai/) to create an account.
 
 ### **2. Obtain Your API Key**
 
@@ -29,16 +29,16 @@ Restart the development server to apply the new environment variable settings.
 
 ## **Integration Details**
 
--   The API key is securely stored in the '.env' file and can be accessed through 'import.meta.env.VITE_COHERE_API_KEY'.
--   Ensure the '.env' file is included in the '.gitignore' file to prevent accidental sharing of sensitive data in version control.
+- The API key is securely stored in the '.env' file and can be accessed through 'import.meta.env.VITE_COHERE_API_KEY'.
+- Ensure the '.env' file is included in the '.gitignore' file to prevent accidental sharing of sensitive data in version control.
 
 ## **Common Issues and Fixes**
 
--   **Missing API Key Error**: If an error like 'COHERE_API_KEY is missing' occurs, verify that the '.env' file is correctly configured and saved.
--   **Incorrect Key**: Verify that the API key in the '.env' file matches the one provided by Cohere.
--   **Formatting Errors**: Check for typos or missing quotes in the '.env' file.
+- **Missing API Key Error**: If an error like 'COHERE_API_KEY is missing' occurs, verify that the '.env' file is correctly configured and saved.
+- **Incorrect Key**: Verify that the API key in the '.env' file matches the one provided by Cohere.
+- **Formatting Errors**: Check for typos or missing quotes in the '.env' file.
 
 ## **Additional Notes**
 
--   Keep the '.env' file private to ensure the API key remains secure.
--   Utilize the free tier responsibly to avoid exceeding its limits and ensure uninterrupted service.
+- Keep the '.env' file private to ensure the API key remains secure.
+- Utilize the free tier responsibly to avoid exceeding its limits and ensure uninterrupted service.

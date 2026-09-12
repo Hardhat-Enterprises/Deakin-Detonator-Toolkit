@@ -137,7 +137,7 @@ function WPScan() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -181,7 +181,7 @@ function WPScan() {
                 "wpscan",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(pid);
             setOutput(output);

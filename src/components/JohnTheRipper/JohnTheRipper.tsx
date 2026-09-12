@@ -279,7 +279,7 @@ const JohnTheRipper = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
@@ -317,7 +317,7 @@ const JohnTheRipper = () => {
                 "john",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setOutput(output);
@@ -336,7 +336,7 @@ const JohnTheRipper = () => {
      */
     const handleClearPotFile = async () => {
         const confirmed = window.confirm(
-            "Are you sure you want to clear all passwords stored in the John the Ripper pot file?"
+            "Are you sure you want to clear all passwords stored in the John the Ripper pot file?",
         );
 
         if (!confirmed) {
@@ -407,7 +407,7 @@ const JohnTheRipper = () => {
                 "john",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setOutput(result.output);
@@ -505,7 +505,7 @@ const JohnTheRipper = () => {
                 `john`,
                 argsCrack,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             )
                 .then(({ output, pid }) => {
                     // Update the UI with the results from the executed command
@@ -559,7 +559,7 @@ const JohnTheRipper = () => {
             )}
             <form
                 onSubmit={form.onSubmit((values) =>
-                    onSubmit({ ...values, mode: selectedModeOption, fileType: selectedFileTypeOption })
+                    onSubmit({ ...values, mode: selectedModeOption, fileType: selectedFileTypeOption }),
                 )}
             >
                 {LoadingOverlayAndCancelButton(loading, pid)}

@@ -64,7 +64,7 @@ export function WalkthroughsPage() {
         <Stack align="center" spacing="sm" style={{ width: "100%" }}>
             {UserGuide(
                 "Walkthrough Videos",
-                "How to add a Walkthrough Video \nStep 1: Use the add button to create a video page \nStep 2: Register it in the RouteWrapper"
+                "How to add a Walkthrough Video \nStep 1: Use the add button to create a video page \nStep 2: Register it in the RouteWrapper",
             )}
 
             {/* Search + Category side-by-side */}

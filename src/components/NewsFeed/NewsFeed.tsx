@@ -69,7 +69,7 @@ export default function NewsFeed() {
                     path: "cached_news.json",
                     contents: JSON.stringify(result),
                 },
-                { dir: BaseDirectory.Desktop }
+                { dir: BaseDirectory.Desktop },
             );
             showNotification({
                 title: "News Refreshed",
@@ -109,12 +109,12 @@ export default function NewsFeed() {
         let filtered = [...news];
         if (selectedCategory !== "All") {
             filtered = filtered.filter((item) =>
-                (item.title + item.description).toLowerCase().includes(selectedCategory.toLowerCase())
+                (item.title + item.description).toLowerCase().includes(selectedCategory.toLowerCase()),
             );
         }
         if (searchQuery.trim() !== "") {
             filtered = filtered.filter((item) =>
-                (item.title + item.description).toLowerCase().includes(searchQuery.toLowerCase())
+                (item.title + item.description).toLowerCase().includes(searchQuery.toLowerCase()),
             );
         }
         setFilteredNews(filtered);
@@ -145,7 +145,7 @@ ${item.description}
                     path: `${safeTitle}.txt`,
                     contents: content,
                 },
-                { dir: BaseDirectory.Desktop }
+                { dir: BaseDirectory.Desktop },
             );
             showNotification({
                 title: "Article Saved",
