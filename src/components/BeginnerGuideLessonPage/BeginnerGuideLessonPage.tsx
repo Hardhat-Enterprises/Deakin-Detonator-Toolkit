@@ -18,7 +18,7 @@ const BGuideLesson: React.FC<BGuideProps> = ({ lessonIndex }) => {
     const [currentPageComplete, setCurrentPageComplete] = useState(false);
     const [openSection, setOpenSection] = useState<number | null>(null);
     const [viewedSections, setViewedSections] = useState(
-        guideData.lessonContent.map((page) => page.pageContent.map(() => false))
+        guideData.lessonContent.map((page) => page.pageContent.map(() => false)),
     );
     const currentPageData = guideData.lessonContent[currentPageIndex];
     const isLastPage = currentPageIndex === guideData.lessonContent.length - 1;

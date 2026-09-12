@@ -147,7 +147,7 @@ function Arjuntool() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [getElapsedTime, handleProcessData] // Dependency on the handleProcessData callback
+        [getElapsedTime, handleProcessData], // Dependency on the handleProcessData callback
     );
 
     // Actions taken after saving the output

@@ -116,7 +116,7 @@ function Whois() {
             setPid("");
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**

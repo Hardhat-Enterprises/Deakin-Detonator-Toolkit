@@ -120,7 +120,7 @@ const SMBEnumeration = () => {
             setOutput((prevOutput) => prevOutput + "\n" + data); // Update output
             if (!allowSave) setAllowSave(true);
         },
-        [allowSave]
+        [allowSave],
     );
 
     // Uses the onTermination callback function of runCommandGetPidAndOutput to handle
@@ -143,7 +143,7 @@ const SMBEnumeration = () => {
             setLoading(false);
             setAllowSave(true);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // onSubmit is a function that is called when the form is submitted.
@@ -174,7 +174,7 @@ const SMBEnumeration = () => {
                 "nmap",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);
@@ -205,7 +205,7 @@ const SMBEnumeration = () => {
         >
             <form
                 onSubmit={form.onSubmit((values) =>
-                    onSubmit({ ...values, speed: selectedSpeedOption, scripts: selectedScriptOption })
+                    onSubmit({ ...values, speed: selectedSpeedOption, scripts: selectedScriptOption }),
                 )}
             >
                 {LoadingOverlayAndCancelButton(loading, pid)}
