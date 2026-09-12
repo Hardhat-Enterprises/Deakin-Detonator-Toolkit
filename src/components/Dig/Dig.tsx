@@ -139,7 +139,9 @@ function Dig() {
                 if (output.includes("NXDOMAIN")) {
                     handleProcessData("\nQuery completed: Domain does not exist (NXDOMAIN). No DNS records found.");
                 } else if (output.includes("SERVFAIL")) {
-                    handleProcessData("\nQuery completed: DNS server returned SERVFAIL. The server could not complete the query.");
+                    handleProcessData(
+                        "\nQuery completed: DNS server returned SERVFAIL. The server could not complete the query.",
+                    );
                 } else if (output.includes("REFUSED")) {
                     handleProcessData("\nQuery completed: DNS server refused the query.");
                 } else {
@@ -155,7 +157,7 @@ function Dig() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -179,7 +181,8 @@ function Dig() {
      * isValidIPv6: Returns true if the string is a valid IPv6 address.
      */
     const isValidIPv6 = (value: string): boolean => {
-        const ipv6Regex = /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$|^::$|^::1$|^([0-9a-fA-F]{1,4}::?){1,7}[0-9a-fA-F]{0,4}$/;
+        const ipv6Regex =
+            /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$|^::$|^::1$|^([0-9a-fA-F]{1,4}::?){1,7}[0-9a-fA-F]{0,4}$/;
         return ipv6Regex.test(value.trim());
     };
 
@@ -278,7 +281,7 @@ function Dig() {
                 "dig",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(pid);
             setOutput(output);
@@ -326,11 +329,9 @@ function Dig() {
                     {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
                     <Stack>
                         {validationError && (
-                        <div style={{ color: "red", marginBottom: "10px", fontWeight: 500 }}>
-                            {validationError}
-                        </div>
-                    )}
-                    <Stepper active={active} onStepClick={setActive} breakpoint="sm">
+                            <div style={{ color: "red", marginBottom: "10px", fontWeight: 500 }}>{validationError}</div>
+                        )}
+                        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
                             {/* Step 1: Domain */}
                             <Stepper.Step label="Domain">
                                 <Stack>

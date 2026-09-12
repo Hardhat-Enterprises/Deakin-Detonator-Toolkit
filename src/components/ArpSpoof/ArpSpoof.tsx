@@ -139,7 +139,7 @@ const ARPSpoofing = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     // Actions taken after saving the output
@@ -177,7 +177,7 @@ const ARPSpoofing = () => {
             args,
             handleProcessData,
             handleProcessTermination,
-            (spawnedPid) => setPid(spawnedPid)
+            (spawnedPid) => setPid(spawnedPid),
         )
             .then(({ output }) => {
                 setOutput(output);
@@ -221,7 +221,7 @@ const ARPSpoofing = () => {
                             pid,
                             "",
                             handleProcessData,
-                            handleProcessTermination
+                            handleProcessTermination,
                         )}
 
                         {showAlert && (

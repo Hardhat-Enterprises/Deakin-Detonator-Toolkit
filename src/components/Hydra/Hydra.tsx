@@ -192,7 +192,7 @@ const Hydra = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     const handleSaveComplete = () => {
@@ -267,7 +267,7 @@ const Hydra = () => {
                 "hydra",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);

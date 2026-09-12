@@ -57,31 +57,31 @@ const Goldeneye = () => {
 
     // Form hook to handle form input.
     let form = useForm({
-    initialValues: {
-        url: "",
-        userAgent: "",
-        worker: "",
-        sockets: "",
-        method: "",
-        sslCheck: "",
-    },
-    validate: {
-        worker: (value) => {
-            const str = String(value).trim();
-            if (str === "") return "Number of workers is required";
-            if (!/^\d+$/.test(str)) return "Workers must be a positive whole number";
-            if (parseInt(str, 10) < 1) return "Workers must be at least 1";
-            return null;
+        initialValues: {
+            url: "",
+            userAgent: "",
+            worker: "",
+            sockets: "",
+            method: "",
+            sslCheck: "",
         },
-        sockets: (value) => {
-            const str = String(value).trim();
-            if (str === "") return "Number of sockets is required";
-            if (!/^\d+$/.test(str)) return "Sockets must be a positive whole number";
-            if (parseInt(str, 10) < 1) return "Sockets must be at least 1";
-            return null;
+        validate: {
+            worker: (value) => {
+                const str = String(value).trim();
+                if (str === "") return "Number of workers is required";
+                if (!/^\d+$/.test(str)) return "Workers must be a positive whole number";
+                if (parseInt(str, 10) < 1) return "Workers must be at least 1";
+                return null;
+            },
+            sockets: (value) => {
+                const str = String(value).trim();
+                if (str === "") return "Number of sockets is required";
+                if (!/^\d+$/.test(str)) return "Sockets must be a positive whole number";
+                if (parseInt(str, 10) < 1) return "Sockets must be at least 1";
+                return null;
+            },
         },
-    },
-});
+    });
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
@@ -140,7 +140,7 @@ const Goldeneye = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -178,7 +178,7 @@ const Goldeneye = () => {
                 "python3",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             // Update the UI with the results from the executed command

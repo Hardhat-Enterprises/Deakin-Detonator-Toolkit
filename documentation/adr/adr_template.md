@@ -6,14 +6,14 @@ Provide a clear and concise title for the architecture decision.
 
 What is the status of this decision?
 
--   Proposed
--   Rejected
+- Proposed
+- Rejected
 
 ## Implementation status
 
--   Implemented
--   Work in progress
--   Cancelled
+- Implemented
+- Work in progress
+- Cancelled
 
 ## Context
 

@@ -122,7 +122,7 @@ const Hashcat = () => {
             setAllowSave(true); // Enable save option
             setHasSaved(false); // Reset save status
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -172,7 +172,7 @@ const Hashcat = () => {
                 "--increment-min",
                 `${values.minPwdLen}`,
                 "--increment-max",
-                `${values.maxPwdLen}`
+                `${values.maxPwdLen}`,
             );
             if (values.maskCharsets) {
                 args.push(values.maskCharsets);
@@ -190,7 +190,7 @@ const Hashcat = () => {
                 "hashcat",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid); // Set the process ID
             setOutput(result.output); // Set the initial output
@@ -241,7 +241,7 @@ const Hashcat = () => {
 
             <form
                 onSubmit={form.onSubmit((values) =>
-                    onSubmit({ ...values, attackMode: selectedModeOption, inputType: selectedInputOption })
+                    onSubmit({ ...values, attackMode: selectedModeOption, inputType: selectedInputOption }),
                 )}
             >
                 <LoadingOverlay visible={loading} />

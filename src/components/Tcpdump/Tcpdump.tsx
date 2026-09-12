@@ -121,7 +121,7 @@ function Tcpdump() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
@@ -153,7 +153,7 @@ function Tcpdump() {
                 dependencies[0],
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setOutput(output);
             setAllowSave(true);

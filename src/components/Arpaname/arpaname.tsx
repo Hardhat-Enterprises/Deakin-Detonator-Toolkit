@@ -208,8 +208,8 @@ const ArpanameTool = () => {
             } else {
                 handleProcessData(
                     `\nProcess terminated with exit code: ${String(result.code)} and signal code: ${String(
-                        result.signal
-                    )}`
+                        result.signal,
+                    )}`,
                 );
             }
         } catch (error) {

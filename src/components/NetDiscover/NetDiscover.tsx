@@ -37,7 +37,7 @@ function NetDiscover() {
         const cleanedData = data.replace(
             // Regex to remove ANSI escape sequences
             /\x1B\[[0-9;]*[a-zA-Z]/g,
-            ""
+            "",
         );
 
         // Prevent output of empty lines or random characters
@@ -48,7 +48,7 @@ function NetDiscover() {
 
     const handleProcessTermination = useCallback(({ code, signal }: { code: number; signal: number }) => {
         setOutput(
-            (prev) => prev + (signal === 2 ? "\nScanning stopped manually." : `\nNetDiscover exited (code ${code}).`)
+            (prev) => prev + (signal === 2 ? "\nScanning stopped manually." : `\nNetDiscover exited (code ${code}).`),
         );
         setLoading(false);
         setAllowSave(true);
@@ -71,7 +71,7 @@ function NetDiscover() {
             "netdiscover",
             args,
             handleProcessData,
-            handleProcessTermination
+            handleProcessTermination,
         ).catch((error) => {
             setOutput(`Error: ${error.message}`);
             setLoading(false);

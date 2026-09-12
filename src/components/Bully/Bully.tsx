@@ -123,7 +123,7 @@ function Bully() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -170,7 +170,7 @@ function Bully() {
                 "bully",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(pid);
