@@ -135,7 +135,7 @@ const ExifTool = () => {
             setLoading(false);
             setAllowSave(true);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
@@ -158,12 +158,12 @@ const ExifTool = () => {
                 "exiftool",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(pid);
             if (!output || output.trim() === "") {
                 setOutput(
-                    `Error: File not found at path "${values.filePath}".\nPlease verify the file path and try again.`
+                    `Error: File not found at path "${values.filePath}".\nPlease verify the file path and try again.`,
                 );
                 setLoading(false);
                 return;

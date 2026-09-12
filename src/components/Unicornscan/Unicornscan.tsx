@@ -106,7 +106,7 @@ const Unicornscan = () => {
             setPid("");
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
     /**
      * onSubmit: Asynchronous handler for the form submission event.

@@ -11,7 +11,7 @@ export function AttackVectors() {
     // Sort first, then filter
     const sortedAttackVectors = useMemo(
         () => [...attackVectors].sort((a, b) => a.name.localeCompare(b.name)),
-        [attackVectors]
+        [attackVectors],
     );
 
     const filtered = useMemo(() => {

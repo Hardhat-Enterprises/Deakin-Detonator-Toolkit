@@ -86,7 +86,7 @@ const Sherlock = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -122,7 +122,7 @@ const Sherlock = () => {
                 "sherlock",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid); // Set process ID
             setOutput(result.output); // Set command output

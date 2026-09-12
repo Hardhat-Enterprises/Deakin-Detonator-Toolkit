@@ -121,7 +121,7 @@ const SMBGhostScanner = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -185,7 +185,7 @@ const SMBGhostScanner = () => {
                 "python3",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(result.pid);
@@ -237,12 +237,12 @@ const SMBGhostScanner = () => {
                                 executionStatus === "running"
                                     ? "blue"
                                     : executionStatus === "success"
-                                    ? "green"
-                                    : executionStatus === "no-vulnerability"
-                                    ? "yellow"
-                                    : executionStatus === "cancelled"
-                                    ? "gray"
-                                    : "red"
+                                      ? "green"
+                                      : executionStatus === "no-vulnerability"
+                                        ? "yellow"
+                                        : executionStatus === "cancelled"
+                                          ? "gray"
+                                          : "red"
                             }
                             radius="md"
                         >
