@@ -163,9 +163,28 @@ const Goldeneye = () => {
     const onSubmit = async (values: FormValuesType) => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
+	// Flexible URL validation (http, https, www, domain, etc)
+let targetUrl = values.url.trim();
+
+// If URL starts with www. or has no scheme, assume  http://
+if (!/^https?:\/\//i.test(targetUrl)) {
+    if (/^www\./i.test(targetUrl) || /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(targetUrl)) {
+        targetUrl = "http://" + targetUrl;
+    }
+}
+
+// Final validation check
+if (!/^https?:\/\/[^\s/$.?#].[^\s]*$/i.test(targetUrl)) {
+    setLoading(false);
+    setOutput(
+        "Error: Please enter a valid URL (e.g. https://example.com or www.example.com)"
+    );
+    return;
+}
+
 
         // Construct arguments for the goldeneye command based on form input
-        const args = [scriptPath, `${values.url}`];
+        const args = [scriptPath, targetUrl];
         values.userAgent ? args.push(`-u`, `${values.userAgent}`) : undefined;
         args.push(`-w`, `${values.worker}`);
         args.push(`-s`, `${values.sockets}`);
