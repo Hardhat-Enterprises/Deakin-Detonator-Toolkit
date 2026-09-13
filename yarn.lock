@@ -1499,11 +1499,11 @@ __metadata:
   linkType: hard
 
 "@tauri-apps/plugin-dialog@npm:~2":
-  version: 2.7.2
-  resolution: "@tauri-apps/plugin-dialog@npm:2.7.2"
+  version: 2.7.3
+  resolution: "@tauri-apps/plugin-dialog@npm:2.7.3"
   dependencies:
     "@tauri-apps/api": ^2.11.0
-  checksum: 63dc3e2e4c9531997100ffed1068a6e48b144727b8df5db2d6243118657356817e0c1ab487b87d00cd7f036b296fb68464b9fbddcc7abad053b15e7a8224b6f2
+  checksum: 14379eb3b1bcb09a33445ec6a69a5d4300da053268f188944a217616b417abd6684fd02f1c4fe42bd350ec057762e438a066fa182f74569af9d209d9101be6a5
   languageName: node
   linkType: hard
 
