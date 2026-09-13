@@ -1508,11 +1508,11 @@ __metadata:
   linkType: hard
 
 "@tauri-apps/plugin-fs@npm:~2":
-  version: 2.5.1
-  resolution: "@tauri-apps/plugin-fs@npm:2.5.1"
+  version: 2.5.2
+  resolution: "@tauri-apps/plugin-fs@npm:2.5.2"
   dependencies:
     "@tauri-apps/api": ^2.11.0
-  checksum: 96218653aba68602d1751330cfe55b98dc9ba168d63e7580e0836800f60dabc2e38340738f8aa561f9bbf509c2c2d0ba15a984f533438ed576975ef6efffdb69
+  checksum: 44a7c09b5e8035392708c4c4fdc4cb1faa76cdf7441176b0c65867365b49efc46812d5d5b0fbd9bd92897474572b30fd52d49d4807c73173404113d21412db07
   languageName: node
   linkType: hard
 
