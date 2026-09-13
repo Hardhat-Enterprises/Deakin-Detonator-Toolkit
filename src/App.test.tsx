@@ -8,7 +8,7 @@ describe("<App/> component tests", () => {
         const component = render(
             <MemoryRouter>
                 <App />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
         expect(component.getByText("Deakin Detonator Toolkit")).toBeTruthy();
     });

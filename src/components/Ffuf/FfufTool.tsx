@@ -143,7 +143,7 @@ const FfufTool = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // Actions taken after saving the output
@@ -207,7 +207,7 @@ const FfufTool = () => {
                 "ffuf",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);

@@ -112,7 +112,7 @@ const NbtscanTool = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -156,7 +156,7 @@ const NbtscanTool = () => {
                 "nbtscan",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);

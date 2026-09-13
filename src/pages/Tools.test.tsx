@@ -8,7 +8,7 @@ describe("<Tools/> component tests", () => {
         const component = render(
             <MemoryRouter>
                 <Tools />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
         expect(component.getByText("Tools")).toBeTruthy();
     });

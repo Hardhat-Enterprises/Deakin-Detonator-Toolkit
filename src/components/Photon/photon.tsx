@@ -143,7 +143,7 @@ const Photon = () => {
             setPid("");
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -183,7 +183,7 @@ const Photon = () => {
                 "photon",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(result.pid);
