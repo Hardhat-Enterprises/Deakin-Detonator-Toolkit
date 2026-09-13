@@ -37,7 +37,7 @@ export const CommandHelper = {
         commandString: string,
         args: string[],
         onData: (data: string) => void,
-        onTermination: ({ code, signal }: { code: number; signal: number }) => void
+        onTermination: ({ code, signal }: { code: number; signal: number }) => void,
     ): Promise<{ pid: string; output: string }> {
         const command = new Command(commandString, args);
         const handle: Child = await command.spawn();
@@ -125,7 +125,7 @@ export const CommandHelper = {
         args: string[],
         onData: (data: string) => void,
         onTermination: ({ code, signal }: { code: number; signal: number }) => void,
-        onSpawn?: (pid: string) => void
+        onSpawn?: (pid: string) => void,
     ): Promise<{ pid: string; output: string }> {
         const command = new Command("pkexec", [commandString, ...args]);
         const handle: Child = await command.spawn();

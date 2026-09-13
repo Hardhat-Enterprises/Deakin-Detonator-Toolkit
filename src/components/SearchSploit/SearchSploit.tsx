@@ -53,7 +53,7 @@ const SearchSploit = () => {
 
     // Tracks the user-facing execution state.
     const [executionStatus, setExecutionStatus] = useState<"idle" | "running" | "success" | "failed" | "cancelled">(
-        "idle"
+        "idle",
     );
 
     const form = useForm<FormValues>({
@@ -104,7 +104,7 @@ const SearchSploit = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // Handle process cancellation.
@@ -141,7 +141,7 @@ const SearchSploit = () => {
                 "searchsploit",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(result.pid);
@@ -229,10 +229,10 @@ const SearchSploit = () => {
                                 executionStatus === "running"
                                     ? "blue"
                                     : executionStatus === "success"
-                                    ? "green"
-                                    : executionStatus === "cancelled"
-                                    ? "gray"
-                                    : "red"
+                                      ? "green"
+                                      : executionStatus === "cancelled"
+                                        ? "gray"
+                                        : "red"
                             }
                             radius="md"
                         >

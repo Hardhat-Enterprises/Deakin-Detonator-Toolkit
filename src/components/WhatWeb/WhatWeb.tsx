@@ -217,7 +217,7 @@ function WhatWeb() {
                 "whatweb",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(pid);
             setOutput(output);

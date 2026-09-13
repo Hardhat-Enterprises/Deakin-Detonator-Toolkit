@@ -1,5 +1,6 @@
 import { Button, Checkbox, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { appCacheDir } from "@tauri-apps/api/path";
 import { useCallback, useState } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -8,15 +9,7 @@ import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFil
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import AskChatGPT from "../AskChatGPT/AskChatGPT";
 import ChatGPTOutput from "../AskChatGPT/ChatGPTOutput";
-
-/**
- * Represents the form values for the Sherlock component.
- */
-interface FormValuesType {
-    username: string;
-    site: string;
-    timeout: number;
-}
+import { buildSherlockArgs, type SherlockFormValues } from "./sherlockArgs";
 
 /**
  * The Sherlock Component
@@ -93,7 +86,7 @@ const Sherlock = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -108,39 +101,33 @@ const Sherlock = () => {
     /**
      * onSubmit: Asynchronous handler for form submission.
      * Triggers the sherlock tool with provided parameters.
-     * @param {FormValuesType} values - The form values containing the username(s), site, and timeout.
+     * @param {SherlockFormValues} values - The form values containing the username(s), site, and timeout.
      */
-    const onSubmit = async (values: FormValuesType) => {
+    const onSubmit = async (values: SherlockFormValues) => {
         // Activate loading state
         setLoading(true);
         // Disallow saving until tool execution is complete
         setAllowSave(false);
 
-        // Construct arguments for Sherlock tool
-        const args = [];
-        if (checkedVerbose) {
-            args.push("--verbose");
-        }
-        if (values.site) {
-            args.push("--site", `${values.site}`);
-        }
-        if (values.timeout) {
-            args.push("--timeout", `${values.timeout}`);
-        }
-        args.push(...values.username.split(" "));
-
         // Run the Sherlock tool using the helper method
         try {
+            const outputDirectory = await appCacheDir();
+            // Sherlock creates --folderoutput itself; no Tauri filesystem access is needed.
+            const args = buildSherlockArgs(values, {
+                verbose: checkedVerbose,
+                outputDirectory,
+            });
+
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "sherlock",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid); // Set process ID
             setOutput(result.output); // Set command output
-        } catch (e: any) {
-            setOutput(e.message); // Display error message if command execution fails
+        } catch (e: unknown) {
+            setOutput(`Unable to start Sherlock: ${e instanceof Error ? e.message : String(e)}`);
             setLoading(false); // Stop loading
         }
     };

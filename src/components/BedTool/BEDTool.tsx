@@ -1,6 +1,7 @@
 import { Button, Select, Stack, Switch, TextInput, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect, useRef } from "react";
+import { invoke } from "@tauri-apps/api/core";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapperWithBuiltinOverlay";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -182,7 +183,7 @@ export function BEDTool() {
 		Tests Completed: ${getTestCategories()}
 		Potential Vulnerabilities Detected: Not confirmed
 		Findings Count: Not available
-		Full Results: Available in the output panel and exported file`
+		Full Results: Available in the output panel and exported file`,
                 );
 
                 handleProcessData("\nProcess completed successfully.");
@@ -193,7 +194,7 @@ export function BEDTool() {
 		Test Categories Observed: ${getTestCategories()}
 		Potential Vulnerabilities Detected: Not confirmed
 		Findings Count: Not available
-		Full Results: Available in the output panel`
+		Full Results: Available in the output panel`,
                 );
                 handleProcessData("\nProcess was manually terminated.");
             } else {
@@ -204,7 +205,7 @@ export function BEDTool() {
             setAllowSave(true); // Allow Saving as the output is finalised.
             setHasSaved(false);
         },
-        [handleProcessData, selectedPlugin, getTestCategories]
+        [handleProcessData, selectedPlugin, getTestCategories],
     );
 
     /**
@@ -218,7 +219,8 @@ export function BEDTool() {
 
     /**
      * onSubmit: Handler function that is triggered when the form is submitted.
-     * It prepares the arguments and initiates the execution of the `bed` command.
+     * It first checks that the target host/port is reachable, then prepares
+     * the arguments and initiates the execution of the `bed` command.
      * @param {FormValuesType} values - An object containing the form input values.
      */
     const onSubmit = (values: FormValuesType) => {
@@ -227,6 +229,25 @@ export function BEDTool() {
         setSummary("");
         outputRef.current = "";
 
+        invoke<void>("check_target_reachable", {
+            host: values.target,
+            port: parseInt(values.port, 10),
+        })
+            .then(() => {
+                runBed(values);
+            })
+            .catch((err: string) => {
+                setLoading(false);
+                setOutput(err);
+            });
+    };
+
+    /**
+     * runBed: Prepares the arguments and initiates execution of the `bed` command.
+     * Only called after the target reachability check passes.
+     * @param {FormValuesType} values - An object containing the form input values.
+     */
+    const runBed = (values: FormValuesType) => {
         const baseArgs = ["-s", values.plugin];
         const conditionalArgs: string[][] = [
             customConfig ? ["-t", values.target, "-p", values.port] : [],
@@ -311,6 +332,12 @@ export function BEDTool() {
                         <Alert title="Manual Network Configuration" color="blue" variant="light">
                             Custom IP address and port can now be specified for this scan. Leave these fields blank to
                             use default settings.
+                        </Alert>
+                    )}
+                    {["SMTP", "POP", "IMAP"].includes(selectedPlugin) && (
+                        <Alert title="No TLS Support" color="yellow" variant="light">
+                            BED does not support TLS. Only test this protocol against plain (non-TLS) local or lab
+                            services — not production or TLS-only endpoints.
                         </Alert>
                     )}
                     <Select

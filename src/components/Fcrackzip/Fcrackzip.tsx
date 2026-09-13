@@ -142,7 +142,7 @@ const Fcrackzip = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -186,7 +186,7 @@ const Fcrackzip = () => {
                 "fcrackzip",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(result.pid);
