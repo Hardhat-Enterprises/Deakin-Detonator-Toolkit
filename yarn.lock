@@ -2204,7 +2204,7 @@ __metadata:
     "@types/react-dom": ^18.0.6
     "@types/uuid": ^10.0.0
     "@vitejs/plugin-react": ^4.3.4
-    dotenv: ^16.4.5
+    dotenv: ^17.4.2
     husky: ^9.1.7
     jsdom: ^20.0.0
     node-fetch: ^3.3.1
@@ -2334,10 +2334,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.4.5":
-  version: 16.4.5
-  resolution: "dotenv@npm:16.4.5"
-  checksum: 301a12c3d44fd49888b74eb9ccf9f07a1f5df43f489e7fcb89647a2edcd84c42d6bc349dc8df099cd18f07c35c7b04685c1a4f3e6a6a9e6b30f8d48c15b7f49c
+"dotenv@npm:^17.4.2":
+  version: 17.4.2
+  resolution: "dotenv@npm:17.4.2"
+  checksum: 217bf2c4696ca40acc13ad063341e9c77cedfdd75e56e4919f4cf2c6333e4f7b38a4b4067e49d006125502a61060cbe85c7eecb0644e4d99ff014693eb7e62c4
   languageName: node
   linkType: hard
 
