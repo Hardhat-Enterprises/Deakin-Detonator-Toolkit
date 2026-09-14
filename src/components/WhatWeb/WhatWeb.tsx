@@ -78,7 +78,7 @@ function WhatWeb() {
         "   - Redirects/Cookies/Auth: Control advanced behaviors.\n" +
         "Step 3: Run WhatWeb and review results. Output can be expanded to fullscreen and saved.";
     const sourceLink = "https://github.com/urbanadventurer/WhatWeb";
-    const tutorial = "https://drive.google.com/file/d/1Pcc5t12GcQLdznHOE2v7B___YyOoE3kB/preview";
+    const tutorial = "https://drive.google.com/file/d/1Pcc5t12GcQLdznHOE2v7B___YyOoE3kB/preview?embedded=true";
     const dependencies = ["whatweb"];
 
     // Form hook
