@@ -86,7 +86,7 @@ const Sherlock = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData],
+        [handleProcessData]
     );
 
     /**
@@ -103,7 +103,15 @@ const Sherlock = () => {
      * Triggers the sherlock tool with provided parameters.
      * @param {SherlockFormValues} values - The form values containing the username(s), site, and timeout.
      */
-    const onSubmit = async (values: SherlockFormValues) => {
+
+    const onSubmit = async (values: FormValuesType) => {
+        const MAX_USERNAME_LENGTH = 50;
+
+        if (values.username.length > MAX_USERNAME_LENGTH) {
+            setOutput(`Username is too long. Maximum allowed length is ${MAX_USERNAME_LENGTH} characters.`);
+            setLoading(false);
+            return;
+        }
         // Activate loading state
         setLoading(true);
         // Disallow saving until tool execution is complete
@@ -122,7 +130,7 @@ const Sherlock = () => {
                 "sherlock",
                 args,
                 handleProcessData,
-                handleProcessTermination,
+                handleProcessTermination
             );
             setPid(result.pid); // Set process ID
             setOutput(result.output); // Set command output
