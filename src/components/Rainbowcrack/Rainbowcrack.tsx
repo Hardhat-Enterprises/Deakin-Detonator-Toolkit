@@ -207,7 +207,7 @@ const RainbowCrack = () => {
                         </div>
                         <label style={{ cursor: "pointer", display: "inline-block" }} onClick={pickRainbowTable}>
                             <img
-                                src="https://static-00.iconduck.com/assets.00/cloud-upload-icon-2048x2048-fej4g14p.png"
+                                src="https://www.svgrepo.com/show/499790/upload.svg"
                                 alt="Upload"
                                 width={80}
                                 height={80}
