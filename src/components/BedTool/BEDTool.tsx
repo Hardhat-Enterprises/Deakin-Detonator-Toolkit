@@ -22,26 +22,64 @@ interface FormValuesType {
     password: string;
 }
 
+interface BedToolStore {
+    loading: boolean;
+    pid: string;
+    output: string;
+    summary: string;
+    allowSave: boolean;
+    hasSaved: boolean;
+    minimized: boolean;
+}
+
+let bedToolStore: BedToolStore = {
+    loading: false,
+    pid: "",
+    output: "",
+    summary: "",
+    allowSave: false,
+    hasSaved: false,
+    minimized: false,
+};
+
+let bedToolRawOutput = "";
+
+type BedToolStoreListener = () => void;
+const bedToolListeners = new Set<BedToolStoreListener>();
+
+function updateBedToolStore(partial: Partial<BedToolStore>) {
+    bedToolStore = { ...bedToolStore, ...partial };
+    bedToolListeners.forEach((listener) => listener());
+}
+
+function useBedToolStore(): BedToolStore {
+    const [, forceRender] = useState({});
+    useEffect(() => {
+        const listener = () => forceRender({});
+        bedToolListeners.add(listener);
+        return () => {
+            bedToolListeners.delete(listener);
+        };
+    }, []);
+    return bedToolStore;
+}
+
 /**
  * The BEDTool component.
  * @returns The BEDTool component.
  */
 export function BEDTool() {
+    //Persistant Component Variables.
+    const { loading, pid, output, summary, allowSave, hasSaved, minimized } = useBedToolStore();
+
     // Component State Variables.
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [summary, setSummary] = useState("");
     const [selectedPlugin, setSelectedPlugin] = useState(""); // State variable to store the selected plugin.
-    const [allowSave, setAllowSave] = useState(false); // State variable boolean to indicate save state.
-    const [hasSaved, setHasSaved] = useState(false); // State variable boolean to indicate if the save has been saved.
     const [customConfig, setCustomConfig] = useState(false); // State variable to toggle manual network configuration.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [showAlert, setShowAlert] = useState(true);
     const alertTimeout = useRef<NodeJS.Timeout | null>(null);
-    const outputRef = useRef("");
 
     // Component Constants.
     const title = "BEDTool"; // Title of the component.
@@ -134,12 +172,12 @@ export function BEDTool() {
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        outputRef.current += "\n" + data;
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
+        bedToolRawOutput += "\n" + data;
+        updateBedToolStore({ output: bedToolStore.output + "\n" + data }); // Append new data to the previous output.
     }, []);
 
     const getTestCategories = () => {
-        const scanOutput = outputRef.current;
+        const scanOutput = bedToolRawOutput;
         const categories: string[] = [];
 
         if (scanOutput.includes("Buffer overflow testing")) {
@@ -177,33 +215,37 @@ export function BEDTool() {
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
-                setSummary(
-                    `Scan Status: Completed
+                updateBedToolStore({
+                    summary: `Scan Status: Completed
 		Target Connection: Successful
 		Tests Completed: ${getTestCategories()}
 		Potential Vulnerabilities Detected: Not confirmed
 		Findings Count: Not available
 		Full Results: Available in the output panel and exported file`,
-                );
+                });
 
                 handleProcessData("\nProcess completed successfully.");
             } else if (signal === 15) {
-                setSummary(
-                    `Scan Status: Partially Completed
+                updateBedToolStore({
+                    summary: `Scan Status: Partially Completed
 		Target Connection: Successful
 		Test Categories Observed: ${getTestCategories()}
 		Potential Vulnerabilities Detected: Not confirmed
 		Findings Count: Not available
 		Full Results: Available in the output panel`,
-                );
+                });
                 handleProcessData("\nProcess was manually terminated.");
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-            setPid(""); // Clear the child process pid reference.
-            setLoading(false); // Cancel the loading overlay.
-            setAllowSave(true); // Allow Saving as the output is finalised.
-            setHasSaved(false);
+
+            updateBedToolStore({
+                pid: "", // Clear the child process pid reference.
+                loading: false, // Cancel the loading overlay.
+                allowSave: true, // Allow Saving as the output is finalised.
+                hasSaved: false,
+                minimized: false, //Un-minimize as result is visible
+            });
         },
         [handleProcessData, selectedPlugin, getTestCategories],
     );
@@ -213,8 +255,7 @@ export function BEDTool() {
      * Sets the hasSaved flag to true and disallows further saving.
      */
     const handleSaveComplete = () => {
-        setHasSaved(true);
-        setAllowSave(false);
+        updateBedToolStore({ hasSaved: true, allowSave: false });
     };
 
     /**
@@ -224,10 +265,8 @@ export function BEDTool() {
      * @param {FormValuesType} values - An object containing the form input values.
      */
     const onSubmit = (values: FormValuesType) => {
-        setAllowSave(false);
-        setLoading(true);
-        setSummary("");
-        outputRef.current = "";
+        updateBedToolStore({ allowSave: false, loading: true, summary: "", minimized: false });
+        bedToolRawOutput = "";
 
         invoke<void>("check_target_reachable", {
             host: values.target,
@@ -237,8 +276,7 @@ export function BEDTool() {
                 runBed(values);
             })
             .catch((err: string) => {
-                setLoading(false);
-                setOutput(err);
+                updateBedToolStore({ loading: false, output: err });
             });
     };
 
@@ -261,12 +299,10 @@ export function BEDTool() {
 
         CommandHelper.runCommandGetPidAndOutput("bed", args, handleProcessData, handleProcessTermination)
             .then(({ pid, output }) => {
-                setPid(pid);
-                setOutput(output);
+                updateBedToolStore({ pid, output });
             })
             .catch((error) => {
-                setLoading(false);
-                setOutput(`Error: ${error.message}`);
+                updateBedToolStore({ loading: false, output: `Error: ${error.message}` });
             });
     };
 
@@ -274,10 +310,8 @@ export function BEDTool() {
      * Function to clear output and reset save status.
      */
     const clearOutput = useCallback(() => {
-        setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
-    }, [setOutput]);
+        updateBedToolStore({ output: "", hasSaved: false, allowSave: false });
+    }, []);
 
     /**
      * Handler for selecting a service plugin from the dropdown menu.
@@ -313,7 +347,9 @@ export function BEDTool() {
                             </Button>
                         )}
                     </Group>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    {LoadingOverlayAndCancelButton(loading, pid, minimized, (v) =>
+                        updateBedToolStore({ minimized: v }),
+                    )}
 
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
@@ -404,7 +440,9 @@ export function BEDTool() {
                         </>
                     )}
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type={"submit"}>Scan</Button>
+                    <Button type={"submit"} disabled={loading}>
+                        Scan
+                    </Button>
                     {summary && (
                         <Alert title="Vulnerability Summary" color="blue">
                             <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{summary}</pre>
