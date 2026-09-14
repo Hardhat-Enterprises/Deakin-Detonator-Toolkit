@@ -129,7 +129,7 @@ const CloudBrute = () => {
             setPid("");
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**

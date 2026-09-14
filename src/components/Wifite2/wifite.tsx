@@ -92,7 +92,7 @@ const Wifite2 = () => {
             setPid("");
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     const onSubmit = async (values: FormValuesType) => {

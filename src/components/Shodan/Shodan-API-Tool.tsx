@@ -35,7 +35,7 @@ export function ShodanAPITool() {
 
     // Tracks the user-facing execution state.
     const [executionStatus, setExecutionStatus] = useState<"idle" | "running" | "success" | "failed" | "cancelled">(
-        "idle"
+        "idle",
     );
 
     // Component Constants.
@@ -115,7 +115,7 @@ export function ShodanAPITool() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -155,7 +155,7 @@ export function ShodanAPITool() {
                 "shodan",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(result.pid);
@@ -205,10 +205,10 @@ export function ShodanAPITool() {
                                 executionStatus === "running"
                                     ? "blue"
                                     : executionStatus === "success"
-                                    ? "green"
-                                    : executionStatus === "cancelled"
-                                    ? "gray"
-                                    : "red"
+                                      ? "green"
+                                      : executionStatus === "cancelled"
+                                        ? "gray"
+                                        : "red"
                             }
                             radius="md"
                         >
