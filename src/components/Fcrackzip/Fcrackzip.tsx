@@ -75,6 +75,39 @@ const Fcrackzip = () => {
             maxLength: 3,
             charSet: "",
         },
+
+        validate: {
+            minLength: (value, values) => {
+                if (attackMethod !== "BruteForce") return null;
+
+                const str = String(value).trim();
+
+                if (str === "") return "Minimum length is required";
+                if (!/^\d+$/.test(str)) return "Minimum length must be a positive whole number";
+                if (parseInt(str, 10) < 1) return "Minimum length must be at least 1";
+                if (values.maxLength && parseInt(str, 10) > Number(values.maxLength)) {
+                    return "Minimum length must be less than or equal to maximum length";
+                }
+
+                return null;
+            },
+
+            maxLength: (value, values) => {
+                if (attackMethod !== "BruteForce") return null;
+
+                const str = String(value).trim();
+
+                if (str === "") return "Maximum length is required";
+                if (!/^\d+$/.test(str)) return "Maximum length must be a positive whole number";
+                if (parseInt(str, 10) < 1) return "Maximum length must be at least 1";
+
+                if (values.minLength && parseInt(str, 10) < Number(values.minLength)) {
+                    return "Maximum length must be greater than or equal to minimum length";
+                }
+
+                return null;
+            },
+        },
     });
 
     // Check if the command is available and set the state variables accordingly.
