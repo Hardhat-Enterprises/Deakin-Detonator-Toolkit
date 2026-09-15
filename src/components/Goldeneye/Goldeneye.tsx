@@ -51,7 +51,7 @@ const Goldeneye = () => {
     const sourceLink = "https://www.kali.org/tools/goldeneye/"; // Link to the source code (or Kali Tools).
     const tutorial = "https://docs.google.com/document/d/1ZJzgzzECVu2s2T4SrH-e-Xiqon08LJq3amBwjPrD5ww/edit?usp=sharing"; // Link to the official documentation/tutorial.
     const dependencies = ["python3"]; // Contains the dependencies required by the component.
-    const scriptPath = "src-tauri/exploits/Goldeneye/goldeneye.py";
+    const scriptPath = "exploits/Goldeneye/goldeneye.py";
     const dosHttpMethod = ["get", "post", "random"]; //Contains types of dosHttpMethod available
     const sslCheckStatus = ["Yes", "No"]; //Contains selection for form value sslCheckStatus
 
