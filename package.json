@@ -13,7 +13,8 @@
         "prepare": "husky install",
         "test": "vitest",
         "coverage": "vitest run --coverage",
-        "update": "node cd_scripts/update.mjs"
+        "update": "node cd_scripts/update.mjs",
+        "docs:tools": "node scripts/generate-tools-doc.mjs"
     },
     "link-staged": {
         "*{tsx,css}": [
