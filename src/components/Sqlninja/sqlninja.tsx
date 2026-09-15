@@ -121,7 +121,7 @@ function Sqlninja() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -178,7 +178,7 @@ function Sqlninja() {
                 "sqlninja",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(result.pid);
@@ -235,10 +235,10 @@ function Sqlninja() {
                                 executionStatus === "running"
                                     ? "blue"
                                     : executionStatus === "success"
-                                    ? "green"
-                                    : executionStatus === "cancelled"
-                                    ? "gray"
-                                    : "red"
+                                      ? "green"
+                                      : executionStatus === "cancelled"
+                                        ? "gray"
+                                        : "red"
                             }
                             radius="md"
                         >

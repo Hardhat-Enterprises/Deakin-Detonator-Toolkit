@@ -22,6 +22,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import { open } from "@tauri-apps/plugin-dialog";
 
 /**
  * Represents the form values for the WhatWeb component.
@@ -77,7 +78,7 @@ function WhatWeb() {
         "   - Redirects/Cookies/Auth: Control advanced behaviors.\n" +
         "Step 3: Run WhatWeb and review results. Output can be expanded to fullscreen and saved.";
     const sourceLink = "https://github.com/urbanadventurer/WhatWeb";
-    const tutorial = "https://docs.google.com/document/d/1IUrB6sX_Ykk5hyrcelRSwi4l7QMqc_YxpyEPCmUarzc/edit?usp=sharing";
+    const tutorial = "https://drive.google.com/file/d/1Pcc5t12GcQLdznHOE2v7B___YyOoE3kB/preview?embedded=true";
     const dependencies = ["whatweb"];
 
     // Form hook
@@ -171,6 +172,17 @@ function WhatWeb() {
         setAllowSave(false);
     };
 
+    const pickInputFile = async () => {
+        const selected = await open({
+            filters: [{ name: "Text File", extensions: ["txt"] }],
+            multiple: false,
+        });
+
+        if (typeof selected === "string") {
+            form.setFieldValue("inputFile", selected);
+        }
+    };
+
     // Submit handler
     const onSubmit = async (values: FormValuesType) => {
         if (!values.target.trim() && !values.inputFile.trim()) {
@@ -185,6 +197,7 @@ function WhatWeb() {
 
         const args: string[] = [];
         if (values.inputFile) args.push("-i", values.inputFile);
+
         if (values.aggression) args.push("-a", values.aggression);
         if (values.userAgent) args.push("-U", values.userAgent);
         if (values.followRedirect) args.push(`--follow-redirect=${values.followRedirect}`);
@@ -194,14 +207,17 @@ function WhatWeb() {
         if (values.verbose) args.push("-v");
         if (values.logFormat) args.push(`--log-${values.logFormat}=-`);
         if (values.maxThreads > 0) args.push("-t", String(values.maxThreads));
-        args.push(values.target);
+
+        if (values.target.trim()) {
+            args.push(values.target.trim());
+        }
 
         try {
             const { pid, output } = await CommandHelper.runCommandGetPidAndOutput(
                 "whatweb",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(pid);
             setOutput(output);
@@ -315,7 +331,14 @@ function WhatWeb() {
                             {/* Step 1 */}
                             <Stepper.Step label="Target">
                                 <TextInput label="Target URL or IP" required {...form.getInputProps("target")} />
-                                <TextInput label="Input File" {...form.getInputProps("inputFile")} />
+                                <Group align="end">
+                                    <TextInput
+                                        label="Input File"
+                                        style={{ flex: 1 }}
+                                        {...form.getInputProps("inputFile")}
+                                    />
+                                    <Button onClick={pickInputFile}>Browse</Button>
+                                </Group>
                                 <Group mt={20} position="right">
                                     <Button onClick={nextStep}>Next</Button>
                                 </Group>

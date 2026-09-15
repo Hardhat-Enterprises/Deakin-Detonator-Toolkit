@@ -105,7 +105,7 @@ const HintedToolGrid: React.FC<HintedToolGridProps> = ({ tool, hints = [], devel
                     >
                         {i}%
                     </span>
-                </div>
+                </div>,
             );
         }
         // Generate horizontal lines
@@ -134,7 +134,7 @@ const HintedToolGrid: React.FC<HintedToolGridProps> = ({ tool, hints = [], devel
                     >
                         {i}%
                     </span>
-                </div>
+                </div>,
             );
         }
 

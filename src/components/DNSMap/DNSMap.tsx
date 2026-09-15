@@ -316,7 +316,7 @@ const DNSMap = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     // Saving complete
@@ -357,7 +357,7 @@ const DNSMap = () => {
         if (!isValidDomainSyntax(sanitised)) {
             if (tryAutocorrect()) return;
             setErrorMsg(
-                `Invalid domain "${rawDomain}". Please enter a valid domain like "example.com" or "deakin.edu.au".`
+                `Invalid domain "${rawDomain}". Please enter a valid domain like "example.com" or "deakin.edu.au".`,
             );
             return;
         }
