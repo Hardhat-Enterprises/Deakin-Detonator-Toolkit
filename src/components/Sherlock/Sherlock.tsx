@@ -104,6 +104,11 @@ const Sherlock = () => {
      * @param {SherlockFormValues} values - The form values containing the username(s), site, and timeout.
      */
     const onSubmit = async (values: SherlockFormValues) => {
+        if (!values.user.trim()) {
+            setOutput("Please enter a valid username.");
+            setLoading(false);
+            return;
+        }
         // Activate loading state
         setLoading(true);
         // Disallow saving until tool execution is complete
