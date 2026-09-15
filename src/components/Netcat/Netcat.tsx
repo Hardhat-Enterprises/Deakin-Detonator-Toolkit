@@ -206,7 +206,7 @@ const NetcatTool = () => {
                 args = ["-z", verboseFlag, "-w", "5", values.ipAddress, values.portNumber];
                 break;
             case "Website Port Scan":
-                args = ["-z", verboseFlag, "-w", "5", values.websiteUrl, values.portNumber];
+                args = ["-z", ...(checkedVerboseMode ? ["-v"] : []), "-w", "5", values.websiteUrl, values.portNumber,];
                 break;
             case "Send File":
                 // confirm file presence again, but keep same execution behaviour
