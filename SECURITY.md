@@ -42,3 +42,5 @@ Contributors and students interested in reviewing or fixing repository security 
 ## Responsible Disclosure
 
 Please follow responsible disclosure practices and only test vulnerabilities in approved or authorised environments.
+
+[Back](README.md)
