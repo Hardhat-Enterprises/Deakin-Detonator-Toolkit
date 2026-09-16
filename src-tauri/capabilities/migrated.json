@@ -349,6 +349,12 @@
         },
         {
           "args": true,
+          "cmd": "/usr/share/ddt/GyoiThon/venv/bin/python",
+          "name": "gyoithon-python",
+          "sidecar": false
+        },
+        {
+          "args": true,
           "cmd": "rar2john",
           "name": "rar2john",
           "sidecar": false
@@ -824,6 +830,12 @@
           "args": true,
           "cmd": "python3",
           "name": "python3",
+          "sidecar": false
+        },
+        {
+          "args": true,
+          "cmd": "/usr/share/ddt/GyoiThon/venv/bin/python",
+          "name": "gyoithon-python",
           "sidecar": false
         },
         {
