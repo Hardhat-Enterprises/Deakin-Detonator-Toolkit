@@ -29,6 +29,6 @@ export function buildSherlockArgs(values: SherlockFormValues, options: SherlockO
         args.push("--timeout", `${values.timeout}`);
     }
 
-    args.push(...values.username.trim().split(/\s+/));
+    args.push("--", ...values.username.trim().split(/\s+/));
     return args;
 }
