@@ -104,7 +104,7 @@ const Sherlock = () => {
      * @param {SherlockFormValues} values - The form values containing the username(s), site, and timeout.
      */
     const onSubmit = async (values: SherlockFormValues) => {
-        if (!values.user.trim()) {
+        if (!values.username.trim()) {
             setOutput("Please enter a valid username.");
             setLoading(false);
             return;
