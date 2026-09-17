@@ -1,0 +1,48 @@
+name: Tool Documentation
+
+on:
+    pull_request:
+        branches:
+            - main
+            - dev
+        paths:
+            - "src/components/RouteWrapper.tsx"
+            - "scripts/generate-tools-doc.mjs"
+
+    workflow_dispatch:
+
+jobs:
+    verify-tools-doc:
+        name: Verify generated tool documentation
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+
+            - name: Enable Corepack
+              run: corepack enable
+
+            - name: Install dependencies
+              run: corepack yarn install --immutable
+
+            - name: Generate tool documentation
+              run: corepack yarn docs:tools
+
+            - name: Verify documentation is current
+              run: |
+                  if ! git diff --exit-code docs/TOOLS.md; then
+                    echo ""
+                    echo "ERROR: docs/TOOLS.md is out of date."
+                    echo "Run the following command locally:"
+                    echo ""
+                    echo "  corepack yarn docs:tools"
+                    echo ""
+                    echo "Then commit the updated docs/TOOLS.md file to this pull request."
+                    exit 1
+                  fi
