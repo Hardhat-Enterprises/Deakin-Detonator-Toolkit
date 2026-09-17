@@ -108,7 +108,7 @@ const Urlsnarf = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -207,7 +207,7 @@ const Urlsnarf = () => {
                     onSubmit({
                         ...values,
                         listenerInputType: selectedListenerInput,
-                    })
+                    }),
                 )}
             >
                 {LoadingOverlayAndCancelButton(loading, pid)}

@@ -125,7 +125,7 @@ const Masscan = () => {
             // Cancel the loading overlay. The process has completed.
             setLoading(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
@@ -175,7 +175,7 @@ const Masscan = () => {
 
         CommandHelper;
         // Execute the Masscan command via helper method and handle its output or potential errors
-        CommandHelper.runCommandWithPkexec("masscan", args, handleProcessData, handleProcessTermination)
+        CommandHelper.runCommandWithPkexec("masscan", args, handleProcessData, handleProcessTermination, setPid)
             .then(({ output, pid }) => {
                 setOutput(output);
                 setPid(pid);

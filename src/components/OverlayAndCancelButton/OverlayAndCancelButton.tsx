@@ -1,4 +1,4 @@
-import { LoadingOverlay, Button, Modal } from "@mantine/core";
+import { LoadingOverlay, Button, Modal, Affix } from "@mantine/core";
 import { CommandHelper } from "../../utils/CommandHelper";
 import { Command } from "@tauri-apps/plugin-shell";
 
@@ -8,7 +8,12 @@ import { Command } from "@tauri-apps/plugin-shell";
  * @param pid - The exit code of the terminated process.
  * @returns A Loading Overlay with cancel button
  */
-export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
+export function LoadingOverlayAndCancelButton(
+    loading: boolean,
+    pid: string,
+    minimized: boolean = false,
+    setMinimized: (minimized: boolean) => void = () => {},
+) {
     // Sends a SIGTERM signal to gracefully terminate the active process passed as an argument
     const handleCancel = () => {
         if (pid !== null) {
@@ -17,13 +22,25 @@ export function LoadingOverlayAndCancelButton(loading: boolean, pid: string) {
         }
     };
 
+    if (minimized) {
+        return (
+            <Affix position={{ bottom: 20, right: 20 }} zIndex={1500}>
+                <Button color="blue" radius="xl" onClick={() => setMinimized(false)}>
+                    Process running - click to view
+                </Button>
+            </Affix>
+        );
+    }
+
     return (
         <>
             <LoadingOverlay visible={false} overlayBlur={3} style={{ zIndex: 1000, position: "fixed" }} />
             {loading && (
                 <Modal
                     opened={loading}
-                    onClose={() => {}}
+                    onClose={() => {
+                        setMinimized(true);
+                    }}
                     title=""
                     centered
                     withCloseButton={false}
@@ -69,7 +86,7 @@ export function LoadingOverlayAndCancelButtonPkexec(
     // function, you will get a warning, but the function will still work. To avoid getting a warning, simply include emtpy quotation marks in pid2's place. Example:
     // {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
     onData: (data: string) => void,
-    onTermination: ({ code, signal }: { code: number; signal: number }) => void
+    onTermination: ({ code, signal }: { code: number; signal: number }) => void,
 ) {
     // Sends a privileged SIGINT signal to gracefully terminate the active root-owned process.
     // arpspoof is spawned via pkexec, so it is owned by root - an unprivileged `kill` here

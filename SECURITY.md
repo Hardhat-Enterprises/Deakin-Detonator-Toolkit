@@ -23,11 +23,11 @@ Please avoid publicly disclosing vulnerabilities until they have been reviewed b
 
 When reporting an issue, try to include:
 
--   Description of the vulnerability
--   Steps to reproduce the issue
--   Affected files, tools, or features
--   Possible impact
--   Suggested fix (if available)
+- Description of the vulnerability
+- Steps to reproduce the issue
+- Affected files, tools, or features
+- Possible impact
+- Suggested fix (if available)
 
 ---
 
@@ -42,3 +42,5 @@ Contributors and students interested in reviewing or fixing repository security 
 ## Responsible Disclosure
 
 Please follow responsible disclosure practices and only test vulnerabilities in approved or authorised environments.
+
+[Back](README.md)

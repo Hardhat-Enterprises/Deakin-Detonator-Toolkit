@@ -157,7 +157,7 @@ const dmitry = () => {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     // Actions taken after saving the output
@@ -265,7 +265,7 @@ const dmitry = () => {
                 "dmitry",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(result.pid);
             setOutput(result.output);

@@ -126,7 +126,7 @@ const TheHarvester = () => {
             setLoading(false);
             setAllowSave(true);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     const handleSaveComplete = () => {
@@ -221,7 +221,7 @@ const TheHarvester = () => {
                 "theHarvester",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(result.pid);
@@ -235,7 +235,7 @@ const TheHarvester = () => {
             const message = error instanceof Error ? error.message : "theHarvester failed to start.";
 
             setOutput((previousOutput) =>
-                previousOutput ? `${previousOutput}\n\nError: ${message}` : `Error: ${message}`
+                previousOutput ? `${previousOutput}\n\nError: ${message}` : `Error: ${message}`,
             );
             setPid("");
             setLoading(false);

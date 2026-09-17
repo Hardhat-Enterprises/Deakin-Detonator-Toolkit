@@ -121,7 +121,7 @@ function Subjack() {
 
             setOutput((prevOutput) => prevOutput + "\n" + lines.join("\n"));
         },
-        [form.values.targetDomain]
+        [form.values.targetDomain],
     );
 
     /**
@@ -143,7 +143,7 @@ function Subjack() {
             setAllowSave(true);
             setHasSaved(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -184,7 +184,7 @@ function Subjack() {
                 "subjack",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setPid(pid);
             setOutput(output);
