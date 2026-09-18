@@ -19,6 +19,184 @@ interface FormValuesType {
 }
 
 /**
+ * Normalizes a file or directory path:
+ * - Trims whitespace
+ * - Collapses consecutive slashes
+ * - Resolves '.' and '..' segments
+ * - Strips trailing slash (unless path is '/')
+ *
+ * @param {string} p - Path to normalize
+ * @returns {string} Normalized path
+ */
+export const normalizePath = (p: string): string => {
+    const trimmed = (p || "").trim();
+    if (!trimmed) return "";
+
+    const isAbsolute = trimmed.startsWith("/");
+    const segments = trimmed.split("/").filter(Boolean);
+    const resolved: string[] = [];
+
+    for (const segment of segments) {
+        if (segment === ".") continue;
+        if (segment === "..") {
+            resolved.pop();
+        } else {
+            resolved.push(segment);
+        }
+    }
+
+    const normalized = (isAbsolute ? "/" : "") + resolved.join("/");
+    return normalized || (isAbsolute ? "/" : "");
+};
+
+/**
+ * Validates the file path for EyeWitness.
+ * Must be an absolute path pointing to a file (not root, not a directory).
+ *
+ * @param {string} filePath - Input file path to validate.
+ * @returns {string | null} Error message if invalid, null if valid.
+ */
+export const validateFilePath = (filePath: string): string | null => {
+    const trimmed = (filePath || "").trim();
+    if (!trimmed) {
+        return "File path is required.";
+    }
+
+    if (!trimmed.startsWith("/")) {
+        return "File path must be an absolute path (start with /).";
+    }
+
+    const normalized = normalizePath(trimmed);
+    if (normalized === "/") {
+        return "File path cannot be the root directory.";
+    }
+
+    if (trimmed.endsWith("/") && normalized !== "/") {
+        return "File path must point to a file, not a directory.";
+    }
+
+    return null;
+};
+
+// Top-level system directories that should never be targeted for output purge
+const SYSTEM_DIRECTORIES = new Set([
+    "/",
+    "/bin",
+    "/boot",
+    "/dev",
+    "/etc",
+    "/home",
+    "/lib",
+    "/lib32",
+    "/lib64",
+    "/libx32",
+    "/media",
+    "/mnt",
+    "/opt",
+    "/proc",
+    "/root",
+    "/run",
+    "/sbin",
+    "/srv",
+    "/sys",
+    "/tmp",
+    "/usr",
+    "/var",
+]);
+
+/**
+ * Validates the output directory for EyeWitness.
+ * EyeWitness invokes shutil.rmtree on existing output directories under --no-prompt.
+ * This validator prevents data loss by disallowing root/system directories,
+ * user home/desktop directories, app directories, and directories containing the input file.
+ *
+ * @param {string} directory - Output directory to validate.
+ * @param {string} [filePath] - Optional input file path to check for containment conflict.
+ * @returns {string | null} Error message if invalid, null if valid.
+ */
+export const validateOutputDirectory = (directory: string, filePath?: string): string | null => {
+    const trimmed = (directory || "").trim();
+    if (!trimmed) {
+        return "Output directory is required.";
+    }
+
+    if (!trimmed.startsWith("/")) {
+        return "Output directory must be an absolute path (start with /).";
+    }
+
+    const normDir = normalizePath(trimmed);
+
+    if (normDir === "/") {
+        return "Output directory cannot be the root directory.";
+    }
+
+    if (SYSTEM_DIRECTORIES.has(normDir)) {
+        return `Output directory cannot be a system directory (${normDir}).`;
+    }
+
+    // Protect user home directory (e.g., /home/kali)
+    if (/^\/home\/[^/]+$/i.test(normDir)) {
+        return `Output directory cannot be the user home directory. Please specify a dedicated subfolder (e.g., ${normDir}/eyewitness_results).`;
+    }
+
+    // Protect user common library directories (Desktop, Documents, Downloads, etc.)
+    const userCommonDirRegex =
+        /^\/(?:home\/[^/]+|root)\/(?:Desktop|Documents|Downloads|Music|Pictures|Videos|Public|Templates)$/i;
+    if (userCommonDirRegex.test(normDir)) {
+        return `Output directory cannot be a common user folder (${normDir}). Please specify a dedicated subfolder (e.g., ${normDir}/eyewitness_results).`;
+    }
+
+    // Protect the application directory itself
+    if (normDir.endsWith("/Deakin-Detonator-Toolkit") || normDir.includes("/Deakin-Detonator-Toolkit/")) {
+        return "Output directory cannot be within the Deakin-Detonator-Toolkit directory.";
+    }
+
+    // Check if input file is inside or matches the output directory
+    if (filePath && filePath.trim()) {
+        const normFile = normalizePath(filePath);
+        if (normDir === normFile) {
+            return "Output directory cannot be the same as the input file path.";
+        }
+
+        const dirPrefix = normDir === "/" ? "/" : `${normDir}/`;
+        if (normFile.startsWith(dirPrefix)) {
+            return "Output directory contains the input file. EyeWitness purges the output directory before scanning; please specify a dedicated directory separate from the input file.";
+        }
+    }
+
+    return null;
+};
+
+/**
+ * Validates timeout input for EyeWitness.
+ * Must be a positive integer.
+ *
+ * @param {string} timeout - Timeout string to validate.
+ * @returns {string | null} Error message if invalid, null if valid.
+ */
+export const validateTimeout = (timeout: string): string | null => {
+    const trimmed = (timeout || "").trim();
+    if (!trimmed) {
+        return "Timeout is required.";
+    }
+
+    if (!/^\d+$/.test(trimmed)) {
+        return "Timeout must be a positive integer (e.g., 15).";
+    }
+
+    const parsed = parseInt(trimmed, 10);
+    if (parsed <= 0) {
+        return "Timeout must be greater than 0.";
+    }
+
+    if (parsed > 3600) {
+        return "Timeout cannot exceed 3600 seconds.";
+    }
+
+    return null;
+};
+
+/**
  * The Eyewitness component.
  * @returns The Eyewitness component.
  */
@@ -27,7 +205,7 @@ const description =
     "EyeWitness takes screenshots of websites, provides information about the server header, and identifies default credentials (if known). It presents this information in a HTML report.";
 const steps =
     "Step 1: Create a plain text file on your local drive and add URLs to it. Each URL must be on its own line. Add the file path to the text file in the first field. \n\n" +
-    "Step 2: Add the file path for where you want the output saved in the second field.\n\n" +
+    "Step 2: Add the file path for a dedicated directory where you want the output saved in the second field (e.g., /home/kali/Desktop/eyewitness_results). Note: EyeWitness purges existing files in the output directory.\n\n" +
     "Step 3: Add a number in the third field for the maximum number of seconds for EyeWitness to try and screenshot a webpage, e.g. 20. \n\n" +
     "Step 4: Press the scan button. ";
 const sourceLink = "https://www.kali.org/tools/eyewitness/#eyewitness"; // Link to the source code or relevant documentation.
@@ -52,6 +230,11 @@ function Eyewitness() {
             filePath: "",
             directory: "",
             timeout: "",
+        },
+        validate: {
+            filePath: (value) => validateFilePath(value),
+            directory: (value, values) => validateOutputDirectory(value, values.filePath),
+            timeout: (value) => validateTimeout(value),
         },
     });
 
@@ -125,7 +308,7 @@ function Eyewitness() {
             setAllowSave(true); // Allow Saving as the output is finalised
             setHasSaved(false); // Reset save status
         },
-        [handleProcessData],
+        [handleProcessData]
     );
 
     // Actions taken after saving the output
@@ -147,26 +330,35 @@ function Eyewitness() {
      * @returns {Promise<void>} - An asynchronous operation.
      */
     const onSubmit = async (values: FormValuesType) => {
-        setAllowSave(false); // Disallow saving until the tool's execution is complete
+        if (form.validate().hasErrors) {
+            return;
+        }
 
+        const fileError = validateFilePath(values.filePath);
+        if (fileError) {
+            setOutput(`Error: ${fileError}`);
+            return;
+        }
+
+        const dirError = validateOutputDirectory(values.directory, values.filePath);
+        if (dirError) {
+            setOutput(`Error: ${dirError}`);
+            return;
+        }
+
+        const timeoutError = validateTimeout(values.timeout);
+        if (timeoutError) {
+            setOutput(`Error: ${timeoutError}`);
+            return;
+        }
+
+        setAllowSave(false); // Disallow saving until the tool's execution is complete
         setLoading(true); // Enable the Loading Overlay
 
-        if (!values.filePath.startsWith("/")) {
-            setLoading(false);
-            setOutput("Error: File path must be an absolute path (start with /).");
-            return;
-        }
-
-        if (!values.directory.startsWith("/")) {
-            setLoading(false);
-            setOutput("Error: Output directory must be an absolute path (start with /).");
-            return;
-        }
-
-        const args = [`-f`, `${values.filePath}`];
+        const args = [`-f`, `${values.filePath.trim()}`];
         args.push(`--web`);
-        args.push(`-d`, `${values.directory}`);
-        args.push(`--timeout`, `${values.timeout}`);
+        args.push(`-d`, `${values.directory.trim()}`);
+        args.push(`--timeout`, `${values.timeout.trim()}`);
         args.push(`--no-prompt`);
 
         CommandHelper.runCommandGetPidAndOutput("eyewitness", args, handleProcessData, handleProcessTermination)
@@ -225,7 +417,7 @@ function Eyewitness() {
                     <p>{description}</p>
                     <TextInput
                         label={"Enter the file name or path containing URLs:"}
-                        placeholder={"Example: /home/kali/Desktop/filename"}
+                        placeholder={"Example: /home/kali/Desktop/urls.txt"}
                         required
                         {...form.getInputProps("filePath")}
                     />
@@ -233,11 +425,16 @@ function Eyewitness() {
                         label={
                             "Enter the directory name where you want to save screenshots or define path of directory:"
                         }
-                        placeholder={"Example: /home/kali/Directory name"}
+                        placeholder={"Example: /home/kali/Desktop/eyewitness_results"}
                         required
                         {...form.getInputProps("directory")}
                     />
-                    <TextInput label={"Enter the timeout time"} required {...form.getInputProps("timeout")} />
+                    <TextInput
+                        label={"Enter the timeout time (in seconds):"}
+                        placeholder={"Example: 15"}
+                        required
+                        {...form.getInputProps("timeout")}
+                    />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
                     <Button type={"submit"}>Scan</Button>
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
