@@ -41,17 +41,54 @@ interface FormValuesType {
     maxThreads: number;
 }
 
+interface WhatWebStore {
+    loading: boolean;
+    pid: string;
+    output: string;
+    allowSave: boolean;
+    hasSaved: boolean;
+    minimized: boolean;
+}
+
+let whatWebStore: WhatWebStore = {
+    loading: false,
+    pid: "",
+    output: "",
+    allowSave: false,
+    hasSaved: false,
+    minimized: false,
+};
+
+let whatWebRawOutput = "";
+
+type WhatWebStoreListener = () => void;
+const whatWebListeners = new Set<WhatWebStoreListener>();
+
+function updateWhatWebStore(partial: Partial<WhatWebStore>) {
+    whatWebStore = { ...whatWebStore, ...partial };
+    whatWebListeners.forEach((listener) => listener());
+}
+
+function useWhatWebStore(): WhatWebstore {
+    const [, forceRender] = useState({});
+    useEffect(() => {
+        const listener = () => forceRender({});
+        whatWebListeners.add(listener);
+        return () => {
+            whatWebListeners.delete(listener);
+        };
+    }, []);
+    return whatWebStore;
+}
+
 /**
  * The WhatWeb component.
  * @returns The WhatWeb component.
  */
 function WhatWeb() {
+    const { loading, pid, output, allowSave, hasSaved, minimized } = useWhatWebStore();
+
     // Declare state variables for component
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
     const [active, setActive] = useState(0);
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [opened, setOpened] = useState(!isCommandAvailable);
@@ -136,40 +173,40 @@ function WhatWeb() {
 
     // Process handlers
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data);
+        whatWebRawOutput += "\n" + data;
+        updateWhatWebStore({ output: whatWebStore.output + "\n" + data });
     }, []);
 
-    const handleProcessTermination = useCallback(({ code, signal }: { code: number; signal: number }) => {
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-            setTimeoutId(null);
-        }
-        setOutput((prevOutput) => {
-            const hasError =
-                prevOutput.includes("ERROR") ||
-                prevOutput.includes("execution expired") ||
-                prevOutput.includes("No plugins selected") ||
-                prevOutput.includes("not found");
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                setTimeoutId(null);
+            }
 
             if (code === 0 && !hasError) {
-                return prevOutput + "\nProcess completed successfully.";
+                handleProcessData("\nProcess completed successfully.");
             } else if (signal === 15) {
-                return prevOutput + "\nProcess was manually terminated.";
+                handleProcessData("\nProcess was manually terminated.");
             } else if (code === 0 && hasError) {
-                return prevOutput + "\nProcess finished with errors.";
+                handleProcessData("\nProcess finished with errors.");
             } else {
-                return prevOutput + `\nProcess terminated with exit code: ${code} and signal code: ${signal}`;
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-        });
 
-        setLoading(false);
-        setAllowSave(true);
-        setHasSaved(false);
-    }, []);
+            updateWhatWebStore({
+                pid: "", // Clear the child process pid reference.
+                loading: false, // Cancel the loading overlay.
+                allowSave: true, // Allow Saving as the output is finalised.
+                hasSaved: false,
+                minimized: false, //Un-minimize as result is visible
+            });
+        },
+        [handleProcessData],
+    );
 
     const handleSaveComplete = () => {
-        setHasSaved(true);
-        setAllowSave(false);
+        updateWhatWebStore({ hasSaved: true, allowSave: false });
     };
 
     const pickInputFile = async () => {
@@ -191,9 +228,8 @@ function WhatWeb() {
             return;
         }
 
-        setOutput("");
-        setLoading(true);
-        setAllowSave(false);
+        updateWhatWebStore({ allowSave: false, loading: true, minimized: false });
+        whatWebRawOutput = "";
 
         const args: string[] = [];
         if (values.inputFile) args.push("-i", values.inputFile);
@@ -219,30 +255,33 @@ function WhatWeb() {
                 handleProcessData,
                 handleProcessTermination,
             );
-            setPid(pid);
-            setOutput(output);
+            updateWhatWebStore({ pid, output });
 
             const timer = setTimeout(() => {
                 if (pid) {
                     CommandHelper.runCommand("kill", ["-15", pid]);
-                    setOutput((prevOutput) => prevOutput + "\nScan timed out after 120 seconds.");
-                    setLoading(false);
-                    setAllowSave(true);
-                    setHasSaved(false);
+                    updateWhatWebStore({
+                        loading: false,
+                        allowSave: false,
+                        hasSaved: false,
+                        output: "Scan timed out after 120 seconds.",
+                        minimized: false,
+                    });
                 }
             }, 120000);
             setTimeoutId(timer);
         } catch (error: any) {
-            setOutput(`Error: ${error.message}`);
-            setLoading(false);
-            setAllowSave(true);
+            updateWhatWebStore({
+                loading: false,
+                allowSave: true,
+                output: `Error: ${error.message}`,
+                minimized: false,
+            });
         }
     };
 
     const clearOutput = useCallback(() => {
-        setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
+        updateWhatWebStore({ output: "", hasSaved: false, allowSave: false });
     }, []);
 
     // Navigation
@@ -305,7 +344,7 @@ function WhatWeb() {
         };
     };
 
-    const summary = extractSummary(output);
+    const summary = extractSummary(whatWebStore.output);
 
     return (
         <>
@@ -325,7 +364,9 @@ function WhatWeb() {
                     />
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    {LoadingOverlayAndCancelButton(loading, pid, minimized, (v) =>
+                        updateWhatWebStore({ minimized: v }),
+                    )}
                     <Stack>
                         <Stepper active={active} onStepClick={handleStepClick} breakpoint="sm">
                             {/* Step 1 */}
@@ -532,7 +573,10 @@ function WhatWeb() {
                                 </Card>
                             )}
 
-                            <ConsoleWrapper output={formatOutput(output)} clearOutputCallback={clearOutput} />
+                            <ConsoleWrapper
+                                output={formatOutput(whatWebStore.output)}
+                                clearOutputCallback={clearOutput}
+                            />
                         </div>
                     </Stack>
                 </form>
