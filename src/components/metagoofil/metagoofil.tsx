@@ -1,6 +1,6 @@
 import { Button, Stack, TextInput, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
@@ -25,35 +25,52 @@ interface FormValuesType {
  * @returns The Metagoofil component.
  */
 function Metagoofil() {
-    //Component State Variables.
-    const [loading, setLoading] = useState(false); // State variable to indicate loading state.
-    const [output, setOutput] = useState(""); // State variable to store the output of the command execution.
-    const [pid, setPid] = useState(""); // State variable to store the process ID of the command execution.
-    const [customConfig, setCustomConfig] = useState(false); //State variable to indicate if custom configuration is enabled
-    const [downloadConfig, setDownloadConfig] = useState(false); //State variable to indicate if download configuration is enabled
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable that indicates if the modal is opened.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable to indicate loading state of the modal.
-    const [allowSave, setAllowSave] = useState(false); // State variable to indicate if saving is allowed
-    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved
+    // Component State Variables.
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [pid, setPid] = useState("");
+    const [customConfig, setCustomConfig] = useState(false);
+    const [downloadConfig, setDownloadConfig] = useState(false);
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [loadingModal, setLoadingModal] = useState(true);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+
+    /**
+     * Used to remember whether Metagoofil received a search-provider error.
+     *
+     * A ref is used instead of normal state because process output and process
+     * termination can happen very quickly. This ensures that the termination
+     * callback always sees the latest error state.
+     */
+    const searchProviderErrorRef = useRef(false);
 
     // Component Constants.
-    const title = "Metagoofil"; // Title of the component.
-    const description =
-        "Metagoofil is an information gathering tool designed for extracting metadata of public documents (pdf,doc,xls,ppt,docx,pptx,xlsx) that belong to a target company."; // Description of the component.
-    const steps =
-        "Step 1: Enter a website URL for the tool to search.\n" +
-        "Step 2: Enter the desired number of results.\n" +
-        "Step 3: Enter the limit for the number of files to be downloaded\n" +
-        "Step 4: Enter the file type name to be extracted.\n" +
-        "Step 5: Click scan to commence the Metagoofil operation.\n" +
-        "Step 6: View the Output block below to view the results of the tool's execution."; //Steps to run the component
-    const sourceLink = "https://www.kali.org/tools/metagoofil/"; // Link to the source code (or Kali Tools).
-    const tutorial = "https://docs.google.com/document/d/10RQ82QbVrjiS6-MdZpbV3r32dhhPSMtD0c6nQOP3RoY/edit?usp=sharing"; // Link to the official documentation/tutorial.
-    const dependencies = ["metagoofil"]; // Contains the dependencies required by the component.
+    const title = "Metagoofil";
 
-    // Form hook to handle form input.
-    let form = useForm({
+    const description =
+        "Metagoofil is an information gathering tool designed for extracting metadata " +
+        "from public documents (pdf, doc, xls, ppt, docx, pptx, xlsx) that belong to a target company.";
+
+    const steps =
+        "Step 1: Enter a website/domain for the tool to search.\n" +
+        "Step 2: Enter the required file type, for example pdf.\n" +
+        "Step 3: Enable Manual Configuration if you want to change the maximum number of results.\n" +
+        "Step 4: Enable Download Files if you want Metagoofil to download discovered files.\n" +
+        "Step 5: Click Scan to start the Metagoofil operation.\n" +
+        "Step 6: View the Output block below to see the results or any search-provider errors.";
+
+    const sourceLink = "https://www.kali.org/tools/metagoofil/";
+
+    const tutorial = "https://docs.google.com/document/d/10RQ82QbVrjiS6-MdZpbV3r32dhhPSMtD0c6nQOP3RoY/edit?usp=sharing";
+
+    const dependencies = ["metagoofil"];
+
+    /**
+     * Form hook to handle form input.
+     */
+    const form = useForm<FormValuesType>({
         initialValues: {
             webName: "",
             searchMax: "",
@@ -61,63 +78,168 @@ function Metagoofil() {
             fileType: "",
             filePath: "",
         },
+
+        validate: {
+            webName: (value) => (value.trim().length === 0 ? "Please enter a website/domain." : null),
+
+            fileType: (value) => (value.trim().length === 0 ? "Please enter a file type." : null),
+
+            searchMax: (value) => {
+                if (!value) {
+                    return null;
+                }
+
+                const number = Number(value);
+
+                if (!Number.isInteger(number) || number <= 0) {
+                    return "Number of results must be a positive whole number.";
+                }
+
+                return null;
+            },
+
+            fileLimit: (value) => {
+                if (!value) {
+                    return null;
+                }
+
+                const number = Number(value);
+
+                if (!Number.isInteger(number) || number <= 0) {
+                    return "Download limit must be a positive whole number.";
+                }
+
+                return null;
+            },
+        },
     });
 
-    // Check if the command is available and set the state variables accordingly.
+    /**
+     * Check whether Metagoofil is installed.
+     */
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-                setLoadingModal(false); // Set loading to false after the check is done
+                setIsCommandAvailable(isAvailable);
+                setOpened(!isAvailable);
+                setLoadingModal(false);
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+                setLoadingModal(false);
             });
     }, []);
 
     /**
-     * handleProcessData: Callback to handle and append new data from the child process to the output.
-     * It updates the state by appending the new data received to the existing output.
-     * @param {string} data - The data received from the child process.
+     * Normalises the domain entered by the user.
+     *
+     * Examples:
+     *
+     * https://www.nasa.gov/documents -> nasa.gov
+     * http://nasa.gov                -> nasa.gov
+     * www.nasa.gov                   -> nasa.gov
+     * nasa.gov                       -> nasa.gov
+     */
+    const normalizeDomain = (domain: string): string => {
+        return domain
+            .trim()
+            .replace(/^https?:\/\//i, "")
+            .replace(/^www\./i, "")
+            .replace(/\/.*$/, "");
+    };
+
+    /**
+     * Normalises the file type entered by the user.
+     *
+     * Examples:
+     *
+     * .pdf -> pdf
+     * PDF  -> pdf
+     * pdf  -> pdf
+     */
+    const normalizeFileType = (fileType: string): string => {
+        return fileType.trim().replace(/^\./, "").toLowerCase();
+    };
+
+    /**
+     * Handles output received from the Metagoofil child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data); // Append new data to the previous output.
-        if (!allowSave) setAllowSave(true);
+        let displayData = data;
+
+        /**
+         * Metagoofil relies on automated Google searches.
+         *
+         * Google may rate-limit these requests and return HTTP 429.
+         * Detect this situation and clearly inform the user that it is
+         * an external search-provider restriction.
+         */
+        if (
+            data.includes("HTTP Error 429") ||
+            data.includes("429: Too Many Requests") ||
+            data.includes("Too Many Requests") ||
+            data.includes("Google is blocking you")
+        ) {
+            searchProviderErrorRef.current = true;
+
+            displayData =
+                data +
+                "\n\n[DDT] Search provider rate limit detected." +
+                "\n[DDT] Google rejected Metagoofil's automated search request (HTTP 429)." +
+                "\n[DDT] This is a Metagoofil/search-provider restriction rather than a DDT execution error." +
+                "\n[DDT] Please wait before trying the search again.";
+        }
+
+        /**
+         * Metagoofil may also return zero results without explicitly returning
+         * HTTP 429. Warn the user that zero results do not always mean that
+         * the target website contains no matching documents.
+         */
+        if (!searchProviderErrorRef.current && /Results:\s*0\s+\.\w+\s+files found/i.test(data)) {
+            displayData =
+                data +
+                "\n\n[DDT] No matching files were returned by Metagoofil." +
+                "\n[DDT] This can occur because modern search engines restrict automated searches." +
+                "\n[DDT] Zero results do not necessarily mean the target domain contains no matching files.";
+        }
+
+        setOutput((prevOutput) => prevOutput + "\n" + displayData);
+        setAllowSave(true);
     }, []);
 
     /**
-     * handleProcessTermination: Callback to handle the termination of the child process.
-     * Once the process termination is handled, it clears the process PID reference and
-     * deactivates the loading overlay.
-     * @param {object} param - An object containing information about the process termination.
-     * @param {number} param.code - The exit code of the terminated process.
-     * @param {number} param.signal - The signal code indicating how the process was terminated.
+     * Handles termination of the Metagoofil process.
      */
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number }) => {
-            // If the process was successful, display a success message.
+            /**
+             * Metagoofil can sometimes catch a search-provider error internally
+             * and still exit with code 0.
+             *
+             * Therefore we check searchProviderErrorRef before displaying
+             * "Process completed successfully".
+             */
             if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
-
-                // If the process was terminated manually, display a termination message.
+                if (searchProviderErrorRef.current) {
+                    handleProcessData(
+                        "\n[DDT] Metagoofil finished, but the search request was blocked by the search provider."
+                    );
+                } else {
+                    handleProcessData("\nProcess completed successfully.");
+                }
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
-
-                // If the process was terminated with an error, display the exit and signal codes.
             } else {
                 handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
 
-            // Clear the child process pid reference. There is no longer a valid process running.
+            // Clear the running process PID.
             setPid("");
 
-            // Cancel the loading overlay. The process has completed.
+            // Remove the loading overlay.
             setLoading(false);
 
-            // Allow Saving as the output is finalised
+            // Allow the completed output to be saved.
             setAllowSave(true);
             setHasSaved(false);
         },
@@ -125,28 +247,91 @@ function Metagoofil() {
     );
 
     /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the goldeneye tool with the given parameters.
-     * Once the command is executed, the results or errors are displayed in the output.
-     *
-     * @param {FormValuesType} values - The form values, containing the webName, searchMax, fileLimit, fileType, filePath.
+     * Handles submission of the Metagoofil form.
      */
     const onSubmit = async (values: FormValuesType) => {
-        // Activate loading state to indicate ongoing process
+        // Reset previous provider-error status.
+        searchProviderErrorRef.current = false;
+
+        // Activate loading state.
         setLoading(true);
 
-        // Disable Output Save
+        // Reset output from any previous execution.
+        setOutput("");
+
+        // Disable saving while the new process is running.
         setAllowSave(false);
         setHasSaved(false);
 
-        // Construct arguments for the Metagoofil command based on form input
-        const args = [`-d`, `${values.webName}`, `-t`, `${values.fileType}`];
-        values.searchMax ? args.push(`-l`, `${values.searchMax}`) : undefined;
-        values.fileLimit ? args.push(`-n`, `${values.fileLimit}`) : undefined;
-        values.filePath ? args.push(`-o`, `${values.filePath}`, `-w`) : undefined;
+        /**
+         * Normalise user input before constructing the command.
+         */
+        const normalizedDomain = normalizeDomain(values.webName);
+        const normalizedFileType = normalizeFileType(values.fileType);
+
+        /**
+         * Additional validation after normalisation.
+         */
+        if (!normalizedDomain) {
+            setOutput("Please enter a valid website/domain.");
+            setLoading(false);
+            return;
+        }
+
+        if (!normalizedFileType) {
+            setOutput("Please enter a valid file type.");
+            setLoading(false);
+            return;
+        }
+
+        /**
+         * Construct Metagoofil arguments.
+         *
+         * -d = target domain
+         * -t = file type
+         * -e = delay between searches
+         *
+         * A 60-second delay is used to reduce the chance of triggering
+         * search-provider rate limiting.
+         */
+        const args = ["-d", normalizedDomain, "-t", normalizedFileType, "-e", "60"];
+
+        /**
+         * Add the maximum number of search results if the user enabled
+         * manual configuration and supplied a value.
+         */
+        if (customConfig && values.searchMax) {
+            args.push("-l", values.searchMax.trim());
+        }
+
+        /**
+         * Configure downloading if the user enabled Download Files.
+         */
+        if (downloadConfig) {
+            if (values.fileLimit) {
+                args.push("-n", values.fileLimit.trim());
+            }
+
+            if (values.filePath) {
+                args.push("-o", values.filePath.trim(), "-w");
+            }
+        }
+
+        /**
+         * Display the cleaned search parameters.
+         *
+         * This helps debugging while avoiding exposing shell execution logic.
+         */
+        setOutput(
+            `[DDT] Starting Metagoofil scan...\n` +
+                `[DDT] Domain: ${normalizedDomain}\n` +
+                `[DDT] File type: ${normalizedFileType}\n`
+        );
 
         try {
-            // Execute the Metagoofil command via helper method and handle its output or potential errors
+            /**
+             * Execute Metagoofil using CommandHelper.
+             */
             const result = await CommandHelper.runCommandGetPidAndOutput(
                 "metagoofil",
                 args,
@@ -154,15 +339,56 @@ function Metagoofil() {
                 handleProcessTermination,
             );
 
-            // Update the UI with the results from the executed command
+            // Store process ID so the process can be cancelled.
             setPid(result.pid);
-            setOutput(result.output);
-            console.log(pid);
+
+            /**
+             * Some CommandHelper implementations return initial output here
+             * while later output arrives through handleProcessData.
+             *
+             * Only replace the output if result.output contains useful data.
+             */
+            if (result.output && result.output.trim().length > 0) {
+                setOutput((previousOutput) => previousOutput + "\n" + result.output);
+            }
+
+            console.log("Metagoofil PID:", result.pid);
         } catch (e: any) {
-            // Display any errors encountered during command execution
-            setOutput(e.message);
-            // Deactivate loading state
+            const errorMessage =
+                e instanceof Error ? e.message : "An unknown error occurred while executing Metagoofil.";
+
+            /**
+             * Detect 429 errors that may be returned through the promise
+             * rejection instead of process stdout/stderr.
+             */
+            if (
+                errorMessage.includes("HTTP Error 429") ||
+                errorMessage.includes("429: Too Many Requests") ||
+                errorMessage.includes("Too Many Requests") ||
+                errorMessage.includes("Google is blocking you")
+            ) {
+                searchProviderErrorRef.current = true;
+
+                setOutput(
+                    `${errorMessage}\n\n` +
+                        "[DDT] Search provider rate limit detected.\n" +
+                        "[DDT] Google rejected Metagoofil's automated search request (HTTP 429).\n" +
+                        "[DDT] This is a Metagoofil/search-provider restriction rather than a DDT execution error.\n" +
+                        "[DDT] Please wait before trying again."
+                );
+            } else {
+                setOutput(`An error occurred while running Metagoofil:\n${errorMessage}`);
+            }
+
+            // Process is no longer running.
+            setPid("");
+
+            // Deactivate loading state.
             setLoading(false);
+
+            // Allow error output to be saved.
+            setAllowSave(true);
+            setHasSaved(false);
         }
     };
 
@@ -171,18 +397,15 @@ function Metagoofil() {
      */
     const clearOutput = useCallback(() => {
         setOutput("");
-
-        //Disallow saving when output is cleared
         setHasSaved(false);
         setAllowSave(false);
-    }, [setOutput]);
+        searchProviderErrorRef.current = false;
+    }, []);
 
     /**
-     * handleSaveComplete: handle state changes when saves are completed
-     * Once the output is saved, prevent duplicate saves
+     * Called after output has successfully been saved.
      */
     const handleSaveComplete = useCallback(() => {
-        //Disallow saving once the output is saved
         setHasSaved(true);
         setAllowSave(false);
     }, []);
@@ -201,10 +424,12 @@ function Metagoofil() {
                     setOpened={setOpened}
                     feature_description={description}
                     dependencies={dependencies}
-                ></InstallationModal>
+                />
             )}
-            <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+
+            <form onSubmit={form.onSubmit(onSubmit)}>
                 {LoadingOverlayAndCancelButton(loading, pid)}
+
                 <Stack>
                     <Switch
                         size="md"
@@ -212,38 +437,63 @@ function Metagoofil() {
                         checked={customConfig}
                         onChange={(e) => setCustomConfig(e.currentTarget.checked)}
                     />
+
                     <Switch
                         size="md"
                         label="Download Files"
                         checked={downloadConfig}
                         onChange={(e) => setDownloadConfig(e.currentTarget.checked)}
                     />
-                    <TextInput label={"Enter the website for search"} required {...form.getInputProps("webName")} />
-                    <TextInput label={"Enter your file type"} required {...form.getInputProps("fileType")} />
+
+                    <TextInput
+                        label="Enter the website for search"
+                        placeholder="Example: nasa.gov"
+                        required
+                        {...form.getInputProps("webName")}
+                    />
+
+                    <TextInput
+                        label="Enter your file type"
+                        placeholder="Example: pdf"
+                        required
+                        {...form.getInputProps("fileType")}
+                    />
+
                     {customConfig && (
-                        <>
-                            <TextInput
-                                label={"Enter number of results (default 100)"}
-                                {...form.getInputProps("searchMax")}
-                            />
-                        </>
+                        <TextInput
+                            label="Enter number of results (default 100)"
+                            placeholder="Example: 10"
+                            {...form.getInputProps("searchMax")}
+                        />
                     )}
+
                     {downloadConfig && (
                         <>
                             <TextInput
-                                label={"Enter the value for Download file limit"}
+                                label="Enter the value for Download file limit"
+                                placeholder="Example: 10"
                                 {...form.getInputProps("fileLimit")}
                             />
-                            <TextInput label={"Enter file path"} {...form.getInputProps("filePath")} />
+
+                            <TextInput
+                                label="Enter file path"
+                                placeholder="Example: /home/kali/Desktop/metagoofil-output"
+                                {...form.getInputProps("filePath")}
+                            />
                         </>
                     )}
 
-                    <Button type={"submit"}>Scan</Button>
+                    <Button type="submit" disabled={loading}>
+                        Scan
+                    </Button>
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
         </RenderComponent>
     );
 }
+
 export default Metagoofil;
