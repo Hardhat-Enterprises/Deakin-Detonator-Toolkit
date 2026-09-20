@@ -175,7 +175,7 @@ const Masscan = () => {
 
         CommandHelper;
         // Execute the Masscan command via helper method and handle its output or potential errors
-        CommandHelper.runCommandWithPkexec("masscan", args, handleProcessData, handleProcessTermination)
+        CommandHelper.runCommandWithPkexec("masscan", args, handleProcessData, handleProcessTermination, setPid)
             .then(({ output, pid }) => {
                 setOutput(output);
                 setPid(pid);
@@ -225,7 +225,7 @@ const Masscan = () => {
             )}
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
-                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
+                    {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination, "-9")}
                     <TextInput
                         label="IP Address/Range/Subnet"
                         required
