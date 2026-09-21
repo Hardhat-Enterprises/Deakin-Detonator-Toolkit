@@ -104,8 +104,16 @@ const Sherlock = () => {
      * @param {SherlockFormValues} values - The form values containing the username(s), site, and timeout.
      */
     const onSubmit = async (values: SherlockFormValues) => {
-        if (!values.user.trim()) {
+        const MAX_USERNAME_LENGTH = 50;
+        if (!values.username.trim()) {
             setOutput("Please enter a valid username.");
+            setLoading(false);
+            return;
+        }
+
+        if (values.username.length > MAX_USERNAME_LENGTH) {
+            setOutput(`Username is too long. Maximum allowed length is ${MAX_USERNAME_LENGTH} characters.`);
+
             setLoading(false);
             return;
         }
