@@ -87,7 +87,7 @@ export function LoadingOverlayAndCancelButtonPkexec(
     // {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
     onData: (data: string) => void,
     onTermination: ({ code, signal }: { code: number; signal: number }) => void,
-killSignal: string = "-2"
+    killSignal: string = "-2",
 ) {
     // Sends a privileged SIGINT signal to gracefully terminate the active root-owned process.
     // arpspoof is spawned via pkexec, so it is owned by root - an unprivileged `kill` here
