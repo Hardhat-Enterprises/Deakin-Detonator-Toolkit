@@ -26,7 +26,7 @@ function Nuclei() {
     const [hasSaved, setHasSaved] = useState(false);
 
     const [executionStatus, setExecutionStatus] = useState<"idle" | "running" | "success" | "failed" | "cancelled">(
-        "idle"
+        "idle",
     );
 
     const title = "Nuclei";
@@ -112,7 +112,7 @@ function Nuclei() {
                 "nuclei",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(pid);
@@ -157,10 +157,10 @@ function Nuclei() {
                                 executionStatus === "running"
                                     ? "blue"
                                     : executionStatus === "success"
-                                    ? "green"
-                                    : executionStatus === "cancelled"
-                                    ? "gray"
-                                    : "red"
+                                      ? "green"
+                                      : executionStatus === "cancelled"
+                                        ? "gray"
+                                        : "red"
                             }
                             radius="md"
                         >

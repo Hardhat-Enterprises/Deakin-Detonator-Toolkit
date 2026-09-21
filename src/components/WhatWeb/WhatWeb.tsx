@@ -1,6 +1,19 @@
 // Import necessary hooks and components from React and other libraries
 import { useState, useCallback, useEffect } from "react";
-import { Stepper, Button, TextInput, NumberInput, Select, Switch, Stack, Grid, Group } from "@mantine/core";
+import {
+    Stepper,
+    Button,
+    TextInput,
+    NumberInput,
+    Select,
+    Switch,
+    Stack,
+    Grid,
+    Group,
+    Text,
+    Card,
+    Badge,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
@@ -9,6 +22,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { RenderComponent } from "../UserGuide/UserGuide";
+import { open } from "@tauri-apps/plugin-dialog";
 
 /**
  * Represents the form values for the WhatWeb component.
@@ -27,17 +41,54 @@ interface FormValuesType {
     maxThreads: number;
 }
 
+interface WhatWebStore {
+    loading: boolean;
+    pid: string;
+    output: string;
+    allowSave: boolean;
+    hasSaved: boolean;
+    minimized: boolean;
+}
+
+let whatWebStore: WhatWebStore = {
+    loading: false,
+    pid: "",
+    output: "",
+    allowSave: false,
+    hasSaved: false,
+    minimized: false,
+};
+
+let whatWebRawOutput = "";
+
+type WhatWebStoreListener = () => void;
+const whatWebListeners = new Set<WhatWebStoreListener>();
+
+function updateWhatWebStore(partial: Partial<WhatWebStore>) {
+    whatWebStore = { ...whatWebStore, ...partial };
+    whatWebListeners.forEach((listener) => listener());
+}
+
+function useWhatWebStore(): WhatWebstore {
+    const [, forceRender] = useState({});
+    useEffect(() => {
+        const listener = () => forceRender({});
+        whatWebListeners.add(listener);
+        return () => {
+            whatWebListeners.delete(listener);
+        };
+    }, []);
+    return whatWebStore;
+}
+
 /**
  * The WhatWeb component.
  * @returns The WhatWeb component.
  */
 function WhatWeb() {
+    const { loading, pid, output, allowSave, hasSaved, minimized } = useWhatWebStore();
+
     // Declare state variables for component
-    const [loading, setLoading] = useState(false);
-    const [output, setOutput] = useState("");
-    const [pid, setPid] = useState("");
-    const [allowSave, setAllowSave] = useState(false);
-    const [hasSaved, setHasSaved] = useState(false);
     const [active, setActive] = useState(0);
     const [isCommandAvailable, setIsCommandAvailable] = useState(false);
     const [opened, setOpened] = useState(!isCommandAvailable);
@@ -64,7 +115,7 @@ function WhatWeb() {
         "   - Redirects/Cookies/Auth: Control advanced behaviors.\n" +
         "Step 3: Run WhatWeb and review results. Output can be expanded to fullscreen and saved.";
     const sourceLink = "https://github.com/urbanadventurer/WhatWeb";
-    const tutorial = "https://docs.google.com/document/d/1IUrB6sX_Ykk5hyrcelRSwi4l7QMqc_YxpyEPCmUarzc/edit?usp=sharing";
+    const tutorial = "https://drive.google.com/file/d/1Pcc5t12GcQLdznHOE2v7B___YyOoE3kB/preview?embedded=true";
     const dependencies = ["whatweb"];
 
     // Form hook
@@ -122,50 +173,67 @@ function WhatWeb() {
 
     // Process handlers
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data);
+        whatWebRawOutput += "\n" + data;
+        updateWhatWebStore({ output: whatWebStore.output + "\n" + data });
     }, []);
 
-    const handleProcessTermination = useCallback(({ code, signal }: { code: number; signal: number }) => {
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-            setTimeoutId(null);
-        }
-        setOutput((prevOutput) => {
-            const hasError =
-                prevOutput.includes("ERROR") ||
-                prevOutput.includes("execution expired") ||
-                prevOutput.includes("No plugins selected") ||
-                prevOutput.includes("not found");
+    const handleProcessTermination = useCallback(
+        ({ code, signal }: { code: number; signal: number }) => {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                setTimeoutId(null);
+            }
 
             if (code === 0 && !hasError) {
-                return prevOutput + "\nProcess completed successfully.";
+                handleProcessData("\nProcess completed successfully.");
             } else if (signal === 15) {
-                return prevOutput + "\nProcess was manually terminated.";
+                handleProcessData("\nProcess was manually terminated.");
             } else if (code === 0 && hasError) {
-                return prevOutput + "\nProcess finished with errors.";
+                handleProcessData("\nProcess finished with errors.");
             } else {
-                return prevOutput + `\nProcess terminated with exit code: ${code} and signal code: ${signal}`;
+                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
             }
-        });
 
-        setLoading(false);
-        setAllowSave(true);
-        setHasSaved(false);
-    }, []);
+            updateWhatWebStore({
+                pid: "", // Clear the child process pid reference.
+                loading: false, // Cancel the loading overlay.
+                allowSave: true, // Allow Saving as the output is finalised.
+                hasSaved: false,
+                minimized: false, //Un-minimize as result is visible
+            });
+        },
+        [handleProcessData],
+    );
 
     const handleSaveComplete = () => {
-        setHasSaved(true);
-        setAllowSave(false);
+        updateWhatWebStore({ hasSaved: true, allowSave: false });
+    };
+
+    const pickInputFile = async () => {
+        const selected = await open({
+            filters: [{ name: "Text File", extensions: ["txt"] }],
+            multiple: false,
+        });
+
+        if (typeof selected === "string") {
+            form.setFieldValue("inputFile", selected);
+        }
     };
 
     // Submit handler
     const onSubmit = async (values: FormValuesType) => {
-        setOutput("");
-        setLoading(true);
-        setAllowSave(false);
+        if (!values.target.trim() && !values.inputFile.trim()) {
+            form.setFieldError("target", "Please enter a target URL or IP address, or provide an input file.");
+            setActive(0);
+            return;
+        }
+
+        updateWhatWebStore({ allowSave: false, loading: true, minimized: false });
+        whatWebRawOutput = "";
 
         const args: string[] = [];
         if (values.inputFile) args.push("-i", values.inputFile);
+
         if (values.aggression) args.push("-a", values.aggression);
         if (values.userAgent) args.push("-U", values.userAgent);
         if (values.followRedirect) args.push(`--follow-redirect=${values.followRedirect}`);
@@ -175,44 +243,78 @@ function WhatWeb() {
         if (values.verbose) args.push("-v");
         if (values.logFormat) args.push(`--log-${values.logFormat}=-`);
         if (values.maxThreads > 0) args.push("-t", String(values.maxThreads));
-        args.push(values.target);
+
+        if (values.target.trim()) {
+            args.push(values.target.trim());
+        }
 
         try {
             const { pid, output } = await CommandHelper.runCommandGetPidAndOutput(
                 "whatweb",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
-            setPid(pid);
-            setOutput(output);
+            updateWhatWebStore({ pid, output });
 
             const timer = setTimeout(() => {
                 if (pid) {
                     CommandHelper.runCommand("kill", ["-15", pid]);
-                    setOutput((prevOutput) => prevOutput + "\nScan timed out after 120 seconds.");
-                    setLoading(false);
-                    setAllowSave(true);
-                    setHasSaved(false);
+                    updateWhatWebStore({
+                        loading: false,
+                        allowSave: false,
+                        hasSaved: false,
+                        output: "Scan timed out after 120 seconds.",
+                        minimized: false,
+                    });
                 }
             }, 120000);
             setTimeoutId(timer);
         } catch (error: any) {
-            setOutput(`Error: ${error.message}`);
-            setLoading(false);
-            setAllowSave(true);
+            updateWhatWebStore({
+                loading: false,
+                allowSave: true,
+                output: `Error: ${error.message}`,
+                minimized: false,
+            });
         }
     };
 
     const clearOutput = useCallback(() => {
-        setOutput("");
-        setHasSaved(false);
-        setAllowSave(false);
+        updateWhatWebStore({ output: "", hasSaved: false, allowSave: false });
     }, []);
 
     // Navigation
-    const nextStep = () => setActive((c) => (c < 2 ? c + 1 : c));
-    const prevStep = () => setActive((c) => (c > 0 ? c - 1 : c));
+    const nextStep = () => {
+        if (active === 0) {
+            const validation = form.validateField("target");
+
+            if (validation.hasError) {
+                return;
+            }
+        }
+
+        setActive((currentStep) => (currentStep < 2 ? currentStep + 1 : currentStep));
+    };
+
+    const prevStep = () => setActive((currentStep) => (currentStep > 0 ? currentStep - 1 : currentStep));
+
+    const handleStepClick = (step: number) => {
+        // Allow the user to return to a previous step
+        if (step <= active) {
+            setActive(step);
+            return;
+        }
+
+        // Validate the required target before moving forward
+        if (!form.values.target.trim() && !form.values.inputFile.trim()) {
+            form.setFieldError("target", "Please enter a target URL or IP address, or provide an input file.");
+            setActive(0);
+            return;
+        }
+
+        setActive(step);
+    };
 
     // Simple structured output parsing
     const formatOutput = (text: string) => {
@@ -225,6 +327,24 @@ function WhatWeb() {
             })
             .join("\n");
     };
+
+    const extractSummary = (text: string) => {
+        const targetMatch = text.match(/https?:\/\/[^\s\[]+/i);
+        const statusMatch = text.match(/\[(\d{3}\s+[^\]]+)\]/);
+        const titleMatch = text.match(/Title\[([^\]]+)\]/i);
+        const ipMatch = text.match(/IP\[([^\]]+)\]/i);
+        const serverMatch = text.match(/HTTPServer\[([^\]]+)\]/i);
+
+        return {
+            target: targetMatch?.[0] || "Not detected",
+            status: statusMatch?.[1] || "Not detected",
+            title: titleMatch?.[1] || "Not detected",
+            ip: ipMatch?.[1] || "Not detected",
+            server: serverMatch?.[1] || "Not detected",
+        };
+    };
+
+    const summary = extractSummary(whatWebStore.output);
 
     return (
         <>
@@ -244,13 +364,22 @@ function WhatWeb() {
                     />
                 )}
                 <form onSubmit={form.onSubmit(onSubmit)}>
-                    {LoadingOverlayAndCancelButton(loading, pid)}
+                    {LoadingOverlayAndCancelButton(loading, pid, minimized, (v) =>
+                        updateWhatWebStore({ minimized: v }),
+                    )}
                     <Stack>
-                        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
+                        <Stepper active={active} onStepClick={handleStepClick} breakpoint="sm">
                             {/* Step 1 */}
                             <Stepper.Step label="Target">
                                 <TextInput label="Target URL or IP" required {...form.getInputProps("target")} />
-                                <TextInput label="Input File" {...form.getInputProps("inputFile")} />
+                                <Group align="end">
+                                    <TextInput
+                                        label="Input File"
+                                        style={{ flex: 1 }}
+                                        {...form.getInputProps("inputFile")}
+                                    />
+                                    <Button onClick={pickInputFile}>Browse</Button>
+                                </Group>
                                 <Group mt={20} position="right">
                                     <Button onClick={nextStep}>Next</Button>
                                 </Group>
@@ -297,16 +426,29 @@ function WhatWeb() {
                                             ]}
                                             {...form.getInputProps("aggression")}
                                         />
+                                        <Text size="sm" c="gray.4">
+                                            Controls how intensive the scan will be. Higher levels perform deeper
+                                            analysis but may take longer.
+                                        </Text>
+
                                         <TextInput
                                             label="Plugins"
                                             title="Specify WhatWeb plugins"
                                             {...form.getInputProps("plugins")}
                                         />
+                                        <Text size="sm" c="gray.4">
+                                            Specify one or more WhatWeb plugins to focus the scan on particular
+                                            technologies.
+                                        </Text>
+
                                         <Switch
                                             label="Verbose Output"
                                             title="Enable detailed results"
                                             {...form.getInputProps("verbose", { type: "checkbox" })}
                                         />
+                                        <Text size="sm" c="gray.4">
+                                            Displays additional scan details for troubleshooting and analysis.
+                                        </Text>
                                     </Stack>
                                 )}
 
@@ -385,14 +527,56 @@ function WhatWeb() {
 
                         {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
 
-                        <Group position="right" mb={5}>
-                            <Button size="xs" onClick={() => setFullscreen((f) => !f)}>
-                                {fullscreen ? "Exit Fullscreen" : "Expand Results"}
-                            </Button>
-                        </Group>
+                        {active === 2 && output.trim() && (
+                            <Group position="right" mb={5}>
+                                <Button size="xs" onClick={() => setFullscreen((f) => !f)}>
+                                    {fullscreen ? "Exit Fullscreen" : "Expand Results"}
+                                </Button>
+                            </Group>
+                        )}
 
                         <div style={{ height: fullscreen ? "80vh" : "300px" }}>
-                            <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+                            {active === 2 && output.trim() !== "" && (
+                                <Card withBorder shadow="sm" mb="md">
+                                    <Stack gap="xs">
+                                        <Text size="lg" fw={700}>
+                                            🔍 Scan Summary
+                                        </Text>
+
+                                        <Group>
+                                            <Text fw={700}>Target:</Text>
+                                            <Text>{summary.target}</Text>
+                                        </Group>
+
+                                        <Group>
+                                            <Text fw={700}>Status:</Text>
+                                            <Badge color={summary.status.startsWith("200") ? "green" : "red"}>
+                                                {summary.status}
+                                            </Badge>
+                                        </Group>
+
+                                        <Group>
+                                            <Text fw={700}>Title:</Text>
+                                            <Text>{summary.title}</Text>
+                                        </Group>
+
+                                        <Group>
+                                            <Text fw={700}>Server:</Text>
+                                            <Text>{summary.server}</Text>
+                                        </Group>
+
+                                        <Group>
+                                            <Text fw={700}>IP:</Text>
+                                            <Text>{summary.ip}</Text>
+                                        </Group>
+                                    </Stack>
+                                </Card>
+                            )}
+
+                            <ConsoleWrapper
+                                output={formatOutput(whatWebStore.output)}
+                                clearOutputCallback={clearOutput}
+                            />
                         </div>
                     </Stack>
                 </form>

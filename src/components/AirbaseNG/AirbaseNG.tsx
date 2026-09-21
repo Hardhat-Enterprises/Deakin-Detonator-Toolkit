@@ -124,7 +124,7 @@ const AirbaseNG = () => {
             // Allow Saving as the output is finalised
             setHasSaved(false);
         },
-        [handleProcessData] // Dependency on the handleProcessData callback
+        [handleProcessData], // Dependency on the handleProcessData callback
     );
 
     /**
@@ -164,7 +164,7 @@ const AirbaseNG = () => {
                 "airbase-ng",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             setOutput(output);
             setAllowSave(true);
