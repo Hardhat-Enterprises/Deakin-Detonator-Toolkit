@@ -59,10 +59,10 @@ describe("EyeWitness Validation & Path Sanitization", () => {
 
         it("rejects relative directory paths", () => {
             expect(validateOutputDirectory("results")).toBe(
-                "Output directory must be an absolute path (start with /)."
+                "Output directory must be an absolute path (start with /).",
             );
             expect(validateOutputDirectory("./results")).toBe(
-                "Output directory must be an absolute path (start with /)."
+                "Output directory must be an absolute path (start with /).",
             );
         });
 
@@ -88,25 +88,25 @@ describe("EyeWitness Validation & Path Sanitization", () => {
 
         it("rejects common user folders (Desktop, Documents, Downloads, etc.)", () => {
             expect(validateOutputDirectory("/home/kali/Desktop")).toContain(
-                "cannot be a common user folder (/home/kali/Desktop)"
+                "cannot be a common user folder (/home/kali/Desktop)",
             );
             expect(validateOutputDirectory("/home/kali/Downloads")).toContain(
-                "cannot be a common user folder (/home/kali/Downloads)"
+                "cannot be a common user folder (/home/kali/Downloads)",
             );
             expect(validateOutputDirectory("/home/kali/Documents")).toContain(
-                "cannot be a common user folder (/home/kali/Documents)"
+                "cannot be a common user folder (/home/kali/Documents)",
             );
             expect(validateOutputDirectory("/root/Desktop")).toContain(
-                "cannot be a common user folder (/root/Desktop)"
+                "cannot be a common user folder (/root/Desktop)",
             );
         });
 
         it("rejects Deakin-Detonator-Toolkit application directories", () => {
             expect(validateOutputDirectory("/home/kali/Desktop/Deakin-Detonator-Toolkit")).toBe(
-                "Output directory cannot be within the Deakin-Detonator-Toolkit directory."
+                "Output directory cannot be within the Deakin-Detonator-Toolkit directory.",
             );
             expect(validateOutputDirectory("/home/kali/Deakin-Detonator-Toolkit/output")).toBe(
-                "Output directory cannot be within the Deakin-Detonator-Toolkit directory."
+                "Output directory cannot be within the Deakin-Detonator-Toolkit directory.",
             );
         });
 
@@ -126,23 +126,23 @@ describe("EyeWitness Validation & Path Sanitization", () => {
 
             const error = validateOutputDirectory(outputDirectory, inputFilePath);
             expect(error).toBe(
-                "Output directory contains the input file. EyeWitness purges the output directory before scanning; please specify a dedicated directory separate from the input file."
+                "Output directory contains the input file. EyeWitness purges the output directory before scanning; please specify a dedicated directory separate from the input file.",
             );
         });
 
         it("rejects output directory matching the input file path exactly", () => {
             const path = "/home/kali/scans/results";
             expect(validateOutputDirectory(path, path)).toBe(
-                "Output directory cannot be the same as the input file path."
+                "Output directory cannot be the same as the input file path.",
             );
         });
 
         it("resolves relative path segments before validating", () => {
             expect(validateOutputDirectory("/home/kali/Desktop/../Desktop")).toContain(
-                "cannot be a common user folder (/home/kali/Desktop)"
+                "cannot be a common user folder (/home/kali/Desktop)",
             );
             expect(validateOutputDirectory("/home/kali/Desktop/")).toContain(
-                "cannot be a common user folder (/home/kali/Desktop)"
+                "cannot be a common user folder (/home/kali/Desktop)",
             );
         });
 
