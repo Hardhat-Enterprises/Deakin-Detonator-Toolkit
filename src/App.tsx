@@ -21,6 +21,7 @@ import Navigation from "./components/NavBar/Navigation";
 import { ROUTES } from "./components/RouteWrapper";
 import { NotificationsProvider } from "@mantine/notifications";
 import DisclaimerModal from "./pages/DisclaimerModal";
+import ContactMaintenanceModal from "./components/ContactMaintenance/ContactMaintenanceModal";
 
 export default function App() {
     const theme = useMantineTheme();
@@ -28,6 +29,7 @@ export default function App() {
     const [opened, setOpened] = useState(false);
     const [imageSrc, setImageSrc] = useState<string>("");
     const [disclaimerOpened, setDisclaimerOpened] = useState(false);
+    const [contactMaintenanceOpened, setContactMaintenanceOpened] = useState(false);
 
     const toggleColorScheme = (value?: ColorScheme) => {
         const nextColorScheme = value || (colorScheme === "dark" ? "light" : "dark");
@@ -55,6 +57,10 @@ export default function App() {
     return (
         <div className="App">
             <DisclaimerModal opened={disclaimerOpened} onClose={() => setDisclaimerOpened(false)} />
+            <ContactMaintenanceModal
+                opened={contactMaintenanceOpened}
+                onClose={() => setContactMaintenanceOpened(false)}
+            />
             <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
                 <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
                     <AppShell
@@ -68,6 +74,9 @@ export default function App() {
                                     <Group style={{ justifyContent: "center" }}>
                                         <Button onClick={() => window.history.back()} color="red">
                                             Go Back
+                                        </Button>
+                                        <Button onClick={() => setContactMaintenanceOpened(true)}>
+                                            Contact Maintenance
                                         </Button>
                                     </Group>
                                 </Aside>
