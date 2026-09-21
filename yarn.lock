@@ -753,18 +753,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/notifications@npm:5.3.0":
-  version: 5.3.0
-  resolution: "@mantine/notifications@npm:5.3.0"
+"@mantine/notifications@npm:9.6.1":
+  version: 9.6.1
+  resolution: "@mantine/notifications@npm:9.6.1"
   dependencies:
-    "@mantine/utils": "npm:5.3.0"
-    react-transition-group: "npm:4.4.2"
+    "@mantine/store": 9.6.1
+    react-transition-group: 4.4.5
   peerDependencies:
-    "@mantine/core": 5.3.0
-    "@mantine/hooks": 5.3.0
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  checksum: 0b8827c8d2b6d188ac9c8cc87df603f2e50a0a1f5016372daf48010d6e6ce12111733078321fc279ccac34b8943b621b01d72fbb393fc0625c899134d5327ba2
+    "@mantine/core": 9.6.1
+    "@mantine/hooks": 9.6.1
+    react: ^19.2.0
+    react-dom: ^19.2.0
+  checksum: 50516400e065518a1b5f5a8a641e58ec43018d842f466fb4741a40c55abe337d37980c2192ded8f97d2ac7fe2f53c6ec8c071e909565de88faacded8721ae79a
   languageName: node
   linkType: hard
 
@@ -797,6 +797,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mantine/store@npm:9.6.1":
+  version: 9.6.1
+  resolution: "@mantine/store@npm:9.6.1"
+  peerDependencies:
+    react: ^19.2.0
+  checksum: fa2195c2b5e1f6ebd4a91108004b0b9ec55d67f8a4434d8eed21ce8e439ecb4652fdfaa2cf0efc88a2b60f6a42e0acdd8aaa93923277570ff107253b59de6bba
+  languageName: node
+  linkType: hard
+
 "@mantine/styles@npm:5.10.5":
   version: 5.10.5
   resolution: "@mantine/styles@npm:5.10.5"
@@ -817,15 +826,6 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0"
   checksum: fe8975a2cffb0493e9c226f2dd7d56473250806e56bdc7843c8f6cd1c8ce90d42daf3d33a31a91ec71bca3a584d8adb3fb5b805639c0f242d1d2f8887e9dd56d
-  languageName: node
-  linkType: hard
-
-"@mantine/utils@npm:5.3.0":
-  version: 5.3.0
-  resolution: "@mantine/utils@npm:5.3.0"
-  peerDependencies:
-    react: ">=16.8.0"
-  checksum: 29d7a9eb292398cf71654cc3d079fe0b16741878009202ac3dd6afb1d1ef32fd4b35d8d795bc0ad36bcd49a0a46156f59f275357b39c575c64cdaa98d969c90b
   languageName: node
   linkType: hard
 
@@ -2184,7 +2184,7 @@ __metadata:
     "@mantine/core": ^5.3.0
     "@mantine/form": ^7.17.7
     "@mantine/hooks": ^5.3.0
-    "@mantine/notifications": 5.3.0
+    "@mantine/notifications": 9.6.1
     "@mantine/prism": ^5.3.0
     "@mantine/spotlight": ^5.3.0
     "@tabler/icons": ^1.95.1
@@ -3848,18 +3848,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-transition-group@npm:4.4.2":
-  version: 4.4.2
-  resolution: "react-transition-group@npm:4.4.2"
+"react-transition-group@npm:4.4.5":
+  version: 4.4.5
+  resolution: "react-transition-group@npm:4.4.5"
   dependencies:
-    "@babel/runtime": "npm:^7.5.5"
-    dom-helpers: "npm:^5.0.1"
-    loose-envify: "npm:^1.4.0"
-    prop-types: "npm:^15.6.2"
+    "@babel/runtime": ^7.5.5
+    dom-helpers: ^5.0.1
+    loose-envify: ^1.4.0
+    prop-types: ^15.6.2
   peerDependencies:
     react: ">=16.6.0"
     react-dom: ">=16.6.0"
-  checksum: b67bf5b3e86dbab72d658b9a52a3589e5960583ab28c7c66272427d8fe30d4c7de422d5046ae96bd2683cdf80cc3264b2516f5ce80cae1dbe6cf3ca6dda392c5
+  checksum: 75602840106aa9c6545149d6d7ae1502fb7b7abadcce70a6954c4b64a438ff1cd16fc77a0a1e5197cdd72da398f39eb929ea06f9005c45b132ed34e056ebdeb1
   languageName: node
   linkType: hard
 
