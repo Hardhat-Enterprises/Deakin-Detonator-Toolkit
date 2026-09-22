@@ -1,5 +1,19 @@
-import { Button, Group, Modal, Select, Stack, Text, Textarea, TextInput, Divider, Paper } from "@mantine/core";
+import {
+    Button,
+    Group,
+    Modal,
+    Select,
+    Stack,
+    Text,
+    Textarea,
+    TextInput,
+    Divider,
+    Paper,
+    TypographyStylesProvider,
+} from "@mantine/core";
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface ContactMaintenanceModalProps {
     opened: boolean;
@@ -72,6 +86,39 @@ export default function ContactMaintenanceModal({ opened, onClose }: ContactMain
         }
     };
 
+    const getIssueBody = () => {
+        switch (issueType) {
+            case "bug":
+                return ["## What Happened?", description.trim(), "## Steps to Reproduce", steps.trim()].join("\n\n");
+
+            case "feature":
+                return [
+                    "## Priority",
+                    priority || "Not specified",
+                    "## Categories",
+                    categories.trim(),
+                    "## Description of Feature",
+                    description.trim(),
+                ].join("\n\n");
+
+            case "improvement":
+                return [
+                    "## Priority",
+                    priority || "Not specified",
+                    "## Categories",
+                    categories.trim(),
+                    "## Description of Feature",
+                    description.trim(),
+                ].join("\n\n");
+
+            case "blank":
+                return description.trim();
+
+            default:
+                return "";
+        }
+    };
+
     return (
         <Modal opened={opened} onClose={handleClose} title="Contact Maintenance" size="lg">
             <Stack>
@@ -85,25 +132,25 @@ export default function ContactMaintenanceModal({ opened, onClose }: ContactMain
                     </Button>
                 </div>
 
-                <Select
-                    label="Issue Type"
-                    placeholder="Select issue type"
-                    value={issueType}
-                    disabled={previewMode}
-                    onChange={(value) => {
-                        resetForm();
-                        setIssueType(value as IssueType | null);
-                    }}
-                    data={[
-                        { value: "bug", label: "Bug Report" },
-                        { value: "improvement", label: "Improvement Request" },
-                        { value: "feature", label: "Feature Request" },
-                        { value: "blank", label: "Blank Issue" },
-                    ]}
-                />
-
                 {!previewMode ? (
                     <>
+                        <Select
+                            label="Issue Type"
+                            placeholder="Select issue type"
+                            value={issueType}
+                            disabled={previewMode}
+                            onChange={(value) => {
+                                resetForm();
+                                setIssueType(value as IssueType | null);
+                            }}
+                            data={[
+                                { value: "bug", label: "Bug Report" },
+                                { value: "improvement", label: "Improvement Request" },
+                                { value: "feature", label: "Feature Request" },
+                                { value: "blank", label: "Blank Issue" },
+                            ]}
+                        />
+
                         {issueType === "bug" && (
                             <Text size="sm">Thanks for taking the time to fill out this bug report!</Text>
                         )}
@@ -262,7 +309,33 @@ export default function ContactMaintenanceModal({ opened, onClose }: ContactMain
                         )}
                     </>
                 ) : (
-                    <></>
+                    <>
+                        <Stack spacing="md">
+                            <div>
+                                <Text weight={700} size="xl">
+                                    Issue Preview
+                                </Text>
+
+                                <Text size="sm" color="dimmed">
+                                    Review how your issue will appear before submitting it to GitHub.
+                                </Text>
+                            </div>
+
+                            <Paper withBorder p="md" radius="md">
+                                <Text weight={700} size="lg">
+                                    {getIssueTitle()}
+                                </Text>
+
+                                <Divider my="md" />
+
+                                <TypographyStylesProvider>
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                        {getIssueBody() || "No content provided."}
+                                    </ReactMarkdown>
+                                </TypographyStylesProvider>
+                            </Paper>
+                        </Stack>
+                    </>
                 )}
 
                 <Group position="apart">
