@@ -1,127 +1,65 @@
 # 🧰 Deakin Detonator Toolkit
 
-This repo houses the new version of the Deakin Detonator Toolkit application built with Modern Web technologies, shipping as a native desktop application.
+The Deakin Detonator Toolkit (DDT) is a desktop penetration-testing toolkit developed by Hardhat Enterprises at Deakin University.
 
--   UI built with [Mantine](https://mantine.dev), [ReactJS](https://reactjs.org/) and [TypeScript](https://www.typescriptlang.org/).
--   Shipped as desktop client via [Tauri](https://tauri.app/).
--   GUI exhibition will be available here: http://34.129.77.178:8080 (Deakin Intranet Only)
+DDT provides a graphical interface for many commonly used command-line security tools. It allows users to configure and execute supported tools without needing to manually construct each command.
+
+- UI built with [Mantine](https://mantine.dev), [ReactJS](https://reactjs.org/), [TypeScript](https://www.typescriptlang.org/).
+- Shipped as desktop client via [Tauri 2](https://tauri.app/), [Rust](https://rust-lang.org/).
+- GUI exhibition will be available here: http://34.129.77.178:8080 (Deakin Intranet Only)
 
 `src/` contains the source code for the UI.
 `src-tauri` contains the source code and configuration for the Tauri application.
 
-## What is the Deakin Detonator Toolkit?
+## 📚 Documentation
 
-In its simplest definition, the Deakin Detonator Toolkit is a penetration testing toolkit. The toolkit allows you to use a variety of tools, without needing the "know-how" of each command.
+- [User Guide](DDT-User-Guide.pdf)
+- [Technology Stack](docs/TECHNOLOGY.md)
+- [Contributing Guide](CONTRIBUTING.md)
+- [Exploit Development](docs/EXPLOIT.md)
+- [Security Policy](SECURITY.md)
+- [Supported Tools](docs/TOOLS.md)
+- [Tool Guides](The%20Tool%20Guides/)
 
-# 🛠️ Exploit Development
+## 🚀 Quick Start
 
-All exploit scripts are expected to live in `/usr/share/ddt/`, and they will be executed by the Tauri application. It is recommended that you use Python for exploit development.
+DDT is primarily developed and tested on Kali Linux.
 
-For the exploit scripts, it is important to ensure they are executable entirely with command line arguments, eg. `python3 my_exploit.py <ip> <port>`. This will simplify the integration of the exploit into the Tauri application.
+### System Minimum Requirements
 
-`install_exploits.sh` is a helper script that will install all the exploit scripts in the `/usr/share/ddt/` directory. If you add new exploits, be sure to run this command again.
+- Kali 2024.1 or later
+- 4GB RAM
+- 2 CPU cores
+- Internet connection
 
-1. Change current directory to the toolkit:
+### Install and Launch
 
-    ```bash
-    cd Deakin-Detonator-Toolkit
-    ```
+The recommended installation method uses the included DDT setup script.
 
-2. Change permissions to execute the script:
+```bash
+curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/setup_ddt.sh -o setup_ddt.sh && chmod +x setup_ddt.sh && ./setup_ddt.sh
+```
 
-    ```bash
-    chmod +x install-update-media/install_exploits.sh
-    ```
+Application can be launched from within the "Deakin-Detonator-Toolkit" directory using:
 
-3. Run the script:
+```bash
+WEBKIT_DISABLE_DMABUF_RENDERER=1 WEBKIT_DISABLE_COMPOSITING_MODE=1 corepack yarn tauri dev
+```
 
-    ```bash
-    ./install-update-media/install_exploits.sh
-    ```
+## 🖼️ Application Preview
 
-The `.deb` that Tauri builds will automatically do this for us for actual toolkit installation.
+After DDT launches successfully, the application should resemble the following:
 
-# 🖥️ System requirements
+<img src="static/ddt_homepage.png" width="1000px" alt="Deakin Detonator Toolkit home screen">
 
--   4GB RAM
--   2 CPU cores
--   Recommended Kali 2024.1 or later
+## 🧑‍🍳 Contributing
 
-# 🔧 Setup
+For development environment setup and pull request requirements see [Contributing Guide](CONTRIBUTING.md).
 
-To install Deakin Detonator Toolkit on Kali, you can follow the method below. The method is a one&#8209;step process that utilises a bash script. If it doesn't work, follow the additional steps below.
+## 📦 Release
 
-## Run the application (dependency install and run)
+For release and update procedures see [Release Guide](docs/RELEASE.md)
 
-1. Run the following command, this will install all dependencies, apply patching and start the application:
+## 📜 Old Installation Guide
 
-    ```
-    curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/setup_ddt.sh -o setup_ddt.sh && chmod +x setup_ddt.sh && ./setup_ddt.sh
-    ```
-
-## Troubleshooting Steps
-
-1. Use this method if you encounter any errors with the above method. Update your Kali:
-
-    ```bash
-    sudo apt update
-    ```
-
-2. Upgrade your Kali:
-
-    ```bash
-    sudo apt full-upgrade -y
-    ```
-
-3. Open your APT sources list:
-
-    ```bash
-    sudo nano /etc/apt/sources.list
-    ```
-
-4. Add the following as new lines to your APT sources list:
-
-    ```bash
-    deb http://deb.debian.org/debian-security/ bookworm-security main contrib non-free non-free-firmware
-    deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware
-    ```
-
-5. Update Kali again:
-
-    ```bash
-    sudo apt update
-    ```
-
-6. Run:
-
-    ```bash
-    sudo apt install libenchant1c2a -y
-    ```
-
-7. Run:
-
-    ```bash
-    sudo apt install libwebkit2gtk-4.0-dev -y
-    ```
-
-8. Finally, rerun the original command, which will install the remaining dependant packages, patching and then start the application:
-
-    ```bash
-    curl -sSL https://raw.githubusercontent.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/main/install-update-media/setup_ddt.sh -o setup_ddt.sh && chmod +x setup_ddt.sh && ./setup_ddt.sh
-    ```
-
-# 📷 Screenshot
-
-Once you have successfully implemented either method one or two, the application should open and look like the following screenshot:
-
-<img src="https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/blob/main/static/ddt_homepage.png" width="1000px">
-
-# 📷 Release
-
-1. Change the version number in scr-tauri/tauri.conf.json larger than current version
-
-2. Merge the main branch into release branch, it will trigger the CD pipeline to update the repo release info
-
-3. The update information will appear when user open the app
-
-<img src="https://github.com/Hardhat-Enterprises/Deakin-Detonator-Toolkit/blob/main/static/Updater.png" width="1000px">
+For the previouse installation method see [Old Installation Guide](docs/OLD_INSTALLATION_GUIDE.md)

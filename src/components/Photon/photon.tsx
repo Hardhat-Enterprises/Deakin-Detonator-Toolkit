@@ -1,6 +1,7 @@
 import { Button, Stack, TextInput, Switch, SimpleGrid } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
+import { invoke } from "@tauri-apps/api/core";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
@@ -28,6 +29,95 @@ interface FormValuesType {
     extractKeys: string;
 }
 
+// IPv4 pattern
+const ipv4Pattern = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
+// Domain pattern
+const domainPattern =
+    /^(?=.{1,253}$)(?!-)[a-zA-Z0-9-]{1,63}(?<!-)(\.(?!-)[a-zA-Z0-9-]{1,63}(?<!-))*\.[a-zA-Z]{2,63}\.?$/;
+
+// Validates that the target is a well-formed http/https URL with a plausible hostname (IPv4, localhost, or domain).
+const isValidUrl = (value: string): boolean => {
+    if (!value || !value.trim()) return false;
+    let parsed: URL;
+    try {
+        parsed = new URL(value.trim());
+    } catch {
+        return false;
+    }
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return false;
+    const hostname = parsed.hostname;
+    if (!hostname) return false;
+    if (hostname.toLowerCase() === "localhost") return true;
+    if (ipv4Pattern.test(hostname)) return true;
+    return domainPattern.test(hostname);
+};
+
+// Checks the output directory is an absolute path, using plain string comparisons only.
+const isValidOutputDir = (value: string): boolean => {
+    if (!value || !value.trim()) return false;
+    const trimmed = value.trim();
+    if (trimmed.includes("\0")) return false;
+    const isUnixAbsolute = trimmed.startsWith("/");
+    const isWindowsAbsolute =
+        trimmed.length >= 3 &&
+        ((trimmed[0] >= "a" && trimmed[0] <= "z") || (trimmed[0] >= "A" && trimmed[0] <= "Z")) &&
+        trimmed[1] === ":" &&
+        trimmed[2] === "\\";
+    return isUnixAbsolute || isWindowsAbsolute;
+};
+
+type OutputDirCheckResult = { ok: true } | { ok: false; reason: "not_found" | "out_of_scope" };
+
+// Checks the output directory exists and is within the app's allowed fs scope, via the fs plugin's invoke() command directly.
+const checkOutputDir = async (path: string): Promise<OutputDirCheckResult> => {
+    try {
+        const found = await invoke<boolean>("plugin:fs|exists", { path });
+        return found ? { ok: true } : { ok: false, reason: "not_found" };
+    } catch {
+        return { ok: false, reason: "out_of_scope" };
+    }
+};
+
+// Maps a raw error/output string to a user-friendly message so raw tracebacks never reach the UI.
+const getFriendlyErrorMessage = (rawMessage: string): string => {
+    if (!rawMessage) return "Error: Photon failed to start. Please check your inputs and try again.";
+    if (/FileNotFoundError/i.test(rawMessage) || /No such file or directory/i.test(rawMessage)) {
+        return "Error: The specified output directory does not exist. Please check the path and try again.";
+    }
+    if (/PermissionError/i.test(rawMessage) || /Permission denied/i.test(rawMessage)) {
+        return "Error: Permission denied when accessing the output directory. Please choose a directory you have write access to.";
+    }
+    if (/NotADirectoryError/i.test(rawMessage)) {
+        return "Error: The specified output path is not a directory. Please provide a valid directory path.";
+    }
+    if (
+        /SSLError/i.test(rawMessage) ||
+        /CERTIFICATE_VERIFY_FAILED/i.test(rawMessage) ||
+        /SSLCertVerificationError/i.test(rawMessage)
+    ) {
+        return "Error: Could not establish a secure connection to the target URL as its SSL certificate could not be verified. Double-check the URL, or try again on a different network.";
+    }
+    if (
+        /Invalid URL/i.test(rawMessage) ||
+        /Name or service not known/i.test(rawMessage) ||
+        /Failed to establish a new connection/i.test(rawMessage) ||
+        /ConnectionError/i.test(rawMessage)
+    ) {
+        return "Error: Unable to reach the target URL. Please check that the URL is correct and reachable.";
+    }
+    if (/Traceback \(most recent call last\)/i.test(rawMessage)) {
+        const lines = rawMessage
+            .split("\n")
+            .map((line) => line.trim())
+            .filter(Boolean);
+        const lastLine = lines[lines.length - 1];
+        return lastLine
+            ? `Error: ${lastLine}`
+            : "Error: Photon encountered an unexpected error. Please check your inputs and try again.";
+    }
+    return rawMessage;
+};
+
 /**
  * The Photon component.
  * @returns The Photon component.
@@ -53,6 +143,10 @@ const Photon = () => {
     const [showHeaders, setShowHeaders] = useState(false);
     const [onlyUrls, setOnlyUrls] = useState(false);
     const [extractKeys, setExtractKeys] = useState(false);
+
+    // Full raw stdout/stderr for the current run
+    // Used to build a friendly message even after streaming stops rendering raw lines.
+    const rawOutputRef = useRef<string>("");
 
     // Component Constants.
     const title = "Photon";
@@ -98,6 +192,17 @@ const Photon = () => {
             onlyUrls: "",
             extractKeys: "",
         },
+        validateInputOnBlur: true,
+        validate: {
+            url: (value) =>
+                isValidUrl(value)
+                    ? null
+                    : "Please enter a valid target URL, including the scheme (e.g. https://www.deakin.edu.au)",
+            outputDir: (value) =>
+                isValidOutputDir(value)
+                    ? null
+                    : "Please enter a valid absolute output directory path (e.g. /home/kali/Deakin-Detonator-Toolkit/OutputFiles/photon_results)",
+        },
     });
 
     // Check if the command is available and set the state variables accordingly.
@@ -120,6 +225,15 @@ const Photon = () => {
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
+        rawOutputRef.current += "\n" + data;
+        if (/Traceback \(most recent call last\)/i.test(rawOutputRef.current)) {
+            setOutput((prevOutput) =>
+                /An error occurred while running Photon/.test(prevOutput)
+                    ? prevOutput
+                    : prevOutput + "\nAn error occurred while running Photon. Finalizing details...",
+            );
+            return;
+        }
         setOutput((prevOutput) => prevOutput + "\n" + data);
     }, []);
 
@@ -137,13 +251,13 @@ const Photon = () => {
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated.");
             } else {
-                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+                setOutput(getFriendlyErrorMessage(rawOutputRef.current));
             }
 
             setPid("");
             setLoading(false);
         },
-        [handleProcessData]
+        [handleProcessData],
     );
 
     /**
@@ -152,11 +266,33 @@ const Photon = () => {
      * @param {FormValuesType} values - The form values containing the url, output directory, crawl depth, cookies, and user agent.
      */
     const onSubmit = async (values: FormValuesType) => {
+        if (!isValidUrl(values.url)) {
+            setOutput("Error: Please enter a valid target URL, including the scheme (e.g. https://www.deakin.edu.au)");
+            return;
+        }
+        if (!isValidOutputDir(values.outputDir)) {
+            setOutput("Error: Please enter a valid absolute output directory path");
+            return;
+        }
+
         setLoading(true);
+        rawOutputRef.current = "";
         const threads = Number(values.threads);
 
         if (values.threads && (!Number.isInteger(threads) || threads <= 0)) {
             setOutput("Error: Threads must be a positive integer greater than 0");
+            setLoading(false);
+            return;
+        }
+
+        // Confirms the output directory actually exists (and is within the app's allowed fs scope) before starting the scan.
+        const dirCheck = await checkOutputDir(values.outputDir);
+        if (!dirCheck.ok) {
+            setOutput(
+                dirCheck.reason === "not_found"
+                    ? "Error: The specified output directory does not exist. Please check the path and try again."
+                    : "Error: The specified output directory is not accessible. Please choose a directory within an allowed location.",
+            );
             setLoading(false);
             return;
         }
@@ -183,13 +319,13 @@ const Photon = () => {
                 "photon",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
 
             setPid(result.pid);
             setOutput(result.output);
         } catch (e: any) {
-            setOutput(e.message);
+            setOutput(getFriendlyErrorMessage(e.message));
             setLoading(false);
         }
     };
