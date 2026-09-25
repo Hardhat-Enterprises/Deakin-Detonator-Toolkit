@@ -85,7 +85,7 @@ const Wifite2 = () => {
                 handleProcessData("\nWifite2 terminal session closed.");
             } else {
                 handleProcessData(
-                    `\nWifite2 terminal session ended with exit code: ${code} and signal code: ${signal}`
+                    `\nWifite2 terminal session ended with exit code: ${code} and signal code: ${signal}`,
                 );
             }
 
