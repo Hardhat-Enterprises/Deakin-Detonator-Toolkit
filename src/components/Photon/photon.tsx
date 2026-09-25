@@ -32,7 +32,8 @@ interface FormValuesType {
 // IPv4 pattern
 const ipv4Pattern = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
 // Domain pattern
-const domainPattern = /^(?=.{1,253}$)(?!-)[a-zA-Z0-9-]{1,63}(?<!-)(\.(?!-)[a-zA-Z0-9-]{1,63}(?<!-))*\.[a-zA-Z]{2,63}\.?$/;
+const domainPattern =
+    /^(?=.{1,253}$)(?!-)[a-zA-Z0-9-]{1,63}(?<!-)(\.(?!-)[a-zA-Z0-9-]{1,63}(?<!-))*\.[a-zA-Z]{2,63}\.?$/;
 
 // Validates that the target is a well-formed http/https URL with a plausible hostname (IPv4, localhost, or domain).
 const isValidUrl = (value: string): boolean => {
@@ -110,7 +111,9 @@ const getFriendlyErrorMessage = (rawMessage: string): string => {
             .map((line) => line.trim())
             .filter(Boolean);
         const lastLine = lines[lines.length - 1];
-        return lastLine ? `Error: ${lastLine}` : "Error: Photon encountered an unexpected error. Please check your inputs and try again.";
+        return lastLine
+            ? `Error: ${lastLine}`
+            : "Error: Photon encountered an unexpected error. Please check your inputs and try again.";
     }
     return rawMessage;
 };
