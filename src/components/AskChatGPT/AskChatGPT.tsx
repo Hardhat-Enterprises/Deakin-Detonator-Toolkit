@@ -1,5 +1,5 @@
 import { Alert, Button, Stack, Text } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface AskChatGPTProps {
     toolName: string;
@@ -7,15 +7,47 @@ interface AskChatGPTProps {
     setChatGPTResponse: (response: string) => void;
 }
 
+/** Maximum time a single request may run before it is aborted. */
+const REQUEST_TIMEOUT_MS = 60_000;
+
+interface ActiveRequest {
+    controller: AbortController;
+    timedOut: boolean;
+}
+
 const AskChatGPT = ({ toolName, output, setChatGPTResponse }: AskChatGPTProps) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
+    // Tracks the request currently in flight, so it can be aborted and so a
+    // superseded response can be discarded rather than displayed.
+    const activeRequest = useRef<ActiveRequest | null>(null);
+
+    // If the tool output changes while a request is running, any response that
+    // arrives afterwards describes output the user is no longer looking at.
+    useEffect(() => {
+        if (activeRequest.current) {
+            activeRequest.current.controller.abort();
+            activeRequest.current = null;
+            setLoading(false);
+            setError("");
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [output]);
+
+    // Abort any request still running when the component unmounts.
+    useEffect(() => {
+        return () => {
+            activeRequest.current?.controller.abort();
+            activeRequest.current = null;
+        };
+    }, []);
 
     /**
      * Sends a prompt and tool output to the OpenAI API and returns the response.
      * Errors are thrown so the caller can present them to the user.
      */
-    const sendToChatGPT = async (prompt: string, data: string): Promise<string> => {
+    const sendToChatGPT = async (prompt: string, data: string, signal: AbortSignal): Promise<string> => {
         const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
         const apiUrl = "https://api.openai.com/v1/chat/completions";
 
@@ -28,6 +60,7 @@ const AskChatGPT = ({ toolName, output, setChatGPTResponse }: AskChatGPTProps) =
 
         const response = await fetch(apiUrl, {
             method: "POST",
+            signal,
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${apiKey}`,
@@ -73,6 +106,17 @@ const AskChatGPT = ({ toolName, output, setChatGPTResponse }: AskChatGPTProps) =
      * Handles the 'Ask ChatGPT' button click.
      */
     const handleAskChatGPT = async () => {
+        // A previous request, if any, is no longer relevant.
+        activeRequest.current?.controller.abort();
+
+        const request: ActiveRequest = { controller: new AbortController(), timedOut: false };
+        activeRequest.current = request;
+
+        const timeoutId = window.setTimeout(() => {
+            request.timedOut = true;
+            request.controller.abort();
+        }, REQUEST_TIMEOUT_MS);
+
         setLoading(true);
         setError("");
         setChatGPTResponse("");
@@ -80,15 +124,33 @@ const AskChatGPT = ({ toolName, output, setChatGPTResponse }: AskChatGPTProps) =
         try {
             const response = await sendToChatGPT(
                 `The following output is from the use of the ${toolName}. Provide a concise explanation of the tool and what the output shows for someone new to the cybersecurity world:`,
-                output
+                output,
+                request.controller.signal
             );
+
+            // Discard the response if this request has since been superseded.
+            if (activeRequest.current !== request) return;
             setChatGPTResponse(response);
         } catch (e) {
-            const message = e instanceof Error ? e.message : "An unexpected error occurred.";
-            console.error("Error communicating with ChatGPT:", e);
-            setError(message);
+            if (activeRequest.current !== request) return;
+
+            if (request.timedOut) {
+                setError(
+                    `The request to ChatGPT did not complete within ${
+                        REQUEST_TIMEOUT_MS / 1000
+                    } seconds and was cancelled. ` + "Please check your network connection and try again."
+                );
+            } else {
+                const message = e instanceof Error ? e.message : "An unexpected error occurred.";
+                console.error("Error communicating with ChatGPT:", e);
+                setError(message);
+            }
         } finally {
-            setLoading(false);
+            window.clearTimeout(timeoutId);
+            if (activeRequest.current === request) {
+                activeRequest.current = null;
+                setLoading(false);
+            }
         }
     };
 
