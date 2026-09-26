@@ -1,31 +1,13 @@
-import { Button, Stack, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { Button, Stack } from "@mantine/core";
+import { open } from "@tauri-apps/plugin-dialog";
 import { useCallback, useState, useEffect } from "react";
 import { CommandHelper } from "../../utils/CommandHelper";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
 import { RenderComponent } from "../UserGuide/UserGuide";
-import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
+import { LoadingOverlayAndCancelButtonPkexec } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
-import { FilePicker } from "../FileHandler/FilePicker";
-
-/**
- * Represents the form values for the RTsort component.
- */
-interface FormValuesType {
-    path: string;
-}
-
-//Deals with the generatedfilepath unique identifier that is added at the end of a file
-const cleanFileName = (filePath: string): string => {
-    // Split the file name by the underscore (_) and keep the first part (before the timestamp/ID)
-    const parts = filePath.split("_");
-
-    // Keep only the base file name (before the timestamp and unique identifier)
-    const baseFileName = parts[0];
-    return baseFileName;
-};
 
 // Function for implementing RTSort as GUI component
 const RTSort = () => {
@@ -38,32 +20,25 @@ const RTSort = () => {
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal.
     const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [fileNames, setFileNames] = useState<string[]>([]); // State variable to store the file names.
+    const [tablePath, setTablePath] = useState<string>(""); // Directory containing the rainbow tables to sort.
 
     // Component Constants.
-    const title = "Rainbow Table Sort"; // Title of the component.
+    const title = "Rtsort"; // Title of the component.
     const description =
         "RTSort is a sub-function of the Rainbowcrack tool. This function sorts created rainbow tables."; // Description of the component.
     const steps =
-        "Step 1: Specify the filepath to the rainbow table file that you wish to sort (e.g ~/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt).\n" +
+        "Step 1: Click the picker below and select a rainbow table (.rt) file. Every file in the folder will be used.\n" +
         "Step 2: Click 'Start Sort'.\n" +
-        "Step 3: View the output block to view the results of the tool's execution.\n";
+        "Step 3: See the console to view the results of the command's execution.\n";
 
     const sourceLink = "https://gitlab.com/kalilinux/packages/rainbowcrack"; // Link to the source code (or Kali Tools).
     const tutorial = "https://docs.google.com/document/d/1d_DmZxMeOaoJexz5mNqXMXd48rmTCWjwYAQg-Eyu7Qs/edit?usp=sharing"; // Link to the official documentation/tutorial.
-    const dependencies = ["rcrack"]; // Contains the dependencies required by the component.
-
-    // Form hook to handle form input.
-    let form = useForm({
-        initialValues: {
-            path: "./",
-        },
-    });
+    const binaryDependencies = ["rtsort"]; // Contains the dependencies required by the component.
+    const packageDependencies = ["rainbowcrack"];
 
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
-        checkAllCommandsAvailability(dependencies)
+        checkAllCommandsAvailability(binaryDependencies)
             .then((isAvailable) => {
                 setIsCommandAvailable(isAvailable); // Set the command availability state
                 setOpened(!isAvailable); // Set the modal state to opened if the command is not available
@@ -120,50 +95,50 @@ const RTSort = () => {
     );
 
     /**
-     * onSubmit: Asynchronous handler for the form submission event.
-     * It sets up and triggers the rt-sort tool with the given parameters.
-     * Once the command is executed, the results or errors are displayed in the output.
-     *
-     * @param {FormValuesType} values - The form value, containing path.
+     * pickTableFolder: Opens a native file picker filtered to .rt files
+     * then stores just the containing directory in tablePath.
      */
-    const onSubmit = async (values: FormValuesType) => {
+    const pickTableFolder = async () => {
+        const selected = await open({
+            defaultPath: "/usr/share/rainbowcrack",
+            filters: [{ name: "Rainbow Table", extensions: ["rt"] }],
+            multiple: false,
+        });
+        if (typeof selected === "string") {
+            const dir = selected.substring(0, selected.lastIndexOf("/"));
+            setTablePath(dir);
+        }
+    };
+
+    /**
+     * onSubmit: Handler for the "Start Sort" button.
+     * Runs rtsort against the folder containing the selected rainbow tables
+     */
+    const onSubmit = async () => {
         // Activate loading state to indicate ongoing process
         setLoading(true);
         // Disallow saving until the tool's execution is complete
         setAllowSave(false);
+        setOutput("");
 
-        const baseFilePath = "/home/kali";
-        const fileToSend = fileNames[0];
-        const cleanName = cleanFileName(fileToSend);
-
-        // Concatenate the base file path with the cleaned file name
-        const dataUploadPath = `${baseFilePath}/${cleanName}`;
-
-        // Construct arguments for the RTsort command based on form input
-        const args = [values.path];
-        const filteredArgs = args.filter((arg) => arg !== ""); // Variable to store non empty string as argument
+        const args = [tablePath || "."];
 
         // Please note this command should not be cancelled as this will cause the rainbow table to be corrupted
-        // Execute the aircrack-ng command via helper method and handle its output or potential errors
-        try {
-            // Execute the artsort command via helper method and handle its output or potential errors
-            const result = await CommandHelper.runCommandGetPidAndOutput(
-                "rtsort",
-                filteredArgs,
-                handleProcessData,
-                handleProcessTermination,
-            );
-            // Update the UI with the results from the executed command
-            setPid(result.pid);
-            setOutput(result.output);
-            // Enable setAllowSave to generate output file
-            setAllowSave(true);
-        } catch (e: any) {
-            setOutput(e);
-            // Disallow save after the output
-            setAllowSave(false);
-        }
+        // Execute the rtsort command via helper method and handle its output or potential errors
+        CommandHelper.runCommandWithPkexec("rtsort", args, handleProcessData, handleProcessTermination)
+            .then(({ output, pid }) => {
+                // Update the UI with the results from the executed command
+                setOutput(output);
+                setPid(pid);
+            })
+            .catch((error) => {
+                setOutput(`Error: ${error.message}`);
+                // Disallow save after the output
+                setAllowSave(false);
+                setLoading(false);
+            });
     };
+
     /**
      * Clears the output state.
      */
@@ -178,7 +153,6 @@ const RTSort = () => {
         setAllowSave(false);
     }, []);
 
-    // placeholder="/home/user/rainbowcrack/tables/ntlm_loweralpha-numeric#1-9_0_1000x1000_0.rt"
     return (
         <RenderComponent
             title={title}
@@ -192,25 +166,29 @@ const RTSort = () => {
                     isOpen={opened}
                     setOpened={setOpened}
                     feature_description={description}
-                    dependencies={dependencies}
+                    dependencies={packageDependencies}
                 ></InstallationModal>
             )}
-            <form onSubmit={form.onSubmit(onSubmit)}>
-                {LoadingOverlayAndCancelButton(loading, pid)}
-                <Stack>
-                    <FilePicker
-                        fileNames={fileNames}
-                        setFileNames={setFileNames}
-                        multiple={false}
-                        componentName="RTsort"
-                        labelText="Select File (Can only select files in /home/kali)"
-                        placeholderText="Click to select file(s)"
-                    />
-                    <Button type={"submit"}>Start Sort</Button>
-                    {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
-                </Stack>
-            </form>
+            {LoadingOverlayAndCancelButtonPkexec(loading, pid, "", handleProcessData, handleProcessTermination)}
+            <Stack>
+                <div style={{ textAlign: "center" }}>
+                    <div style={{ textAlign: "center", fontSize: "14px", fontWeight: 500, marginBottom: "4px" }}>
+                        Select Rainbow Table
+                    </div>
+                    <label style={{ cursor: "pointer", display: "inline-block" }} onClick={pickTableFolder}>
+                        <img src="https://www.svgrepo.com/show/499790/upload.svg" alt="Upload" width={80} height={80} />
+                        <div style={{ fontSize: "14px", color: "#666" }}>
+                            {tablePath ? tablePath : "Select a path for .rt files"}
+                        </div>
+                    </label>
+                </div>
+
+                <Button onClick={onSubmit} disabled={!tablePath || loading}>
+                    Start Sort
+                </Button>
+                {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
+                <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
+            </Stack>
         </RenderComponent>
     );
 };
