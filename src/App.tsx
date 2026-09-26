@@ -13,6 +13,7 @@ import {
     Button,
     Aside,
     Group,
+    Stack,
 } from "@mantine/core";
 import { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
@@ -21,6 +22,7 @@ import Navigation from "./components/NavBar/Navigation";
 import { ROUTES } from "./components/RouteWrapper";
 import { NotificationsProvider } from "@mantine/notifications";
 import DisclaimerModal from "./pages/DisclaimerModal";
+import ContactMaintenanceModal from "./components/ContactMaintenance/ContactMaintenanceModal";
 
 export default function App() {
     const theme = useMantineTheme();
@@ -28,6 +30,7 @@ export default function App() {
     const [opened, setOpened] = useState(false);
     const [imageSrc, setImageSrc] = useState<string>("");
     const [disclaimerOpened, setDisclaimerOpened] = useState(false);
+    const [contactMaintenanceOpened, setContactMaintenanceOpened] = useState(false);
 
     const toggleColorScheme = (value?: ColorScheme) => {
         const nextColorScheme = value || (colorScheme === "dark" ? "light" : "dark");
@@ -55,8 +58,13 @@ export default function App() {
     return (
         <div className="App">
             <DisclaimerModal opened={disclaimerOpened} onClose={() => setDisclaimerOpened(false)} />
+
             <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
                 <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+                    <ContactMaintenanceModal
+                        opened={contactMaintenanceOpened}
+                        onClose={() => setContactMaintenanceOpened(false)}
+                    />
                     <AppShell
                         navbarOffsetBreakpoint="sm"
                         asideOffsetBreakpoint="sm"
@@ -65,11 +73,37 @@ export default function App() {
                         aside={
                             <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
                                 <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 120, lg: 120 }}>
-                                    <Group style={{ justifyContent: "center" }}>
-                                        <Button onClick={() => window.history.back()} color="red">
+                                    <Stack align="center" spacing="xs">
+                                        <Button
+                                            size="xs"
+                                            onClick={() => window.history.back()}
+                                            style={{ width: "90px" }}
+                                            color="red"
+                                        >
                                             Go Back
                                         </Button>
-                                    </Group>
+
+                                        <Button
+                                            size="xs"
+                                            onClick={() => setContactMaintenanceOpened(true)}
+                                            styles={{
+                                                root: {
+                                                    height: "auto",
+                                                    minHeight: "34px",
+                                                    padding: "5px 8px",
+                                                },
+                                                label: {
+                                                    whiteSpace: "normal",
+                                                    lineHeight: 1.15,
+                                                    textAlign: "center",
+                                                },
+                                            }}
+                                        >
+                                            Contact
+                                            <br />
+                                            Maintenance
+                                        </Button>
+                                    </Stack>
                                 </Aside>
                             </MediaQuery>
                         }
