@@ -79,13 +79,16 @@ const Wifite2 = () => {
 
     const handleProcessTermination = useCallback(
         ({ code, signal }: { code: number; signal: number | null }) => {
-            if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 2) {
-                handleProcessData("\nProcess was manually terminated.");
+            if (signal === 2 || signal === 15) {
+                handleProcessData("\nWifite2 terminal session was manually terminated.");
+            } else if (code === 0) {
+                handleProcessData("\nWifite2 terminal session closed.");
             } else {
-                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
+                handleProcessData(
+                    `\nWifite2 terminal session ended with exit code: ${code} and signal code: ${signal}`,
+                );
             }
+
             setPid("");
             setLoading(false);
         },
@@ -97,7 +100,17 @@ const Wifite2 = () => {
 
         const args: string[] = [];
 
-        if (values.target) args.push(values.target);
+        if (values.target.trim()) {
+            const target = values.target.trim();
+
+            const bssidPattern = /^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$/;
+
+            if (bssidPattern.test(target)) {
+                args.push("-b", target);
+            } else {
+                args.push("-e", target);
+            }
+        }
         if (values.dictPath) args.push("--dict", values.dictPath);
         if (values.timeout > 0) args.push("--timeout", values.timeout.toString());
         if (values.power > 0) args.push("--power", values.power.toString());
@@ -107,7 +120,9 @@ const Wifite2 = () => {
         if (values.noWpa) args.push("--no-wpa");
         if (values.skipCrack) args.push("--skip-crack");
 
-        CommandHelper.runCommandWithPkexec("wifite", args, handleProcessData, handleProcessTermination)
+        const terminalArgs = ["-c", 'exec qterminal -e pkexec wifite "$@"', "--", ...args];
+
+        CommandHelper.runCommandGetPidAndOutput("bash", terminalArgs, handleProcessData, handleProcessTermination)
             .then(({ output, pid }) => {
                 setOutput(output);
                 setAllowSave(true);
