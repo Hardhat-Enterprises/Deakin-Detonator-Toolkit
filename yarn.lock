@@ -1605,11 +1605,11 @@ __metadata:
   linkType: hard
 
 "@tauri-apps/plugin-fs@npm:~2":
-  version: 2.5.2
-  resolution: "@tauri-apps/plugin-fs@npm:2.5.2"
+  version: 2.6.0
+  resolution: "@tauri-apps/plugin-fs@npm:2.6.0"
   dependencies:
-    "@tauri-apps/api": ^2.11.0
-  checksum: 44a7c09b5e8035392708c4c4fdc4cb1faa76cdf7441176b0c65867365b49efc46812d5d5b0fbd9bd92897474572b30fd52d49d4807c73173404113d21412db07
+    "@tauri-apps/api": ^2.12.0
+  checksum: cae30ea68b19cb91c2b2b2b3d7453c1ad4126ff37a613ef729d41832a9d588fc7ecba364e8c3ba98cbf1d878ff04d493b94cfb5a86e3cdd776ecf2a1b58501e7
   languageName: node
   linkType: hard
 
