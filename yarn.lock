@@ -1614,11 +1614,11 @@ __metadata:
   linkType: hard
 
 "@tauri-apps/plugin-shell@npm:~2":
-  version: 2.3.6
-  resolution: "@tauri-apps/plugin-shell@npm:2.3.6"
+  version: 2.4.0
+  resolution: "@tauri-apps/plugin-shell@npm:2.4.0"
   dependencies:
-    "@tauri-apps/api": ^2.11.0
-  checksum: 773a14fc33ceddff06dad3162ae95b0d49bb7bac79e8f3f15286d3ee4f05f58c1b2da2159e26b8dd4eb0ec64306084f701f3b3cef4850c0bd65aca4c806ba14c
+    "@tauri-apps/api": ^2.12.0
+  checksum: 20d3b8dc7b5b4f140d52fbc19dd691371ed3adabdc9be61399c8f7798842434a9d90b36e8ac833310dca587b48cd3a539149f3ed6373b6670fbaed3679e12e2a
   languageName: node
   linkType: hard
 
