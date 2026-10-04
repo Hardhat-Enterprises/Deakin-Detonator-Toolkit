@@ -1445,18 +1445,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tabler/icons@npm:^1.95.1":
-  version: 1.119.0
-  resolution: "@tabler/icons@npm:1.119.0"
-  peerDependencies:
-    react: ^16.x || 17.x || 18.x
-    react-dom: ^16.x || 17.x || 18.x
-  peerDependenciesMeta:
-    react:
-      optional: true
-    react-dom:
-      optional: true
-  checksum: ef1ac50c1a47b2205cb86ca43c28d69c7b8f547ad9c2c5545190fc4a455e9767f49cb511a6f9e8dc45b046ee7d2dab3d2c87af4fd5bbb1694832a15698158753
+"@tabler/icons@npm:^3.48.0":
+  version: 3.48.0
+  resolution: "@tabler/icons@npm:3.48.0"
+  checksum: 3f17c1a21d6da6a6b5c5b6bb71430b57100ddf02eacf24e4b4700c87c9635fcea8bc83678931668cca688a4b4543023de00ea1b4ad792050e26e5b4b7fac83c6
   languageName: node
   linkType: hard
 
@@ -2397,7 +2389,7 @@ __metadata:
     "@mantine/notifications": 5.3.0
     "@mantine/prism": ^5.3.0
     "@mantine/spotlight": ^5.3.0
-    "@tabler/icons": ^1.95.1
+    "@tabler/icons": ^3.48.0
     "@tauri-apps/api": ^2.0.0
     "@tauri-apps/cli": ^2.11.4
     "@tauri-apps/plugin-dialog": ~2
