@@ -37,7 +37,7 @@
         "@tauri-apps/plugin-fs": "~2",
         "@tauri-apps/plugin-shell": "~2",
         "@tauri-apps/plugin-updater": "~2",
-        "dotenv": "^17.4.2",
+        "dotenv": "^18.0.5",
         "node-fetch": "^3.3.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
