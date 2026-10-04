@@ -1460,7 +1460,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tauri-apps/api@npm:^2.0.0, @tauri-apps/api@npm:^2.11.0":
+"@tauri-apps/api@npm:^2.0.0":
   version: 2.11.1
   resolution: "@tauri-apps/api@npm:2.11.1"
   checksum: 75b99cdc5b5209d060e279c2572ac9cf1776f020d0ef605b90faf26fed6f7aff4213160dc9b30574006ee91aa990eec808158ae32b97790a66534d468e20fb5d
@@ -1596,11 +1596,11 @@ __metadata:
   linkType: hard
 
 "@tauri-apps/plugin-dialog@npm:~2":
-  version: 2.7.3
-  resolution: "@tauri-apps/plugin-dialog@npm:2.7.3"
+  version: 2.8.1
+  resolution: "@tauri-apps/plugin-dialog@npm:2.8.1"
   dependencies:
-    "@tauri-apps/api": ^2.11.0
-  checksum: 14379eb3b1bcb09a33445ec6a69a5d4300da053268f188944a217616b417abd6684fd02f1c4fe42bd350ec057762e438a066fa182f74569af9d209d9101be6a5
+    "@tauri-apps/api": ^2.12.0
+  checksum: e19b21b7f5b02082411490e0570262505b6b4e154ba0cdb860edb87a7775cafdc037e49b2eadadb05fb95669b8e36be1c7334794764c83db9e34df93f8b40c10
   languageName: node
   linkType: hard
 
