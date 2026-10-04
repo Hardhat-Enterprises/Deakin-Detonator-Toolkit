@@ -30,3 +30,9 @@ src-tauri/exploits/GyoiThon/host.txt
 
 # .env file
 .env
+
+# DDT uses yarn
+package-lock.json
+
+# Yarn local installation state
+.yarn/install-state.gz
