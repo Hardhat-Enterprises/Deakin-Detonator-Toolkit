@@ -9,6 +9,21 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
+// Normalize input: remove protocol, www, and extract domain
+const normalizeDomain = (input: string): string => {
+    try {
+        const url = new URL(input.trim().toLowerCase());
+        return url.hostname.replace(/^www\./, "");
+    } catch {
+        return input
+            .trim()
+            .toLowerCase()
+            .replace(/^https?:\/\//, "")
+            .replace(/^www\./, "")
+            .split(/[/?#]/)[0];
+    }
+};
+
 /**
  * Represents the form values for the Whois component.
  */
@@ -109,25 +124,63 @@ function Whois() {
      * ONLY runs when inputs are valid (form.onSubmit handles validation).
      */
     const onSubmit = async (values: FormValuesType) => {
-        setAllowSave(false);
-        setHasSaved(false);
-        setOutput("");
         setLoading(true);
+      
+  setAllowSave(false);
+  setHasSaved(false);
+  setOutput("");
+  setLoading(true);
+      
+        // Normalize input (e.g., remove https://, www.)
+        const cleanedInput = normalizeDomain(values.targetURL);
+        const args = [cleanedInput];
 
-        // Build args for whois
-        const arg = values.targetURL.trim().replace(/^\[|\]$/g, ""); // strip [] for IPv6 when passing to whois
-        const args = [arg];
+        try {
+            let result = "";
+            let processId = "";
 
-        CommandHelper.runCommandGetPidAndOutput("whois", args, handleProcessData, handleProcessTermination)
-            .then(({ output, pid }) => {
-                setOutput(output);
-                setPid(pid);
-                setAllowSave(true);
-            })
-            .catch((error) => {
-                setOutput("WHOIS lookup failed. Please check the domain or IP address and try again.");
-                setLoading(false);
-            });
+            // Run command
+            const res = await CommandHelper.runCommandGetPidAndOutput(
+                "whois",
+                args,
+                handleProcessData,
+                handleProcessTermination
+            );
+            result = res.output;
+            processId = res.pid;
+
+            // Fallback if www. domain fails
+            if (result.includes("No match") && cleanedInput.startsWith("www.")) {
+                const fallbackInput = cleanedInput.replace(/^www\./, "");
+                const fallbackRes = await CommandHelper.runCommandGetPidAndOutput(
+                    "whois",
+                    [fallbackInput],
+                    handleProcessData,
+                    handleProcessTermination
+                );
+                result += `\n\n📌 Retried with base domain: ${fallbackInput}\n${fallbackRes.output}`;
+            }
+
+            // Clean the result before showing
+            const cleanOutput = (raw: string): string => {
+                if (raw.includes("No whois server is known")) {
+                    return "⚠️ Invalid input. Please enter a valid domain or IP address.";
+                }
+                if (raw.includes("No match")) {
+                    return "❌ Domain not found. Try removing 'www.' or check spelling.";
+                }
+                if (raw.includes("timeout")) {
+                    return "⏳ The request timed out. Please try again.";
+                }
+                return raw;
+            };
+
+            setOutput(cleanOutput(result));
+            setPid(processId);
+        } catch (error: any) {
+            setOutput("❌ Error: " + error.message);
+            setLoading(false);
+        }
     };
 
     /** Handles the completion of output saving */
