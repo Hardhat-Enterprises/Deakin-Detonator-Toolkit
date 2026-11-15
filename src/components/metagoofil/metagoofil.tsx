@@ -222,7 +222,7 @@ function Metagoofil() {
             if (code === 0) {
                 if (searchProviderErrorRef.current) {
                     handleProcessData(
-                        "\n[DDT] Metagoofil finished, but the search request was blocked by the search provider."
+                        "\n[DDT] Metagoofil finished, but the search request was blocked by the search provider.",
                     );
                 } else {
                     handleProcessData("\nProcess completed successfully.");
@@ -325,7 +325,7 @@ function Metagoofil() {
         setOutput(
             `[DDT] Starting Metagoofil scan...\n` +
                 `[DDT] Domain: ${normalizedDomain}\n` +
-                `[DDT] File type: ${normalizedFileType}\n`
+                `[DDT] File type: ${normalizedFileType}\n`,
         );
 
         try {
@@ -374,7 +374,7 @@ function Metagoofil() {
                         "[DDT] Search provider rate limit detected.\n" +
                         "[DDT] Google rejected Metagoofil's automated search request (HTTP 429).\n" +
                         "[DDT] This is a Metagoofil/search-provider restriction rather than a DDT execution error.\n" +
-                        "[DDT] Please wait before trying again."
+                        "[DDT] Please wait before trying again.",
                 );
             } else {
                 setOutput(`An error occurred while running Metagoofil:\n${errorMessage}`);
