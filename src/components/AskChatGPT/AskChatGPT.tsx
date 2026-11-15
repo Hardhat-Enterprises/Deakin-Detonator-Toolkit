@@ -54,7 +54,7 @@ const AskChatGPT = ({ toolName, output, setChatGPTResponse }: AskChatGPTProps) =
         if (!apiKey) {
             throw new Error(
                 "The AI feature is not configured. An OpenAI API key must be set as VITE_OPENAI_API_KEY " +
-                    "in a .env file at the project root. See .env.example for the expected format."
+                    "in a .env file at the project root. See .env.example for the expected format.",
             );
         }
 
@@ -125,7 +125,7 @@ const AskChatGPT = ({ toolName, output, setChatGPTResponse }: AskChatGPTProps) =
             const response = await sendToChatGPT(
                 `The following output is from the use of the ${toolName}. Provide a concise explanation of the tool and what the output shows for someone new to the cybersecurity world:`,
                 output,
-                request.controller.signal
+                request.controller.signal,
             );
 
             // Discard the response if this request has since been superseded.
@@ -138,7 +138,7 @@ const AskChatGPT = ({ toolName, output, setChatGPTResponse }: AskChatGPTProps) =
                 setError(
                     `The request to ChatGPT did not complete within ${
                         REQUEST_TIMEOUT_MS / 1000
-                    } seconds and was cancelled. ` + "Please check your network connection and try again."
+                    } seconds and was cancelled. ` + "Please check your network connection and try again.",
                 );
             } else {
                 const message = e instanceof Error ? e.message : "An unexpected error occurred.";
