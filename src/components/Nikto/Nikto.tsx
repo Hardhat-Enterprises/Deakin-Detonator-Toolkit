@@ -254,7 +254,10 @@ function Nikto() {
         setAllowSave(false);
 
         const host = form.values.host.trim();
-        const args = ["-h", host];
+        // Run Nikto non-interactively, as DDT cannot pass user input to the process (Issue #1812).
+        // "-ask no" stops the post-scan CIRT.net submission prompt.
+        // "-nointeractive" disables Nikto's keypress controls during the scan.
+        const args = ["-h", host, "-ask", "no", "-nointeractive"];
 
         if (form.values.port !== 80) {
             args.push("-port", form.values.port.toString());
