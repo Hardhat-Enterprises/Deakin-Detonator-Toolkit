@@ -16,4 +16,4 @@ updates:
       # increase the version requirements for npm dependencies
       # only when required
       versioning-strategy: "increase-if-necessary"
-      open-pull-requests-limit: 10
+      open-pull-requests-limit: 0
