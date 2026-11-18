@@ -1,5 +1,13 @@
 import { describe, it, expect } from "vitest";
-import { normalizePath, validateFilePath, validateOutputDirectory, validateTimeout } from "./eyewitness";
+import {
+    normalizePath,
+    validateFilePath,
+    validateOutputDirectory,
+    validateTimeout,
+    buildInputCheckArgs,
+    describeInputCheckResult,
+    INPUT_CHECK_SCRIPT,
+} from "./eyewitness";
 
 describe("EyeWitness Validation & Path Sanitization", () => {
     describe("normalizePath", () => {
@@ -182,6 +190,34 @@ describe("EyeWitness Validation & Path Sanitization", () => {
             expect(validateTimeout("15")).toBeNull();
             expect(validateTimeout("60")).toBeNull();
             expect(validateTimeout("3600")).toBeNull();
+        });
+    });
+
+    describe("Input file check (Issue #1488)", () => {
+        it("passes the file path as a separate argument instead of inserting it into the script", () => {
+            const path = "/home/kali/Desktop/we ird;$(touch PWNED).txt";
+            const args = buildInputCheckArgs(path);
+            expect(args).toEqual(["-c", INPUT_CHECK_SCRIPT, "eyewitness-input-check", path]);
+            expect(args[1]).not.toContain(path);
+        });
+
+        it("accepts a readable plain text file", () => {
+            expect(describeInputCheckResult(0)).toBeNull();
+        });
+
+        it("rejects binary files such as PNG images with a clear message", () => {
+            expect(describeInputCheckResult(6)).toContain("Unsupported input file type");
+        });
+
+        it("rejects missing, unreadable and empty files", () => {
+            expect(describeInputCheckResult(3)).toContain("not found");
+            expect(describeInputCheckResult(4)).toContain("permission denied");
+            expect(describeInputCheckResult(5)).toContain("empty");
+        });
+
+        it("returns a generic message for unexpected exit codes", () => {
+            expect(describeInputCheckResult(2)).toContain("Could not check the input file");
+            expect(describeInputCheckResult(null)).toContain("Could not check the input file");
         });
     });
 });

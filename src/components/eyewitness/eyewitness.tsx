@@ -8,6 +8,7 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { Command } from "@tauri-apps/plugin-shell";
 
 /**
  * Represents the form values for the EyeWitness component.
@@ -197,6 +198,78 @@ export const validateTimeout = (timeout: string): string | null => {
 };
 
 /**
+ * Bash script used to check the EyeWitness input file before the tool runs (Issue #1488).
+ * The file path is passed as a positional argument ($1) and is never inserted into the script text,
+ * so paths containing spaces or shell characters cannot be used to inject commands.
+ *
+ * Exit codes:
+ * - 0: readable plain text file
+ * - 3: path does not exist or is not a regular file
+ * - 4: file cannot be read (permission denied)
+ * - 5: file is empty or only contains blank lines
+ * - 6: file is binary (contains NUL bytes), for example a PNG image
+ */
+export const INPUT_CHECK_SCRIPT =
+    'f="$1"; [ -f "$f" ] || exit 3; [ -r "$f" ] || exit 4; [ -s "$f" ] || exit 5; ' +
+    'LC_ALL=C grep -Iq . -- "$f" && exit 0; LC_ALL=C grep -q . -- "$f" && exit 6; exit 5';
+
+/**
+ * Builds the bash arguments for the input file check.
+ * "$0" is set to a fixed label and the file path is passed separately as "$1".
+ *
+ * @param {string} filePath - Absolute path of the EyeWitness input file.
+ * @returns {string[]} Arguments to pass to bash.
+ */
+export const buildInputCheckArgs = (filePath: string): string[] => [
+    "-c",
+    INPUT_CHECK_SCRIPT,
+    "eyewitness-input-check",
+    filePath,
+];
+
+/**
+ * Converts the exit code of the input file check into a user-friendly error message.
+ *
+ * @param {number | null} code - Exit code returned by the input check script.
+ * @returns {string | null} Error message if the input file is not usable, null if it is valid.
+ */
+export const describeInputCheckResult = (code: number | null): string | null => {
+    switch (code) {
+        case 0:
+            return null;
+        case 3:
+            return "Input file not found. Please enter the path to an existing file.";
+        case 4:
+            return "Input file cannot be read (permission denied).";
+        case 5:
+            return "Input file is empty. Add one URL per line.";
+        case 6:
+            return "Unsupported input file type. EyeWitness needs a plain text file with one URL per line (e.g. urls.txt), not an image or other binary file.";
+        default:
+            return "Could not check the input file. Please make sure it is a plain text file and try again.";
+    }
+};
+
+/**
+ * Checks that the EyeWitness input file is a readable, non-empty plain text file (Issue #1488).
+ * Without this check, a binary file such as a PNG is passed straight to EyeWitness, which fails
+ * with a Python error instead of a clear message.
+ *
+ * @param {string} filePath - Absolute path of the EyeWitness input file.
+ * @returns {Promise<string | null>} Error message if the file is not usable, null if it is valid.
+ */
+const checkInputFile = async (filePath: string): Promise<string | null> => {
+    try {
+        const result = await Command.create("bash", buildInputCheckArgs(filePath)).execute();
+        return describeInputCheckResult(result.code);
+    } catch (error) {
+        // If the check itself cannot run, do not block the scan; EyeWitness will report its own error.
+        console.error("EyeWitness input file check could not be run:", error);
+        return null;
+    }
+};
+
+/**
  * The Eyewitness component.
  * @returns The Eyewitness component.
  */
@@ -349,6 +422,14 @@ function Eyewitness() {
         const timeoutError = validateTimeout(values.timeout);
         if (timeoutError) {
             setOutput(`Error: ${timeoutError}`);
+            return;
+        }
+
+        // Make sure the input file is a readable plain text file before running EyeWitness (Issue #1488).
+        const inputError = await checkInputFile(values.filePath.trim());
+        if (inputError) {
+            form.setFieldError("filePath", inputError);
+            setOutput(`Error: ${inputError}`);
             return;
         }
 
