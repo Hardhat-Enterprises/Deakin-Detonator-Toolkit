@@ -125,12 +125,12 @@ function Whois() {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-      
-  setAllowSave(false);
-  setHasSaved(false);
-  setOutput("");
-  setLoading(true);
-      
+
+        setAllowSave(false);
+        setHasSaved(false);
+        setOutput("");
+        setLoading(true);
+
         // Normalize input (e.g., remove https://, www.)
         const cleanedInput = normalizeDomain(values.targetURL);
         const args = [cleanedInput];
@@ -144,7 +144,7 @@ function Whois() {
                 "whois",
                 args,
                 handleProcessData,
-                handleProcessTermination
+                handleProcessTermination,
             );
             result = res.output;
             processId = res.pid;
@@ -156,7 +156,7 @@ function Whois() {
                     "whois",
                     [fallbackInput],
                     handleProcessData,
-                    handleProcessTermination
+                    handleProcessTermination,
                 );
                 result += `\n\n📌 Retried with base domain: ${fallbackInput}\n${fallbackRes.output}`;
             }
