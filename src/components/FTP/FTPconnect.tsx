@@ -1,4 +1,3 @@
-
 import { Button, Stack, TextInput, Modal, Text, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useCallback, useState, useEffect } from "react";
@@ -93,10 +92,7 @@ function FTPconnect() {
      * Debian package status with dpkg-query and grep.
      */
     const checkFtpDependencies = useCallback(async (): Promise<boolean> => {
-        const command = Command.create("bash", [
-            "-c",
-            "command -v xdg-open",
-        ]);
+        const command = Command.create("bash", ["-c", "command -v xdg-open"]);
 
         const result = await command.execute();
 
@@ -122,9 +118,7 @@ function FTPconnect() {
             } catch (error) {
                 if (!isMounted) return;
 
-                setDependencyOutput(
-                    `Failed to check dependencies: ${String(error)}`
-                );
+                setDependencyOutput(`Failed to check dependencies: ${String(error)}`);
 
                 setDependencyModalOpened(true);
             } finally {
@@ -158,30 +152,17 @@ function FTPconnect() {
                 "apt-get install --no-install-recommends -y " +
                 dependencies.join(" ");
 
-            const command = Command.create("pkexec", [
-                "bash",
-                "-c",
-                installScript,
-            ]);
+            const command = Command.create("pkexec", ["bash", "-c", installScript]);
 
             const result = await command.execute();
 
             // Display installation output.
-            const installationLog = [
-                result.stdout,
-                result.stderr,
-            ]
-                .filter(Boolean)
-                .join("\n");
+            const installationLog = [result.stdout, result.stderr].filter(Boolean).join("\n");
 
-            setDependencyOutput(
-                installationLog || "Installation process completed."
-            );
+            setDependencyOutput(installationLog || "Installation process completed.");
 
             if (result.code !== 0) {
-                throw new Error(
-                    `Installation failed with exit code ${result.code}.`
-                );
+                throw new Error(`Installation failed with exit code ${result.code}.`);
             }
 
             // Verify that xdg-open is available after installation.
@@ -192,23 +173,12 @@ function FTPconnect() {
             if (available) {
                 setDependencyModalOpened(false);
 
-                setDependencyOutput(
-                    (prevOutput) =>
-                        prevOutput +
-                        "\nFTP dependency installed successfully."
-                );
+                setDependencyOutput((prevOutput) => prevOutput + "\nFTP dependency installed successfully.");
             } else {
-                setDependencyOutput(
-                    (prevOutput) =>
-                        prevOutput +
-                        "\nxdg-open is still unavailable."
-                );
+                setDependencyOutput((prevOutput) => prevOutput + "\nxdg-open is still unavailable.");
             }
         } catch (error) {
-            setDependencyOutput(
-                (prevOutput) =>
-                    prevOutput + `\nInstallation error: ${String(error)}`
-            );
+            setDependencyOutput((prevOutput) => prevOutput + `\nInstallation error: ${String(error)}`);
         } finally {
             setInstallingDependencies(false);
         }
@@ -233,14 +203,9 @@ function FTPconnect() {
         const port = values.port;
 
         // Handle IPv6 addresses by adding brackets when required.
-        const formattedHost =
-            host.startsWith("[") && host.endsWith("]")
-                ? host.slice(1, -1)
-                : host;
+        const formattedHost = host.startsWith("[") && host.endsWith("]") ? host.slice(1, -1) : host;
 
-        const urlHost = formattedHost.includes(":")
-            ? `[${formattedHost}]`
-            : formattedHost;
+        const urlHost = formattedHost.includes(":") ? `[${formattedHost}]` : formattedHost;
 
         // Construct and validate the FTP URL.
         let ftpUrl: string;
@@ -254,10 +219,7 @@ function FTPconnect() {
 
             ftpUrl = url.toString();
         } catch {
-            form.setFieldError(
-                "ipAddress",
-                "Enter a valid IP address or hostname."
-            );
+            form.setFieldError("ipAddress", "Enter a valid IP address or hostname.");
             return;
         }
 
@@ -269,33 +231,17 @@ function FTPconnect() {
 
         try {
             // Pass the URL as a separate argument to avoid shell injection.
-            const command = Command.create("bash", [
-                "-c",
-                'exec xdg-open "$1"',
-                "ddt-ftp-open",
-                ftpUrl,
-            ]);
+            const command = Command.create("bash", ["-c", 'exec xdg-open "$1"', "ddt-ftp-open", ftpUrl]);
 
             const result = await command.execute();
 
             if (result.code !== 0) {
-                throw new Error(
-                    result.stderr.trim() ||
-                    `xdg-open exited with code ${result.code}.`
-                );
+                throw new Error(result.stderr.trim() || `xdg-open exited with code ${result.code}.`);
             }
 
-            setOutput(
-                (prevOutput) =>
-                    prevOutput +
-                    "FTP location opened successfully.\n"
-            );
+            setOutput((prevOutput) => prevOutput + "FTP location opened successfully.\n");
         } catch (error) {
-            setOutput(
-                (prevOutput) =>
-                    prevOutput +
-                    `Failed to open FTP location: ${String(error)}\n`
-            );
+            setOutput((prevOutput) => prevOutput + `Failed to open FTP location: ${String(error)}\n`);
         } finally {
             setLoading(false);
             setAllowSave(true);
@@ -337,15 +283,12 @@ function FTPconnect() {
                 closeOnEscape={!installingDependencies}
             >
                 <Stack>
-                    <Text>
-                        The FTP tool requires the following dependency:
-                    </Text>
+                    <Text>The FTP tool requires the following dependency:</Text>
 
                     <Text weight={500}>xdg-utils</Text>
 
                     <Text size="sm" color="dimmed">
-                        This package provides xdg-open, which opens FTP
-                        locations using your Linux desktop's default
+                        This package provides xdg-open, which opens FTP locations using your Linux desktop's default
                         application.
                     </Text>
 
@@ -363,33 +306,21 @@ function FTPconnect() {
                         </pre>
                     )}
 
-                    <Button
-                        onClick={installFtpDependencies}
-                        disabled={installingDependencies}
-                    >
-                        {installingDependencies
-                            ? "Installing Dependencies..."
-                            : "Install Dependencies"}
+                    <Button onClick={installFtpDependencies} disabled={installingDependencies}>
+                        {installingDependencies ? "Installing Dependencies..." : "Install Dependencies"}
                     </Button>
                 </Stack>
             </Modal>
 
             {/* Show a warning if dependencies are missing and the modal is closed. */}
-            {!dependenciesReady &&
-                !checkingDependencies &&
-                !dependencyModalOpened && (
-                    <Alert title="FTP dependency missing" color="yellow">
-                        xdg-open is unavailable.
-
-                        <Button
-                            mt="sm"
-                            size="xs"
-                            onClick={() => setDependencyModalOpened(true)}
-                        >
-                            Install Dependencies
-                        </Button>
-                    </Alert>
-                )}
+            {!dependenciesReady && !checkingDependencies && !dependencyModalOpened && (
+                <Alert title="FTP dependency missing" color="yellow">
+                    xdg-open is unavailable.
+                    <Button mt="sm" size="xs" onClick={() => setDependencyModalOpened(true)}>
+                        Install Dependencies
+                    </Button>
+                </Alert>
+            )}
 
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
@@ -412,20 +343,10 @@ function FTPconnect() {
                         {...form.getInputProps("port")}
                     />
 
-                    <Button
-                        type="submit"
-                        disabled={
-                            loading ||
-                            checkingDependencies ||
-                            !dependenciesReady
-                        }
-                    >
+                    <Button type="submit" disabled={loading || checkingDependencies || !dependenciesReady}>
                         {loading ? "Opening FTP..." : "Open FTP Location"}
                     </Button>
-                    <ConsoleWrapper
-                        output={output}
-                        clearOutputCallback={clearOutput}
-                    />
+                    <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
         </RenderComponent>
