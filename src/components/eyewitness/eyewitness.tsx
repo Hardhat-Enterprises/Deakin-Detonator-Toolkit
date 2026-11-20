@@ -9,6 +9,7 @@ import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/Overlay
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { Command } from "@tauri-apps/plugin-shell";
+import { open as openDialog } from "@tauri-apps/plugin-dialog";
 
 /**
  * Represents the form values for the EyeWitness component.
@@ -270,6 +271,46 @@ const checkInputFile = async (filePath: string): Promise<string | null> => {
 };
 
 /**
+ * Checks whether all EyeWitness inputs are valid, using the same validators as the form.
+ * Used to keep the Scan button disabled until the inputs can be run (Issue #1489).
+ *
+ * @param {FormValuesType} values - Current form values.
+ * @returns {boolean} True if the file path, output directory and timeout are all valid.
+ */
+export const areInputsValid = (values: FormValuesType): boolean =>
+    validateFilePath(values.filePath) === null &&
+    validateOutputDirectory(values.directory, values.filePath) === null &&
+    validateTimeout(values.timeout) === null;
+
+/**
+ * Builds the path of the HTML report that EyeWitness writes to the output directory.
+ *
+ * @param {string} directory - EyeWitness output directory.
+ * @returns {string} Absolute path of report.html inside the output directory.
+ */
+export const buildReportPath = (directory: string): string => `${normalizePath(directory)}/report.html`;
+
+/**
+ * Bash script used to open the EyeWitness report in the default browser (Issue #1489).
+ * The report path is passed as "$1" and never inserted into the script text.
+ * Exit code 3 means the report file does not exist.
+ */
+export const OPEN_REPORT_SCRIPT = '[ -f "$1" ] || exit 3; setsid xdg-open "$1" >/dev/null 2>&1 & exit 0';
+
+/**
+ * Builds the bash arguments used to open the EyeWitness report.
+ *
+ * @param {string} reportPath - Absolute path of report.html.
+ * @returns {string[]} Arguments to pass to bash.
+ */
+export const buildOpenReportArgs = (reportPath: string): string[] => [
+    "-c",
+    OPEN_REPORT_SCRIPT,
+    "eyewitness-open-report",
+    reportPath,
+];
+
+/**
  * The Eyewitness component.
  * @returns The Eyewitness component.
  */
@@ -296,9 +337,13 @@ function Eyewitness() {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
     const [showAlert, setShowAlert] = useState(true);
+    const [reportPath, setReportPath] = useState(""); // Path of the EyeWitness HTML report after a successful scan
+    const outputDirectoryRef = useRef(""); // Output directory of the current scan, used to locate the report
     const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     let form = useForm({
+        // Show field errors as soon as the user leaves a field, so it is clear why Scan is disabled (Issue #1489).
+        validateInputOnBlur: true,
         initialValues: {
             filePath: "",
             directory: "",
@@ -370,6 +415,7 @@ function Eyewitness() {
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully."); // Successful completion message
+                setReportPath(buildReportPath(outputDirectoryRef.current)); // Enable the Open results button
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated."); // Manual termination message
             } else {
@@ -433,6 +479,10 @@ function Eyewitness() {
             return;
         }
 
+        // Remember the output directory so the report can be opened after the scan (Issue #1489).
+        outputDirectoryRef.current = values.directory.trim();
+        setReportPath("");
+
         setAllowSave(false); // Disallow saving until the tool's execution is complete
         setLoading(true); // Enable the Loading Overlay
 
@@ -456,6 +506,52 @@ function Eyewitness() {
     /**
      * Clears the output data and resets the save state.
      */
+    /**
+     * Opens a file picker so the user can choose the text file of URLs (Issue #1489).
+     */
+    const pickInputFile = async () => {
+        const selected = await openDialog({
+            multiple: false,
+            directory: false,
+            filters: [{ name: "Text File", extensions: ["txt", "list"] }],
+        });
+        if (typeof selected === "string") {
+            form.setFieldValue("filePath", selected);
+            // Validate straight away so the user can see why Scan is disabled, if it is.
+            form.setFieldError("filePath", validateFilePath(selected));
+            if (form.values.directory) {
+                form.setFieldError("directory", validateOutputDirectory(form.values.directory, selected));
+            }
+        }
+    };
+
+    /**
+     * Opens a folder picker so the user can choose the output directory (Issue #1489).
+     */
+    const pickOutputDirectory = async () => {
+        const selected = await openDialog({ multiple: false, directory: true });
+        if (typeof selected === "string") {
+            form.setFieldValue("directory", selected);
+            // Validate straight away so the user can see why Scan is disabled, if it is.
+            form.setFieldError("directory", validateOutputDirectory(selected, form.values.filePath));
+        }
+    };
+
+    /**
+     * Opens the EyeWitness HTML report in the default browser (Issue #1489).
+     */
+    const openReport = async () => {
+        try {
+            const result = await Command.create("bash", buildOpenReportArgs(reportPath)).execute();
+            if (result.code === 3) {
+                setOutput((prev) => `${prev}\nReport not found: ${reportPath}`);
+            }
+        } catch (error) {
+            console.error("Could not open the EyeWitness report:", error);
+            setOutput((prev) => `${prev}\nCould not open the report automatically. It is saved at: ${reportPath}`);
+        }
+    };
+
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
@@ -496,20 +592,32 @@ function Eyewitness() {
                     )}
 
                     <p>{description}</p>
-                    <TextInput
-                        label={"Enter the file name or path containing URLs:"}
-                        placeholder={"Example: /home/kali/Desktop/urls.txt"}
-                        required
-                        {...form.getInputProps("filePath")}
-                    />
-                    <TextInput
-                        label={
-                            "Enter the directory name where you want to save screenshots or define path of directory:"
-                        }
-                        placeholder={"Example: /home/kali/Desktop/eyewitness_results"}
-                        required
-                        {...form.getInputProps("directory")}
-                    />
+                    <Group align="flex-start" noWrap>
+                        <TextInput
+                            label={"Enter the file name or path containing URLs:"}
+                            placeholder={"Example: /home/kali/Desktop/urls.txt"}
+                            required
+                            style={{ flex: 1 }}
+                            {...form.getInputProps("filePath")}
+                        />
+                        <Button variant="outline" mt={25} onClick={pickInputFile}>
+                            Choose File
+                        </Button>
+                    </Group>
+                    <Group align="flex-start" noWrap>
+                        <TextInput
+                            label={
+                                "Enter the directory name where you want to save screenshots or define path of directory:"
+                            }
+                            placeholder={"Example: /home/kali/Desktop/eyewitness_results"}
+                            required
+                            style={{ flex: 1 }}
+                            {...form.getInputProps("directory")}
+                        />
+                        <Button variant="outline" mt={25} onClick={pickOutputDirectory}>
+                            Choose Folder
+                        </Button>
+                    </Group>
                     <TextInput
                         label={"Enter the timeout time (in seconds):"}
                         placeholder={"Example: 15"}
@@ -517,7 +625,14 @@ function Eyewitness() {
                         {...form.getInputProps("timeout")}
                     />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type={"submit"}>Scan</Button>
+                    <Button type={"submit"} disabled={!areInputsValid(form.values)}>
+                        Scan
+                    </Button>
+                    {reportPath && !loading && (
+                        <Button variant="light" onClick={openReport}>
+                            Open results
+                        </Button>
+                    )}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
