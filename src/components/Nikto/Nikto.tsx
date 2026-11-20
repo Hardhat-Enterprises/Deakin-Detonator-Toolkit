@@ -36,6 +36,21 @@ function wrapIPv6IfNeeded(s: string): string {
     return s.includes("://") ? s : `http://${s}`;
 }
 
+/**
+ * If the Host field is a full URL that already carries an explicit port
+ * (e.g. https://example.com:8443), return that port as a string.
+ * Returns null if there's no embedded port (bare hostname/IP, or a URL
+ * with no port in it).
+ */
+function extractPortFromHost(host: string): string | null {
+    try {
+        const url = new URL(wrapIPv6IfNeeded(host));
+        return url.port || null;
+    } catch {
+        return null;
+    }
+}
+
 function isValidTarget(input: string): boolean {
     if (!input) return false;
     const s = input.trim();
@@ -254,9 +269,12 @@ function Nikto() {
         setAllowSave(false);
 
         const host = form.values.host.trim();
+        const embeddedPort = extractPortFromHost(host);
         const args = ["-h", host];
 
-        if (form.values.port !== 80) {
+        // Only pass -port from the Port field if the Host URL doesn't already
+        // specify its own port — otherwise Nikto receives the port twice and errors.
+        if (!embeddedPort && form.values.port !== 80) {
             args.push("-port", form.values.port.toString());
         }
 
