@@ -34,8 +34,15 @@ interface FormValuesType {
     custom: string;
 }
 
-const architectures = ["Select Architecture", "windows/x86", "windows/x64", "linux/x86", "Mac/x64", "Android ARM"];
-const payloadOptions = [
+export const architectures = [
+    "Select Architecture",
+    "windows/x86",
+    "windows/x64",
+    "linux/x86",
+    "Mac/x64",
+    "Android ARM",
+];
+export const payloadOptions = [
     ["Select Payload"],
     [
         "windows/meterpreter/reverse_tcp",
@@ -93,7 +100,15 @@ const payloadOptions = [
 
 const payloadFormats = ["Select Payload Format", "exe", "elf", "raw", "psh", "asp", "aspx", "jsp", "war", "jar", "apk"];
 
-const payloadRequiredVariables = [
+/**
+ * Required msfvenom variables for each payload, used to decide which input fields to show.
+ * The outer index must match architectures and payloadOptions, so index 0 is the
+ * "Select Architecture" placeholder (Issue #1877). Each inner list must have one entry
+ * per payload in the matching payloadOptions list, in the same order.
+ */
+export const payloadRequiredVariables = [
+    // Placeholder entry for "Select Architecture" / "Select Payload"
+    [[]],
     // windows x86 payload variables
     [
         ["LHOST", "LPORT"],
@@ -122,7 +137,8 @@ const payloadRequiredVariables = [
         ["LHOST", "LPORT"],
     ],
     //MAC x64 payload variables
-    [["LHOST", "LPORT"], ["LPORT"], ["CMD"], ["TEXT"], [], [], [], ["LHOST", "LPORT"]],
+    // One entry per payload: reverse_https, shell_bind_tcp, exec, say, shell_find_tag, dupandexecve/bind_tcp, meterpreter/reverse_tcp
+    [["LHOST", "LPORT"], ["LPORT"], ["CMD"], ["TEXT"], [], [], ["LHOST", "LPORT"]],
     //Android ARM payload variables
     [
         ["LHOST", "LPORT"],
