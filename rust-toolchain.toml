@@ -1,0 +1,4 @@
+# Generated from versions.env by scripts/sync-versions.mjs. Do not edit by hand.
+# Change RUST_TOOLCHAIN in versions.env, then run: corepack yarn versions:sync
+[toolchain]
+channel = "1.99.1"
