@@ -11,6 +11,9 @@ import {
     buildReportPath,
     buildOpenReportArgs,
     OPEN_REPORT_SCRIPT,
+    buildOutputDirCheckArgs,
+    describeOutputDirCheckResult,
+    OUTPUT_DIR_CHECK_SCRIPT,
 } from "./eyewitness";
 
 describe("EyeWitness Validation & Path Sanitization", () => {
@@ -253,6 +256,32 @@ describe("EyeWitness Validation & Path Sanitization", () => {
             const args = buildOpenReportArgs(path);
             expect(args).toEqual(["-c", OPEN_REPORT_SCRIPT, "eyewitness-open-report", path]);
             expect(args[1]).not.toContain(path);
+        });
+    });
+
+    describe("Output directory check (QA feedback on PR #1885)", () => {
+        it("passes the output directory as a separate argument instead of inserting it into the script", () => {
+            const dir = "/home/kali/valid-urls.txt/output";
+            const args = buildOutputDirCheckArgs(dir);
+            expect(args).toEqual(["-c", OUTPUT_DIR_CHECK_SCRIPT, "eyewitness-output-check", dir]);
+            expect(args[1]).not.toContain(dir);
+        });
+
+        it("accepts a usable output directory", () => {
+            expect(describeOutputDirCheckResult(0)).toBeNull();
+        });
+
+        it("rejects a path that goes through an existing file", () => {
+            expect(describeOutputDirCheckResult(7)).toContain("part of this path is an existing file");
+        });
+
+        it("rejects a location that is not writable", () => {
+            expect(describeOutputDirCheckResult(8)).toContain("permission denied");
+        });
+
+        it("returns a generic message for unexpected exit codes", () => {
+            expect(describeOutputDirCheckResult(1)).toContain("Could not check the output directory");
+            expect(describeOutputDirCheckResult(null)).toContain("Could not check the output directory");
         });
     });
 });

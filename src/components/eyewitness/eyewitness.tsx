@@ -271,6 +271,71 @@ const checkInputFile = async (filePath: string): Promise<string | null> => {
 };
 
 /**
+ * Bash script used to check the EyeWitness output directory against the file system before the tool runs.
+ * EyeWitness creates the output directory itself, so the path does not have to exist yet. However, every
+ * part of the path that does exist must be a directory, and the closest existing directory must be writable.
+ * Without this check, a path such as /home/kali/urls.txt/output makes EyeWitness fail with a Python
+ * NotADirectoryError. The path is passed as "$1" and is never inserted into the script text.
+ *
+ * Exit codes:
+ * - 0: usable output directory (existing directory, or a new one inside a writable directory)
+ * - 7: the path, or one of its parent folders, is an existing file rather than a directory
+ * - 8: the closest existing directory is not writable
+ */
+export const OUTPUT_DIR_CHECK_SCRIPT =
+    'd="$1"; while [ ! -e "$d" ] && [ ! -L "$d" ]; do d=$(dirname -- "$d"); done; ' +
+    '[ -d "$d" ] || exit 7; [ -w "$d" ] || exit 8; exit 0';
+
+/**
+ * Builds the bash arguments for the output directory check.
+ *
+ * @param {string} directory - Absolute path of the EyeWitness output directory.
+ * @returns {string[]} Arguments to pass to bash.
+ */
+export const buildOutputDirCheckArgs = (directory: string): string[] => [
+    "-c",
+    OUTPUT_DIR_CHECK_SCRIPT,
+    "eyewitness-output-check",
+    directory,
+];
+
+/**
+ * Converts the exit code of the output directory check into a user-friendly error message.
+ *
+ * @param {number | null} code - Exit code returned by the output directory check script.
+ * @returns {string | null} Error message if the directory cannot be used, null if it is usable.
+ */
+export const describeOutputDirCheckResult = (code: number | null): string | null => {
+    switch (code) {
+        case 0:
+            return null;
+        case 7:
+            return "Output directory is not valid: part of this path is an existing file, not a folder. Choose or enter a folder path.";
+        case 8:
+            return "Output directory cannot be created here (permission denied). Choose a folder you can write to.";
+        default:
+            return "Could not check the output directory. Please choose a different folder and try again.";
+    }
+};
+
+/**
+ * Checks the EyeWitness output directory against the file system (QA feedback on PR #1885).
+ *
+ * @param {string} directory - Absolute path of the EyeWitness output directory.
+ * @returns {Promise<string | null>} Error message if the directory cannot be used, null if it is usable.
+ */
+const checkOutputDirectory = async (directory: string): Promise<string | null> => {
+    try {
+        const result = await Command.create("bash", buildOutputDirCheckArgs(directory)).execute();
+        return describeOutputDirCheckResult(result.code);
+    } catch (error) {
+        // If the check itself cannot run, do not block the scan; EyeWitness will report its own error.
+        console.error("EyeWitness output directory check could not be run:", error);
+        return null;
+    }
+};
+
+/**
  * Checks whether all EyeWitness inputs are valid, using the same validators as the form.
  * Used to keep the Scan button disabled until the inputs can be run (Issue #1489).
  *
@@ -476,6 +541,14 @@ function Eyewitness() {
         if (inputError) {
             form.setFieldError("filePath", inputError);
             setOutput(`Error: ${inputError}`);
+            return;
+        }
+
+        // Make sure the output directory can actually be used before running EyeWitness (QA feedback on PR #1885).
+        const outputError = await checkOutputDirectory(values.directory.trim());
+        if (outputError) {
+            form.setFieldError("directory", outputError);
+            setOutput(`Error: ${outputError}`);
             return;
         }
 
