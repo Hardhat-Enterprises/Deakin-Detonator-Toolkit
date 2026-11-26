@@ -148,6 +148,8 @@ const PayloadGenerator = () => {
     const [payloadIndex, setPayloadIndex] = useState<number | null>(null);
     const [requiredVariables, setRequiredVariables] = useState<string[]>([]);
     const [pid, setPid] = useState("");
+    // State variable to store validation messages for the required preset fields (Issue #1747).
+    const [presetErrors, setPresetErrors] = useState<{ architecture?: string; payload?: string; format?: string }>({});
 
     const form = useForm<FormValuesType>({
         initialValues: {
@@ -207,7 +209,35 @@ const PayloadGenerator = () => {
         setAllowSave(false);
     }, []);
 
+    /**
+     * validatePresetFields: Checks that the required preset fields have real selections,
+     * as the dropdowns start on placeholder options that are not valid msfvenom values (Issue #1747).
+     * @returns {boolean} True if all required preset fields are valid, otherwise false.
+     */
+    const validatePresetFields = (): boolean => {
+        const errors: { architecture?: string; payload?: string; format?: string } = {};
+
+        if (architectures.indexOf(selectedArchitecture) < 1) {
+            errors.architecture = "Please select an architecture.";
+        }
+        if (!selectedPayload || selectedPayload === "Select Payload") {
+            errors.payload = "Please select a payload.";
+        }
+        if (!selectedFormat || selectedFormat === payloadFormats[0]) {
+            errors.format = "Please select a payload format.";
+        }
+
+        setPresetErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     const onSubmit = async () => {
+        // Block generation in preset mode until the required fields are valid (Issue #1747).
+        if (!isCustomMode && !validatePresetFields()) {
+            setOutput("Error: Please select an architecture, payload and payload format before generating.");
+            return;
+        }
+
         setLoading(true);
         setAllowSave(true);
         if (form.values.lport) {
@@ -355,6 +385,12 @@ const PayloadGenerator = () => {
                                 onChange={(e) => {
                                     const newArchitecture = e.target.value;
                                     setSelectedArchitecture(newArchitecture);
+                                    // Clear architecture and payload errors once a new architecture is chosen.
+                                    setPresetErrors((prev) => ({
+                                        ...prev,
+                                        architecture: undefined,
+                                        payload: undefined,
+                                    }));
 
                                     const archIndex = architectures.indexOf(newArchitecture);
                                     const newPayload = payloadOptions[archIndex]?.[0] || "";
@@ -366,6 +402,7 @@ const PayloadGenerator = () => {
                                     setRequiredVariables(payloadRequiredVariables[archIndex]?.[payloadIndex] || []);
                                 }}
                                 title="Select Architecture"
+                                error={presetErrors.architecture}
                                 data={architectures}
                                 required
                             />
@@ -374,11 +411,14 @@ const PayloadGenerator = () => {
                                 value={selectedPayload}
                                 onChange={(e) => {
                                     setSelectedPayload(e.target.value);
+                                    // Clear the payload error once a payload is chosen.
+                                    setPresetErrors((prev) => ({ ...prev, payload: undefined }));
                                     const newIndex = payloadOptions[architectureIndex].indexOf(e.target.value);
                                     setPayloadIndex(newIndex);
                                     setRequiredVariables(payloadRequiredVariables[architectureIndex][newIndex] || []);
                                 }}
                                 title="Select Payload"
+                                error={presetErrors.payload}
                                 data={payloadOptions[architectureIndex] || []}
                                 required
                             />
@@ -477,8 +517,13 @@ const PayloadGenerator = () => {
 
                             <NativeSelect
                                 value={selectedFormat}
-                                onChange={(e) => setSelectedFormat(e.target.value)}
+                                onChange={(e) => {
+                                    setSelectedFormat(e.target.value);
+                                    // Clear the format error once a format is chosen.
+                                    setPresetErrors((prev) => ({ ...prev, format: undefined }));
+                                }}
                                 title="Select Format"
+                                error={presetErrors.format}
                                 data={payloadFormats}
                                 required
                             />
