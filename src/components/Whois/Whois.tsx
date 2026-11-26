@@ -9,6 +9,21 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import InstallationModal from "../InstallationModal/InstallationModal";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 
+// Normalize input: remove protocol, www, and extract domain
+const normalizeDomain = (input: string): string => {
+    try {
+        const url = new URL(input.trim().toLowerCase());
+        return url.hostname.replace(/^www\./, "");
+    } catch {
+        return input
+            .trim()
+            .toLowerCase()
+            .replace(/^https?:\/\//, "")
+            .replace(/^www\./, "")
+            .split(/[/?#]/)[0];
+    }
+};
+
 /**
  * Represents the form values for the Whois component.
  */
@@ -17,13 +32,12 @@ interface FormValuesType {
 }
 
 /* --- Simple validators (no new deps) --- */
-const hasSchemeOrPath = (s: string) => /^\s*[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(s) || /[\/?#]/.test(s);
-
 const ipv4Re = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
 
 const ipv6Re = /^(\[)?([0-9A-Fa-f]{0,4}:){2,7}[0-9A-Fa-f]{0,4}(\])?$/;
 
-const fqdnRe = /^(?=.{1,253}$)(?!-)([A-Za-z0-9-]{1,63}\.)+[A-Za-z]{2,63}$/;
+//Fix #1415, less permissive, now rejects invalid URLs containing hyphens such as 'google-.com'.
+const fqdnRe = /^(?=.{1,253}$)(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}$/;
 
 /**
  * The Whois component.
@@ -59,10 +73,16 @@ function Whois() {
             targetURL: (value) => {
                 const raw = (value || "").trim();
                 if (!raw) return "Please enter a domain or IP address.";
-                if (hasSchemeOrPath(raw)) return "Enter only a domain or IP (no http/https, no paths/queries).";
-                const stripped = raw.replace(/^\[|\]$/g, ""); // allow [IPv6]
+
+                //Fix #1415, removed 'hasSchemeOrPath' function, URLs should be normalised instead of rejected.
+                //Fix #1415, should normalise before validaiton.
+                const cleanedInput = normalizeDomain(raw);
+
+                const stripped = cleanedInput.replace(/^\[|\]$/g, "");
                 if (ipv4Re.test(stripped)) return null;
-                if (ipv6Re.test(raw)) return null; // accepts bracketed or bare IPv6
+
+                // Fix #1415, should test the normalised input, not the raw input.
+                if (ipv6Re.test(stripped)) return null;
                 if (fqdnRe.test(stripped)) return null;
                 return "Invalid domain or IP address.";
             },
@@ -109,25 +129,63 @@ function Whois() {
      * ONLY runs when inputs are valid (form.onSubmit handles validation).
      */
     const onSubmit = async (values: FormValuesType) => {
+        setLoading(true);
+
         setAllowSave(false);
         setHasSaved(false);
         setOutput("");
         setLoading(true);
 
-        // Build args for whois
-        const arg = values.targetURL.trim().replace(/^\[|\]$/g, ""); // strip [] for IPv6 when passing to whois
-        const args = [arg];
+        // Normalize input (e.g., remove https://, www.)
+        const cleanedInput = normalizeDomain(values.targetURL);
+        const args = [cleanedInput];
 
-        CommandHelper.runCommandGetPidAndOutput("whois", args, handleProcessData, handleProcessTermination)
-            .then(({ output, pid }) => {
-                setOutput(output);
-                setPid(pid);
-                setAllowSave(true);
-            })
-            .catch((error) => {
-                setOutput("WHOIS lookup failed. Please check the domain or IP address and try again.");
-                setLoading(false);
-            });
+        try {
+            let result = "";
+            let processId = "";
+
+            // Run command
+            const res = await CommandHelper.runCommandGetPidAndOutput(
+                "whois",
+                args,
+                handleProcessData,
+                handleProcessTermination,
+            );
+            result = res.output;
+            processId = res.pid;
+
+            // Fallback if www. domain fails
+            if (result.includes("No match") && cleanedInput.startsWith("www.")) {
+                const fallbackInput = cleanedInput.replace(/^www\./, "");
+                const fallbackRes = await CommandHelper.runCommandGetPidAndOutput(
+                    "whois",
+                    [fallbackInput],
+                    handleProcessData,
+                    handleProcessTermination,
+                );
+                result += `\n\n📌 Retried with base domain: ${fallbackInput}\n${fallbackRes.output}`;
+            }
+
+            // Clean the result before showing
+            const cleanOutput = (raw: string): string => {
+                if (raw.includes("No whois server is known")) {
+                    return "⚠️ Invalid input. Please enter a valid domain or IP address.";
+                }
+                if (raw.includes("No match")) {
+                    return "❌ Domain not found. Try removing 'www.' or check spelling.";
+                }
+                if (raw.includes("timeout")) {
+                    return "⏳ The request timed out. Please try again.";
+                }
+                return raw;
+            };
+
+            setOutput(cleanOutput(result));
+            setPid(processId);
+        } catch (error: any) {
+            setOutput("❌ Error: " + error.message);
+            setLoading(false);
+        }
     };
 
     /** Handles the completion of output saving */
