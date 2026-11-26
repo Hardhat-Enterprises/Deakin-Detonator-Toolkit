@@ -866,17 +866,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/spotlight@npm:^5.3.0":
-  version: 5.10.5
-  resolution: "@mantine/spotlight@npm:5.10.5"
+"@mantine/spotlight@npm:^9.7.1":
+  version: 9.7.1
+  resolution: "@mantine/spotlight@npm:9.7.1"
   dependencies:
-    "@mantine/utils": "npm:5.10.5"
+    "@mantine/store": 9.7.1
   peerDependencies:
-    "@mantine/core": 5.10.5
-    "@mantine/hooks": 5.10.5
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  checksum: eea544c14dc68dbfca8b396957219791b3a6ade0143860ae163466cd26f5f4721d943cb0848f1d435539de287e3b322c1446fc42885d6f36c7cb06de621c7c1b
+    "@mantine/core": 9.7.1
+    "@mantine/hooks": 9.7.1
+    react: ^19.2.0
+    react-dom: ^19.2.0
+  checksum: 9c1f7a4fbb1d65660a0e7189aa1de8f62364f04a561e7c7cf21d1b260fd881bba065278fa10aa0e341e0a90277e0ddc8c8ac3fece906c844b60023ad69ad25da
+  languageName: node
+  linkType: hard
+
+"@mantine/store@npm:9.7.1":
+  version: 9.7.1
+  resolution: "@mantine/store@npm:9.7.1"
+  peerDependencies:
+    react: ^19.2.0
+  checksum: c516c63eafd9b175b7d2461bc7001d511ffb5236d3734d2fe321b5b73ec9ec359c4fa3691c8a19a81c1de1f8259850ac7ae9daecc1c8c1dc63970d15502ec71e
   languageName: node
   linkType: hard
 
@@ -2438,7 +2447,7 @@ __metadata:
     "@mantine/hooks": ^5.3.0
     "@mantine/notifications": 5.3.0
     "@mantine/prism": ^5.3.0
-    "@mantine/spotlight": ^5.3.0
+    "@mantine/spotlight": ^9.7.1
     "@tabler/icons": ^1.95.1
     "@tauri-apps/api": ^2.0.0
     "@tauri-apps/cli": ^2.11.4
