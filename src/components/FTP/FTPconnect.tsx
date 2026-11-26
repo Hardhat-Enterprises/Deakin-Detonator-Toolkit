@@ -235,11 +235,19 @@ function FTPconnect() {
 
             const result = await command.execute();
 
-            if (result.code !== 0) {
-                throw new Error(result.stderr.trim() || `xdg-open exited with code ${result.code}.`);
+            if (result.code === 0) {
+                setOutput(
+                    (prevOutput) =>
+                        prevOutput +
+                        "FTP location request sent to your default file manager. Check the file manager for connection status.\n",
+                );
+            } else {
+                setOutput(
+                    (prevOutput) =>
+                        prevOutput +
+                        `Failed to open FTP location: ${result.stderr.trim() || `Exit code ${result.code}`}\n`,
+                );
             }
-
-            setOutput((prevOutput) => prevOutput + "FTP location opened successfully.\n");
         } catch (error) {
             setOutput((prevOutput) => prevOutput + `Failed to open FTP location: ${String(error)}\n`);
         } finally {
