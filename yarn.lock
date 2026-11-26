@@ -2622,11 +2622,11 @@ __metadata:
   linkType: hard
 
 "dotenv@npm:^18.0.5":
-  version: 18.0.5
-  resolution: "dotenv@npm:18.0.5"
+  version: 18.0.7
+  resolution: "dotenv@npm:18.0.7"
   bin:
     dotenv: dist/index.cjs
-  checksum: 96edde25eb7d28e54cfa1f78041be7d20122a8bf94c6bcc407ae34e3c6534b761a4091a6d180f290b59a5b2de1f0f4ad8ffaf4892b6b8400f5d9cf83ffb59849
+  checksum: 125b8f28f3bb5761e8bf843af382125a2a6a967cba3b67dda6a00c1efa791ab52de04f969125c92b5dc1e7c31b0fc450499afe9f2a37a49785259db46f594568
   languageName: node
   linkType: hard
 
