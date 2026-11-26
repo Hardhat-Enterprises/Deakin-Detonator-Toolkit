@@ -38,7 +38,7 @@ const ipv4Re = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[
 
 const ipv6Re = /^(\[)?([0-9A-Fa-f]{0,4}:){2,7}[0-9A-Fa-f]{0,4}(\])?$/;
 
-const fqdnRe = /^(?=.{1,253}$)(?!-)([A-Za-z0-9-]{1,63}\.)+[A-Za-z]{2,63}$/;
+const fqdnRe = /^(?=.{1,253}$)(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}$/;
 
 /**
  * The Whois component.
@@ -74,10 +74,13 @@ function Whois() {
             targetURL: (value) => {
                 const raw = (value || "").trim();
                 if (!raw) return "Please enter a domain or IP address.";
-                if (hasSchemeOrPath(raw)) return "Enter only a domain or IP (no http/https, no paths/queries).";
-                const stripped = raw.replace(/^\[|\]$/g, ""); // allow [IPv6]
+
+                //Must validate before form submission - Issue #1415
+                const cleanedInput = normalizeDomain(raw);
+
+                const stripped = cleanedInput.replace(/^\[|\]$/g, ""); // allow [IPv6]
                 if (ipv4Re.test(stripped)) return null;
-                if (ipv6Re.test(raw)) return null; // accepts bracketed or bare IPv6
+                if (ipv6Re.test(stripped)) return null; // accepts bracketed or bare IPv6
                 if (fqdnRe.test(stripped)) return null;
                 return "Invalid domain or IP address.";
             },
