@@ -112,12 +112,7 @@ type PkexecCancellationOverlayProps = {
     killSignal: string;
 };
 
-function PkexecCancellationOverlay({
-    loading,
-    pid,
-    pid2,
-    killSignal,
-}: PkexecCancellationOverlayProps) {
+function PkexecCancellationOverlay({ loading, pid, pid2, killSignal }: PkexecCancellationOverlayProps) {
     const [cancelError, setCancelError] = useState("");
     const [cancelling, setCancelling] = useState(false);
 
@@ -127,51 +122,47 @@ function PkexecCancellationOverlay({
     const isValidPid = (value: string) => value !== null && value !== undefined && value.trim() !== "";
 
     const handleCancel = async () => {
-    setCancelError("");
-    setCancelling(true);
+        setCancelError("");
+        setCancelling(true);
 
-    try {
-        const pids = [pid, pid2].filter(isValidPid);
+        try {
+            const pids = [pid, pid2].filter(isValidPid);
 
-        if (pids.length === 0) {
-            setCancelError("No valid process ID is available for cancellation.");
-            return;
-        }
-
-        let cancellationFailed = false;
-
-        for (const processId of pids) {
-            const result = await new Command("pkexec", ["kill", killSignal, processId]).execute();
-
-            if (result.code === 126) {
-                setCancelError(
-                    "Authentication was cancelled. The process may still be running. Please try again.",
-                );
+            if (pids.length === 0) {
+                setCancelError("No valid process ID is available for cancellation.");
                 return;
             }
 
-            if (result.code === 127) {
-                setCancelError(
-                    "Authorisation or cancellation failed. The process may still be running.",
-                );
-                return;
+            let cancellationFailed = false;
+
+            for (const processId of pids) {
+                const result = await new Command("pkexec", ["kill", killSignal, processId]).execute();
+
+                if (result.code === 126) {
+                    setCancelError("Authentication was cancelled. The process may still be running. Please try again.");
+                    return;
+                }
+
+                if (result.code === 127) {
+                    setCancelError("Authorisation or cancellation failed. The process may still be running.");
+                    return;
+                }
+
+                if (result.code !== 0) {
+                    cancellationFailed = true;
+                }
             }
 
-            if (result.code !== 0) {
-                cancellationFailed = true;
+            if (cancellationFailed) {
+                setCancelError("Unable to cancel one or more processes. Please try again.");
             }
+        } catch (error) {
+            console.error("Failed to terminate process:", error);
+            setCancelError("An error occurred while attempting to cancel the process.");
+        } finally {
+            setCancelling(false);
         }
-
-        if (cancellationFailed) {
-            setCancelError("Unable to cancel one or more processes. Please try again.");
-        }
-    } catch (error) {
-        console.error("Failed to terminate process:", error);
-        setCancelError("An error occurred while attempting to cancel the process.");
-    } finally {
-        setCancelling(false);
-    }
-};
+    };
 
     //Returns a loadingoverlay function to handle process termination for pkexec
     return (
