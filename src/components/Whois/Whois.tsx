@@ -32,12 +32,11 @@ interface FormValuesType {
 }
 
 /* --- Simple validators (no new deps) --- */
-const hasSchemeOrPath = (s: string) => /^\s*[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(s) || /[\/?#]/.test(s);
-
 const ipv4Re = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
 
 const ipv6Re = /^(\[)?([0-9A-Fa-f]{0,4}:){2,7}[0-9A-Fa-f]{0,4}(\])?$/;
 
+//Fix #1415, less permissive, now rejects invalid URLs containing hyphens such as 'google-.com'.
 const fqdnRe = /^(?=.{1,253}$)(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}$/;
 
 /**
@@ -75,12 +74,15 @@ function Whois() {
                 const raw = (value || "").trim();
                 if (!raw) return "Please enter a domain or IP address.";
 
-                //Must validate before form submission - Issue #1415
+                //Fix #1415, removed 'hasSchemeOrPath' function, URLs should be normalised instead of rejected.
+                //Fix #1415, should normalise before validaiton.
                 const cleanedInput = normalizeDomain(raw);
 
-                const stripped = cleanedInput.replace(/^\[|\]$/g, ""); // allow [IPv6]
+                const stripped = cleanedInput.replace(/^\[|\]$/g, "");
                 if (ipv4Re.test(stripped)) return null;
-                if (ipv6Re.test(stripped)) return null; // accepts bracketed or bare IPv6
+
+                // Fix #1415, should test the normalised input, not the raw input.
+                if (ipv6Re.test(stripped)) return null;
                 if (fqdnRe.test(stripped)) return null;
                 return "Invalid domain or IP address.";
             },
