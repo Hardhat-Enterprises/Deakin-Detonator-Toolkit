@@ -1,7 +1,9 @@
 import { Button, Stack, TextInput, NativeSelect, Checkbox, Alert, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useCallback, useState, useRef } from "react";
-import { CommandHelper } from "../../utils/CommandHelper";
+import { tempDir, join } from "@tauri-apps/api/path";
+import { Command } from "@tauri-apps/plugin-shell";
+import { open } from "@tauri-apps/plugin-dialog";
 import ConsoleWrapper from "../ConsoleWrapper/ConsoleWrapper";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import { SaveOutputToTextFile_v2 } from "../SaveOutputToFile/SaveOutputToTextFile";
@@ -24,46 +26,48 @@ interface FormValuesType {
  */
 const Fcrackzip = () => {
     // Component state variables
-    const [loading, setLoading] = useState(false); // Indicates loading state
-    const [output, setOutput] = useState(""); // Stores the output of command execution
-    const [allowSave, setAllowSave] = useState(false); // State variable to allow saving the output to a file.
-    const [hasSaved, setHasSaved] = useState(false); // State variable to indicate if the output has been saved.
-    const [attackMethod, setAttackmethod] = useState("Dictionary"); // Stores the selected attack method
-    const [checkedUnzip, setCheckedUnzip] = useState(true); // Indicates if unzip option is checked
-    const [pid, setPid] = useState(""); // Stores the process ID
-    const [useCharsetUppercase, setCharsetUppercase] = useState(false); // Indicates if uppercase character set is selected
-    const [useCharsetLowercase, setCharsetLowercase] = useState(false); // Indicates if lowercase character set is selected
-    const [useCharsetNumeric, setCharsetNumeric] = useState(false); // Indicates if numeric character set is selected
-    const [checkedVerbose, setCheckedVerbose] = useState(false); // Indicates if verbose mode is checked
-    const [isCommandAvailable, setIsCommandAvailable] = useState(false); // State variable to check if the command is available.
-    const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
-    const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
+    const [loading, setLoading] = useState(false);
+    const [output, setOutput] = useState("");
+    const [allowSave, setAllowSave] = useState(false);
+    const [hasSaved, setHasSaved] = useState(false);
+    const [attackMethod, setAttackmethod] = useState("Dictionary");
+    const [checkedUnzip, setCheckedUnzip] = useState(true);
+    const [pid, setPid] = useState("");
+    const [useCharsetUppercase, setCharsetUppercase] = useState(false);
+    const [useCharsetLowercase, setCharsetLowercase] = useState(false);
+    const [useCharsetNumeric, setCharsetNumeric] = useState(false);
+    const [checkedVerbose, setCheckedVerbose] = useState(false);
+    const [isCommandAvailable, setIsCommandAvailable] = useState(false);
+    const [opened, setOpened] = useState(!isCommandAvailable);
+    const [loadingModal, setLoadingModal] = useState(true);
     const [showAlert, setShowAlert] = useState(true);
-    const alertTimeout = useRef<NodeJS.Timeout | null>(null);
+    const alertTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const dictionaryLinkRef = useRef<string | null>(null);
 
     // Define the attack methods
     const methods = ["Dictionary", "BruteForce"];
 
     // Component title
     const title = "Fcrackzip";
+
     // Description of the component
     const description_guide = "Fcrackzip is a tool for cracking the password of a protected zip file.";
+
     // Additional props for the RenderComponent
     const steps =
         "Step 1: Input path of the zip file.\n" +
         "Step 2: Select an Attack Mode (Dictionary or Brute Force)\n" +
         "Step 3: You can save output by checking 'Save Output to File'\n" +
         "Step 4: Click start cracking!";
+
     // Link to the tutorial
     const tutorial = "https://docs.google.com/document/d/1m8kmNbdI3uq5Qzxaw7K3bg9b1lfOXpWC_z4_jR_rG7M/edit?tab=t.0";
+
     // Link to the source code
     const sourceLink = "https://www.kali.org/tools/fcrackzip/";
 
-    // Determine if attack method is Dictionary
     const isDictionary = attackMethod === "Dictionary";
-    // Determine if attack method is Brute Force
     const isBruteForce = attackMethod === "BruteForce";
-    // Dependencies required by the component
     const dependencies = ["fcrackzip"];
 
     // Initialize form hook
@@ -110,20 +114,54 @@ const Fcrackzip = () => {
         },
     });
 
+    // Open a file picker to select a ZIP file.
+    const pickZipFile = async () => {
+        try {
+            const selected = await open({
+                title: "Select ZIP File",
+                multiple: false,
+                directory: false,
+                filters: [{ name: "ZIP Files", extensions: ["zip"] }],
+            });
+
+            if (typeof selected === "string") {
+                form.setFieldValue("zip", selected);
+            }
+        } catch (error) {
+            console.error("Failed to select ZIP file:", error);
+        }
+    };
+
+    // Open a file picker to select a dictionary file.
+    const pickDictionaryFile = async () => {
+        try {
+            const selected = await open({
+                title: "Select Dictionary File",
+                multiple: false,
+                directory: false,
+            });
+
+            if (typeof selected === "string") {
+                form.setFieldValue("dictionary", selected);
+            }
+        } catch (error) {
+            console.error("Failed to select dictionary file:", error);
+        }
+    };
+
     // Check if the command is available and set the state variables accordingly.
     useEffect(() => {
-        // Check if the command is available and set the state variables accordingly.
         checkAllCommandsAvailability(dependencies)
             .then((isAvailable) => {
-                setIsCommandAvailable(isAvailable); // Set the command availability state
-                setOpened(!isAvailable); // Set the modal state to opened if the command is not available
-                setLoadingModal(false); // Set loading to false after the check is done
+                setIsCommandAvailable(isAvailable);
+                setOpened(!isAvailable);
+                setLoadingModal(false);
             })
             .catch((error) => {
                 console.error("An error occurred:", error);
-                setLoadingModal(false); // Also set loading to false in case of error
+                setLoadingModal(false);
             });
-        // Set timeout to remove alert after 5 seconds on load.
+
         alertTimeout.current = setTimeout(() => {
             setShowAlert(false);
         }, 5000);
@@ -137,9 +175,11 @@ const Fcrackzip = () => {
 
     const handleShowAlert = () => {
         setShowAlert(true);
+
         if (alertTimeout.current) {
             clearTimeout(alertTimeout.current);
         }
+
         alertTimeout.current = setTimeout(() => {
             setShowAlert(false);
         }, 5000);
@@ -150,33 +190,68 @@ const Fcrackzip = () => {
      * @param {string} data - The data received from the child process.
      */
     const handleProcessData = useCallback((data: string) => {
-        setOutput((prevOutput) => prevOutput + "\n" + data);
+        setOutput((prevOutput) => prevOutput + data);
+    }, []);
+
+    const createShortDictionaryLink = async (dictionaryPath: string): Promise<string> => {
+        const temporaryDirectory = await tempDir();
+
+        const linkName = `d${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
+        const linkPath = await join(temporaryDirectory, linkName);
+
+        if (new TextEncoder().encode(linkPath).length > 40) {
+            throw new Error("Could not generate a temporary dictionary path within Fcrackzip's 40-byte limit.");
+        }
+
+        const command = Command.create("bash", [
+            "-c",
+            'target=$(realpath -e -- "$1") || exit 1; if [ ! -f "$target" ] || [ ! -r "$target" ]; then echo "Dictionary must be a readable file." >&2; exit 1; fi; ln -s -- "$target" "$2"',
+            "ddt-create-link",
+            dictionaryPath,
+            linkPath,
+        ]);
+
+        const result = await command.execute();
+
+        if (result.code !== 0) {
+            throw new Error(result.stderr.trim() || "Failed to create temporary dictionary link.");
+        }
+
+        return linkPath;
+    };
+
+    const cleanupDictionaryLink = useCallback(async () => {
+        const linkPath = dictionaryLinkRef.current;
+
+        if (!linkPath) return;
+
+        dictionaryLinkRef.current = null;
+
+        try {
+            const command = Command.create("bash", ["-c", 'rm -f -- "$1"', "ddt-cleanup", linkPath]);
+
+            const result = await command.execute();
+
+            if (result.code !== 0) {
+                console.error("Failed to remove temporary dictionary link:", result.stderr);
+            }
+        } catch (error) {
+            console.error("Failed to remove temporary dictionary link:", error);
+        }
     }, []);
 
     /**
      * Callback function to handle process termination.
-     * @param {object} param - An object containing information about the process termination.
-     * @param {number} param.code - The exit code of the terminated process.
-     * @param {number} param.signal - The signal code indicating how the process was terminated.
      */
-    const handleProcessTermination = useCallback(
-        ({ code, signal }: { code: number; signal: number }) => {
-            if (code === 0) {
-                handleProcessData("\nProcess completed successfully.");
-            } else if (signal === 15) {
-                handleProcessData("\nProcess was manually terminated.");
-            } else {
-                handleProcessData(`\nProcess terminated with exit code: ${code} and signal code: ${signal}`);
-            }
-            setPid("");
-            setLoading(false);
+    const handleProcessTermination = useCallback(() => {
+        setPid("");
+        setLoading(false);
 
-            // Allow Saving as the output is finalised
-            setAllowSave(true);
-            setHasSaved(false);
-        },
-        [handleProcessData],
-    );
+        void cleanupDictionaryLink();
+
+        setAllowSave(true);
+        setHasSaved(false);
+    }, [cleanupDictionaryLink]);
 
     /**
      * Function to handle form submission.
@@ -184,14 +259,11 @@ const Fcrackzip = () => {
      */
     const onSubmit = async (values: FormValuesType) => {
         setLoading(true);
-
-        // Disallow saving until the tool's execution is complete
         setAllowSave(false);
 
         const args = [];
-
         if (attackMethod === "Dictionary") {
-            args.push("-D", "-p", `${values.dictionary}`, "-u");
+            args.push("-D", "-v", "-p", values.dictionary.trim(), "-u");
         } else if (attackMethod === "BruteForce") {
             args.push("-b");
 
@@ -205,7 +277,9 @@ const Fcrackzip = () => {
 
             if (charSet) args.push("-c", charSet);
 
-            if (values.maxLength && values.minLength) args.push("-l", `${values.minLength}-${values.maxLength}`);
+            if (values.maxLength && values.minLength) {
+                args.push("-l", `${values.minLength}-${values.maxLength}`);
+            }
 
             if (checkedUnzip) args.push("-u");
         }
@@ -214,24 +288,105 @@ const Fcrackzip = () => {
             args.push(values.zip);
         }
 
+        setOutput("");
+
         try {
-            const result = await CommandHelper.runCommandGetPidAndOutput(
-                "fcrackzip",
-                args,
-                handleProcessData,
-                handleProcessTermination,
-            );
+            const executionArgs = [...args];
 
-            setPid(result.pid);
+            if (attackMethod === "Dictionary") {
+                const dictionaryPath = values.dictionary.trim();
 
-            // Set output without checking for cracked password match
-            setOutput(result.output);
-        } catch (e: any) {
-            setOutput(e.message);
-        } finally {
+                if (new TextEncoder().encode(dictionaryPath).length > 40) {
+                    const shortDictionaryPath = await createShortDictionaryLink(dictionaryPath);
+
+                    dictionaryLinkRef.current = shortDictionaryPath;
+
+                    const dictionaryPathIndex = executionArgs.indexOf("-p");
+
+                    if (dictionaryPathIndex === -1 || !executionArgs[dictionaryPathIndex + 1]) {
+                        throw new Error("Dictionary path argument was not found.");
+                    }
+
+                    executionArgs[dictionaryPathIndex + 1] = shortDictionaryPath;
+                }
+            }
+
+            const command = Command.create("fcrackzip", executionArgs);
+
+            let processFinished = false;
+            let commandOutput = "";
+
+            const stripAnsi = (data: string) =>
+                data.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9- A-ORZcf-nqry=><]/g, "");
+
+            // Capture output while displaying it in the console.
+            const appendCommandOutput = (data: string) => {
+                const cleaned = stripAnsi(data);
+
+                commandOutput += cleaned;
+                handleProcessData(cleaned);
+            };
+
+            command.stdout.on("data", (data) => {
+                appendCommandOutput(data.toString());
+            });
+
+            command.stderr.on("data", (data) => {
+                appendCommandOutput(data.toString());
+            });
+
+            // Check the result after Fcrackzip finishes.
+            command.on("close", ({ code, signal }) => {
+                processFinished = true;
+
+                if (signal) {
+                    handleProcessData(
+                        signal === 15
+                            ? "\n\nSearch cancelled before completion. No final result is available."
+                            : `\n\nSearch stopped by signal ${signal}.`,
+                    );
+                } else if (/no usable files found/i.test(commandOutput)) {
+                    handleProcessData("\n\nThe ZIP may be unencrypted, unsupported, or invalid.");
+                } else if (/PASSWORD FOUND!!!!/i.test(commandOutput)) {
+                    handleProcessData("\n\nPassword found and verified successfully.");
+                } else if (/possible pw found:/i.test(commandOutput)) {
+                    handleProcessData(
+                        "\n\nPossible password candidate(s) found. Enable 'Show cracked password' to verify candidates.",
+                    );
+                } else if (code === 0) {
+                    const message =
+                        attackMethod === "Dictionary"
+                            ? "\n\nNo matching password was found in the selected dictionary."
+                            : "\n\nNo matching password was found within the selected character set and length range.";
+
+                    handleProcessData(message);
+                } else {
+                    handleProcessData(
+                        `\n\nFcrackzip failed with exit code ${code ?? "unknown"}. Check the ZIP file, dictionary file, and output above.`,
+                    );
+                }
+
+                handleProcessTermination();
+            });
+
+            command.on("error", (error) => {
+                handleProcessData(`\nCommand error: ${String(error)}`);
+            });
+
+            const child = await command.spawn();
+
+            if (!processFinished) {
+                setPid(child.pid.toString());
+            }
+        } catch (error) {
+            await cleanupDictionaryLink();
+
+            setOutput((prevOutput) => prevOutput + `\nFailed to start Fcrackzip: ${String(error)}`);
+
+            setPid("");
             setLoading(false);
+            setAllowSave(true);
         }
-        setAllowSave(true);
     };
 
     /**
@@ -244,15 +399,9 @@ const Fcrackzip = () => {
     }, []);
 
     const handleSaveComplete = () => {
-        // Indicating that the file has saved which is passed
-        // back into SaveOutputToTextFile to inform the user
         setHasSaved(true);
         setAllowSave(false);
     };
-
-    // the disable charset logic is commented out
-    // Please remove it if the future implementation does not need to use it
-    // for now the logic stay as commented
 
     return (
         <RenderComponent
@@ -270,9 +419,11 @@ const Fcrackzip = () => {
                     dependencies={dependencies}
                 ></InstallationModal>
             )}
+
             <form onSubmit={form.onSubmit(onSubmit)}>
                 <Stack>
                     {LoadingOverlayAndCancelButton(loading, pid)}
+
                     <Group position="right">
                         {!showAlert && (
                             <Button onClick={handleShowAlert} size="xs" variant="outline" color="gray">
@@ -280,6 +431,7 @@ const Fcrackzip = () => {
                             </Button>
                         )}
                     </Group>
+
                     {showAlert && (
                         <Alert title="Warning: Potential Risks" color="red">
                             This tool is used to crack passwords, use with caution and only on files you own or have
@@ -287,45 +439,65 @@ const Fcrackzip = () => {
                         </Alert>
                     )}
 
-                    <TextInput
-                        label={"Zip file"}
-                        placeholder="Specify the zip file."
-                        required
-                        {...form.getInputProps("zip")}
-                    />
+                    {/* ZIP file input with Browse button */}
+                    <Group spacing="sm" style={{ alignItems: "flex-end" }}>
+                        <TextInput
+                            style={{ flex: 1 }}
+                            label="Zip file"
+                            placeholder="Specify the zip file."
+                            required
+                            {...form.getInputProps("zip")}
+                        />
+                        <Button type="button" variant="outline" onClick={pickZipFile}>
+                            Browse
+                        </Button>
+                    </Group>
+
                     <NativeSelect
                         value={attackMethod}
                         onChange={(e) => setAttackmethod(e.target.value)}
-                        label={"Attack Method"}
+                        label="Attack Method"
                         data={methods}
                         required
-                        //placeholder={"Select attack method"}
                     />
 
                     {isDictionary && (
-                        <TextInput
-                            label={"Dictionary"}
-                            placeholder="Path file of the dictionary."
-                            required
-                            {...form.getInputProps("dictionary")}
-                        />
+                        /* Dictionary input with Browse button */
+                        <Group spacing="sm" style={{ alignItems: "flex-end" }}>
+                            <TextInput
+                                style={{ flex: 1 }}
+                                label="Dictionary"
+                                placeholder="Path file of the dictionary."
+                                required
+                                {...form.getInputProps("dictionary")}
+                            />
+                            <Button type="button" variant="outline" onClick={pickDictionaryFile}>
+                                Browse
+                            </Button>
+                        </Group>
                     )}
+
                     {isBruteForce && (
                         <>
                             <div style={{ display: "flex", alignItems: "center" }}>
                                 <span style={{ marginRight: "10px" }}>Charset List:</span>
+
                                 <Checkbox
                                     label="Use Lowercase Character"
                                     checked={useCharsetLowercase}
                                     onChange={(e) => setCharsetLowercase(e.currentTarget.checked)}
                                 />
+
                                 <span style={{ margin: "0 10px" }}></span>
+
                                 <Checkbox
                                     label="Use Uppercase Character"
                                     checked={useCharsetUppercase}
                                     onChange={(e) => setCharsetUppercase(e.currentTarget.checked)}
                                 />
+
                                 <span style={{ margin: "0 10px" }}></span>
+
                                 <Checkbox
                                     label="Use Numeric Character"
                                     typeof="number"
@@ -333,37 +505,43 @@ const Fcrackzip = () => {
                                     onChange={(e) => setCharsetNumeric(e.currentTarget.checked)}
                                 />
                             </div>
+
                             <div style={{ display: "flex", alignItems: "center" }}>
                                 <TextInput
-                                    label={"Min Length"}
+                                    label="Min Length"
                                     type="number"
                                     required
                                     {...form.getInputProps("minLength")}
                                 />
+
                                 <span style={{ margin: "0 10px" }}></span>
+
                                 <TextInput
-                                    label={"Max Length"}
+                                    label="Max Length"
                                     type="number"
                                     required
                                     {...form.getInputProps("maxLength")}
                                 />
                             </div>
+
                             <Checkbox
-                                label={
-                                    "Verbose Mode: Generates extended information of files inside zip. (eg. name, size, etc.)"
-                                }
+                                label="Verbose Mode: Generates extended information of files inside zip. (eg. name, size, etc.)"
                                 checked={checkedVerbose}
                                 onChange={(e) => setCheckedVerbose(e.currentTarget.checked)}
                             />
+
                             <Checkbox
-                                label={"Show cracked password."}
+                                label="Show cracked password."
                                 checked={checkedUnzip}
                                 onChange={(e) => setCheckedUnzip(e.currentTarget.checked)}
                             />
                         </>
                     )}
+
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type={"submit"}>Start Cracking!</Button>
+
+                    <Button type="submit">Start Cracking!</Button>
+
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
