@@ -288,7 +288,7 @@ const Fcrackzip = () => {
             args.push(values.zip);
         }
 
-        setOutput("");
+        setOutput("Starting Fcrackzip...\n");
 
         try {
             const executionArgs = [...args];
