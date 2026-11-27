@@ -8,6 +8,8 @@ import { checkAllCommandsAvailability } from "../../utils/CommandAvailability";
 import { LoadingOverlayAndCancelButton } from "../OverlayAndCancelButton/OverlayAndCancelButton";
 import { RenderComponent } from "../UserGuide/UserGuide";
 import InstallationModal from "../InstallationModal/InstallationModal";
+import { Command } from "@tauri-apps/plugin-shell";
+import { open as openDialog } from "@tauri-apps/plugin-dialog";
 
 /**
  * Represents the form values for the EyeWitness component.
@@ -197,6 +199,183 @@ export const validateTimeout = (timeout: string): string | null => {
 };
 
 /**
+ * Bash script used to check the EyeWitness input file before the tool runs (Issue #1488).
+ * The file path is passed as a positional argument ($1) and is never inserted into the script text,
+ * so paths containing spaces or shell characters cannot be used to inject commands.
+ *
+ * Exit codes:
+ * - 0: readable plain text file
+ * - 3: path does not exist or is not a regular file
+ * - 4: file cannot be read (permission denied)
+ * - 5: file is empty or only contains blank lines
+ * - 6: file is binary (contains NUL bytes), for example a PNG image
+ */
+export const INPUT_CHECK_SCRIPT =
+    'f="$1"; [ -f "$f" ] || exit 3; [ -r "$f" ] || exit 4; [ -s "$f" ] || exit 5; ' +
+    'LC_ALL=C grep -Iq . -- "$f" && exit 0; LC_ALL=C grep -q . -- "$f" && exit 6; exit 5';
+
+/**
+ * Builds the bash arguments for the input file check.
+ * "$0" is set to a fixed label and the file path is passed separately as "$1".
+ *
+ * @param {string} filePath - Absolute path of the EyeWitness input file.
+ * @returns {string[]} Arguments to pass to bash.
+ */
+export const buildInputCheckArgs = (filePath: string): string[] => [
+    "-c",
+    INPUT_CHECK_SCRIPT,
+    "eyewitness-input-check",
+    filePath,
+];
+
+/**
+ * Converts the exit code of the input file check into a user-friendly error message.
+ *
+ * @param {number | null} code - Exit code returned by the input check script.
+ * @returns {string | null} Error message if the input file is not usable, null if it is valid.
+ */
+export const describeInputCheckResult = (code: number | null): string | null => {
+    switch (code) {
+        case 0:
+            return null;
+        case 3:
+            return "Input file not found. Please enter the path to an existing file.";
+        case 4:
+            return "Input file cannot be read (permission denied).";
+        case 5:
+            return "Input file is empty. Add one URL per line.";
+        case 6:
+            return "Unsupported input file type. EyeWitness needs a plain text file with one URL per line (e.g. urls.txt), not an image or other binary file.";
+        default:
+            return "Could not check the input file. Please make sure it is a plain text file and try again.";
+    }
+};
+
+/**
+ * Checks that the EyeWitness input file is a readable, non-empty plain text file (Issue #1488).
+ * Without this check, a binary file such as a PNG is passed straight to EyeWitness, which fails
+ * with a Python error instead of a clear message.
+ *
+ * @param {string} filePath - Absolute path of the EyeWitness input file.
+ * @returns {Promise<string | null>} Error message if the file is not usable, null if it is valid.
+ */
+const checkInputFile = async (filePath: string): Promise<string | null> => {
+    try {
+        const result = await Command.create("bash", buildInputCheckArgs(filePath)).execute();
+        return describeInputCheckResult(result.code);
+    } catch (error) {
+        // If the check itself cannot run, do not block the scan; EyeWitness will report its own error.
+        console.error("EyeWitness input file check could not be run:", error);
+        return null;
+    }
+};
+
+/**
+ * Bash script used to check the EyeWitness output directory against the file system before the tool runs.
+ * EyeWitness creates the output directory itself, so the path does not have to exist yet. However, every
+ * part of the path that does exist must be a directory, and the closest existing directory must be writable.
+ * Without this check, a path such as /home/kali/urls.txt/output makes EyeWitness fail with a Python
+ * NotADirectoryError. The path is passed as "$1" and is never inserted into the script text.
+ *
+ * Exit codes:
+ * - 0: usable output directory (existing directory, or a new one inside a writable directory)
+ * - 7: the path, or one of its parent folders, is an existing file rather than a directory
+ * - 8: the closest existing directory is not writable
+ */
+export const OUTPUT_DIR_CHECK_SCRIPT =
+    'd="$1"; while [ ! -e "$d" ] && [ ! -L "$d" ]; do d=$(dirname -- "$d"); done; ' +
+    '[ -d "$d" ] || exit 7; [ -w "$d" ] || exit 8; exit 0';
+
+/**
+ * Builds the bash arguments for the output directory check.
+ *
+ * @param {string} directory - Absolute path of the EyeWitness output directory.
+ * @returns {string[]} Arguments to pass to bash.
+ */
+export const buildOutputDirCheckArgs = (directory: string): string[] => [
+    "-c",
+    OUTPUT_DIR_CHECK_SCRIPT,
+    "eyewitness-output-check",
+    directory,
+];
+
+/**
+ * Converts the exit code of the output directory check into a user-friendly error message.
+ *
+ * @param {number | null} code - Exit code returned by the output directory check script.
+ * @returns {string | null} Error message if the directory cannot be used, null if it is usable.
+ */
+export const describeOutputDirCheckResult = (code: number | null): string | null => {
+    switch (code) {
+        case 0:
+            return null;
+        case 7:
+            return "Output directory is not valid: part of this path is an existing file, not a folder. Choose or enter a folder path.";
+        case 8:
+            return "Output directory cannot be created here (permission denied). Choose a folder you can write to.";
+        default:
+            return "Could not check the output directory. Please choose a different folder and try again.";
+    }
+};
+
+/**
+ * Checks the EyeWitness output directory against the file system (QA feedback on PR #1885).
+ *
+ * @param {string} directory - Absolute path of the EyeWitness output directory.
+ * @returns {Promise<string | null>} Error message if the directory cannot be used, null if it is usable.
+ */
+const checkOutputDirectory = async (directory: string): Promise<string | null> => {
+    try {
+        const result = await Command.create("bash", buildOutputDirCheckArgs(directory)).execute();
+        return describeOutputDirCheckResult(result.code);
+    } catch (error) {
+        // If the check itself cannot run, do not block the scan; EyeWitness will report its own error.
+        console.error("EyeWitness output directory check could not be run:", error);
+        return null;
+    }
+};
+
+/**
+ * Checks whether all EyeWitness inputs are valid, using the same validators as the form.
+ * Used to keep the Scan button disabled until the inputs can be run (Issue #1489).
+ *
+ * @param {FormValuesType} values - Current form values.
+ * @returns {boolean} True if the file path, output directory and timeout are all valid.
+ */
+export const areInputsValid = (values: FormValuesType): boolean =>
+    validateFilePath(values.filePath) === null &&
+    validateOutputDirectory(values.directory, values.filePath) === null &&
+    validateTimeout(values.timeout) === null;
+
+/**
+ * Builds the path of the HTML report that EyeWitness writes to the output directory.
+ *
+ * @param {string} directory - EyeWitness output directory.
+ * @returns {string} Absolute path of report.html inside the output directory.
+ */
+export const buildReportPath = (directory: string): string => `${normalizePath(directory)}/report.html`;
+
+/**
+ * Bash script used to open the EyeWitness report in the default browser (Issue #1489).
+ * The report path is passed as "$1" and never inserted into the script text.
+ * Exit code 3 means the report file does not exist.
+ */
+export const OPEN_REPORT_SCRIPT = '[ -f "$1" ] || exit 3; setsid xdg-open "$1" >/dev/null 2>&1 & exit 0';
+
+/**
+ * Builds the bash arguments used to open the EyeWitness report.
+ *
+ * @param {string} reportPath - Absolute path of report.html.
+ * @returns {string[]} Arguments to pass to bash.
+ */
+export const buildOpenReportArgs = (reportPath: string): string[] => [
+    "-c",
+    OPEN_REPORT_SCRIPT,
+    "eyewitness-open-report",
+    reportPath,
+];
+
+/**
  * The Eyewitness component.
  * @returns The Eyewitness component.
  */
@@ -223,9 +402,13 @@ function Eyewitness() {
     const [opened, setOpened] = useState(!isCommandAvailable); // State variable that indicates if the modal is opened.
     const [loadingModal, setLoadingModal] = useState(true); // State variable to indicate loading state of the modal
     const [showAlert, setShowAlert] = useState(true);
+    const [reportPath, setReportPath] = useState(""); // Path of the EyeWitness HTML report after a successful scan
+    const outputDirectoryRef = useRef(""); // Output directory of the current scan, used to locate the report
     const alertTimeout = useRef<NodeJS.Timeout | null>(null);
 
     let form = useForm({
+        // Show field errors as soon as the user leaves a field, so it is clear why Scan is disabled (Issue #1489).
+        validateInputOnBlur: true,
         initialValues: {
             filePath: "",
             directory: "",
@@ -297,6 +480,7 @@ function Eyewitness() {
         ({ code, signal }: { code: number; signal: number }) => {
             if (code === 0) {
                 handleProcessData("\nProcess completed successfully."); // Successful completion message
+                setReportPath(buildReportPath(outputDirectoryRef.current)); // Enable the Open results button
             } else if (signal === 15) {
                 handleProcessData("\nProcess was manually terminated."); // Manual termination message
             } else {
@@ -352,6 +536,26 @@ function Eyewitness() {
             return;
         }
 
+        // Make sure the input file is a readable plain text file before running EyeWitness (Issue #1488).
+        const inputError = await checkInputFile(values.filePath.trim());
+        if (inputError) {
+            form.setFieldError("filePath", inputError);
+            setOutput(`Error: ${inputError}`);
+            return;
+        }
+
+        // Make sure the output directory can actually be used before running EyeWitness (QA feedback on PR #1885).
+        const outputError = await checkOutputDirectory(values.directory.trim());
+        if (outputError) {
+            form.setFieldError("directory", outputError);
+            setOutput(`Error: ${outputError}`);
+            return;
+        }
+
+        // Remember the output directory so the report can be opened after the scan (Issue #1489).
+        outputDirectoryRef.current = values.directory.trim();
+        setReportPath("");
+
         setAllowSave(false); // Disallow saving until the tool's execution is complete
         setLoading(true); // Enable the Loading Overlay
 
@@ -375,6 +579,52 @@ function Eyewitness() {
     /**
      * Clears the output data and resets the save state.
      */
+    /**
+     * Opens a file picker so the user can choose the text file of URLs (Issue #1489).
+     */
+    const pickInputFile = async () => {
+        const selected = await openDialog({
+            multiple: false,
+            directory: false,
+            filters: [{ name: "Text File", extensions: ["txt", "list"] }],
+        });
+        if (typeof selected === "string") {
+            form.setFieldValue("filePath", selected);
+            // Validate straight away so the user can see why Scan is disabled, if it is.
+            form.setFieldError("filePath", validateFilePath(selected));
+            if (form.values.directory) {
+                form.setFieldError("directory", validateOutputDirectory(form.values.directory, selected));
+            }
+        }
+    };
+
+    /**
+     * Opens a folder picker so the user can choose the output directory (Issue #1489).
+     */
+    const pickOutputDirectory = async () => {
+        const selected = await openDialog({ multiple: false, directory: true });
+        if (typeof selected === "string") {
+            form.setFieldValue("directory", selected);
+            // Validate straight away so the user can see why Scan is disabled, if it is.
+            form.setFieldError("directory", validateOutputDirectory(selected, form.values.filePath));
+        }
+    };
+
+    /**
+     * Opens the EyeWitness HTML report in the default browser (Issue #1489).
+     */
+    const openReport = async () => {
+        try {
+            const result = await Command.create("bash", buildOpenReportArgs(reportPath)).execute();
+            if (result.code === 3) {
+                setOutput((prev) => `${prev}\nReport not found: ${reportPath}`);
+            }
+        } catch (error) {
+            console.error("Could not open the EyeWitness report:", error);
+            setOutput((prev) => `${prev}\nCould not open the report automatically. It is saved at: ${reportPath}`);
+        }
+    };
+
     const clearOutput = useCallback(() => {
         setOutput("");
         setHasSaved(false);
@@ -415,20 +665,32 @@ function Eyewitness() {
                     )}
 
                     <p>{description}</p>
-                    <TextInput
-                        label={"Enter the file name or path containing URLs:"}
-                        placeholder={"Example: /home/kali/Desktop/urls.txt"}
-                        required
-                        {...form.getInputProps("filePath")}
-                    />
-                    <TextInput
-                        label={
-                            "Enter the directory name where you want to save screenshots or define path of directory:"
-                        }
-                        placeholder={"Example: /home/kali/Desktop/eyewitness_results"}
-                        required
-                        {...form.getInputProps("directory")}
-                    />
+                    <Group align="flex-start" noWrap>
+                        <TextInput
+                            label={"Enter the file name or path containing URLs:"}
+                            placeholder={"Example: /home/kali/Desktop/urls.txt"}
+                            required
+                            style={{ flex: 1 }}
+                            {...form.getInputProps("filePath")}
+                        />
+                        <Button variant="outline" mt={25} onClick={pickInputFile}>
+                            Choose File
+                        </Button>
+                    </Group>
+                    <Group align="flex-start" noWrap>
+                        <TextInput
+                            label={
+                                "Enter the directory name where you want to save screenshots or define path of directory:"
+                            }
+                            placeholder={"Example: /home/kali/Desktop/eyewitness_results"}
+                            required
+                            style={{ flex: 1 }}
+                            {...form.getInputProps("directory")}
+                        />
+                        <Button variant="outline" mt={25} onClick={pickOutputDirectory}>
+                            Choose Folder
+                        </Button>
+                    </Group>
                     <TextInput
                         label={"Enter the timeout time (in seconds):"}
                         placeholder={"Example: 15"}
@@ -436,7 +698,14 @@ function Eyewitness() {
                         {...form.getInputProps("timeout")}
                     />
                     {SaveOutputToTextFile_v2(output, allowSave, hasSaved, handleSaveComplete)}
-                    <Button type={"submit"}>Scan</Button>
+                    <Button type={"submit"} disabled={!areInputsValid(form.values)}>
+                        Scan
+                    </Button>
+                    {reportPath && !loading && (
+                        <Button variant="light" onClick={openReport}>
+                            Open results
+                        </Button>
+                    )}
                     <ConsoleWrapper output={output} clearOutputCallback={clearOutput} />
                 </Stack>
             </form>
