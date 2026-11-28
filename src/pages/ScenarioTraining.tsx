@@ -209,7 +209,7 @@ Avoid generic or vague suggestions. Each sentence should provide clear, actionab
             const fileName = `PTGUI_Scenario_Report_${Date.now()}.txt`;
             const fullText =
                 Object.entries(scenarioSections)
-                    .map(([title, wipWarning, content]) => `=== ${title} ===\n${content}`)
+                    .map(([title, content]) => `=== ${title} ===\n${content}`)
                     .join("\n\n") +
                 "\n\n=== User Notes ===\n" +
                 userReport;
