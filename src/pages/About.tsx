@@ -154,9 +154,12 @@ const AboutPage = () => {
 
                 <Accordion.Item value="AITraining">
                     <Accordion.Control icon={<IconReportAnalytics size={16} color={getColor("teal")} />}>
-                        AI Training Scenarios
+                        AI Training Scenarios (WIP)
                     </Accordion.Control>
                     <Accordion.Panel style={{ padding: "2rem" }}>
+                        <Text style={textStyles}>
+                            Warning: this functionality is currently under development and is not yet complete.
+                        </Text>
                         <Text style={textStyles}>
                             The AI Training Scenarios page of the Deakin Detonator Toolkit provides you with GPT-4
                             powered penetration testing scenarios tailored to your skill level. These dynamic scenarios

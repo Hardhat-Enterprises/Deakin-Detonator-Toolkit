@@ -23,10 +23,12 @@ import { writeTextFile } from "@tauri-apps/plugin-fs";
 import { save } from "@tauri-apps/plugin-dialog";
 import { RenderComponent } from "../components/UserGuide/UserGuide";
 
-// Title and description for the User Guide tab
-const title = "AI Scenario Training";
-const description =
-    "AI Scenario Training helps users learn how to think like a red teamer. It uses GPT-4 to generate full penetration testing scenarios based on a chosen CVE or technique, the difficulty level, and tools available in the GUI. If a tool is missing from PT-GUI, it clearly tells the user to run it through the command line instead.\n\nThe goal is to guide users through a realistic attack plan with context, objectives, tools, hints, and remediation. It doesn't create a live lab but it helps users understand the flow of a red team assessment in a structured and educational way.";
+// Title, Work in progress warning and description for the User Guide tab
+const title = "AI Scenario Training (WIP)"; // changed to indicate it is a work in progress according to github issue 1892
+const description = // changed to indicate it is a work in progress according to github issue 1892
+    "Warning: this functionality is currently under development and is not yet complete.\n\n" +
+    "AI Scenario Training helps users learn how to think like a red teamer. It uses GPT-4 to generate full penetration testing scenarios based on a chosen CVE or technique, the difficulty level, and tools available in the GUI. If a tool is missing from PT-GUI, it clearly tells the user to run it through the command line instead.\n\n" +
+    "The goal is to guide users through a realistic attack plan with context, objectives, tools, hints, and remediation. It doesn't create a live lab but it helps users understand the flow of a red team assessment in a structured and educational way.";
 
 // Setup instructions for API key
 const steps =
@@ -257,7 +259,7 @@ Avoid generic or vague suggestions. Each sentence should provide clear, actionab
                 <Center>
                     <Group spacing="md">
                         <Button onClick={handleGenerate} loading={loading}>
-                            Generate Scenario
+                            Generate Scenario (WIP)
                         </Button>
                         {loading && (
                             <Button color="red" variant="outline" onClick={cancelRequest}>
